@@ -60,6 +60,6 @@ jobs:
              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
              -Dsonar.exclusions=**/node_modules/**,**/*.test.js
              -Dsonar.branch.name=development
-             -Dsonar.ci.analysis=true
+             -Dsonar.ci.analysis=true  # Fuerza modo CI
              -Dsonar.scm.provider=git
-             -Dsonar.verbose=true  # Para obtener logs detallados
+             -Dsonar.scanner.skipSystemTruststore=true  # Evita problemas SSL
