@@ -1,0 +1,59 @@
+name: Node.js CI with SonarCloud
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'development'
+      - 'jonier-development'
+      - 'David-development'
+      - 'Roberto-development'
+      - 'matius-development'
+      - 'victor-development'
+  pull_request:
+    branches: [master, development, jonier-development, David-development, Roberto-development, matius-development, victor-development]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Checkout + caché para node_modules
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: Backend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('Backend/package-lock.json') }}
+
+      # Paso 2: Instalar dependencias y ejecutar tests
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: Backend
+
+      - name: Run tests
+        run: npm test
+        working-directory: Backend
+
+      # Paso 3: Análisis con SonarCloud (versión actualizada)
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
+            -Dsonar.sources=Backend/src
+            -Dsonar.tests=Backend/test
+            -Dsonar.javascript.lcov.reportPaths=Backend/coverage/lcov.info
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**
