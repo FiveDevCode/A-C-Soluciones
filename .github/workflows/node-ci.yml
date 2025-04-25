@@ -1,37 +1,20 @@
-name: SonarQube Scan
+name: Node.js CI with SonarCloud
 
 on:
   push:
     branches:
       - development
   pull_request:
-    branches:
-      - development
-
+    types: [opened, synchronize, reopened]
 jobs:
   sonarqube:
-    name: SonarQube Analysis
-    runs-on: ubuntu-latest
-
+    name: SonarQube
+    runs-on: windows-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
         with:
-          node-version: '18'  # O la versión que uses en tu proyecto
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests (opcional)
-        run: npm test
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v1.1.0
-        with:
-          projectBaseDir: .
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: 'https://sonarcloud.io'
