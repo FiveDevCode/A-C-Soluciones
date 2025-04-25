@@ -57,9 +57,9 @@ jobs:
             -Dsonar.organization=fivedevcode
             -Dsonar.sources=src
             -Dsonar.tests=test
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=Backend/coverage/lcov.info
             -Dsonar.exclusions=**/node_modules/**,**/*.test.js
             -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.scm.provider=git
-            -Dsonar.scanner.skipSystemTruststore=true
             -Dsonar.qualitygate.wait=true
+            -Dsonar.analysis.ci=true  # ¡Clave para evitar el error!
