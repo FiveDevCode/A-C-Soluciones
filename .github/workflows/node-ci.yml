@@ -50,10 +50,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
-            -Dsonar.sources=Backend/src
-            -Dsonar.tests=Backend/test
-            -Dsonar.javascript.lcov.reportPaths=Backend/coverage/lcov.info
-            -Dsonar.exclusions=**/node_modules/**,**/dist/**
+        
