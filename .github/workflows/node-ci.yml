@@ -1,27 +1,37 @@
-name: Node.js CI
+name: Node.js CI with SonarCloud
 
 on:
   push:
     branches:
       - 'master'
       - 'development'
-      - 'jonier-development' 
+      - 'jonier-development'
       - 'David-development'
-      
+      - 'Roberto-development'
+      - 'matius-development'
+      - 'victor-development'
   pull_request:
     branches:
       - 'master'
       - 'development'
       - 'jonier-development'
       - 'David-development'
+      - 'Roberto-development'
+      - 'matius-development'
+      - 'victor-development'
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+      
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
 
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -31,6 +41,14 @@ jobs:
         run: npm install
         working-directory: Backend
 
+      
       - name: Run tests
         run: npm test
         working-directory: Backend
+
+      
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
