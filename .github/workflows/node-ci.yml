@@ -3,7 +3,8 @@ name: Node.js CI with SonarCloud
 on:
   push:
     branches:
-      - development
+      - 'development'
+      
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
