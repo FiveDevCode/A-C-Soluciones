@@ -62,4 +62,3 @@ jobs:
             -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.scm.provider=git
             -Dsonar.qualitygate.wait=true
-            -Dsonar.analysis.ci=true  # ¡Clave para evitar el error!
