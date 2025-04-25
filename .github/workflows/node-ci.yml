@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: Backend  # Especifica la carpeta base del proyecto
+          projectBaseDir: Backend
           args: >
             -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
             -Dsonar.organization=fivedevcode
@@ -62,6 +62,4 @@ jobs:
             -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.scm.provider=git
             -Dsonar.scanner.skipSystemTruststore=true
-            -Dsonar.analysis.mode=preview  # Modo alternativo clave
-            -Dsonar.scanner.forceAnalysis=true
-            -Dsonar.issuesReport.console.enable=true
+            -Dsonar.qualitygate.wait=true
