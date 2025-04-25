@@ -53,11 +53,13 @@ jobs:
         with:
           projectBaseDir: Backend  # Especifica la carpeta base del proyecto
           args: >
-            -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
-            -Dsonar.organization=fivedevcode
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.sources=src
-            -Dsonar.tests=test  # Añade si tienes tests
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.exclusions=**/node_modules/**,**/*.test.js
-            -Dsonar.branch.name=development 
+             -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
+             -Dsonar.organization=fivedevcode
+             -Dsonar.sources=src
+             -Dsonar.tests=test
+             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+             -Dsonar.exclusions=**/node_modules/**,**/*.test.js
+             -Dsonar.branch.name=development
+             -Dsonar.ci.analysis=true
+             -Dsonar.scm.provider=git
+             -Dsonar.verbose=true  # Para obtener logs detallados
