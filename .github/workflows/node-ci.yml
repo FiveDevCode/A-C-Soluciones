@@ -59,8 +59,9 @@ jobs:
             -Dsonar.tests=test
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.exclusions=**/node_modules/**,**/*.test.js
-            -Dsonar.branch.name=development
+            -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.scm.provider=git
             -Dsonar.scanner.skipSystemTruststore=true
-            -Dsonar.analysis.allowMultipleAnalysis=true  # Clave para proyectos públicos
-            -Dsonar.scanner.forceAnalysis=true  # Fuerza el análisis manual
+            -Dsonar.analysis.mode=preview  # Modo alternativo clave
+            -Dsonar.scanner.forceAnalysis=true
+            -Dsonar.issuesReport.console.enable=true
