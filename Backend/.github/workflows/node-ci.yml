@@ -5,7 +5,7 @@ on:
     branches:
       - 'master'
       - 'development'
-      - 'Jonier-desarrollo'
+      - 'jonier-development'
       
   pull_request:
     branches:
