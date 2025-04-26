@@ -1,11 +1,11 @@
 import App from "./app.js";
 import { PORT } from './config/puerto.js';
-import { conectDB } from "./database/conexion.js";
+import { connectDB } from "./database/conexion.js";
 
 
 async function main(){
     try {
-        await conectDB();
+        await connectDB();
         App.listen(PORT, () => {
             console.log(`Servidor escuchando en http://localhost:${PORT}`);
         })
