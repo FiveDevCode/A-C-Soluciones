@@ -1,4 +1,4 @@
-import { pool } from "../database/conexion.js";
+import { sequelize } from "../database/conexion.js";
 
 
 const crearServicio = async (titulo, descripcion,costo,adicionales ) => {
@@ -11,6 +11,7 @@ const crearServicio = async (titulo, descripcion,costo,adicionales ) => {
    const { rows } = await pool.query(query);
    return rows[0];
 }
+
 
 
 // consultar todos los servicios que estan en la base de datos 
