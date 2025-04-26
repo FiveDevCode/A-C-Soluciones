@@ -4,15 +4,16 @@ on:
   push:
     branches:
       - 'development'
+      - 'jonier-development'
   pull_request:
     branches:
-      - master
-      - development
-      - jonier-development
-      - David-development
-      - Roberto-development
-      - matius-development
-      - victor-development
+      - 'master'
+      - 'development'
+      - 'jonier-development'
+      - 'David-development'
+      - 'Roberto-development'
+      - 'matius-development'
+      - 'victor-development'
 
 jobs:
   build-and-test:
