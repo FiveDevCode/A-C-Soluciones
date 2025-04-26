@@ -1,17 +1,7 @@
+import React from 'react'
 
-const Header = () => {
+export const HeaderTc = () => {
   return (
-    <section>
-      <div>
-        
-      </div>
-      <div>
-        
-      </div>
-
-    </section>
+    <div>HeaderTc</div>
   )
 }
-
-
-export default Header;

@@ -1,17 +1,8 @@
 
-const Header = () => {
-  return (
-    <section>
-      <div>
-        
-      </div>
-      <div>
-        
-      </div>
+import React from 'react'
 
-    </section>
+export const HeaderAd = () => {
+  return (
+    <div>HeaderAd</div>
   )
 }
-
-
-export default Header;

@@ -1,17 +1,7 @@
 
-const Header = () => {
-  return (
-    <section>
-      <div>
-        
-      </div>
-      <div>
-        
-      </div>
 
-    </section>
+export const HeaderCl = () => {
+  return (
+    <div>HeaderCl</div>
   )
 }
-
-
-export default Header;
