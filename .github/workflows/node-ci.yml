@@ -4,16 +4,15 @@ on:
   push:
     branches:
       - 'development'
-      - 'jonier-development'
   pull_request:
     branches:
-      - 'master'
-      - 'development'
-      - 'jonier-development'
-      - 'David-development'
-      - 'Roberto-development'
-      - 'matius-development'
-      - 'victor-development'
+      - master
+      - development
+      - jonier-development
+      - David-development
+      - Roberto-development
+      - matius-development
+      - victor-development
 
 jobs:
   build-and-test:
@@ -52,9 +51,12 @@ jobs:
         with:
           projectBaseDir: Backend
           args: >
-            
-            
-            
+            -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
+            -Dsonar.organization=fivedevcode
+            -Dsonar.sources=src
+            -Dsonar.tests=test
+            -Dsonar.exclusions=**/node_modules/**,**/*.test.js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.scm.provider=git
