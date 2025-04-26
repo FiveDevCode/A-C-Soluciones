@@ -1,15 +1,12 @@
 name: Build
-
 on:
   push:
     branches:
-      - development
+      - master 
+      - development 
       - jonier-development
   pull_request:
-    branches:
-      - development
     types: [opened, synchronize, reopened]
-
 jobs:
   sonarqube:
     name: SonarQube
@@ -17,11 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Para análisis más precisos (no shallow clone)
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
-        with:
-          projectBaseDir: . # Donde está el sonar-project.properties (en la raíz del repo)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
