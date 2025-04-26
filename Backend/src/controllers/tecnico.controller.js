@@ -5,7 +5,7 @@ export class TecnicoController {
   constructor() {
     this.tecnicoService = new TecnicoService();
   }
-  
+
   // registrar tecnicos en el sistema 
   crearTecnico = async (req, res) => {
     try {
@@ -34,7 +34,7 @@ export class TecnicoController {
     }
   };
   
-  
+  // obtener empleados por id
   obtenerTecnicoPorId = async (req, res) => {
     try {
       const tecnico = await this.tecnicoService.obtenerTecnicoPorId(req.params.id);
@@ -44,10 +44,11 @@ export class TecnicoController {
       return res.status(200).json(tecnico);
     } catch (error) {
       console.error(error);
+      
       return res.status(500).json({ message: 'Error al obtener el empleado.' });
     }
   };
-
+  // obtener empleados por cedula
   obtenerTecnicoPorCedula = async (req, res) => {
     try {
       const tecnico = await this.tecnicoService.obtenerTecnicoPorcedula(req.params.numero_de_cedula);
@@ -64,7 +65,7 @@ export class TecnicoController {
     }
   }
   
-
+  // obtener todo les empleados que estan registrados en el sistema 
   obtenerTecnicos = async (req, res) => {
     try {
       const tecnicos = await this.tecnicoService.obtenerTecnicos();
@@ -74,7 +75,7 @@ export class TecnicoController {
       return res.status(500).json({ message: 'Error al obtener los empleados.' });
     }
   };
-
+  // actualizar empleado si esta registrado en el sistema 
   actualizarTecnico = async (req, res) => {
     try {
       const tecnicoActualizado = await this.tecnicoService.actualizarTecnico(req.params.id, req.body);
@@ -84,10 +85,14 @@ export class TecnicoController {
       return res.status(200).json(tecnicoActualizado);
     } catch (error) {
       console.error(error);
+      if (error instanceof ValidationError) {
+        const mensajes = error.errors.map((err) => err.message);
+        return res.status(400).json({ errors: mensajes });
+      }
       return res.status(500).json({ message: 'Error al actualizar el empleado.' });
     }
   };
-
+  // eliminar empleado si esta registrado en el sistema 
   eliminarTecnico = async (req, res) => {
     try {
       const tecnicoEliminado = await this.tecnicoService.eliminarTecnico(req.params.id);

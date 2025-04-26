@@ -6,7 +6,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 
-// import ServicioRouter from "./routers/servicio.routes.js";
 import TecnicoRouter from "./routers/tecnico.routes.js"
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +18,6 @@ expressOasGenerator.init(App, {});
 
 App.use(morgan('dev'));
 App.use(express.json());
-// App.use(ServicioRouter);
 App.use(TecnicoRouter);
 
 // Documentación Swagger 

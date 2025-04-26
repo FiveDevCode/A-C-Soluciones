@@ -143,7 +143,7 @@ const Tecnico = sequelize.define('Tecnico', {
 // encriptar la contraseña antes de guardar el registro
 Tecnico.beforeCreate(encryptPasswordHook); 
 
-
+// exportamos el model para usarlo en el repository
 export const TecnicoModel = {
   Tecnico
 }
