@@ -5,6 +5,7 @@ on:
     branches:
     
       - 'development'
+      - 'jonier-development'
       
   pull_request:
     branches: [master, development, jonier-development, David-development, Roberto-development, matius-development, victor-development]
