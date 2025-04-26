@@ -1,13 +1,10 @@
 name: Build
-
 on:
   push:
-    branches:
-      - development
+    branches: 
+      - development 
       - jonier-development
   pull_request:
-    branches:
-      - development
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -17,11 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Para análisis más precisos (no shallow clone)
-
+          fetch-depth: 0
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
-        with:
-          projectBaseDir: . # Donde está el sonar-project.properties (en la raíz del repo)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.branch.name=${{ github.ref_name }}
