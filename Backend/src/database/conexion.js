@@ -21,3 +21,13 @@ export const conectDB = async () => {
     }
     
 };
+
+const Usuario = require('../models/usuario')(sequelize);
+
+// cnoxion con el modelo
+module.exports = {
+  sequelize,
+  models: {
+    Usuario: Usuario
+  }
+};
