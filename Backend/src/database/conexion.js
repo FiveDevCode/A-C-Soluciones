@@ -1,26 +1,20 @@
-import Sequelize from 'sequelize'
+// src/config/database.js
+import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
-
-// configuramos la conexion con la base de datos postgresql
-export const sequelize = new Sequelize( process.env.DATABASE_URL, {
-    dialect: 'postgres',
-    logging: false
+export const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: false, // No muestra las consultas en consola
 });
 
 
-// conexion con la base de datos 
-export const conectDB = async () => {
-    try {
-        await sequelize.authenticate ();
-        console.log('Conectado a la base de datos PostgreSQL con Sequelize');
-        await sequelize.sync({alter: true})
-        console.log("Tablas sincronizadas");
-    } catch (error) {
-        console.log('Error a conectarse a la base de datos', error);
-        process.exit(1);
-    }
-    
+// Función para probar la conexión
+export const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Conectado correctamente a la base de datos');
+  } catch (error) {
+    console.error('Error al conectarse a la base de datos:', error);
+    process.exit(1);
+  }
 };
-
-
