@@ -1,6 +1,6 @@
 import {DataTypes} from 'sequelize'
 import { sequelize } from "../database/conexion";
-import { toDefaultValue } from 'sequelize/lib/utils';
+
 
 sequelize.define('cliente',{
 
