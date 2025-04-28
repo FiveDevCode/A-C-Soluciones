@@ -16,8 +16,8 @@ sequelize.define('cliente',{
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
-            is: { //validación solo letras y espacios
-                args: /^[/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+            is: { //validación solo letras, acentos y espacios
+                args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
                 msg: 'El nombre solo puede contener letras y espacios.',
 
             },
@@ -30,6 +30,19 @@ sequelize.define('cliente',{
                 if(value.trim()!= value){
                     throw new Error('El nombre no debe tener espacios al inicio o final.');
 
+                    
+                }
+            },
+            //Validacion de repeticones excessivas (+3 caracteres igua)
+            noRepeticionesExcesivas(value){
+                if (/(.)\1{3,}/.test(value)){
+                    throw new Error('No se permiten repeticiones excesivas de caracteres.');
+                    
+                }
+            },
+            noEspaciosMultiples (value){
+                if(/\s{2,}/.test(value)){
+                    throw new Error('No se permiten espacios multiples consecutivos.');
                     
                 }
             }
@@ -63,6 +76,21 @@ sequelize.define('cliente',{
 
         }
     },
+    correo_electronico: {
+        type: DataTypes.STRING(320),
+        allowNull: false,
+        validate: {
+          isEmail: { msg: 'El correo electrónico no es válido.' },
+          len: {
+            args: [5, 320],
+            msg: 'El correo debe tener máximo 320 caracteres.',
+          },
+          is: {
+            args: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+            msg: 'El correo electrónico tiene un formato incorrecto.',
+          },
+        },
+      },
     Telefono: {
 
         type: DataTypes.STRING(20)
