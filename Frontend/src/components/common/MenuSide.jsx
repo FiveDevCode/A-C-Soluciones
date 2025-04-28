@@ -1,0 +1,140 @@
+import Logo from './Logo';
+import logo from '../../assets/common/logoA&C.png';
+import { Divider } from '@mui/material';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHouse, 
+  faFile, 
+  faPaperPlane, 
+  faDiagramProject, 
+  faClockRotateLeft, 
+  faGear, 
+  faArrowRightFromBracket
+} from '@fortawesome/free-solid-svg-icons';
+
+const SectionMenu = styled.section`
+  display: flex;
+  flex-direction: column;
+  width: 13%;
+  padding: 0.5rem;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  height: 100vh;
+  min-width: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+`
+
+const TitleMenu = styled.h1`
+  font-size: 1rem;
+  font-weight: lighter;
+`
+
+const ContainerAllOption = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.725rem;
+
+`
+const ContainerOption = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 10px;
+  padding: 0.5rem;
+
+  & > svg {
+    min-width: 32px;
+    text-align: center;
+  }
+`
+const TitleOption = styled.h2`
+  font-size: 1rem;
+  font-weight: normal;
+`
+const ContainerAllConfiguration = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100vh;
+  justify-content: flex-end;
+  gap: 0.725rem;
+
+`
+
+
+const MenuSide = () => {
+  return (
+    <SectionMenu>
+      <Logo src={logo} size="157px"/>
+      <TitleMenu>Menu</TitleMenu>
+      <Divider/> 
+      <ContainerAllOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faHouse} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+          
+          />
+          <TitleOption>Inicio</TitleOption>
+        </ContainerOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faDiagramProject} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+
+          />
+          <TitleOption>Mis solicitudes</TitleOption>
+        </ContainerOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faPaperPlane} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+          />
+          <TitleOption>Enviar solicitud</TitleOption>
+        </ContainerOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faFile} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+          />
+          <TitleOption>Mis reportes</TitleOption>
+        </ContainerOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faClockRotateLeft} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}}
+          />
+          <TitleOption>Ver historial</TitleOption>
+        </ContainerOption>
+      </ContainerAllOption>
+      
+
+      <ContainerAllConfiguration>
+        <Divider/> 
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faGear} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+          />
+          <TitleOption>Configuracion</TitleOption>
+        </ContainerOption>
+        <ContainerOption>
+          <FontAwesomeIcon 
+            icon={faArrowRightFromBracket} 
+            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
+          />
+          <TitleOption>Salir</TitleOption>
+        </ContainerOption>
+      </ContainerAllConfiguration>
+
+    </SectionMenu>
+  )
+}
+
+export default MenuSide;
