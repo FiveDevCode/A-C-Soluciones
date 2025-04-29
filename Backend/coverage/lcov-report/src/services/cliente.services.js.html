@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/repository/tecnico.repository.js</title>
+    <title>Code coverage report for src/services/cliente.services.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/repository</a> tecnico.repository.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> cliente.services.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -98,20 +98,11 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,8 +112,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -130,45 +135,52 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TecnicoModel } from '../models/tecnico.model.js';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ClienteRepository } from "../repository/cliente.repository.js";
 &nbsp;
-export class TecnicoRepository {
-<span class="fstat-no" title="function not covered" >  as</span>ync crearTecnico(data) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.create(data);</span>
-  }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findByPk(id);</span>
-  }
+export class ClienteService {
+<span class="fstat-no" title="function not covered" >    co</span>nstructor() {
+<span class="cstat-no" title="statement not covered" >        this.clienteRepository = new ClienteRepository();</span>
+    }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorcedula(numero_de_cedula) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findOne({</span>
-      where: { numero_de_cedula }
-    });
-  }
+<span class="fstat-no" title="function not covered" >    as</span>ync crearCliente(data) {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.crearCliente(data);</span>
+    }
+<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorId(id) {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorId(id);</span>
+    }
+<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorEmail(correo_electronico) {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorEmail(correo_electronico);</span>
+    }
+    
+    // Obtener todos los clientes (útil para admin)
+<span class="fstat-no" title="function not covered" >    as</span>ync obtenerTodosLosClientes() {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerTodosLosClientes();</span>
+    }
+<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientesActivos() {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.ObtenerClientesActivos();</span>
+    }
+<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorCedula(numero_de_cedula) {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorCedula(numero_de_cedula);</span>
+    }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicos() {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findAll();</span>
-  }
+<span class="fstat-no" title="function not covered" >    as</span>ync eliminarCliente(id) {
+        const clienteEliminado = <span class="cstat-no" title="statement not covered" >await clienteRepository.eliminarCliente(id);</span>
+<span class="cstat-no" title="statement not covered" >        if (!clienteEliminado) <span class="cstat-no" title="statement not covered" >throw new Error('Cliente no encontrado');</span></span>
+<span class="cstat-no" title="statement not covered" >        return clienteEliminado;</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarTecnico(id, data) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.update(data);</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
-  }
-&nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarTecnico(id) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.destroy();</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
-  }
-}
-&nbsp;</pre></td></tr></table></pre>
+    }
+    
+<span class="fstat-no" title="function not covered" >    as</span>ync actualizarCliente(id, data) {
+<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.actualizarCliente(id, data);</span>
+    }   
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

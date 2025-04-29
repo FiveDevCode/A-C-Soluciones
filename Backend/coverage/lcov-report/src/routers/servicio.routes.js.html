@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/repository/tecnico.repository.js</title>
+    <title>Code coverage report for src/routers/servicio.routes.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/repository</a> tecnico.repository.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routers</a> servicio.routes.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
                 <span class='fraction'>0/6</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -94,80 +94,68 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TecnicoModel } from '../models/tecnico.model.js';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router } from "express";
 &nbsp;
-export class TecnicoRepository {
-<span class="fstat-no" title="function not covered" >  as</span>ync crearTecnico(data) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.create(data);</span>
-  }
+import { ServicioController } from "../controllers/servicio.controller.js";
+//aaa 
+const router = <span class="cstat-no" title="statement not covered" >Router();</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findByPk(id);</span>
-  }
+// ruta para registrar servicios
+<span class="cstat-no" title="statement not covered" >router.post("/api/servicio", ServicioController.crear);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorcedula(numero_de_cedula) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findOne({</span>
-      where: { numero_de_cedula }
-    });
-  }
+// ruta para listar todos los servicios
+<span class="cstat-no" title="statement not covered" >router.get("/api/servicio", ServicioController.listar);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicos() {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findAll();</span>
-  }
+// ruta para obtener un solo servicio
+<span class="cstat-no" title="statement not covered" >router.get("/api/servicio/:id", ServicioController.obtenerPorId); </span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarTecnico(id, data) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.update(data);</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
-  }
+// ruta para eliminar un servicio
+<span class="cstat-no" title="statement not covered" >router.delete("/api/servicio/:id", ServicioController.eliminar); </span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarTecnico(id) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.destroy();</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
-  }
-}
+// ruta para actualizar un servicio
+<span class="cstat-no" title="statement not covered" >router.put("/api/servicio/:id", ServicioController.actualizar);</span>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+export default router;
+&nbsp;
+&nbsp;
+&nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

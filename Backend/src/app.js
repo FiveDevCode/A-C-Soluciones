@@ -1,34 +1,29 @@
-import express from 'express';
-import morgan from 'morgan';
-import expressOasGenerator from 'express-oas-generator';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import swaggerUi from 'swagger-ui-express';
+const express = require('express');
+const morgan = require('morgan');
+const expressOasGenerator = require('express-oas-generator');
+const fs = require('fs');
+const path = require('path');
+const { fileURLToPath } = require('url'); // Este puede eliminarse si no se usa import.meta.url
+const swaggerUi = require('swagger-ui-express');
 
-import TecnicoRouter from "./routers/tecnico.routes.js"
-import clienteRouter from "./routers/cliente.routes.js"
+const TecnicoRouter = require('./routers/tecnico.routes.js');
+const ClienteRouter = require('./routers/cliente.routes.js');
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const App = express();
 
 expressOasGenerator.init(App, {});
 
-
 App.use(morgan('dev'));
 App.use(express.json());
 App.use(TecnicoRouter);
-App.use(clienteRouter);
+App.use(ClienteRouter);
 
-// Documentación Swagger 
+// Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
-  // url para la documentacion de la api 
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
-export default App;
+module.exports = App;
