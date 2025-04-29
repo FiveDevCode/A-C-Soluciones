@@ -25,6 +25,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./backend
+
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v2.2.0
