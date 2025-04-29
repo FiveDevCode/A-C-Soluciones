@@ -14,7 +14,7 @@ jest.mock('../../../src/database/conexion', () => ({
     transaction: jest.fn(),
   }
 }));
-
+//aa
 import AuthService from '../../../src/services/usuario.services.js';
 import UsuarioRepository from '../../../src/repository/usuario.repository.js';
 import EmailService from '../../../src/services/correo.services.js';
