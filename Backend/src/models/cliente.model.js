@@ -1,8 +1,9 @@
 import {DataTypes} from 'sequelize'
 import { sequelize } from "../database/conexion";
+import { encryptPasswordHook, encryptPasswordHookCliente } from '../hooks/encryptPassword.js';
 
 
-sequelize.define('cliente',{
+const Cliente=sequelize.define('Cliente',{
 
     id:{
         type: DataTypes.INTEGER,
@@ -12,7 +13,30 @@ sequelize.define('cliente',{
 
         
     },
-    Nombre: {
+    numero_de_cedula: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
+        unique: true,
+        validate: {
+          isNumeric: { msg: 'La cédula debe contener solo números.' },
+          len: {
+            args: [6, 10],
+            msg: 'La cédula debe tener entre 6 y 10 dígitos.',
+          },
+          notStartsWithZero(value) {
+            if (value.startsWith('0')) {
+              throw new Error('La cédula no debe comenzar con cero.');
+            }
+          },
+          notSequential(value) {
+            const sequences = ['123456', '1234567', '12345678', '123456789', '111111', '1111111', '11111111', '111111111'];
+            if (sequences.includes(value.substring(0, value.length - 1))) {
+              throw new Error('La cédula no debe ser una secuencia numérica predecible.');
+            }
+          },
+        },
+      },
+    nombre: {
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
@@ -49,16 +73,13 @@ sequelize.define('cliente',{
 
         }
     },
-    Apellido: {
-
-        type: DataTypes.STRING(100),
-        allowNull: false,
+    apellido: {
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
             is: { //validación solo letras y espacios
-                args: /^[/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
-                msg: 'El nombre solo puede contener letras y espacios.',
+                args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+                msg: 'El apellido solo puede contener letras y espacios.',
 
             },
             len: {
@@ -91,28 +112,100 @@ sequelize.define('cliente',{
           },
         },
       },
-    Telefono: {
+    telefono: {
 
-        type: DataTypes.STRING(20)
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        validate: {
+            isNumeric: {msg: 'El número de teléfono solo puede contener números.'},
+            len:{
+                args:[10,10],
+                msg: 'El teléfono debe tener exactamente 10 dígitos',
+
+            },
+            iniciaConDigitoValido (value){
+                if(!value.startsWith('3')){
+                    throw new Error('El teléfono debe iniciar con 3 en Colombia');
+                    
+                }
+            }
+        }
     },
-    Direccion: {
+    contrasenia: {
+        type: DataTypes.STRING(64),
+        allowNull: false,
+        validate: {
+          len: {
+            args: [8, 64],
+            msg: 'La contraseña debe tener entre 8 y 64 caracteres.',
+          },
+          is: {
+            args: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!])(?!.*\s)(?!.*(.)\1{2,}).{8,64}$/,
+            msg: 'La contraseña debe incluir mayúscula, minúscula, número, carácter especial y no repetir caracteres.',
+          },
+          //Valida que las contraseña ingresada no sea alguna predecible 
+          notCommonPassword(value) {
+            const commonPasswords = ['123456', 'abcdef', 'qwerty', '12345678', '111111'];
+            if (commonPasswords.includes(value)) {
+              throw new Error('La contraseña no puede ser común o predecible.');
+            }
+          },
+        },
+      },
+    direccion: {
 
-        type: DataTypes.TEXT
-
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            len: {
+              args: [10, 255],
+              msg: 'La dirección debe tener entre 10 y 255 caracteres.',
+            },
+            notEmpty: {
+              msg: 'La dirección no puede estar vacía.',
+            },
+            noOnlySpaces(value) {
+              if (value.trim() === '') {
+                throw new Error('La dirección no puede contener solo espacios.');
+              }
+            },
+          }
+        
 
     },
     fecha_registro: {
 
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        validate: {
+            isDate: { msg: 'La fecha de registro debe ser una fecha válida.' },
+            notInFuture(value) {
+              if (value && new Date(value) > new Date()) {
+                throw new Error('La fecha de registro no puede estar en el futuro.');
+              }
+            }
+          }
+          
+
     },
-    Estado: {
+    estado: {
 
         type: DataTypes.ENUM('activo', 'inactivo'),
         defaultValue: 'activo'
-    }
+    },
 
-    
+}, {
+    tableName: 'cliente',
+    timestamps: false,
+});
 
 
-})
+//Forna de encriptar la contraseña antes de guardar el registro
+Cliente.beforeCreate(encryptPasswordHook);
+
+//Se exporta el model para usarse en el repository
+
+export const ClienteModel={Cliente}
+
+//Encriptacion cuando se cambie la contraseña
+Cliente.beforeUpdate(encryptPasswordHook);

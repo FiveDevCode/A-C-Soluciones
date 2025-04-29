@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 
 import TecnicoRouter from "./routers/tecnico.routes.js"
+import clienteRouter from "./routers/cliente.routes.js"
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +21,7 @@ expressOasGenerator.init(App, {});
 App.use(morgan('dev'));
 App.use(express.json());
 App.use(TecnicoRouter);
+App.use(clienteRouter);
 
 // Documentación Swagger 
 const openApiPath = path.join(__dirname, '../openapi.json');
