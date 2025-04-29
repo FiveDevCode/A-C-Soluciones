@@ -5,7 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
-import ServicioRouter from "./routers/servicio.routes.js";
+
+import TecnicoRouter from "./routers/tecnico.routes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +18,7 @@ expressOasGenerator.init(App, {});
 
 App.use(morgan('dev'));
 App.use(express.json());
-App.use(ServicioRouter);
+App.use(TecnicoRouter);
 
 // Documentación Swagger 
 const openApiPath = path.join(__dirname, '../openapi.json');
