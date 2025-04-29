@@ -1,85 +1,247 @@
-import jwt from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import { isEmail } from 'validator';
-import { models } from '../database/conexion';
+import rateLimit from 'express-rate-limit';
+import db from '../database/conexion';
 
-// validaciones para el correo y contrasena para que el usuaio no vaya a cometer cagadas
+// Mensajes de error
+const ERROR_MESSAGES = {
+  CREDENCIALES_INCOMPLETAS: 'Correo electrónico y contraseña son requeridos',
+  EMAIL_INVALIDO: 'Formato de correo electrónico inválido',
+  CONTRASENA_INVALIDA: 'La contraseña no cumple con los requisitos',
+  TOKEN_FALTANTE: 'Token de autenticación requerido',
+  TOKEN_INVALIDO: 'Token inválido o expirado',
+  TOKEN_REVOCADO: 'Este token ha sido revocado',
+  NO_AUTORIZADO: 'Acceso no autorizado',
+  PERMISO_DENEGADO: 'No tienes permiso para este recurso',
+  DEMASIADOS_INTENTOS: 'Demasiados intentos. Por favor, espera 15 minutos.',
+  USUARIO_NO_ENCONTRADO: 'Usuario no encontrado'
+};
 
-function validarCorreoElectronico(correo) {
+// Validaciones de la contraseña
+const PASSWORD_REGEX = {
+  MAYUSCULA: /[A-Z]/,
+  MINUSCULA: /[a-z]/,
+  NUMERO: /[0-9]/,
+  ESPECIAL: /[@#$%&*!]/,
+  ESPACIOS: /\s/,
+  REPETIDOS: /(.)\1{2,}/
+};
+
+const SECUENCIAS_PREDECIBLES = ['123456', 'abcdef', 'qwerty'];
+
+// Rate limiting para autenticación
+export const limiterAuth = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // Límite por IP
+  message: { error: ERROR_MESSAGES.DEMASIADOS_INTENTOS }
+});
+
+// Headers de seguridad
+export const headersSeguridad = (req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+    'Content-Security-Policy': "default-src 'self'",
+    'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*'
+  });
+  next();
+};
+
+// Configuración CORS para frontend separado
+export const configurarCORS = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
+  next();
+};
+
+// Validación de credenciales
+export const validarCredenciales = (req, res, next) => {
+  const { correo_electronico, contrasena } = req.body;
   const errores = [];
 
-  if (!isEmail(correo)) {
-    errores.push("El formato del correo electrónico es inválido");
+  if (!correo_electronico || !contrasena) {
+    return res.status(400).json({ error: ERROR_MESSAGES.CREDENCIALES_INCOMPLETAS });
   }
 
-  if (correo.length > 320) {
-    errores.push("El correo electrónico no debe exceder los 320 caracteres");
+  // Validación del correo
+  if (!isEmail(correo_electronico)) {
+    errores.push(ERROR_MESSAGES.EMAIL_INVALIDO);
+  } else if (correo_electronico.length > 320) {
+    errores.push('El correo no debe exceder 320 caracteres');
   }
 
-  return errores;
-}
-
-function validarContrasena(contrasena) {
-  const errores = [];
-
+  // Validación de contraseña
   if (contrasena.length < 8 || contrasena.length > 64) {
-    errores.push("La contraseña debe tener entre 8 y 64 caracteres");
+    errores.push('La contraseña debe tener entre 8-64 caracteres');
+  } else {
+    if (!PASSWORD_REGEX.MAYUSCULA.test(contrasena)) errores.push('Requiere al menos una mayúscula');
+    if (!PASSWORD_REGEX.MINUSCULA.test(contrasena)) errores.push('Requiere al menos una minúscula');
+    if (!PASSWORD_REGEX.NUMERO.test(contrasena)) errores.push('Requiere al menos un número');
+    if (!PASSWORD_REGEX.ESPECIAL.test(contrasena)) errores.push('Requiere al menos un carácter especial');
+    if (PASSWORD_REGEX.ESPACIOS.test(contrasena)) errores.push('No debe contener espacios');
+    if (PASSWORD_REGEX.REPETIDOS.test(contrasena)) errores.push('No debe tener caracteres repetidos seguidos');
+   
+    const contienePredecible = SECUENCIAS_PREDECIBLES.some(seq =>
+      contrasena.toLowerCase().includes(seq)
+    );
+    if (contienePredecible) errores.push('No debe contener secuencias predecibles');
   }
 
-  if (!/[A-Z]/.test(contrasena)) {
-    errores.push("La contraseña debe contener al menos una letra mayúscula");
-  }
-
-  if (!/[a-z]/.test(contrasena)) {
-    errores.push("La contraseña debe contener al menos una letra minúscula");
-  }
-
-  if (!/[0-9]/.test(contrasena)) {
-    errores.push("La contraseña debe contener al menos un número");
-  }
-
-  if (!/[@#$%&*!]/.test(contrasena)) {
-    errores.push("La contraseña debe contener al menos un carácter especial (@, #, $, %, &, *, !)");
-  }
-
-  if (/\s/.test(contrasena)) {
-    errores.push("La contraseña no debe contener espacios en blanco");
-  }
-
-  const secuenciasPredecibles = ['123456', 'abcdef', 'qwerty'];
-  if (secuenciasPredecibles.some(seq => contrasena.toLowerCase().includes(seq))) {
-    errores.push("La contraseña no debe contener secuencias predecibles");
-  }
-
-  if (/(.)\1{2,}/.test(contrasena)) {
-    errores.push("La contraseña no debe contener muchos caracteres repetidos seguidos");
-  }
-
-  return errores;
-}
-
-// Middleware principal
-
-const validarCredenciales = (req, res, next) => {
-  const { correo, contrasena } = req.body;
-
-  if (!correo || !contrasena) {
-    return res.status(400).json({ 
-      error: "Por favor, complete todos los campos obligatorios" 
+  if (errores.length > 0) {
+    return res.status(400).json({
+      error: ERROR_MESSAGES.CONTRASENA_INVALIDA,
+      detalles: errores
     });
   }
 
-  const errores = [
-    ...validarCorreoElectronico(correo),
-    ...validarContrasena(contrasena)
-  ];
+  next();
+};
+
+// Middleware de verificación de token mejorado
+export const verificarToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+ 
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ error: ERROR_MESSAGES.TOKEN_FALTANTE });
+  }
+
+  const token = authHeader.split(' ')[1];
+ 
+  try {
+    const decoded = verify(token, process.env.JWT_SECRET);
+    
+    // Verificar si el token ha sido invalidado
+    const Usuario = db.getModel('Usuario');
+    const usuario = await Usuario.findByPk(decoded.id);
+    
+    if (!usuario) {
+      return res.status(401).json({ error: ERROR_MESSAGES.TOKEN_INVALIDO });
+    }
+    
+    if (usuario.esTokenInvalidado(token)) {
+      return res.status(401).json({ error: ERROR_MESSAGES.TOKEN_REVOCADO });
+    }
+    
+    // Verificar si ha habido un cambio de contraseña desde que se emitió el token
+    const tokenIssuedAt = decoded.iat * 1000;
+    const lastPasswordUpdate = usuario.ultima_actualizacion_contrasena?.getTime() || 0;
+    
+    if (tokenIssuedAt < lastPasswordUpdate) {
+      return res.status(401).json({ 
+        error: ERROR_MESSAGES.TOKEN_INVALIDO,
+        detalles: 'La contraseña ha sido cambiada desde que se emitió este token' 
+      });
+    }
+    
+    req.usuario = decoded;
+    req.tokenActual = token;
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      error: ERROR_MESSAGES.TOKEN_INVALIDO,
+      detalles: err.name === 'TokenExpiredError' ? 'Token expirado' : 'Token inválido'
+    });
+  }
+};
+
+// Verificación de roles
+export const verificarRol = (rolesPermitidos) => (req, res, next) => {
+  if (!req.usuario) {
+    return res.status(401).json({ error: ERROR_MESSAGES.NO_AUTORIZADO });
+  }
+
+  if (!rolesPermitidos.includes(req.usuario.rol)) {
+    return res.status(403).json({
+      error: ERROR_MESSAGES.PERMISO_DENEGADO,
+      rolRequerido: rolesPermitidos,
+      rolActual: req.usuario.rol
+    });
+  }
+
+  next();
+};
+
+// Validación de token de recuperación (mejorada)
+export const validarTokenRecuperacion = async (req, res, next) => {
+  const { token } = req.body;
+ 
+  if (!token) {
+    return res.status(400).json({ error: ERROR_MESSAGES.TOKEN_FALTANTE });
+  }
+
+  try {
+    const decoded = verify(token, process.env.JWT_RESET_SECRET || process.env.JWT_SECRET);
+    const Usuario = db.getModel('Usuario');
+    const usuario = await Usuario.findByPk(decoded.id);
+    
+    if (!usuario || !usuario.token_recuperacion || 
+        new Date() > usuario.expiracion_token_recuperacion) {
+      return res.status(401).json({ 
+        error: ERROR_MESSAGES.TOKEN_INVALIDO,
+        detalles: 'Token de recuperación inválido o expirado'
+      });
+    }
+    
+    req.usuario = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      error: ERROR_MESSAGES.TOKEN_INVALIDO,
+      detalles: err.name === 'TokenExpiredError' ? 'Token expirado' : 'Token inválido'
+    });
+  }
+};
+
+// Validación de nueva contraseña
+export const validarNuevaContrasena = (req, res, next) => {
+  const { nuevaContrasena } = req.body;
+  const errores = [];
+
+  if (!nuevaContrasena) {
+    return res.status(400).json({ error: 'Nueva contraseña es requerida' });
+  }
+
+  if (nuevaContrasena.length < 8 || nuevaContrasena.length > 64) {
+    errores.push('La contraseña debe tener entre 8-64 caracteres');
+  } else {
+    if (!PASSWORD_REGEX.MAYUSCULA.test(nuevaContrasena)) errores.push('Requiere al menos una mayúscula');
+    if (!PASSWORD_REGEX.MINUSCULA.test(nuevaContrasena)) errores.push('Requiere al menos una minúscula');
+    if (!PASSWORD_REGEX.NUMERO.test(nuevaContrasena)) errores.push('Requiere al menos un número');
+    if (!PASSWORD_REGEX.ESPECIAL.test(nuevaContrasena)) errores.push('Requiere al menos un carácter especial');
+    if (PASSWORD_REGEX.ESPACIOS.test(nuevaContrasena)) errores.push('No debe contener espacios');
+    if (PASSWORD_REGEX.REPETIDOS.test(nuevaContrasena)) errores.push('No debe tener caracteres repetidos seguidos');
+   
+    const contienePredecible = SECUENCIAS_PREDECIBLES.some(seq =>
+      nuevaContrasena.toLowerCase().includes(seq)
+    );
+    if (contienePredecible) errores.push('No debe contener secuencias predecibles');
+  }
 
   if (errores.length > 0) {
-    return res.status(400).json({ errores });
+    return res.status(400).json({
+      error: ERROR_MESSAGES.CONTRASENA_INVALIDA,
+      detalles: errores
+    });
   }
 
   next();
 };
 
 export default {
-  validarCredenciales
+  limiterAuth,
+  headersSeguridad,
+  configurarCORS,
+  validarCredenciales,
+  verificarToken,
+  verificarRol,
+  validarTokenRecuperacion,
+  validarNuevaContrasena
 };
