@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "test": "jest --coverage --collectCoverageFrom='src/**/*.js'"
+    "test": "jest  --collectCoverageFrom='src/**/*.js'",
+    "test:coverage": "jest --coverage"
+
   },
   "author": "",
   "license": "ISC",
@@ -24,8 +26,12 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/preset-env": "^7.26.9",
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "supertest": "^7.1.0"
   }
 }

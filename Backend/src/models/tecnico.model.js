@@ -43,7 +43,7 @@ const Tecnico = sequelize.define('Tecnico', {
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {
-        args: [1, 50],
+        args: [1, 100],
         msg: 'El nombre no debe exceder los 50 caracteres.',
       },
       noSpacesEdges(value) {
@@ -62,7 +62,7 @@ const Tecnico = sequelize.define('Tecnico', {
         msg: 'El primer apellido solo puede contener letras.',
       },
       len: {
-        args: [1, 50],
+        args: [1, 100],
         msg: 'El primer apellido no debe exceder los 50 caracteres.',
       },
       noSpacesEdges(value) {

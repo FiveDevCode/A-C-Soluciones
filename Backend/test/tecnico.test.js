@@ -1,6 +1,6 @@
-const request = require('supertest');
-const { App } = require('../src/app.js');  // Cambia import a require
-const { sequelize } = require('../src/database/conexion.js');
+import request from 'supertest';
+import { App } from '../src/app.js';
+import { sequelize } from '../src/database/conexion.js';
 
 describe('Tecnico Router', () => {
   beforeAll(async () => {
@@ -13,7 +13,7 @@ describe('Tecnico Router', () => {
 
   describe('POST /api/tecnico', () => {
     test('debería crear un nuevo técnico', async () => {
-      const response = await request(App)  // Usa App directamente (sin new)
+      const response = await request(App)
         .post('/api/tecnico')
         .send({
           numero_de_cedula: '1234567890',

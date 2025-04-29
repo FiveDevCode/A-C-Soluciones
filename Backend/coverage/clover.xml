@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745701549505" clover="3.2.0">
-  <project timestamp="1745701549505" name="All files">
+<coverage generated="1745967088028" clover="3.2.0">
+  <project timestamp="1745967088028" name="All files">
     <metrics statements="128" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="32" coveredmethods="0" elements="196" coveredelements="0" complexity="0" loc="128" ncloc="128" packages="10" files="11" classes="11"/>
     <package name="src">
       <metrics statements="17" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="app.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\app.js">
+      <file name="app.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/app.js">
         <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -18,7 +18,7 @@
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
       </file>
-      <file name="index.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\index.js">
+      <file name="index.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/index.js">
         <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -30,14 +30,14 @@
     </package>
     <package name="src.config">
       <metrics statements="1" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="puerto.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\config\puerto.js">
+      <file name="puerto.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/config/puerto.js">
         <metrics statements="1" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.controllers">
       <metrics statements="55" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="9" coveredmethods="0"/>
-      <file name="tecnico.controller.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\controllers\tecnico.controller.js">
+      <file name="tecnico.controller.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/controllers/tecnico.controller.js">
         <metrics statements="55" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -98,7 +98,7 @@
     </package>
     <package name="src.database">
       <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="conexion.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\database\conexion.js">
+      <file name="conexion.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/database/conexion.js">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -111,7 +111,7 @@
     </package>
     <package name="src.hooks">
       <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="encryptPassword.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\hooks\encryptPassword.js">
+      <file name="encryptPassword.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/hooks/encryptPassword.js">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -121,13 +121,13 @@
     </package>
     <package name="src.middlewares">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="permisos.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\middlewares\permisos.js">
+      <file name="permisos.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/middlewares/permisos.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
     <package name="src.models">
       <metrics statements="17" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
-      <file name="tecnico.model.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\models\tecnico.model.js">
+      <file name="tecnico.model.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/models/tecnico.model.js">
         <metrics statements="17" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -150,7 +150,7 @@
     </package>
     <package name="src.repository">
       <metrics statements="12" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
-      <file name="tecnico.repository.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\repository\tecnico.repository.js">
+      <file name="tecnico.repository.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/repository/tecnico.repository.js">
         <metrics statements="12" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -168,7 +168,7 @@
     </package>
     <package name="src.routers">
       <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="tecnico.routes.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\routers\tecnico.routes.js">
+      <file name="tecnico.routes.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/routers/tecnico.routes.js">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -182,7 +182,7 @@
     </package>
     <package name="src.services">
       <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
-      <file name="tecnico.services.js" path="C:\Users\Sala Sistemas\Desktop\A-C-Soluciones\Backend\src\services\tecnico.services.js">
+      <file name="tecnico.services.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/services/tecnico.services.js">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
