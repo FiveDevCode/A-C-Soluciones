@@ -24,6 +24,7 @@
     "morgan": "^1.10.0",
     "pg": "^8.15.6",
     "pg-hstore": "^2.3.4",
+    "portfinder": "^1.0.37",
     "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
@@ -40,7 +41,8 @@
     "supertest": "^6.3.4"
   },
   "jest": {
-    "transform": { "^.+\\.js$": "babel-jest"
+    "transform": {
+      "^.+\\.js$": "babel-jest"
     },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"

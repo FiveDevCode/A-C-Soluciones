@@ -1,10 +1,11 @@
 // test/unit/auth.service.test.js
 
 // Mock de las dependencias al inicio
-jest.mock('../../../src/repository/usuario.repository');
-jest.mock('../../../src/services/correo.services', () => ({
+jest.mock('../../../src/repository/usuario.repository.js');
+jest.mock('../../../src/services/correo.services.js', () => ({
   enviarEmailRecuperacion: jest.fn().mockResolvedValue(true),
-  enviarConfirmacionCambioContrasena: jest.fn().mockResolvedValue(true)
+  enviarConfirmacionCambioContrasena: jest.fn().mockResolvedValue(true),
+  enviarEmailBienvenida: jest.fn().mockResolvedValue(true)  // Agregar este mock
 }));
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
@@ -14,10 +15,10 @@ jest.mock('../../../src/database/conexion', () => ({
   }
 }));
 
-import AuthService from '../../../src/services/usuario.services';
-import UsuarioRepository from '../../../src/repository/usuario.repository';
-import EmailService from '../../../src/services/correo.services';
-import { sequelize } from '../../../src/database/conexion';
+import AuthService from '../../../src/services/usuario.services.js';
+import UsuarioRepository from '../../../src/repository/usuario.repository.js';
+import EmailService from '../../../src/services/correo.services.js';
+import { sequelize } from '../../../src/database/conexion.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; 
 
@@ -208,7 +209,7 @@ describe('AuthService.cambiarContrasena', () => {
   
     const result = await AuthService.cambiarContrasena(1, 'Vieja123', 'Nueva456');
   
-    console.log('🔍 RESULTADO FINAL CAMBIO OK:\n', JSON.stringify(result, null, 2));
+    console.log('Ver el resultado y comprobar:\n', JSON.stringify(result, null, 2));
   
     expect(fakeUser.validarContrasena).toHaveBeenCalledWith('Vieja123');
     expect(result.success).toBe(true);
@@ -332,5 +333,137 @@ describe('AuthService - obtenerUsuarioPorId', () => {
     expect(response.success).toBe(false);
     expect(response.status).toBe(500);
     expect(response.error).toBe(ERROR_MESSAGES.ERROR_OBTENER_USUARIO);
+  });
+});
+
+describe('AuthService.crearUsuario', () => {
+  const fakeTransaction = {
+    commit: jest.fn(),
+    rollback: jest.fn()
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    sequelize.transaction.mockResolvedValue(fakeTransaction);
+    bcrypt.genSalt.mockResolvedValue('fake-salt');
+    bcrypt.hash.mockResolvedValue('hashed-password');
+    
+    AuthService.filtrarDatosUsuario = jest.fn().mockImplementation(usuario => ({
+      id: usuario.id,
+      nombre: usuario.nombre,
+      correo_electronico: usuario.correo_electronico,
+      rol: usuario.rol
+    }));
+  });
+
+  it('debe crear un usuario correctamente y enviar correo de confirmación', async () => {
+    const datosUsuario = {
+      nombre: 'Nuevo Usuario',
+      correo_electronico: 'nuevo@test.com',
+      contrasena: 'Pass123!',
+      rol: 'cliente'
+    };
+  
+    const usuarioCreado = {
+      id: 1,
+      ...datosUsuario,
+      contrasena: 'hashed-password',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+  
+    UsuarioRepository.findByEmail.mockResolvedValue(null);
+    UsuarioRepository.create.mockResolvedValue(usuarioCreado);
+  
+    const result = await AuthService.crearUsuario(datosUsuario);
+
+    // Verificaciones del proceso
+    expect(UsuarioRepository.findByEmail).toHaveBeenCalledWith(
+      datosUsuario.correo_electronico, 
+      { transaction: fakeTransaction }
+    );
+    
+    expect(bcrypt.genSalt).toHaveBeenCalledWith(12);
+    expect(bcrypt.hash).toHaveBeenCalledWith(datosUsuario.contrasena, 'fake-salt');
+    
+    expect(UsuarioRepository.create).toHaveBeenCalledWith(
+      {
+        ...datosUsuario,
+        contrasena: 'hashed-password'
+      },
+      { transaction: fakeTransaction }
+    );
+    
+    expect(EmailService.enviarEmailBienvenida).toHaveBeenCalledWith(datosUsuario.correo_electronico);
+    expect(fakeTransaction.commit).toHaveBeenCalled();
+    
+    // Verificación de la estructura de respuesta ACTUAL
+    expect(result).toEqual({
+      success: true,
+      status: 201,
+      error: null,
+      data: {
+        usuario: {
+          id: 1,
+          nombre: 'Nuevo Usuario',
+          correo_electronico: 'nuevo@test.com',
+          rol: 'cliente'
+        },
+        mensaje: 'Usuario creado exitosamente'
+      }
+    });
+  });
+  // ... otros tests ...
+
+  it('debe retornar error 409 si el email ya existe', async () => {
+    const datosUsuario = {
+      nombre: 'Usuario Existente',
+      correo_electronico: 'existente@test.com',
+      contrasena: 'Pass123!',
+      rol: 'cliente'
+    };
+
+    // Mock de usuario existente
+    UsuarioRepository.findByEmail.mockResolvedValue({
+      id: 2,
+      correo_electronico: 'existente@test.com'
+    });
+
+    const result = await AuthService.crearUsuario(datosUsuario);
+
+    expect(result).toEqual({
+      success: false,
+      status: 409,
+      error: 'El correo electrónico ya está registrado',
+      data: null
+    });
+
+    expect(fakeTransaction.rollback).toHaveBeenCalled();
+    expect(UsuarioRepository.create).not.toHaveBeenCalled();
+    expect(EmailService.enviarEmailBienvenida).not.toHaveBeenCalled();
+  });
+
+  it('debe manejar errores y hacer rollback si falla la creación del usuario', async () => {
+    const datosUsuario = {
+      nombre: 'Usuario Fallido',
+      correo_electronico: 'fallo@test.com',
+      contrasena: 'Pass123!',
+      rol: 'cliente'
+    };
+
+    UsuarioRepository.findByEmail.mockResolvedValue(null); // No existe
+    UsuarioRepository.create.mockRejectedValue(new Error('Error de base de datos'));
+
+    const result = await AuthService.crearUsuario(datosUsuario);
+
+    expect(result).toEqual({
+      success: false,
+      status: 500,
+      error: 'Error al crear usuario',
+      data: null
+    });
+
+    expect(fakeTransaction.rollback).toHaveBeenCalled();
+    expect(EmailService.enviarEmailBienvenida).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
-import UsuarioModel from '../models/usuario.model';
+import UsuarioModel from '../models/usuario.model.js';
 
 // Configuración
 const config = {

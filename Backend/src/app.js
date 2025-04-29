@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 
 import usuarioRouter from './routers/usuario.routes.js'; 
-import TecnicoRouter from './routers/tecnico.routes.js';
 import { sequelize } from './database/conexion.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,7 +29,6 @@ app.use(headersSeguridad);
 
 // Rutas
 app.use('/api/auth', usuarioRouter); // Rutas de autenticación
-app.use('/api/tecnicos', TecnicoRouter); // Rutas de técnicos
 
 // Health Check Endpoint
 app.get('/health', (req, res) => {
@@ -47,7 +45,7 @@ if (fs.existsSync(openApiPath)) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
-// Manejo de errores global (opcional pero recomendado)
+// Manejo de errores global
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Algo salió mal!' });

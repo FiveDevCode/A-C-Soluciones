@@ -343,45 +343,41 @@ async cambiarContrasena(usuarioId, contrasenaActual, nuevaContrasena) {
   }
 
 
-  // Crear nuevo usuario
-  async crearUsuario(datosUsuario) {
-    const t = await sequelize.transaction();
-    try {
-      const usuarioExistente = await UsuarioRepository.findByEmail(datosUsuario.correo_electronico, {
-        transaction: t
-      });
+ // Servicio corregido (usuario.services.js):
+async crearUsuario(datosUsuario) {
+  const t = await sequelize.transaction();
+  try {
+    const usuarioExistente = await UsuarioRepository.findByEmail(datosUsuario.correo_electronico, {
+      transaction: t
+    });
 
-
-      if (usuarioExistente) {
-        await t.rollback();
-        return this.buildResponse(false, 409, ERROR_MESSAGES.EMAIL_DUPLICADO);
-      }
-
-
-      const salt = await genSalt(12);
-      const hashedPassword = await hash(datosUsuario.contrasena, salt);
-
-
-      const usuario = await UsuarioRepository.create({
-        ...datosUsuario,
-        contrasena: hashedPassword
-      }, { transaction: t });
-
-
-      await t.commit();
-     
-      await EmailService.enviarEmailBienvenida(usuario.correo_electronico);
-
-
-      return this.buildResponse(true, 201, null, this.filtrarDatosUsuario(usuario));
-    } catch (error) {
-      if (t && !t.finished) await t.rollback();
-      console.error('[AuthService] Error en crearUsuario:', error);
-      return this.buildResponse(false, 500, 'Error al crear usuario');
+    if (usuarioExistente) {
+      await t.rollback();
+      return this.buildResponse(false, 409, ERROR_MESSAGES.EMAIL_DUPLICADO);
     }
+
+    const salt = await genSalt(12);
+    const hashedPassword = await hash(datosUsuario.contrasena, salt);
+
+    const usuario = await UsuarioRepository.create({
+      ...datosUsuario,
+      contrasena: hashedPassword
+    }, { transaction: t });
+
+    await t.commit();
+    await EmailService.enviarEmailBienvenida(usuario.correo_electronico);
+
+    // Cambio clave aquí - agregar null como tercer parámetro
+    return this.buildResponse(true, 201, null, {
+      usuario: this.filtrarDatosUsuario(usuario),
+      mensaje: 'Usuario creado exitosamente'
+    });
+  } catch (error) {
+    if (t && !t.finished) await t.rollback();
+    console.error('[AuthService] Error en crearUsuario:', error);
+    return this.buildResponse(false, 500, 'Error al crear usuario');
   }
-
-
+}
   // Actualizar usuario existente
   async actualizarUsuario(id, datosActualizados) {
     const t = await sequelize.transaction();

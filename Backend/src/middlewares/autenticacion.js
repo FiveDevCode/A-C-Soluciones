@@ -1,7 +1,11 @@
-import { verify } from 'jsonwebtoken';
-import { isEmail } from 'validator';
+import jwt from 'jsonwebtoken';
+const { verify } = jwt;
+
+import validator from 'validator';
+const { isEmail } = validator;
+
 import rateLimit from 'express-rate-limit';
-import db from '../database/conexion';
+import db from '../database/conexion.js';
 
 // Mensajes de error
 const ERROR_MESSAGES = {

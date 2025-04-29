@@ -1,4 +1,4 @@
-import AuthService from '../services/auth.service';
+import AuthService from '../services/usuario.services.js';
 
 // HTTP centralizados
 const HTTP_STATUS = {
