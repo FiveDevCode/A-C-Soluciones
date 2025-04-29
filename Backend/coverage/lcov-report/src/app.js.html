@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -117,13 +117,7 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,7 +148,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,7 +168,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,15 +179,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 &nbsp;
-// Importaciones de tus módulos
-import usuarioRouter from './routers/usuario.routes.js'; // Asegúrate de que esta ruta sea correcta
-import TecnicoRouter from './routers/tecnico.routes.js';
-import { sequelize } from './database/conexion.js'; // Importa la conexión a la DB
+import usuarioRouter from './routers/usuario.routes.js'; 
+import { sequelize } from './database/conexion.js'; 
 &nbsp;
 const __filename = <span class="cstat-no" title="statement not covered" >fileURLToPath(import.meta.url);</span>
 const __dirname = <span class="cstat-no" title="statement not covered" >path.dirname(__filename);</span>
 &nbsp;
-const app = <span class="cstat-no" title="statement not covered" >express();</span> // Mejor usar minúscula para la instancia
+const app = <span class="cstat-no" title="statement not covered" >express(); </span>
 &nbsp;
 // Configuración inicial
 <span class="cstat-no" title="statement not covered" >expressOasGenerator.init(app, {});</span>
@@ -203,16 +193,15 @@ const app = <span class="cstat-no" title="statement not covered" >express();</sp
 // Middlewares básicos
 <span class="cstat-no" title="statement not covered" >app.use(morgan('dev'));</span>
 <span class="cstat-no" title="statement not covered" >app.use(express.json());</span>
-<span class="cstat-no" title="statement not covered" >app.use(express.urlencoded({ extended: true })); </span>// Para parsear form-data
+<span class="cstat-no" title="statement not covered" >app.use(express.urlencoded({ extended: true }));</span>
 &nbsp;
-// Middlewares de seguridad (importados desde tu autenticación)
+// Middlewares de seguridad 
 import { configurarCORS, headersSeguridad } from './middlewares/autenticacion.js';
 <span class="cstat-no" title="statement not covered" >app.use(configurarCORS);</span>
 <span class="cstat-no" title="statement not covered" >app.use(headersSeguridad);</span>
 &nbsp;
 // Rutas
 <span class="cstat-no" title="statement not covered" >app.use('/api/auth', usuarioRouter); </span>// Rutas de autenticación
-<span class="cstat-no" title="statement not covered" >app.use('/api/tecnicos', TecnicoRouter); </span>// Rutas de técnicos
 &nbsp;
 // Health Check Endpoint
 <span class="cstat-no" title="statement not covered" >app.get('/health', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
@@ -229,14 +218,13 @@ const openApiPath = <span class="cstat-no" title="statement not covered" >path.j
 <span class="cstat-no" title="statement not covered" >  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));</span>
 }
 &nbsp;
-// Manejo de errores global (opcional pero recomendado)
+// Manejo de errores global
 <span class="cstat-no" title="statement not covered" >app.use(<span class="fstat-no" title="function not covered" >(e</span>rr, req, res, next) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  console.error(err.stack);</span>
 <span class="cstat-no" title="statement not covered" >  res.status(500).json({ error: 'Algo salió mal!' });</span>
 });
 &nbsp;
-// Exportamos solo la instancia de app sin iniciar el servidor
-// (El servidor se iniciará desde index.js)
+&nbsp;
 export default app;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -244,7 +232,7 @@ export default app;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-29T02:33:05.442Z
+                at 2025-04-29T22:44:03.192Z
             </div>
         <script src="../prettify.js"></script>
         <script>

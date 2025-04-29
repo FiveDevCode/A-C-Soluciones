@@ -18,7 +18,7 @@ export default (sequelize) => {
       }
     },
     contrasena: {
-      type: DataTypes.CHAR(60), // Hash bcrypt siempre ocupa 60 caracteres
+      type: DataTypes.CHAR(60),
       allowNull: false,
       validate: {
         notEmpty: true
