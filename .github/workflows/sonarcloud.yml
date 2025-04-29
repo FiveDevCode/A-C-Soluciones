@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./backend
+        working-directory: ./Backend
 
 
       - name: Analyze with SonarCloud
