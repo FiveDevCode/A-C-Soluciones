@@ -24,7 +24,6 @@ async function main() {
         // 4. Iniciar servidor con manejo de errores
         const server = app.listen(availablePort, () => {
             console.log(`Servidor escuchando en http://localhost:${availablePort}`);
-            console.log(`Documentación API disponible en http://localhost:${availablePort}/api-docs`);
         });
 
         // cierre
@@ -55,7 +54,6 @@ async function main() {
     } catch (error) {
         console.error('Error al iniciar la aplicación:', error.message);
         
-        // Cierre seguro de conexiones
         try {
             await sequelize.close();
             console.log('Conexiones de base de datos cerradas');

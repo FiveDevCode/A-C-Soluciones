@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -136,9 +136,7 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,7 +160,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,7 +191,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -220,11 +216,11 @@ import portfinder from 'portfinder';
 &nbsp;
 async function <span class="fstat-no" title="function not covered" >main(</span>) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-        // 1. Autenticar conexión a la base de datos
+        //Autenticar conexión a la base de datos
 <span class="cstat-no" title="statement not covered" >        await sequelize.authenticate();</span>
 <span class="cstat-no" title="statement not covered" >        console.log('Conexión a PostgreSQL establecida');</span>
 &nbsp;
-        // 2. Sincronizar modelos (opcional: configurar según entorno)
+        // Sincronizar modelos 
         const syncOptions = <span class="cstat-no" title="statement not covered" >process.env.NODE_ENV === 'test' </span>
             ? { force: false } 
             : { alter: true };
@@ -239,10 +235,9 @@ async function <span class="fstat-no" title="function not covered" >main(</span>
         // 4. Iniciar servidor con manejo de errores
         const server = <span class="cstat-no" title="statement not covered" >app.listen(availablePort, <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            console.log(`Servidor escuchando en http://localhost:${availablePort}`);</span>
-<span class="cstat-no" title="statement not covered" >            console.log(`Documentación API disponible en http://localhost:${availablePort}/api-docs`);</span>
         });
 &nbsp;
-        // Manejo de cierre elegante
+        // cierre
         const shutdown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            console.log('\nRecibida señal de apagado, cerrando servidor...');</span>
 <span class="cstat-no" title="statement not covered" >            server.close(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -256,7 +251,7 @@ async function <span class="fstat-no" title="function not covered" >main(</span>
 <span class="cstat-no" title="statement not covered" >        process.on('SIGTERM', shutdown);</span>
 <span class="cstat-no" title="statement not covered" >        process.on('SIGINT', shutdown);</span>
 &nbsp;
-        // Manejo específico de error EADDRINUSE
+        // error
 <span class="cstat-no" title="statement not covered" >        server.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            if (err.code === 'EADDRINUSE') {</span>
 <span class="cstat-no" title="statement not covered" >                console.log(`Puerto ${availablePort} en uso, intentando con otro...`);</span>
@@ -270,7 +265,6 @@ async function <span class="fstat-no" title="function not covered" >main(</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >        console.error('Error al iniciar la aplicación:', error.message);</span>
         
-        // Cierre seguro de conexiones
 <span class="cstat-no" title="statement not covered" >        try {</span>
 <span class="cstat-no" title="statement not covered" >            await sequelize.close();</span>
 <span class="cstat-no" title="statement not covered" >            console.log('Conexiones de base de datos cerradas');</span>
@@ -295,7 +289,7 @@ async function <span class="fstat-no" title="function not covered" >main(</span>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-30T01:17:31.692Z
+                at 2025-04-30T03:06:35.472Z
             </div>
         <script src="../prettify.js"></script>
         <script>

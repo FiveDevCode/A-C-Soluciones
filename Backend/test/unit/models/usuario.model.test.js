@@ -1,14 +1,16 @@
 import bcrypt from 'bcrypt';
 import { Usuario, setupDatabase } from '../../helpers/sequelize-test-setup.js'; 
 
-// Mock de bcrypt
+//test de model de usuario 
 jest.mock('bcrypt', () => ({
   genSalt: jest.fn(() => Promise.resolve('salt')),
   hash: jest.fn((pwd, salt) => Promise.resolve(`hashed-${pwd}`)),
   compare: jest.fn((pwd, hashed) => Promise.resolve(hashed === `hashed-${pwd}`))
 }));
+jest.setTimeout(20000); // 20 segundos
 
 describe('Modelo Usuario (con Sequelize real)', () => {
+    
   beforeAll(async () => {
     await setupDatabase(); 
   });

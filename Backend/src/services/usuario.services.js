@@ -5,7 +5,7 @@ import { sequelize } from '../database/conexion.js';
 import UsuarioRepository from '../repository/usuario.repository.js';
 import EmailService from './correo.services.js';
 
-// Constantes de configuración
+//  configuracion
 const AUTH_CONFIG = {
   TIEMPO_BLOQUEO: 5 * 60 * 1000,
   MAX_INTENTOS: 3,

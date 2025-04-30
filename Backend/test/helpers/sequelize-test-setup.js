@@ -1,10 +1,9 @@
-// test/helpers/sequelize-test-setup.js
 import dotenv from 'dotenv';
 dotenv.config();
 
 
 import { Sequelize } from 'sequelize';
-import defineUsuarioModel from '../../src/models/usuario.model.js'; // Ajusta si es necesario
+import defineUsuarioModel from '../../src/models/usuario.model.js'; 
 
 // Usar la URL de conexión a PostgreSQL
 const sequelizeTestInstance = new Sequelize(process.env.DATABASE_URL, { logging: false });

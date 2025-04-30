@@ -5,7 +5,7 @@ import validator from 'validator';
 const { isEmail } = validator;
 
 import rateLimit from 'express-rate-limit';
-import db from '../database/conexion.js';
+import { sequelize } from '../database/conexion.js'; // ✅ Correcto
 
 // Mensajes de error
 const ERROR_MESSAGES = {
