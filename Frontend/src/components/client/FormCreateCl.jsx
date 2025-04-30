@@ -78,6 +78,13 @@ const FormCreateCl = () => {
         sx={{ backgroundColor: 'white' }}
         error={name.valid === false} 
         helperText={name.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
       <TextField 
         label="Apellidos" 
@@ -87,6 +94,13 @@ const FormCreateCl = () => {
         sx={{ backgroundColor: 'white' }}
         error={lastName.valid === false} 
         helperText={lastName.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
       <TextField 
         label="Celular" 
@@ -97,6 +111,13 @@ const FormCreateCl = () => {
         sx={{ backgroundColor: 'white' }}
         error={phone.valid === false} 
         helperText={phone.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
       <TextField 
         label="Correo electrónico" 
@@ -106,6 +127,13 @@ const FormCreateCl = () => {
         sx={{ backgroundColor: 'white' }}
         error={email.valid === false} 
         helperText={email.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
       <TextField 
         label="Contraseña" 
@@ -115,6 +143,13 @@ const FormCreateCl = () => {
         sx={{ backgroundColor: 'white' }}
         error={password.valid === false} 
         helperText={password.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       /> 
 
       <FormControlLabel
@@ -146,7 +181,7 @@ const FormCreateCl = () => {
 
 
       <ContainerButton>
-        <Button type="submit" variant="contained">Crear cuenta</Button>
+        <Button type="submit" variant="contained" disabled={!termsAccepted}>Crear cuenta</Button>
         <LinkForgot to="/login">¿Ya tienes cuenta?</LinkForgot>
       </ContainerButton>
 

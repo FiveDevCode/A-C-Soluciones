@@ -123,6 +123,7 @@ const FormCreateEmployeeAd = () => {
         sx={{ backgroundColor: 'white' }}
         error={name.valid === false} 
         helperText={name.valid === false && "El campo no debe estar vacio"} 
+        required
       />
       <TextField 
         label="Apellido" 
@@ -132,6 +133,7 @@ const FormCreateEmployeeAd = () => {
         sx={{ backgroundColor: 'white' }}
         error={lastName.valid === false} 
         helperText={lastName.valid === false && "El campo no debe estar vacio"} 
+        required
       />
       <TextField 
         label="Cedula" 

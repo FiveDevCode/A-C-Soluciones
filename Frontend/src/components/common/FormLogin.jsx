@@ -63,15 +63,29 @@ const FormLogin = () => {
         sx={{ backgroundColor: 'white' }}
         error={email.valid === false} 
         helperText={email.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
-        value={password} 
+        value={password.value} 
         onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
         error={password.valid === false} 
         helperText={password.valid === false && "El campo no debe estar vacio"} 
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
       />
 
       <LinkForgot to="/ForgotPasswordPage">Has olvidado tu contraseña?</LinkForgot>
