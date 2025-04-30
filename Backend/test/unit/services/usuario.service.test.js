@@ -198,7 +198,7 @@ describe('AuthService.cambiarContrasena', () => {
   it('debe cambiar la contraseña si la actual es válida y la nueva es diferente', async () => {
     const fakeUser = {
       id: 1,
-      contrasena: 'hashed-old-password',
+      contrasenia: 'hashed-old-password',
       validarContrasena: jest.fn().mockResolvedValue(true) // La contraseña actual es válida
     };
   
@@ -360,14 +360,14 @@ describe('AuthService.crearUsuario', () => {
     const datosUsuario = {
       nombre: 'Nuevo Usuario',
       correo_electronico: 'nuevo@test.com',
-      contrasena: 'Pass123!',
+      contrasenia: 'Pass123!',
       rol: 'cliente'
     };
   
     const usuarioCreado = {
       id: 1,
       ...datosUsuario,
-      contrasena: 'hashed-password',
+      contrasenia: 'hashed-password',
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -384,12 +384,12 @@ describe('AuthService.crearUsuario', () => {
     );
     
     expect(bcrypt.genSalt).toHaveBeenCalledWith(12);
-    expect(bcrypt.hash).toHaveBeenCalledWith(datosUsuario.contrasena, 'fake-salt');
+    expect(bcrypt.hash).toHaveBeenCalledWith(datosUsuario.contrasenia, 'fake-salt');
     
     expect(UsuarioRepository.create).toHaveBeenCalledWith(
       {
         ...datosUsuario,
-        contrasena: 'hashed-password'
+        contrasenia: 'hashed-password'
       },
       { transaction: fakeTransaction }
     );
@@ -419,7 +419,7 @@ describe('AuthService.crearUsuario', () => {
     const datosUsuario = {
       nombre: 'Usuario Existente',
       correo_electronico: 'existente@test.com',
-      contrasena: 'Pass123!',
+      contrasenia: 'Pass123!',
       rol: 'cliente'
     };
 
@@ -447,7 +447,7 @@ describe('AuthService.crearUsuario', () => {
     const datosUsuario = {
       nombre: 'Usuario Fallido',
       correo_electronico: 'fallo@test.com',
-      contrasena: 'Pass123!',
+      contrasenia: 'Pass123!',
       rol: 'cliente'
     };
 

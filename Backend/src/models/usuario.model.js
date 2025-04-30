@@ -17,8 +17,8 @@ export default (sequelize) => {
         len: [5, 320]
       }
     },
-    contrasena: {
-      type: DataTypes.CHAR(60),
+    contrasenia: {
+      type: DataTypes.CHAR(64),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -57,15 +57,15 @@ export default (sequelize) => {
   }, {
     hooks: {
       beforeCreate: async (usuario) => {
-        if (usuario.changed('contrasena')) {
+        if (usuario.changed('contrasenia')) {
           const salt = await genSalt(12);
-          usuario.contrasena = await hash(usuario.contrasena, salt);
+          usuario.contrasenia = await hash(usuario.contrasenia, salt);
         }
       },
       beforeUpdate: async (usuario) => {
-        if (usuario.changed('contrasena')) {
+        if (usuario.changed('contrasenia')) {
           const salt = await genSalt(12); // Usar el mismo factor que en beforeCreate
-          usuario.contrasena = await hash(usuario.contrasena, salt);
+          usuario.contrasenia = await hash(usuario.contrasenia, salt);
           usuario.ultima_actualizacion_contrasena = new Date();
         }
       }
@@ -86,8 +86,8 @@ export default (sequelize) => {
   });
 
   // Método para validar contraseña
-  Usuario.prototype.validarContrasena = async function(contrasena) {
-    return await compare(contrasena, this.contrasena);
+  Usuario.prototype.validarContrasena = async function(contrasenia) {
+    return await compare(contrasenia, this.contrasenia);
   };
 
   // Método para invalidar tokens

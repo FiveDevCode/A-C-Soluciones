@@ -68,10 +68,10 @@ export const configurarCORS = (req, res, next) => {
 
 // Validación de credenciales
 export const validarCredenciales = (req, res, next) => {
-  const { correo_electronico, contrasena } = req.body;
+  const { correo_electronico, contrasenia } = req.body;
   const errores = [];
 
-  if (!correo_electronico || !contrasena) {
+  if (!correo_electronico || !contrasenia) {
     return res.status(400).json({ error: ERROR_MESSAGES.CREDENCIALES_INCOMPLETAS });
   }
 
@@ -83,18 +83,18 @@ export const validarCredenciales = (req, res, next) => {
   }
 
   // Validación de contraseña
-  if (contrasena.length < 8 || contrasena.length > 64) {
+  if (contrasenia.length < 8 || contrasenia.length > 64) {
     errores.push('La contraseña debe tener entre 8-64 caracteres');
   } else {
-    if (!PASSWORD_REGEX.MAYUSCULA.test(contrasena)) errores.push('Requiere al menos una mayúscula');
-    if (!PASSWORD_REGEX.MINUSCULA.test(contrasena)) errores.push('Requiere al menos una minúscula');
-    if (!PASSWORD_REGEX.NUMERO.test(contrasena)) errores.push('Requiere al menos un número');
-    if (!PASSWORD_REGEX.ESPECIAL.test(contrasena)) errores.push('Requiere al menos un carácter especial');
-    if (PASSWORD_REGEX.ESPACIOS.test(contrasena)) errores.push('No debe contener espacios');
-    if (PASSWORD_REGEX.REPETIDOS.test(contrasena)) errores.push('No debe tener caracteres repetidos seguidos');
+    if (!PASSWORD_REGEX.MAYUSCULA.test(contrasenia)) errores.push('Requiere al menos una mayúscula');
+    if (!PASSWORD_REGEX.MINUSCULA.test(contrasenia)) errores.push('Requiere al menos una minúscula');
+    if (!PASSWORD_REGEX.NUMERO.test(contrasenia)) errores.push('Requiere al menos un número');
+    if (!PASSWORD_REGEX.ESPECIAL.test(contrasenia)) errores.push('Requiere al menos un carácter especial');
+    if (PASSWORD_REGEX.ESPACIOS.test(contrasenia)) errores.push('No debe contener espacios');
+    if (PASSWORD_REGEX.REPETIDOS.test(contrasenia)) errores.push('No debe tener caracteres repetidos seguidos');
    
     const contienePredecible = SECUENCIAS_PREDECIBLES.some(seq =>
-      contrasena.toLowerCase().includes(seq)
+      contrasenia.toLowerCase().includes(seq)
     );
     if (contienePredecible) errores.push('No debe contener secuencias predecibles');
   }

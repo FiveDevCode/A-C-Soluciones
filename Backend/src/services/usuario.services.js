@@ -36,10 +36,10 @@ const ERROR_MESSAGES = {
 
 class AuthService {
   //autenticacion del usuario 
-  async autenticarUsuario(correo_electronico, contrasena) {
+  async autenticarUsuario(correo_electronico, contrasenia) {
     const t = await sequelize.transaction();
     try {
-      if (!correo_electronico || !contrasena) {
+      if (!correo_electronico || !contrasenia) {
         await t.rollback();
         return this.buildResponse(false, 400, ERROR_MESSAGES.CREDENCIALES_INVALIDAS);
       }
@@ -61,7 +61,7 @@ class AuthService {
         return bloqueoResponse;
       }
       //validmos que la controsena sea valida
-      const contrasenaValida = await usuario.validarContrasena(contrasena);
+      const contrasenaValida = await usuario.validarContrasena(contrasenia);
 
       if (!contrasenaValida) {
         const resultado = await this.manejarIntentoFallido(usuario, t);
@@ -357,11 +357,11 @@ async crearUsuario(datosUsuario) {
     }
 
     const salt = await genSalt(12);
-    const hashedPassword = await hash(datosUsuario.contrasena, salt);
+    const hashedPassword = await hash(datosUsuario.contrasenia, salt);
 
     const usuario = await UsuarioRepository.create({
       ...datosUsuario,
-      contrasena: hashedPassword
+      contrasenia: hashedPassword
     }, { transaction: t });
 
     await t.commit();
@@ -406,9 +406,9 @@ async crearUsuario(datosUsuario) {
       }
 
 
-      if (datosActualizados.contrasena) {
+      if (datosActualizados.contrasenia) {
         const salt = await genSalt(12);
-        datosActualizados.contrasena = await hash(datosActualizados.contrasena, salt);
+        datosActualizados.contrasenia = await hash(datosActualizados.contrasenia, salt);
         datosActualizados.ultima_actualizacion_contrasena = new Date();
       }
 
@@ -544,7 +544,7 @@ async crearUsuario(datosUsuario) {
 
   // Generación de JWT
   generarTokenJWT(usuario) {
-    return jwt.sign(   // Aquí está el cambio: sign → jwt.sign
+    return jwt.sign(   
       {
         id: usuario.id,
         correo_electronico: usuario.correo_electronico,

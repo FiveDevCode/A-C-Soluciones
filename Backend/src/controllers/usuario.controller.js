@@ -30,9 +30,9 @@ const ERROR_MESSAGES = {
 class AuthController {
   //inicio de sesion
   async login(req, res) {
-    const { correo_electronico, contrasena } = req.body;
+    const { correo_electronico, contrasenia } = req.body;
 
-    if (!correo_electronico?.trim() || !contrasena?.trim()) {
+    if (!correo_electronico?.trim() || !contrasenia?.trim()) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         error: ERROR_MESSAGES.DATOS_INCOMPLETOS,
@@ -43,7 +43,7 @@ class AuthController {
     try {
       const resultado = await AuthService.autenticarUsuario(
         correo_electronico.trim(),
-        contrasena.trim()
+        contrasenia.trim()
       );
       return res.status(resultado.status || HTTP_STATUS.OK).json(resultado);
     } catch (error) {
@@ -289,9 +289,9 @@ class AuthController {
   //creacion de un nuevo usuario
   async crearUsuario(req, res) {
     try {
-      const { correo_electronico, contrasena, rol } = req.body;
+      const { correo_electronico, contrasenia, rol } = req.body;
       
-      if (!correo_electronico?.trim() || !contrasena?.trim()) {
+      if (!correo_electronico?.trim() || !contrasenia?.trim()) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
           error: ERROR_MESSAGES.DATOS_INCOMPLETOS,
@@ -301,7 +301,7 @@ class AuthController {
       
       const resultado = await AuthService.crearUsuario({
         correo_electronico: correo_electronico.trim(),
-        contrasena: contrasena.trim(),
+        contrasenia: contrasenia.trim(),
         rol: rol || 'cliente'
       });
       

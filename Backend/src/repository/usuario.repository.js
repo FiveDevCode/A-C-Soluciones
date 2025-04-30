@@ -11,7 +11,7 @@ class UsuarioRepository {
   async findById(id, options = {}) {
     return await Usuario.findByPk(id, { 
       ...options,
-      attributes: { exclude: ['contrasena'] } // No devolver contraseña
+      attributes: { exclude: ['contrasenia'] } // No devolver contraseña
     });
   }
   
@@ -22,7 +22,7 @@ class UsuarioRepository {
     
     return await Usuario.findOne({
       where: { correo_electronico: email },
-      attributes: includePassword ? undefined : { exclude: ['contrasena'] },
+      attributes: includePassword ? undefined : { exclude: ['contrasenia'] },
       ...restOptions
     });
   }
@@ -88,7 +88,7 @@ class UsuarioRepository {
     
     const { count, rows } = await Usuario.findAndCountAll({
       where,
-      attributes: { exclude: ['contrasena'] },
+      attributes: { exclude: ['contrasenia'] },
       offset,
       limit,
       order: [['created_at', 'DESC']],
@@ -131,11 +131,11 @@ class UsuarioRepository {
   // Actualiza la contraseña de un usuario
    
    
-  async updatePassword(id, contrasena, options = {}) {
+  async updatePassword(id, contrasenia, options = {}) {
     return await this.update(
       id,
       {
-        contrasena,
+        contrasenia,
         token_recuperacion: null,
         expiracion_token_recuperacion: null
       },
