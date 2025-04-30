@@ -40,7 +40,7 @@ yarn-error.log*
 Thumbs.db
 
 # ===== Testing =====
-/coverage/
+
 /.nyc_output/
 
 # ===== Build/Compilación =====
