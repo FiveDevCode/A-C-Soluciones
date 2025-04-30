@@ -36,12 +36,34 @@ const ContainerButton = styled.div`
 
 `
 
+
+
+const validacionFormulario = (texto) => {
+  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
+}
+
+
 const FormCreateCl = () => {
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState({
+    value: "",
+    valid: null,
+  });
+  const [lastName, setLastName] = useState({
+    value: "",
+    valid: null,
+  });
+  const [phone, setPhone] = useState({
+    value: "",
+    valid: null,
+  });
+  const [email, setEmail] = useState({
+    value: "",
+    valid: null,
+  });
+  const [password, setPassword] = useState({
+    value: "",
+    valid: null,
+  });
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [offersAccepted, setOffersAccepted] = useState(false);
@@ -51,38 +73,48 @@ const FormCreateCl = () => {
       <TextField 
         label="Nombre" 
         fullWidth size="medium" 
-        value={name} 
-        onChange={(e) => setName(e.target.value)}
+        value={name.value} 
+        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={name.valid === false} 
+        helperText={name.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Apellidos" 
         fullWidth size="medium" 
-        value={lastName} 
-        onChange={(e) => setLastName(e.target.value)}
+        value={lastName.value} 
+        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={lastName.valid === false} 
+        helperText={lastName.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Celular" 
         fullWidth size="medium" 
         type='number'
-        value={phone} 
-        onChange={(e) => setPhone(e.target.value)}
+        value={phone.value} 
+        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={phone.valid === false} 
+        helperText={phone.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)}
+        value={email.value} 
+        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={email.valid === false} 
+        helperText={email.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
+        value={password.value} 
+        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={password.valid === false} 
+        helperText={password.valid === false && "El campo no debe estar vacio"} 
       /> 
 
       <FormControlLabel

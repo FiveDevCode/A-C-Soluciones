@@ -3,7 +3,6 @@ import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom'; // Importa el BrowserRouter
 import HeaderBarCl from '../../../components/client/HeaderBarCl';
 
-// Mocks for images
 jest.mock('../../../assets/common/logoA&C.png', () => 'mockedLogo.png');
 
 describe('HeaderBarCl Component', () => {
@@ -59,13 +58,10 @@ describe('HeaderBarCl Component', () => {
     );
     const searchInput = screen.getByPlaceholderText(/buscar/i);
   
-    // Asegúrate de que el valor cambie
     fireEvent.change(searchInput, { target: { value: 'Test' } });
   
-    // Simula el "Enter"
     fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
   
-    // Verifica la URL esperada
     expect(window.location.pathname).toBe('/resultado');
     expect(window.location.search).toBe('?data=Test');
   });

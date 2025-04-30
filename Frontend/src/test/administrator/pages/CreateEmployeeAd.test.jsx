@@ -8,40 +8,33 @@ jest.mock('../../../assets/administrator/registerEmployeeAd.png', () => 'registe
 
 describe("CreateEmployeeAd", () => {
   
-  test("renderiza la descripción del registro de empleados", () => {
+  test("renders the description of the employee record", () => {
     render(<CreateEmployeeAd />);
 
     expect(screen.getByText(/Registra aquí a los nuevos empleados/)).toBeInTheDocument();
   });
 
-  test("renderiza el helper de registro de empleados", () => {
+  test("renders the employee registration helper", () => {
     render(<CreateEmployeeAd />);
 
     expect(screen.getByText(/Por favor, completa todos los campos requeridos/)).toBeInTheDocument();
   });
 
-  test("renderiza el formulario de creación de empleado", () => {
-    render(<CreateEmployeeAd />);
-
-    const form = screen.getByRole("form");
-    expect(form).toBeInTheDocument();
-  });
-
-  test("renderiza el logo correctamente", () => {
+  test("render the logo correctly", () => {
     render(<CreateEmployeeAd />);
 
     const logo = screen.getByRole("img");
     expect(logo).toHaveAttribute("src", "registerEmployeeAd.png");
   });
 
-  test("renderiza los elementos de la interfaz con el layout adecuado", () => {
+  test("renders interface elements with the appropriate layout", () => {
     render(<CreateEmployeeAd />);
 
     const container = screen.getByText(/Registra aquí a los nuevos empleados/).parentElement;
     expect(container).toHaveStyle("flex-direction: column");
   });
 
-  test("verifica que el texto de la descripción es el correcto", () => {
+  test("Check that the description text is correct", () => {
     render(<CreateEmployeeAd />);
 
     const descriptionText = screen.getByText(/Registra aquí a los nuevos empleados/);

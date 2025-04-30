@@ -52,7 +52,6 @@ describe('FormCreateCl Component', () => {
       </BrowserRouter>
     );
     
-    // Simula la escritura en los campos
     const nameField = screen.getByLabelText(/nombre/i);
     fireEvent.change(nameField, { target: { value: 'Juan' } });
     expect(nameField.value).toBe('Juan');
@@ -108,7 +107,6 @@ describe('FormCreateCl Component', () => {
     const link = screen.getByText(/¿ya tienes cuenta\?/i);
     fireEvent.click(link);
     
-    // Asumiendo que el enrutamiento funciona correctamente
     expect(window.location.pathname).toBe('/login');
   });
 });

@@ -36,10 +36,21 @@ const ContainerButton = styled.div`
 `
 
 
+const validacionFormulario = (texto) => {
+  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
+}
+
+
 const FormLogin = () => {
   
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState({
+    value: "",
+    valid: null,
+  });
+  const [password, setPassword] = useState({
+    value: "",
+    valid: null,
+  });
 
   
   return (
@@ -47,16 +58,20 @@ const FormLogin = () => {
       <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)}
+        value={email.value} 
+        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={email.valid === false} 
+        helperText={email.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
         value={password} 
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={password.valid === false} 
+        helperText={password.valid === false && "El campo no debe estar vacio"} 
       />
 
       <LinkForgot to="/ForgotPasswordPage">Has olvidado tu contraseña?</LinkForgot>

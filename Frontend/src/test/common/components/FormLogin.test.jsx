@@ -12,16 +12,13 @@ describe('FormLogin Component', () => {
       </Router>
     );
 
-    // Campos de texto
     expect(screen.getByLabelText(/Correo electrónico/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument();
 
-    // Link
     const forgotLink = screen.getByText(/Has olvidado tu contraseña/i);
     expect(forgotLink).toBeInTheDocument();
     expect(forgotLink).toHaveAttribute('href', '/ForgotPasswordPage');
 
-    // Botones
     expect(screen.getByRole('button', { name: /Iniciar sesion/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Crear Cuenta/i })).toBeInTheDocument();
   });

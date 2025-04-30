@@ -29,42 +29,88 @@ const ContainerButton = styled.div`
 
 `
 
-const FormCreateEmployeeAd = () => {
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [IdCard, setIdCard] = useState("");
-  const [phone, setPhone] = useState("");
-  const [position, setPosition] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const validacionFormulario = (texto) => {
+  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
+}
 
-  
+
+
+const FormCreateEmployeeAd = () => {
+  const [name, setName] = useState({
+    value: "",
+    valid: null,
+  });
+  const [lastName, setLastName] = useState({
+    value: "",
+    valid: null,
+  });
+  const [IdCard, setIdCard] = useState({
+    value: "",
+    valid: null,
+  });
+  const [phone, setPhone] = useState({
+    value: "",
+    valid: null,
+  });
+  const [position, setPosition] = useState({
+    value: "",
+    valid: null,
+  });
+  const [email, setEmail] = useState({
+    value: "",
+    valid: null,
+  });
+  const [password, setPassword] = useState({
+    value: "",
+    valid: null,
+  });
+
+
   const handleSubmit = (event) => {
     event.preventDefault(); 
 
     handleCreateSubmitTechnical(
-      IdCard,
-      name,
-      lastName,
-      email,
-      phone,
-      password,
-      position
+      IdCard.value,
+      name.value,
+      lastName.value,
+      email.value,
+      phone.value,
+      password.value,
+      position.value,
     );
   };
 
   const handleLimpiar = () => {
-    setName("");
-    setLastName("");
-    setIdCard("");
-    setPhone("");
-    setPosition("");
-    setEmail("");
-    setPassword("");
+    setName({
+      value: "",
+      valid: null,
+    });
+    setLastName({
+      value: "",
+      valid: null,
+    });
+    setIdCard({
+      value: "",
+      valid: null,
+    });
+    setPhone({
+      value: "",
+      valid: null,
+    });
+    setPosition({
+      value: "",
+      valid: null,
+    });
+    setEmail({
+      value: "",
+      valid: null,
+    });
+    setPassword({
+      value: "",
+      valid: null,
+    });
 
   };
-
-
 
 
   return (
@@ -72,51 +118,65 @@ const FormCreateEmployeeAd = () => {
       <TextField 
         label="Nombre" 
         fullWidth size="medium" 
-        value={name} 
-        onChange={(e) => setName(e.target.value)}
+        value={name.value} 
+        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={name.valid === false} 
+        helperText={name.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Apellido" 
         fullWidth size="medium" 
-        value={lastName} 
-        onChange={(e) => setLastName(e.target.value)}
+        value={lastName.value} 
+        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={lastName.valid === false} 
+        helperText={lastName.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Cedula" 
         fullWidth size="medium" 
-        value={IdCard} 
-        onChange={(e) => setIdCard(e.target.value)}
+        value={IdCard.value} 
+        onChange={(e) => setIdCard({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={IdCard.valid === false} 
+        helperText={IdCard.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Teléfono" 
         fullWidth size="medium" 
-        value={phone} 
-        onChange={(e) => setPhone(e.target.value)}
+        value={phone.value} 
+        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={phone.valid === false} 
+        helperText={phone.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Cargo" 
         fullWidth size="medium" 
-        value={position} 
-        onChange={(e) => setPosition(e.target.value)}
+        value={position.value} 
+        onChange={(e) => setPosition({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={position.valid === false} 
+        helperText={position.valid === false && "El campo no debe estar vacio"} 
       />
       <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)}
+        value={email.value} 
+        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={email.valid === false} 
+        helperText={email.valid === false && "El campo no debe estar vacio"} 
       /> 
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
+        value={password.value} 
+        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
         sx={{ backgroundColor: 'white' }}
+        error={password.valid === false} 
+        helperText={password.valid === false && "El campo no debe estar vacio"} 
       /> 
 
 

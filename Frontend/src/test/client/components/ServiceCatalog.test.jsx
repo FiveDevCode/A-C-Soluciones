@@ -5,7 +5,6 @@ import ServicieCatalogCl from '../../../components/client/ServicieCatalogCl';
 
 describe('ServicieCatalogCl Component', () => {
 
-  // Helper to wrap the component with Router for the Link to work
   const renderWithRouter = (ui) => render(<Router>{ui}</Router>);
 
   it('should render the main title correctly', () => {
@@ -17,7 +16,6 @@ describe('ServicieCatalogCl Component', () => {
   it('should render the catalog services and their items', () => {
     renderWithRouter(<ServicieCatalogCl />);
     
-    // Check if catalog titles are rendered
     const mountTitle = screen.getByText(/MONTAJE Y MANTENIMIENTO DE EQUIPOS DE PRESION/i);
     const plantTitle = screen.getByText(/MANTENIMIENTO PLANTA ELECTRICA DE EMERGENCIA/i);
     const otherTitle = screen.getByText(/OTROS/i);

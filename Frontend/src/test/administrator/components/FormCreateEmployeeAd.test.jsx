@@ -1,4 +1,3 @@
-// FormCreateEmployeeAd.test.js
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -32,7 +31,6 @@ describe('FormCreateEmployeeAd Component', () => {
     expect(lastNameInput.value).toBe('');
   });
 
-  // Este test ya no evalúa el controller
   it('should submit the form with correct input values', () => {
     fireEvent.change(screen.getByLabelText(/Nombre/i), { target: { value: 'Ana' } });
     fireEvent.change(screen.getByLabelText(/Apellido/i), { target: { value: 'Lopez' } });
@@ -44,8 +42,6 @@ describe('FormCreateEmployeeAd Component', () => {
 
     fireEvent.click(screen.getByText(/Registrar/i));
 
-    // Aquí no hay necesidad de verificar el controller, solo se asegura que se haya enviado el formulario.
-    // Puedes reemplazar esta parte con un simple 'expect' si necesitas verificar algún comportamiento visual.
     expect(screen.getByLabelText(/Nombre/i).value).toBe('Ana');
     expect(screen.getByLabelText(/Apellido/i).value).toBe('Lopez');
     expect(screen.getByLabelText(/Cedula/i).value).toBe('12345678');

@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import HomeSessionPageCl from '../../../pages/client/HomeSessionPageCl';
 
-// Mock de todos los subcomponentes
 jest.mock('../../../components/client/BackgroundHomeCl', () => () => <div>Mock BackgroundHomeCl</div>);
 jest.mock('../../../components/client/ContentHomeCl', () => () => <div>Mock ContentHomeCl</div>);
 jest.mock('../../../components/client/HeaderBarCl', () => () => <div>Mock HeaderBarCl</div>);
