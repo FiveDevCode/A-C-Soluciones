@@ -2,7 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 import expressOasGenerator from 'express-oas-generator';
 import fs from 'fs';
-import { dirname,path } from 'path';
+import path from 'path';
+import {dirname} from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 

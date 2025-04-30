@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745998043167" clover="3.2.0">
-  <project timestamp="1745998043167" name="All files">
-    <metrics statements="289" coveredstatements="109" conditionals="78" coveredconditionals="24" methods="75" coveredmethods="37" elements="442" coveredelements="170" complexity="0" loc="289" ncloc="289" packages="10" files="18" classes="18"/>
+<coverage generated="1746035111310" clover="3.2.0">
+  <project timestamp="1746035111310" name="All files">
+    <metrics statements="262" coveredstatements="101" conditionals="78" coveredconditionals="22" methods="70" coveredmethods="31" elements="410" coveredelements="154" complexity="0" loc="262" ncloc="262" packages="10" files="16" classes="16"/>
     <package name="src">
       <metrics statements="18" coveredstatements="10" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="0"/>
       <file name="app.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/app.js">
@@ -185,11 +185,11 @@
       <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="encryptPassword.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/hooks/encryptPassword.js">
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="17" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="19" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.middlewares">
@@ -199,7 +199,7 @@
       </file>
     </package>
     <package name="src.models">
-      <metrics statements="65" coveredstatements="28" conditionals="34" coveredconditionals="18" methods="21" coveredmethods="16"/>
+      <metrics statements="44" coveredstatements="28" conditionals="34" coveredconditionals="18" methods="16" coveredmethods="16"/>
       <file name="cliente.model.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/models/cliente.model.js">
         <metrics statements="26" coveredstatements="16" conditionals="22" coveredconditionals="12" methods="10" coveredmethods="10"/>
         <line num="6" count="2" type="stmt"/>
@@ -228,30 +228,6 @@
         <line num="204" count="2" type="stmt"/>
         <line num="208" count="2" type="stmt"/>
         <line num="211" count="2" type="stmt"/>
-      </file>
-      <file name="servicio.model.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/models/servicio.model.js">
-        <metrics statements="21" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
       </file>
       <file name="tecnico.model.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/models/tecnico.model.js">
         <metrics statements="18" coveredstatements="12" conditionals="12" coveredconditionals="6" methods="6" coveredmethods="6"/>
@@ -313,7 +289,7 @@
       </file>
     </package>
     <package name="src.routers">
-      <metrics statements="24" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="cliente.routes.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/routers/cliente.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="2" type="stmt"/>
@@ -326,15 +302,6 @@
         <line num="23" count="2" type="stmt"/>
         <line num="26" count="2" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
-      </file>
-      <file name="servicio.routes.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/routers/servicio.routes.js">
-        <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
       </file>
       <file name="tecnico.routes.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/routers/tecnico.routes.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -349,20 +316,20 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="18" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="16" coveredmethods="12"/>
+      <metrics statements="18" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="16" coveredmethods="6"/>
       <file name="cliente.services.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/services/cliente.services.js">
-        <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9"/>
-        <line num="6" count="11" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="27" count="2" type="stmt"/>
-        <line num="31" count="2" type="stmt"/>
-        <line num="32" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
+        <metrics statements="11" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="3"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
       </file>
       <file name="tecnico.services.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/services/tecnico.services.js">
         <metrics statements="7" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="3"/>

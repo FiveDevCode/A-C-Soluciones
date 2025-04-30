@@ -1,6 +1,7 @@
 import request from 'supertest';
 import  App  from '../src/app.js';
 import { sequelize } from '../src/database/conexion.js';
+import path from 'path';
 
 describe('Tecnico Router', () => {
   beforeAll(async () => {
