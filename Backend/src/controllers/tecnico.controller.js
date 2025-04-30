@@ -5,7 +5,7 @@ export class TecnicoController {
   constructor() {
     this.tecnicoService = new TecnicoService();
   }
-
+//aaa
   // registrar tecnicos en el sistema 
   crearTecnico = async (req, res) => {
     try {
