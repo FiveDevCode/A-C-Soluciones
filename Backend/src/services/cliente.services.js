@@ -28,7 +28,7 @@ export class ClienteService {
     }
 
     async eliminarCliente(id) {
-        const clienteEliminado = await clienteRepository.eliminarCliente(id);
+        const clienteEliminado = await this.clienteRepository.eliminarCliente(id);
         if (!clienteEliminado) throw new Error('Cliente no encontrado');
         return clienteEliminado;
 
