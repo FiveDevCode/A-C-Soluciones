@@ -41,7 +41,7 @@ const Cliente=sequelize.define('Cliente',{
         allowNull: false,
         validate: {
             is: { //validación solo letras, acentos y espacios
-                args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+                args: [/^[a-záéíóúñ\s]*$/i],
                 msg: 'El nombre solo puede contener letras y espacios.',
 
             },
@@ -78,7 +78,7 @@ const Cliente=sequelize.define('Cliente',{
         allowNull: false,
         validate: {
             is: { //validación solo letras y espacios
-                args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+                args:[/^[a-záéíóúñ\s]*$/i],
                 msg: 'El apellido solo puede contener letras y espacios.',
 
             },
@@ -107,7 +107,7 @@ const Cliente=sequelize.define('Cliente',{
             msg: 'El correo debe tener máximo 320 caracteres.',
           },
           is: {
-            args: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+            args: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             msg: 'El correo electrónico tiene un formato incorrecto.',
           },
         },
