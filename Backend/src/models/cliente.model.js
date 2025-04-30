@@ -140,7 +140,7 @@ const Cliente=sequelize.define('Cliente',{
             msg: 'La contraseña debe tener entre 8 y 64 caracteres.',
           },
           is: {
-            args: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!])(?!.*\s)(?!.*(.)\1{2,}).{8,64}$/,
+            args: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=])[^\s]{8,64}$/,
             msg: 'La contraseña debe incluir mayúscula, minúscula, número, carácter especial y no repetir caracteres.',
           },
           //Valida que las contraseña ingresada no sea alguna predecible 
