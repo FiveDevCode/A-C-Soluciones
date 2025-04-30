@@ -1,6 +1,6 @@
 import {DataTypes} from 'sequelize'
 import { sequelize } from "../database/conexion";
-import { encryptPasswordHook, encryptPasswordHookCliente } from '../hooks/encryptPassword.js';
+import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 
 
 const Cliente=sequelize.define('Cliente',{

@@ -3,11 +3,15 @@ import morgan from 'morgan';
 import expressOasGenerator from 'express-oas-generator';
 import fs from 'fs';
 import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 
 import TecnicoRouter from './routers/tecnico.routes.js';
 import ClienteRouter from './routers/cliente.routes.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const App = express();
 
