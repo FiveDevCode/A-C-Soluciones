@@ -37,11 +37,11 @@ const ContainerButton = styled.div`
 `
 
 const FormCreateCl = () => {
-  const [name, setName] = useState();
-  const [lastName, setLastName] = useState();
-  const [phone, setPhone] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [offersAccepted, setOffersAccepted] = useState(false);

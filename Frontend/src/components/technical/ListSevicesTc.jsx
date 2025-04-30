@@ -95,7 +95,7 @@ const ListSevicesTc = () => {
               label="Estado"
               onChange={handleChange}
             >
-              <MenuItem value="Pendiente">Pediente</MenuItem>
+              <MenuItem value="Pendiente">Pendiente</MenuItem>
               <MenuItem value="Completada">Completada</MenuItem>
               <MenuItem value="Cancelada">Cancelada</MenuItem>
             </Select>

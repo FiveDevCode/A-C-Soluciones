@@ -1,6 +1,6 @@
 import { TextField, Button } from '@mui/material';
 import { useState } from 'react';
-import { Link } from "react-router-dom";
+import {handleCreateSubmitTechnical} from "../../controllers/technical/createTc.controller"
 import styled from 'styled-components';
 
 const Form = styled.form`
@@ -30,21 +30,57 @@ const ContainerButton = styled.div`
 `
 
 const FormCreateEmployeeAd = () => {
-  const [name, setName] = useState();
-  const [IdCard, setIdCard] = useState();
-  const [phone, setPhone] = useState();
-  const [position, setPosition] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [IdCard, setIdCard] = useState("");
+  const [phone, setPhone] = useState("");
+  const [position, setPosition] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   
+  const handleSubmit = (event) => {
+    event.preventDefault(); 
+
+    handleCreateSubmitTechnical(
+      IdCard,
+      name,
+      lastName,
+      email,
+      phone,
+      password,
+      position
+    );
+  };
+
+  const handleLimpiar = () => {
+    setName("");
+    setLastName("");
+    setIdCard("");
+    setPhone("");
+    setPosition("");
+    setEmail("");
+    setPassword("");
+
+  };
+
+
+
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <TextField 
         label="Nombre" 
         fullWidth size="medium" 
         value={name} 
         onChange={(e) => setName(e.target.value)}
+        sx={{ backgroundColor: 'white' }}
+      />
+      <TextField 
+        label="Apellido" 
+        fullWidth size="medium" 
+        value={lastName} 
+        onChange={(e) => setLastName(e.target.value)}
         sx={{ backgroundColor: 'white' }}
       />
       <TextField 
@@ -86,7 +122,7 @@ const FormCreateEmployeeAd = () => {
 
       <ContainerButton>
         <Button type="submit" variant="contained">Registrar</Button>
-        <Button type="button" variant="contained">Limpiar campos</Button>
+        <Button type="button" variant="contained" onClick={handleLimpiar}>Limpiar campos</Button>
       </ContainerButton>
 
     </Form>

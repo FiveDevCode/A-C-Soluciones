@@ -2,7 +2,7 @@ import { faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 
@@ -43,6 +43,8 @@ const InputSearch = styled(TextField)`
 const HeaderBar = () => {
   const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
   
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -50,9 +52,20 @@ const HeaderBar = () => {
     }
   };
 
+  const titles = {
+    "/services": "Servicios",
+    "/register-employee": "Crear empleado",
+    "/register": "Crear cuenta",
+    "/account": "Perfil de usuario",
+    "/home": "Inicio",
+  };
+
+  const title = titles[pathname] || "Home";
+
+
   return (
     <ContainerBar>
-      <TitleCategory>Servicios</TitleCategory>
+      <TitleCategory>{title}</TitleCategory>
       <InputSearch
         value={busqueda}
         onKeyDown={handleKeyDown}

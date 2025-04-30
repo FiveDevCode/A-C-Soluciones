@@ -7,6 +7,8 @@ import MenuSide from './components/common/MenuSide';
 import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
+import PerfilUsuario from './pages/technical/PerfilUsuario';
+import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
 
 
 const Container = styled.div`
@@ -36,7 +38,7 @@ const Content = styled.div`
 
 function AppContent() {
   const location = useLocation();
-  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register';
+  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/home';
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
@@ -47,7 +49,9 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/services" element={<ServicesPageTc />} />
           <Route path="/register" element={<CreateAccountPageCl />} />
+          <Route path="/account" element={<PerfilUsuario />} />
           <Route path="/register-employee" element={<CreateEmployeeAd />} />
+          <Route path="/home" element={<HomeSessionPageCl />} />
         </Routes>
       </Content>
     </Container>

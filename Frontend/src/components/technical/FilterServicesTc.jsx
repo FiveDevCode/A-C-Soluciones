@@ -19,7 +19,7 @@ const FilterServicesTc = () => {
   return (
     <ContainerInfo>
       <TitleSearch>Se encontraron 56 resultados    |   filtros</TitleSearch>
-      <FontAwesomeIcon icon={faFilter} style={{fontSize:"20px"}}/>
+      <FontAwesomeIcon data-testid="filter-icon" icon={faFilter} style={{fontSize:"20px"}}/>
     </ContainerInfo>
   )
 }
