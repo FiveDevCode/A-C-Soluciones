@@ -1,6 +1,6 @@
-const App = require('./app.js');
-const { PORT } = require('./config/puerto.js');
-const { connectDB } = require('./database/conexion.js');
+import App from './app.js';
+import { PORT } from './config/puerto.js';
+import { connectDB } from './database/conexion.js';
 
 async function main() {
   try {

@@ -1,6 +1,6 @@
-const request = require('supertest');
-const App = require('../src/app.js'); // ✅ Corrección aquí
-const { sequelize } = require('../src/database/conexion.js');
+import request from 'supertest';
+import App from '../src/app.js'; 
+import { sequelize } from '../src/database/conexion.js';
 
 describe('Cliente Router', () => {
   beforeAll(async () => {

@@ -1,13 +1,12 @@
-const express = require('express');
-const morgan = require('morgan');
-const expressOasGenerator = require('express-oas-generator');
-const fs = require('fs');
-const path = require('path');
-const { fileURLToPath } = require('url'); // Este puede eliminarse si no se usa import.meta.url
-const swaggerUi = require('swagger-ui-express');
+import express from 'express';
+import morgan from 'morgan';
+import expressOasGenerator from 'express-oas-generator';
+import fs from 'fs';
+import path from 'path';
+import swaggerUi from 'swagger-ui-express';
 
-const TecnicoRouter = require('./routers/tecnico.routes.js');
-const ClienteRouter = require('./routers/cliente.routes.js');
+import TecnicoRouter from './routers/tecnico.routes.js';
+import ClienteRouter from './routers/cliente.routes.js';
 
 
 const App = express();
@@ -26,4 +25,4 @@ if (fs.existsSync(openApiPath)) {
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
-module.exports = App;
+export default App;
