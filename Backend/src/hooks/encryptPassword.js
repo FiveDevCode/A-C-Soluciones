@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt';
     tecnico.contrasenia = await bcrypt.hash(tecnico.contrasenia, salt);
   }
 */
-//};
+//}
 
 const SALT_ROUNDS = 10;
 
