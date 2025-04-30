@@ -9,3 +9,5 @@ export const encryptPasswordHook = async (tecnico) => {
     tecnico.contrasenia = await bcrypt.hash(tecnico.contrasenia, salt);
   }
 };
+
+// funcion para comparar la contraseña
