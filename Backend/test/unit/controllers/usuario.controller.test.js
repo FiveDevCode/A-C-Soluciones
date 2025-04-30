@@ -1,4 +1,3 @@
-// test/controllers/usuario.controller.test.js
 import AuthController from '../../../src/controllers/usuario.controller.js';
 import AuthService from '../../../src/services/usuario.services.js';
 
@@ -25,7 +24,7 @@ describe('AuthController - login', () => {
     }));
   });
 
-  it('debería retornar 200 con respuesta exitosa si las credenciales son válidas', async () => {
+  it('debera retornar 200 con respuesta exitosa si las credenciales son validas', async () => {
     mockReq.body = { correo_electronico: 'test@example.com', contrasenia: '123456' };
 
     const mockResultado = { success: true, token: 'abc123' };
@@ -38,7 +37,7 @@ describe('AuthController - login', () => {
     expect(mockRes.json).toHaveBeenCalledWith(mockResultado);
   });
 
-  it('debería retornar 500 si hay un error en el servicio', async () => {
+  it('debera retornar 500 si hay un error en el servicio', async () => {
     mockReq.body = { correo_electronico: 'test@example.com', contrasenia: '123456' };
 
     AuthService.autenticarUsuario = jest.fn().mockRejectedValue(new Error('Fallo en BD'));

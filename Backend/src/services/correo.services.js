@@ -11,12 +11,12 @@ class EmailService {
     
       secure: true, 
       tls: {
-        rejectUnauthorized: true // Verificar certificado
+        rejectUnauthorized: true 
       }
     });
   }
 
-  
+  //se envia un correo para recuperacion
   async enviarEmailRecuperacion(email, token) {
     try {
       const appUrl = process.env.APP_URL || 'https://ac-soluciones.com';
@@ -37,7 +37,7 @@ class EmailService {
     }
   }
 
- 
+ //cinfirmacion de contra
   async enviarConfirmacionCambioContrasena(email) {
     try {
       const appUrl = process.env.APP_URL || 'https://ac-soluciones.com';
@@ -58,7 +58,7 @@ class EmailService {
     }
   }
 
-  
+  //alertas
   async enviarAlertaSeguridad(email, datos) {
     try {
       const { ip, ubicacion, dispositivo, fecha } = datos;

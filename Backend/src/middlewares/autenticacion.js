@@ -52,7 +52,7 @@ export const headersSeguridad = (req, res, next) => {
   next();
 };
 
-// Configuración CORS para frontend separado
+// Configuracion CORS para frontend separado
 export const configurarCORS = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL || '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -66,7 +66,7 @@ export const configurarCORS = (req, res, next) => {
   next();
 };
 
-// Validación de credenciales
+// Validacion de credenciales
 export const validarCredenciales = (req, res, next) => {
   const { correo_electronico, contrasenia } = req.body;
   const errores = [];
@@ -134,7 +134,7 @@ export const verificarToken = async (req, res, next) => {
       return res.status(401).json({ error: ERROR_MESSAGES.TOKEN_REVOCADO });
     }
     
-    // Verificar si ha habido un cambio de contraseña desde que se emitió el token
+    // Verificar si ha habido un cambio de contraseña
     const tokenIssuedAt = decoded.iat * 1000;
     const lastPasswordUpdate = usuario.ultima_actualizacion_contrasena?.getTime() || 0;
     
@@ -173,7 +173,7 @@ export const verificarRol = (rolesPermitidos) => (req, res, next) => {
   next();
 };
 
-// Validación de token de recuperación (mejorada)
+// Validación de token de recuperacion
 export const validarTokenRecuperacion = async (req, res, next) => {
   const { token } = req.body;
  
@@ -204,7 +204,7 @@ export const validarTokenRecuperacion = async (req, res, next) => {
   }
 };
 
-// Validación de nueva contraseña
+// Validacin de nueva contra
 export const validarNuevaContrasena = (req, res, next) => {
   const { nuevaContrasena } = req.body;
   const errores = [];

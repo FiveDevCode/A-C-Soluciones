@@ -36,7 +36,7 @@ export default (sequelize) => {
       type: DataTypes.ENUM('cliente', 'administrador', 'tecnico'),
       defaultValue: 'cliente'
     },
-    // Campos para recuperación de contraseña
+  
     token_recuperacion: {
       type: DataTypes.STRING,
       allowNull: true
@@ -45,7 +45,7 @@ export default (sequelize) => {
       type: DataTypes.DATE,
       allowNull: true
     },
-    // Campo para registrar los tokens invalidados
+  
     tokens_invalidados: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []
@@ -76,13 +76,13 @@ export default (sequelize) => {
         fields: ['correo_electronico']
       },
       {
-        fields: ['token_recuperacion'] // Índice para búsquedas por token
+        fields: ['token_recuperacion'] 
       }
     ],
     timestamps: true,
     paranoid: true,
     tableName: 'usuarios',
-    underscored: true // Para coincidir con snake_case de la BD
+    underscored: true 
   });
 
   // Método para validar contraseña

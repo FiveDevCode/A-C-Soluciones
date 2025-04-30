@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Usuario, setupDatabase } from '../../helpers/sequelize-test-setup.js'; // Asegúrate de que setupDatabase esté importado correctamente
+import { Usuario, setupDatabase } from '../../helpers/sequelize-test-setup.js'; 
 
 // Mock de bcrypt
 jest.mock('bcrypt', () => ({
@@ -10,11 +10,11 @@ jest.mock('bcrypt', () => ({
 
 describe('Modelo Usuario (con Sequelize real)', () => {
   beforeAll(async () => {
-    await setupDatabase(); // Sincroniza la base de datos antes de las pruebas
+    await setupDatabase(); 
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Limpia los mocks entre pruebas
+    jest.clearAllMocks(); 
   });
 
   
@@ -22,7 +22,6 @@ describe('Modelo Usuario (con Sequelize real)', () => {
   it('debería hashear la contraseña antes de crear', async () => {
     const usuario = Usuario.build({ correo_electronico: 'a@b.com', contrasenia: 'abc123' });
 
-    // Sequelize ejecuta automáticamente los hooks, pero si prefieres llamarlos explícitamente:
     await Usuario.runHooks('beforeCreate', usuario);
 
     expect(usuario.contrasenia).toBe('hashed-abc123');

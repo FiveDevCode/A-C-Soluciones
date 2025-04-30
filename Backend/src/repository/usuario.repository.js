@@ -2,9 +2,7 @@ import { Op } from 'sequelize';
 import { sequelize } from '../database/conexion.js';
 import Usuario from '../models/usuario.model.js';
 
-/**
- * Repositorio para el manejo de operaciones de CRUD sobre usuarios
- */
+
 class UsuarioRepository {
    //Busca un usuario por ID
    
@@ -15,7 +13,7 @@ class UsuarioRepository {
     });
   }
   
-  // Busca un usuario por correo electrónico
+  // Busca un usuario por correo electronico
    
   async findByEmail(email, options = {}) {
     const { includePassword = false, ...restOptions } = options;
@@ -27,7 +25,7 @@ class UsuarioRepository {
     });
   }
   
-   //Busca un usuario por token de recuperación
+   //Busca un usuario por token de recuperacion
    
   async findByRecoveryToken(token, options = {}) {
     return await Usuario.findOne({
@@ -62,7 +60,7 @@ class UsuarioRepository {
     return [rowsUpdated, updated];
   }
   
-  //Elimina un usuario de forma lógica (soft delete)
+  //Elimina un usuario
    
   async delete(id, options = {}) {
     return await Usuario.destroy({
@@ -71,7 +69,7 @@ class UsuarioRepository {
     });
   }
   
-   //Lista usuarios con paginación y filtros
+   //Lista usuarios
    
   async findAll({ page = 1, limit = 10, rol, searchTerm }, options = {}) {
     const offset = (page - 1) * limit;

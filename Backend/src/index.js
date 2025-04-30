@@ -5,11 +5,11 @@ import portfinder from 'portfinder';
 
 async function main() {
     try {
-        // 1. Autenticar conexión a la base de datos
+        //Autenticar conexión a la base de datos
         await sequelize.authenticate();
         console.log('Conexión a PostgreSQL establecida');
 
-        // 2. Sincronizar modelos (opcional: configurar según entorno)
+        // Sincronizar modelos 
         const syncOptions = process.env.NODE_ENV === 'test' 
             ? { force: false } 
             : { alter: true };
@@ -27,7 +27,7 @@ async function main() {
             console.log(`Documentación API disponible en http://localhost:${availablePort}/api-docs`);
         });
 
-        // Manejo de cierre elegante
+        // cierre
         const shutdown = async () => {
             console.log('\nRecibida señal de apagado, cerrando servidor...');
             server.close(async () => {
@@ -41,7 +41,7 @@ async function main() {
         process.on('SIGTERM', shutdown);
         process.on('SIGINT', shutdown);
 
-        // Manejo específico de error EADDRINUSE
+        // error
         server.on('error', (err) => {
             if (err.code === 'EADDRINUSE') {
                 console.log(`Puerto ${availablePort} en uso, intentando con otro...`);

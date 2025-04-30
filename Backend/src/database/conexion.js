@@ -15,7 +15,7 @@ const config = {
   },
   development: {
     logging: console.log,
-    benchmark: true  // Muestra tiempo de ejecución
+    benchmark: true  
   },
   test: {
     logging: false
@@ -121,7 +121,7 @@ export const initializeDatabase = async () => {
   } catch (error) {
     console.error('fallo en inicialización:', error);
    
-    // Cierra conexiones limpiamente
+    // Cierra conexiones 
     try {
       await closeConnection();
     } catch (e) {
@@ -132,7 +132,7 @@ export const initializeDatabase = async () => {
   }
 };
 
-// Cierre seguro con timeout
+// Cierre seguro 
 export const closeConnection = async () => {
   try {
     console.log(' Cerrando conexión...');
@@ -151,7 +151,7 @@ export const closeConnection = async () => {
   }
 };
 
-// Exportaciones mejor organizadas
+
 export default {
   sequelize,
   Sequelize,

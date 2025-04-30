@@ -1,6 +1,4 @@
-// test/unit/auth.service.test.js
 
-// Mock de las dependencias al inicio
 jest.mock('../../../src/repository/usuario.repository.js');
 jest.mock('../../../src/services/correo.services.js', () => ({
   enviarEmailRecuperacion: jest.fn().mockResolvedValue(true),
@@ -22,7 +20,6 @@ import { sequelize } from '../../../src/database/conexion.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; 
 
-// Definimos los mensajes de error directamente en el test para evitar dependencias
 const ERROR_MESSAGES = {
   USUARIO_NO_ENCONTRADO: 'Usuario no encontrado',
   ERROR_OBTENER_USUARIO: 'Error al obtener usuario'
@@ -199,7 +196,7 @@ describe('AuthService.cambiarContrasena', () => {
     const fakeUser = {
       id: 1,
       contrasenia: 'hashed-old-password',
-      validarContrasena: jest.fn().mockResolvedValue(true) // La contraseña actual es válida
+      validarContrasena: jest.fn().mockResolvedValue(true) // La contraseña actual es beuna
     };
   
     UsuarioRepository.findById.mockResolvedValue(fakeUser);
