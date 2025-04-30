@@ -6,6 +6,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   logging: false, // No muestra las consultas en consola
 });
 
+//aa
 // Función para probar la conexión
 const connectDB = async () => {
   try {
