@@ -63,7 +63,7 @@ export class TecnicoController {
       console.error(error);
       return res.status(500).json({ message: 'Error al obtener el empleado' });
     }
-  }
+  };
   
   // obtener todo les empleados que estan registrados en el sistema 
   obtenerTecnicos = async (req, res) => {
