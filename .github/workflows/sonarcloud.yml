@@ -27,9 +27,6 @@ jobs:
         run: npm install
         working-directory: ./Backend
 
-      - name: Run tests with coverage
-        run: npm test -- --coverage
-        working-directory: ./Backend
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v2.2.0
@@ -39,9 +36,8 @@ jobs:
           args: >
             -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
             -Dsonar.organization=fivedevcode
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.sources=src
-            -Dsonar.tests=test
+            -Dsonar.javascript.lcov.reportPaths=./Backend/coverage/lcov.info
+            -Dsonar.sources=./Backend/src
+            -Dsonar.tests=./Backend/test
             -Dsonar.test.inclusions=**/*.test.js
             -Dsonar.verbose=true
-        working-directory: ./Backend
