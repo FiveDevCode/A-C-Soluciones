@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage --detectOpenHandles --forceExit"
   },
   "author": "",
   "license": "ISC",
@@ -38,7 +38,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "coverageDirectory": "coverage",
-    "coverageReporters": ["lcov"]
+    "coverageDirectory": "./coverage",
+    "coverageReporters": ["lcov", "text"]
   }
 }
