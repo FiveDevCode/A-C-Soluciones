@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -96,62 +96,62 @@
 <a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
 import { ClienteController } from '../controllers/cliente.controller.js';
 &nbsp;
-const router = express.Router();
-const clienteController = new ClienteController();
+const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
+const clienteController = <span class="cstat-no" title="statement not covered" >new ClienteController();</span>
 &nbsp;
 // registrar clientes
-router.post('/api/cliente', clienteController.crearCliente);
+<span class="cstat-no" title="statement not covered" >router.post('/api/cliente', clienteController.crearCliente);</span>
 &nbsp;
 // obtener todos los clientes registrados
-router.get('/api/cliente', clienteController.obtenerClientesActivos);
+<span class="cstat-no" title="statement not covered" >router.get('/api/cliente', clienteController.obtenerClientesActivos);</span>
 &nbsp;
 // obtener cliente por id
-router.get('/api/cliente/:id', clienteController.obtenerClientePorId);
+<span class="cstat-no" title="statement not covered" >router.get('/api/cliente/:id', clienteController.obtenerClientePorId);</span>
 &nbsp;
 // obtener cliente por cedula
-router.get('/api/cliente/cedula/:numero_de_cedula', clienteController.obtenerClientePorCedula);
+<span class="cstat-no" title="statement not covered" >router.get('/api/cliente/cedula/:numero_de_cedula', clienteController.obtenerClientePorCedula);</span>
 &nbsp;
 // obtener cliente por email
-router.get('/api/cliente/email/:correo_electronico', clienteController.obtenerClientePorEmail);
+<span class="cstat-no" title="statement not covered" >router.get('/api/cliente/email/:correo_electronico', clienteController.obtenerClientePorEmail);</span>
 &nbsp;
 //actualizar cliente por id
-router.put('/api/cliente/:id', clienteController.actualizarCliente);
+<span class="cstat-no" title="statement not covered" >router.put('/api/cliente/:id', clienteController.actualizarCliente);</span>
 &nbsp;
 // eliminar cliente por id
-router.delete('/api/cliente/:id', clienteController.eliminarCliente);
+<span class="cstat-no" title="statement not covered" >router.delete('/api/cliente/:id', clienteController.eliminarCliente);</span>
 &nbsp;
 // obtener todos los clientes
-router.get('/api/cliente/todos', clienteController.obtenerTodosLosClientes);
+<span class="cstat-no" title="statement not covered" >router.get('/api/cliente/todos', clienteController.obtenerTodosLosClientes);</span>
 &nbsp;
 export default router;</pre></td></tr></table></pre>
 
@@ -160,7 +160,7 @@ export default router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-01T01:20:15.572Z
+                at 2025-05-01T15:45:01.587Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

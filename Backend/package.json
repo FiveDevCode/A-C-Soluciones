@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --collectCoverageFrom=\"src/**/*.js\"",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage --collectCoverageFrom=\"src/**/*.js\"",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch"
     
   },
   "author": "",
