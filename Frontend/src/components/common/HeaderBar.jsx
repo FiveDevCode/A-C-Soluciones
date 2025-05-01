@@ -38,6 +38,10 @@ const InputSearch = styled(TextField)`
     border-radius: 50px;
     padding-right: 10px;
   }
+
+  &:focus-within {
+    background-color: #ffffff;
+  }
 `
 
 const HeaderBar = () => {
@@ -58,6 +62,7 @@ const HeaderBar = () => {
     "/register": "Crear cuenta",
     "/account": "Perfil de usuario",
     "/home": "Inicio",
+    "/profile": "Perfil",
   };
 
   const title = titles[pathname] || "Home";
@@ -89,7 +94,7 @@ const HeaderBar = () => {
             style={{fontSize: '24px'}}
           />
         </Link>
-        <Link >
+        <Link to="/profile" >
           <FontAwesomeIcon 
             icon={faCircleUser}
             style={{fontSize: '24px'}}

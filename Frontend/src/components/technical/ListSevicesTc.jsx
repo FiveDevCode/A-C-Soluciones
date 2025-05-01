@@ -11,17 +11,19 @@ import { Link } from "react-router-dom";
 const ContainerNoti = styled.div`
   display: flex;
   flex-direction: column;
-
 `;
 
 const Notification = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid rgba(0,0,0,0.25);
-  border-radius: 3px 5px 0 0;
   padding-left: 1rem;
   padding-right: 5rem;
   justify-content: space-between;
+  
+  &:first-child{
+    border-radius: 5px 5px 0 0;
+  }
 `;
 
 const NotificationDescription = styled.div`

@@ -8,7 +8,7 @@ import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
-
+import ProfileUserTc from './pages/technical/ProfileUserTc'
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -50,6 +50,7 @@ function AppContent() {
           <Route path="/register" element={<CreateAccountPageCl />} />
           <Route path="/register-employee" element={<CreateEmployeeAd />} />
           <Route path="/home" element={<HomeSessionPageCl />} />
+          <Route path="/profile" element={<ProfileUserTc />} />
         </Routes>
       </Content>
     </Container>

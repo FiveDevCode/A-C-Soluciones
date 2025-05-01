@@ -31,7 +31,9 @@ const SectionMenu = styled.section`
 
 const TitleMenu = styled.h1`
   font-size: 1rem;
-  font-weight: lighter;
+  font-weight: 300;
+  color: #505050;
+
 `
 
 const ContainerAllOption = styled.div`
@@ -45,7 +47,8 @@ const ContainerOption = styled(Link)`
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid rgba(0,0,0,0.25);
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   padding: 0.5rem;
   color: #000000;
@@ -54,10 +57,27 @@ const ContainerOption = styled(Link)`
     min-width: 32px;
     text-align: center;
   }
+
+  &:hover {
+    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
+
+    h2 {
+      font-weight: bold;
+    }
+
+    svg {
+      color: #000000;
+      stroke-width: 0;
+
+    }
+  }
+  
 `
 const TitleOption = styled.h2`
   font-size: 1rem;
   font-weight: normal;
+  color: #505050;
+
 `
 const ContainerAllConfiguration = styled.div`
   display: flex;
@@ -68,49 +88,48 @@ const ContainerAllConfiguration = styled.div`
   gap: 0.725rem;
 
 `
+const IconOption = styled(FontAwesomeIcon)`
+  color: white;
+  stroke: black;
+  stroke-width: 15px;
+  font-size: 32px;
+`
 
 
 const MenuSide = () => {
   return (
     <SectionMenu>
-      <Logo src={logo} size="157px"/>
+      <Link to="/"><Logo src={logo} size="157px"/></Link>
       <TitleMenu>Menu</TitleMenu>
       <Divider/> 
       <ContainerAllOption>
-        <ContainerOption>
-          <FontAwesomeIcon 
-            icon={faHouse} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
-          
+        <ContainerOption to="/">
+          <IconOption 
+            icon={faHouse}           
           />
           <TitleOption>Inicio</TitleOption>
         </ContainerOption>
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faDiagramProject} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
-
           />
           <TitleOption>Mis solicitudes</TitleOption>
         </ContainerOption>
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faPaperPlane} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
           />
           <TitleOption>Enviar solicitud</TitleOption>
         </ContainerOption>
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faFile} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
           />
           <TitleOption>Mis reportes</TitleOption>
         </ContainerOption>
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faClockRotateLeft} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}}
           />
           <TitleOption>Ver historial</TitleOption>
         </ContainerOption>
@@ -120,16 +139,14 @@ const MenuSide = () => {
       <ContainerAllConfiguration>
         <Divider/> 
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faGear} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
           />
           <TitleOption>Configuracion</TitleOption>
         </ContainerOption>
         <ContainerOption>
-          <FontAwesomeIcon 
+          <IconOption 
             icon={faArrowRightFromBracket} 
-            style={{color: 'white', stroke: 'black', strokeWidth: '15px', fontSize: '32px'}} 
           />
           <TitleOption>Salir</TitleOption>
         </ContainerOption>

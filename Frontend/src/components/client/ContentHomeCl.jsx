@@ -55,8 +55,8 @@ const ContainerWhoInfo = styled.div`
 const Img = styled.img`
   
   @media screen and (max-width: 1520px) {
-    width: 50%; // ejemplo
-    height: fit-content; // ejemplo
+    width: 50%;
+    height: fit-content; 
   }
 
 
