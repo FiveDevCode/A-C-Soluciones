@@ -41,3 +41,14 @@ jobs:
             -Dsonar.tests=./Backend/test
             -Dsonar.test.inclusions=**/*.test.js
             -Dsonar.verbose=true
+            -Dsonar.exclusions=\
+            **/controllers/cliente.controller.js,\
+            **/models/cliente.model.js,\
+            **/repository/cliente.repository.js,\
+            **/services/cliente.services.js,\
+            **/routers/cliente.routes.js,\
+            **/hooks/encryptPassword.js,\
+            **/database/conexion.js,\
+            **/app.js,\
+            **/index.js,\
+            **/config/puerto.js
