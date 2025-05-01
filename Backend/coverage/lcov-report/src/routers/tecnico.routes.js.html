@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/database/conexion.js</title>
+    <title>Code coverage report for src/routers/tecnico.routes.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/database</a> conexion.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routers</a> tecnico.routes.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -82,52 +82,76 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/config/database.js
-import { Sequelize } from 'sequelize';
-import 'dotenv/config';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
+import { TecnicoController } from '../controllers/tecnico.controller.js';
 &nbsp;
-export const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  logging: false, // No muestra las consultas en consola
-});
+const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
+const tecnicoController = <span class="cstat-no" title="statement not covered" >new TecnicoController();</span>
 &nbsp;
+// registrar empleados 
+<span class="cstat-no" title="statement not covered" >router.post('/api/tecnico',  tecnicoController.crearTecnico);</span>
 &nbsp;
-// Función para probar la conexión
-export const connectDB = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await sequelize.authenticate();</span>
-<span class="cstat-no" title="statement not covered" >    console.log('Conectado correctamente a la base de datos');</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.error('Error al conectarse a la base de datos:', error);</span>
-<span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
-  }
-};</pre></td></tr></table></pre>
+// obtener todo los empleados registrados 
+<span class="cstat-no" title="statement not covered" >router.get('/api/tecnico', tecnicoController.obtenerTecnicos);</span>
+&nbsp;
+// obtener empleado por id
+<span class="cstat-no" title="statement not covered" >router.get('/api/tecnico/:id', tecnicoController.obtenerTecnicoPorId);</span>
+&nbsp;
+// obtener empleado por numero de cedula 
+<span class="cstat-no" title="statement not covered" >router.get('/api/tecnico/cedula/:numero_de_cedula', tecnicoController.obtenerTecnicoPorCedula);</span>
+&nbsp;
+// actualizar empleado por id
+<span class="cstat-no" title="statement not covered" >router.put('/api/tecnico/:id', tecnicoController.actualizarTecnico);</span>
+&nbsp;
+// eliminar empleado por id
+<span class="cstat-no" title="statement not covered" >router.delete('/api/tecnico/:id', tecnicoController.eliminarTecnico);</span>
+&nbsp;
+export default router;
+&nbsp;
+// rutas del la api 
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-01T02:42:09.050Z
+                at 2025-05-01T01:14:51.618Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
