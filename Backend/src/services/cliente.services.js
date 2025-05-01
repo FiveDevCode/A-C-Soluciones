@@ -16,7 +16,6 @@ export class ClienteService {
         return await this.clienteRepository.obtenerClientePorEmail(correo_electronico);
     }
     
-    // Obtener todos los clientes (útil para admin)
     async obtenerTodosLosClientes() {
         return await this.clienteRepository.obtenerTodosLosClientes();
     }

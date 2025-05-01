@@ -17,12 +17,14 @@ describe('Tecnico Router', () => {
       const response = await request(App)
         .post('/api/tecnico')
         .send({
-          numero_de_cedula: '1112698860',
-          nombre: 'Test',
-          apellido: 'User',
-          correo_electronico: 'test@example.com',
-          telefono: '3123456789',
-          contrasenia: 'TestP@ss1',
+         numero_de_cedula: "1172698860",
+         nombre: "Test",
+         apellido: "User",
+         correo_electronico: "test@example.com",
+         telefono: "3123456789",
+         contrasenia: "Daniel21@",
+         especialidad: "Mecanico",
+         estado: "activo"
         });
 
       expect(response.statusCode).toBe(201);

@@ -1,7 +1,5 @@
-require('dotenv/config');
+// configuracion para el peuero, este archivo no debe ser modificado
 
-const PORT = process.env.PORT || 8000;
+export const PORT = process.env.PORT || 8000;
 
-module.exports = {
-  PORT
-};
+

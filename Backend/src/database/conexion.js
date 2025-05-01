@@ -1,14 +1,15 @@
+// configuracion de la conexion a la base de datos, este archivo no debe ser modificado
+
 import { Sequelize } from 'sequelize';
 import 'dotenv/config';
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+export const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
   logging: false, // No muestra las consultas en consola
 });
 
-//aa
-// Función para probar la conexión
-const connectDB = async () => {
+
+export const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('Conectado correctamente a la base de datos');
@@ -17,5 +18,3 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
-export { sequelize, connectDB };

@@ -1,5 +1,5 @@
-import {DataTypes} from 'sequelize'
-import { sequelize } from "../database/conexion";
+import { DataTypes } from "sequelize";
+import { sequelize } from "../database/conexion.js";
 import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 
 
@@ -203,9 +203,7 @@ const Cliente=sequelize.define('Cliente',{
 //Forna de encriptar la contraseña antes de guardar el registro
 Cliente.beforeCreate(encryptPasswordHook);
 
-//Se exporta el model para usarse en el repository
 
-export const ClienteModel={Cliente}
-
-//Encriptacion cuando se cambie la contraseña
-Cliente.beforeUpdate(encryptPasswordHook);
+export const ClienteModel ={
+  Cliente
+}

@@ -115,20 +115,7 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,21 +124,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,15 +140,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,66 +167,55 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-import { ClienteModel } from "../models/cliente.model";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ClienteModel } from "../models/cliente.model.js";
 &nbsp;
 &nbsp;
-//Crea el cliente
 export class ClienteRepository {
     async crearCliente(data){
         return await ClienteModel.Cliente.create(data);
     }
 &nbsp;
-    //Buscar cliente por ID
 <span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorId(id) {
 <span class="cstat-no" title="statement not covered" >        return await ClienteModel.Cliente.findByPk(id);</span>
     }
-&nbsp;
-    //Buscar cliente por email
 &nbsp;
 <span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorEmail (correo_electronico){
 <span class="cstat-no" title="statement not covered" >        return await ClienteModel.Cliente.findOne({ where:{correo_electronico}});</span>
     }
 &nbsp;
-        // Buscar cliente por teléfono
 <span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorTelefono(telefono) {
 <span class="cstat-no" title="statement not covered" >        return await ClienteModel.Cliente.findOne({ where: { telefono } });</span>
     }
 &nbsp;
-&nbsp;
-    // Obtener todos los clientes (útil para admin)
 <span class="fstat-no" title="function not covered" >    as</span>ync obtenerTodosLosClientes() {
 <span class="cstat-no" title="statement not covered" >        return await ClienteModel.Cliente.findAll();</span>
     }
-     //Obtiene TODOS los clientes activos
+&nbsp;
 <span class="fstat-no" title="function not covered" >    as</span>ync ObtenerClientesActivos() {
 <span class="cstat-no" title="statement not covered" >        return await ClienteModel.Cliente.findAll({ where: { estado: 'activo' } });</span>
     }
 &nbsp;
-    //Borrado lógico del cliente
 <span class="fstat-no" title="function not covered" >    as</span>ync eliminarCliente(id) {
-        const cliente = <span class="cstat-no" title="statement not covered" >await ClienteModel.Cliente.findByPk(id);</span> //busca el cliente
-<span class="cstat-no" title="statement not covered" >        if(!cliente)<span class="cstat-no" title="statement not covered" >return null; </span></span>//sino lo encuentra retorna null
-&nbsp;
-        //borrado lógico cambia el estado a inactivo
+        const cliente = <span class="cstat-no" title="statement not covered" >await ClienteModel.Cliente.findByPk(id); </span>
+<span class="cstat-no" title="statement not covered" >        if(!cliente)<span class="cstat-no" title="statement not covered" >return null; </span></span>
 <span class="cstat-no" title="statement not covered" >        cliente.estado='inactivo';</span>
 <span class="cstat-no" title="statement not covered" >        await cliente.save();</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >        return cliente;</span>
         
-      }
-      async obtenerClientePorCedula(numero_de_cedula) {
+    }
+&nbsp;
+    async obtenerClientePorCedula(numero_de_cedula) {
         return await ClienteModel.Cliente.findOne({
             where: { numero_de_cedula }
         });
     }
-    //Actualizar cliente
-<span class="fstat-no" title="function not covered" >        as</span>ync actualizarCliente(id, data) {
-            const cliente = <span class="cstat-no" title="statement not covered" >await ClienteModel.Cliente.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >            if (!cliente) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >            await cliente.update(data);</span>
-<span class="cstat-no" title="statement not covered" >            return cliente;</span>
-        }
+  
+<span class="fstat-no" title="function not covered" >    as</span>ync actualizarCliente(id, data) {
+        const cliente = <span class="cstat-no" title="statement not covered" >await ClienteModel.Cliente.findByPk(id);</span>
+<span class="cstat-no" title="statement not covered" >        if (!cliente) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+<span class="cstat-no" title="statement not covered" >        await cliente.update(data);</span>
+<span class="cstat-no" title="statement not covered" >        return cliente;</span>
+    }
 &nbsp;
 }
 &nbsp;
@@ -259,7 +226,7 @@ export class ClienteRepository {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-30T17:45:11.273Z
+                at 2025-05-01T01:04:42.498Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

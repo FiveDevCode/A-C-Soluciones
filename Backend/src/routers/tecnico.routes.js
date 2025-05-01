@@ -24,4 +24,4 @@ router.delete('/api/tecnico/:id', tecnicoController.eliminarTecnico);
 
 export default router;
 
-// rutas del la api 
+

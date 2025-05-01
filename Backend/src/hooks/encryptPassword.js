@@ -1,3 +1,5 @@
+// encriptacion general para la contraseña, este archivo no debe ser modificado
+
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
