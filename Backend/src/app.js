@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import TecnicoRouter from './routers/tecnico.routes.js';
 import ClienteRouter from './routers/cliente.routes.js';
+import UsuarioRouter from './routers/usuario.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,6 +22,7 @@ App.use(morgan('dev'));
 App.use(express.json());
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
+App.use(UsuarioRouter);
 
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');

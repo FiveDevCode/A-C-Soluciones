@@ -25,7 +25,7 @@ describe('Tecnico Router', () => {
     const response = await request(App)
       .post('/api/cliente')
       .send({
-        numero_de_cedula: '116168950',
+        numero_de_cedula: '118468950',
         nombre: 'Test',
         apellido: 'User',
         correo_electronico: 'test@example.com',
