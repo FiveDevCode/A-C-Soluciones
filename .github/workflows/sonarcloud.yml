@@ -36,7 +36,7 @@ jobs:
           args: >
             -Dsonar.projectKey=FiveDevCode_A-C-Soluciones
             -Dsonar.organization=fivedevcode
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=./Backend/coverage/lcov.info
             -Dsonar.sources=./Backend/src
             -Dsonar.tests=./Backend/test
             -Dsonar.test.inclusions=**/*.test.js
