@@ -9,6 +9,8 @@ import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
 import ProfileUserTc from './pages/technical/ProfileUserTc'
+import HomeAd from './pages/administrator/HomeAd';
+import HomeTc from './pages/technical/HomeTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -17,6 +19,7 @@ const Container = styled.div`
   ` : `
     display: flex;
     width: 100%;
+
   `}
 `;
 
@@ -51,6 +54,8 @@ function AppContent() {
           <Route path="/register-employee" element={<CreateEmployeeAd />} />
           <Route path="/home" element={<HomeSessionPageCl />} />
           <Route path="/profile" element={<ProfileUserTc />} />
+          <Route path="/homeAd" element={<HomeAd />} />
+          <Route path="/homeTc" element={<HomeTc />} />
         </Routes>
       </Content>
     </Container>

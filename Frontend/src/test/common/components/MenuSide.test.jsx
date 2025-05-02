@@ -43,6 +43,6 @@ describe("MenuSide", () => {
     );
 
     const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(7);
+    expect(links).toHaveLength(8);
   });
 });

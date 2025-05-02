@@ -17,19 +17,28 @@ const ContainerFloating = styled.section`
   padding: 0.5rem 0;
   z-index: 1000;
   background-color: #FFFFFF;
+
+  @media screen and (max-width: 1520px) {
+    left: calc(100vw - 226px);
+  }
+  @media screen and (max-width: 1280px) {
+    left: calc(100vw - 194px);
+  }
+
   
-`
+
+`;
 
 const Option = styled(Link)`
   display: flex;
   padding: 0 1rem 0 1rem;
   color: #505050;
-`
+`;
 
 const OptionText = styled.h2`
   font-size: 1rem;
   font-weight: bold;
-`
+`;
 
 
 

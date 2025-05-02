@@ -30,7 +30,8 @@ const ContainerButton = styled.div`
 `
 
 const validacionFormulario = (texto) => {
-  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
+
+  return texto.length > 0 ? true : false;
 }
 
 
@@ -66,18 +67,33 @@ const FormCreateEmployeeAd = () => {
   });
 
 
-  const handleSubmit = (event) => {
+  const [errorMsg, setErrorMsg] = useState("");
+
+
+  const handleSubmit = async(event) => {
     event.preventDefault(); 
 
-    handleCreateSubmitTechnical(
-      IdCard.value,
-      name.value,
-      lastName.value,
-      email.value,
-      phone.value,
-      password.value,
-      position.value,
-    );
+    try {
+      await handleCreateSubmitTechnical(
+        IdCard.value,
+        name.value,
+        lastName.value,
+        email.value,
+        phone.value,
+        password.value,
+        position.value
+      );
+
+      setErrorMsg("");
+    } catch (err) {
+      console.error("Error al crear:", err);
+      
+      if (err.response?.data?.message) {
+        setErrorMsg(err.response.data.message);
+      } else {
+        setErrorMsg("Hubo un error al registrar el técnico.");
+      }
+    }
   };
 
   const handleLimpiar = () => {
