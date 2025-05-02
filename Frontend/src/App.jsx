@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Global from "./Global";
+import LoginPage from './pages/common/LoginPage';
+import ServicesPageTc from './pages/technical/ServicesPageTc';
+import styled from 'styled-components';
+import MenuSide from './components/common/MenuSide';
+import HeaderBar from './components/common/HeaderBar';
+import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
+import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
+import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
+import ProfileUserTc from './pages/technical/ProfileUserTc'
+import HomeAd from './pages/administrator/HomeAd';
+import HomeTc from './pages/technical/HomeTc';
 
-function App() {
-  const [count, setCount] = useState(0)
+const Container = styled.div`
+  ${({ hideStyles }) => hideStyles ? `
+    display: block;
+    width: auto;
+  ` : `
+    display: flex;
+    width: 100%;
+
+  `}
+`;
+
+const Content = styled.div`
+  ${({ hideStyles }) => hideStyles ? `
+    display: block;
+    width: auto;
+    padding: 0;
+    gap: 0;
+  ` : `
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 4rem;
+    gap: 2.5rem;
+    margin-bottom: 1rem;
+  `}
+`;
+
+function AppContent() {
+  const location = useLocation();
+  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/home';
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Container hideStyles={hideMenuAndHeader}>
+      {!hideMenuAndHeader && <MenuSide />}
+      <Content hideStyles={hideMenuAndHeader}>
+        {!hideMenuAndHeader && <HeaderBar />}
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/services" element={<ServicesPageTc />} />
+          <Route path="/register" element={<CreateAccountPageCl />} />
+          <Route path="/register-employee" element={<CreateEmployeeAd />} />
+          <Route path="/home" element={<HomeSessionPageCl />} />
+          <Route path="/profile" element={<ProfileUserTc />} />
+          <Route path="/homeAd" element={<HomeAd />} />
+          <Route path="/homeTc" element={<HomeTc />} />
+        </Routes>
+      </Content>
+    </Container>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <>
+      <Global />
+      <Router>
+        <AppContent />
+      </Router>
+    </>
+  );
+}
+
+export default App;
