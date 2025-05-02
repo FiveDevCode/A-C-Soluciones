@@ -35,6 +35,7 @@ const Content = styled.div`
     width: 100%;
     padding: 0 4rem;
     gap: 2.5rem;
+    margin-bottom: 1rem;
   `}
 `;
 

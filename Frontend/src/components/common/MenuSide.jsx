@@ -21,11 +21,11 @@ const SectionMenu = styled.section`
   padding: 0.5rem;
   gap: 1rem;
   padding-bottom: 1.5rem;
-  height: 100vh;
   min-width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0 10px 10px 0;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  min-height: 100vh;
 `
 
 const TitleMenu = styled.h1`
@@ -82,7 +82,7 @@ const ContainerAllConfiguration = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: 100vh;
+  height: 100%;
   justify-content: flex-end;
   gap: 0.725rem;
 
