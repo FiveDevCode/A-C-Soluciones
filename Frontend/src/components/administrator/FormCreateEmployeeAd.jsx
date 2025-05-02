@@ -29,7 +29,10 @@ const ContainerButton = styled.div`
 
 `
 
-const validacionFormulario = (texto) => {
+const validacionFormulario = (texto, errorMsg) => {
+  if (errorMsg !== "") {
+    return false;
+  }
 
   return texto.length > 0 ? true : false;
 }
@@ -86,7 +89,6 @@ const FormCreateEmployeeAd = () => {
 
       setErrorMsg("");
     } catch (err) {
-      console.error("Error al crear:", err);
       
       if (err.response?.data?.message) {
         setErrorMsg(err.response.data.message);
@@ -135,64 +137,64 @@ const FormCreateEmployeeAd = () => {
         label="Nombre" 
         fullWidth size="medium" 
         value={name.value} 
-        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={name.valid === false} 
-        helperText={name.valid === false && "El campo no debe estar vacio"} 
+        helperText={name.valid === false && errorMsg} 
       />
       <TextField 
         label="Apellido" 
         fullWidth size="medium" 
         value={lastName.value} 
-        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={lastName.valid === false} 
-        helperText={lastName.valid === false && "El campo no debe estar vacio"} 
+        helperText={lastName.valid === false && errorMsg} 
       />
       <TextField 
         label="Cedula" 
         fullWidth size="medium" 
         value={IdCard.value} 
-        onChange={(e) => setIdCard({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setIdCard({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={IdCard.valid === false} 
-        helperText={IdCard.valid === false && "El campo no debe estar vacio"} 
+        helperText={IdCard.valid === false && errorMsg} 
       />
       <TextField 
         label="Teléfono" 
         fullWidth size="medium" 
         value={phone.value} 
-        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={phone.valid === false} 
-        helperText={phone.valid === false && "El campo no debe estar vacio"} 
+        helperText={phone.valid === false && errorMsg} 
       />
       <TextField 
         label="Cargo" 
         fullWidth size="medium" 
         value={position.value} 
-        onChange={(e) => setPosition({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setPosition({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={position.valid === false} 
-        helperText={position.valid === false && "El campo no debe estar vacio"} 
+        helperText={position.valid === false && errorMsg} 
       />
       <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
         value={email.value} 
-        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={email.valid === false} 
-        helperText={email.valid === false && "El campo no debe estar vacio"} 
+        helperText={email.valid === false && errorMsg} 
       /> 
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
         value={password.value} 
-        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
         sx={{ backgroundColor: 'white' }}
         error={password.valid === false} 
-        helperText={password.valid === false && "El campo no debe estar vacio"} 
+        helperText={password.valid === false && errorMsg} 
       /> 
 
 
