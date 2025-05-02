@@ -1,6 +1,6 @@
 import request from 'supertest';
-import App from '../src/app.js';
-import { sequelize } from '../src/database/conexion.js';
+import App from '../../../src/app.js';
+import { sequelize } from '../../../src/database/conexion.js';
 
 describe('Tecnico Router', () => {
   // Conexión a la base de datos antes de todos los tests

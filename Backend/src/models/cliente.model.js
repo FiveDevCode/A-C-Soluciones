@@ -188,6 +188,11 @@ const Cliente=sequelize.define('Cliente',{
           
 
     },
+    rol: {
+      type: DataTypes.ENUM('cliente'),
+      defaultValue: 'cliente',
+      allowNull: false
+    },
     estado: {
 
         type: DataTypes.ENUM('activo', 'inactivo'),
