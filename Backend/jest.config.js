@@ -1,11 +1,10 @@
-export default {
-    testEnvironment: 'node',
-    transform: {},
-    moduleNameMapper: {
-      '^(\\.{1,2}/.*)\\.js$': '$1'
-    },
-    transformIgnorePatterns: [
-      '/node_modules/(?!supertest)/'
-    ],
-    verbose: true
-  };
+ export default  {
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.js$': 'babel-jest',
+  },
+  collectCoverageFrom: ['test/**/*.js'],
+  transformIgnorePatterns: [
+    "/node_modules/(?!<your-module-to-transform>)/"
+  ],
+};

@@ -1,12 +1,11 @@
 import request from 'supertest';
-import  App  from '../src/app.js';
-import { sequelize } from '../src/database/conexion.js';
-import path from 'path';
+import  App  from '../../../src/app.js';
+import { sequelize } from '../../../src/database/conexion.js';
 
 describe('Tecnico Router', () => {
   beforeAll(async () => {
     await sequelize.sync({ force: true });
-  },30000);
+  },20000);
 
   afterAll(async () => {
     await sequelize.close();
@@ -17,7 +16,7 @@ describe('Tecnico Router', () => {
       const response = await request(App)
         .post('/api/tecnico')
         .send({
-         numero_de_cedula: "1172698860",
+         numero_de_cedula: "1123698860",
          nombre: "Test",
          apellido: "User",
          correo_electronico: "test@example.com",

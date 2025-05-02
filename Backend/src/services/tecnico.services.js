@@ -14,7 +14,7 @@ export class TecnicoService {
   }
 
   async obtenerTecnicoPorcedula(numero_de_cedula){
-    return await this.tecnicoRepository.obtenerTecnicoPorcedula(numero_de_cedula);
+    return await this.tecnicoRepository.obtenerTecnicoPorCedula(numero_de_cedula);
   }
 
   async obtenerTecnicos() {
@@ -27,5 +27,9 @@ export class TecnicoService {
 
   async eliminarTecnico(id) {
     return await this.tecnicoRepository.eliminarTecnico(id);
+  }
+
+  async obtenerPorTecnicoCorreo (correo_electronico){
+    return await this.tecnicoRepository.obtenerTecnicoPorCorreo(correo_electronico)
   }
 }
