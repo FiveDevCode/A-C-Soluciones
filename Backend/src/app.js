@@ -6,7 +6,7 @@ import path from 'path';
 import {dirname} from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
-
+import AministradorRouter from './routers/administrador.routes.js';
 import TecnicoRouter from './routers/tecnico.routes.js';
 import ClienteRouter from './routers/cliente.routes.js';
 import UsuarioRouter from './routers/usuario.routes.js';
@@ -20,6 +20,7 @@ expressOasGenerator.init(App, {});
 
 App.use(morgan('dev'));
 App.use(express.json());
+App.use(AministradorRouter)
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
 App.use(UsuarioRouter);
