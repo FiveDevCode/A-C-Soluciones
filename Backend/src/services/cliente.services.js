@@ -1,7 +1,7 @@
 import { ClienteRepository } from "../repository/cliente.repository.js";
 
 
-export class ClienteService {
+export class ClienteService { 
     constructor() {
         this.clienteRepository = new ClienteRepository();
     }

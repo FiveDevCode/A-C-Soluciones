@@ -1,17 +1,16 @@
-// src/models/tecnico.model.js
+// src/models/admin.model.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/conexion.js';
-import { encryptPasswordHook } from '../hooks/encryptPassword.js'; // Importar el hook
+import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 
-
-const Tecnico = sequelize.define('Tecnico', {
+const Admin = sequelize.define('Admin', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  numero_de_cedula: {
+  numero_cedula: {
     type: DataTypes.STRING(10),
     allowNull: false,
     unique: true,
@@ -43,7 +42,7 @@ const Tecnico = sequelize.define('Tecnico', {
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {
-        args: [1, 100],
+        args: [1, 50],
         msg: 'El nombre no debe exceder los 50 caracteres.',
       },
       noSpacesEdges(value) {
@@ -59,15 +58,15 @@ const Tecnico = sequelize.define('Tecnico', {
     validate: {
       is: {
         args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/i,
-        msg: 'El primer apellido solo puede contener letras.',
+        msg: 'El apellido solo puede contener letras.',
       },
       len: {
-        args: [1, 100],
-        msg: 'El primer apellido no debe exceder los 50 caracteres.',
+        args: [1, 50],
+        msg: 'El apellido no debe exceder los 50 caracteres.',
       },
       noSpacesEdges(value) {
         if (value.trim() !== value) {
-          throw new Error('El primer apellido no debe tener espacios al inicio o final.');
+          throw new Error('El apellido no debe tener espacios al inicio o final.');
         }
       },
     },
@@ -75,6 +74,7 @@ const Tecnico = sequelize.define('Tecnico', {
   correo_electronico: {
     type: DataTypes.STRING(320),
     allowNull: false,
+    unique: true,
     validate: {
       isEmail: { msg: 'El correo electrónico no es válido.' },
       len: {
@@ -84,22 +84,6 @@ const Tecnico = sequelize.define('Tecnico', {
       is: {
         args: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
         msg: 'El correo electrónico tiene un formato incorrecto.',
-      },
-    },
-  },
-  telefono: {
-    type: DataTypes.STRING(10),
-    allowNull: false,
-    validate: {
-      isNumeric: { msg: 'El teléfono solo puede contener números.' },
-      len: {
-        args: [10, 10],
-        msg: 'El teléfono debe tener exactamente 10 dígitos.',
-      },
-      startsWithValidDigit(value) {
-        if (!value.startsWith('3')) {
-          throw new Error('El teléfono debe iniciar con 3 en Colombia.');
-        }
       },
     },
   },
@@ -123,32 +107,19 @@ const Tecnico = sequelize.define('Tecnico', {
       },
     },
   },
-  especialidad: {
-    type: DataTypes.STRING(100),
-    allowNull: true,
-  },
   rol: {
-    type: DataTypes.ENUM('tecnico'),
-    defaultValue: 'tecnico',
+    type: DataTypes.ENUM('administrador'),
+    defaultValue: 'administrador',
     allowNull: false
   },
-  fecha_registro: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  estado: {
-    type: DataTypes.ENUM('activo', 'inactivo'),
-    defaultValue: 'activo',
-  },
 }, {
-  tableName: 'tecnico',
+  tableName: 'administrador',
   timestamps: false,
 });
 
-// encriptar la contraseña antes de guardar el registro
-Tecnico.beforeCreate(encryptPasswordHook); 
+// Encriptar la contraseña antes de guardar el registro
+Admin.beforeCreate(encryptPasswordHook);
 
-// exportamos el model para usarlo en el repository
-export const TecnicoModel = {
-  Tecnico
-}
+export const AdminModel = {
+  Admin
+};

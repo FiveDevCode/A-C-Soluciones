@@ -1,14 +1,11 @@
 import express from 'express';
-import { loginController } from '../controllers/usuario.controller.js';
-import verificarToken from '../middlewares/autenticacion.js';
+import { AuthController } from '../controllers/usuario.controller.js';
 
 const router = express.Router();
+const authController = new AuthController();
 
-router.post('/api/login', loginController);
+// Ruta para iniciar sesión
+router.post('/api/login', authController.login);
 
-// Ejemplo de rutas protegidas:
-router.get('/admin', verificarToken(['administrador']), (req, res) => res.send('Vista admin'));
-router.get('/tecnico', verificarToken(['tecnico']), (req, res) => res.send('Vista técnico'));
-router.get('/cliente', verificarToken(['cliente']), (req, res) => res.send('Vista cliente'));
 
 export default router;

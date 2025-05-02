@@ -1,50 +1,103 @@
-import bcrypt from 'bcryptjs';
+
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { AdminModel } from '../models/administrador.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
+import { TecnicoModel } from '../models/tecnico.model.js';
 
-import { UsuarioRepository } from '../repository/usuario.repository.js';
-import { TecnicoRepository } from '../repository/tecnico.repository.js';
-import { ClienteRepository } from '../repository/cliente.repository.js';
 
-// Crear instancias de los repositorios
-const usuarioRepo = new UsuarioRepository();
-const tecnicoRepo = new TecnicoRepository();
-const clienteRepo = new ClienteRepository();
+export class AuthService {
+  async login(correo, contrasenia) {
+    try {
+      
+      if (!correo?.trim() || !contrasenia?.trim()) {
+        throw new Error('Correo y contraseña son requeridos');
+      }
 
-export const login = async (correo_electronico, contrasenia) => {
-  let user = await usuarioRepo.findByEmail(correo_electronico); // Usamos la instancia de UsuarioRepository
-  let rol = 'administrador';
 
-  if (!user) {
-    user = await tecnicoRepo.findByEmail(correo_electronico);
-    rol = 'tecnico';
-  }
+      const [admin, cliente, tecnico] = await Promise.all([
+        AdminModel.Admin.findOne({
+          where: { correo_electronico: correo.trim().toLowerCase() },
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol']
+        }),
+        ClienteModel.Cliente.findOne({ 
+          where: { correo_electronico: correo.trim().toLowerCase() },
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol']
+        }),
+        TecnicoModel.Tecnico.findOne({
+          where: { correo_electronico: correo.trim().toLowerCase() },
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'especialidad', 'rol']
+        })
+      ]);
 
-  if (!user) {
-    user = await clienteRepo.findByEmail(correo_electronico);
-    rol = 'cliente';
-  }
+     
+      const user = admin || cliente || tecnico;
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
 
-  if (!user) throw new Error('Usuario no encontrado');
+      // Verificación de contraseña con hash
+      if (!user.contrasenia?.startsWith('$2b$')) {
+        throw new Error('Credenciales no válidas (formato incorrecto)');
+      }
 
-  // Usamos la contraseña en la base de datos (clave) para compararla con la contraseña en texto plano proporcionada
-  const clave = user.contrasenia || user.password;
-  const correo = user.correo_electronico || user.email;
+      const passwordMatch = await bcrypt.compare(contrasenia.trim(), user.contrasenia);
+      if (!passwordMatch) {
+        throw new Error('Contraseña incorrecta');
+      }
 
-  const valid = await bcrypt.compare(contrasenia, clave); // Compara la contraseña en texto plano con la contraseña encriptada
-  if (!valid) throw new Error('Contraseña incorrecta');
+   
 
-  const token = jwt.sign(
-    { id: user.id, rol },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+      // Generación de token con más datos útiles
+      const token = jwt.sign(
+        {
+          id: user.id,
+          rol: user.rol,
+          email: user.correo_electronico,
+          nombre: user.nombre,
+          ...(user.especialidad && { especialidad: user.especialidad }) // Campo adicional para técnicos
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
 
-  return {
-    token,
-    user: {
-      id: user.id,
-      email: correo,
-      rol
+      return {
+        token,
+        user: {
+          id: user.id,
+          rol: user.rol,
+          nombre: user.nombre,
+          email: user.correo_electronico,
+          ...(user.especialidad && { especialidad: user.especialidad })
+        }
+      };
+    } catch (error) {
+      console.error('Error en AuthService.login:', {
+        message: error.message,
+        correo,
+        timestamp: new Date().toISOString()
+      });
+      throw error;
     }
-  };
-};
+  }
+
+  async verifyToken(token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      // Verificación adicional de estructura del token
+      if (!decoded.id || !decoded.rol || !decoded.email) {
+        throw new Error('Token inválido: estructura incorrecta');
+      }
+      
+      return decoded;
+    } catch (error) {
+      console.error('Error en verifyToken:', {
+        message: error.message,
+        token: token?.slice(0, 20), // Log parcial del token por seguridad
+        timestamp: new Date().toISOString()
+      });
+      throw error;
+    }
+  }
+}

@@ -1,25 +1,76 @@
 import jwt from 'jsonwebtoken';
+import { AuthService } from '../services/usuario.services.js';
 
-const verificarToken = (roles = []) => {
-  return (req, res, next) => {
+const authService = new AuthService();
+
+// Middleware de autenticación que verifica el token JWT
+export const authenticate = async (req, res, next) => {
+  try {
+    // Obtener el token del header Authorization
     const authHeader = req.headers.authorization;
-    const token = authHeader?.split(' ')[1];
-
-    if (!token) return res.status(403).json({ error: 'Token requerido' });
-
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      if (roles.length && !roles.includes(decoded.rol)) {
-        return res.status(403).json({ error: 'Acceso denegado' });
-      }
-
-      req.user = decoded;
-      next();
-    } catch (err) {
-      res.status(401).json({ error: 'Token inválido' });
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ 
+        success: false,
+        message: 'Formato de token inválido. Use: Bearer <token>' 
+      });
     }
+
+    const token = authHeader.split(' ')[1];
+    
+    // Verificar el token
+    const decoded = await authService.verifyToken(token);
+    
+    // Adjuntar el usuario decodificado a la solicitud
+    req.user = {
+      id: decoded.id,
+      rol: decoded.rol,
+      email: decoded.email
+    };
+    
+    next();
+  } catch (error) {
+    console.error('Error en autenticación:', error.message);
+    
+    const message = error.name === 'TokenExpiredError' 
+      ? 'Token expirado' 
+      : 'Token inválido';
+    
+    return res.status(401).json({ 
+      success: false,
+      message 
+    });
+  }
+};
+
+/**
+ * Middleware de autorización que verifica los roles
+ * @param {string[]} roles - Roles permitidos (ej: ['admin', 'tecnico'])
+ */
+export const authorize = (roles = []) => {
+  return (req, res, next) => {
+    // Si no se especifican roles, permitir acceso a cualquier rol autenticado
+    if (roles.length === 0) {
+      return next();
+    }
+
+    // Verificar si el usuario tiene alguno de los roles requeridos
+    if (!roles.includes(req.user.rol)) {
+      console.warn(`Intento de acceso no autorizado. Rol: ${req.user.rol}, Ruta: ${req.path}`);
+      
+      return res.status(403).json({ 
+        success: false,
+        message: `Acceso denegado. Se requieren los roles: ${roles.join(', ')}` 
+      });
+    }
+
+    next();
   };
 };
 
-export default verificarToken;
+// Exportar middlewares de autorización para roles específicos
+export const isAdmin = authorize(['admin']);
+export const isTecnico = authorize(['tecnico']);
+export const isCliente = authorize(['cliente']);
+export const isAdminOrTecnico = authorize(['admin', 'tecnico']);
+export const isAdminOrCliente = authorize(['admin', 'cliente']);

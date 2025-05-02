@@ -1,8 +1,13 @@
-import Usuario from '../models/usuario.model.js';
+import { UsuarioModel } from '../models/usuario.model.js';
 
 export class UsuarioRepository {
-  // Definir findByEmail como método estático
-  async findByEmail(correo_electronico) {
-    return await Usuario.findOne({ where: { correo_electronico: correo_electronico } });
+  // Obtener usuario por correo electrónico
+  async obtenerPorCorreo(correo_electronico) {
+    return await UsuarioModel.Usuario.findOne({ where: { correo_electronico } });
+  }
+
+  // Crear nuevo usuario
+  async crearUsuario(data) {
+    return await UsuarioModel.Usuario.create(data);
   }
 }

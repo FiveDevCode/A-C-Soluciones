@@ -20,6 +20,9 @@ export class TecnicoRepository {
       where: { numero_de_cedula }
     });
   }
+  async obtenerTecnicoPorCorreo(correo_electronico) {
+    return await TecnicoModel.Tecnico.findOne({ where: { correo_electronico } });
+  }
 
   async obtenerTecnicoPorCorreo(correo_electronico) {
     return await TecnicoModel.Tecnico.findOne({
@@ -41,7 +44,9 @@ export class TecnicoRepository {
   async eliminarTecnico(id) {
     const tecnico = await TecnicoModel.Tecnico.findByPk(id);
     if (!tecnico) return null;
-    await tecnico.destroy();
+    tecnico.estado = 'inactivo'; 
+    await tecnico.save();
     return tecnico;
   }
 }
+
