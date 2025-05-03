@@ -1,5 +1,5 @@
 import { Divider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 
@@ -40,11 +40,26 @@ const OptionText = styled.h2`
   font-weight: bold;
 `;
 
+const OptionClose = styled.button`
+  display: flex;
+  padding: 0 1rem 0 1rem;
+  color: #505050;
+`
 
 
 
 
 const FloatingMenuHomeCl = () => {
+
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
+
   return (
     <ContainerFloating data-testid="floating-menu">
       <Option to="/accesibility">
@@ -68,9 +83,9 @@ const FloatingMenuHomeCl = () => {
         <OptionText>Modo Oscuro</OptionText>
       </Option>
       <Divider />
-      <Option to="/logout">
+      <OptionClose onClick={handleLogout}>
         <OptionText>Cerrar sesión</OptionText>
-      </Option>
+      </OptionClose>
     </ContainerFloating>
   )
 }

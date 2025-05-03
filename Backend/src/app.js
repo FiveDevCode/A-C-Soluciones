@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors'
 import expressOasGenerator from 'express-oas-generator';
 import fs from 'fs';
 import path from 'path';
@@ -20,6 +21,14 @@ expressOasGenerator.init(App, {});
 
 App.use(morgan('dev'));
 App.use(express.json());
+
+// configuracion de CORS
+App.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true
+}));
+
+// ratas de la API
 App.use(AministradorRouter)
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
@@ -31,5 +40,7 @@ if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
+
+
 
 export default App;
