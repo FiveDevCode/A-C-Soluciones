@@ -54,23 +54,23 @@ const CategoryRecomendTc = () => {
     <ContainerCategory>
       <h1>Categorias recomendadas</h1>
       <ContainerOption>
-        <Option>
+        <Option to="/">
           <Icon icon={faInbox} style={{stroke:"#343A40"}}/>
           <OptionTitle>Solicitudes de clientes</OptionTitle>
         </Option>
-        <Option>
+        <Option to="/">
           <Icon icon={faFileAlt} style={{stroke:"#6C757D"}}/>
           <OptionTitle>Generar reporte</OptionTitle>
-        </Option> 
-        <Option>
+        </Option > 
+        <Option to="/">
           <Icon icon={faCalendarCheck} style={{stroke:"#17A2B8"}}/>
           <OptionTitle>Visitas programadas</OptionTitle>
         </Option>
-        <Option>
+        <Option to="/services">
           <Icon icon={faBriefcase} style={{stroke:"#E67E22"}}/>
           <OptionTitle>Servicios en curso</OptionTitle>
         </Option>
-        <Option>
+        <Option to="/">
           <Icon icon={faFileAlt} style={{stroke:"#6C757D"}}/>
           <OptionTitle>Generar ficha de mantenamiento</OptionTitle>
         </Option> 

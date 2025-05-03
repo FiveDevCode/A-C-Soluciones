@@ -1,5 +1,5 @@
 TN:
-SF:src/app.js
+SF:src\app.js
 FNF:0
 FNH:0
 DA:15,0
@@ -23,7 +23,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:src/index.js
+SF:src\index.js
 FN:5,main
 FN:8,(anonymous_1)
 FNF:2
@@ -42,7 +42,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/config/puerto.js
+SF:src\config\puerto.js
 FNF:0
 FNH:0
 DA:3,0
@@ -54,7 +54,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:src/controllers/cliente.controller.js
+SF:src\controllers\cliente.controller.js
 FN:5,(anonymous_0)
 FN:10,(anonymous_1)
 FN:29,(anonymous_2)
@@ -163,7 +163,7 @@ BRF:14
 BRH:0
 end_of_record
 TN:
-SF:src/controllers/tecnico.controller.js
+SF:src\controllers\tecnico.controller.js
 FN:5,(anonymous_0)
 FN:10,(anonymous_1)
 FN:29,(anonymous_2)
@@ -479,7 +479,7 @@ BRF:82
 BRH:0
 end_of_record
 TN:
-SF:src/database/conexion.js
+SF:src\database\conexion.js
 FN:12,(anonymous_0)
 FNF:1
 FNH:0
@@ -497,7 +497,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/hooks/encryptPassword.js
+SF:src\hooks\encryptPassword.js
 FN:7,(anonymous_0)
 FNF:1
 FNH:0
@@ -726,7 +726,7 @@ BRF:83
 BRH:0
 end_of_record
 TN:
-SF:src/middlewares/permisos.js
+SF:src\middlewares\permisos.js
 FNF:0
 FNH:0
 LF:0
@@ -735,7 +735,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/models/cliente.model.js
+SF:src\models\cliente.model.js
 FN:26,(anonymous_0)
 FN:31,(anonymous_1)
 FN:53,(anonymous_2)
@@ -811,7 +811,7 @@ BRF:22
 BRH:0
 end_of_record
 TN:
-SF:src/models/tecnico.model.js
+SF:src\models\tecnico.model.js
 FN:24,(anonymous_0)
 FN:29,(anonymous_1)
 FN:49,(anonymous_2)
@@ -908,7 +908,7 @@ BRF:8
 BRH:0
 end_of_record
 TN:
-SF:src/repository/cliente.repository.js
+SF:src\repository\cliente.repository.js
 FN:5,(anonymous_0)
 FN:9,(anonymous_1)
 FN:13,(anonymous_2)
@@ -955,7 +955,7 @@ BRF:4
 BRH:0
 end_of_record
 TN:
-SF:src/repository/tecnico.repository.js
+SF:src\repository\tecnico.repository.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:12,(anonymous_2)
@@ -1087,7 +1087,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/routers/tecnico.routes.js
+SF:src\routers\tecnico.routes.js
 FNF:0
 FNH:0
 DA:4,0
@@ -1129,7 +1129,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/services/cliente.services.js
+SF:src\services\cliente.services.js
 FN:5,(anonymous_0)
 FN:9,(anonymous_1)
 FN:12,(anonymous_2)

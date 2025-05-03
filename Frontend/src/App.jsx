@@ -8,9 +8,10 @@ import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
-import ProfileUserTc from './pages/technical/ProfileUserTc'
+import ProfileUserTc from './pages/technical/ProfileUserTc';
 import HomeAd from './pages/administrator/HomeAd';
 import HomeTc from './pages/technical/HomeTc';
+import PrivateRoute from './components/common/PrivateRoute';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -19,7 +20,6 @@ const Container = styled.div`
   ` : `
     display: flex;
     width: 100%;
-
   `}
 `;
 
@@ -41,7 +41,7 @@ const Content = styled.div`
 
 function AppContent() {
   const location = useLocation();
-  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/home';
+  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
@@ -49,14 +49,49 @@ function AppContent() {
       <Content hideStyles={hideMenuAndHeader}>
         {!hideMenuAndHeader && <HeaderBar />}
         <Routes>
+          {/* Rutas públicas */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/services" element={<ServicesPageTc />} />
           <Route path="/register" element={<CreateAccountPageCl />} />
-          <Route path="/register-employee" element={<CreateEmployeeAd />} />
-          <Route path="/home" element={<HomeSessionPageCl />} />
-          <Route path="/profile" element={<ProfileUserTc />} />
-          <Route path="/homeAd" element={<HomeAd />} />
-          <Route path="/homeTc" element={<HomeTc />} />
+
+          {/* Rutas protegidas por tipo de usuario */}
+          <Route path="/home" element={
+            <PrivateRoute roleRequired="cliente">
+              <HomeSessionPageCl />
+            </PrivateRoute>
+          } />
+
+          <Route path="/services" element={
+            <PrivateRoute roleRequired="tecnico">
+              <ServicesPageTc />
+            </PrivateRoute>
+          } />
+
+          <Route path="/profile" element={
+            <PrivateRoute roleRequired="tecnico">
+              <ProfileUserTc />
+            </PrivateRoute>
+          } />
+
+          <Route path="/homeTc" element={
+            <PrivateRoute roleRequired="tecnico">
+              <HomeTc />
+            </PrivateRoute>
+          } />
+
+          <Route path="/register-employee" element={
+            <PrivateRoute roleRequired="administrador">
+              <CreateEmployeeAd />
+            </PrivateRoute>
+          } />
+
+          <Route path="/homeAd" element={
+            <PrivateRoute roleRequired="administrador">
+              <HomeAd />
+            </PrivateRoute>
+          } />
+
+          {/* Ruta para acceso denegado */}
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Content>
     </Container>

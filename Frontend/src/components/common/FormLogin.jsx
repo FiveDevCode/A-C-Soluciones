@@ -1,7 +1,9 @@
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
+import { handleLogin } from '../../controllers/common/login.controller';
+import { jwtDecode } from 'jwt-decode';
 
 const Form = styled.form`
   display: flex;
@@ -36,33 +38,69 @@ const ContainerButton = styled.div`
 `
 
 
-const validacionFormulario = (texto) => {
-  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
-}
-
-
 const FormLogin = () => {
   
-  const [email, setEmail] = useState({
-    value: "",
-    valid: null,
-  });
-  const [password, setPassword] = useState({
-    value: "",
-    valid: null,
-  });
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+
+    try {
+      const {data} = await handleLogin(
+        email,
+        password
+      );
+
+      console.log(data)
+      localStorage.setItem('authToken', data.token);
+
+      const decoded = jwtDecode(data.token);
+      const role = decoded.rol;
+      
+      switch (role) {
+        case "cliente":
+          navigate("/home");
+          break;
+        case "tecnico":
+          navigate("/homeTc");
+          break;
+        case "administrador":
+          navigate("/homeAd");
+          break;
+        default:
+          navigate("/login"); // o una página de error
+      }
+
+    } catch (err) {
+      console.log(err)
+      if (err.response?.data?.errors) {
+        setFieldErrors(err.response.data.errors);
+      } else {
+        setErrorMsg("Hubo un error al iniciar sesion.");
+      }
+    }
+
+  }
+
 
   
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
-        value={email.value} 
-        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={email.valid === false} 
-        helperText={email.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.correo_electronico)}
+        helperText={fieldErrors.correo_electronico}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -74,11 +112,11 @@ const FormLogin = () => {
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
-        value={password.value} 
-        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={password.valid === false} 
-        helperText={password.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.contrasenia)}
+        helperText={fieldErrors.contrasenia}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -87,6 +125,12 @@ const FormLogin = () => {
           },
         }}
       />
+      
+      {errorMsg && (
+        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+          {errorMsg}
+        </Typography>
+      )}
 
       <LinkForgot to="/ForgotPasswordPage">Has olvidado tu contraseña?</LinkForgot>
 
