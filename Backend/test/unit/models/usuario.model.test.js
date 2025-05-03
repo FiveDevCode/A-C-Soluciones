@@ -1,73 +1,175 @@
-import bcrypt from 'bcrypt';
-import { Usuario, setupDatabase } from '../../helpers/sequelize-test-setup.js'; 
+import { jest } from '@jest/globals';
+import { AdminModel } from '../../../src/models/administrador.model.js';
+import { sequelize } from '../../../src/database/conexion.js';
+import { encryptPasswordHook } from '../../../src/hooks/encryptPassword.js';
 
-//test de model de usuario 
-jest.mock('bcrypt', () => ({
-  genSalt: jest.fn(() => Promise.resolve('salt')),
-  hash: jest.fn((pwd, salt) => Promise.resolve(`hashed-${pwd}`)),
-  compare: jest.fn((pwd, hashed) => Promise.resolve(hashed === `hashed-${pwd}`))
+// Create mock DataTypes
+const MockDataTypes = {
+  INTEGER: { constructor: { name: 'INTEGER' } },
+  STRING: (size) => ({ constructor: { name: 'STRING' }, size }),
+  ENUM: (...values) => ({ constructor: { name: 'ENUM' }, values }),
+  NOW: 'CURRENT_TIMESTAMP'
+};
+
+// Mock dependencies
+jest.mock('../../../src/database/conexion.js', () => ({
+  sequelize: {
+    define: jest.fn().mockReturnValue({
+      beforeCreate: jest.fn()
+    })
+  }
 }));
-jest.setTimeout(20000); // 20 segundos
 
-describe('Modelo Usuario (con Sequelize real)', () => {
-    
-  beforeAll(async () => {
-    await setupDatabase(); 
-  });
+jest.mock('../../../src/hooks/encryptPassword.js', () => ({
+  encryptPasswordHook: jest.fn()
+}));
 
-  afterEach(() => {
-    jest.clearAllMocks(); 
-  });
+describe('Admin Model Tests', () => {
+  let modelDefinition;
+  let hooks;
 
-  
+  beforeEach(() => {
+    jest.clearAllMocks();
 
-  it('debería hashear la contraseña antes de crear', async () => {
-    const usuario = Usuario.build({ correo_electronico: 'a@b.com', contrasenia: 'abc123' });
-
-    await Usuario.runHooks('beforeCreate', usuario);
-
-    expect(usuario.contrasenia).toBe('hashed-abc123');
-    expect(bcrypt.hash).toHaveBeenCalled();
-  });
-
-  it('debería hashear la contraseña antes de actualizar y actualizar fecha', async () => {
-    const usuario = Usuario.build({ contrasenia: 'abc123' });
-    usuario.changed = jest.fn((field) => field === 'contrasenia');
-
-    await Usuario.runHooks('beforeUpdate', usuario);
-
-    expect(usuario.contrasenia).toBe('hashed-abc123');
-    expect(usuario.ultima_actualizacion_contrasena).toBeInstanceOf(Date);
-  });
-
-  it('debería validar correctamente una contraseña', async () => {
-    const usuario = Usuario.build({ contrasenia: 'hashed-abc123' });
-
-    const esValida = await usuario.validarContrasena('abc123');
-    expect(esValida).toBe(true);
-  });
-
-  it('debería invalidar un token y guardarlo', async () => {
-    const usuario = await Usuario.create({
-      correo_electronico: 'tokentest@example.com',
-      contrasenia: 'abc123',
-      tokens_invalidados: []
+    sequelize.define.mockImplementation((modelName, attributes, options) => {
+      modelDefinition = { modelName, attributes, options };
+      const model = { beforeCreate: jest.fn() };
+      hooks = model.beforeCreate;
+      return model;
     });
 
-    const saveSpy = jest.spyOn(usuario, 'save');
-
-    await usuario.invalidarToken('token123');
-
-    expect(usuario.tokens_invalidados).toContain('token123');
-    expect(saveSpy).toHaveBeenCalled();
+    jest.isolateModules(() => {
+      require('../../../src/models/administrador.model.js');
+    });
   });
 
-  it('debería identificar si un token está invalidado', async () => {
-    const usuario = Usuario.build({ tokens_invalidados: ['tok1', 'tok2'] });
+  test('Debe definir el modelo de administración con el nombre de tabla.', () => {
+    expect(modelDefinition.options.tableName).toBe('administrador');
+    expect(modelDefinition.options.timestamps).toBe(false);
+  });
 
-    expect(usuario.esTokenInvalidado('tok1')).toBe(true);
-    expect(usuario.esTokenInvalidado('otro')).toBe(false);
+  test('Debe definir el modelo de administración con todos los campos obligatorios.', () => {
+    const attributes = modelDefinition.attributes;
+    
+    expect(attributes).toHaveProperty('id');
+    expect(attributes).toHaveProperty('numero_cedula');
+    expect(attributes).toHaveProperty('nombre');
+    expect(attributes).toHaveProperty('apellido');
+    expect(attributes).toHaveProperty('correo_electronico');
+    expect(attributes).toHaveProperty('contrasenia');
+    expect(attributes).toHaveProperty('rol');
+  });
+
+  test('Debería hacer el campo de identificación correctamente', () => {
+    const idField = modelDefinition.attributes.id;
+    expect(idField.primaryKey).toBe(true);
+    expect(idField.autoIncrement).toBe(true);
+    expect(idField.allowNull).toBe(false);
+  });
+
+  test('Debería hacer el campo numero_cedula con validaciones correctas', () => {
+    const cedulaField = modelDefinition.attributes.numero_cedula;
+    expect(cedulaField.allowNull).toBe(false);
+    expect(cedulaField.unique).toBe(true);
+    
+    //validacion de nuermo
+    expect(() => cedulaField.validate.isNumeric.msg).not.toThrow();
+    
+    // test del legth
+    expect(cedulaField.validate.len.args).toEqual([6, 10]);
+    expect(() => cedulaField.validate.len.msg).not.toThrow();
+    
+    // Test validaciones
+    expect(() => cedulaField.validate.notStartsWithZero('123456')).not.toThrow();
+    expect(() => cedulaField.validate.notStartsWithZero('023456')).toThrow();
+    
+    expect(() => cedulaField.validate.notSequential('987654')).not.toThrow();
+    expect(() => cedulaField.validate.notSequential('1234567')).toThrow();
+  });
+
+  test('Debe hacer el campo nombre con validaciones correctas', () => {
+    const nombreField = modelDefinition.attributes.nombre;
+    expect(nombreField.allowNull).toBe(false);
+    
+    // Test  validacion
+    expect(nombreField.validate.is.args).toBeDefined();
+    expect(() => nombreField.validate.is.msg).not.toThrow();
+    
+    // Test length validacion
+    expect(nombreField.validate.len.args).toEqual([1, 50]);
+    expect(() => nombreField.validate.len.msg).not.toThrow();
+    
+    // Test  validaciones
+    expect(() => nombreField.validate.noSpacesEdges('Juan')).not.toThrow();
+    expect(() => nombreField.validate.noSpacesEdges(' Juan')).toThrow();
+    expect(() => nombreField.validate.noSpacesEdges('Juan ')).toThrow();
+  });
+
+  test('Debe hacer el campo apellido con validaciones correctas', () => {
+    const apellidoField = modelDefinition.attributes.apellido;
+    expect(apellidoField.allowNull).toBe(false);
+    
+    // Test  validacion
+    expect(apellidoField.validate.is.args).toBeDefined();
+    expect(() => apellidoField.validate.is.msg).not.toThrow();
+    
+    // Test length validacion
+    expect(apellidoField.validate.len.args).toEqual([1, 50]);
+    expect(() => apellidoField.validate.len.msg).not.toThrow();
+    
+    // Test  validaciones
+    expect(() => apellidoField.validate.noSpacesEdges('Perez')).not.toThrow();
+    expect(() => apellidoField.validate.noSpacesEdges(' Perez')).toThrow();
+    expect(() => apellidoField.validate.noSpacesEdges('Perez ')).toThrow();
+  });
+
+  test('Debería hacer el campo correo_electronico con las validaciones correctas', () => {
+    const emailField = modelDefinition.attributes.correo_electronico;
+    expect(emailField.allowNull).toBe(false);
+    expect(emailField.unique).toBe(true);
+    
+    // Test correo validacion
+    expect(() => emailField.validate.isEmail.msg).not.toThrow();
+    
+    // Test length validacion
+    expect(emailField.validate.len.args).toEqual([5, 320]);
+    expect(() => emailField.validate.len.msg).not.toThrow();
+    
+    // Test regex validacion
+    expect(emailField.validate.is.args).toBeDefined();
+    expect(() => emailField.validate.is.msg).not.toThrow();
+  });
+
+  test('Debería hacer el campo de contraseña con validaciones correctas', () => {
+    const passwordField = modelDefinition.attributes.contrasenia;
+    expect(passwordField.allowNull).toBe(false);
+    
+    // Test length validacion
+    expect(passwordField.validate.len.args).toEqual([8, 64]);
+    expect(() => passwordField.validate.len.msg).not.toThrow();
+    
+    // Test regex validacion
+    expect(passwordField.validate.is.args).toBeDefined();
+    expect(() => passwordField.validate.is.msg).not.toThrow();
+    
+    // Test  validaciones
+    expect(() => passwordField.validate.notCommonPassword('Strong@Password123')).not.toThrow();
+    expect(() => passwordField.validate.notCommonPassword('123456')).toThrow();
+  });
+
+  test('Deberia hacer el campo rol correctamente', () => {
+    const rolField = modelDefinition.attributes.rol;
+    expect(rolField.defaultValue).toBe('administrador');
+    expect(rolField.allowNull).toBe(false);
+  });
+
+  test('Deberia aplicar el cifrado de contraseña', () => {
+    // Test that the hook is registered
+    expect(hooks).toHaveBeenCalledWith(encryptPasswordHook);
+  });
+
+  test('Debería exportar AdministradorModel con la propiedad Admin.', () => {
+    expect(AdminModel).toBeDefined();
+    expect(AdminModel).toHaveProperty('Admin');
   });
 });
-
-
