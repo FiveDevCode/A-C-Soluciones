@@ -9,7 +9,8 @@ const SectionPage = styled.section`
   flex-direction: column;
   align-items: center;
   background-color: #F2F5F7;
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 2rem;
 
 `
 const Title = styled.h1`

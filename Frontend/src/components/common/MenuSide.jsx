@@ -12,7 +12,7 @@ import {
   faGear, 
   faArrowRightFromBracket
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const SectionMenu = styled.section`
   display: flex;
@@ -94,8 +94,49 @@ const IconOption = styled(FontAwesomeIcon)`
   font-size: 32px;
 `
 
+const ContainerOptionClose = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 0.5rem;
+  color: #000000;
+
+  & > svg {
+    min-width: 32px;
+    text-align: center;
+  }
+
+  &:hover {
+    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
+
+    h2 {
+      font-weight: bold;
+    }
+
+    svg {
+      color: #000000;
+      stroke-width: 0;
+
+    }
+  }
+
+`
+
 
 const MenuSide = () => {
+  
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
+
   return (
     <SectionMenu>
       <Link to="/"><Logo src={logo} size="157px"/></Link>
@@ -143,12 +184,13 @@ const MenuSide = () => {
           />
           <TitleOption>Configuracion</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOptionClose onClick={handleLogout}>
           <IconOption 
             icon={faArrowRightFromBracket} 
+            
           />
           <TitleOption>Salir</TitleOption>
-        </ContainerOption>
+        </ContainerOptionClose>
       </ContainerAllConfiguration>
 
     </SectionMenu>

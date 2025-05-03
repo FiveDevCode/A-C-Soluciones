@@ -2,6 +2,7 @@ import { TextField, Button, Checkbox, FormControlLabel, Typography } from '@mui/
 import { useState } from 'react';
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import { handleCreateSubmitClient } from '../../controllers/client/createCl.controller';
 
 const Form = styled.form`
   display: flex;
@@ -38,46 +39,78 @@ const ContainerButton = styled.div`
 
 
 
-const validacionFormulario = (texto) => {
-  return texto.length > 0 ? true : false;  // en caso de que se mayor o igual a 0 la validacion sera valida;
-}
-
 
 const FormCreateCl = () => {
-  const [name, setName] = useState({
-    value: "",
-    valid: null,
-  });
-  const [lastName, setLastName] = useState({
-    value: "",
-    valid: null,
-  });
-  const [phone, setPhone] = useState({
-    value: "",
-    valid: null,
-  });
-  const [email, setEmail] = useState({
-    value: "",
-    valid: null,
-  });
-  const [password, setPassword] = useState({
-    value: "",
-    valid: null,
-  });
+  const [idCard, setIdCard] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [offersAccepted, setOffersAccepted] = useState(false);
   
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+
+    try {
+      await handleCreateSubmitClient(
+        idCard,
+        name,
+        lastName,
+        email,
+        phone,
+        password,
+        address
+      );
+
+      setErrorMsg("");
+    } catch (err) {
+      console.log(err)
+      if (err.response?.data?.errors) {
+        setFieldErrors(err.response.data.errors);
+      } else {
+        setErrorMsg("Hubo un error al registrar el técnico.");
+      }
+    }
+
+  }
+
+  console.log(fieldErrors)
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
+
+      <TextField 
+        label="Cédula" 
+        fullWidth size="medium" 
+        value={idCard} 
+        onChange={(e) => setIdCard(e.target.value)}
+        sx={{ backgroundColor: 'white' }}
+        error={Boolean(fieldErrors.numero_de_cedula)}
+        helperText={fieldErrors.numero_de_cedula}
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+
+          },
+        }}
+      />
       <TextField 
         label="Nombre" 
         fullWidth size="medium" 
-        value={name.value} 
-        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={name} 
+        onChange={(e) => setName(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={name.valid === false} 
-        helperText={name.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.nombre)}
+        helperText={fieldErrors.nombre}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -89,11 +122,11 @@ const FormCreateCl = () => {
       <TextField 
         label="Apellidos" 
         fullWidth size="medium" 
-        value={lastName.value} 
-        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={lastName} 
+        onChange={(e) => setLastName(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={lastName.valid === false} 
-        helperText={lastName.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.apellido)}
+        helperText={fieldErrors.apellido}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -106,11 +139,11 @@ const FormCreateCl = () => {
         label="Celular" 
         fullWidth size="medium" 
         type='number'
-        value={phone.value} 
-        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={phone} 
+        onChange={(e) => setPhone(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={phone.valid === false} 
-        helperText={phone.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.telefono)}
+        helperText={fieldErrors.telefono}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -120,13 +153,28 @@ const FormCreateCl = () => {
         }}
       />
       <TextField 
+        label="Dirrecion" 
+        fullWidth size="medium" 
+        value={address} 
+        onChange={(e) => setAddress(e.target.value)}
+        sx={{ backgroundColor: 'white' }}
+        error={Boolean(fieldErrors.direccion)}
+        helperText={fieldErrors.direccion}
+        FormHelperTextProps={{
+          sx: {
+            backgroundColor: '#F2F5F7',
+            margin: 0,
+          },
+        }}
+      />
+      <TextField 
         label="Correo electrónico" 
         fullWidth size="medium" 
-        value={email.value} 
-        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={email.valid === false} 
-        helperText={email.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.correo_electronico)}
+        helperText={fieldErrors.correo_electronico}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -138,11 +186,11 @@ const FormCreateCl = () => {
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
-        value={password.value} 
-        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value)})}
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={password.valid === false} 
-        helperText={password.valid === false && "El campo no debe estar vacio"} 
+        error={Boolean(fieldErrors.contrasenia)}
+        helperText={fieldErrors.contrasenia}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
@@ -152,6 +200,11 @@ const FormCreateCl = () => {
         }}
       /> 
 
+      {errorMsg && (
+        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+          {errorMsg}
+        </Typography>
+      )}
       <FormControlLabel
         control={
           <Checkbox
