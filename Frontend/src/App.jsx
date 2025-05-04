@@ -4,6 +4,7 @@ import PerfilUsuario from './components/tecnico/PerfilUsuario';
 import GenerateReportsTc from './components/tecnico/GenerateReportsTc';
 import { colors } from '@mui/material';
 import ServiceTc from './components/tecnico/ServiceTc';
+import UserProfileAd from './components/Admini/UserProfileAd';
 
 
 function Login() {
@@ -44,12 +45,16 @@ function App() {
   return (
     <Router>
       <Routes>
-       {/* <Route path="/" element={<PerfilUsuario />} />
-        <Route path="/login" element={<Login />} /> 
-        <Route path='/' element={<GenerateReportsTc/>}/>
-        <Route path='/Report' element={<Report/>}/>*/}
+       {/* <Route path="/" element={<PerfilUsuario />} /> */}
+      {/*  <Route path="/login" element={<Login />} />  */}
+      {/*   <Route path='/' element={<GenerateReportsTc/>}/> */}
+      {/*   <Route path='/Report' element={<Report/>}/> */}
         
-        <Route path='/' element={<ServiceTc tarea={tareaDemo}/>}/>
+     {/*  <Route path='/' element={<ServiceTc tarea={tareaDemo}/>}/> */}
+
+       {/*  <Route path='/' element={<UserProfileAd/>}/> */}
+
+       
       </Routes>
     </Router>
   );
