@@ -1,14 +1,16 @@
 // test/unit/models/servicios.model.test.js
 import { ServicioModel } from '../../../src/models/servicios.model.js';
-import { DataTypes } from 'sequelize';
 
 const modelDefinition = ServicioModel.Servicio;
 const attrs = modelDefinition.rawAttributes;
 
 describe('Servicio Model Tests', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Debe definir el modelo con el nombre "Servicio"', () => {
-    // Ajustamos para verificar directamente el nombre del modelo
-    expect(modelDefinition.name).toBe('Servicio');  // Usamos .name en vez de .modelName
+    expect(modelDefinition.name).toBe('Servicio');
     expect(modelDefinition.options.tableName).toBe('servicios');
   });
 
@@ -27,7 +29,7 @@ describe('Servicio Model Tests', () => {
     const estado = attrs.estado;
     expect(estado.type.values).toEqual(['activo', 'inactivo']);
     expect(estado.defaultValue).toBe('activo');
-    expect(estado.allowNull).toBe(false);  // Cambié a `false`, ya que es el valor correcto
+    expect(estado.allowNull).toBe(false);
   });
 
   test('Campo descripcion debe tener restricciones de longitud y no permitir nulos', () => {

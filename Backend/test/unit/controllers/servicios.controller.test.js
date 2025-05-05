@@ -29,7 +29,10 @@ describe('ServicioController', () => {
     servicioServiceMock = ServicioService.mock.instances[0];
   });
 
-  //test para crear servicio
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('crearServicio', () => {
     it('debe crear un servicio correctamente', async () => {
       const req = mockReq({ body: { nombre: 'Servicio A' }, user: { id: 1 } });
@@ -47,7 +50,7 @@ describe('ServicioController', () => {
         data: expect.any(Object)
       }));
     });
-    //debe mandar error si ya existe el nombre
+
     it('debe retornar error si el nombre ya existe', async () => {
       const req = mockReq({ body: { nombre: 'Existente' }, user: { id: 1 } });
       const res = mockRes();
@@ -58,7 +61,7 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
-    //validaciones
+
     it('debe manejar errores de validación', async () => {
       const req = mockReq({ body: {}, user: { id: 1 } });
       const res = mockRes();
@@ -76,7 +79,7 @@ describe('ServicioController', () => {
       }));
     });
   });
-  //encontrar un servicio por id
+
   describe('obtenerServicioPorId', () => {
     it('debe retornar un servicio si existe', async () => {
       const req = mockReq({ params: { id: 1 } });
@@ -88,7 +91,7 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
-    //debe mandar error si no existe el serviicio
+
     it('debe retornar 404 si no existe', async () => {
       const req = mockReq({ params: { id: 999 } });
       const res = mockRes();
@@ -100,7 +103,7 @@ describe('ServicioController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
     });
   });
-  //encontrar un servicio por nombre
+
   describe('obtenerServicioPorNombre', () => {
     it('debe retornar el servicio si existe', async () => {
       const req = mockReq({ params: { nombre: 'Nombre' } });

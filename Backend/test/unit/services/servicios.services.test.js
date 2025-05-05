@@ -1,3 +1,4 @@
+// test/unit/services/servicio.services.test.js
 import { ServicioService } from '../../../src/services/servicio.services.js';
 import { ServicioRepository } from '../../../src/repository/servicio.repository.js';
 
@@ -10,6 +11,7 @@ describe('ServicioService', () => {
 
   beforeEach(() => {
     ServicioRepository.mockClear();
+
     mockRepo = {
       crearServicio: jest.fn(),
       obtenerServicioPorId: jest.fn(),
@@ -22,8 +24,13 @@ describe('ServicioService', () => {
       deshabilitarServicio: jest.fn(),
       habilitarServicio: jest.fn(),
     };
+
     ServicioRepository.mockImplementation(() => mockRepo);
     servicioService = new ServicioService();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('crearServicio debe delegar en el repositorio', async () => {
