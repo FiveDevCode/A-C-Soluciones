@@ -1,0 +1,89 @@
+import { DataTypes } from "sequelize";
+import { sequelize } from "../database/database.js";
+import {noFechasPasadas, sinEspaciosSolamente,} from "../hooks/validators.js";
+
+
+
+const Solicitud = sequelize.define('Solicitud', {
+
+    id : {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    fecha_solicitud : {
+
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false,
+        validate: {
+          
+            isDate: {
+                msg: 'La fecha de solicitud debe ser una fecha válida.',
+            },
+        
+            notNull: {
+                msg: 'La fecha de solicitud es requerida.',
+            },
+            notEmpty: {
+                msg: 'La fecha de solicitud no puede estar vacía.',
+            },
+            noFechasPasadas,
+
+        },
+        
+    },
+    estado: {
+        type: DataTypes.ENUM(
+            'pendiente', 
+            'cotizada', 
+            'aceptada', 
+            'en proceso',
+            'completada', 
+            'cancelada'
+        ),
+        allowNull: false,
+        defaultValue: 'pendiente'
+    },
+    direccion_servicio: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            len: {
+                args: [10, 255],
+                msg: 'La dirección de servicio debe tener entre 10 y 255 caracteres.',
+            },
+            notEmpty: {
+                msg: 'La dirección del servicio no puede estar vacía.',
+            },
+            sinEspaciosSolamente
+          
+        },
+    },
+
+    comentarios: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        validate: {
+            len: {
+                args: [0, 255],
+                msg: 'Los comentarios no deben exceder los 255 caracteres.',
+            },
+        },
+    },
+
+
+},{
+    tableName: 'solicitud',
+    timestamps: false,
+});
+
+//asociaciones de latabla solicitud con otras tablas
+
+
+
+// Exportar el modelo para su uso en otras partes de la aplicación
+export const SolicitudModel = {
+    Solicitud
+}
