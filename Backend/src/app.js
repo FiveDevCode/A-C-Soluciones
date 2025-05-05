@@ -11,6 +11,7 @@ import AministradorRouter from './routers/administrador.routes.js';
 import TecnicoRouter from './routers/tecnico.routes.js';
 import ClienteRouter from './routers/cliente.routes.js';
 import UsuarioRouter from './routers/usuario.routes.js';
+import ServicioRouter from "./routers/servicio.routes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,6 +34,7 @@ App.use(AministradorRouter)
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
 App.use(UsuarioRouter);
+App.use(ServicioRouter); 
 
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
