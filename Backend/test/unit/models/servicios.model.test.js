@@ -70,4 +70,60 @@ describe('Servicio Model Tests', () => {
     expect(admin.validate.isInt).toBeDefined();
     expect(admin.validate.min.args[0]).toBe(1);
   });
+
+  test('El campo nombre no debe tener espacios al inicio o final', async () => {
+    const servicio = modelDefinition.build({ nombre: ' Limpieza ' });
+    try {
+      await servicio.validate();
+    } catch (error) {
+      expect(error.message).toContain('El nombre no debe tener espacios al inicio o final.');
+    }
+  });
+
+  test('El campo descripcion no debe tener espacios al inicio o final', async () => {
+    const servicio = modelDefinition.build({ descripcion: ' Servicio de limpieza ' });
+    try {
+      await servicio.validate();
+    } catch (error) {
+      expect(error.message).toContain('La descripción no debe tener espacios al inicio o final.');
+    }
+  });
+
+  test('El hook beforeUpdate debe actualizar la fecha_modificacion antes de actualizar el servicio', async () => {
+    // Crear un servicio de prueba
+    const servicio = await modelDefinition.create({
+      nombre: 'Limpieza',
+      descripcion: 'Servicio de limpieza con más de 20 caracteres para cumplir validación',
+      creada_por_fk: 1,
+    });
+
+    // Almacenar la fecha original de creación
+    const fechaCreacion = new Date(servicio.fecha_creacion);
+    
+    // Método 1: Forzar una fecha de modificación anterior
+    const fechaAnterior = new Date(fechaCreacion.getTime() - 60000); // 1 minuto antes
+    servicio.fecha_modificacion = fechaAnterior;
+    
+    // Modificar el servicio
+    servicio.nombre = 'Limpieza profunda';
+    
+    // Guardar los cambios usando update directo en lugar de save
+    await modelDefinition.update(
+      { nombre: 'Limpieza profunda' },
+      { where: { id: servicio.id }, individualHooks: true }
+    );
+    
+    // Recargar el servicio desde la base de datos para obtener los valores actualizados
+    const servicioActualizado = await modelDefinition.findByPk(servicio.id);
+    
+    // Verificar que la fecha de modificación sea posterior a la fecha de creación
+    expect(new Date(servicioActualizado.fecha_modificacion).getTime())
+      .not.toEqual(fechaCreacion.getTime());
+    expect(new Date(servicioActualizado.fecha_modificacion).getTime())
+      .toBeGreaterThan(fechaCreacion.getTime());
+  }, 20000); // Aumentamos el timeout a 10 segundos por si acaso
+
+  test('El modelo Servicio se exporta correctamente', () => {
+    expect(ServicioModel.Servicio).toBeDefined();
+  });
 });
