@@ -1,5 +1,6 @@
 name: SonarCloud analysis
 
+
 on:
   push:
     branches: [ "development" ]
@@ -7,25 +8,32 @@ on:
     branches: [ "development" ]
   workflow_dispatch:
 
+
 permissions:
   pull-requests: read
+
 
 jobs:
   Analysis:
     runs-on: ubuntu-latest
 
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+
       - name: Install dependencies
         run: npm install
         working-directory: ./Backend
+
+
 
 
       - name: Analyze with SonarCloud
@@ -52,3 +60,4 @@ jobs:
             **/app.js,\
             **/index.js,\
             **/config/puerto.js
+
