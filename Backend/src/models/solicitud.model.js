@@ -72,7 +72,44 @@ const Solicitud = sequelize.define('Solicitud', {
             },
         },
     },
+    // =====Asociaciones=====
+     servicioId:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'servicio',
+            key: 'id'
+        },
+        validate: {
+            notNull: {
+                msg: 'El id del servicio es requerido.',
+            },
+            notEmpty: {
+                msg: 'El id del servicio no puede estar vacío.',
+            },
+        }
+    },
+    clienteId:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'cliente',
+            key: 'id'
+        },
+        validate: {
+            notNull: {
+                msg: 'El id del cliente es requerido.',
+            },
+            notEmpty: {
+                msg: 'El id del cliente no puede estar vacío.',
+            },
+        }
+    },
 
+
+
+   
+    
 
 },{
     tableName: 'solicitud',
