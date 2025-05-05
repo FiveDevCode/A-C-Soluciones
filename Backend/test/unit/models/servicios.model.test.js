@@ -100,8 +100,8 @@ describe('Servicio Model Tests', () => {
     // Almacenar la fecha original de creación
     const fechaCreacion = new Date(servicio.fecha_creacion);
     
-    // Método 1: Forzar una fecha de modificación anterior
-    const fechaAnterior = new Date(fechaCreacion.getTime() - 60000); // 1 minuto antes
+    
+    const fechaAnterior = new Date(fechaCreacion.getTime() - 60000);
     servicio.fecha_modificacion = fechaAnterior;
     
     // Modificar el servicio
@@ -121,7 +121,7 @@ describe('Servicio Model Tests', () => {
       .not.toEqual(fechaCreacion.getTime());
     expect(new Date(servicioActualizado.fecha_modificacion).getTime())
       .toBeGreaterThan(fechaCreacion.getTime());
-  }, 20000); // Aumentamos el timeout a 10 segundos por si acaso
+  }, 20000); 
 
   test('El modelo Servicio se exporta correctamente', () => {
     expect(ServicioModel.Servicio).toBeDefined();

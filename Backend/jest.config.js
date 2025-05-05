@@ -8,7 +8,9 @@ export default {
     'src/controllers/**/*.js',
     'src/services/**/*.js',
     'src/repository/**/*.js',
-    'src/routes/**/*.js'
+    'src/routers/**/*.js',
+    'src/middlewares/**/*.js',
+    'src/models/**/*.js'  
   ],
   transformIgnorePatterns: [
     "/node_modules/(?!<your-module-to-transform>)/"
