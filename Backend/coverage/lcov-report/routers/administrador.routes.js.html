@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for services/administrador.services.js</title>
+    <title>Code coverage report for routers/administrador.routes.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">services</a> administrador.services.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">routers</a> administrador.routes.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -97,41 +97,33 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -139,42 +131,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/services/admin.service.js
-import { AdminRepository } from '../repository/administrador.repository.js';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/routes/admin.routes.js
+import express from 'express';
+import { AdminController } from '../controllers/administrador.controller.js';
 &nbsp;
-export class AdminService {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >    this.adminRepository = new AdminRepository();</span>
-  }
+const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
+const adminController = <span class="cstat-no" title="statement not covered" >new AdminController();</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync crearAdmin(data) {
-<span class="cstat-no" title="statement not covered" >   return await this.adminRepository.crearAdmin(data);</span>
-  }
+// Registrar administrador
+<span class="cstat-no" title="statement not covered" >router.post('/api/admin', adminController.crearAdmin);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorId(id);</span>
-  }
+// Obtener todos los administradores registrados
+<span class="cstat-no" title="statement not covered" >router.get('/api/admin', adminController.obtenerAdmins);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCedula(numero_cedula) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCedula(numero_cedula);</span>
-  }
+// Obtener administrador por ID
+<span class="cstat-no" title="statement not covered" >router.get('/api/admin/:id', adminController.obtenerAdminPorId);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCorreo(correo_electronico) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCorreo(correo_electronico);</span>
-  }
+// Obtener administrador por número de cédula
+<span class="cstat-no" title="statement not covered" >router.get('/api/admin/cedula/:numero_cedula', adminController.obtenerAdminPorCedula);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdmins() {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdmins();</span>
-  }
+// Obtener administrador por correo electrónico (útil para login)
+<span class="cstat-no" title="statement not covered" >router.get('/api/admin/correo/:correo_electronico', adminController.obtenerAdminPorCorreo);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarAdmin(id, data) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.actualizarAdmin(id, data);</span>
-  }
+// Actualizar administrador por ID
+<span class="cstat-no" title="statement not covered" >router.put('/api/admin/:id', adminController.actualizarAdmin);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarAdmin(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.eliminarAdmin(id);</span>
-  }
-}
+// Eliminar administrador por ID
+<span class="cstat-no" title="statement not covered" >router.delete('/api/admin/:id', adminController.eliminarAdmin);</span>
+&nbsp;
+// Ruta adicional para autenticación
+<span class="cstat-no" title="statement not covered" >router.post('/api/admin/login', adminController.autenticarAdmin);</span>
+&nbsp;
+export default router;
 &nbsp;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>

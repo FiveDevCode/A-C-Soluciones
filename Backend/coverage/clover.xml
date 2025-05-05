@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746462598245" clover="3.2.0">
-  <project timestamp="1746462598245" name="All files">
-    <metrics statements="473" coveredstatements="172" conditionals="142" coveredconditionals="60" methods="126" coveredmethods="54" elements="741" coveredelements="286" complexity="0" loc="473" ncloc="473" packages="3" files="16" classes="16"/>
+<coverage generated="1746472074752" clover="3.2.0">
+  <project timestamp="1746472074752" name="All files">
+    <metrics statements="608" coveredstatements="275" conditionals="201" coveredconditionals="119" methods="153" coveredmethods="81" elements="962" coveredelements="475" complexity="0" loc="608" ncloc="608" packages="6" files="29" classes="29"/>
     <package name="controllers">
       <metrics statements="316" coveredstatements="92" conditionals="82" coveredconditionals="29" methods="47" coveredmethods="15"/>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
@@ -336,6 +336,127 @@
         <line num="33" count="1" type="stmt"/>
       </file>
     </package>
+    <package name="middlewares">
+      <metrics statements="26" coveredstatements="26" conditionals="11" coveredconditionals="11" methods="3" coveredmethods="3"/>
+      <file name="autenticacion.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\middlewares\autenticacion.js">
+        <metrics statements="26" coveredstatements="26" conditionals="11" coveredconditionals="11" methods="3" coveredmethods="3"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="12" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="35" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="50" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="51" count="8" type="stmt"/>
+        <line num="53" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="58" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+      </file>
+      <file name="permisos.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\middlewares\permisos.js">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="models">
+      <metrics statements="65" coveredstatements="64" conditionals="48" coveredconditionals="48" methods="24" coveredmethods="24"/>
+      <file name="administrador.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\administrador.model.js">
+        <metrics statements="15" coveredstatements="15" conditionals="10" coveredconditionals="10" methods="5" coveredmethods="5"/>
+        <line num="6" count="15" type="stmt"/>
+        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="30" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="49" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="68" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="104" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="121" count="15" type="stmt"/>
+        <line num="123" count="15" type="stmt"/>
+      </file>
+      <file name="cliente.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\cliente.model.js">
+        <metrics statements="25" coveredstatements="25" conditionals="22" coveredconditionals="22" methods="10" coveredmethods="10"/>
+        <line num="6" count="19" type="stmt"/>
+        <line num="27" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="54" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="62" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="68" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="91" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="127" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="128" count="1" type="stmt"/>
+        <line num="148" count="2" type="stmt"/>
+        <line num="149" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="150" count="1" type="stmt"/>
+        <line num="168" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="169" count="1" type="stmt"/>
+        <line num="183" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="184" count="1" type="stmt"/>
+        <line num="209" count="19" type="stmt"/>
+        <line num="212" count="19" type="stmt"/>
+      </file>
+      <file name="index.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\index.js">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+      <file name="servicios.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\servicios.model.js">
+        <metrics statements="7" coveredstatements="7" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="26" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="96" count="3" type="stmt"/>
+      </file>
+      <file name="tecnico.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\tecnico.model.js">
+        <metrics statements="17" coveredstatements="17" conditionals="12" coveredconditionals="12" methods="6" coveredmethods="6"/>
+        <line num="7" count="20" type="stmt"/>
+        <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="50" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="69" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="100" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="119" count="2" type="stmt"/>
+        <line num="120" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="149" count="20" type="stmt"/>
+        <line num="152" count="20" type="stmt"/>
+      </file>
+      <file name="usuario.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\usuario.model.js">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
     <package name="repository">
       <metrics statements="74" coveredstatements="39" conditionals="22" coveredconditionals="12" methods="37" coveredmethods="18"/>
       <file name="administrador.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\administrador.repository.js">
@@ -426,6 +547,68 @@
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="routers">
+      <metrics statements="44" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="administrador.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\administrador.routes.js">
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+      </file>
+      <file name="cliente.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\cliente.routes.js">
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+      </file>
+      <file name="servicio.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\servicio.routes.js">
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+      </file>
+      <file name="tecnico.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\tecnico.routes.js">
+        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+      </file>
+      <file name="usuario.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\usuario.routes.js">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
       </file>
     </package>
     <package name="services">

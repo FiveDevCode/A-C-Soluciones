@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for services/administrador.services.js</title>
+    <title>Code coverage report for routers/servicio.routes.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">services</a> administrador.services.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">routers</a> servicio.routes.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -105,79 +105,79 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/services/admin.service.js
-import { AdminRepository } from '../repository/administrador.repository.js';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
+import { ServicioController } from '../controllers/servicio.controller.js';
+import { authenticate, isAdmin } from '../middlewares/autenticacion.js';
 &nbsp;
-export class AdminService {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >    this.adminRepository = new AdminRepository();</span>
-  }
+const router = express.Router();
+const servicioController = new ServicioController();
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync crearAdmin(data) {
-<span class="cstat-no" title="statement not covered" >   return await this.adminRepository.crearAdmin(data);</span>
-  }
+// Rutas públicas
+router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);
+router.get('/api/servicios/buscar', servicioController.buscarServicios);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorId(id);</span>
-  }
+// Rutas protegidas - requieren autenticación
+router.use(authenticate);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCedula(numero_cedula) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCedula(numero_cedula);</span>
-  }
+// Crear servicio (solo lo peude hacer administradores)
+router.post('/api/servicios', isAdmin, servicioController.crearServicio);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCorreo(correo_electronico) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCorreo(correo_electronico);</span>
-  }
+// Obtener todos los servicios
+router.get('/api/servicios', servicioController.obtenerServicios);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdmins() {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdmins();</span>
-  }
+// Obtener servicio por ID
+router.get('/api/servicios/:id', servicioController.obtenerServicioPorId);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarAdmin(id, data) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.actualizarAdmin(id, data);</span>
-  }
+// Obtener servicio por nombre
+router.get('/api/servicios/nombre/:nombre', servicioController.obtenerServicioPorNombre);
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarAdmin(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.eliminarAdmin(id);</span>
-  }
-}
+// Actualizar servicio (Solo administradores tiene este permiso)
+router.put('/api/servicios/:id', isAdmin, servicioController.actualizarServicio);
 &nbsp;
+// Eliminar servicio (Solo administradores tienen este permiso)
+router.delete('/api/servicios/:id', isAdmin, servicioController.eliminarServicio);
 &nbsp;
-&nbsp;</pre></td></tr></table></pre>
+// Deshabilitar servicio (Solo administradores tienen este permiso)
+router.patch('/api/servicios/:id/deshabilitar', isAdmin, servicioController.deshabilitarServicio);
+&nbsp;
+// Habilitar servicio (Solo administradores tienen este permiso)
+router.patch('/api/servicios/:id/habilitar', isAdmin, servicioController.habilitarServicio);
+&nbsp;
+export default router;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
