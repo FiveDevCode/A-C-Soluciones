@@ -1,6 +1,12 @@
 import { TecnicoModel } from '../models/tecnico.model.js';
 
 export class TecnicoRepository {
+  async findByEmail(email) {
+    return await TecnicoModel.Tecnico.findOne({
+      where: { correo_electronico: email },
+    });
+  }
+
   async crearTecnico(data) {
     return await TecnicoModel.Tecnico.create(data);
   }
@@ -9,13 +15,19 @@ export class TecnicoRepository {
     return await TecnicoModel.Tecnico.findByPk(id);
   }
 
-  async obtenerTecnicoPorcedula(numero_de_cedula) {
+  async obtenerTecnicoPorCedula(numero_de_cedula) {
     return await TecnicoModel.Tecnico.findOne({
       where: { numero_de_cedula }
     });
   }
   async obtenerTecnicoPorCorreo(correo_electronico) {
     return await TecnicoModel.Tecnico.findOne({ where: { correo_electronico } });
+  }
+
+  async obtenerTecnicoPorCorreo(correo_electronico) {
+    return await TecnicoModel.Tecnico.findOne({
+      where: { correo_electronico }
+    });
   }
 
   async obtenerTecnicos() {
