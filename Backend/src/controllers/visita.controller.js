@@ -93,7 +93,7 @@ export class VisitaController {
 
   obtenerVisitasPorSolicitud = async (req, res) => {
     try {
-      const visitas = await this.visitaService.obtenerVisitasPorSolicitud(req.params.solicitudId);
+      const visitas = await this.visitaService.obtenerVisitasPorSolicitud(req.params.solicitud_id_fk);
       return res.status(200).json({
         success: true,
         data: visitas

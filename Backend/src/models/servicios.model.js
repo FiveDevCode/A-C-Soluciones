@@ -82,6 +82,21 @@ const Servicio = sequelize.define('Servicio', {
       },
     },
   },
+  tecnico_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'tecnico', 
+      key: 'id'
+    },
+    validate: {
+      isInt: { msg: 'El ID del técnico debe ser un número entero.' },
+      min: {
+        args: [1],
+        msg: 'El ID del técnico debe ser un número positivo.'
+      }
+    }
+  }
 }, {
   tableName: 'servicios',
   timestamps: false,
@@ -92,7 +107,7 @@ const Servicio = sequelize.define('Servicio', {
   }
 });
 
-// exportamos el model para usarlo en el repository
+// Exportación
 export const ServicioModel = {
   Servicio
-}
+};

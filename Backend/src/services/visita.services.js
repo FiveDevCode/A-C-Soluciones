@@ -17,21 +17,21 @@ export class VisitaService {
     }
 
     // Validar solicitud
-    // const solicitud = await this.solicitudRepository.obtenerSolicitudPorId(data.solicitud_ID);
-    // if (!solicitud) {
-    //   throw new Error('Solicitud no encontrada');
-    // }
+    const solicitud = await this.solicitudRepository.obtenerPorId(data.solicitud_id_fk);
+    if (!solicitud) {
+      throw new Error('Solicitud no encontrada');
+    }
 
-    // // Verificar disponibilidad del técnico
-    // const tecnicoDisponible = await this.visitaRepository.verificarDisponibilidadTecnico(
-    //   data.tecnico_id_fk,
-    //   data.fecha_programada,
-    //   data.duracion_estimada
-    // );
+    //Verificar disponibilidad del técnico
+    const tecnicoDisponible = await this.visitaRepository.verificarDisponibilidadTecnico(
+      data.tecnico_id_fk,
+      data.fecha_programada,
+      data.duracion_estimada
+    );
 
-    // if (!tecnicoDisponible) {
-    //   throw new Error('El técnico no está disponible en ese horario');
-    // }
+    if (!tecnicoDisponible) {
+      throw new Error('El técnico no está disponible en ese horario');
+    }
 
 
     // Crear la visita
