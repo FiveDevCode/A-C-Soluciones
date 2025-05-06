@@ -1,5 +1,5 @@
-import { SolicitudService } from "../services/solicitud.services.js";
-import { ValidationError } from "sequelize";
+import { SolicitudService } from '../services/solicitud.services.js';
+import { ValidationError } from 'sequelize';
 
 export class SolicitudController {
     constructor() {
@@ -7,208 +7,119 @@ export class SolicitudController {
     }
 
     // Crear una nueva solicitud
-    crearSolicitud = async (req, res) => {
+    crear = async (req, res) => {
         try {
-            const { 
-                fecha_solicitud, 
-                direccion_servicio, 
-                comentarios, 
-                servicio_id_fk, 
-                cliente_id_fk 
-            } = req.body;
+            const { cliente_id_fk, servicio_id_fk } = req.body;
 
-            // Validar que exista el cliente
-            const clienteExiste = await this.solicitudService.verificarCliente(cliente_id_fk);
-            if (!clienteExiste) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'El cliente especificado no existe'
+            // Verificar existencia de cliente y servicio
+            const clienteExiste = await this.solicitudService.clienteExiste(cliente_id_fk);
+            const servicioExiste = await this.solicitudService.servicioExiste(servicio_id_fk);
+
+            if (!clienteExiste || !servicioExiste) {
+                return res.status(400).json({ 
+                    message: 'Cliente o servicio no encontrado' 
                 });
             }
 
-            // Validar que exista el servicio
-            const servicioExiste = await this.solicitudService.verificarServicio(servicio_id_fk);
-            if (!servicioExiste) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'El servicio especificado no existe'
-                });
-            }
+            const nuevaSolicitud = await this.solicitudService.crear(req.body);
+            return res.status(201).json(nuevaSolicitud);
 
-            // Crear la solicitud
-            const nuevaSolicitud = await this.solicitudService.crearSolicitud({
-                fecha_solicitud,
-                direccion_servicio,
-                comentarios,
-                servicio_id_fk,
-                cliente_id_fk,
-                estado: 'pendiente' // Por defecto
-            });
-
-            return res.status(201).json({
-                success: true,
-                message: 'Solicitud creada exitosamente',
-                data: nuevaSolicitud
-            });
         } catch (error) {
-            console.error('Error al crear solicitud:', error);
-            
+            console.error(error);
+
             if (error instanceof ValidationError) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Error de validación',
-                    errors: error.errors.map(e => e.message)
-                });
+                const mensajes = error.errors.map(err => err.message);
+                return res.status(400).json({ errors: mensajes });
             }
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al crear la solicitud'
-            });
+
+            return res.status(500).json({ message: 'Error al crear la solicitud' });
         }
-    }
+    };
 
     // Obtener todas las solicitudes
-    obtenerSolicitudes = async (req, res) => {
+    obtenerTodos = async (req, res) => {
         try {
-            const solicitudes = await this.solicitudService.obtenerSolicitudes();
-            
-            return res.status(200).json({
-                success: true,
-                data: solicitudes
-            });
+            const solicitudes = await this.solicitudService.obtenerTodos();
+            return res.status(200).json(solicitudes);
         } catch (error) {
-            console.error('Error al obtener solicitudes:', error);
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al obtener las solicitudes'
-            });
+            console.error(error);
+            return res.status(500).json({ message: 'Error al obtener las solicitudes' });
         }
-    }
+    };
 
-    // Obtener solicitudes por cliente
-    obtenerSolicitudesPorCliente = async (req, res) => {
+    // Obtener solicitud por ID
+    obtenerPorId = async (req, res) => {
         try {
-            const { cliente_id_fk } = req.params;
-            
-            const solicitudes = await this.solicitudService.obtenerSolicitudesPorCliente(cliente_id_fk);
-            
-            return res.status(200).json({
-                success: true,
-                data: solicitudes
-            });
-        } catch (error) {
-            console.error('Error al obtener solicitudes por cliente:', error);
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al obtener las solicitudes por cliente'
-            });
-        }
-    }
-
-    // Obtener una solicitud por ID
-    obtenerSolicitudPorId = async (req, res) => {
-        try {
-            const { id } = req.params;
-            
-            const solicitud = await this.solicitudService.obtenerSolicitudPorId(id);
+            const solicitud = await this.solicitudService.obtenerPorId(req.params.id);
             
             if (!solicitud) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Solicitud no encontrada'
-                });
+                return res.status(404).json({ message: 'Solicitud no encontrada' });
             }
-            
-            return res.status(200).json({
-                success: true,
-                data: solicitud
-            });
-        } catch (error) {
-            console.error('Error al obtener solicitud por ID:', error);
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al obtener la solicitud'
-            });
-        }
-    }
 
-    // Actualizar el estado de una solicitud
-    actualizarEstadoSolicitud = async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { estado } = req.body;
-            
-            // Validar el estado
-            const estadosValidos = ['pendiente', 'cotizada', 'aceptada', 'en proceso', 'completada', 'cancelada'];
-            
-            if (!estadosValidos.includes(estado)) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Estado de solicitud no válido',
-                    estadosValidos
-                });
-            }if (estado = 'completada'){
-                return res.status(400).json({
-                    success:false,
-                    message: 'No se puede modificar una solicitud completada'                })
-            }
-            
-            try {
-                const solicitudActualizada = await this.solicitudService.actualizarEstadoSolicitud(id, estado);
-                
-                return res.status(200).json({
-                    success: true,
-                    message: 'Estado de solicitud actualizado exitosamente',
-                    data: solicitudActualizada
-                });
-            } catch (error) {
-                if (error.message === 'Solicitud no encontrada') {
-                    return res.status(404).json({
-                        success: false,
-                        message: 'Solicitud no encontrada'
-                    });
-                }
-                throw error;
-            }
+            return res.status(200).json(solicitud);
         } catch (error) {
-            console.error('Error al actualizar estado de solicitud:', error);
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al actualizar el estado de la solicitud'
-            });
+            console.error(error);
+            return res.status(500).json({ message: 'Error al obtener la solicitud' });
         }
-    }
-    //Eliminar una solicitud
-    eliminarSolicitud = async (req, res) => {
+    };
+
+    // Obtener solicitudes por cliente
+    obtenerPorCliente = async (req, res) => {
         try {
-            const { id } = req.params;
+            const solicitudes = await this.solicitudService.obtenerPorCliente(req.params.cliente_id);
             
-            const solicitudEliminada = await this.solicitudService.eliminarSolicitud(id);
+            if (!solicitudes || solicitudes.length === 0) {
+                return res.status(404).json({ 
+                    message: 'No se encontraron solicitudes para este cliente' 
+                });
+            }
+
+            return res.status(200).json(solicitudes);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error al obtener las solicitudes' });
+        }
+    };
+
+    // Actualizar estado de una solicitud
+    actualizarEstado = async (req, res) => {
+        try {
+            const { estado } = req.body;
+            const solicitudActualizada = await this.solicitudService.actualizarEstado(
+                req.params.id, 
+                estado
+            );
+
+            if (!solicitudActualizada) {
+                return res.status(404).json({ message: 'Solicitud no encontrada' });
+            }
+
+            return res.status(200).json(solicitudActualizada);
+        } catch (error) {
+            console.error(error);
+            
+            if (error instanceof ValidationError) {
+                const mensajes = error.errors.map(err => err.message);
+                return res.status(400).json({ errors: mensajes });
+            }
+
+            return res.status(500).json({ message: 'Error al actualizar la solicitud' });
+        }
+    };
+
+    // Eliminar una solicitud
+    eliminar = async (req, res) => {
+        try {
+            const solicitudEliminada = await this.solicitudService.eliminar(req.params.id);
             
             if (!solicitudEliminada) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Solicitud no encontrada'
-                });
+                return res.status(404).json({ message: 'Solicitud no encontrada' });
             }
-            
-            return res.status(200).json({
-                success: true,
-                message: 'Solicitud eliminada exitosamente',
-                data: solicitudEliminada
-            });
+
+            return res.status(200).json({ message: 'Solicitud eliminada correctamente' });
         } catch (error) {
-            console.error('Error al eliminar solicitud:', error);
-            
-            return res.status(500).json({
-                success: false,
-                message: 'Error interno del servidor al eliminar la solicitud'
-            });
+            console.error(error);
+            return res.status(500).json({ message: 'Error al eliminar la solicitud' });
         }
-    }
+    };
 }

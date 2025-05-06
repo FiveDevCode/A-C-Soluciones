@@ -1,93 +1,41 @@
-
 import { SolicitudRepository } from "../repository/solicitud.repository.js";
 
 export class SolicitudService {
     constructor() {
-        this.solicitudRepository = new SolicitudRepository();
+        this.repository = new SolicitudRepository();
     }
 
-    // Verificar si existe un cliente
-    async verificarCliente(cliente_id_fk) {
-        try {
-            return await this.solicitudRepository.clienteExiste(cliente_id_fk);
-        } catch (error) {
-            console.error("Error en servicio al verificar cliente:", error);
-            throw error;
-        }
+    async crear(data) {
+        return await this.repository.crear(data);
     }
 
-    // Verificar si existe un servicio
-    async verificarServicio(servicio_id_fk) {
-        try {
-            return await this.solicitudRepository.servicioExiste(servicio_id_fk);
-        } catch (error) {
-            console.error("Error en servicio al verificar servicio:", error);
-            throw error;
-        }
+    async obtenerTodos() {
+        return await this.repository.obtenerTodos();
     }
 
-    // Crear una nueva solicitud
-    async crearSolicitud(solicitudData) {
-        try {
-            return await this.solicitudRepository.crear(solicitudData);
-        } catch (error) {
-            console.error("Error en servicio al crear solicitud:", error);
-            throw error;
-        }
+    async obtenerPorId(id) {
+        return await this.repository.obtenerPorId(id);
     }
 
-    // Obtener todas las solicitudes con sus relaciones
-    async obtenerSolicitudes() {
-        try {
-            return await this.solicitudRepository.obtenerTodos();
-        } catch (error) {
-            console.error("Error en servicio al obtener solicitudes:", error);
-            throw error;
-        }
+    async obtenerPorCliente(cliente_id) {
+        return await this.repository.obtenerPorCliente(cliente_id);
     }
 
-    // Obtener solicitudes por cliente
-    async obtenerSolicitudesPorCliente(cliente_id_fk) {
-        try {
-            return await this.solicitudRepository.obtenerPorCliente(cliente_id_fk);
-        } catch (error) {
-            console.error("Error en servicio al obtener solicitudes por cliente:", error);
-            throw error;
-        }
+    async clienteExiste(cliente_id) {
+        return await this.repository.clienteExiste(cliente_id);
     }
 
-    // Obtener una solicitud por ID
-    async obtenerSolicitudPorId(id) {
-        try {
-            return await this.solicitudRepository.obtenerPorId(id);
-        } catch (error) {
-            console.error("Error en servicio al obtener solicitud por ID:", error);
-            throw error;
-        }
+    async servicioExiste(servicio_id) {
+        return await this.repository.servicioExiste(servicio_id);
     }
 
-    // Actualizar el estado de una solicitud
-    async actualizarEstadoSolicitud(id, estado) {
-        try {
-            const solicitud = await this.solicitudRepository.actualizarEstado(id, estado);
-            
-            if (!solicitud) {
-                throw new Error('Solicitud no encontrada');
-            }
-            
-            return solicitud;
-        } catch (error) {
-            console.error("Error en servicio al actualizar estado de solicitud:", error);
-            throw error;
-        }
+    async actualizarEstado(id, estado) {
+        const solicitud = await this.repository.actualizarEstado(id, estado);
+        if (!solicitud) throw new Error('Solicitud no encontrada');
+        return solicitud;
     }
-    //Eliminar una solicitud
-    async eliminarSolicitud(id) {
-        try {
-            return await this.solicitudRepository.eliminar(id);
-        } catch (error) {
-            console.error("Error en servicio al eliminar solicitud:", error);
-            throw error;
-        }
+
+    async eliminar(id) {
+        return await this.repository.eliminar(id);
     }
 }

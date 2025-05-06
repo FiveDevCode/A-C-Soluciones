@@ -12,14 +12,8 @@ export class ServicioRepository {
 
   async obtenerServicioPorNombre(nombre) {
     return await ServicioModel.Servicio.findOne({
-      where: { 
-        nombre: {
-          [Op.iLike]: nombre // 
-        }
-      }
-    });
-  }
-
+      where: { nombre: {[Op.iLike]: nombre }}});
+    }
   async buscarServicios(termino) {
     return await ServicioModel.Servicio.findAll({
       where: {

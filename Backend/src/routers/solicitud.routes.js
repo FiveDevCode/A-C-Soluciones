@@ -8,46 +8,25 @@ const router = Router();
 // Crear una instancia del controlador
 const solicitudController = new SolicitudController();
 
-/**
- * Rutas para el manejo de solicitudes
- * Todas las rutas están protegidas por el middleware de autenticación
- */
 
 router.use(authenticate);
 
 // Crear una nueva solicitud
-router.post('/api/solicitudes', 
-    isCliente, 
-    solicitudController.crearSolicitud
-);
+router.post('/api/solicitudes', isCliente, solicitudController.crear);
 
 // Obtener todas las solicitudes
-router.get('/api/solicitudes', 
-    solicitudController.obtenerSolicitudes
-);
+router.get('/api/solicitudes', isCliente || isAdmin,  solicitudController.obtenerTodos);
 
 // Obtener solicitudes por cliente
-router.get('api/solicitudes/:cliente_id_fk', 
-    isCliente, isAdmin, 
-    solicitudController.obtenerSolicitudesPorCliente
-);
+router.get('/api/solicitudes/:id', isCliente || isAdmin , solicitudController.obtenerPorId);
 
 // Obtener una solicitud específica por ID
-router.get('api/solicitudes/:id', 
-    isAdmin, isTecnico,
-    solicitudController.obtenerSolicitudPorId
-);
+router.get('/api/solicitudes/cliente/:cliente_id_fk', isCliente || isAdmin, solicitudController.obtenerPorCliente);
 
 // Actualizar el estado de una solicitud
-router.patch('api/solicitudes/:id/estado', 
-    isAdmin, isCliente,
-    solicitudController.actualizarEstadoSolicitud
-);
+router.patch('/api/solicitudes/:id/estado', isAdmin, isCliente,solicitudController.actualizarEstado);
 
 // Eliminar una solicitud
-router.delete('api/solicitudes/:id', 
-    isAdmin, isCliente,
-    solicitudController.eliminarSolicitud
-);
+router.delete('/api/solicitud/:id', isAdmin || isCliente,solicitudController.eliminar);
 
 export default router;
