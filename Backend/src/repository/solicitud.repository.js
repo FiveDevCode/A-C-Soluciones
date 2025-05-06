@@ -1,7 +1,7 @@
 
 import { SolicitudModel } from "../models/solicitud.model.js";
 import { ClienteModel } from "../models/cliente.model.js";
-import { ServicioModel } from "../models/servicio.model.js";
+import { ServicioModel } from "../models/servicios.model.js";
 
 
 export class SolicitudRepository {
@@ -22,9 +22,9 @@ export class SolicitudRepository {
     }
 
     // Verificar si existe un cliente
-    async clienteExiste(clienteId) {
+    async clienteExiste(cliente_id_fk) {
         try {
-            const cliente = await this.clienteModel.findByPk(clienteId);
+            const cliente = await this.clienteModel.findByPk(cliente_id_fk);
             return !!cliente;
         } catch (error) {
             console.error("Error en repository al verificar cliente:", error);
@@ -33,9 +33,9 @@ export class SolicitudRepository {
     }
 
     // Verificar si existe un servicio
-    async servicioExiste(servicioId) {
+    async servicioExiste(servicio_id_fk) {
         try {
-            const servicio = await this.servicioModel.findByPk(servicioId);
+            const servicio = await this.servicioModel.findByPk(servicio_id_fk);
             return !!servicio;
         } catch (error) {
             console.error("Error en repository al verificar servicio:", error);
@@ -68,10 +68,10 @@ export class SolicitudRepository {
     }
 
     // Obtener solicitudes por cliente
-    async obtenerPorCliente(clienteId) {
+    async obtenerPorCliente(cliente_id_fk) {
         try {
             return await this.solicitudModel.findAll({
-                where: { clienteId },
+                where: { cliente_id_fk },
                 include: [
                     {
                         model: this.servicioModel,

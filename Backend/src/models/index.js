@@ -17,11 +17,11 @@ export { Usuario };
 export { sequelize };
 
 Cliente.hasMany(SolicitudModel.Solicitud, {
-    foreignKey: 'clienteId',
+    foreignKey: 'cliente_id_fk',
     sourceKey: 'id'
 });
 SolicitudModel.Solicitud.belongsTo(Cliente, {
-    foreignKey: 'clienteId',
+    foreignKey: 'cliente_id_fk',
     targetKey: 'id'
 });
 

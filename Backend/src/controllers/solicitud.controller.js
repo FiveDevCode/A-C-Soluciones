@@ -13,12 +13,12 @@ export class SolicitudController {
                 fecha_solicitud, 
                 direccion_servicio, 
                 comentarios, 
-                servicioId, 
-                clienteId 
+                servicio_id_fk, 
+                cliente_id_fk 
             } = req.body;
 
             // Validar que exista el cliente
-            const clienteExiste = await this.solicitudService.verificarCliente(clienteId);
+            const clienteExiste = await this.solicitudService.verificarCliente(cliente_id_fk);
             if (!clienteExiste) {
                 return res.status(404).json({
                     success: false,
@@ -27,7 +27,7 @@ export class SolicitudController {
             }
 
             // Validar que exista el servicio
-            const servicioExiste = await this.solicitudService.verificarServicio(servicioId);
+            const servicioExiste = await this.solicitudService.verificarServicio(servicio_id_fk);
             if (!servicioExiste) {
                 return res.status(404).json({
                     success: false,
@@ -40,8 +40,8 @@ export class SolicitudController {
                 fecha_solicitud,
                 direccion_servicio,
                 comentarios,
-                servicioId,
-                clienteId,
+                servicio_id_fk,
+                cliente_id_fk,
                 estado: 'pendiente' // Por defecto
             });
 
@@ -90,9 +90,9 @@ export class SolicitudController {
     // Obtener solicitudes por cliente
     obtenerSolicitudesPorCliente = async (req, res) => {
         try {
-            const { clienteId } = req.params;
+            const { cliente_id_fk } = req.params;
             
-            const solicitudes = await this.solicitudService.obtenerSolicitudesPorCliente(clienteId);
+            const solicitudes = await this.solicitudService.obtenerSolicitudesPorCliente(cliente_id_fk);
             
             return res.status(200).json({
                 success: true,

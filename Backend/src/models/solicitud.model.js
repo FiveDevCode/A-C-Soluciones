@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../database/database.js";
+import { sequelize} from "../database/conexion.js";
 import {noFechasPasadas, sinEspaciosSolamente,} from "../hooks/validators.js";
 
 
@@ -61,10 +61,24 @@ const Solicitud = sequelize.define('Solicitud', {
           
         },
     },
+    descripcion: { 
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            len: {
+                args: [5, 500],
+                msg: 'La descripción debe tener entre 20 y 500 caracteres.',
+            },
+            notEmpty: {
+                msg: 'La descripción no puede estar vacía.',
+            },
+            sinEspaciosSolamente
+        },
+    },
 
     comentarios: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: false,
         validate: {
             len: {
                 args: [0, 255],
@@ -73,11 +87,11 @@ const Solicitud = sequelize.define('Solicitud', {
         },
     },
     // =====Asociaciones=====
-     servicioId:{
+     servicio_id_fk:{
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'servicio',
+            model: 'servicios',
             key: 'id'
         },
         validate: {
@@ -89,7 +103,7 @@ const Solicitud = sequelize.define('Solicitud', {
             },
         }
     },
-    clienteId:{
+    cliente_id_fk:{
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -112,7 +126,7 @@ const Solicitud = sequelize.define('Solicitud', {
     
 
 },{
-    tableName: 'solicitud',
+    tableName: 'solicitudes',
     timestamps: false,
 });
 
@@ -123,14 +137,14 @@ const Solicitud = sequelize.define('Solicitud', {
 export const establecerAsociaciones = (models) => {
     // Asociación con Cliente (muchas solicitudes pertenecen a un cliente)
     Solicitud.belongsTo(models.Cliente, {
-        foreignKey: 'clienteId',
+        foreignKey: 'cliente_id_fk',
         as: 'cliente'
     });
     
     // Asociación con Servicio (muchas solicitudes pertenecen a un servicio)
     Solicitud.belongsTo(models.Servicio, {
-        foreignKey: 'servicioId',
-        as: 'servicio'
+        foreignKey: 'servicio_id_fk',
+        as: 'servicios'
     });
     
     // Asociación con Cotizaciones (una solicitud puede tener muchas cotizaciones)

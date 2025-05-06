@@ -7,9 +7,9 @@ export class SolicitudService {
     }
 
     // Verificar si existe un cliente
-    async verificarCliente(clienteId) {
+    async verificarCliente(cliente_id_fk) {
         try {
-            return await this.solicitudRepository.clienteExiste(clienteId);
+            return await this.solicitudRepository.clienteExiste(cliente_id_fk);
         } catch (error) {
             console.error("Error en servicio al verificar cliente:", error);
             throw error;
@@ -17,9 +17,9 @@ export class SolicitudService {
     }
 
     // Verificar si existe un servicio
-    async verificarServicio(servicioId) {
+    async verificarServicio(servicio_id_fk) {
         try {
-            return await this.solicitudRepository.servicioExiste(servicioId);
+            return await this.solicitudRepository.servicioExiste(servicio_id_fk);
         } catch (error) {
             console.error("Error en servicio al verificar servicio:", error);
             throw error;
@@ -47,9 +47,9 @@ export class SolicitudService {
     }
 
     // Obtener solicitudes por cliente
-    async obtenerSolicitudesPorCliente(clienteId) {
+    async obtenerSolicitudesPorCliente(cliente_id_fk) {
         try {
-            return await this.solicitudRepository.obtenerPorCliente(clienteId);
+            return await this.solicitudRepository.obtenerPorCliente(cliente_id_fk);
         } catch (error) {
             console.error("Error en servicio al obtener solicitudes por cliente:", error);
             throw error;

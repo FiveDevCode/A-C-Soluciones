@@ -27,7 +27,7 @@ router.get('/api/solicitudes',
 );
 
 // Obtener solicitudes por cliente
-router.get('api/solicitudes/:clienteId', 
+router.get('api/solicitudes/:cliente_id_fk', 
     isCliente, isAdmin, 
     solicitudController.obtenerSolicitudesPorCliente
 );
