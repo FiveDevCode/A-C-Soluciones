@@ -9,7 +9,7 @@ export class VisitaController {
   crearVisita = async (req, res) => {
     try {
       // Verificar rol de administrador
-      if (req.user.rol !== 'admin') {
+      if (req.user.rol !== 'administrador' ) {
         return res.status(403).json({
           success: false,
           message: 'Solo los administradores pueden programar visitas'
@@ -41,19 +41,21 @@ export class VisitaController {
 
   obtenerVisitas = async (req, res) => {
     try {
-      // Solo administradores pueden ver todas las visitas
-      if (req.user.rol !== 'admin') {
-        return res.status(403).json({
-          success: false,
-          message: 'No tienes permisos para ver todas las visitas'
-        });
+      if (req.user.rol === 'administrador') {
+        const visitas = await this.visitaService.obtenerVisitas(); // Todas
+        return res.status(200).json({ success: true, data: visitas });
       }
-
-      const visitas = await this.visitaService.obtenerVisitas();
-      return res.status(200).json({
-        success: true,
-        data: visitas
+  
+      if (req.user.rol === 'tecnico') {
+        const visitas = await this.visitaService.obtenerVisitasPorTecnico(req.user.id);
+        return res.status(200).json({ success: true, data: visitas });
+      }
+  
+      return res.status(403).json({
+        success: false,
+        message: 'No tienes permisos para ver las visitas'
       });
+  
     } catch (error) {
       console.error('Error al obtener visitas:', error);
       return res.status(500).json({
@@ -62,13 +64,14 @@ export class VisitaController {
       });
     }
   };
+  
 
   obtenerVisitaPorId = async (req, res) => {
     try {
       const visita = await this.visitaService.obtenerVisitaPorId(req.params.id);
       
       // Verificar permisos (admin o técnico asignado)
-      if (req.user.rol !== 'admin' && req.user.id !== visita.tecnico_ID) {
+      if (req.user.rol === 'admin' || req.user.rol === 'admininistrador' || req.user.rol === 'tecnico') {
         return res.status(403).json({
           success: false,
           message: 'No tienes permisos para ver esta visita'
@@ -107,7 +110,7 @@ export class VisitaController {
   actualizarVisita = async (req, res) => {
     try {
       // Solo administradores pueden actualizar visitas
-      if (req.user.rol !== 'admin') {
+      if (req.user.rol === 'admin' || req.user.rol === 'admininistrador' ) {
         return res.status(403).json({
           success: false,
           message: 'Solo los administradores pueden actualizar visitas'

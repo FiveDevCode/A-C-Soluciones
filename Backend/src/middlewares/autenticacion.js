@@ -43,10 +43,6 @@ export const authenticate = async (req, res, next) => {
   }
 };
 
-/**
- * Middleware de autorización que verifica los roles
- * @param {string[]} roles - Roles permitidos (ej: ['admin', 'tecnico'])
- */
 export const authorize = (roles = []) => {
   return (req, res, next) => {
     // Si no se especifican roles, permitir acceso a cualquier rol autenticado
@@ -54,9 +50,13 @@ export const authorize = (roles = []) => {
       return next();
     }
 
+    // Normalizar comparación de roles (case insensitive)
+    const userRole = req.user.rol.toLowerCase();
+    const allowedRoles = roles.map(role => role.toLowerCase());
+
     // Verificar si el usuario tiene alguno de los roles requeridos
-    if (!roles.includes(req.user.rol)) {
-      console.warn(`Intento de acceso no autorizado. Rol: ${req.user.rol}, Ruta: ${req.path}`);
+    if (!allowedRoles.includes(userRole)) {
+      console.warn(`Intento de acceso no autorizado. Rol: ${userRole}, Ruta: ${req.path}`);
       
       return res.status(403).json({ 
         success: false,

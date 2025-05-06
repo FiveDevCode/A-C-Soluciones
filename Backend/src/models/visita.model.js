@@ -25,7 +25,7 @@ export const Visita = sequelize.define('Visita', {
   duracion_estimada: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 60, // 60 minutos por defecto
+    defaultValue: 60, 
     validate: {
       min: {
         args: [15],
@@ -61,15 +61,15 @@ export const Visita = sequelize.define('Visita', {
     defaultValue: DataTypes.NOW,
     allowNull: false
   },
-  solicitud_ID: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'solicitud',
-      key: 'id'
-    }
-  },
-  tecnico_ID: {
+  // solicitud_ID: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //     model: 'solicitud',
+  //     key: 'id'
+  //   }
+  // },
+  tecnico_id_fk: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -92,3 +92,7 @@ export const Visita = sequelize.define('Visita', {
     }
   ]
 });
+
+export const VisitaModel = {
+  Visita
+}
