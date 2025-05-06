@@ -25,10 +25,10 @@ export const setupAssociations = () => {
 
 
   // // Visita N:1 Solicitud
-  // VisitaModel.Visita.belongsTo(SolicitudModel.Solicitud, {
-  //   foreignKey: 'solicitud_ID',
-  //   as: 'solicitud'
-  // });
+  VisitaModel.Visita.belongsTo(SolicitudModel.Solicitud, {
+    foreignKey: 'solicitud_id_fk',
+    as: 'solicitudes'
+  });
 
   // Visita N:1 Técnico
   VisitaModel.Visita.belongsTo(TecnicoModel.Tecnico, {

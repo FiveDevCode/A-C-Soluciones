@@ -61,14 +61,14 @@ export const Visita = sequelize.define('Visita', {
     defaultValue: DataTypes.NOW,
     allowNull: false
   },
-  // solicitud_ID: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: {
-  //     model: 'solicitud',
-  //     key: 'id'
-  //   }
-  // },
+  solicitud_id_fk: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'solicitudes',
+      key: 'id'
+    }
+  },
   tecnico_id_fk: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -85,10 +85,10 @@ export const Visita = sequelize.define('Visita', {
       fields: ['fecha_programada']
     },
     {
-      fields: ['tecnico_ID']
+      fields: ['tecnico_id_fk']
     },
     {
-      fields: ['solicitud_ID']
+      fields: ['solicitud_id_fk']
     }
   ]
 });
