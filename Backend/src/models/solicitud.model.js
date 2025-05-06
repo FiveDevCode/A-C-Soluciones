@@ -119,8 +119,35 @@ const Solicitud = sequelize.define('Solicitud', {
 //asociaciones de latabla solicitud con otras tablas
 
 
+//Función para establecer las asociaciones
+export const establecerAsociaciones = (models) => {
+    // Asociación con Cliente (muchas solicitudes pertenecen a un cliente)
+    Solicitud.belongsTo(models.Cliente, {
+        foreignKey: 'clienteId',
+        as: 'cliente'
+    });
+    
+    // Asociación con Servicio (muchas solicitudes pertenecen a un servicio)
+    Solicitud.belongsTo(models.Servicio, {
+        foreignKey: 'servicioId',
+        as: 'servicio'
+    });
+    
+    // Asociación con Cotizaciones (una solicitud puede tener muchas cotizaciones)
+    Solicitud.hasMany(models.Cotizacion, {
+        foreignKey: 'solicitud_id',
+        as: 'cotizaciones'
+    });
+    
+    // Asociación con Visitas (una solicitud puede tener muchas visitas)
+    Solicitud.hasMany(models.Visita, {
+        foreignKey: 'solicitud_id',
+        as: 'visitas'
+    });
+};
 
 // Exportar el modelo para su uso en otras partes de la aplicación
 export const SolicitudModel = {
-    Solicitud
+    Solicitud,
+    establecerAsociaciones,
 }
