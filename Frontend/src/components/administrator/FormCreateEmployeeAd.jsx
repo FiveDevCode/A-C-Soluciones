@@ -1,7 +1,9 @@
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import {handleCreateSubmitTechnical} from "../../controllers/technical/createTc.controller"
+import {handleCreateSubmitTechnical} from "../../controllers/administrator/createTc.controller"
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import ScreenSuccess from "../common/ScreenSuccess"
 
 const Form = styled.form`
   display: flex;
@@ -29,48 +31,23 @@ const ContainerButton = styled.div`
 
 `
 
-const validacionFormulario = (texto, errorMsg) => {
-  if (errorMsg !== "") {
-    return false;
-  }
-
-  return texto.length > 0 ? true : false;
-}
-
-
-
 const FormCreateEmployeeAd = () => {
-  const [name, setName] = useState({
-    value: "",
-    valid: null,
-  });
-  const [lastName, setLastName] = useState({
-    value: "",
-    valid: null,
-  });
-  const [IdCard, setIdCard] = useState({
-    value: "",
-    valid: null,
-  });
-  const [phone, setPhone] = useState({
-    value: "",
-    valid: null,
-  });
-  const [position, setPosition] = useState({
-    value: "",
-    valid: null,
-  });
-  const [email, setEmail] = useState({
-    value: "",
-    valid: null,
-  });
-  const [password, setPassword] = useState({
-    value: "",
-    valid: null,
-  });
 
+  const navigate = useNavigate();
+
+
+  const [nameUser, setNameUser] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [IdCard, setIdCard] = useState("");
+  const [phone, setPhone] = useState("");
+  const [position, setPosition] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const [showSuccess, setShowSuccess] = useState(false);
 
 
   const handleSubmit = async(event) => {
@@ -78,55 +55,39 @@ const FormCreateEmployeeAd = () => {
 
     try {
       await handleCreateSubmitTechnical(
-        IdCard.value,
-        name.value,
-        lastName.value,
-        email.value,
-        phone.value,
-        password.value,
-        position.value
+        IdCard,
+        nameUser,
+        lastName,
+        email,
+        phone,
+        password,
+        position
       );
 
+      setFieldErrors("");
       setErrorMsg("");
-    } catch (err) {
+      setShowSuccess(true);
+      handleLimpiar();
       
-      if (err.response?.data?.message) {
-        setErrorMsg(err.response.data.message);
+    } catch (err) {
+      setErrorMsg("");
+      console.log(err)
+      if (err.response?.data?.errors) {
+        setFieldErrors(err.response.data.errors);
       } else {
-        setErrorMsg("Hubo un error al registrar el técnico.");
+        setErrorMsg(err.response.data.message);
       }
     }
   };
 
   const handleLimpiar = () => {
-    setName({
-      value: "",
-      valid: null,
-    });
-    setLastName({
-      value: "",
-      valid: null,
-    });
-    setIdCard({
-      value: "",
-      valid: null,
-    });
-    setPhone({
-      value: "",
-      valid: null,
-    });
-    setPosition({
-      value: "",
-      valid: null,
-    });
-    setEmail({
-      value: "",
-      valid: null,
-    });
-    setPassword({
-      value: "",
-      valid: null,
-    });
+    setNameUser("");
+    setLastName("");
+    setIdCard("");
+    setPhone("");
+    setPosition("");
+    setEmail("");
+    setPassword("");
 
   };
 
@@ -135,77 +96,96 @@ const FormCreateEmployeeAd = () => {
     <Form onSubmit={handleSubmit}>
       <TextField 
         label="Nombre" 
-        fullWidth size="medium" 
-        value={name.value} 
-        onChange={(e) => setName({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={nameUser} 
+        onChange={(e) => setNameUser(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={name.valid === false} 
-        helperText={name.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.nombre)}
+        helperText={fieldErrors.nombre}
       />
       <TextField 
         label="Apellido" 
-        fullWidth size="medium" 
-        value={lastName.value} 
-        onChange={(e) => setLastName({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={lastName} 
+        onChange={(e) => setLastName(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={lastName.valid === false} 
-        helperText={lastName.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.apellido)}
+        helperText={fieldErrors.apellido}
       />
       <TextField 
         label="Cedula" 
-        fullWidth size="medium" 
-        value={IdCard.value} 
-        onChange={(e) => setIdCard({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={IdCard} 
+        onChange={(e) => setIdCard(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={IdCard.valid === false} 
-        helperText={IdCard.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.numero_de_cedula)}
+        helperText={fieldErrors.numero_de_cedula}
       />
       <TextField 
         label="Teléfono" 
-        fullWidth size="medium" 
-        value={phone.value} 
-        onChange={(e) => setPhone({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={phone} 
+        onChange={(e) => setPhone(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={phone.valid === false} 
-        helperText={phone.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.telefono)}
+        helperText={fieldErrors.telefono}
       />
       <TextField 
         label="Cargo" 
-        fullWidth size="medium" 
-        value={position.value} 
-        onChange={(e) => setPosition({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={position} 
+        onChange={(e) => setPosition(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={position.valid === false} 
-        helperText={position.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.especialidad)}
+        helperText={fieldErrors.especialidad}
       />
       <TextField 
         label="Correo electrónico" 
-        fullWidth size="medium" 
-        value={email.value} 
-        onChange={(e) => setEmail({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={email.valid === false} 
-        helperText={email.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.correo_electronico)}
+        helperText={fieldErrors.correo_electronico}
       /> 
       <TextField 
         label="Contraseña" 
-        fullWidth size="medium" 
-        value={password.value} 
-        onChange={(e) => setPassword({value: e.target.value, valid: validacionFormulario(e.target.value, errorMsg)})}
+        fullWidth 
+        size="medium" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={password.valid === false} 
-        helperText={password.valid === false && errorMsg} 
+        error={Boolean(fieldErrors.contrasenia)}
+        helperText={fieldErrors.contrasenia}
       /> 
 
+
+      {errorMsg && (
+        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+          {errorMsg}
+        </Typography>
+      )}
 
       <ContainerButton>
         <Button type="submit" variant="contained">Registrar</Button>
         <Button type="button" variant="contained" onClick={handleLimpiar}>Limpiar campos</Button>
       </ContainerButton>
 
+      {showSuccess && (
+        <ScreenSuccess onClose={() => setShowSuccess(false)}>
+          El empleado fue registrado con éxito!
+        </ScreenSuccess>
+      )}
+
     </Form>
 
   )
 }
 
-export default FormCreateEmployeeAd
+export default FormCreateEmployeeAd;

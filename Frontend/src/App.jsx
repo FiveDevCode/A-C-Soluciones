@@ -12,6 +12,16 @@ import ProfileUserTc from './pages/technical/ProfileUserTc';
 import HomeAd from './pages/administrator/HomeAd';
 import HomeTc from './pages/technical/HomeTc';
 import PrivateRoute from './components/common/PrivateRoute';
+import { useEffect, useMemo, useState } from 'react';
+import Home from './pages/common/Home';
+import ServiceTc from './pages/technical/ServiceTc';
+import UserProfileAd from './pages/administrator/UserProfileAd';
+import EditClientAd from './pages/administrator/EditClientAd';
+import CreateServiceAd from './pages/administrator/CreateServiceAd';
+import CreateAdministratorAd from './pages/administrator/CreateAdministratorAd';
+import CreateAdminPermit from './pages/administrator/CreateAdminPermit';
+import AssignTaskPageAd from './pages/administrator/AssignTaskPageAd';
+import ServiceOpenCl from './components/client/ServiceOpen';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -41,7 +51,18 @@ const Content = styled.div`
 
 function AppContent() {
   const location = useLocation();
-  const hideMenuAndHeader = location.pathname === '/login' || location.pathname === '/register';
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem('userRole');
+    setRole(storedRole);
+  }, [location.pathname]);
+
+  const hideMenuAndHeader =
+    location.pathname === '/login' ||
+    location.pathname === '/register' ||
+    location.pathname === '/' ||
+    role === 'cliente';
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
@@ -50,6 +71,7 @@ function AppContent() {
         {!hideMenuAndHeader && <HeaderBar />}
         <Routes>
           {/* Rutas públicas */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<CreateAccountPageCl />} />
 
@@ -77,6 +99,12 @@ function AppContent() {
               <HomeTc />
             </PrivateRoute>
           } />
+          
+          <Route path="/view-service" element={
+            <PrivateRoute roleRequired="tecnico">
+              <ServiceTc />
+            </PrivateRoute>
+          } />
 
           <Route path="/register-employee" element={
             <PrivateRoute roleRequired="administrador">
@@ -87,6 +115,48 @@ function AppContent() {
           <Route path="/homeAd" element={
             <PrivateRoute roleRequired="administrador">
               <HomeAd />
+            </PrivateRoute>
+          } />
+
+          <Route path="/profile-technical/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <UserProfileAd />
+            </PrivateRoute>
+          } />
+
+          <Route path="/edit-client/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <EditClientAd/>
+            </PrivateRoute>
+          } />
+          
+          <Route path="/register-service" element={
+            <PrivateRoute roleRequired="administrador">
+              <CreateServiceAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/register-administrator" element={
+            <PrivateRoute roleRequired="administrador">
+              <CreateAdministratorAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/administrator-permit" element={
+            <PrivateRoute roleRequired="administrador">
+              <CreateAdminPermit/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/assing-task" element={
+            <PrivateRoute roleRequired="administrador">
+              <AssignTaskPageAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/service-open" element={
+            <PrivateRoute roleRequired="cliente">
+              <ServiceOpenCl />
             </PrivateRoute>
           } />
 

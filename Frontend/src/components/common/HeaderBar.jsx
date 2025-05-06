@@ -19,6 +19,8 @@ const TitleCategory = styled.div`
   font-size: 1.25rem;
   color: #007BFF;
   font-weight: bold;
+  width: 12.5%;
+;
 
 `
 
@@ -56,6 +58,7 @@ const HeaderBar = () => {
     }
   };
 
+
   const titles = {
     "/services": "Servicios",
     "/register-employee": "Crear empleado",
@@ -63,10 +66,23 @@ const HeaderBar = () => {
     "/account": "Perfil de usuario",
     "/home": "Inicio",
     "/profile": "Perfil",
+    "/view-service": "Ver servicio",
+    "/profile-client": "Perfil cliente",
+    "/edit-client": "Editar cliente", // clave base
+    "/register-service": "Crear servicio",
+    "/administrator-permit": "Crear administrador permisos",
+    "/assing-task": "Asignar tarea",
   };
 
-  const title = titles[pathname] || "Home";
+  function getRouteName(path) {
+    if (path.startsWith("/edit-client/")) {
+      return "Editar cliente";
+    }
 
+    return titles[path] || "Ruta desconocida";
+  }
+
+  const title = getRouteName(pathname);
 
   return (
     <ContainerBar>

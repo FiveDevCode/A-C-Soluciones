@@ -44,6 +44,9 @@ const OptionClose = styled.button`
   display: flex;
   padding: 0 1rem 0 1rem;
   color: #505050;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  border: unset;
 `
 
 
@@ -56,7 +59,7 @@ const FloatingMenuHomeCl = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    navigate("/login");
+    navigate("/");
   };
 
 

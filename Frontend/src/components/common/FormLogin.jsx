@@ -1,9 +1,11 @@
-import { TextField, Button, Typography } from '@mui/material';
-import { useState } from 'react';
+import { TextField, Button, Typography, InputAdornment, IconButton } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { handleLogin } from '../../controllers/common/login.controller';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from 'jwt-decode';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Form = styled.form`
   display: flex;
@@ -47,7 +49,40 @@ const FormLogin = () => {
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
   
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const role = decoded.rol;
+  
+        switch (role) {
+          case "cliente":
+            navigate("/home");
+            break;
+          case "tecnico":
+            navigate("/homeTc");
+            break;
+          case "administrador":
+            navigate("/homeAd");
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error("Token inválido:", error);
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userRole');
+      }
+    }
+  }, []);
+
+
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -63,7 +98,8 @@ const FormLogin = () => {
 
       const decoded = jwtDecode(data.token);
       const role = decoded.rol;
-      
+      localStorage.setItem('userRole', role);
+
       switch (role) {
         case "cliente":
           navigate("/home");
@@ -83,7 +119,7 @@ const FormLogin = () => {
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
-        setErrorMsg("Hubo un error al iniciar sesion.");
+        setErrorMsg("Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.");
       }
     }
 
@@ -112,6 +148,7 @@ const FormLogin = () => {
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
+        type={showPassword ? 'text' : 'password'}
         value={password} 
         onChange={(e) => setPassword(e.target.value)}
         sx={{ backgroundColor: 'white' }}
@@ -123,6 +160,19 @@ const FormLogin = () => {
             margin: 0,
 
           },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={handleClickShowPassword}
+                edge="end"
+                aria-label="toggle password visibility"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} style={{fontSize:"22px"}}/>
+              </IconButton>
+            </InputAdornment>
+          ),
         }}
       />
       
@@ -136,7 +186,8 @@ const FormLogin = () => {
 
       <ContainerButton>
         <Button type="submit" variant="contained">Iniciar sesion</Button>
-        <Button type="button" variant="contained">Crear Cuenta</Button>
+        <Button type="button" variant="contained" LinkComponent={Link} to="/register">Crear Cuenta</Button>
+
       </ContainerButton>
 
     </Form>
