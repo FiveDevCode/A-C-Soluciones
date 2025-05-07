@@ -1,10 +1,11 @@
 import styled from "styled-components"
 import ScreenSuccess from "../../components/common/ScreenSuccess"
-import { Autocomplete, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import { Autocomplete, Button, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import assignTask from "../../assets/administrator/assignTask.png"
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller"
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller"
+import { handleCreateVisit } from "../../controllers/administrator/createVisitAd.controller"
 
 
 const TitleAssignTask = styled.h1`
@@ -73,11 +74,12 @@ const AssignVisitPageAd = () => {
     e.preventDefault();
 
     try {
-      await handleCreateSubmitClient(
+      await handleCreateVisit(
+        estimatedDuration,
         previousNotes,
         postnotes,
-        technical,
         request,
+        technical,
       );
 
       setShowSuccess(true);
@@ -187,7 +189,7 @@ const AssignVisitPageAd = () => {
             fullWidth
             options={requestList}
             getOptionLabel={(request) =>
-              `${request.id} - ${request.descripcion}`
+              `${request.id} - ${request.descripcion.slice(0, 10)}`
             }
             onChange={(event, newValue) => {
               setRequest(newValue ? newValue.id : "");
@@ -234,7 +236,7 @@ const AssignVisitPageAd = () => {
 
           {showSuccess && (
             <ScreenSuccess onClose={() => setShowSuccess(false)}>
-              El empleado fue registrado con éxito!
+              Visita asignada exitosamente!
             </ScreenSuccess>
           )}
         </Form>
