@@ -59,6 +59,7 @@ const AssignVisitPageAd = () => {
   const [previousNotes, setPreviousNotes] = useState("");
   const [postnotes, setPostnotes] = useState("");
   const [estimatedDuration, setEstimatedDuration] = useState("");
+  const [scheduledDate, setScheduledDate] = useState("");
   const [technical, setTechnical] = useState("");
   const [request, setRequest] = useState("");
 
@@ -78,6 +79,7 @@ const AssignVisitPageAd = () => {
         estimatedDuration,
         previousNotes,
         postnotes,
+        scheduledDate,
         request,
         technical,
       );
@@ -168,6 +170,23 @@ const AssignVisitPageAd = () => {
               },
             }}
           />
+
+          <TextField 
+            label="Fecha programada" 
+            fullWidth size="medium" 
+            value={scheduledDate} 
+            onChange={(e) => setScheduledDate(e.target.value)}
+            sx={{ backgroundColor: 'white' }}
+            error={Boolean(fieldErrors.notas_posteriores)}
+            helperText={fieldErrors.notas_posteriores}
+            FormHelperTextProps={{
+              sx: {
+                backgroundColor: '#F2F5F7',
+                margin: 0,
+                
+              },
+            }}
+          />
           <TextField 
             label="Duracion estimada" 
             fullWidth size="medium" 
@@ -189,7 +208,7 @@ const AssignVisitPageAd = () => {
             fullWidth
             options={requestList}
             getOptionLabel={(request) =>
-              `${request.id} - ${request.descripcion.slice(0, 10)}`
+              `${request.id} - ${request.descripcion.slice(0, 50)}`
             }
             onChange={(event, newValue) => {
               setRequest(newValue ? newValue.id : "");

@@ -78,12 +78,13 @@ const getListRequest = () => {
   });
 }
 
-const assignVisit = (estimatedDuration, previousNotes, postnotes, requestId, technicalId ) => {
+const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId ) => {
   const token = localStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/visitas", {
     duracion_estimada: estimatedDuration,
     notas_previas: previousNotes,
+    fecha_programada: scheduledDate,
     notas_posteriores: postnotes,
     solicitud_id_fk: requestId,
     tecnico_id_fk: technicalId,

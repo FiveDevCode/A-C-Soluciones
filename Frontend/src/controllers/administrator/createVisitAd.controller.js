@@ -5,11 +5,11 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleCreateVisit = (estimatedDuration, previousNotes, postnotes, requestId, technicalId ) => {
+const handleCreateVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId ) => {
     
 
   return administratorService
-  .assignVisit(estimatedDuration, previousNotes, postnotes, requestId, technicalId );
+  .assignVisit(estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId );
 
 
 };
