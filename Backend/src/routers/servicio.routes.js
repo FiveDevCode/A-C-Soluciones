@@ -1,6 +1,6 @@
 import express from 'express';
 import { ServicioController } from '../controllers/servicio.controller.js';
-import { authenticate, isAdmin } from '../middlewares/autenticacion.js';
+import { authenticate, isAdmin} from '../middlewares/autenticacion.js';
 
 const router = express.Router();
 const servicioController = new ServicioController();
@@ -11,6 +11,10 @@ router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
 // Rutas protegidas - requieren autenticación
 router.use(authenticate);
+
+// Obtener servicios asignados a un técnico autenticado
+router.get('/api/servicios/asignados', servicioController.obtenerServiciosAsignados);
+
 
 // Crear servicio (solo lo peude hacer administradores)
 router.post('/api/servicios', isAdmin, servicioController.crearServicio);

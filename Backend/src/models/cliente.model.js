@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/conexion.js";
 import { encryptPasswordHook } from '../hooks/encryptPassword.js';
-
+import { noFechasPasadas, sinEspaciosSolamente } from "../hooks/validators.js";
 
 const Cliente=sequelize.define('Cliente',{
 
@@ -164,11 +164,7 @@ const Cliente=sequelize.define('Cliente',{
             notEmpty: {
               msg: 'La dirección no puede estar vacía.',
             },
-            noOnlySpaces(value) {
-              if (value.trim() === '') {
-                throw new Error('La dirección no puede contener solo espacios.');
-              }
-            },
+            sinEspaciosSolamente
           }
         
 
@@ -179,11 +175,9 @@ const Cliente=sequelize.define('Cliente',{
         defaultValue: DataTypes.NOW,
         validate: {
             isDate: { msg: 'La fecha de registro debe ser una fecha válida.' },
-            notInFuture(value) {
-              if (value && new Date(value) > new Date()) {
-                throw new Error('La fecha de registro no puede estar en el futuro.');
-              }
-            }
+            noFechasPasadas,
+                
+            
           }
           
 
@@ -196,6 +190,7 @@ const Cliente=sequelize.define('Cliente',{
     estado: {
 
         type: DataTypes.ENUM('activo', 'inactivo'),
+        allowNull: false,
         defaultValue: 'activo'
     },
 

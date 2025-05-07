@@ -1,5 +1,6 @@
 import { ServicioModel } from '../models/servicios.model.js';
-import { Op } from 'sequelize';
+import { Op } from 'sequelize'; 
+import { VisitaModel } from '../models/visita.model.js';
 
 export class ServicioRepository {
   async crearServicio(data) {
@@ -12,14 +13,8 @@ export class ServicioRepository {
 
   async obtenerServicioPorNombre(nombre) {
     return await ServicioModel.Servicio.findOne({
-      where: { 
-        nombre: {
-          [Op.iLike]: nombre // 
-        }
-      }
-    });
-  }
-
+      where: { nombre: {[Op.iLike]: nombre }}});
+    }
   async buscarServicios(termino) {
     return await ServicioModel.Servicio.findAll({
       where: {
@@ -69,4 +64,15 @@ export class ServicioRepository {
     await servicio.save();
     return servicio;
   }
+
+  async obtenerServiciosPorTecnico(tecnico_id) {
+    return await VisitaModel.Visita.findAll({
+      where: {
+        tecnico_id_fk: tecnico_id
+      },
+      attributes: ['id', 'fecha_programada', 'duracion_estimada','estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'], 
+      order: [['fecha_creacion', 'DESC']]
+    });
+  }
+
 }

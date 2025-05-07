@@ -26,7 +26,7 @@ export class AuthService {
         }),
         TecnicoModel.Tecnico.findOne({
           where: { correo_electronico: correo.trim().toLowerCase() },
-          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'especialidad', 'rol']
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'especialidad', 'rol', 'estado']
         })
       ]);
 
@@ -34,6 +34,11 @@ export class AuthService {
       const user = admin || cliente || tecnico;
       if (!user) {
         throw new Error('Usuario no encontrado');
+      }
+
+      // validar que el empleado este activo para para ingresar a el sistema 
+      if(tecnico && tecnico.correo_electronico === tecnico.correo_electronico && tecnico.estado === 'inactivo'){
+        throw new Error('El empleado no está activo para ingresar al sistema');
       }
 
       // Verificación de contraseña con hash
