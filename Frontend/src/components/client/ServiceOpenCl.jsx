@@ -78,7 +78,10 @@ const ServiceOpenCl = ({servicio, onClose }) => {
         {showRequestScreen && (
           <ScreenRequestCl 
             requestId={servicio.id}
-            onClose={() => setShowRequestScreen(false)}
+            onClose={() => {
+              setShowRequestScreen(false); // cierra ScreenRequestCl
+              onClose(); // cierra ServiceOpenCl
+            }}
           />
         )}
 

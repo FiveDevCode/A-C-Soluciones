@@ -170,8 +170,8 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
           </ContainerButton>
         </Form>
         {showSuccess && (
-          <ScreenSuccess onClose={() => setShowSuccess(false)}>
-            La solicitud fue enviada con exito!
+          <ScreenSuccess onClose={onClose}>
+            La solicitud fue enviada con éxito!
           </ScreenSuccess>
         )}
 
