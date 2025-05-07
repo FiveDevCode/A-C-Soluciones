@@ -3,6 +3,7 @@ import { ClienteModel } from './cliente.model.js';
 import { ServicioModel } from './servicios.model.js';
 import { VisitaModel } from './visita.model.js';
 import { TecnicoModel } from './tecnico.model.js';
+import { AdminModel } from './administrador.model.js';
 
 export const setupAssociations = () => {
   // Asociación Cliente -> Solicitud (1:N)
@@ -17,23 +18,29 @@ export const setupAssociations = () => {
     as: 'cliente'
   });
 
-  // Asociación Solicitud -> Servicio (N:1)
-  SolicitudModel.belongsTo(ServicioModel, {
-    foreignKey: 'servicio_id_fk',
-    as: 'servicio'
+  // Asociación Solicitud -> Administrador (N:1)
+  SolicitudModel.belongsTo(AdminModel, {
+    foreignKey: 'admin_id_fk',
+    as: 'administrador'
   });
 
-
-  // // Visita N:1 Solicitud
-  VisitaModel.Visita.belongsTo(SolicitudModel.Solicitud, {
-    foreignKey: 'solicitud_id_fk',
+  // Asociación Administrador -> Solicitudes (1:N)
+  AdminModel.hasMany(SolicitudModel, {
+    foreignKey: 'admin_id_fk',
     as: 'solicitudes'
   });
 
-  // Visita N:1 Técnico
-  VisitaModel.Visita.belongsTo(TecnicoModel.Tecnico, {
+  // Relación entre Visita y Solicitud (N:1)
+  VisitaModel.belongsTo(SolicitudModel, {
+    foreignKey: 'solicitud_id_fk',
+    as: 'solicitud'
+  });
+
+  // Relación entre Visita y Técnico (N:1)
+  VisitaModel.belongsTo(TecnicoModel, {
     foreignKey: 'tecnico_id_fk',
     as: 'tecnico'
   });
+
   console.log('🔗 Asociaciones establecidas correctamente');
 };

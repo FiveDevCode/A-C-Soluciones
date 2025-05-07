@@ -15,7 +15,6 @@ router.use(authenticate);
 // Obtener servicios asignados a un técnico autenticado
 router.get('/api/servicios/asignados', servicioController.obtenerServiciosAsignados);
 
-
 // Crear servicio (solo lo peude hacer administradores)
 router.post('/api/servicios', isAdmin, servicioController.crearServicio);
 

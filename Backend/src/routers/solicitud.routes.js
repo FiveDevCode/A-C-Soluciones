@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { SolicitudController } from '../controllers/solicitud.controller.js';
-import { authenticate, isAdmin, isCliente, isTecnico } from '../middlewares/autenticacion.js';
+import { authenticate, isAdmin, isAdminOrCliente, isCliente, isTecnico } from '../middlewares/autenticacion.js';
 
 // Crear instancia del router
 const router = Router();
@@ -15,18 +15,18 @@ router.use(authenticate);
 router.post('/api/solicitudes', isCliente, solicitudController.crear);
 
 // Obtener todas las solicitudes
-router.get('/api/solicitudes', isCliente || isAdmin,  solicitudController.obtenerTodos);
+router.get('/api/solicitudes', isAdminOrCliente,  solicitudController.obtenerTodos);
 
 // Obtener solicitudes por cliente
-router.get('/api/solicitudes/:id', isCliente || isAdmin , solicitudController.obtenerPorId);
+router.get('/api/solicitudes/:id', isAdminOrCliente , solicitudController.obtenerPorId);
 
 // Obtener una solicitud específica por ID
-router.get('/api/solicitudes/cliente/:cliente_id_fk', isCliente || isAdmin, solicitudController.obtenerPorCliente);
+router.get('/api/solicitudes/cliente/:cliente_id_fk', isAdminOrCliente, solicitudController.obtenerPorCliente);
 
 // Actualizar el estado de una solicitud
-router.patch('/api/solicitudes/:id/estado', isAdmin, isCliente,solicitudController.actualizarEstado);
+router.patch('/api/solicitudes/:id/estado', isAdminOrCliente,solicitudController.actualizarEstado);
 
 // Eliminar una solicitud
-router.delete('/api/solicitud/:id', isAdmin || isCliente,solicitudController.eliminar);
+router.delete('/api/solicitud/:id', isAdminOrCliente,solicitudController.eliminar);
 
 export default router;

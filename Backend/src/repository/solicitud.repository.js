@@ -1,12 +1,14 @@
 import { SolicitudModel } from "../models/solicitud.model.js";
 import { ClienteModel } from "../models/cliente.model.js";
 import { ServicioModel } from "../models/servicios.model.js";
+import { AdminModel } from "../models/administrador.model.js";
 
 export class SolicitudRepository {
   constructor() {
     this.model = SolicitudModel.Solicitud;
     this.clienteModel = ClienteModel.Cliente;
     this.servicioModel = ServicioModel.Servicio;
+    this.adminModel = AdminModel.Admin; // ✅ Se agregó la referencia al modelo Admin
 
     this.setupAssociations();
   }
@@ -23,6 +25,13 @@ export class SolicitudRepository {
       this.model.belongsTo(this.servicioModel, {
         foreignKey: 'servicio_id_fk',
         as: 'servicio'
+      });
+    }
+
+    if (!this.model.associations?.admin) {
+      this.model.belongsTo(this.adminModel, {
+        foreignKey: 'admin_id_fk',
+        as: 'admin'
       });
     }
   }
@@ -45,6 +54,11 @@ export class SolicitudRepository {
           model: this.clienteModel,
           as: 'cliente',
           attributes: ['id', 'nombre', 'apellido', 'telefono']
+        },
+        {
+          model: this.adminModel, // ✅ Asociado correctamente
+          as: 'admin',
+          attributes: ['id', 'nombre', 'apellido']
         },
         {
           model: this.servicioModel,
@@ -100,7 +114,7 @@ export class SolicitudRepository {
   async actualizarEstado(id, estado) {
     const solicitud = await this.model.findByPk(id);
     if (!solicitud) return null;
-    
+
     await solicitud.update({ estado });
     return solicitud;
   }
@@ -108,7 +122,7 @@ export class SolicitudRepository {
   async eliminar(id) {
     const solicitud = await this.model.findByPk(id);
     if (!solicitud) return null;
-    
+
     await solicitud.destroy();
     return solicitud;
   }
