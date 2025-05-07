@@ -6,8 +6,6 @@ import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import FloatingMenuHomeCl from "./FloatingMenuHomeCl";
-import MenuSideCl from "./MenuSideCl";
 
 
 const ContainerHeader = styled.div`
@@ -67,18 +65,6 @@ const Menu = styled.div`
 
 `
 
-const MenuHamburger = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-`
-
-const IconButtonMenu = styled.button`
-  border: unset;
-  background-color: #FFFFFF;
-  cursor: pointer;
-`
 
 const MenuOption = styled.div`
   display: flex;
@@ -90,17 +76,16 @@ const LinkOption = styled(Link)`
 
 `
 
-const ButtonProfile = styled.button`
+const ButtonProfile = styled(Link)`
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
+  color: #000000;
 `
 
-const HeaderBarCl = () => {
+const HeaderBarHome = () => {
 
-  const [showMenu, setShowMenu] = useState(false)
-  const [show, setShow] = useState(false)
   const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
   
@@ -109,15 +94,6 @@ const HeaderBarCl = () => {
         navigate(`/resultado?data=${busqueda}`);
     }
   };
-
-  const handleShowMenu = () => {
-    setShow(!show)
-  }
-
-  const handleShowMenuSide = () => {
-    setShowMenu(!showMenu)
-  }
-
 
   return (
     <ContainerHeader>
@@ -137,20 +113,13 @@ const HeaderBarCl = () => {
             ),
           }}
         />
-        <FontAwesomeIcon icon={faBell} style={{fontSize:"24px"}}/>
-        <ButtonProfile onClick={handleShowMenu}><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
-        {show && <FloatingMenuHomeCl />}
-
+        <ButtonProfile to="/login"><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
       </MenuBar>
       <Menu>
-        <MenuHamburger>
-          <IconButtonMenu onClick={handleShowMenuSide}><FontAwesomeIcon icon={faBars} style={{fontSize:"24px"}} /></IconButtonMenu>
-          {showMenu && <MenuSideCl onClose={() => setShowMenu(false)}/>}
-          <Link to="/home"><Logo src={logo} size="45%"/></Link>
-        </MenuHamburger>
+        <Logo src={logo} size="13%" max="150px"/> 
         <MenuOption>
           <LinkOption to="/">Acerca de nosotros</LinkOption>
-          <LinkOption to="/services-all">Servicios</LinkOption>
+          <LinkOption to="/">Servicios</LinkOption>
           <LinkOption to="/">Contacte con nosotros</LinkOption>
         </MenuOption>
 
@@ -162,4 +131,4 @@ const HeaderBarCl = () => {
 }
 
 
-export default HeaderBarCl;
+export default HeaderBarHome;

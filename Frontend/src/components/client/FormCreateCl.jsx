@@ -1,6 +1,6 @@
 import { TextField, Button, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { handleCreateSubmitClient } from '../../controllers/client/createCl.controller';
 
@@ -41,6 +41,9 @@ const ContainerButton = styled.div`
 
 
 const FormCreateCl = () => {
+
+  const navigate = useNavigate();
+
   const [idCard, setIdCard] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -71,6 +74,7 @@ const FormCreateCl = () => {
         address
       );
 
+      navigate("/login");
       setErrorMsg("");
     } catch (err) {
       console.log(err)

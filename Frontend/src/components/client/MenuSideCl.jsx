@@ -1,4 +1,4 @@
-import Logo from './Logo';
+import Logo from '../common/Logo';
 import logo from '../../assets/common/logoA&C.png';
 import { Divider } from '@mui/material';
 import styled from 'styled-components';
@@ -16,16 +16,28 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const SectionMenu = styled.section`
   display: flex;
+  flex-direction: row;
+`
+
+const ContainerMenu = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
   flex-direction: column;
-  width: 13%;
-  padding: 0.5rem;
+  width: 16%;
+  padding: 0.725rem;
   gap: 1rem;
   padding-bottom: 1.5rem;
-  min-width: 200px;
+  min-width: 210px;
+  max-width: 250px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0 10px 10px 0;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  min-height: 100vh;
+  height: 100%;
+  background-color: #FFFFFF;
+  z-index: 1500;
+
 `
 
 const TitleMenu = styled.h1`
@@ -81,7 +93,6 @@ const TitleOption = styled.h2`
 const ContainerAllConfiguration = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   height: 100%;
   justify-content: flex-end;
   gap: 0.725rem;
@@ -127,9 +138,17 @@ const ContainerOptionClose = styled.button`
   }
 
 `
+const ScreenFaint = styled.div`
+  background-color: rgba(0,0,0,0.35);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
 
+`
 
-const MenuSide = () => {
+const MenuSideCl = ({ onClose }) => {
   
   const navigate = useNavigate();
 
@@ -139,78 +158,67 @@ const MenuSide = () => {
     navigate("/");
   };
 
-  const role = localStorage.getItem('userRole');
-
-  const getHomeRouteByRole = (role) => {
-    switch (role) {
-      case 'tecnico':
-        return '/homeTc';
-      case 'administrador':
-        return '/homeAd';
-      default:
-        return '/login';
-    }
-  };
-  
-
   return (
     <SectionMenu>
-      <Link to={getHomeRouteByRole(role)}><Logo src={logo} size="157px"/></Link>
-      <TitleMenu>Menu</TitleMenu>
-      <Divider/> 
-      <ContainerAllOption>
-        <ContainerOption to={getHomeRouteByRole(role)}>
-          <IconOption 
-            icon={faHouse}           
-          />
-          <TitleOption>Inicio</TitleOption>
-        </ContainerOption>
-        <ContainerOption>
-          <IconOption 
-            icon={faDiagramProject} 
-          />
-          <TitleOption>Mis solicitudes</TitleOption>
-        </ContainerOption>
-        <ContainerOption>
-          <IconOption 
-            icon={faPaperPlane} 
-          />
-          <TitleOption>Enviar solicitud</TitleOption>
-        </ContainerOption>
-        <ContainerOption>
-          <IconOption 
-            icon={faFile} 
-          />
-          <TitleOption>Mis reportes</TitleOption>
-        </ContainerOption>
-        <ContainerOption>
-          <IconOption 
-            icon={faClockRotateLeft} 
-          />
-          <TitleOption>Ver historial</TitleOption>
-        </ContainerOption>
-      </ContainerAllOption>
-      
-
-      <ContainerAllConfiguration>
+      <ContainerMenu>
+        <Link to="/home"><Logo src={logo} size="157px"/></Link>
+        <TitleMenu>Menu</TitleMenu>
         <Divider/> 
-        <ContainerOption>
-          <IconOption 
-            icon={faGear} 
-          />
-          <TitleOption>Configuracion</TitleOption>
-        </ContainerOption>
-        <ContainerOptionClose onClick={handleLogout}>
-          <IconOption 
-            icon={faArrowRightFromBracket} 
-            
-          />
-          <TitleOption>Salir</TitleOption>
-        </ContainerOptionClose>
-      </ContainerAllConfiguration>
+        <ContainerAllOption>
+          <ContainerOption to="/home">
+            <IconOption 
+              icon={faHouse}           
+            />
+            <TitleOption>Inicio</TitleOption>
+          </ContainerOption>
+          <ContainerOption>
+            <IconOption 
+              icon={faDiagramProject} 
+            />
+            <TitleOption>Mis solicitudes</TitleOption>
+          </ContainerOption>
+          <ContainerOption>
+            <IconOption 
+              icon={faPaperPlane} 
+            />
+            <TitleOption>Enviar solicitud</TitleOption>
+          </ContainerOption>
+          <ContainerOption>
+            <IconOption 
+              icon={faFile} 
+            />
+            <TitleOption>Mis reportes</TitleOption>
+          </ContainerOption>
+          <ContainerOption>
+            <IconOption 
+              icon={faClockRotateLeft} 
+            />
+            <TitleOption>Ver historial</TitleOption>
+          </ContainerOption>
+        </ContainerAllOption>
+        
+
+        <ContainerAllConfiguration>
+          <Divider/> 
+          <ContainerOption>
+            <IconOption 
+              icon={faGear} 
+            />
+            <TitleOption>Configuracion</TitleOption>
+          </ContainerOption>
+          <ContainerOptionClose onClick={handleLogout}>
+            <IconOption 
+              icon={faArrowRightFromBracket} 
+              
+            />
+            <TitleOption>Salir</TitleOption>
+          </ContainerOptionClose>
+        </ContainerAllConfiguration>
+      </ContainerMenu>
+      <ScreenFaint onClick={onClose}/>
 
     </SectionMenu>
   )
 }
 
-export default MenuSide;
+export default MenuSideCl;

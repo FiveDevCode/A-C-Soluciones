@@ -62,13 +62,13 @@ const CategoryRecomendAd = () => {
           <Icon icon={faUserPlus} style={{stroke:"#28A745"}}/>
           <OptionTitle>Registra un empleado</OptionTitle>
         </Option>
-        <Option to="/">
+        <Option to="/register-service">
           <Icon icon={faPlusSquare} style={{stroke:"#007BFF"}}/>
           <OptionTitle>Crea un nuevo servicio</OptionTitle>
         </Option>
-        <Option to="/">
+        <Option to="/assing-visit">
           <Icon icon={faTasks} style={{stroke:"#FD7E14"}}/>
-          <OptionTitle>Asigna una tarea</OptionTitle>
+          <OptionTitle>Asigna una visita</OptionTitle>
         </Option>
         <Option to="/">
           <Icon icon={faInbox} style={{stroke:"#343A40"}}/>

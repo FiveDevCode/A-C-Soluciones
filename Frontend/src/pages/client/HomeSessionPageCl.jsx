@@ -19,14 +19,10 @@ const ContentHome = styled.section`
 const HomeSessionPageCl = () => {
   return (
     <ContentHome>
-      <div>
-        <HeaderBarCl />
-        <BackgroundHomeCl />
-      </div>
+      <BackgroundHomeCl />
       <ContentHomeCl />
       <WorkProductCl />
       <ServicieCatalogCl />
-      <FooterHomeCl />
 
     </ContentHome>
   )
