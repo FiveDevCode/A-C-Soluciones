@@ -5,7 +5,7 @@ import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 
 const Admin = sequelize.define('Admin', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.INTEGER,  
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
