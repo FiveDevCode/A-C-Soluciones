@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { handleGetTechical } from "../../controllers/administrator/getTechnicalAd.controller";
+import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
+import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
 
 const Container = styled.div`
   padding: 2rem;
@@ -68,6 +70,8 @@ const UserProfileAd = () => {
   const { id } = useParams(); 
   const [technicalData, setTechnicalData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -93,8 +97,21 @@ const UserProfileAd = () => {
     return <p>No se encontró el cliente.</p>;
   }
 
+  const handleToggleState = async () => {
+    const newState = technicalData.estado === "activo" ? "inactivo" : "activo";
+    try {
+      await handleChangeStateTechnical(id, newState);
+      setTechnicalData(prev => ({ ...prev, estado: newState }));
+    } catch (error) {
+      console.error("Error al cambiar el estado:", error);
+    } finally {
+      setShowConfirmation(false); // oculta el modal tras la acción
+    }
+  };
 
-
+  const confirmationMessage = technicalData.estado === "activo"
+    ? "¿Quieres deshabilitar este técnico?"
+    : "¿Quieres habilitar este técnico?";
 
   return (
     <Container>
@@ -109,6 +126,7 @@ const UserProfileAd = () => {
 
         <Button
           variant="contained"
+          onClick={() => setShowConfirmation(true)}
           color={technicalData.estado === "activo" ? "error" : "success"}
           style={{ marginTop: "70px", marginRight: "15rem", width: "15rem" }}
         >
@@ -148,6 +166,14 @@ const UserProfileAd = () => {
             EDITAR
         </Button>
       </Footer>
+
+      {showConfirmation && (
+        <ScreenConfirmation 
+          onConfirm={handleToggleState} 
+          onCancel={() => setShowConfirmation(false)} 
+          message={confirmationMessage}
+        />
+      )}
     </Container>
   );
 };

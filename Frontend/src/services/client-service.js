@@ -17,8 +17,13 @@ const createClient = (IdCard, name, lastName, email, phone, password, address) =
   });
 };
 
+const getServiceList = () => {
+  return axios.get("http://localhost:8000/api/servicios/activos")
+}
+
 
 export const clientService = {
   createClient,
+  getServiceList,
 
 }

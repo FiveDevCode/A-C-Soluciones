@@ -52,7 +52,7 @@ const ContainerButton = styled.div`
 `
 
 
-const AssignTaskPageAd = () => {
+const AssignVisitPageAd = () => {
 
   const [titleTask, setTitleTask] = useState("");
   const [description, setDescription] = useState("");
@@ -235,4 +235,4 @@ const AssignTaskPageAd = () => {
 }
 
 
-export default AssignTaskPageAd;
+export default AssignVisitPageAd;

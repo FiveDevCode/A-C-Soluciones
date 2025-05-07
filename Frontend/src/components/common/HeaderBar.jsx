@@ -71,7 +71,9 @@ const HeaderBar = () => {
     "/edit-client": "Editar cliente", // clave base
     "/register-service": "Crear servicio",
     "/administrator-permit": "Crear administrador permisos",
-    "/assing-task": "Asignar tarea",
+    "/assing-task": "Asignar visita",
+    "/homeTc": "Home",
+    "/homeAd": "Home",
   };
 
   function getRouteName(path) {

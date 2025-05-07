@@ -20,8 +20,10 @@ import EditClientAd from './pages/administrator/EditClientAd';
 import CreateServiceAd from './pages/administrator/CreateServiceAd';
 import CreateAdministratorAd from './pages/administrator/CreateAdministratorAd';
 import CreateAdminPermit from './pages/administrator/CreateAdminPermit';
-import AssignTaskPageAd from './pages/administrator/AssignTaskPageAd';
-import ServiceOpenCl from './components/client/ServiceOpen';
+import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
+import HeaderBarCl from './components/client/HeaderBarCl';
+import FooterHomeCl from './components/client/FooterHomeCl';
+import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -58,6 +60,7 @@ function AppContent() {
     setRole(storedRole);
   }, [location.pathname]);
 
+  const isCliente = role === 'cliente';
   const hideMenuAndHeader =
     location.pathname === '/login' ||
     location.pathname === '/register' ||
@@ -66,9 +69,10 @@ function AppContent() {
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
-      {!hideMenuAndHeader && <MenuSide />}
+      {!hideMenuAndHeader && !isCliente && <MenuSide />}
       <Content hideStyles={hideMenuAndHeader}>
-        {!hideMenuAndHeader && <HeaderBar />}
+        {!hideMenuAndHeader && !isCliente && <HeaderBar />}
+        {isCliente && role && <HeaderBarCl />}
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Home />} />
@@ -82,9 +86,21 @@ function AppContent() {
             </PrivateRoute>
           } />
 
+          <Route path="/services-all" element={
+            <PrivateRoute roleRequired="cliente">
+              <ServicesAllPageCl />
+            </PrivateRoute>
+          } />
+
           <Route path="/services" element={
             <PrivateRoute roleRequired="tecnico">
               <ServicesPageTc />
+            </PrivateRoute>
+          } />
+
+          <Route path="/view-service" element={
+            <PrivateRoute roleRequired="tecnico">
+              <ServiceTc />
             </PrivateRoute>
           } />
 
@@ -100,12 +116,6 @@ function AppContent() {
             </PrivateRoute>
           } />
           
-          <Route path="/view-service" element={
-            <PrivateRoute roleRequired="tecnico">
-              <ServiceTc />
-            </PrivateRoute>
-          } />
-
           <Route path="/register-employee" element={
             <PrivateRoute roleRequired="administrador">
               <CreateEmployeeAd />
@@ -150,20 +160,16 @@ function AppContent() {
 
           <Route path="/assing-task" element={
             <PrivateRoute roleRequired="administrador">
-              <AssignTaskPageAd/>
+              <AssignVisitPageAd/>
             </PrivateRoute>
           } />
 
-          <Route path="/service-open" element={
-            <PrivateRoute roleRequired="cliente">
-              <ServiceOpenCl />
-            </PrivateRoute>
-          } />
 
           {/* Ruta para acceso denegado */}
           <Route path="/login" element={<LoginPage />} />
         </Routes>
-      </Content>
+        {isCliente && role && <FooterHomeCl />}
+        </Content>
     </Container>
   );
 }

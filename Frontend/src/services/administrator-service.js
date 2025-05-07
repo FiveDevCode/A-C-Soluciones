@@ -44,7 +44,29 @@ const getListTechnical = () => {
   return axios.get("http://localhost:8000/api/tecnico")
 };
 
+const createService = (nameService, descripcion) => {
+  const token = localStorage.getItem("authToken");
 
+  return axios.post("http://localhost:8000/api/servicios", {
+    nombre: nameService,
+    descripcion: descripcion
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+const stateChange = (id, state) => {
+  return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
+    estado: state
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
 
 export const administratorService = {
   createTechnical,
@@ -52,4 +74,6 @@ export const administratorService = {
   getClient,
   getTechnical,
   updateClient,
+  createService,
+  stateChange
 }

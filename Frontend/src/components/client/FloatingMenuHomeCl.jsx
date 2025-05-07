@@ -59,6 +59,7 @@ const FloatingMenuHomeCl = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem('userRole');
     navigate("/");
   };
 

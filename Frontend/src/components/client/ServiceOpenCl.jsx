@@ -5,6 +5,9 @@ const ContainerService = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: rgba(0,0,0,0.35);
   width: 100vw;
   height: 100vh;
@@ -47,24 +50,18 @@ const ContainerButton = styled.div`
     margin-right: 1.5rem;
   }
 `
-const ServiceOpenCl = () => {
+const ServiceOpenCl = ({servicio, onClose }) => {
   return (
     <ContainerService>
       <ContainerOpen>
         <ContainerTitle>
-          <Title>
-            Monitoreo y Mantenimiento Inteligente
-          </Title>
+          <Title>{servicio.nombre}</Title>
         </ContainerTitle>
         <ContainerDescription>
-          <Description>
-            Optimiza el rendimiento de tu planta hidroeléctrica con nuestro servicio integral de monitoreo en tiempo real y mantenimiento preventivo.
-            Detectamos anomalías antes de que se conviertan en fallos, garantizando la continuidad operativa, 
-            seguridad y eficiencia energética de tus instalaciones.
-          </Description>
+          <Description>{servicio.descripcion}</Description>
         </ContainerDescription>
         <ContainerButton>
-          <Button variant="contained" style={{backgroundColor: "#17A2B8"}}>Cancelar</Button>
+          <Button variant="contained" style={{backgroundColor: "#17A2B8"}} onClick={onClose}>Cancelar</Button>
           <Button variant="contained">Solicitar revision</Button>
         </ContainerButton>
 

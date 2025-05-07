@@ -135,6 +135,7 @@ const MenuSide = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem('userRole');
     navigate("/");
   };
 
