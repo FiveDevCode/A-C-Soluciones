@@ -26,10 +26,13 @@ export class VisitaController {
       console.error('Error al crear visita:', error);
       
       if (error instanceof ValidationError) {
-        return res.status(400).json({
-          success: false,
-          message: error.errors.map(e => e.message).join(', ')
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+            if (err.path) {
+                fieldErrors[err.path] = err.message;
+            }
         });
+        return res.status(400).json({ errors: fieldErrors });
       }
       
       return res.status(500).json({
