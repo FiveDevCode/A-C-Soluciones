@@ -45,6 +45,9 @@ export const authenticate = async (req, res, next) => {
 
 export const authorize = (roles = []) => {
   return (req, res, next) => {
+    console.log(`Rol recibido: "${req.user.rol}"`);
+
+
     // Si no se especifican roles, permitir acceso a cualquier rol autenticado
     if (roles.length === 0) {
       return next();
@@ -62,8 +65,9 @@ export const authorize = (roles = []) => {
         success: false,
         message: `Acceso denegado. Se requieren los roles: ${roles.join(', ')}` 
       });
+      
     }
-
+    
     next();
   };
 };
@@ -72,5 +76,5 @@ export const authorize = (roles = []) => {
 export const isAdmin = authorize(['admin', 'administrador']);
 export const isTecnico = authorize(['tecnico']);
 export const isCliente = authorize(['cliente']);
-export const isAdminOrTecnico = authorize(['admin', 'tecnico']);
-export const isAdminOrCliente = authorize(['admin', 'cliente']);
+export const isAdminOrTecnico = authorize(['admin', 'administrador', 'tecnico']);
+export const isAdminOrCliente = authorize(['admin', 'administrador', 'cliente']);

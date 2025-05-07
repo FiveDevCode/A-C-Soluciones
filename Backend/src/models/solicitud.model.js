@@ -120,6 +120,16 @@ const Solicitud = sequelize.define('Solicitud', {
         }
     },
 
+    admin_id_fk: {
+        type: DataTypes.INTEGER,
+        allowNull: true, 
+        references: { 
+            model: 'administrador',
+            key: 'id'
+        },
+        
+    },    
+
 
 
    
