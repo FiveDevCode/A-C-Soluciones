@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
 import styled from "styled-components";
+import ScreenRequestCl from "./ScreenRequestCl";
+import { useState } from "react";
 
 const ContainerService = styled.section`
   display: flex;
@@ -51,6 +53,9 @@ const ContainerButton = styled.div`
   }
 `
 const ServiceOpenCl = ({servicio, onClose }) => {
+
+  const [showRequestScreen, setShowRequestScreen] = useState(false);
+
   return (
     <ContainerService>
       <ContainerOpen>
@@ -62,10 +67,22 @@ const ServiceOpenCl = ({servicio, onClose }) => {
         </ContainerDescription>
         <ContainerButton>
           <Button variant="contained" style={{backgroundColor: "#17A2B8"}} onClick={onClose}>Cancelar</Button>
-          <Button variant="contained">Solicitar revision</Button>
+          <Button
+            variant="contained"
+            onClick={() => setShowRequestScreen(true)}
+          >
+            Solicitar revisión
+          </Button>
         </ContainerButton>
 
+        {showRequestScreen && (
+          <ScreenRequestCl 
+            requestId={servicio.id}
+            onClose={() => setShowRequestScreen(false)}
+          />
+        )}
 
+        
 
       </ContainerOpen>
     </ContainerService>

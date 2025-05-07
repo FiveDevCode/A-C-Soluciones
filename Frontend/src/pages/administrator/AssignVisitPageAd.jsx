@@ -4,6 +4,7 @@ import { Autocomplete, Button, FormControl, InputLabel, MenuItem, Select, TextFi
 import { useEffect, useState } from "react"
 import assignTask from "../../assets/administrator/assignTask.png"
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller"
+import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller"
 
 
 const TitleAssignTask = styled.h1`
@@ -54,14 +55,14 @@ const ContainerButton = styled.div`
 
 const AssignVisitPageAd = () => {
 
-  const [titleTask, setTitleTask] = useState("");
-  const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [priority, setPriority] = useState("");
-  const [state, setState] = useState("");
+  const [previousNotes, setPreviousNotes] = useState("");
+  const [postnotes, setPostnotes] = useState("");
+  const [estimatedDuration, setEstimatedDuration] = useState("");
   const [technical, setTechnical] = useState("");
+  const [request, setRequest] = useState("");
 
   const [technicalList, setTechnicalList] = useState([]);
+  const [requestList, setRequestList] = useState([]);
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -73,11 +74,13 @@ const AssignVisitPageAd = () => {
 
     try {
       await handleCreateSubmitClient(
-        nameService,
-        description
+        previousNotes,
+        postnotes,
+        technical,
+        request,
       );
 
-      navigate("/login");
+      setShowSuccess(true);
       setErrorMsg("");
     } catch (err) {
       console.log(err)
@@ -102,6 +105,20 @@ const AssignVisitPageAd = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await handleGetListRequest();
+        console.log(response.data)
+        setRequestList(response.data);
+      } catch (error) {
+        console.error("Error al obtener la lista de solicitudes:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
   return (
     <section>
       <TitleAssignTask>
@@ -115,13 +132,15 @@ const AssignVisitPageAd = () => {
       <ContainerRegister>
         <Form onSubmit={handleSubmit}>
           <TextField
-            label="Titulo de la tarea" 
+            label="Notas previas" 
             fullWidth size="medium" 
-            value={titleTask} 
-            onChange={(e) => setTitleTask(e.target.value)}
+            value={previousNotes} 
+            multiline
+            rows={4}
+            onChange={(e) => setPreviousNotes(e.target.value)}
             sx={{ backgroundColor: 'white' }}
-            error={Boolean(fieldErrors.nombre)}
-            helperText={fieldErrors.nombre}
+            error={Boolean(fieldErrors.notas_previas)}
+            helperText={fieldErrors.notas_previas}
             FormHelperTextProps={{
               sx: {
                 backgroundColor: '#F2F5F7',
@@ -130,13 +149,15 @@ const AssignVisitPageAd = () => {
             }}
           />
           <TextField 
-            label="Descripción" 
+            label="Notas posteriores" 
             fullWidth size="medium" 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)}
+            value={postnotes} 
+            multiline
+            rows={4}
+            onChange={(e) => setPostnotes(e.target.value)}
             sx={{ backgroundColor: 'white' }}
-            error={Boolean(fieldErrors.descripcion)}
-            helperText={fieldErrors.descripcion}
+            error={Boolean(fieldErrors.notas_posteriores)}
+            helperText={fieldErrors.notas_posteriores}
             FormHelperTextProps={{
               sx: {
                 backgroundColor: '#F2F5F7',
@@ -146,13 +167,13 @@ const AssignVisitPageAd = () => {
             }}
           />
           <TextField 
-            label="Fecha limite" 
+            label="Duracion estimada" 
             fullWidth size="medium" 
-            value={deadline} 
-            onChange={(e) => setDeadline(e.target.value)}
+            value={estimatedDuration} 
+            onChange={(e) => setEstimatedDuration(e.target.value)}
             sx={{ backgroundColor: 'white' }}
-            error={Boolean(fieldErrors.fecha_limite)}
-            helperText={fieldErrors.fecha_limite}
+            error={Boolean(fieldErrors.duracion_estimada)}
+            helperText={fieldErrors.duracion_estimada}
             FormHelperTextProps={{
               sx: {
                 backgroundColor: '#F2F5F7',
@@ -162,35 +183,25 @@ const AssignVisitPageAd = () => {
             }}
           />
 
-          <FormControl fullWidth>
-            <InputLabel id="prioridad-label">Prioridad</InputLabel>
-            <Select
-              labelId="prioridad-label"
-              value={priority}
-              label="Prioridad"
-              onChange={(e) => setPriority(e.target.value)}
-            >
-              <MenuItem value="baja">Baja</MenuItem>
-              <MenuItem value="media">Media</MenuItem>
-              <MenuItem value="alta">Alta</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+            fullWidth
+            options={requestList}
+            getOptionLabel={(request) =>
+              `${request.id} - ${request.descripcion}`
+            }
+            onChange={(event, newValue) => {
+              setRequest(newValue ? newValue.id : "");
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Solicitudes"
+                placeholder="Buscar por id o palabra clave"
+                sx={{ backgroundColor: 'white' }}
+              />
+            )}
+          />
 
-          <FormControl fullWidth>
-            <InputLabel id="estado-label">Estado</InputLabel>
-            <Select
-              labelId="estado-label"
-              value={state}
-              label="Estado"
-              onChange={(e) => setState(e.target.value)}
-            >
-              <MenuItem value="pendiente">Pendiente</MenuItem>
-              <MenuItem value="en_progreso">En progreso</MenuItem>
-              <MenuItem value="completado">Completado</MenuItem>
-            </Select>
-          </FormControl>
-
-          
           <Autocomplete
             fullWidth
             options={technicalList}

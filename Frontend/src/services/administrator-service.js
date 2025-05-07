@@ -68,6 +68,36 @@ const stateChange = (id, state) => {
   });
 }
 
+const getListRequest = () => {
+  const token = localStorage.getItem("authToken");
+
+  return axios.get("http://localhost:8000/api/solicitudes", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const assignVisit = (estimatedDuration, previousNotes, postnotes, requestId, technicalId ) => {
+  const token = localStorage.getItem("authToken");
+
+  return axios.post("http://localhost:8000/api/visitas", {
+    duracion_estimada: estimatedDuration,
+    notas_previas: previousNotes,
+    notas_posteriores: postnotes,
+    solicitud_id_fk: requestId,
+    tecnico_id_fk: technicalId,
+
+
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -75,5 +105,7 @@ export const administratorService = {
   getTechnical,
   updateClient,
   createService,
-  stateChange
+  stateChange,
+  getListRequest,
+  assignVisit
 }

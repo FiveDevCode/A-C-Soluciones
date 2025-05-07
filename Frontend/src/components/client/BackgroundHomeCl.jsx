@@ -1,6 +1,7 @@
 import {Button} from '@mui/material';
 import styled from 'styled-components';
 import logoHome from '../../assets/client/backgroundHome.png'
+import { Link } from 'react-router-dom';
 
 
 const CompanyName = styled.h2`
@@ -58,7 +59,7 @@ const BackgroundHomeCl = () => {
     <ContainerBackground>
       <CompanyName>A & C Soluciones</CompanyName>
       <CompanyPhrase>Expertos en reparaciones hidroeléctricas: pequeña empresa, gran ingeniería.</CompanyPhrase>
-      <ButtonService variant='contained'>Ver nuestro servicios</ButtonService>
+      <ButtonService variant='contained' LinkComponent={Link} to="/services-all">Ver nuestro servicios</ButtonService>
       
     </ContainerBackground>
 

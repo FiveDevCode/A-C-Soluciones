@@ -21,9 +21,27 @@ const getServiceList = () => {
   return axios.get("http://localhost:8000/api/servicios/activos")
 }
 
+const createRequest = (serviceAddress, description, comments, requestId, clientId) => {
+  const token = localStorage.getItem("authToken");
+
+  return axios.post("http://localhost:8000/api/solicitudes", {
+    direccion_servicio: serviceAddress,
+    descripcion: description,
+    comentarios: comments,
+    servicio_id_fk: requestId,
+    cliente_id_fk: clientId
+
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
 
 export const clientService = {
   createClient,
   getServiceList,
-
+  createRequest,
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ServiceOpenCl from "../../components/client/ServiceOpenCl";
 
 
+
 const ContainerServices = styled.section`
   display: flex;
   flex-direction: column;
@@ -63,7 +64,6 @@ const Description = styled.h3`
 const ServicesAllPageCl = () => {
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(null); // nuevo estado
-
 
   useEffect(() => {
     handleGetServiceList()

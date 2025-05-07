@@ -158,7 +158,7 @@ function AppContent() {
             </PrivateRoute>
           } />
 
-          <Route path="/assing-task" element={
+          <Route path="/assing-visit" element={
             <PrivateRoute roleRequired="administrador">
               <AssignVisitPageAd/>
             </PrivateRoute>
