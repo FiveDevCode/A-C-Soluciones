@@ -76,6 +76,14 @@ export const Visita = sequelize.define('Visita', {
       model: 'tecnico',
       key: 'id'
     }
+  },
+  servicio_id_fk: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'servicios',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'visitas',
@@ -89,6 +97,9 @@ export const Visita = sequelize.define('Visita', {
     },
     {
       fields: ['solicitud_id_fk']
+    },
+    {
+      fields: ['servicio_id_fk']
     }
   ]
 });

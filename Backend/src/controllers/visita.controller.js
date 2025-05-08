@@ -186,4 +186,78 @@ export class VisitaController {
       });
     }
   };
-}
+// Obtener servicios asignados a un técnico
+  obtenerServiciosAsignados = async (req, res) => {
+    try {
+    // Validar que el usuario sea un técnico
+      if (req.user.rol !== 'tecnico') {
+        return res.status(403).json({
+          success: false,
+          message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
+        });
+      }
+    
+      const tecnico_id = req.user.id;
+    
+      const visitas = await this.visitaService.obtenerServiciosPorTecnico(tecnico_id);
+    
+      if (visitas.length === 0) {
+        return res.status(200).json({
+          success: true,
+          message: 'No tienes servicios asignados por el momento.',
+          data: []
+        });
+      }
+    
+      return res.status(200).json({
+        success: true,
+        message: 'Servicios asignados obtenidos correctamente.',
+        count: visitas.length,
+        data: visitas
+      });
+    } catch (error) {
+      console.error('Error al obtener servicios asignados:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener los servicios asignados.'
+      });
+    }
+  };
+
+// Obtener un servicio asignado específico por ID
+  obtenerServicioAsignadoPorId = async (req, res) => {
+    try {
+      // Validar que el usuario sea un técnico
+      if (req.user.rol !== 'tecnico') {
+        return res.status(403).json({
+          success: false,
+          message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
+        });
+      }
+    
+      const tecnico_id = req.user.id;
+      const visita_id = req.params.id;
+    
+      const visita = await this.visitaService.obtenerServicioAsignadoPorId(tecnico_id, visita_id);
+    
+      if (!visita) {
+        return res.status(404).json({
+          success: false,
+          message: 'Servicio asignado no encontrado o no pertenece a este técnico.'
+        });
+      }
+    
+      return res.status(200).json({
+        success: true,
+        message: 'Servicio asignado obtenido correctamente.',
+        data: visita
+      });
+    } catch (error) {
+      console.error('Error al obtener servicio asignado por ID:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener el servicio asignado.'
+      });
+    } 
+  } 
+}  

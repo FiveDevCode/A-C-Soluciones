@@ -65,14 +65,4 @@ export class ServicioRepository {
     return servicio;
   }
 
-  async obtenerServiciosPorTecnico(tecnico_id) {
-    return await VisitaModel.Visita.findAll({
-      where: {
-        tecnico_id_fk: tecnico_id
-      },
-      attributes: ['id', 'fecha_programada', 'duracion_estimada','estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'], 
-      order: [['fecha_creacion', 'DESC']]
-    });
-  }
-
 }

@@ -42,5 +42,15 @@ export const setupAssociations = () => {
     as: 'tecnico'
   });
 
+  VisitaModel.Visita.belongsTo(ServicioModel.Servicio, {
+    foreignKey: 'servicio_id_fk',
+    as: 'servicio'
+  });
+  
+  ServicioModel.Servicio.hasMany(VisitaModel.Visita, {
+    foreignKey: 'servicio_id_fk',
+    as: 'visitas'
+  });
+
   console.log('🔗 Asociaciones establecidas correctamente');
 };
