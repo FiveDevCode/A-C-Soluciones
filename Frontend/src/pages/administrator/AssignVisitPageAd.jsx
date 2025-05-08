@@ -62,6 +62,9 @@ const AssignVisitPageAd = () => {
   const [scheduledDate, setScheduledDate] = useState("");
   const [technical, setTechnical] = useState("");
   const [request, setRequest] = useState("");
+  const [selectedTechnical, setSelectedTechnical] = useState(null);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
 
   const [technicalList, setTechnicalList] = useState([]);
   const [requestList, setRequestList] = useState([]);
@@ -86,6 +89,8 @@ const AssignVisitPageAd = () => {
 
       setShowSuccess(true);
       setErrorMsg("");
+      setFieldErrors({});
+      handleLimpiar();
     } catch (err) {
       console.log(err)
       if (err.response?.data?.errors) {
@@ -94,6 +99,19 @@ const AssignVisitPageAd = () => {
         setErrorMsg("Hubo un error al registrar el técnico.");
       }
     }
+  }
+
+  const handleLimpiar = () =>{
+    setEstimatedDuration("");
+    setPostnotes("");
+    setPreviousNotes("");
+    setTechnical("");
+    setRequest("");
+    setScheduledDate("");
+    setSelectedTechnical(null);
+    setSelectedRequest(null);
+    setFieldErrors({});
+    setErrorMsg("");
   }
 
   useEffect(() => {
@@ -177,8 +195,8 @@ const AssignVisitPageAd = () => {
             value={scheduledDate} 
             onChange={(e) => setScheduledDate(e.target.value)}
             sx={{ backgroundColor: 'white' }}
-            error={Boolean(fieldErrors.notas_posteriores)}
-            helperText={fieldErrors.notas_posteriores}
+            error={Boolean(fieldErrors.fecha_programada)}
+            helperText={fieldErrors.fecha_programada}
             FormHelperTextProps={{
               sx: {
                 backgroundColor: '#F2F5F7',
@@ -210,7 +228,9 @@ const AssignVisitPageAd = () => {
             getOptionLabel={(request) =>
               `${request.id} - ${request.descripcion.slice(0, 50)}`
             }
+            value={selectedRequest}
             onChange={(event, newValue) => {
+              setSelectedRequest(newValue);
               setRequest(newValue ? newValue.id : "");
             }}
             renderInput={(params) => (
@@ -229,7 +249,9 @@ const AssignVisitPageAd = () => {
             getOptionLabel={(tecnico) =>
               `${tecnico.numero_de_cedula} - ${tecnico.nombre} ${tecnico.apellido}`
             }
+            value={selectedTechnical}
             onChange={(event, newValue) => {
+              setSelectedTechnical(newValue);
               setTechnical(newValue ? newValue.id : "");
             }}
             renderInput={(params) => (
@@ -241,6 +263,7 @@ const AssignVisitPageAd = () => {
               />
             )}
           />
+
             
           {errorMsg && (
             <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
@@ -250,7 +273,7 @@ const AssignVisitPageAd = () => {
 
           <ContainerButton>
             <Button type="submit" variant="contained">Asignar Tarea</Button>
-            <Button type="button" variant="contained">Limpiar Campos</Button>
+            <Button type="button" variant="contained" onClick={handleLimpiar}>Limpiar Campos</Button>
           </ContainerButton>
 
           {showSuccess && (
