@@ -90,7 +90,7 @@ const EditClientAd = () => {
       setErrorMsg("");
       setShowSuccess(true);
 
-      navigate(`/profile-client/${id}`)
+      navigate(`/edit-client/${id}`)
     } catch (err) {
       console.log(err)
       if (err.response?.data?.errors) {

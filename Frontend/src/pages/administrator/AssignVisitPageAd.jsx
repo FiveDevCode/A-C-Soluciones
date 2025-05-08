@@ -126,11 +126,11 @@ const AssignVisitPageAd = () => {
   return (
     <section>
       <TitleAssignTask>
-        Asigna tareas operativas al personal técnico, especificando el trabajo a realizar, 
-        ubicación y prioridad correspondiente
+        Asigna una visita al personal técnico, especificando el trabajo a realizar y 
+        ubicación
       </TitleAssignTask>
       <TextHelp>
-        Por favor, completa todos los campos obligatorios para continuar con la asignación de la tarea al empleado.
+        Por favor, completa todos los campos obligatorios para continuar con la asignación de la visita al empleado.
       </TextHelp>
 
       <ContainerRegister>
@@ -171,22 +171,7 @@ const AssignVisitPageAd = () => {
             }}
           />
 
-          <TextField 
-            label="Fecha programada" 
-            fullWidth size="medium" 
-            value={scheduledDate} 
-            onChange={(e) => setScheduledDate(e.target.value)}
-            sx={{ backgroundColor: 'white' }}
-            error={Boolean(fieldErrors.notas_posteriores)}
-            helperText={fieldErrors.notas_posteriores}
-            FormHelperTextProps={{
-              sx: {
-                backgroundColor: '#F2F5F7',
-                margin: 0,
-                
-              },
-            }}
-          />
+
           <TextField 
             label="Duracion estimada" 
             fullWidth size="medium" 
@@ -195,13 +180,7 @@ const AssignVisitPageAd = () => {
             sx={{ backgroundColor: 'white' }}
             error={Boolean(fieldErrors.duracion_estimada)}
             helperText={fieldErrors.duracion_estimada}
-            FormHelperTextProps={{
-              sx: {
-                backgroundColor: '#F2F5F7',
-                margin: 0,
-                
-              },
-            }}
+
           />
 
           <Autocomplete
@@ -240,6 +219,20 @@ const AssignVisitPageAd = () => {
                 sx={{ backgroundColor: 'white' }}
               />
             )}
+          />
+
+          <TextField 
+            label="Fecha programada" 
+            size="medium" 
+            type="date"
+            value={scheduledDate} 
+            onChange={(e) => setScheduledDate(e.target.value)}
+            sx={{ backgroundColor: 'white' }}
+            error={Boolean(fieldErrors.notas_posteriores)}
+            helperText={fieldErrors.notas_posteriores}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
             
           {errorMsg && (
