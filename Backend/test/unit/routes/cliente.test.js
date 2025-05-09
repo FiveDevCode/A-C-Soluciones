@@ -42,7 +42,7 @@ describe('Cliente Model Tests', () => {
       return model;
     });
 
-    // Re-import to trigger the mock captures
+    // Re-import to trigger the mock captures 
     jest.isolateModules(() => {
       require('../../../src/models/cliente.model.js');
     });
@@ -201,8 +201,8 @@ describe('Cliente Model Tests', () => {
     expect(() => direccionField.validate.notEmpty.msg).not.toThrow();
     
     // Test custom validations
-    expect(() => direccionField.validate.noOnlySpaces('Calle 123 #45-67')).not.toThrow();
-    expect(() => direccionField.validate.noOnlySpaces('   ')).toThrow();
+    expect(() => direccionField.validate.sinEspaciosSolamente('Calle 123 #45-67')).not.toThrow();
+    expect(() => direccionField.validate.sinEspaciosSolamente('   ')).toThrow();
   });
 
   test('should set up fecha_registro field with correct validations', () => {
@@ -216,8 +216,8 @@ describe('Cliente Model Tests', () => {
     const pastDate = new Date(2023, 0, 1);
     const futureDate = new Date(2030, 0, 1);
     
-    expect(() => fechaField.validate.notInFuture(pastDate)).not.toThrow();
-    expect(() => fechaField.validate.notInFuture(futureDate)).toThrow();
+    expect(() => fechaField.validate.noFechasPasadas(pastDate)).toThrow();
+    expect(() => fechaField.validate.noFechasPasadas(futureDate)).not.toThrow();
   });
 
   test('should set up rol field correctly', () => {

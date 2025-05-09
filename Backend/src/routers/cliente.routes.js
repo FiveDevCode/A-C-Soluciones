@@ -6,6 +6,7 @@ const clienteController = new ClienteController();
 
 // registrar clientes
 router.post('/api/cliente', clienteController.crearCliente);
+router.get('/api/cliente/todos', clienteController.obtenerTodosLosClientes);
 
 // obtener todos los clientes registrados
 router.get('/api/cliente', clienteController.obtenerClientesActivos);
@@ -25,7 +26,5 @@ router.put('/api/cliente/:id', clienteController.actualizarCliente);
 // eliminar cliente por id
 router.delete('/api/cliente/:id', clienteController.eliminarCliente);
 
-// obtener todos los clientes
-router.get('/api/cliente/todos', clienteController.obtenerTodosLosClientes);
 
 export default router;
