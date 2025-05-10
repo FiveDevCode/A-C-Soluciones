@@ -117,7 +117,6 @@ const Admin = sequelize.define('Admin', {
   timestamps: false,
 });
 
-// Encriptar la contraseña antes de guardar el registro
 Admin.beforeCreate(encryptPasswordHook);
 
 export const AdminModel = {

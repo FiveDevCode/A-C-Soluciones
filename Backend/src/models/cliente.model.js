@@ -4,14 +4,11 @@ import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 import { noFechasPasadas, sinEspaciosSolamente } from "../hooks/validators.js";
 
 const Cliente=sequelize.define('Cliente',{
-
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true, 
         autoIncrement: true,
-        allowNull:false,
-
-        
+        allowNull:false
     },
     numero_de_cedula: {
         type: DataTypes.STRING(10),
@@ -40,47 +37,38 @@ const Cliente=sequelize.define('Cliente',{
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
-            is: { //validación solo letras, acentos y espacios
+            is: { 
                 args: [/^[a-záéíóúñ\s]*$/i],
-                msg: 'El nombre solo puede contener letras y espacios.',
-
+                msg: 'El nombre solo puede contener letras y espacios.'
             },
             len: {
                 args:[1,50],
-                msg: 'El nombre no debe exceder los 50 caracteres.',
-
-            }, //validación de espacios 
+                msg: 'El nombre no debe exceder los 50 caracteres.'
+            }, 
             noSpaceEdges (value){
                 if(value.trim()!= value){
                     throw new Error('El nombre no debe tener espacios al inicio o final.');
-
-                    
                 }
             },
-            //Validacion de repeticones excessivas (+3 caracteres igua)
             noRepeticionesExcesivas(value){
                 if (/(.)\1{3,}/.test(value)){
                     throw new Error('No se permiten repeticiones excesivas de caracteres.');
-                    
                 }
             },
             noEspaciosMultiples (value){
                 if(/\s{2,}/.test(value)){
-                    throw new Error('No se permiten espacios multiples consecutivos.');
-                    
+                    throw new Error('No se permiten espacios multiples consecutivos.'); 
                 }
             }
-
         }
     },
     apellido: {
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
-            is: { //validación solo letras y espacios
+            is: { 
                 args:[/^[a-záéíóúñ\s]*$/i],
                 msg: 'El apellido solo puede contener letras y espacios.',
-
             },
             len: {
                 args:[1,50],
@@ -90,11 +78,8 @@ const Cliente=sequelize.define('Cliente',{
             noSpaceEdges (value){
                 if(value.trim()!= value){
                     throw new Error('El apellido no debe tener espacios al inicio o final.');
-
-                    
                 }
             }
-
         }
     },
     correo_electronico: {
@@ -113,7 +98,6 @@ const Cliente=sequelize.define('Cliente',{
         },
       },
     telefono: {
-
         type: DataTypes.STRING(20),
         allowNull: false,
         validate: {
@@ -121,12 +105,10 @@ const Cliente=sequelize.define('Cliente',{
             len:{
                 args:[10,10],
                 msg: 'El teléfono debe tener exactamente 10 dígitos',
-
             },
             iniciaConDigitoValido (value){
                 if(!value.startsWith('3')){
                     throw new Error('El teléfono debe iniciar con 3 en Colombia');
-                    
                 }
             }
         }
@@ -153,7 +135,6 @@ const Cliente=sequelize.define('Cliente',{
         },
       },
     direccion: {
-
         type: DataTypes.TEXT,
         allowNull: false,
         validate: {
@@ -166,21 +147,14 @@ const Cliente=sequelize.define('Cliente',{
             },
             sinEspaciosSolamente
           }
-        
-
     },
     fecha_registro: {
-
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         validate: {
             isDate: { msg: 'La fecha de registro debe ser una fecha válida.' },
-            noFechasPasadas,
-                
-            
-          }
-          
-
+            noFechasPasadas
+     }
     },
     rol: {
       type: DataTypes.ENUM('cliente'),
@@ -199,8 +173,6 @@ const Cliente=sequelize.define('Cliente',{
     timestamps: false,
 });
 
-
-//Forna de encriptar la contraseña antes de guardar el registro
 Cliente.beforeCreate(encryptPasswordHook);
 
 
