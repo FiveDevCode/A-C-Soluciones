@@ -1,4 +1,3 @@
-// test/tecnico.controller.test.js
 import { TecnicoController } from '../../../src/controllers/tecnico.controller.js';
 import { TecnicoService } from '../../../src/services/tecnico.services.js';
 import { ValidationError } from 'sequelize';
@@ -43,12 +42,12 @@ describe('TecnicoController', () => {
       expect(res.json).toHaveBeenCalledWith({ message: 'El técnico ya está registrado.' });
     });
 
-    it('debe retornar errores de validación', async () => {
+    it('debe retornar errores de validación con path', async () => {
       req.body = {};
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
       const error = new ValidationError('Error', [
         { path: 'numero_de_cedula', message: 'Campo requerido' }
       ]);
+      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
       TecnicoService.prototype.crearTecnico.mockRejectedValue(error);
 
       await tecnicoController.crearTecnico(req, res);
@@ -57,6 +56,31 @@ describe('TecnicoController', () => {
       expect(res.json).toHaveBeenCalledWith({
         errors: { numero_de_cedula: 'Campo requerido' }
       });
+    });
+
+    it('debe manejar errores de validación sin path', async () => {
+      req.body = {};
+      const error = new ValidationError('Error', [
+        { message: 'Error sin campo específico' } // Error sin path
+      ]);
+      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
+      TecnicoService.prototype.crearTecnico.mockRejectedValue(error);
+
+      await tecnicoController.crearTecnico(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ errors: {} });
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      req.body = { numero_de_cedula: '1004892314' };
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.obtenerTecnicoPorcedula.mockRejectedValue(error);
+
+      await tecnicoController.crearTecnico(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al crear el empleado.' });
     });
   });
 
@@ -80,6 +104,17 @@ describe('TecnicoController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.obtenerTecnicoPorId.mockRejectedValue(error);
+
+      await tecnicoController.obtenerTecnicoPorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado.' });
+    });
   });
 
   describe('obtenerTecnicoPorCedula', () => {
@@ -102,6 +137,17 @@ describe('TecnicoController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado' });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.numero_de_cedula = '123';
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.obtenerTecnicoPorcedula.mockRejectedValue(error);
+
+      await tecnicoController.obtenerTecnicoPorCedula(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado' });
+    });
   });
 
   describe('obtenerTecnicos', () => {
@@ -112,6 +158,25 @@ describe('TecnicoController', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith([{ id: 1 }, { id: 2 }]);
+    });
+
+    it('debe manejar caso cuando no hay técnicos', async () => {
+      TecnicoService.prototype.obtenerTecnicos.mockResolvedValue([]);
+
+      await tecnicoController.obtenerTecnicos(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith([]);
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.obtenerTecnicos.mockRejectedValue(error);
+
+      await tecnicoController.obtenerTecnicos(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener los empleados.' });
     });
   });
 
@@ -152,6 +217,18 @@ describe('TecnicoController', () => {
         errors: ['Campo inválido']
       });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      req.body = { nombre: 'Actualizado' };
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.actualizarTecnico.mockRejectedValue(error);
+
+      await tecnicoController.actualizarTecnico(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al actualizar el empleado.' });
+    });
   });
 
   describe('eliminarTecnico', () => {
@@ -173,6 +250,17 @@ describe('TecnicoController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      const error = new Error('Error inesperado');
+      TecnicoService.prototype.eliminarTecnico.mockRejectedValue(error);
+
+      await tecnicoController.eliminarTecnico(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al eliminar el empleado.' });
     });
   });
 });

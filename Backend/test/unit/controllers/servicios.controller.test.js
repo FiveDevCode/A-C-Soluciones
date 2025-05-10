@@ -78,6 +78,22 @@ describe('ServicioController', () => {
         errors: ['Campo requerido']
       }));
     });
+    
+    it('debe manejar errores generales al crear servicio', async () => {
+      const req = mockReq({ body: { nombre: 'Servicio Error' } });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorNombre.mockResolvedValue(null);
+      servicioServiceMock.crearServicio.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.crearServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al crear el servicio.'
+      }));
+    });
   });
 
   describe('obtenerServicioPorId', () => {
@@ -101,6 +117,21 @@ describe('ServicioController', () => {
       await controller.obtenerServicioPorId(req, res);
 
       expect(res.status).toHaveBeenCalledWith(404);
+    });
+    
+    it('debe manejar errores generales al obtener servicio por ID', async () => {
+      const req = mockReq({ params: { id: 1 } });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorId.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.obtenerServicioPorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al obtener el servicio.'
+      }));
     });
   });
 
@@ -126,6 +157,21 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
+    
+    it('debe manejar errores generales al obtener servicio por nombre', async () => {
+      const req = mockReq({ params: { nombre: 'Servicio' } });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorNombre.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.obtenerServicioPorNombre(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al obtener el servicio.'
+      }));
+    });
   });
 
   describe('buscarServicios', () => {
@@ -148,6 +194,34 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
+    
+    it('debe retornar 400 si el término solo contiene espacios', async () => {
+      const req = mockReq({ query: { termino: '   ' } });
+      const res = mockRes();
+
+      await controller.buscarServicios(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'El término de búsqueda es requerido'
+      }));
+    });
+    
+    it('debe manejar errores generales al buscar servicios', async () => {
+      const req = mockReq({ query: { termino: 'mantenimiento' } });
+      const res = mockRes();
+
+      servicioServiceMock.buscarServicios.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.buscarServicios(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al buscar servicios.'
+      }));
+    });
   });
 
   describe('obtenerServicios', () => {
@@ -161,6 +235,21 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
+    
+    it('debe manejar errores generales al obtener todos los servicios', async () => {
+      const req = mockReq();
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicios.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.obtenerServicios(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al obtener los servicios.'
+      }));
+    });
   });
 
   describe('obtenerServiciosActivos', () => {
@@ -173,6 +262,21 @@ describe('ServicioController', () => {
       await controller.obtenerServiciosActivos(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
+    });
+    
+    it('debe manejar errores generales al obtener servicios activos', async () => {
+      const req = mockReq();
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServiciosActivos.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.obtenerServiciosActivos(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al obtener los servicios activos.'
+      }));
     });
   });
 
@@ -212,6 +316,61 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
+    
+    it('debe actualizar el servicio cuando no se cambia el nombre', async () => {
+      const servicioExistente = { id: 1, nombre: 'Mismo Nombre' };
+      const req = mockReq({ 
+        params: { id: 1 }, 
+        body: { nombre: 'Mismo Nombre', descripcion: 'Actualizada' },
+        user: { id: 1 }
+      });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorId.mockResolvedValue(servicioExistente);
+      servicioServiceMock.actualizarServicio.mockResolvedValue({ 
+        ...servicioExistente, 
+        descripcion: 'Actualizada' 
+      });
+
+      await controller.actualizarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(servicioServiceMock.obtenerServicioPorNombre).not.toHaveBeenCalled();
+    });
+    
+    it('debe manejar errores de validación al actualizar servicio', async () => {
+      const req = mockReq({ params: { id: 1 }, body: { nombre: 'Invalido' }, user: { id: 1 } });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorId.mockResolvedValue({ id: 1, nombre: 'Anterior' });
+      servicioServiceMock.obtenerServicioPorNombre.mockResolvedValue(null);
+      
+      const error = new ValidationError('Error', [{ message: 'Nombre inválido' }]);
+      servicioServiceMock.actualizarServicio.mockRejectedValue(error);
+
+      await controller.actualizarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        errors: ['Nombre inválido']
+      }));
+    });
+    
+    it('debe manejar errores generales al actualizar servicio', async () => {
+      const req = mockReq({ params: { id: 1 }, body: { nombre: 'Nuevo' } });
+      const res = mockRes();
+
+      servicioServiceMock.obtenerServicioPorId.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.actualizarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al actualizar el servicio.'
+      }));
+    });
   });
 
   describe('eliminarServicio', () => {
@@ -235,6 +394,21 @@ describe('ServicioController', () => {
       await controller.eliminarServicio(req, res);
 
       expect(res.status).toHaveBeenCalledWith(404);
+    });
+    
+    it('debe manejar errores generales al eliminar servicio', async () => {
+      const req = mockReq({ params: { id: 1 } });
+      const res = mockRes();
+
+      servicioServiceMock.eliminarServicio.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.eliminarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al eliminar el servicio.'
+      }));
     });
   });
 
@@ -260,6 +434,21 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
+    
+    it('debe manejar errores generales al deshabilitar servicio', async () => {
+      const req = mockReq({ params: { id: 1 } });
+      const res = mockRes();
+
+      servicioServiceMock.deshabilitarServicio.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.deshabilitarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al deshabilitar el servicio.'
+      }));
+    });
   });
 
   describe('habilitarServicio', () => {
@@ -283,6 +472,21 @@ describe('ServicioController', () => {
       await controller.habilitarServicio(req, res);
 
       expect(res.status).toHaveBeenCalledWith(404);
+    });
+    
+    it('debe manejar errores generales al habilitar servicio', async () => {
+      const req = mockReq({ params: { id: 1 } });
+      const res = mockRes();
+
+      servicioServiceMock.habilitarServicio.mockRejectedValue(new Error('Error de servidor'));
+
+      await controller.habilitarServicio(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: false,
+        message: 'Error al habilitar el servicio.'
+      }));
     });
   });
 });

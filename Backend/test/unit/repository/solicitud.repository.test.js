@@ -3,22 +3,24 @@ import { SolicitudRepository } from '../../../src/repository/solicitud.repositor
 import { SolicitudModel } from '../../../src/models/solicitud.model.js';
 import { ClienteModel } from '../../../src/models/cliente.model.js';
 import { ServicioModel } from '../../../src/models/servicios.model.js';
+import { AdminModel } from '../../../src/models/administrador.model.js';
 
-jest.mock('../../../src/models/solicitud.model.js', () => ({
-  SolicitudModel: {
-    Solicitud: {
-      create: jest.fn(),
-      findAll: jest.fn(),
-      findByPk: jest.fn(),
-      findOne: jest.fn(),
-      belongsTo: jest.fn(), // mock para relaciones
-      associations: {
-        cliente: {},
-        servicio: {},
-      },
-    },
-  },
-}));
+// Configuración de mocks
+jest.mock('../../../src/models/solicitud.model.js', () => {
+  const mockSolicitud = {
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findByPk: jest.fn(),
+    findOne: jest.fn(),
+    belongsTo: jest.fn(),
+    associations: {},
+  };
+  return {
+    SolicitudModel: {
+      Solicitud: mockSolicitud
+    }
+  };
+});
 
 jest.mock('../../../src/models/cliente.model.js', () => ({
   ClienteModel: {
@@ -36,30 +38,75 @@ jest.mock('../../../src/models/servicios.model.js', () => ({
   },
 }));
 
+jest.mock('../../../src/models/administrador.model.js', () => ({
+  AdminModel: {
+    Admin: {
+      findByPk: jest.fn(),
+    },
+  },
+}));
+
 describe('SolicitudRepository', () => {
   let solicitudRepository;
-  const mockSolicitud = {
-    id: 1,
-    cliente_id: 1,
-    servicio_id: 1,
-    estado: 'pendiente',
-    update: jest.fn().mockResolvedValue(true),
-    save: jest.fn().mockResolvedValue(true),
-    destroy: jest.fn().mockResolvedValue(true), // Agregar el mock de destroy
-  };
+  let mockSolicitud;
+  const mockCliente = { id: 1, nombre: 'Cliente Test' };
+  const mockServicio = { id: 1, nombre: 'Servicio Test' };
+  const mockAdmin = { id: 1, nombre: 'Admin Test' };
 
   beforeEach(() => {
-    solicitudRepository = new SolicitudRepository();
     jest.clearAllMocks();
-    // Reset estado property to default before each test
-    mockSolicitud.estado = 'pendiente';
+    
+    mockSolicitud = {
+      id: 1,
+      cliente_id_fk: 1,
+      servicio_id_fk: 1,
+      admin_id_fk: 1,
+      estado: 'pendiente',
+      update: jest.fn().mockImplementation((data) => {
+        return Promise.resolve({ ...mockSolicitud, ...data });
+      }),
+      destroy: jest.fn().mockResolvedValue(true),
+    };
+
+    solicitudRepository = new SolicitudRepository();
+  });
+
+  describe('setupAssociations', () => {
+    it('debe configurar las asociaciones correctamente', () => {
+      const repo = new SolicitudRepository();
+      
+      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledTimes(3);
+      
+      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
+        ClienteModel.Cliente,
+        expect.objectContaining({
+          foreignKey: 'cliente_id_fk',
+          as: 'cliente'
+        })
+      );
+      
+      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
+        ServicioModel.Servicio,
+        expect.objectContaining({
+          foreignKey: 'servicio_id_fk',
+          as: 'servicio'
+        })
+      );
+      
+      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
+        AdminModel.Admin,
+        expect.objectContaining({
+          foreignKey: 'admin_id_fk',
+          as: 'admin'
+        })
+      );
+    });
   });
 
   describe('crear', () => {
     it('debe crear una nueva solicitud', async () => {
       jest.spyOn(solicitudRepository, 'clienteExiste').mockResolvedValue(true);
       jest.spyOn(solicitudRepository, 'servicioExiste').mockResolvedValue(true);
-
       SolicitudModel.Solicitud.create.mockResolvedValue(mockSolicitud);
 
       const result = await solicitudRepository.crear(mockSolicitud);
@@ -68,35 +115,79 @@ describe('SolicitudRepository', () => {
       expect(result).toEqual(mockSolicitud);
     });
 
-    it('debe lanzar un error si el cliente o el servicio no existen', async () => {
+    it('debe lanzar un error si el cliente no existe', async () => {
       jest.spyOn(solicitudRepository, 'clienteExiste').mockResolvedValue(false);
       jest.spyOn(solicitudRepository, 'servicioExiste').mockResolvedValue(true);
+
+      await expect(solicitudRepository.crear(mockSolicitud)).rejects.toThrow('Cliente o servicio no encontrado');
+    });
+
+    it('debe lanzar un error si el servicio no existe', async () => {
+      jest.spyOn(solicitudRepository, 'clienteExiste').mockResolvedValue(true);
+      jest.spyOn(solicitudRepository, 'servicioExiste').mockResolvedValue(false);
 
       await expect(solicitudRepository.crear(mockSolicitud)).rejects.toThrow('Cliente o servicio no encontrado');
     });
   });
 
   describe('obtenerTodos', () => {
-    it('debe retornar todas las solicitudes', async () => {
+    it('debe retornar todas las solicitudes con relaciones', async () => {
       SolicitudModel.Solicitud.findAll.mockResolvedValue([mockSolicitud]);
 
       const result = await solicitudRepository.obtenerTodos();
 
-      expect(SolicitudModel.Solicitud.findAll).toHaveBeenCalled();
+      expect(SolicitudModel.Solicitud.findAll).toHaveBeenCalledWith({
+        include: [
+          {
+            model: ClienteModel.Cliente,
+            as: 'cliente',
+            attributes: ['id', 'nombre', 'apellido', 'telefono']
+          },
+          {
+            model: AdminModel.Admin,
+            as: 'admin',
+            attributes: ['id', 'nombre', 'apellido']
+          },
+          {
+            model: ServicioModel.Servicio,
+            as: 'servicio',
+            attributes: ['id', 'nombre', 'descripcion']
+          }
+        ],
+        order: [['fecha_solicitud', 'DESC']]
+      });
       expect(result).toEqual([mockSolicitud]);
+    });
+
+    it('debe retornar array vacío si no hay solicitudes', async () => {
+      SolicitudModel.Solicitud.findAll.mockResolvedValue([]);
+
+      const result = await solicitudRepository.obtenerTodos();
+
+      expect(result).toEqual([]);
     });
   });
 
   describe('obtenerPorId', () => {
-    it('debe retornar una solicitud por ID', async () => {
+    it('debe retornar una solicitud por ID con relaciones', async () => {
       SolicitudModel.Solicitud.findByPk.mockResolvedValue(mockSolicitud);
 
       const result = await solicitudRepository.obtenerPorId(1);
 
-      // Corregir la expectativa para incluir el objeto con relaciones
-      expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1, expect.objectContaining({
-        include: expect.any(Array),
-      }));
+      expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1, {
+        include: [
+          {
+            model: ClienteModel.Cliente,
+            as: 'cliente',
+            attributes: ['id', 'nombre', 'apellido', 'telefono', 'direccion']
+          },
+          {
+            model: ServicioModel.Servicio,
+            as: 'servicio',
+            attributes: ['id', 'nombre', 'descripcion']
+          }
+        ]
+      });
       expect(result).toEqual(mockSolicitud);
     });
 
@@ -112,24 +203,33 @@ describe('SolicitudRepository', () => {
   describe('obtenerPorCliente', () => {
     it('debe retornar solicitudes por cliente_id', async () => {
       SolicitudModel.Solicitud.findAll.mockResolvedValue([mockSolicitud]);
+
       const result = await solicitudRepository.obtenerPorCliente(1);
 
-      // Actualizar expectativa para incluir todos los parámetros
-      expect(SolicitudModel.Solicitud.findAll).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { cliente_id_fk: 1 },
-          // No verificamos los valores exactos de include y order, solo que estén presentes
-          include: expect.any(Array),
-          order: expect.any(Array)
-        })
-      );
+      expect(SolicitudModel.Solicitud.findAll).toHaveBeenCalledWith({
+        where: { cliente_id_fk: 1 },
+        include: [{
+          model: ServicioModel.Servicio,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion']
+        }],
+        order: [['fecha_solicitud', 'DESC']]
+      });
       expect(result).toEqual([mockSolicitud]);
+    });
+
+    it('debe retornar array vacío si no hay solicitudes para el cliente', async () => {
+      SolicitudModel.Solicitud.findAll.mockResolvedValue([]);
+
+      const result = await solicitudRepository.obtenerPorCliente(1);
+
+      expect(result).toEqual([]);
     });
   });
 
   describe('clienteExiste', () => {
     it('debe retornar true si el cliente existe', async () => {
-      ClienteModel.Cliente.findByPk.mockResolvedValue({ id: 1 });
+      ClienteModel.Cliente.findByPk.mockResolvedValue(mockCliente);
 
       const result = await solicitudRepository.clienteExiste(1);
 
@@ -148,7 +248,7 @@ describe('SolicitudRepository', () => {
 
   describe('servicioExiste', () => {
     it('debe retornar true si el servicio existe', async () => {
-      ServicioModel.Servicio.findByPk.mockResolvedValue({ id: 1 });
+      ServicioModel.Servicio.findByPk.mockResolvedValue(mockServicio);
 
       const result = await solicitudRepository.servicioExiste(1);
 
@@ -165,5 +265,43 @@ describe('SolicitudRepository', () => {
     });
   });
 
-  
+  describe('actualizarEstado', () => {
+    it('debe actualizar el estado de una solicitud existente', async () => {
+      SolicitudModel.Solicitud.findByPk.mockResolvedValue(mockSolicitud);
+
+      const result = await solicitudRepository.actualizarEstado(1, 'completado');
+
+      expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1);
+      expect(mockSolicitud.update).toHaveBeenCalledWith({ estado: 'completado' });
+      expect(result.estado).toBe('completado');
+    });
+
+    it('debe retornar null si la solicitud no existe', async () => {
+      SolicitudModel.Solicitud.findByPk.mockResolvedValue(null);
+
+      const result = await solicitudRepository.actualizarEstado(999, 'completado');
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('eliminar', () => {
+    it('debe eliminar una solicitud existente', async () => {
+      SolicitudModel.Solicitud.findByPk.mockResolvedValue(mockSolicitud);
+
+      const result = await solicitudRepository.eliminar(1);
+
+      expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1);
+      expect(mockSolicitud.destroy).toHaveBeenCalled();
+      expect(result).toEqual(mockSolicitud);
+    });
+
+    it('debe retornar null si la solicitud no existe', async () => {
+      SolicitudModel.Solicitud.findByPk.mockResolvedValue(null);
+
+      const result = await solicitudRepository.eliminar(999);
+
+      expect(result).toBeNull();
+    });
+  });
 });

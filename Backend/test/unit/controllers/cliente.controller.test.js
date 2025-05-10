@@ -58,6 +58,17 @@ describe('ClienteController', () => {
         errors: { numero_de_cedula: 'Campo requerido' }
       });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.body = { numero_de_cedula: '1007356754' };
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerClientePorCedula.mockRejectedValue(error);
+
+      await clienteController.crearCliente(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al crear el cliente.' });
+    });
   });
 
   describe('obtenerClientePorId', () => {
@@ -79,6 +90,17 @@ describe('ClienteController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado.' });
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerClientePorId.mockRejectedValue(error);
+
+      await clienteController.obtenerClientePorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el cliente.' });
     });
   });
 
@@ -102,6 +124,17 @@ describe('ClienteController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado' });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.numero_de_cedula = '123';
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerClientePorCedula.mockRejectedValue(error);
+
+      await clienteController.obtenerClientePorCedula(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el cliente.' });
+    });
   });
 
   describe('obtenerTodosLosClientes', () => {
@@ -113,6 +146,16 @@ describe('ClienteController', () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith([{ id: 1 }, { id: 2 }]);
     });
+
+    it('debe manejar errores inesperados', async () => {
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerTodosLosClientes.mockRejectedValue(error);
+
+      await clienteController.obtenerTodosLosClientes(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener los clientes.' });
+    });
   });
 
   describe('obtenerClientesActivos', () => {
@@ -123,6 +166,16 @@ describe('ClienteController', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith([{ id: 1 }]);
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerClientesActivos.mockRejectedValue(error);
+
+      await clienteController.obtenerClientesActivos(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener los clientes activos.' });
     });
   });
 
@@ -147,6 +200,18 @@ describe('ClienteController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado.' });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      req.body = { nombre: 'Actualizado' };
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.actualizarCliente.mockRejectedValue(error);
+
+      await clienteController.actualizarCliente(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al actualizar el cliente.' });
+    });
   });
 
   describe('eliminarCliente', () => {
@@ -169,6 +234,17 @@ describe('ClienteController', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado.' });
     });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.id = 1;
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.eliminarCliente.mockRejectedValue(error);
+
+      await clienteController.eliminarCliente(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al eliminar el cliente.' });
+    });
   });
 
   describe('obtenerClientePorEmail', () => {
@@ -190,6 +266,17 @@ describe('ClienteController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado.' });
+    });
+
+    it('debe manejar errores inesperados', async () => {
+      req.params.correo_electronico = 'test@mail.com';
+      const error = new Error('Error inesperado');
+      ClienteService.prototype.obtenerClientePorEmail.mockRejectedValue(error);
+
+      await clienteController.obtenerClientePorEmail(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el cliente.' });
     });
   });
 });
