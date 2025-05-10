@@ -56,15 +56,21 @@ describe('SolicitudRepository', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    mockSolicitud = {
+    // Mock base que será extendido en cada prueba según sea necesario
+    const baseMock = {
       id: 1,
       cliente_id_fk: 1,
       servicio_id_fk: 1,
       admin_id_fk: 1,
-      estado: 'pendiente',
-      update: jest.fn().mockImplementation((data) => {
-        return Promise.resolve({ ...mockSolicitud, ...data });
-      }),
+      estado: 'pendiente'
+    };
+
+    mockSolicitud = {
+      ...baseMock,
+      update: jest.fn().mockImplementation(function(data) {
+        Object.assign(this, data);
+        return Promise.resolve(this);
+      }.bind({...baseMock})),
       destroy: jest.fn().mockResolvedValue(true),
     };
 
@@ -73,8 +79,6 @@ describe('SolicitudRepository', () => {
 
   describe('setupAssociations', () => {
     it('debe configurar las asociaciones correctamente', () => {
-      const repo = new SolicitudRepository();
-      
       expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledTimes(3);
       
       expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
@@ -266,15 +270,28 @@ describe('SolicitudRepository', () => {
   });
 
   describe('actualizarEstado', () => {
-    it('debe actualizar el estado de una solicitud existente', async () => {
-      SolicitudModel.Solicitud.findByPk.mockResolvedValue(mockSolicitud);
+  it('debe actualizar el estado de una solicitud existente', async () => {
+    const testMock = {
+      id: 1,
+      cliente_id_fk: 1,
+      servicio_id_fk: 1,
+      admin_id_fk: 1,
+      estado: 'pendiente',
+      update: jest.fn(function (data) {
+        this.estado = data.estado;
+        return Promise.resolve(this);
+      })
+    };
 
-      const result = await solicitudRepository.actualizarEstado(1, 'completado');
+    SolicitudModel.Solicitud.findByPk.mockResolvedValue(testMock);
 
-      expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1);
-      expect(mockSolicitud.update).toHaveBeenCalledWith({ estado: 'completado' });
-      expect(result.estado).toBe('completado');
-    });
+    const result = await solicitudRepository.actualizarEstado(1, 'completado');
+
+    expect(SolicitudModel.Solicitud.findByPk).toHaveBeenCalledWith(1);
+    expect(testMock.update).toHaveBeenCalledWith({ estado: 'completado' });
+    expect(result.estado).toBe('completado');
+  });
+
 
     it('debe retornar null si la solicitud no existe', async () => {
       SolicitudModel.Solicitud.findByPk.mockResolvedValue(null);
@@ -304,4 +321,4 @@ describe('SolicitudRepository', () => {
       expect(result).toBeNull();
     });
   });
-});
+}); 
