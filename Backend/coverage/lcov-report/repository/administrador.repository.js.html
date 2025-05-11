@@ -107,28 +107,17 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,16 +127,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -165,41 +151,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/repositories/admin.repository.js
-import { AdminModel } from '../models/administrador.model.js';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AdminModel } from '../models/administrador.model.js';
 &nbsp;
 export class AdminRepository {
 <span class="fstat-no" title="function not covered" >  as</span>ync crearAdmin(data) {
 <span class="cstat-no" title="statement not covered" >    return await AdminModel.Admin.create(data);</span>
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorId(id) {
 <span class="cstat-no" title="statement not covered" >    return await AdminModel.Admin.findByPk(id);</span>
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCedula(numero_cedula) {
 <span class="cstat-no" title="statement not covered" >    return await AdminModel.Admin.findOne({ </span>
       where: { numero_cedula } 
     });
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCorreo(correo_electronico) {
 <span class="cstat-no" title="statement not covered" >    return await AdminModel.Admin.findOne({ </span>
       where: { correo_electronico } 
     });
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdmins() {
 <span class="cstat-no" title="statement not covered" >    return await AdminModel.Admin.findAll();</span>
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync actualizarAdmin(id, data) {
     const admin = <span class="cstat-no" title="statement not covered" >await AdminModel.Admin.findByPk(id);</span>
 <span class="cstat-no" title="statement not covered" >    if (!admin) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    await admin.update(data);</span>
 <span class="cstat-no" title="statement not covered" >    return admin;</span>
   }
-&nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync eliminarAdmin(id) {
     const admin = <span class="cstat-no" title="statement not covered" >await AdminModel.Admin.findByPk(id);</span>
 <span class="cstat-no" title="statement not covered" >    if (!admin) <span class="cstat-no" title="statement not covered" >return null;</span></span>
@@ -223,7 +202,7 @@ export class AdminRepository {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-11T01:46:45.074Z
+                at 2025-05-11T02:41:26.179Z
             </div>
         <script src="../prettify.js"></script>
         <script>

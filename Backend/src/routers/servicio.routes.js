@@ -7,6 +7,8 @@ const servicioController = new ServicioController();
 
 // Rutas públicas
 router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);
+
+// Buscar servicios por nombre o descripción
 router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
 // Rutas protegidas - requieren autenticación

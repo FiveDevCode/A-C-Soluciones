@@ -107,7 +107,7 @@ const Servicio = sequelize.define('Servicio', {
   }
 });
 
-// Exportación
+
 export const ServicioModel = {
   Servicio
 };
