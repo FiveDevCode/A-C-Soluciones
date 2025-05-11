@@ -49,7 +49,6 @@ export class SolicitudRepository {
         },
         {
           model: this.adminModel, 
-          model: this.adminModel, 
           as: 'admin',
           attributes: ['id', 'nombre', 'apellido']
         },

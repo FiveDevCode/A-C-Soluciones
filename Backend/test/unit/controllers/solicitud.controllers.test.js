@@ -22,7 +22,13 @@ describe('SolicitudController', () => {
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    };
+    };    
+  });
+
+  it('debería instanciar con el constructor por defecto correctamente', () => {
+    const controller = new SolicitudController(); // Sin argumentos
+    expect(controller).toBeInstanceOf(SolicitudController);
+    expect(controller.solicitudService).toBeInstanceOf(SolicitudService);
   });
 
   describe('crear', () => {
@@ -65,6 +71,20 @@ describe('SolicitudController', () => {
       expect(res.json).toHaveBeenCalledWith({
         message: 'Error al crear la solicitud',
       });
+    });
+
+    it('debería crear una solicitud exitosamente', async () => {
+      req.body = { cliente_id_fk: 1, servicio_id_fk: 2 };
+      const nuevaSolicitud = { id: 1, cliente_id_fk: 1, servicio_id_fk: 2 };
+
+      serviceMock.clienteExiste.mockResolvedValue(true);
+      serviceMock.servicioExiste.mockResolvedValue(true);
+      serviceMock.crear.mockResolvedValue(nuevaSolicitud);
+
+      await controller.crear(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(nuevaSolicitud);
     });
   });
 

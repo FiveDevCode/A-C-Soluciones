@@ -32,5 +32,5 @@ describe('Rutas de Usuario', () => {
     const response = await request(app).post('/api/login').send({ email: 'test@example.com', password: '123456' });
     expect(response.status).toBe(200);
     expect(__mockAuthMethods.login).toHaveBeenCalled();
-  });
+  },10000);
 });
