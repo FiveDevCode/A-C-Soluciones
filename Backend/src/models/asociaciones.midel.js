@@ -3,6 +3,7 @@ import { ClienteModel } from './cliente.model.js';
 import { VisitaModel } from './visita.model.js';
 import { TecnicoModel } from './tecnico.model.js';
 import { AdminModel } from './administrador.model.js';
+import { ServicioModel } from './servicios.model.js'; 
 
 export const setupAssociations = () => {
  

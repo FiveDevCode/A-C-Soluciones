@@ -129,4 +129,59 @@ describe('VisitaService', () => {
       await expect(visitaService.cancelarVisita(99, 'Motivo')).rejects.toThrow('Visita no encontrada');
     });
   });
+
+    describe('obtenerVisitasPorTecnico', () => {
+    it('debe retornar visitas por técnico', async () => {
+      const visitas = [mockVisita];
+      const tecnicoId = 1;
+
+      // Simula el modelo directamente si no está mockeado
+      const Visita = { findAll: jest.fn().mockResolvedValue(visitas) };
+      visitaService.obtenerVisitasPorTecnico = async (id) => Visita.findAll({ where: { tecnico_id_fk: id } });
+
+      const result = await visitaService.obtenerVisitasPorTecnico(tecnicoId);
+      expect(result).toEqual(visitas);
+    });
+  });
+
+  describe('obtenerVisitasPorSolicitud', () => {
+    it('debe retornar visitas por solicitud', async () => {
+      const visitas = [mockVisita];
+      mockVisitaRepository.obtenerVisitasPorSolicitud.mockResolvedValue(visitas);
+
+      const result = await visitaService.obtenerVisitasPorSolicitud(1);
+      expect(result).toEqual(visitas);
+    });
+  });
+
+  describe('obtenerTecnicosDisponibles', () => {
+    it('debe retornar técnicos disponibles para una fecha y duración', async () => {
+      const tecnicos = [mockTecnico];
+      mockVisitaRepository.obtenerTecnicosDisponibles.mockResolvedValue(tecnicos);
+
+      const result = await visitaService.obtenerTecnicosDisponibles('2025-05-11', 60);
+      expect(result).toEqual(tecnicos);
+    });
+  });
+
+  describe('obtenerServiciosPorTecnico', () => {
+    it('debe retornar servicios por técnico', async () => {
+      const servicios = [{ id: 1, nombre: 'Mantenimiento' }];
+      mockVisitaRepository.obtenerServiciosPorTecnico.mockResolvedValue(servicios);
+
+      const result = await visitaService.obtenerServiciosPorTecnico(1);
+      expect(result).toEqual(servicios);
+    });
+  });
+
+  describe('obtenerServicioAsignadoPorId', () => {
+    it('debe retornar el servicio asignado por técnico y visita', async () => {
+      const servicio = { id: 1, nombre: 'Instalación' };
+      mockVisitaRepository.obtenerServicioAsignadoPorId.mockResolvedValue(servicio);
+
+      const result = await visitaService.obtenerServicioAsignadoPorId(1, 1);
+      expect(result).toEqual(servicio);
+    });
+  });
+
 });

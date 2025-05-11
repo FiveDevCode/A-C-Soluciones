@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/36</span>
+                <span class='fraction'>32/36</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/36</span>
+                <span class='fraction'>32/36</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -150,9 +150,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,25 +188,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -216,14 +216,14 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { VisitaRepository } from '../repository/visita.repository.js';
 import { TecnicoRepository } from '../repository/tecnico.repository.js';
@@ -272,8 +272,8 @@ export class VisitaService {
   obtenerVisitasPorTecnico = <span class="fstat-no" title="function not covered" >as</span>ync (tecnicoId) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return await Visita.findAll({ where: { tecnico_id_fk: tecnicoId } });</span>
   };
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerVisitasPorSolicitud(solicitudId) {
-<span class="cstat-no" title="statement not covered" >    return await this.visitaRepository.obtenerVisitasPorSolicitud(solicitudId);</span>
+  async obtenerVisitasPorSolicitud(solicitudId) {
+    return await this.visitaRepository.obtenerVisitasPorSolicitud(solicitudId);
   }
   async actualizarVisita(id, data) {
     const visita = await this.visitaRepository.obtenerVisitaPorId(id);
@@ -296,15 +296,15 @@ export class VisitaService {
     });
     return visitaActualizada;
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicosDisponibles(fecha, duracion) {
-<span class="cstat-no" title="statement not covered" >    return await this.visitaRepository.obtenerTecnicosDisponibles(fecha, duracion);</span>
+  async obtenerTecnicosDisponibles(fecha, duracion) {
+    return await this.visitaRepository.obtenerTecnicosDisponibles(fecha, duracion);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServiciosPorTecnico(tecnico_id) {
-<span class="cstat-no" title="statement not covered" >    return await this.visitaRepository.obtenerServiciosPorTecnico(tecnico_id);</span>
+  async obtenerServiciosPorTecnico(tecnico_id) {
+    return await this.visitaRepository.obtenerServiciosPorTecnico(tecnico_id);
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServicioAsignadoPorId(tecnico_id, visita_id) {
-<span class="cstat-no" title="statement not covered" >    return await this.visitaRepository.obtenerServicioAsignadoPorId(tecnico_id, visita_id);</span>
+  async obtenerServicioAsignadoPorId(tecnico_id, visita_id) {
+    return await this.visitaRepository.obtenerServicioAsignadoPorId(tecnico_id, visita_id);
   }
 }</pre></td></tr></table></pre>
 
@@ -313,7 +313,7 @@ export class VisitaService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-11T02:41:26.179Z
+                at 2025-05-11T18:29:52.519Z
             </div>
         <script src="../prettify.js"></script>
         <script>
