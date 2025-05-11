@@ -1,16 +1,16 @@
-import { TextField, Button, Typography } from '@mui/material';
+import { TextField, Button, Collapse, Alert, IconButton } from '@mui/material';
 import { useState } from 'react';
 import {handleCreateSubmitTechnical} from "../../controllers/administrator/createTc.controller"
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import ScreenSuccess from "../common/ScreenSuccess"
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 40%;
-  max-width: 700px;
+  width: 600px;
 `
 
 
@@ -47,11 +47,18 @@ const FormCreateEmployeeAd = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const handleChange = (setter) => (e) => {
+    setter(e.target.value);
+    if (showSuccess) setShowSuccess(false);
+  };
 
   const handleSubmit = async(event) => {
     event.preventDefault(); 
+    setIsSubmitting(true);
+
 
     try {
       await handleCreateSubmitTechnical(
@@ -77,6 +84,8 @@ const FormCreateEmployeeAd = () => {
       } else {
         setErrorMsg(err.response.data.message);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -99,7 +108,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={nameUser} 
-        onChange={(e) => setNameUser(e.target.value)}
+        onChange={handleChange(setNameUser)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.nombre)}
         helperText={fieldErrors.nombre}
@@ -109,7 +118,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={lastName} 
-        onChange={(e) => setLastName(e.target.value)}
+        onChange={handleChange(setLastName)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.apellido)}
         helperText={fieldErrors.apellido}
@@ -119,7 +128,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={IdCard} 
-        onChange={(e) => setIdCard(e.target.value)}
+        onChange={handleChange(setIdCard)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.numero_de_cedula)}
         helperText={fieldErrors.numero_de_cedula}
@@ -129,7 +138,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={phone} 
-        onChange={(e) => setPhone(e.target.value)}
+        onChange={handleChange(setPhone)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.telefono)}
         helperText={fieldErrors.telefono}
@@ -139,7 +148,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={position} 
-        onChange={(e) => setPosition(e.target.value)}
+        onChange={handleChange(setPosition)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.especialidad)}
         helperText={fieldErrors.especialidad}
@@ -149,7 +158,7 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={email} 
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleChange(setEmail)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.correo_electronico)}
         helperText={fieldErrors.correo_electronico}
@@ -159,29 +168,59 @@ const FormCreateEmployeeAd = () => {
         fullWidth 
         size="medium" 
         value={password} 
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange(setPassword)}
         sx={{ backgroundColor: 'white' }}
         error={Boolean(fieldErrors.contrasenia)}
         helperText={fieldErrors.contrasenia}
       /> 
 
 
-      {errorMsg && (
-        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+      <Collapse in={!!errorMsg}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setErrorMsg('')}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
           {errorMsg}
-        </Typography>
-      )}
+        </Alert>
+      </Collapse>
+
+      <Collapse in={showSuccess}>
+        <Alert
+          severity="success"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowSuccess(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          ¡El empleado fue creado con exito!
+        </Alert>
+      </Collapse>
 
       <ContainerButton>
-        <Button type="submit" variant="contained">Registrar</Button>
+        <Button type="submit" variant="contained" disabled={isSubmitting}>
+          {isSubmitting ? "Registrando..." : "Registrar"}
+        </Button>
         <Button type="button" variant="contained" onClick={handleLimpiar}>Limpiar campos</Button>
       </ContainerButton>
 
-      {showSuccess && (
-        <ScreenSuccess onClose={() => setShowSuccess(false)}>
-          El empleado fue registrado con éxito!
-        </ScreenSuccess>
-      )}
+
 
     </Form>
 

@@ -221,14 +221,16 @@ export class ServicioController {
     } catch (error) {
       console.error('Error al actualizar servicio:', error);
       
-      if (error instanceof ValidationError) {
-        const mensajes = error.errors.map((err) => err.message);
-        return res.status(400).json({ 
-          success: false,
-          errors: mensajes 
-        });
-      }
-      
+      if (error instanceof ValidationError) { 
+        const fieldErrors = {}; 
+        error.errors.forEach((err) => { 
+          if (err.path) { 
+            fieldErrors[err.path] = err.message; 
+          } 
+        }); 
+        return res.status(400).json({ errors: fieldErrors }); 
+      } 
+
       return res.status(500).json({ 
         success: false,
         message: 'Error al actualizar el servicio.' 

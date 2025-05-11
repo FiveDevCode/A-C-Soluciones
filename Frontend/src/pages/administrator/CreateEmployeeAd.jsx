@@ -1,19 +1,25 @@
 import styled from "styled-components"
 import FormCreateEmployeeAd from "../../components/administrator/FormCreateEmployeeAd"
-import Logo from "../../components/common/Logo"
 import registerEmployeeAd from "../../assets/administrator/registerEmployeeAd.png"
+
+const ContainerRegisterAll = styled.section`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
 
 const ContainerRegister = styled.section`
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  width: min-content;
 `
 
 
 const DescriptionRegister = styled.h1`
   font-size: 1.25rem;
   font-weight: bold;
-  width: 50%;
+  width: 80%;
 `
 
 const HelperRegister = styled.h1`
@@ -30,19 +36,28 @@ const ContainerForm = styled.div`
   }
 `
 
+const ImgCreate = styled.img`
+  width: 260px;
+  height: 260px;
+  user-select: none;
+  pointer-events: none;
+`
+
 const CreateEmployeeAd = () => {
 
   return (
-    <ContainerRegister>
-      <DescriptionRegister>Registra aquí a los nuevos empleados ingresando sus datos y rol. 
-      Esto les dará acceso al sistema con los permisos correspondientes.</DescriptionRegister>
-      <HelperRegister>Por favor, completa todos los campos requeridos para continuar con el registro del empleado.</HelperRegister>
+    <ContainerRegisterAll>
+      <ContainerRegister>
+        <DescriptionRegister>Registra aquí a los nuevos empleados ingresando sus datos y rol. 
+        Esto les dará acceso al sistema con los permisos correspondientes.</DescriptionRegister>
+        <HelperRegister>Por favor, completa todos los campos requeridos para continuar con el registro del empleado.</HelperRegister>
 
-      <ContainerForm>
-        <FormCreateEmployeeAd />
-        <Logo src={registerEmployeeAd}/>
-      </ContainerForm>
-    </ContainerRegister>
+        <ContainerForm>
+          <FormCreateEmployeeAd />
+          <ImgCreate src={registerEmployeeAd} alt="Imagen de creacion del empleado"/>
+        </ContainerForm>
+      </ContainerRegister>
+    </ContainerRegisterAll>
   )
 }
 

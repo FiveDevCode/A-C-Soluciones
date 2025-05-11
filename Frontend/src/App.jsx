@@ -24,6 +24,7 @@ import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
 import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
 import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
+import EditServicePageAd from './pages/administrator/EditServicePageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -56,7 +57,7 @@ function AppContent() {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('userRole');
+    const storedRole = sessionStorage.getItem('userRole');
     setRole(storedRole);
   }, [location.pathname]);
 
@@ -161,6 +162,12 @@ function AppContent() {
           <Route path="/assing-visit" element={
             <PrivateRoute roleRequired="administrador">
               <AssignVisitPageAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/edit-service/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <EditServicePageAd/>
             </PrivateRoute>
           } />
 

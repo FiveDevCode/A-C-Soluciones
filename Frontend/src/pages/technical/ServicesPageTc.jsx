@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import FilterServicesTc from "../../components/technical/FilterServicesTc";
 import ListSevicesTc from "../../components/technical/ListSevicesTc";
+import { useEffect, useState } from "react";
+import { handleGetServiceList } from "../../controllers/technical/getServiceListTc.controller";
 
 const ContainerServices = styled.div`
   display: flex;
@@ -11,11 +13,24 @@ const ContainerServices = styled.div`
 
 
 const ServicesPageTc = () => {
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    handleGetServiceList()
+      .then((res) => {
+        setServices(res.data.data); // ajusta según respuesta real
+      })
+      .catch((err) => {
+        console.error("Error fetching service list:", err);
+      });
+  }, []);
+
+
   return (
     <ContainerServices>
 
-      <FilterServicesTc />
-      <ListSevicesTc />
+      <FilterServicesTc count={services.length} />
+      <ListSevicesTc services={services} />
 
     </ContainerServices>
   )

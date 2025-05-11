@@ -45,7 +45,7 @@ const getListTechnical = () => {
 };
 
 const createService = (nameService, descripcion) => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/servicios", {
     nombre: nameService,
@@ -58,6 +58,33 @@ const createService = (nameService, descripcion) => {
   });
 };
 
+const updateService = (id, nameService, descripcion) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.put(`http://localhost:8000/api/servicios/${id}`, {
+    nombre: nameService,
+    descripcion: descripcion
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+const getService = (id) => {
+  const token = sessionStorage.getItem("authToken");
+
+
+  return axios.get(`http://localhost:8000/api/servicios/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+
 const stateChange = (id, state) => {
   return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
     estado: state
@@ -69,7 +96,7 @@ const stateChange = (id, state) => {
 }
 
 const getListRequest = () => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   return axios.get("http://localhost:8000/api/solicitudes", {
     headers: {
@@ -79,7 +106,7 @@ const getListRequest = () => {
 }
 
 const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId ) => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/visitas", {
     duracion_estimada: estimatedDuration,
@@ -104,9 +131,11 @@ export const administratorService = {
   getListTechnical,
   getClient,
   getTechnical,
+  getService,
   updateClient,
   createService,
   stateChange,
   getListRequest,
-  assignVisit
+  assignVisit,
+  updateService
 }

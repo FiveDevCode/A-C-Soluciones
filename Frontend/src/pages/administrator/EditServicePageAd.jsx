@@ -1,22 +1,22 @@
 import { Alert, Button, Collapse, IconButton, TextField, Typography } from "@mui/material";
 import styled from "styled-components";
-import { useState } from "react";
-import {handleCreateService} from "../../controllers/administrator/createServiceAd.controller.js"
-import registerService from "../../assets/administrator/registerService.png"
+import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate, useParams } from "react-router-dom";
+import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
+import { handleUpdateService } from "../../controllers/administrator/updateServiceAd.controller";
+import editService from "../../assets/administrator/editService.png"
 
-const ContainerRegisterAll = styled.section`
+const ContainerEditAll = styled.section`
   display: flex;
   justify-content: center;
-
+  
 `
-
-const ContainerRegister = styled.div`
+const ContainerEdit = styled.div`
   display: flex;
   flex-direction: column;
   width: min-content;
 `
-
 
 const TitleService = styled.h1`
   font-size: 1.25rem;
@@ -31,7 +31,7 @@ const TextHelp = styled.h2`
 `
 const ContentForm = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 5rem;
 `
 
 const Form = styled.form`
@@ -67,8 +67,9 @@ const ContainerButton = styled.div`
 
 
 
-const CreateServiceAd = () => {
+const EditServicePageAd = () => {
 
+  const navigate = useNavigate();
 
 
   const [nameService, setNameService] = useState("");
@@ -79,6 +80,7 @@ const CreateServiceAd = () => {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { id } = useParams();
 
 
   const handleSubmit = async(e) => {
@@ -86,7 +88,8 @@ const CreateServiceAd = () => {
     setIsSubmitting(true);
 
     try {
-      await handleCreateService(
+      await handleUpdateService(
+        id,
         nameService,
         description
       );
@@ -94,35 +97,46 @@ const CreateServiceAd = () => {
       setFieldErrors("");
       setErrorMsg("");
       setShowSuccess(true);
-      handleLimpiar();
+      //navigate('')
     } catch (err) {
       console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
-        setErrorMsg(err.response);
+        setErrorMsg(err.response.data.errors);
       }
     } finally {
       setIsSubmitting(false);
     }
   }
-  
 
-  const handleLimpiar = () => {
-    setNameService("");
-    setDescription("");
 
+  useEffect(() => {
+    const fetchClient = async () => {
+      try {
+        const service = await handleGetService(id);
+        console.log(service)
+        setNameService(service.data.data.nombre);
+        setDescription(service.data.data.descripcion);
+      } catch (err) {
+        setErrorMsg("Error al obtener el servicio:", err);
+      }
   };
+    fetchClient();
+  }, [id]);
+
+
 
   return (
-    <ContainerRegisterAll>
-      <ContainerRegister>
+    <ContainerEditAll>
+
+      <ContainerEdit>
         <TitleService>
-          Registra aquí los nuevos servicios ingresando sus datos y 
-          categoría. Esto permitirá habilitarlos en el sistema con las configuraciones correspondientes.
+          Edita aquí los datos del servicio. 
+          Esto permitirá actualizar su información y mantener la configuración correcta en el sistema
         </TitleService>
         <TextHelp>
-          Por favor, completa todos los campos requeridos para continuar con el registro del servicio.
+          Por favor, completa todos los campos requeridos para continuar con la edición del servicio.
         </TextHelp>
         <ContentForm>
           <Form onSubmit={handleSubmit}>
@@ -160,6 +174,7 @@ const CreateServiceAd = () => {
               }}
             />
 
+              
             <Collapse in={!!errorMsg}>
               <Alert
                 severity="error"
@@ -194,24 +209,24 @@ const CreateServiceAd = () => {
                 }
                 sx={{ mb: 2 }}
               >
-                ¡La visita fue asignada con exito!
+                ¡El servicio fue editado con exito!
               </Alert>
             </Collapse>
 
             <ContainerButton>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? "Registrando..." : "Registrar servicio"}
+                {isSubmitting ? "Editando..." : "Editar servicio"}
               </Button>
-              <Button type="button" variant="contained" onClick={handleLimpiar}>Limpiar Campos</Button>
+              <Button type="button" variant="contained">Cancelar</Button>
             </ContainerButton>
-
           </Form>
-          <ImgRegisterService src={registerService}/>
+          <ImgRegisterService src={editService}/>
         </ContentForm>
 
-      </ContainerRegister>
-    </ContainerRegisterAll>
+      </ContainerEdit>
+    </ContainerEditAll>
+
   )
 }
 
-export default CreateServiceAd;
+export default EditServicePageAd;

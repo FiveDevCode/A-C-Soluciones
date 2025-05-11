@@ -55,7 +55,7 @@ const FormLogin = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -76,8 +76,8 @@ const FormLogin = () => {
         }
       } catch (error) {
         console.error("Token inválido:", error);
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userRole');
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('userRole');
       }
     }
   }, []);
@@ -94,11 +94,11 @@ const FormLogin = () => {
       );
 
       console.log(data)
-      localStorage.setItem('authToken', data.token);
+      sessionStorage.setItem('authToken', data.token);
 
       const decoded = jwtDecode(data.token);
       const role = decoded.rol;
-      localStorage.setItem('userRole', role);
+      sessionStorage.setItem('userRole', role);
 
       switch (role) {
         case "cliente":

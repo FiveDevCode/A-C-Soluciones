@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, MenuItem, Select, Typography } from '@mui/material';
 
@@ -12,9 +12,8 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  gap: 0.5rem;
 `;
 
 const Titulo = styled.h2`
@@ -27,8 +26,8 @@ const Titulo = styled.h2`
 `;
 
 const Imagen = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   flex-shrink:0;
 `;
 
@@ -60,7 +59,8 @@ const tareaDemo = {
   en la planta sur. Verificar estado de sellos, realizar limpieza, lubricación y
   reemplazo si es necesario. Documentar hallazgos y tomar fotografías del antes y después.`,
   fechaLimite: '25/04/2025',
-  estado: 'pendiente'
+  estado: 'programada',
+  duracionEstimada: '15 minutos',
 };
 
 
@@ -70,10 +70,11 @@ const ServiceTc= () => {
     descripcion,
     fechaLimite,
     estado,
+    duracionEstimada,
     imagen = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
   } = tareaDemo;
 
-  const [estadoVisita, setEstadoVisita] = React.useState(estado || 'pendiente');
+  const [estadoVisita, setEstadoVisita] = useState(estado || 'programada');
 
   const handleEstadoChange = (e) => {
     setEstadoVisita(e.target.value);
@@ -84,30 +85,31 @@ const ServiceTc= () => {
       <Header>
         <Imagen src={imagen} alt="icono" />
         <Titulo>{nombre}</Titulo>
-        <Button variant="contained" color="error"
-        style={{width:"16rem", flexShrink:0, marginTop:"1rem"}}>
-          ELIMINAR
-        </Button>
       </Header>
 
       <Divider />
 
       <Typography variant="subtitle1" sx={{color:"black"}}><strong>Informacion</strong></Typography>
 
-      <Label>Nombre de la tarea:</Label>
+      <Label>Notas previas:</Label>
       <Typography sx={{color:"black"}}> {nombre}</Typography>
 
-      <Label>Descripcion:</Label>
+      <Label>Notas posteriores:</Label>
       <Typography sx={{color:"black"}}>{descripcion}</Typography>
 
-      <Label>Fecha limite:</Label>
+      <Label>Fecha programada:</Label>
       <Typography sx={{color:"black"}}>{fechaLimite}</Typography>
+
+      <Label>Duracion estimada:</Label>
+      <Typography sx={{color:"black"}}>{duracionEstimada}</Typography>
 
       <Label>Estado de la visita:</Label>
       <EstadoSelect value={estadoVisita} onChange={handleEstadoChange}>
-        <MenuItem value="pendiente">pendiente</MenuItem>
-        <MenuItem value="completado">completado</MenuItem>
-        <MenuItem value="cancelado">cancelado</MenuItem>
+        <MenuItem value="programada">Programada</MenuItem>
+        <MenuItem value="en camino">En camino</MenuItem>
+        <MenuItem value="iniciada">Iniciada</MenuItem>
+        <MenuItem value="completada">Completada</MenuItem>
+        <MenuItem value="cancelada">Cancelada</MenuItem>
       </EstadoSelect>
 
       <Botones>

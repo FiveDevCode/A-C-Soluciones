@@ -68,10 +68,11 @@ const HeaderBar = () => {
     "/profile": "Perfil",
     "/view-service": "Ver servicio",
     "/profile-client": "Perfil cliente",
-    "/edit-client": "Editar cliente", // clave base
+    "/edit-client": "Editar cliente",
     "/register-service": "Crear servicio",
     "/administrator-permit": "Crear administrador permisos",
-    "/assing-task": "Asignar visita",
+    "/assing-visit": "Asignar visita",
+    "/register-administrator" : "Crear administrador",
     "/homeTc": "Home",
     "/homeAd": "Home",
   };
