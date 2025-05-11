@@ -8,7 +8,7 @@ export class SolicitudRepository {
     this.model = SolicitudModel.Solicitud;
     this.clienteModel = ClienteModel.Cliente;
     this.servicioModel = ServicioModel.Servicio;
-    this.adminModel = AdminModel.Admin; // ✅ Se agregó la referencia al modelo Admin
+    this.adminModel = AdminModel.Admin; 
     this.setupAssociations();
   }
   setupAssociations() {

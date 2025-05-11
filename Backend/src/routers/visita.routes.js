@@ -1,16 +1,18 @@
 import express from 'express';
 import { VisitaController } from '../controllers/visita.controller.js';
-import { authenticate, isAdmin, isTecnico } from '../middlewares/autenticacion.js';
+import { authenticate, isAdmin, isTecnico, isAdminOrTecnico} from '../middlewares/autenticacion.js';
 
 const router = express.Router();
 const visitaController = new VisitaController();
 
 // Rutas protegidas para administradores
 router.post('/api/visitas', authenticate, isAdmin, visitaController.crearVisita);
+// Obtener servicios asignados a un técnico autenticado
+router.get('/api/visitas/asignados', visitaController.obtenerServiciosAsignados);
+router.get('/api/visitas/asignados/:id', visitaController.obtenerServicioAsignadoPorId);
+router.get('/api/visitas', authenticate, isAdminOrTecnico, visitaController.obtenerVisitas); 
 
-router.get('/api/visitas', authenticate && ( isAdmin || isTecnico), visitaController.obtenerVisitas); 
-
-router.get('/api/visitas/:id', authenticate && ( isAdmin || isTecnico), visitaController.obtenerVisitaPorId);
+router.get('/api/visitas/:id', isAdminOrTecnico, visitaController.obtenerVisitaPorId);
 
 router.put('/api/visitas/:id', authenticate, isAdmin, visitaController.actualizarVisita);
 

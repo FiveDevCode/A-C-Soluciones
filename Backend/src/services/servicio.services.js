@@ -44,8 +44,6 @@ export class ServicioService {
   async habilitarServicio(id) {
     return await this.servicioRepository.habilitarServicio(id);
   }
-  async obtenerServiciosPorTecnico(tecnico_id) {
-    return await this.servicioRepository.obtenerServiciosPorTecnico(tecnico_id);
-  }
+  
 
 }

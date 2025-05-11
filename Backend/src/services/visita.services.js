@@ -72,4 +72,11 @@ export class VisitaService {
   async obtenerTecnicosDisponibles(fecha, duracion) {
     return await this.visitaRepository.obtenerTecnicosDisponibles(fecha, duracion);
   }
+
+  async obtenerServiciosPorTecnico(tecnico_id) {
+    return await this.visitaRepository.obtenerServiciosPorTecnico(tecnico_id);
+  }
+  async obtenerServicioAsignadoPorId(tecnico_id, visita_id) {
+    return await this.visitaRepository.obtenerServicioAsignadoPorId(tecnico_id, visita_id);
+  }
 }

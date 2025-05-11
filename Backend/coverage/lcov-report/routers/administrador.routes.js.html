@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,32 +101,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,32 +135,32 @@
 import express from 'express';
 import { AdminController } from '../controllers/administrador.controller.js';
 &nbsp;
-const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
-const adminController = <span class="cstat-no" title="statement not covered" >new AdminController();</span>
+const router = express.Router();
+const adminController = new AdminController();
 &nbsp;
 // Registrar administrador
-<span class="cstat-no" title="statement not covered" >router.post('/api/admin', adminController.crearAdmin);</span>
+router.post('/api/admin', adminController.crearAdmin);
 &nbsp;
 // Obtener todos los administradores registrados
-<span class="cstat-no" title="statement not covered" >router.get('/api/admin', adminController.obtenerAdmins);</span>
+router.get('/api/admin', adminController.obtenerAdmins);
 &nbsp;
 // Obtener administrador por ID
-<span class="cstat-no" title="statement not covered" >router.get('/api/admin/:id', adminController.obtenerAdminPorId);</span>
+router.get('/api/admin/:id', adminController.obtenerAdminPorId);
 &nbsp;
 // Obtener administrador por número de cédula
-<span class="cstat-no" title="statement not covered" >router.get('/api/admin/cedula/:numero_cedula', adminController.obtenerAdminPorCedula);</span>
+router.get('/api/admin/cedula/:numero_cedula', adminController.obtenerAdminPorCedula);
 &nbsp;
 // Obtener administrador por correo electrónico (útil para login)
-<span class="cstat-no" title="statement not covered" >router.get('/api/admin/correo/:correo_electronico', adminController.obtenerAdminPorCorreo);</span>
+router.get('/api/admin/correo/:correo_electronico', adminController.obtenerAdminPorCorreo);
 &nbsp;
 // Actualizar administrador por ID
-<span class="cstat-no" title="statement not covered" >router.put('/api/admin/:id', adminController.actualizarAdmin);</span>
+router.put('/api/admin/:id', adminController.actualizarAdmin);
 &nbsp;
 // Eliminar administrador por ID
-<span class="cstat-no" title="statement not covered" >router.delete('/api/admin/:id', adminController.eliminarAdmin);</span>
+router.delete('/api/admin/:id', adminController.eliminarAdmin);
 &nbsp;
 // Ruta adicional para autenticación
-<span class="cstat-no" title="statement not covered" >router.post('/api/admin/login', adminController.autenticarAdmin);</span>
+router.post('/api/admin/login', adminController.autenticarAdmin);
 &nbsp;
 export default router;
 &nbsp;
@@ -172,7 +172,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-05T19:07:54.627Z
+                at 2025-05-11T18:56:58.315Z
             </div>
         <script src="../prettify.js"></script>
         <script>
