@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'; 
 import { ServicioModel } from '../models/servicios.model.js';
 
+
 export class ServicioRepository {
   async crearServicio(data) {
     return await ServicioModel.Servicio.create(data);
