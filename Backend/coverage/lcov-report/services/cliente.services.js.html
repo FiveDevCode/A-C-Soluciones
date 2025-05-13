@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,76 +106,76 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ClienteRepository } from "../repository/cliente.repository.js";
 &nbsp;
 &nbsp;
 export class ClienteService { 
-<span class="fstat-no" title="function not covered" >    co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >        this.clienteRepository = new ClienteRepository();</span>
+    constructor() {
+        this.clienteRepository = new ClienteRepository();
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    as</span>ync crearCliente(data) {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.crearCliente(data);</span>
+    async crearCliente(data) {
+        return await this.clienteRepository.crearCliente(data);
     }
-<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorId(id) {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorId(id);</span>
+    async obtenerClientePorId(id) {
+        return await this.clienteRepository.obtenerClientePorId(id);
     }
-<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorEmail(correo_electronico) {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorEmail(correo_electronico);</span>
+    async obtenerClientePorEmail(correo_electronico) {
+        return await this.clienteRepository.obtenerClientePorEmail(correo_electronico);
     }
     
-<span class="fstat-no" title="function not covered" >    as</span>ync obtenerTodosLosClientes() {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerTodosLosClientes();</span>
+    async obtenerTodosLosClientes() {
+        return await this.clienteRepository.obtenerTodosLosClientes();
     }
-<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientesActivos() {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.ObtenerClientesActivos();</span>
+    async obtenerClientesActivos() {
+        return await this.clienteRepository.ObtenerClientesActivos();
     }
-<span class="fstat-no" title="function not covered" >    as</span>ync obtenerClientePorCedula(numero_de_cedula) {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.obtenerClientePorCedula(numero_de_cedula);</span>
+    async obtenerClientePorCedula(numero_de_cedula) {
+        return await this.clienteRepository.obtenerClientePorCedula(numero_de_cedula);
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    as</span>ync eliminarCliente(id) {
-        const clienteEliminado = <span class="cstat-no" title="statement not covered" >await this.clienteRepository.eliminarCliente(id);</span>
-<span class="cstat-no" title="statement not covered" >        if (!clienteEliminado) <span class="cstat-no" title="statement not covered" >throw new Error('Cliente no encontrado');</span></span>
-<span class="cstat-no" title="statement not covered" >        return clienteEliminado;</span>
+    async eliminarCliente(id) {
+        const clienteEliminado = await this.clienteRepository.eliminarCliente(id);
+        if (!clienteEliminado) throw new Error('Cliente no encontrado');
+        return clienteEliminado;
 &nbsp;
     }
     
-<span class="fstat-no" title="function not covered" >    as</span>ync actualizarCliente(id, data) {
-<span class="cstat-no" title="statement not covered" >        return await this.clienteRepository.actualizarCliente(id, data);</span>
+    async actualizarCliente(id, data) {
+        return await this.clienteRepository.actualizarCliente(id, data);
     }   
 }</pre></td></tr></table></pre>
 
@@ -184,7 +184,7 @@ export class ClienteService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T21:16:52.926Z
+                at 2025-05-13T21:24:40.612Z
             </div>
         <script src="../prettify.js"></script>
         <script>

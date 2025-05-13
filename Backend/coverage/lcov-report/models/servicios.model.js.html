@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -179,7 +179,7 @@
 <a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,8 +201,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,8 +217,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,19 +280,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/conexion.js';
 &nbsp;
-const Servicio = <span class="cstat-no" title="statement not covered" >sequelize.define('Servicio', {</span>
+const Servicio = sequelize.define('Servicio', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -313,9 +313,9 @@ const Servicio = <span class="cstat-no" title="statement not covered" >sequelize
         args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,&amp;()-]+$/i,
         msg: 'El nombre del servicio contiene caracteres no válidos.',
       },
-<span class="fstat-no" title="function not covered" >      no</span>SpacesEdges(value) {
-<span class="cstat-no" title="statement not covered" >        if (value.trim() !== value) {</span>
-<span class="cstat-no" title="statement not covered" >          throw new Error('El nombre no debe tener espacios al inicio o final.');</span>
+      noSpacesEdges(value) {
+        if (value.trim() !== value) {
+          throw new Error('El nombre no debe tener espacios al inicio o final.');
         }
       },
     },
@@ -329,9 +329,9 @@ const Servicio = <span class="cstat-no" title="statement not covered" >sequelize
         args: [20, 500],
         msg: 'La descripción debe tener entre 20 y 500 caracteres.',
       },
-<span class="fstat-no" title="function not covered" >      no</span>SpacesEdges(value) {
-<span class="cstat-no" title="statement not covered" >        if (value.trim() !== value) {</span>
-<span class="cstat-no" title="statement not covered" >          throw new Error('La descripción no debe tener espacios al inicio o final.');</span>
+      noSpacesEdges(value) {
+        if (value.trim() !== value) {
+          throw new Error('La descripción no debe tener espacios al inicio o final.');
         }
       },
     },
@@ -392,14 +392,14 @@ const Servicio = <span class="cstat-no" title="statement not covered" >sequelize
   tableName: 'servicios',
   timestamps: false,
   hooks: {
-    beforeUpdate: <span class="fstat-no" title="function not covered" >(s</span>ervicio) =&gt; {
-<span class="cstat-no" title="statement not covered" >      servicio.fecha_modificacion = new Date();</span>
+    beforeUpdate: (servicio) =&gt; {
+      servicio.fecha_modificacion = new Date();
     }
   }
 });
 &nbsp;
 &nbsp;
-export const ServicioModel = <span class="cstat-no" title="statement not covered" >{</span>
+export const ServicioModel = {
   Servicio
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -409,7 +409,7 @@ export const ServicioModel = <span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T21:16:52.926Z
+                at 2025-05-13T21:24:40.612Z
             </div>
         <script src="../prettify.js"></script>
         <script>

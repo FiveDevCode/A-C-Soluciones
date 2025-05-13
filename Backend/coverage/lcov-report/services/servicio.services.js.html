@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -113,94 +113,94 @@
 <a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ServicioRepository } from '../repository/servicio.repository.js';
 export class ServicioService {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >    this.servicioRepository = new ServicioRepository();</span>
+  constructor() {
+    this.servicioRepository = new ServicioRepository();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync crearServicio(data) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.crearServicio(data);</span>
+  async crearServicio(data) {
+    return await this.servicioRepository.crearServicio(data);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServicioPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.obtenerServicioPorId(id);</span>
+  async obtenerServicioPorId(id) {
+    return await this.servicioRepository.obtenerServicioPorId(id);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServicioPorNombre(nombre) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.obtenerServicioPorNombre(nombre);</span>
+  async obtenerServicioPorNombre(nombre) {
+    return await this.servicioRepository.obtenerServicioPorNombre(nombre);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync buscarServicios(termino) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.buscarServicios(termino);</span>
+  async buscarServicios(termino) {
+    return await this.servicioRepository.buscarServicios(termino);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServicios() {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.obtenerServicios();</span>
+  async obtenerServicios() {
+    return await this.servicioRepository.obtenerServicios();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerServiciosActivos() {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.obtenerServiciosActivos();</span>
+  async obtenerServiciosActivos() {
+    return await this.servicioRepository.obtenerServiciosActivos();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarServicio(id, data) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.actualizarServicio(id, data);</span>
+  async actualizarServicio(id, data) {
+    return await this.servicioRepository.actualizarServicio(id, data);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarServicio(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.eliminarServicio(id);</span>
+  async eliminarServicio(id) {
+    return await this.servicioRepository.eliminarServicio(id);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync deshabilitarServicio(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.deshabilitarServicio(id);</span>
+  async deshabilitarServicio(id) {
+    return await this.servicioRepository.deshabilitarServicio(id);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync habilitarServicio(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.servicioRepository.habilitarServicio(id);</span>
+  async habilitarServicio(id) {
+    return await this.servicioRepository.habilitarServicio(id);
   }
   
 &nbsp;
@@ -211,7 +211,7 @@ export class ServicioService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T21:16:52.926Z
+                at 2025-05-13T21:24:40.612Z
             </div>
         <script src="../prettify.js"></script>
         <script>

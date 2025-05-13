@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,85 +110,85 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TecnicoModel } from '../models/tecnico.model.js';
 &nbsp;
 export class TecnicoRepository {
-<span class="fstat-no" title="function not covered" >  as</span>ync findByEmail(email) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findOne({</span>
+  async findByEmail(email) {
+    return await TecnicoModel.Tecnico.findOne({
       where: { correo_electronico: email },
     });
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync crearTecnico(data) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.create(data);</span>
+  async crearTecnico(data) {
+    return await TecnicoModel.Tecnico.create(data);
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findByPk(id);</span>
+  async obtenerTecnicoPorId(id) {
+    return await TecnicoModel.Tecnico.findByPk(id);
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorCedula(numero_de_cedula) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findOne({</span>
+  async obtenerTecnicoPorCedula(numero_de_cedula) {
+    return await TecnicoModel.Tecnico.findOne({
       where: { numero_de_cedula }
     });
   }
   
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorCorreo(correo_electronico) {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findOne({</span>
+  async obtenerTecnicoPorCorreo(correo_electronico) {
+    return await TecnicoModel.Tecnico.findOne({
       where: { correo_electronico }
     });
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicos() {
-<span class="cstat-no" title="statement not covered" >    return await TecnicoModel.Tecnico.findAll();</span>
+  async obtenerTecnicos() {
+    return await TecnicoModel.Tecnico.findAll();
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarTecnico(id, data) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.update(data);</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
+  async actualizarTecnico(id, data) {
+    const tecnico = await TecnicoModel.Tecnico.findByPk(id);
+    if (!tecnico) return null;
+    await tecnico.update(data);
+    return tecnico;
   }
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarTecnico(id) {
-    const tecnico = <span class="cstat-no" title="statement not covered" >await TecnicoModel.Tecnico.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!tecnico) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >    tecnico.estado = 'inactivo'; </span>
-<span class="cstat-no" title="statement not covered" >    await tecnico.save();</span>
-<span class="cstat-no" title="statement not covered" >    return tecnico;</span>
+  async eliminarTecnico(id) {
+    const tecnico = await TecnicoModel.Tecnico.findByPk(id);
+    if (!tecnico) return null;
+    tecnico.estado = 'inactivo'; 
+    await tecnico.save();
+    return tecnico;
   }
 }
 &nbsp;
@@ -199,7 +199,7 @@ export class TecnicoRepository {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T21:16:52.926Z
+                at 2025-05-13T21:24:40.612Z
             </div>
         <script src="../prettify.js"></script>
         <script>

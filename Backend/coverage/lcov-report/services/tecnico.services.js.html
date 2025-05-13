@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -102,70 +102,70 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TecnicoRepository } from '../repository/tecnico.repository.js';
 &nbsp;
 export class TecnicoService {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >    this.tecnicoRepository = new TecnicoRepository();</span>
+  constructor() {
+    this.tecnicoRepository = new TecnicoRepository();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync crearTecnico(data) {
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.crearTecnico(data);</span>
+  async crearTecnico(data) {
+    return await this.tecnicoRepository.crearTecnico(data);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorId(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.obtenerTecnicoPorId(id);</span>
+  async obtenerTecnicoPorId(id) {
+    return await this.tecnicoRepository.obtenerTecnicoPorId(id);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicoPorcedula(numero_de_cedula){
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.obtenerTecnicoPorCedula(numero_de_cedula);</span>
+  async obtenerTecnicoPorcedula(numero_de_cedula){
+    return await this.tecnicoRepository.obtenerTecnicoPorCedula(numero_de_cedula);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerTecnicos() {
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.obtenerTecnicos();</span>
+  async obtenerTecnicos() {
+    return await this.tecnicoRepository.obtenerTecnicos();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync actualizarTecnico(id, data) {
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.actualizarTecnico(id, data);</span>
+  async actualizarTecnico(id, data) {
+    return await this.tecnicoRepository.actualizarTecnico(id, data);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync eliminarTecnico(id) {
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.eliminarTecnico(id);</span>
+  async eliminarTecnico(id) {
+    return await this.tecnicoRepository.eliminarTecnico(id);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync obtenerPorTecnicoCorreo (correo_electronico){
-<span class="cstat-no" title="statement not covered" >    return await this.tecnicoRepository.obtenerTecnicoPorCorreo(correo_electronico)</span>
+  async obtenerPorTecnicoCorreo (correo_electronico){
+    return await this.tecnicoRepository.obtenerTecnicoPorCorreo(correo_electronico)
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -175,7 +175,7 @@ export class TecnicoService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T21:16:52.926Z
+                at 2025-05-13T21:24:40.612Z
             </div>
         <script src="../prettify.js"></script>
         <script>
