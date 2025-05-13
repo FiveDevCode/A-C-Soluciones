@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,85 +109,85 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
 import { ServicioController } from '../controllers/servicio.controller.js';
 import { authenticate, isAdmin} from '../middlewares/autenticacion.js';
 &nbsp;
-const router = express.Router();
-const servicioController = new ServicioController();
+const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
+const servicioController = <span class="cstat-no" title="statement not covered" >new ServicioController();</span>
 &nbsp;
 // Rutas públicas
-router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);
+<span class="cstat-no" title="statement not covered" >router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);</span>
 &nbsp;
 // Buscar servicios por nombre o descripción
-router.get('/api/servicios/buscar', servicioController.buscarServicios);
+<span class="cstat-no" title="statement not covered" >router.get('/api/servicios/buscar', servicioController.buscarServicios);</span>
 &nbsp;
 // Rutas protegidas - requieren autenticación
-router.use(authenticate);
+<span class="cstat-no" title="statement not covered" >router.use(authenticate);</span>
 &nbsp;
 &nbsp;
 &nbsp;
 // Crear servicio (solo lo peude hacer administradores)
-router.post('/api/servicios', isAdmin, servicioController.crearServicio);
+<span class="cstat-no" title="statement not covered" >router.post('/api/servicios', isAdmin, servicioController.crearServicio);</span>
 &nbsp;
 // Obtener todos los servicios
-router.get('/api/servicios', servicioController.obtenerServicios);
+<span class="cstat-no" title="statement not covered" >router.get('/api/servicios', servicioController.obtenerServicios);</span>
 &nbsp;
 // Obtener servicio por ID
-router.get('/api/servicios/:id', servicioController.obtenerServicioPorId);
+<span class="cstat-no" title="statement not covered" >router.get('/api/servicios/:id', servicioController.obtenerServicioPorId);</span>
 &nbsp;
 // Obtener servicio por nombre
-router.get('/api/servicios/nombre/:nombre', servicioController.obtenerServicioPorNombre);
+<span class="cstat-no" title="statement not covered" >router.get('/api/servicios/nombre/:nombre', servicioController.obtenerServicioPorNombre);</span>
 &nbsp;
 // Actualizar servicio (Solo administradores tiene este permiso)
-router.put('/api/servicios/:id', isAdmin, servicioController.actualizarServicio);
+<span class="cstat-no" title="statement not covered" >router.put('/api/servicios/:id', isAdmin, servicioController.actualizarServicio);</span>
 &nbsp;
 // Eliminar servicio (Solo administradores tienen este permiso)
-router.delete('/api/servicios/:id', isAdmin, servicioController.eliminarServicio);
+<span class="cstat-no" title="statement not covered" >router.delete('/api/servicios/:id', isAdmin, servicioController.eliminarServicio);</span>
 &nbsp;
 // Deshabilitar servicio (Solo administradores tienen este permiso)
-router.patch('/api/servicios/:id/deshabilitar', isAdmin, servicioController.deshabilitarServicio);
+<span class="cstat-no" title="statement not covered" >router.patch('/api/servicios/:id/deshabilitar', isAdmin, servicioController.deshabilitarServicio);</span>
 &nbsp;
 // Habilitar servicio (Solo administradores tienen este permiso)
-router.patch('/api/servicios/:id/habilitar', isAdmin, servicioController.habilitarServicio);
+<span class="cstat-no" title="statement not covered" >router.patch('/api/servicios/:id/habilitar', isAdmin, servicioController.habilitarServicio);</span>
 &nbsp;
 export default router;</pre></td></tr></table></pre>
 
@@ -196,7 +196,7 @@ export default router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-11T18:56:58.315Z
+                at 2025-05-13T01:42:46.993Z
             </div>
         <script src="../prettify.js"></script>
         <script>

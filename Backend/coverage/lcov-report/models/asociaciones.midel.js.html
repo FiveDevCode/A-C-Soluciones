@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -116,44 +116,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SolicitudModel } from './solicitud.model.js';
 import { ClienteModel } from './cliente.model.js';
@@ -162,44 +162,44 @@ import { TecnicoModel } from './tecnico.model.js';
 import { AdminModel } from './administrador.model.js';
 import { ServicioModel } from './servicios.model.js'; 
 &nbsp;
-export const setupAssociations = () =&gt; {
+export const setupAssociations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
  
-  ClienteModel.hasMany(SolicitudModel, {
+<span class="cstat-no" title="statement not covered" >  ClienteModel.hasMany(SolicitudModel, {</span>
     foreignKey: 'cliente_id_fk',
     as: 'solicitudes'
   });
-  SolicitudModel.belongsTo(ClienteModel, {
+<span class="cstat-no" title="statement not covered" >  SolicitudModel.belongsTo(ClienteModel, {</span>
     foreignKey: 'cliente_id_fk',
     as: 'cliente'
   });
-  SolicitudModel.belongsTo(AdminModel, {
+<span class="cstat-no" title="statement not covered" >  SolicitudModel.belongsTo(AdminModel, {</span>
     foreignKey: 'admin_id_fk',
     as: 'administrador'
   });
-  AdminModel.hasMany(SolicitudModel, {
+<span class="cstat-no" title="statement not covered" >  AdminModel.hasMany(SolicitudModel, {</span>
     foreignKey: 'admin_id_fk',
     as: 'solicitudes'
   });
-  VisitaModel.belongsTo(SolicitudModel, {
+<span class="cstat-no" title="statement not covered" >  VisitaModel.belongsTo(SolicitudModel, {</span>
     foreignKey: 'solicitud_id_fk',
     as: 'solicitud'
   });
-  VisitaModel.belongsTo(TecnicoModel, {
+<span class="cstat-no" title="statement not covered" >  VisitaModel.belongsTo(TecnicoModel, {</span>
     foreignKey: 'tecnico_id_fk',
     as: 'tecnico'
   });
 &nbsp;
-  VisitaModel.Visita.belongsTo(ServicioModel.Servicio, {
+<span class="cstat-no" title="statement not covered" >  VisitaModel.Visita.belongsTo(ServicioModel.Servicio, {</span>
     foreignKey: 'servicio_id_fk',
     as: 'servicio'
   });
   
-  ServicioModel.Servicio.hasMany(VisitaModel.Visita, {
+<span class="cstat-no" title="statement not covered" >  ServicioModel.Servicio.hasMany(VisitaModel.Visita, {</span>
     foreignKey: 'servicio_id_fk',
     as: 'visitas'
   });
 &nbsp;
-  console.log('🔗 Asociaciones establecidas correctamente');
+<span class="cstat-no" title="statement not covered" >  console.log('🔗 Asociaciones establecidas correctamente');</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -208,7 +208,7 @@ export const setupAssociations = () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-11T18:56:58.315Z
+                at 2025-05-13T01:42:46.993Z
             </div>
         <script src="../prettify.js"></script>
         <script>

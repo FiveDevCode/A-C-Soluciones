@@ -5,7 +5,7 @@ export class VisitaController {
   constructor() {
     this.visitaService = new VisitaService();
   }
-  
+
   crearVisita = async (req, res) => {
     try {
       if (req.user.rol !== 'administrador' ) {
@@ -24,19 +24,24 @@ export class VisitaController {
       if (error instanceof ValidationError) {
         const fieldErrors = {};
         error.errors.forEach((err) => {
-            if (err.path) {
-                fieldErrors[err.path] = err.message;
-            }
+          const path = err.path || 'general'
+          fieldErrors[err.path] = err.message;
         });
         return res.status(400).json({ errors: fieldErrors });
       }
+      //extraer el mensaje error o usar el predeterminado de forma explicita
+      let mensajeDeError = 'Error al agendar la visita. Intente nuevamente.'
+      if  (error.message && error.message.trim() !== ''){
+        mensajeDeError= error.message;
+      }
+
       return res.status(500).json({
-        success: false, 
-        message: error.message || 'Error al agendar la visita. Intente nuevamente.'
+        success: false,
+        message: mensajeDeError
       });
     }
   };
-  
+
   obtenerVisitas = async (req, res) => {
     try {
       if (req.user.rol === 'administrador') {
@@ -59,11 +64,11 @@ export class VisitaController {
       });
     }
   };
-  
+
   obtenerVisitaPorId = async (req, res) => {
     try {
       const visita = await this.visitaService.obtenerVisitaPorId(req.params.id);
-      
+
       // Verificar si la visita existe
       if (!visita) {
         return res.status(404).json({
@@ -71,7 +76,7 @@ export class VisitaController {
           message: 'Visita no encontrada'
         });
       }
-      
+
       return res.status(200).json({
         success: true,
         data: visita
@@ -84,7 +89,7 @@ export class VisitaController {
       });
     }
   };
-  
+
   obtenerVisitasPorSolicitud = async (req, res) => {
     try {
       const visitas = await this.visitaService.obtenerVisitasPorSolicitud(req.params.solicitud_id_fk);
@@ -100,7 +105,7 @@ export class VisitaController {
       });
     }
   };
-  
+
   actualizarVisita = async (req, res) => {
     try {
       // Corregir la verificación de permisos
@@ -110,7 +115,7 @@ export class VisitaController {
           message: 'Solo los administradores pueden actualizar visitas'
         });
       }
-      
+
       const visitaActualizada = await this.visitaService.actualizarVisita(req.params.id, req.body);
       return res.status(200).json({
         success: true,
@@ -124,7 +129,7 @@ export class VisitaController {
       });
     }
   };
-  
+
   cancelarVisita = async (req, res) => {
     try {
       // Verificar que sea administrador
@@ -134,7 +139,6 @@ export class VisitaController {
           message: 'Solo los administradores pueden cancelar visitas'
         });
       }
-      
       // Verificar que exista motivo (cambiar código de estado a 403)
       if (!req.body.motivo) {
         return res.status(403).json({
@@ -142,7 +146,7 @@ export class VisitaController {
           message: 'Se requiere un motivo para cancelar la visita'
         });
       }
-      
+
       const visitaCancelada = await this.visitaService.cancelarVisita(req.params.id, req.body.motivo);
       return res.status(200).json({
         success: true,
@@ -150,37 +154,47 @@ export class VisitaController {
       });
     } catch (error) {
       console.error('Error al cancelar visita:', error);
+        // Extraer mensaje de error de forma explícita
+      let errorMessage = 'Error al cancelar la visita';
+      if (error.message && error.message.trim() !== '') {
+        errorMessage = error.message;
+      }
       return res.status(400).json({
         success: false,
-        message: error.message || 'Error al cancelar la visita'
+        message: errorMessage
       });
     }
   };
-  
+
   obtenerTecnicosDisponibles = async (req, res) => {
     try {
       const { fecha, duracion } = req.query;
       if (!fecha || !duracion) {
         return res.status(400).json({
-          success: false, 
+          success: false,
           message: 'Se requieren fecha y duración para buscar técnicos disponibles'
         });
       }
-      
+
       const tecnicos = await this.visitaService.obtenerTecnicosDisponibles(fecha, duracion);
       return res.status(200).json({
-        success: true, 
-        data: tecnicos 
+        success: true,
+        data: tecnicos
       });
     } catch (error) {
       console.error('Error al obtener técnicos disponibles:', error);
+
+      let errorMessageTecnicosDisponibles = 'Error al obtener ténicos disponibles'
+      if (error.message && error.message.trim() !== ''){
+        errorMessageTecnicosDisponibles=error.message
+      }
       return res.status(500).json({
         success: false,
-        message: 'Error al buscar técnicos disponibles' 
+        message: errorMessageTecnicosDisponibles
       });
     }
   };
-  
+
   // Obtener servicios asignados a un técnico
   obtenerServiciosAsignados = async (req, res) => {
     try {
@@ -191,10 +205,10 @@ export class VisitaController {
           message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
         });
       }
-    
+
       const tecnico_id = req.user.id;
       const visitas = await this.visitaService.obtenerServiciosPorTecnico(tecnico_id);
-    
+
       return res.status(200).json({
         success: true,
         message: 'Servicios asignados obtenidos correctamente.',
@@ -203,9 +217,14 @@ export class VisitaController {
       });
     } catch (error) {
       console.error('Error al obtener servicios asignados:', error);
+
+      let errorMessage = 'Error al obtener servicios asignados';
+      if (error.message && error.message.trim() !== ''){
+        errorMessage = error.message
+      }
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener los servicios asignados.'
+        message: errorMessage
       });
     }
   };
@@ -220,19 +239,19 @@ export class VisitaController {
           message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
         });
       }
-    
+
       const tecnico_id = req.user.id;
       const visita_id = req.params.id;
-    
+
       const visita = await this.visitaService.obtenerServicioAsignadoPorId(tecnico_id, visita_id);
-    
+
       if (!visita) {
         return res.status(404).json({
           success: false,
           message: 'Servicio asignado no encontrado o no pertenece a este técnico.'
         });
       }
-    
+
       return res.status(200).json({
         success: true,
         message: 'Servicio asignado obtenido correctamente.',
@@ -240,10 +259,14 @@ export class VisitaController {
       });
     } catch (error) {
       console.error('Error al obtener servicio asignado por ID:', error);
+      let errorMessageServicioAsignadoID = 'Error al obtener servicio asignado por ID:';
+      if (error.message && error.message.trim() !== ''){
+        errorMessageServicioAsignadoID = error.message
+      }
       return res.status(500).json({
         success: false,
-        message: 'Error al obtener el servicio asignado.'
+        message: errorMessageServicioAsignadoID
       });
-    } 
-  } 
+    }
+  }
 }

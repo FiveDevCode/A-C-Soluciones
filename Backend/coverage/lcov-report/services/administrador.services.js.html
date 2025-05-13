@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,35 +106,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,36 +143,36 @@
 import { AdminRepository } from '../repository/administrador.repository.js';
 &nbsp;
 export class AdminService {
-  constructor() {
-    this.adminRepository = new AdminRepository();
+<span class="fstat-no" title="function not covered" >  co</span>nstructor() {
+<span class="cstat-no" title="statement not covered" >    this.adminRepository = new AdminRepository();</span>
   }
 &nbsp;
-  async crearAdmin(data) {
-   return await this.adminRepository.crearAdmin(data);
+<span class="fstat-no" title="function not covered" >  as</span>ync crearAdmin(data) {
+<span class="cstat-no" title="statement not covered" >   return await this.adminRepository.crearAdmin(data);</span>
   }
 &nbsp;
-  async obtenerAdminPorId(id) {
-    return await this.adminRepository.obtenerAdminPorId(id);
+<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorId(id) {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorId(id);</span>
   }
 &nbsp;
-  async obtenerAdminPorCedula(numero_cedula) {
-    return await this.adminRepository.obtenerAdminPorCedula(numero_cedula);
+<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCedula(numero_cedula) {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCedula(numero_cedula);</span>
   }
 &nbsp;
-  async obtenerAdminPorCorreo(correo_electronico) {
-    return await this.adminRepository.obtenerAdminPorCorreo(correo_electronico);
+<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdminPorCorreo(correo_electronico) {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdminPorCorreo(correo_electronico);</span>
   }
 &nbsp;
-  async obtenerAdmins() {
-    return await this.adminRepository.obtenerAdmins();
+<span class="fstat-no" title="function not covered" >  as</span>ync obtenerAdmins() {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.obtenerAdmins();</span>
   }
 &nbsp;
-  async actualizarAdmin(id, data) {
-    return await this.adminRepository.actualizarAdmin(id, data);
+<span class="fstat-no" title="function not covered" >  as</span>ync actualizarAdmin(id, data) {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.actualizarAdmin(id, data);</span>
   }
 &nbsp;
-  async eliminarAdmin(id) {
-    return await this.adminRepository.eliminarAdmin(id);
+<span class="fstat-no" title="function not covered" >  as</span>ync eliminarAdmin(id) {
+<span class="cstat-no" title="statement not covered" >    return await this.adminRepository.eliminarAdmin(id);</span>
   }
 }
 &nbsp;
@@ -184,7 +184,7 @@ export class AdminService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-11T18:56:58.315Z
+                at 2025-05-13T01:42:46.993Z
             </div>
         <script src="../prettify.js"></script>
         <script>

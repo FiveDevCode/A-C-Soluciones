@@ -381,6 +381,32 @@ describe('VisitaController', () => {
         message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
       });
     });
+
+    it('debería denegar acceso a usuarios que no son técnicos', async () => {
+      // Mock de la solicitud para un usuario no técnico
+      const req = {
+        user: {
+          rol: 'administrador', // Rol diferente de 'tecnico'
+          id: '123'
+        }
+      };
+
+      // Mock de la respuesta
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+
+      // Ejecutar la función del controlador usando la instancia
+      await visitaController.obtenerServiciosAsignados(req, res);
+
+      // Verificar que se denegó el acceso
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
+      });
+    });
   });
 
   describe('obtenerServicioAsignadoPorId', () => {
