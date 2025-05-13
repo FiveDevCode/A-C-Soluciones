@@ -89,11 +89,25 @@ describe('VisitaController', () => {
       });
     });
 
-    it('debe usar el mensaje de error por defecto si error.message está vacío', async () => {
+    it('debe usar el mensaje de error por defecto si error.message está vacío al crear visita', async () => {
       req.user.rol = 'administrador';
       req.body = { fecha: '2023-01-01', tecnico_id: 1 };
-      // Simulamos un error con message vacío
       const error = new Error('');
+      mockVisitaService.crearVisita.mockRejectedValue(error);
+
+      await visitaController.crearVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al agendar la visita. Intente nuevamente.'
+      });
+    });
+
+    it('debe usar el mensaje de error por defecto si el error no tiene propiedad message al crear visita', async () => {
+      req.user.rol = 'administrador';
+      req.body = { fecha: '2023-01-01', tecnico_id: 1 };
+      const error = {}; // Sin propiedad message
       mockVisitaService.crearVisita.mockRejectedValue(error);
 
       await visitaController.crearVisita(req, res);
@@ -341,6 +355,22 @@ describe('VisitaController', () => {
         message: 'Error al cancelar la visita'
       });
     });
+
+    it('debe usar el mensaje de error por defecto si el error no tiene propiedad message al cancelar visita', async () => {
+      req.user.rol = 'administrador';
+      req.body = { motivo: 'Motivo' };
+      req.params.id = '1';
+      const error = {}; // Sin propiedad message
+      mockVisitaService.cancelarVisita.mockRejectedValue(error);
+
+      await visitaController.cancelarVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al cancelar la visita'
+      });
+    });
   });
 
   describe('obtenerTecnicosDisponibles', () => {
@@ -373,8 +403,7 @@ describe('VisitaController', () => {
 
     it('debe usar el mensaje de error por defecto si error.message está vacío al obtener técnicos disponibles', async () => {
       req.query = { fecha: '2023-01-01', duracion: '2' };
-      // Simulamos un error con message vacío
-      const error = new Error('');
+      const error = {};
       mockVisitaService.obtenerTecnicosDisponibles.mockRejectedValue(error);
 
       await visitaController.obtenerTecnicosDisponibles(req, res);
@@ -446,8 +475,7 @@ describe('VisitaController', () => {
     it('debe usar el mensaje de error por defecto si error.message está vacío al obtener servicios asignados', async () => {
       req.user.rol = 'tecnico';
       req.user.id = 1;
-      // Simulamos un error con message vacío
-      const error = new Error('');
+      const error = {};
       mockVisitaService.obtenerServiciosPorTecnico.mockRejectedValue(error);
 
       await visitaController.obtenerServiciosAsignados(req, res);
@@ -496,8 +524,7 @@ describe('VisitaController', () => {
       req.user.rol = 'tecnico';
       req.user.id = 1;
       req.params.id = '1';
-      // Simulamos un error con mensaje vacío
-      const error = new Error('');
+      const error = {};
       mockVisitaService.obtenerServicioAsignadoPorId.mockRejectedValue(error);
 
       await visitaController.obtenerServicioAsignadoPorId(req, res);

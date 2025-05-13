@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747103072418" clover="3.2.0">
-  <project timestamp="1747103072418" name="All files">
-    <metrics statements="917" coveredstatements="98" conditionals="319" coveredconditionals="38" methods="216" coveredmethods="11" elements="1452" coveredelements="147" complexity="0" loc="917" ncloc="917" packages="6" files="40" classes="40"/>
+<coverage generated="1747171012973" clover="3.2.0">
+  <project timestamp="1747171012973" name="All files">
+    <metrics statements="916" coveredstatements="98" conditionals="319" coveredconditionals="38" methods="215" coveredmethods="11" elements="1450" coveredelements="147" complexity="0" loc="916" ncloc="916" packages="6" files="40" classes="40"/>
     <package name="controllers">
       <metrics statements="479" coveredstatements="98" conditionals="151" coveredconditionals="38" methods="67" coveredmethods="11"/>
       <file name="administrador.controller.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/controllers/administrador.controller.js">
@@ -400,25 +400,25 @@
       </file>
       <file name="visita.controller.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/controllers/visita.controller.js">
         <metrics statements="103" coveredstatements="98" conditionals="48" coveredconditionals="38" methods="11" coveredmethods="11"/>
-        <line num="6" count="31" type="stmt"/>
-        <line num="9" count="31" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="11" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="33" type="stmt"/>
+        <line num="9" count="33" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="17" count="3" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="25" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="27" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="28" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="2" falsecount="2"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="45" count="31" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="45" count="33" type="stmt"/>
         <line num="46" count="4" type="stmt"/>
         <line num="47" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="48" count="2" type="stmt"/>
@@ -429,7 +429,7 @@
         <line num="55" count="1" type="stmt"/>
         <line num="60" count="1" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
-        <line num="68" count="31" type="stmt"/>
+        <line num="68" count="33" type="stmt"/>
         <line num="69" count="3" type="stmt"/>
         <line num="70" count="3" type="stmt"/>
         <line num="73" count="2" type="cond" truecount="2" falsecount="0"/>
@@ -437,13 +437,13 @@
         <line num="80" count="1" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
         <line num="86" count="1" type="stmt"/>
-        <line num="93" count="31" type="stmt"/>
+        <line num="93" count="33" type="stmt"/>
         <line num="94" count="2" type="stmt"/>
         <line num="95" count="2" type="stmt"/>
         <line num="96" count="1" type="stmt"/>
         <line num="101" count="1" type="stmt"/>
         <line num="102" count="1" type="stmt"/>
-        <line num="109" count="31" type="stmt"/>
+        <line num="109" count="33" type="stmt"/>
         <line num="110" count="3" type="stmt"/>
         <line num="112" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="113" count="1" type="stmt"/>
@@ -451,20 +451,20 @@
         <line num="120" count="1" type="stmt"/>
         <line num="125" count="1" type="stmt"/>
         <line num="126" count="1" type="stmt"/>
-        <line num="133" count="31" type="stmt"/>
-        <line num="134" count="4" type="stmt"/>
-        <line num="136" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="33" type="stmt"/>
+        <line num="134" count="5" type="stmt"/>
+        <line num="136" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="137" count="1" type="stmt"/>
-        <line num="143" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="143" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="144" count="1" type="stmt"/>
-        <line num="150" count="2" type="stmt"/>
+        <line num="150" count="3" type="stmt"/>
         <line num="151" count="1" type="stmt"/>
-        <line num="156" count="1" type="stmt"/>
-        <line num="158" count="1" type="stmt"/>
-        <line num="159" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="156" count="2" type="stmt"/>
+        <line num="158" count="2" type="stmt"/>
+        <line num="159" count="2" type="cond" truecount="2" falsecount="2"/>
         <line num="160" count="0" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="169" count="31" type="stmt"/>
+        <line num="162" count="2" type="stmt"/>
+        <line num="169" count="33" type="stmt"/>
         <line num="170" count="3" type="stmt"/>
         <line num="171" count="3" type="stmt"/>
         <line num="172" count="3" type="cond" truecount="4" falsecount="0"/>
@@ -476,7 +476,7 @@
         <line num="188" count="1" type="cond" truecount="2" falsecount="2"/>
         <line num="189" count="0" type="stmt"/>
         <line num="191" count="1" type="stmt"/>
-        <line num="199" count="31" type="stmt"/>
+        <line num="199" count="33" type="stmt"/>
         <line num="200" count="4" type="stmt"/>
         <line num="202" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="203" count="2" type="stmt"/>
@@ -488,7 +488,7 @@
         <line num="222" count="1" type="cond" truecount="2" falsecount="2"/>
         <line num="223" count="0" type="stmt"/>
         <line num="225" count="1" type="stmt"/>
-        <line num="233" count="31" type="stmt"/>
+        <line num="233" count="33" type="stmt"/>
         <line num="234" count="4" type="stmt"/>
         <line num="236" count="4" type="cond" truecount="1" falsecount="1"/>
         <line num="237" count="0" type="stmt"/>
@@ -650,7 +650,7 @@
       </file>
     </package>
     <package name="repository">
-      <metrics statements="139" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="59" coveredmethods="0"/>
+      <metrics statements="138" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="58" coveredmethods="0"/>
       <file name="administrador.repository.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/repository/administrador.repository.js">
         <metrics statements="16" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
@@ -751,23 +751,22 @@
         <line num="112" count="0" type="stmt"/>
       </file>
       <file name="tecnico.repository.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/repository/tecnico.repository.js">
-        <metrics statements="16" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
       </file>
       <file name="usuario.repository.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/repository/usuario.repository.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -952,17 +951,17 @@
       </file>
       <file name="servicio.services.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/services/servicio.services.js">
         <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
       </file>
       <file name="solicitud.services.js" path="/home/dao/Escritorio/Desarrollo de Software/Semestre2025_1/Desarrollo de Software II/A-C-Soluciones/Backend/src/services/solicitud.services.js">
         <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>

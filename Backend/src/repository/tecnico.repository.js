@@ -17,9 +17,7 @@ export class TecnicoRepository {
       where: { numero_de_cedula }
     });
   }
-  async obtenerTecnicoPorCorreo(correo_electronico) {
-    return await TecnicoModel.Tecnico.findOne({ where: { correo_electronico } });
-  }
+  
   async obtenerTecnicoPorCorreo(correo_electronico) {
     return await TecnicoModel.Tecnico.findOne({
       where: { correo_electronico }
