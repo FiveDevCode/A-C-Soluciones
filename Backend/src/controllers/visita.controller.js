@@ -25,7 +25,7 @@ export class VisitaController {
         const fieldErrors = {};
         error.errors.forEach((err) => {
           const path = err.path || 'general'
-          fieldErrors[err.path] = err.message;
+          fieldErrors[path] = err.message;
         });
         return res.status(400).json({ errors: fieldErrors });
       }

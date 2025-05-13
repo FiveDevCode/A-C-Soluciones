@@ -89,8 +89,11 @@ describe('VisitaController', () => {
       });
     });
 
-    it('debe manejar errores inesperados', async () => {
-      const error = new Error('Error inesperado');
+    it('debe usar el mensaje de error por defecto si error.message está vacío', async () => {
+      req.user.rol = 'administrador';
+      req.body = { fecha: '2023-01-01', tecnico_id: 1 };
+      // Simulamos un error con message vacío
+      const error = new Error('');
       mockVisitaService.crearVisita.mockRejectedValue(error);
 
       await visitaController.crearVisita(req, res);
@@ -98,7 +101,7 @@ describe('VisitaController', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         success: false,
-        message: error.message
+        message: 'Error al agendar la visita. Intente nuevamente.'
       });
     });
   });
@@ -321,6 +324,23 @@ describe('VisitaController', () => {
         message: 'Solo los administradores pueden cancelar visitas'
       });
     });
+
+    it('debe usar el mensaje de error por defecto si error.message está vacío al cancelar visita', async () => {
+      req.user.rol = 'administrador';
+      req.body = { motivo: 'Motivo' };
+      req.params.id = '1';
+      // Simulamos un error con message vacío
+      const error = new Error('');
+      mockVisitaService.cancelarVisita.mockRejectedValue(error);
+
+      await visitaController.cancelarVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al cancelar la visita'
+      });
+    });
   });
 
   describe('obtenerTecnicosDisponibles', () => {
@@ -348,6 +368,21 @@ describe('VisitaController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Se requieren fecha y duración para buscar técnicos disponibles'
+      });
+    });
+
+    it('debe usar el mensaje de error por defecto si error.message está vacío al obtener técnicos disponibles', async () => {
+      req.query = { fecha: '2023-01-01', duracion: '2' };
+      // Simulamos un error con message vacío
+      const error = new Error('');
+      mockVisitaService.obtenerTecnicosDisponibles.mockRejectedValue(error);
+
+      await visitaController.obtenerTecnicosDisponibles(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al obtener ténicos disponibles'
       });
     });
   });
@@ -407,6 +442,22 @@ describe('VisitaController', () => {
         message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
       });
     });
+
+    it('debe usar el mensaje de error por defecto si error.message está vacío al obtener servicios asignados', async () => {
+      req.user.rol = 'tecnico';
+      req.user.id = 1;
+      // Simulamos un error con message vacío
+      const error = new Error('');
+      mockVisitaService.obtenerServiciosPorTecnico.mockRejectedValue(error);
+
+      await visitaController.obtenerServiciosAsignados(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al obtener servicios asignados'
+      });
+    });
   });
 
   describe('obtenerServicioAsignadoPorId', () => {
@@ -438,6 +489,40 @@ describe('VisitaController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Servicio asignado no encontrado o no pertenece a este técnico.'
+      });
+    });
+
+    it('debe usar el mensaje de error por defecto si ocurre un error inesperado con mensaje vacío en obtenerServicioAsignadoPorId', async () => {
+      req.user.rol = 'tecnico';
+      req.user.id = 1;
+      req.params.id = '1';
+      // Simulamos un error con mensaje vacío
+      const error = new Error('');
+      mockVisitaService.obtenerServicioAsignadoPorId.mockRejectedValue(error);
+
+      await visitaController.obtenerServicioAsignadoPorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error al obtener servicio asignado por ID:'
+      });
+    });
+
+    it('debe usar el mensaje de error personalizado si ocurre un error inesperado con mensaje en obtenerServicioAsignadoPorId', async () => {
+      req.user.rol = 'tecnico';
+      req.user.id = 1;
+      req.params.id = '1';
+      // Simulamos un error con mensaje personalizado
+      const error = new Error('Error personalizado');
+      mockVisitaService.obtenerServicioAsignadoPorId.mockRejectedValue(error);
+
+      await visitaController.obtenerServicioAsignadoPorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error personalizado'
       });
     });
   });
