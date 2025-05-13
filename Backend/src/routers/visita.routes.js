@@ -1,6 +1,6 @@
 import express from 'express';
 import { VisitaController } from '../controllers/visita.controller.js';
-import { authenticate, isAdmin, isTecnico, isAdminOrTecnico} from '../middlewares/autenticacion.js';
+import { authenticate, isAdmin, isAdminOrTecnico} from '../middlewares/autenticacion.js';
 
 const router = express.Router();
 const visitaController = new VisitaController();

@@ -1,6 +1,5 @@
 import { Op } from 'sequelize'; 
 import { ServicioModel } from '../models/servicios.model.js';
-import { VisitaModel } from '../models/visita.model.js';
 
 export class ServicioRepository {
   async crearServicio(data) {

@@ -1,5 +1,4 @@
 import { ServicioRepository } from '../repository/servicio.repository.js';
-import { VisitaRepository } from '../repository/visita.repository.js';
 export class ServicioService {
   constructor() {
     this.servicioRepository = new ServicioRepository();
