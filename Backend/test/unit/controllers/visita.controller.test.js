@@ -118,6 +118,39 @@ describe('VisitaController', () => {
         message: 'Error al agendar la visita. Intente nuevamente.'
       });
     });
+
+    it('debe manejar errores de validación con múltiples campos', async () => {
+      req.user.rol = 'administrador';
+      req.body = { fecha: '', tecnico_id: null };
+      const validationError = new ValidationError('Error de validación', [
+        { path: 'fecha', message: 'Fecha requerida' },
+        { path: 'tecnico_id', message: 'Técnico requerido' }
+      ]);
+      mockVisitaService.crearVisita.mockRejectedValue(validationError);
+
+      await visitaController.crearVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        errors: { fecha: 'Fecha requerida', tecnico_id: 'Técnico requerido' }
+      });
+    });
+
+    it('debe manejar errores de validación sin path usando "general" como clave', async () => {
+      req.user.rol = 'administrador';
+      req.body = { fecha: '', tecnico_id: null };
+      const validationError = new ValidationError('Error de validación', [
+        { message: 'Error general' }
+      ]);
+      mockVisitaService.crearVisita.mockRejectedValue(validationError);
+
+      await visitaController.crearVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        errors: { general: 'Error general' }
+      });
+    });
   });
 
   describe('obtenerVisitas', () => {
@@ -371,6 +404,22 @@ describe('VisitaController', () => {
         message: 'Error al cancelar la visita'
       });
     });
+
+    it('debe usar el mensaje de error personalizado si error.message tiene contenido al cancelar visita', async () => {
+      req.user.rol = 'administrador';
+      req.body = { motivo: 'Motivo' };
+      req.params.id = '1';
+      const error = new Error('Error personalizado al cancelar');
+      mockVisitaService.cancelarVisita.mockRejectedValue(error);
+
+      await visitaController.cancelarVisita(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error personalizado al cancelar'
+      });
+    });
   });
 
   describe('obtenerTecnicosDisponibles', () => {
@@ -412,6 +461,20 @@ describe('VisitaController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Error al obtener ténicos disponibles'
+      });
+    });
+
+    it('debe usar el mensaje de error personalizado si error.message tiene contenido al obtener técnicos disponibles', async () => {
+      req.query = { fecha: '2023-01-01', duracion: '2' };
+      const error = new Error('Error personalizado técnicos');
+      mockVisitaService.obtenerTecnicosDisponibles.mockRejectedValue(error);
+
+      await visitaController.obtenerTecnicosDisponibles(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error personalizado técnicos'
       });
     });
   });
@@ -486,6 +549,21 @@ describe('VisitaController', () => {
         message: 'Error al obtener servicios asignados'
       });
     });
+
+    it('debe usar el mensaje de error personalizado si error.message tiene contenido al obtener servicios asignados', async () => {
+      req.user.rol = 'tecnico';
+      req.user.id = 1;
+      const error = new Error('Error personalizado servicios asignados');
+      mockVisitaService.obtenerServiciosPorTecnico.mockRejectedValue(error);
+
+      await visitaController.obtenerServiciosAsignados(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error personalizado servicios asignados'
+      });
+    });
   });
 
   describe('obtenerServicioAsignadoPorId', () => {
@@ -550,6 +628,19 @@ describe('VisitaController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Error personalizado'
+      });
+    });
+
+    it('debe denegar el acceso si el usuario no es técnico en obtenerServicioAsignadoPorId', async () => {
+      req.user.rol = 'administrador';
+      req.params.id = '1';
+
+      await visitaController.obtenerServicioAsignadoPorId(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Acceso denegado. Solo los técnicos pueden consultar sus servicios asignados.'
       });
     });
   });
