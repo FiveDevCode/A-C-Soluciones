@@ -2,8 +2,8 @@ import { SolicitudService } from '../services/solicitud.services.js';
 import { ValidationError } from 'sequelize';
 
 export class SolicitudController {
-    constructor() {
-        this.solicitudService = new SolicitudService();
+    constructor(servicio = new SolicitudService()) {
+        this.solicitudService = servicio;
     }
 
     // Crear una nueva solicitud

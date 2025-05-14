@@ -18,6 +18,7 @@ const ServicesPageTc = () => {
   useEffect(() => {
     handleGetServiceList()
       .then((res) => {
+        console.log("respuesta:" , res)
         setServices(res.data.data); // ajusta según respuesta real
       })
       .catch((err) => {
@@ -30,7 +31,11 @@ const ServicesPageTc = () => {
     <ContainerServices>
 
       <FilterServicesTc count={services.length} />
-      <ListSevicesTc services={services} />
+      {services.length === 0 ? (
+        <p style={{textAlign: "center"}}>No tienes ninguna visita asignada por el momento.</p>
+      ) : (
+        <ListSevicesTc services={services} />
+      )}
 
     </ContainerServices>
   )

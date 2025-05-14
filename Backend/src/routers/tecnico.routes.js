@@ -7,7 +7,7 @@ const tecnicoController = new TecnicoController();
 // registrar empleados 
 router.post('/api/tecnico',  tecnicoController.crearTecnico);
 
-// obtener todo los empleados registrados 
+// obtener los empleados registrados 
 router.get('/api/tecnico', tecnicoController.obtenerTecnicos);
 
 // obtener empleado por id

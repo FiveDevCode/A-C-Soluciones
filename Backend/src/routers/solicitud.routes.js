@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { SolicitudController } from '../controllers/solicitud.controller.js';
-import { authenticate, isAdmin, isAdminOrCliente, isCliente, isTecnico } from '../middlewares/autenticacion.js';
+import { authenticate, isAdminOrCliente, isCliente } from '../middlewares/autenticacion.js';
 
 // Crear instancia del router
 const router = Router();

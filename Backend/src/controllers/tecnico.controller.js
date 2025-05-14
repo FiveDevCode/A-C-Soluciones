@@ -71,7 +71,7 @@ export class TecnicoController {
     }
   };
   
-  // obtener todo les empleados que estan registrados en el sistema 
+  // obtener los empleados que estan registrados en el sistema 
   obtenerTecnicos = async (req, res) => {
     try {
       const tecnicos = await this.tecnicoService.obtenerTecnicos();

@@ -7,13 +7,14 @@ const servicioController = new ServicioController();
 
 // Rutas públicas
 router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);
+
+// Buscar servicios por nombre o descripción
 router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
 // Rutas protegidas - requieren autenticación
 router.use(authenticate);
 
-// Obtener servicios asignados a un técnico autenticado
-router.get('/api/servicios/asignados', servicioController.obtenerServiciosAsignados);
+
 
 // Crear servicio (solo lo peude hacer administradores)
 router.post('/api/servicios', isAdmin, servicioController.crearServicio);

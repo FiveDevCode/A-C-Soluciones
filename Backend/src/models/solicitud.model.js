@@ -5,7 +5,6 @@ import {noFechasPasadas, sinEspaciosSolamente,} from "../hooks/validators.js";
 
 
 const Solicitud = sequelize.define('Solicitud', {
-
     id : {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -13,12 +12,10 @@ const Solicitud = sequelize.define('Solicitud', {
         allowNull: false,
     },
     fecha_solicitud : {
-
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
         validate: {
-          
             isDate: {
                 msg: 'La fecha de solicitud debe ser una fecha válida.',
             },
@@ -30,9 +27,7 @@ const Solicitud = sequelize.define('Solicitud', {
                 msg: 'La fecha de solicitud no puede estar vacía.',
             },
             noFechasPasadas,
-
         },
-        
     },
     estado: {
         type: DataTypes.ENUM(
@@ -75,7 +70,6 @@ const Solicitud = sequelize.define('Solicitud', {
             sinEspaciosSolamente
         },
     },
-
     comentarios: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -86,7 +80,6 @@ const Solicitud = sequelize.define('Solicitud', {
             },
         },
     },
-    // =====Asociaciones=====
      servicio_id_fk:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -119,7 +112,6 @@ const Solicitud = sequelize.define('Solicitud', {
             },
         }
     },
-
     admin_id_fk: {
         type: DataTypes.INTEGER,
         allowNull: true, 
@@ -129,18 +121,12 @@ const Solicitud = sequelize.define('Solicitud', {
         },
         
     },    
-
-
-
-   
-    
-
 },{
     tableName: 'solicitudes',
     timestamps: false,
 });
 
-// Exportar el modelo de solicitud
+
 export const SolicitudModel = {
     Solicitud
 }

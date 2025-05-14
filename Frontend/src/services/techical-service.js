@@ -5,7 +5,7 @@ import axios from "axios";
 const getServiceAssign = (id) => {
   const token = sessionStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/servicios/asignados/${id}`, {
+  return axios.get(`http://localhost:8000/api/visitas/asignados/${id}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -15,7 +15,7 @@ const getServiceAssign = (id) => {
 const getListVisits = () => {
   const token = sessionStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/servicios/asignados`, {
+  return axios.get(`http://localhost:8000/api/visitas/asignados`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }

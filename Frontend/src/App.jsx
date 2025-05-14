@@ -99,7 +99,7 @@ function AppContent() {
             </PrivateRoute>
           } />
 
-          <Route path="/view-service" element={
+          <Route path="/view-service/:id" element={
             <PrivateRoute roleRequired="tecnico">
               <ServiceTc />
             </PrivateRoute>

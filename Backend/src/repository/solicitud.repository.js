@@ -8,11 +8,9 @@ export class SolicitudRepository {
     this.model = SolicitudModel.Solicitud;
     this.clienteModel = ClienteModel.Cliente;
     this.servicioModel = ServicioModel.Servicio;
-    this.adminModel = AdminModel.Admin; // ✅ Se agregó la referencia al modelo Admin
-
+    this.adminModel = AdminModel.Admin; 
     this.setupAssociations();
   }
-
   setupAssociations() {
     if (!this.model.associations?.cliente) {
       this.model.belongsTo(this.clienteModel, {
@@ -20,14 +18,12 @@ export class SolicitudRepository {
         as: 'cliente'
       });
     }
-
     if (!this.model.associations?.servicio) {
       this.model.belongsTo(this.servicioModel, {
         foreignKey: 'servicio_id_fk',
         as: 'servicio'
       });
     }
-
     if (!this.model.associations?.admin) {
       this.model.belongsTo(this.adminModel, {
         foreignKey: 'admin_id_fk',
@@ -35,18 +31,14 @@ export class SolicitudRepository {
       });
     }
   }
-
   async crear(data) {
     const clienteExiste = await this.clienteExiste(data.cliente_id_fk);
     const servicioExiste = await this.servicioExiste(data.servicio_id_fk);
-
     if (!clienteExiste || !servicioExiste) {
       throw new Error('Cliente o servicio no encontrado');
     }
-
     return await this.model.create(data);
   }
-
   async obtenerTodos() {
     return await this.model.findAll({
       include: [
@@ -56,7 +48,7 @@ export class SolicitudRepository {
           attributes: ['id', 'nombre', 'apellido', 'telefono']
         },
         {
-          model: this.adminModel, // ✅ Asociado correctamente
+          model: this.adminModel, 
           as: 'admin',
           attributes: ['id', 'nombre', 'apellido']
         },
@@ -69,7 +61,6 @@ export class SolicitudRepository {
       order: [['fecha_solicitud', 'DESC']]
     });
   }
-
   async obtenerPorId(id) {
     return await this.model.findByPk(id, {
       include: [
@@ -86,7 +77,6 @@ export class SolicitudRepository {
       ]
     });
   }
-
   async obtenerPorCliente(cliente_id) {
     return await this.model.findAll({
       where: { cliente_id_fk: cliente_id },
@@ -100,17 +90,14 @@ export class SolicitudRepository {
       order: [['fecha_solicitud', 'DESC']]
     });
   }
-
   async clienteExiste(cliente_id) {
     const cliente = await this.clienteModel.findByPk(cliente_id);
     return !!cliente;
   }
-
   async servicioExiste(servicio_id) {
     const servicio = await this.servicioModel.findByPk(servicio_id);
     return !!servicio;
   }
-
   async actualizarEstado(id, estado) {
     const solicitud = await this.model.findByPk(id);
     if (!solicitud) return null;
@@ -118,11 +105,9 @@ export class SolicitudRepository {
     await solicitud.update({ estado });
     return solicitud;
   }
-
   async eliminar(id) {
     const solicitud = await this.model.findByPk(id);
     if (!solicitud) return null;
-
     await solicitud.destroy();
     return solicitud;
   }

@@ -105,7 +105,7 @@ const getListRequest = () => {
   });
 }
 
-const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId ) => {
+const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId, serviceId) => {
   const token = sessionStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/visitas", {
@@ -115,7 +115,7 @@ const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate,
     notas_posteriores: postnotes,
     solicitud_id_fk: requestId,
     tecnico_id_fk: technicalId,
-
+    servicio_id_fk: serviceId
 
   }, {
     headers: {
@@ -125,6 +125,15 @@ const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate,
   });
 }
 
+const getServiceList = () => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get("http://localhost:8000/api/servicios", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
 
 export const administratorService = {
   createTechnical,
@@ -137,5 +146,6 @@ export const administratorService = {
   stateChange,
   getListRequest,
   assignVisit,
-  updateService
+  updateService,
+  getServiceList
 }

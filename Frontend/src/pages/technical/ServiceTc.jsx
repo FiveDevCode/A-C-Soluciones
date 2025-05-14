@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, MenuItem, Select, Typography } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { handleGetServiceAssign } from '../../controllers/technical/getServiceAssignTc.controller';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 const Container = styled.div`
-  padding: 2rem;
+  padding-top: 1rem;
+  padding-left: 2rem;
+  padding-bottom: 0;
   max-width: 800px;
   display: flex;
   flex-direction: column;
@@ -49,6 +55,7 @@ const EstadoSelect = styled(Select)`
 const Botones = styled.div`
   display: flex;
   gap: 1rem;
+  margin-top: 1rem;
 `;
 
 
@@ -64,17 +71,36 @@ const tareaDemo = {
 };
 
 
-const ServiceTc= () => {
-  const {
-    nombre,
-    descripcion,
-    fechaLimite,
-    estado,
-    duracionEstimada,
-    imagen = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
-  } = tareaDemo;
+const ServiceTc = () => {
+  const { id } = useParams();
+  const [servicioData, setServicioData] = useState(null);
+  const [estadoVisita, setEstadoVisita] = useState('');
 
-  const [estadoVisita, setEstadoVisita] = useState(estado || 'programada');
+  useEffect(() => {
+    if (id) {
+      handleGetServiceAssign(id)
+        .then((res) => {
+          const data = res.data.data;
+          setServicioData(data);
+          setEstadoVisita(data.estado || 'programada');
+        })
+        .catch((err) => {
+          console.error('Error al obtener el servicio asignado:', err);
+        });
+    }
+  }, [id]);
+
+  if (!servicioData) {
+    return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del servicio...</Typography>;
+  }
+
+  const {
+    fecha_programada,
+    duracion_estimada,
+    notas_previas,
+    notas_posteriores,
+    servicio,
+  } = servicioData;
 
   const handleEstadoChange = (e) => {
     setEstadoVisita(e.target.value);
@@ -83,25 +109,25 @@ const ServiceTc= () => {
   return (
     <Container>
       <Header>
-        <Imagen src={imagen} alt="icono" />
-        <Titulo>{nombre}</Titulo>
+        <Imagen src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="icono" />
+        <Titulo>{servicio?.nombre || 'Sin nombre'}</Titulo>
       </Header>
 
       <Divider />
 
-      <Typography variant="subtitle1" sx={{color:"black"}}><strong>Informacion</strong></Typography>
+      <Typography variant="subtitle1" sx={{ color: 'black' }}><strong>Información</strong></Typography>
 
       <Label>Notas previas:</Label>
-      <Typography sx={{color:"black"}}> {nombre}</Typography>
+      <Typography sx={{ color: 'black' }}>{notas_previas}</Typography>
 
       <Label>Notas posteriores:</Label>
-      <Typography sx={{color:"black"}}>{descripcion}</Typography>
+      <Typography sx={{ color: 'black' }}>{notas_posteriores}</Typography>
 
       <Label>Fecha programada:</Label>
-      <Typography sx={{color:"black"}}>{fechaLimite}</Typography>
+      <Typography sx={{ color: 'black' }}>{fecha_programada?.substring(0, 10)}</Typography>
 
-      <Label>Duracion estimada:</Label>
-      <Typography sx={{color:"black"}}>{duracionEstimada}</Typography>
+      <Label>Duración estimada:</Label>
+      <Typography sx={{ color: 'black' }}>{duracion_estimada} minutos</Typography>
 
       <Label>Estado de la visita:</Label>
       <EstadoSelect value={estadoVisita} onChange={handleEstadoChange}>
@@ -111,6 +137,40 @@ const ServiceTc= () => {
         <MenuItem value="completada">Completada</MenuItem>
         <MenuItem value="cancelada">Cancelada</MenuItem>
       </EstadoSelect>
+
+      <Accordion
+        sx={{
+          backgroundColor: '#f5f5f5',
+          border: '1px solid #bdbdbd',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '2px',
+          mt: 1
+        }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}
+          sx={{
+            backgroundColor: '#e0e0e0',
+            padding: '6px 12px',
+            borderBottom: '1px solid #bdbdbd',
+          }}
+      
+        >
+        <Typography sx={{ fontWeight: 'bold', color: '#212121' }}>
+          Servicio asignado: {servicio?.nombre}
+        </Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ padding: '16px', color: '#424242' }}>
+          <Typography>
+            <strong>Descripción:</strong> {servicio?.descripcion}
+          </Typography>
+          <Typography>
+            <strong>Estado:</strong> {servicio?.estado}
+          </Typography>
+          <Typography>
+            <strong>Fecha de creación:</strong> {new Date(servicio?.fecha_creacion).toLocaleDateString()}
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
 
       <Botones>
         <Button variant="contained" color="primary">GENERAR REPORTE</Button>

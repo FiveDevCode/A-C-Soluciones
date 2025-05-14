@@ -6,6 +6,7 @@ import { handleGetListTechnical } from "../../controllers/administrator/getTechn
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller"
 import { handleCreateVisit } from "../../controllers/administrator/createVisitAd.controller"
 import CloseIcon from '@mui/icons-material/Close';
+import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller"
 
 const ContainerPageAll = styled.section`
   display: flex;
@@ -76,12 +77,15 @@ const AssignVisitPageAd = () => {
   const [scheduledDate, setScheduledDate] = useState("");
   const [technical, setTechnical] = useState("");
   const [request, setRequest] = useState("");
+  const [service, setService] = useState("");
   const [selectedTechnical, setSelectedTechnical] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
 
 
   const [technicalList, setTechnicalList] = useState([]);
   const [requestList, setRequestList] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -102,6 +106,7 @@ const AssignVisitPageAd = () => {
         scheduledDate,
         request,
         technical,
+        service,
       );
 
       setShowSuccess(true);
@@ -129,6 +134,7 @@ const AssignVisitPageAd = () => {
     setScheduledDate("");
     setSelectedTechnical(null);
     setSelectedRequest(null);
+    setSelectedService(null);
     setFieldErrors({});
     setErrorMsg("");
   }
@@ -150,10 +156,23 @@ const AssignVisitPageAd = () => {
     const fetchData = async () => {
       try {
         const response = await handleGetListRequest();
-        console.log(response.data)
         setRequestList(response.data);
       } catch (error) {
         console.error("Error al obtener la lista de solicitudes:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await handleGetListServiceAd();
+        console.log(response.data)
+        setServiceList(response.data.data);
+      } catch (error) {
+        console.error("Error al obtener la lista de servicios:", error);
       }
     };
   
@@ -237,6 +256,7 @@ const AssignVisitPageAd = () => {
               onChange={(event, newValue) => {
                 setSelectedRequest(newValue);
                 setRequest(newValue ? newValue.id : "");
+                console.log(newValue.id)
               }}
               renderInput={(params) => (
                 <TextField
@@ -264,6 +284,27 @@ const AssignVisitPageAd = () => {
                   {...params}
                   label="Técnico"
                   placeholder="Buscar por nombre o cédula"
+                  sx={{ backgroundColor: 'white' }}
+                />
+              )}
+            />
+
+          <Autocomplete
+              fullWidth
+              options={serviceList}
+              getOptionLabel={(service) =>
+                `${service.nombre} - ${service.descripcion.slice(0, 50)}`
+              }
+              value={selectedService}
+              onChange={(event, newValue) => {
+                setSelectedService(newValue);
+                setService(newValue ? newValue.id : "");
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Servicio"
+                  placeholder="Buscar por id o palabra clave"
                   sx={{ backgroundColor: 'white' }}
                 />
               )}
