@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747342029210" clover="3.2.0">
-  <project timestamp="1747342029210" name="All files">
-    <metrics statements="1011" coveredstatements="979" conditionals="341" coveredconditionals="308" methods="231" coveredmethods="224" elements="1583" coveredelements="1511" complexity="0" loc="1011" ncloc="1011" packages="6" files="46" classes="46"/>
+<coverage generated="1747343080398" clover="3.2.0">
+  <project timestamp="1747343080398" name="All files">
+    <metrics statements="1012" coveredstatements="980" conditionals="341" coveredconditionals="308" methods="231" coveredmethods="224" elements="1584" coveredelements="1512" complexity="0" loc="1012" ncloc="1012" packages="6" files="46" classes="46"/>
     <package name="controllers">
       <metrics statements="510" coveredstatements="509" conditionals="167" coveredconditionals="163" methods="69" coveredmethods="69"/>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
@@ -967,7 +967,7 @@
       </file>
     </package>
     <package name="services">
-      <metrics statements="170" coveredstatements="142" conditionals="65" coveredconditionals="42" methods="67" coveredmethods="62"/>
+      <metrics statements="171" coveredstatements="143" conditionals="65" coveredconditionals="42" methods="67" coveredmethods="62"/>
       <file name="administrador.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\administrador.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="6" count="7" type="stmt"/>
@@ -1019,12 +1019,13 @@
         <line num="78" count="0" type="stmt"/>
       </file>
       <file name="email.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\email.services.js">
-        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="2" type="stmt"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="13" count="2" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
       </file>
       <file name="ficha_mantenimiento.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\ficha_mantenimiento.services.js">
         <metrics statements="33" coveredstatements="33" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>

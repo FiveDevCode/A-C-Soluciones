@@ -1,11 +1,16 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config(); // 
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465, // Puerto seguro
+    secure: true, 
     auth: {
-      user: 'jonier145@gmail.com',
-      pass: 'vjrd wzmr pxxx opew',
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 };
@@ -14,7 +19,7 @@ export const sendEmail = async (to, subject, text, filePath) => {
   const transporter = createTransporter();
 
   await transporter.sendMail({
-    from: 'tuemail@gmail.com',
+    from: process.env.EMAIL_USER, // 
     to,
     subject,
     text,

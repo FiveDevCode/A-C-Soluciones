@@ -1,55 +1,57 @@
 import nodemailer from 'nodemailer';
-import { sendEmail } from '../../../src/services/email.services.js';
+import { sendEmail, createTransporter } from '../../../src/services/email.services.js';
 
 jest.mock('nodemailer');
 
 describe('email.services', () => {
-  let sendMailMock;
-
-  beforeAll(() => {
-    // Mock del transporter y sendMail
-    sendMailMock = jest.fn().mockResolvedValue(true);
-
-    nodemailer.createTransport.mockReturnValue({
-      sendMail: sendMailMock,
-    });
-  });
+  let mockSendMail;
 
   beforeEach(() => {
+    mockSendMail = jest.fn().mockResolvedValue('Email enviado');
+    nodemailer.createTransport.mockReturnValue({ sendMail: mockSendMail });
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('sendEmail llama a transporter.sendMail con los argumentos correctos', async () => {
-    const to = 'cliente@example.com';
-    const subject = 'Asunto de prueba';
-    const text = 'Contenido del email';
-    const filePath = '/ruta/al/archivo.pdf';
+  describe('createTransporter', () => {
+    it('debe crear un transporter con la configuración correcta', () => {
+      const transporter = createTransporter();
 
-    await sendEmail(to, subject, text, filePath);
+      expect(nodemailer.createTransport).toHaveBeenCalledWith({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
 
-    expect(nodemailer.createTransport).toHaveBeenCalledWith({
-      service: 'gmail',
-      auth: {
-        user: 'jonier145@gmail.com',
-        pass: 'vjrd wzmr pxxx opew',
-      },
-    });
-
-    expect(sendMailMock).toHaveBeenCalledWith({
-      from: 'tuemail@gmail.com',
-      to,
-      subject,
-      text,
-      attachments: [{ path: filePath }],
+      expect(transporter.sendMail).toBeDefined();
     });
   });
 
-  // Opcional: test para manejo de errores (si implementas try/catch)
-  test('sendEmail propaga el error si sendMail falla', async () => {
-    sendMailMock.mockRejectedValueOnce(new Error('Fallo al enviar'));
+  describe('sendEmail', () => {
+    it('debe enviar un correo con los argumentos correctos', async () => {
+      await sendEmail('cliente@example.com', 'Asunto', 'Contenido del mensaje', 'ruta/del/archivo.pdf');
 
-    await expect(
-      sendEmail('to@example.com', 'subj', 'text', '/file.pdf')
-    ).rejects.toThrow('Fallo al enviar');
+      expect(mockSendMail).toHaveBeenCalledWith({
+        from: process.env.EMAIL_USER,
+        to: 'cliente@example.com',
+        subject: 'Asunto',
+        text: 'Contenido del mensaje',
+        attachments: [{ path: 'ruta/del/archivo.pdf' }],
+      });
+    });
+
+    it('debe propagar errores si sendMail falla', async () => {
+      mockSendMail.mockRejectedValue(new Error('Fallo al enviar'));
+
+      await expect(
+        sendEmail('cliente@example.com', 'Asunto', 'Texto', 'ruta/archivo.pdf')
+      ).rejects.toThrow('Fallo al enviar');
+    });
   });
 });
