@@ -166,5 +166,4 @@ export class VisitaRepository {
   }
 }
 
-//['id', 'nombre', 'descripcion', 'estado', ' fecha_creacion', ' fecha_modificacion']
  
