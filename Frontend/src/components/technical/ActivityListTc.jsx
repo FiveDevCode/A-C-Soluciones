@@ -112,7 +112,7 @@ const ActivityListTc = () => {
             </SeeMore>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to="/">Ver</Link>
+              <Link to={`/view-service/${service.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>

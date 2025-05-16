@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const Container = styled.div`
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   padding-left: 2rem;
   padding-bottom: 0;
   max-width: 800px;
@@ -19,12 +19,12 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 2rem;
 `;
 
 const Titulo = styled.h2`
   flex:1;
-  text-align: center;
+  text-align: start;
   margin:0;
   min-width:0;
   word-break:break-word;
@@ -57,18 +57,6 @@ const Botones = styled.div`
   gap: 1rem;
   margin-top: 1rem;
 `;
-
-
-
-const tareaDemo = {
-  nombre: 'Revisión de válvulas de presión en planta sur',
-  descripcion: `Realizar inspección preventiva y mantenimiento de las válvulas de presión ubicadas
-  en la planta sur. Verificar estado de sellos, realizar limpieza, lubricación y
-  reemplazo si es necesario. Documentar hallazgos y tomar fotografías del antes y después.`,
-  fechaLimite: '25/04/2025',
-  estado: 'programada',
-  duracionEstimada: '15 minutos',
-};
 
 
 const ServiceTc = () => {
@@ -140,26 +128,27 @@ const ServiceTc = () => {
 
       <Accordion
         sx={{
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#5D4037',
           border: '1px solid #bdbdbd',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
           borderRadius: '2px',
+          borderBottom: '1px solid #3E2723',
           mt: 1
         }}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: '#e0e0e0',
+            backgroundColor: '#3CAEA3',
             padding: '6px 12px',
-            borderBottom: '1px solid #bdbdbd',
+            borderBottom: '1px solid #2a9d8f',
           }}
       
         >
-        <Typography sx={{ fontWeight: 'bold', color: '#212121' }}>
+        <Typography sx={{ fontWeight: 'bold', color: '#EFEBE9' }}>
           Servicio asignado: {servicio?.nombre}
         </Typography>
         </AccordionSummary>
-        <AccordionDetails sx={{ padding: '16px', color: '#424242' }}>
+        <AccordionDetails sx={{ padding: '16px', color: '#424242', backgroundColor: '#FBF8F6', borderLeft: '4px solid #8D6E63' }}>
           <Typography>
             <strong>Descripción:</strong> {servicio?.descripcion}
           </Typography>
@@ -173,8 +162,8 @@ const ServiceTc = () => {
       </Accordion>
 
       <Botones>
-        <Button variant="contained" color="primary">GENERAR REPORTE</Button>
-        <Button variant="contained" color="primary">EDITAR REPORTE</Button>
+        <Button variant="contained" color="primary" sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}>Generar reporte</Button>
+        <Button variant="contained" color="primary" sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}>Editar reporte</Button>
       </Botones>
     </Container>
   );

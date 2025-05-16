@@ -81,6 +81,12 @@ const HeaderBar = () => {
     if (path.startsWith("/edit-client/")) {
       return "Editar cliente";
     }
+    if (path.startsWith("/view-service/")) {
+      return "Ver servicio";
+    }
+    if (path.startsWith("/profile-client/")) {
+      return "Perfil cliente";
+    }
 
     return titles[path] || "Ruta desconocida";
   }

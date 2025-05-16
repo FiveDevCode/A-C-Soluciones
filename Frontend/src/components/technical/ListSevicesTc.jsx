@@ -99,7 +99,7 @@ const ListSevicesTc = ({services}) => {
             </FormControl>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to="/">Ver</Link>
+              <Link to={`/view-service/${service.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>
