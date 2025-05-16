@@ -1,8 +1,12 @@
 import { jest } from '@jest/globals';
 import { ClienteService } from '../../../src/services/cliente.services.js';
 import { ClienteRepository } from '../../../src/repository/cliente.repository.js';
+import { encryptPasswordHook } from '../../../src/hooks/encryptPassword.js'; 
 
 jest.mock('../../../src/repository/cliente.repository.js');
+jest.mock('../../../src/hooks/encryptPassword.js', () => ({
+  encryptPasswordHook: jest.fn((pass) => Promise.resolve(`hashed_${pass}`))
+}));
 
 describe('ClienteService', () => {
   let clienteService;
@@ -28,7 +32,8 @@ describe('ClienteService', () => {
       ObtenerClientesActivos: jest.fn(),
       obtenerClientePorCedula: jest.fn(),
       eliminarCliente: jest.fn(),
-      actualizarCliente: jest.fn()
+      actualizarCliente: jest.fn(),
+      actualizarinfoCliente: jest.fn(),  
     };
 
     ClienteRepository.mockImplementation(() => mockClienteRepository);
@@ -144,6 +149,35 @@ describe('ClienteService', () => {
 
       expect(mockClienteRepository.actualizarCliente).toHaveBeenCalledWith(1, data);
       expect(result).toEqual(actualizado);
+    });
+  });
+
+  describe('actualizarPerfilCliente', () => {
+    it('debe actualizar el perfil con contraseña encriptada', async () => {
+      const clienteId = 1;
+      const datos = { nombre: 'Carlos', contrasenia: 'secreta' };
+      const datosEncriptados = { ...datos, contrasenia: 'hashed_secreta' };
+
+      mockClienteRepository.actualizarinfoCliente.mockResolvedValue({ id: clienteId, ...datosEncriptados });
+
+      const result = await clienteService.actualizarPerfilCliente(clienteId, datos);
+
+      expect(encryptPasswordHook).toHaveBeenCalledWith('secreta');
+      expect(mockClienteRepository.actualizarinfoCliente).toHaveBeenCalledWith(clienteId, datosEncriptados);
+      expect(result).toEqual({ id: clienteId, ...datosEncriptados });
+    });
+
+    it('debe actualizar el perfil sin contraseña', async () => {
+      const clienteId = 1;
+      const datos = { nombre: 'Carlos' };
+
+      mockClienteRepository.actualizarinfoCliente.mockResolvedValue({ id: clienteId, ...datos });
+
+      const result = await clienteService.actualizarPerfilCliente(clienteId, datos);
+
+      expect(encryptPasswordHook).not.toHaveBeenCalled();
+      expect(mockClienteRepository.actualizarinfoCliente).toHaveBeenCalledWith(clienteId, datos);
+      expect(result).toEqual({ id: clienteId, ...datos });
     });
   });
 });

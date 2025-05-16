@@ -279,4 +279,86 @@ describe('ClienteController', () => {
       expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el cliente.' });
     });
   });
+
+
+    describe('ClienteController - actualizarMiPerfil', () => {
+    let clienteController;
+    let clienteServiceMock;
+    let req;
+    let res;
+
+    beforeEach(() => {
+      // Mock del servicio con la función que nos interesa
+      clienteServiceMock = {
+        actualizarPerfilCliente: jest.fn(),
+      };
+
+      // Pasamos el mock al controlador
+      clienteController = new ClienteController(clienteServiceMock);
+
+      // Mock del request y response
+      req = {
+        user: { id: 1 },
+        body: {
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          telefono: '3001234567',
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      // Simula los campos permitidos (opcional: puedes omitir si no se usan internamente)
+      global.camposPermitidosCliente = ['nombre', 'apellido', 'telefono'];
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('debe actualizar correctamente el perfil del cliente', async () => {
+      const clienteMock = {
+        id: 1,
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        telefono: '3001234567',
+      };
+
+      clienteServiceMock.actualizarPerfilCliente.mockResolvedValue(clienteMock);
+
+      await clienteController.actualizarMiPerfil(req, res);
+
+      expect(clienteServiceMock.actualizarPerfilCliente).toHaveBeenCalledWith(1, {
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        telefono: '3001234567',
+      });
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(clienteMock);
+    });
+
+    it('debe responder 404 si el cliente no existe', async () => {
+      clienteServiceMock.actualizarPerfilCliente.mockResolvedValue(null);
+
+      await clienteController.actualizarMiPerfil(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Cliente no encontrado.' });
+    });
+
+    it('debe responder 500 si ocurre un error', async () => {
+      clienteServiceMock.actualizarPerfilCliente.mockRejectedValue(new Error('Fallo inesperado'));
+
+      await clienteController.actualizarMiPerfil(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Error al actualizar el perfil del cliente.' });
+    });
+  });
+
+
 });

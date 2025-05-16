@@ -1,5 +1,5 @@
 import { ClienteRepository } from "../repository/cliente.repository.js";
-
+import { encryptPasswordHook } from "../hooks/encryptPassword.js";
 
 export class ClienteService { 
     constructor() {
@@ -35,5 +35,12 @@ export class ClienteService {
     
     async actualizarCliente(id, data) {
         return await this.clienteRepository.actualizarCliente(id, data);
-    }   
+    } 
+    
+    async actualizarPerfilCliente(clienteId, datosActualizados) {
+    if (datosActualizados.contrasenia) {
+      datosActualizados.contrasenia = await encryptPasswordHook(datosActualizados.contrasenia);
+    }
+    return this.clienteRepository.actualizarinfoCliente(clienteId, datosActualizados);
+  } 
 }
