@@ -3,7 +3,7 @@ import { sequelize } from "../database/conexion.js";
 import { encryptPasswordHook } from '../hooks/encryptPassword.js';
 import { noFechasPasadas, sinEspaciosSolamente } from "../hooks/validators.js";
 
-const Cliente=sequelize.define('Cliente',{
+const Cliente= sequelize.define('Cliente',{
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true, 

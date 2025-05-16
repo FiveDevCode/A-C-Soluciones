@@ -14,6 +14,8 @@ import UsuarioRouter from './routers/usuario.routes.js';
 import ServicioRouter from "./routers/servicio.routes.js"
 import SolicitudRouter from './routers/solicitud.routes.js';
 import VisitaRouter from './routers/visita.routes.js';
+import fichaRouter from './routers/ficha.routes.js';
+import fichaClienteRouter from './routers/ficha.routes.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,7 +33,7 @@ App.use(cors({
   credentials: true
 }));
 
-// ratas de la API
+// rutas de la API
 App.use(AministradorRouter)
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
@@ -39,7 +41,10 @@ App.use(UsuarioRouter);
 App.use(ServicioRouter); 
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
+App.use('/fichas', fichaClienteRouter);
 
+App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
+App.use('/api', fichaRouter);
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
