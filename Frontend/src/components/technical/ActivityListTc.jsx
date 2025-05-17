@@ -70,19 +70,9 @@ const SeeMore = styled.div`
 
 
 
-const ActivityListTc = () => {
+const ActivityListTc = ({services}) => {
 
-  const [services, setServices] = useState([]);
 
-  useEffect(() => {
-    handleGetServiceList()
-      .then((res) => {
-        setServices(res.data.data); // Ajusta según la estructura real del backend
-      })
-      .catch((err) => {
-        console.error("Error fetching service list:", err);
-      });
-  }, []);
 
 
   return (

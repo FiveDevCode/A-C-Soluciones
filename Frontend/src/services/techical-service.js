@@ -22,9 +22,14 @@ const getListVisits = () => {
   });
 }
 
+const getTechnicalId = (id) => {
+  return axios.get(`http://localhost:8000/api/tecnico/${id}`)
+}
+
 
 
 export const technicalService = {
   getServiceAssign,
   getListVisits,
+  getTechnicalId,
 }

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Divider } from '@mui/material';
+import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -49,11 +51,27 @@ const Details = styled.div`
 `;
 
 const ProfileUserTc = () => {
-  const navigate = useNavigate();
 
-  const handleCerrarSesion = () => {
-    navigate('/login');
-  };
+  const [userTechnical, setUserTechnical] = useState();
+
+  useEffect(() => {
+
+    const token = sessionStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+
+    handleGetTechnicalId(decoded.id)
+      .then((res) => {
+        console.log(res)
+        setUserTechnical(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching technical:", err);
+      });
+  }, []);
+  
+  if (!userTechnical) {
+    return <p>Cargando datos del perfil...</p>;
+  }
 
   return (
     <Main>
@@ -71,10 +89,10 @@ const ProfileUserTc = () => {
       <Divider />
 
       <Details>
-        <p><strong>Nombre:</strong><br/>María Fernanda Toro Delgado</p>
-        <p><strong>Dirección:</strong> <br/>Calle Las Turbinas 234, Urb. Energía Verde, Arequipa 04001, Perú</p>
-        <p><strong>Correo electrónico:</strong> <br/><a href="mailto:maria.toro@hidrosoluciones.pe">maria.toro@hidrosoluciones.pe</a></p>
-        <p><strong>Teléfono:</strong> <br/>+51 312 688 3598</p>
+        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre} ${userTechnical.apellido}`}</p>
+        <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
+        <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
+        <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
       </Details>
     </Main>
   );

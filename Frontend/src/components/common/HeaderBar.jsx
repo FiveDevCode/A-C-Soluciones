@@ -1,7 +1,8 @@
 import { faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputAdornment, TextField } from "@mui/material";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -48,6 +49,7 @@ const InputSearch = styled(TextField)`
 
 const HeaderBar = () => {
   const [busqueda, setBusqueda] = useState('');
+  const [profilePath, setProfilePath] = useState("");
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
@@ -57,6 +59,23 @@ const HeaderBar = () => {
         navigate(`/resultado?data=${busqueda}`);
     }
   };
+
+
+
+  useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
+
+    switch (role) {
+      case "tecnico":
+        setProfilePath("/profileTc");
+        break;
+      case "administrador":
+        setProfilePath("/profileAd");
+        break;
+    }
+    
+  }, []);
+
 
 
   const titles = {
@@ -119,10 +138,10 @@ const HeaderBar = () => {
             style={{fontSize: '24px'}}
           />
         </Link>
-        <Link to="/profile" >
+        <Link to={profilePath}>
           <FontAwesomeIcon 
             icon={faCircleUser}
-            style={{fontSize: '24px'}}
+            style={{ fontSize: '24px' }}
           />
         </Link>
       </ContainerOption>

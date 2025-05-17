@@ -105,7 +105,7 @@ function AppContent() {
             </PrivateRoute>
           } />
 
-          <Route path="/profile" element={
+          <Route path="/profileTc" element={
             <PrivateRoute roleRequired="tecnico">
               <ProfileUserTc />
             </PrivateRoute>
