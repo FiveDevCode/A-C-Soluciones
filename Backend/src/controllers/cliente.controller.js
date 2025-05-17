@@ -1,6 +1,6 @@
 import { ClienteService } from "../services/cliente.services.js";
 import { ValidationError } from 'sequelize'; 
-import { camposPermitidosCliente } from '../utils/allowedFields.js';
+import { camposPermitidosCliente } from '../services/allowedFields.js';
 
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747500630481" clover="3.2.0">
-  <project timestamp="1747500630481" name="All files">
-    <metrics statements="1034" coveredstatements="1002" conditionals="350" coveredconditionals="317" methods="235" coveredmethods="228" elements="1619" coveredelements="1547" complexity="0" loc="1034" ncloc="1034" packages="6" files="46" classes="46"/>
+<coverage generated="1747501486772" clover="3.2.0">
+  <project timestamp="1747501486773" name="All files">
+    <metrics statements="1035" coveredstatements="1003" conditionals="350" coveredconditionals="317" methods="235" coveredmethods="228" elements="1620" coveredelements="1548" complexity="0" loc="1035" ncloc="1035" packages="6" files="47" classes="47"/>
     <package name="controllers">
       <metrics statements="524" coveredstatements="523" conditionals="172" coveredconditionals="168" methods="71" coveredmethods="71"/>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
@@ -986,7 +986,7 @@
       </file>
     </package>
     <package name="services">
-      <metrics statements="174" coveredstatements="146" conditionals="67" coveredconditionals="44" methods="68" coveredmethods="63"/>
+      <metrics statements="175" coveredstatements="147" conditionals="67" coveredconditionals="44" methods="68" coveredmethods="63"/>
       <file name="administrador.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\administrador.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="6" count="7" type="stmt"/>
@@ -997,6 +997,10 @@
         <line num="26" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
+      </file>
+      <file name="allowedFields.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\allowedFields.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="2" type="stmt"/>
       </file>
       <file name="cliente.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\cliente.services.js">
         <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="10" coveredmethods="10"/>

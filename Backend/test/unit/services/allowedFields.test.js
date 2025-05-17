@@ -1,4 +1,4 @@
-import { camposPermitidosCliente } from '../../../src/utils/allowedFields.js';
+import { camposPermitidosCliente } from '../../../src/services/allowedFields.js';
 
 describe('camposPermitidosCliente', () => {
   it('debe ser un array con los campos permitidos esperados', () => {
