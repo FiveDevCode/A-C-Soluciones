@@ -2,6 +2,14 @@ import { jest } from '@jest/globals';
 import express from 'express';
 import request from 'supertest';
 
+//  Mock del middleware de autenticación ANTES de importar el router
+jest.mock('../../../src/middlewares/autenticacion.js', () => ({
+  authenticate: (req, res, next) => {
+    req.user = { id: 1 }; // simula un usuario autenticado
+    next();
+  }
+}));
+
 // Mock del ClienteController
 jest.mock('../../../src/controllers/cliente.controller.js', () => {
   const mockControllerMethods = {
@@ -13,6 +21,7 @@ jest.mock('../../../src/controllers/cliente.controller.js', () => {
     actualizarCliente: jest.fn((req, res) => res.status(200).json({ message: 'actualizarCliente' })),
     eliminarCliente: jest.fn((req, res) => res.status(200).json({ message: 'eliminarCliente' })),
     obtenerTodosLosClientes: jest.fn((req, res) => res.status(200).json({ message: 'obtenerTodosLosClientes' })),
+    actualizarMiPerfil: jest.fn((req, res) => res.status(200).json({ message: 'actualizarMiPerfil' })),
   };
 
   return {
@@ -80,5 +89,16 @@ describe('Rutas de Cliente', () => {
     const response = await request(app).get('/api/cliente/todos');
     expect(response.status).toBe(200);
     expect(__mockClienteMethods.obtenerTodosLosClientes).toHaveBeenCalled();
+  });
+
+  test('PUT /api/mi-perfil llama a actualizarMiPerfil', async () => {
+    const response = await request(app).put('/api/mi-perfil').send({
+      nombre: 'Juan',
+      apellido: 'Pérez',
+      telefono: '3001234567'
+    });
+
+    expect(response.status).toBe(200);
+    expect(__mockClienteMethods.actualizarMiPerfil).toHaveBeenCalled();
   });
 });

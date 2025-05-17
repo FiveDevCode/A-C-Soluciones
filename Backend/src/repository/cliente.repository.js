@@ -38,5 +38,12 @@ export class ClienteRepository {
         await cliente.update(data);
         return cliente;
     }
+
+    async actualizarinfoCliente(id, camposActualizados) {
+        const cliente = await ClienteModel.Cliente.findByPk(id);
+        if (!cliente) return null;
+        await cliente.update(camposActualizados);
+        return cliente;
+  }
 }
 
