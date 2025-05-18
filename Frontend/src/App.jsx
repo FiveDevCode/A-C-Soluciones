@@ -5,7 +5,10 @@ import GenerateReportsTc from './components/tecnico/GenerateReportsTc';
 import { colors } from '@mui/material';
 import ServiceTc from './components/tecnico/ServiceTc';
 import UserProfileAd from './components/Admini/UserProfileAd';
-
+import ClientFaqs from './components/cliente/ClientFaqs';
+import ClientNotifications from './components/cliente/ClientNotifications';
+import NotificationFilter from './components/Admini/NotificationFilter';
+import Notification from './components/Admini/Notification';
 
 function Login() {
   return (
@@ -54,7 +57,12 @@ function App() {
 
        {/*  <Route path='/' element={<UserProfileAd/>}/> */}
 
-       
+       {/*< Route path='/' element={<ClientFaqs/>}/>*/}
+
+       {/* <Route path='/' element={<ClientNotifications/>}/> */}
+
+       <Route path='/' element={<NotificationFilter/>}/>
+
       </Routes>
     </Router>
   );
