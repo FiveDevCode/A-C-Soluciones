@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { handleLogin } from '../../controllers/common/login.controller';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from 'jwt-decode';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Form = styled.form`
   display: flex;
@@ -15,13 +13,13 @@ const Form = styled.form`
   max-width: 500px;
 `
 const LinkForgot = styled(Link)`
-  align-self: flex-end;
+  align-self: center;
   color: #0000EE;
   text-decoration: underline;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  margin-top: 1rem;
 
 `
-
 
 const ContainerButton = styled.div`
   display: flex;
@@ -40,20 +38,15 @@ const ContainerButton = styled.div`
 `
 
 
-const FormLogin = () => {
+const FormRecoverCode = () => {
   
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     if (token) {
@@ -130,11 +123,25 @@ const FormLogin = () => {
   return (
     <Form onSubmit={handleSubmit}>
       <TextField 
-        label="Correo electrónico" 
+        label="Código" 
         fullWidth size="medium" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ backgroundColor: 'white' }}
+        value={code} 
+        type='number'
+        onChange={(e) => setCode(e.target.value)}
+        sx={{ 
+          backgroundColor: 'white',
+          '& input[type=number]': {
+            MozAppearance: 'textfield',
+          },
+          '& input[type=number]::-webkit-outer-spin-button': {
+            WebkitAppearance: 'none',
+            margin: 0,
+          },
+          '& input[type=number]::-webkit-inner-spin-button': {
+            WebkitAppearance: 'none',
+            margin: 0,
+          },
+        }}
         error={Boolean(fieldErrors.correo_electronico)}
         helperText={fieldErrors.correo_electronico}
         FormHelperTextProps={{
@@ -145,36 +152,6 @@ const FormLogin = () => {
           },
         }}
       />
-      <TextField 
-        label="Contraseña" 
-        fullWidth size="medium" 
-        type={showPassword ? 'text' : 'password'}
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.contrasenia)}
-        helperText={fieldErrors.contrasenia}
-        FormHelperTextProps={{
-          sx: {
-            backgroundColor: '#F2F5F7',
-            margin: 0,
-
-          },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={handleClickShowPassword}
-                edge="end"
-                aria-label="toggle password visibility"
-              >
-                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} style={{fontSize:"22px"}}/>
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
       
       {errorMsg && (
         <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
@@ -182,17 +159,14 @@ const FormLogin = () => {
         </Typography>
       )}
 
-      <LinkForgot to="/recover">Has olvidado tu contraseña?</LinkForgot>
-
-      <ContainerButton>
-        <Button type="submit" variant="contained">Iniciar sesion</Button>
-        <Button type="button" variant="contained" LinkComponent={Link} to="/register">Crear Cuenta</Button>
-
-      </ContainerButton>
+      
+      <Button type="submit" variant="contained">Enviar</Button>
+      
+      <LinkForgot to="/recover">Reenviar código</LinkForgot>
 
     </Form>
 
   )
 }
 
-export default FormLogin;
+export default FormRecoverCode;

@@ -26,8 +26,8 @@ const ProfileInfo = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
 `;
 
@@ -78,10 +78,10 @@ const ProfileUserTc = () => {
       <ProfileSection>
         <ProfileInfo>
           <Avatar
-            src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png"
+            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
             alt="Avatar"
           />
-          <h2>María Fernanda Toro Delgado</h2>
+          <h2>{`${userTechnical.nombre} ${userTechnical.apellido}`}</h2>
         </ProfileInfo>
       
       </ProfileSection>
@@ -89,10 +89,11 @@ const ProfileUserTc = () => {
       <Divider />
 
       <Details>
+        <p><strong>Cédula:</strong><br/>{`${userTechnical.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</p>
         <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre} ${userTechnical.apellido}`}</p>
-        <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
-        <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
         <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
+        <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
+        <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
       </Details>
     </Main>
   );

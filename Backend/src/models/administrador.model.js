@@ -57,7 +57,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/i,
+        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
         msg: 'El apellido solo puede contener letras.',
       },
       len: {

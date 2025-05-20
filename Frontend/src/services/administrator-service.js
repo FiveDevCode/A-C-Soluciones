@@ -135,6 +135,25 @@ const getServiceList = () => {
   });
 }
 
+const getAdminId = (id) => {
+  return axios.get(`http://localhost:8000/api/admin/${id}`)
+}
+
+const updateAdmin = (id, idCard, nameUser, lastName, email) => {
+  
+  return axios.put(`http://localhost:8000/api/admin/${id}`, {
+    numero_cedula: idCard,
+    nombre: nameUser,
+    apellido: lastName,
+    correo_electronico: email,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -147,5 +166,7 @@ export const administratorService = {
   getListRequest,
   assignVisit,
   updateService,
-  getServiceList
+  getServiceList,
+  getAdminId,
+  updateAdmin
 }

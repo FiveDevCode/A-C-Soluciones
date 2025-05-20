@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Alert, Button, Collapse, Divider, IconButton, Skeleton, TextField } from '@mui/material';
+import { Alert, Button, Collapse, Divider, IconButton, TextField } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { handleGetAdminId } from '../../controllers/administrator/getAdminIdAd.controller';
 import adminProfile from "../../assets/administrator/admin.png"
+import { handleUpdateAdmin } from '../../controllers/administrator/updateAdminAd.controller';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { handleUpdateClient } from '../../controllers/administrator/updateClient.controller';
-import { handleGetClient } from '../../controllers/administrator/getClientAd.controller';
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Main = styled.main`
@@ -22,12 +22,17 @@ const Form = styled.form`
   width: 600px;
 `
 
+const ProfileSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+`;
 
 const ProfileInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 1rem;
 `;
 
 const Avatar = styled.img`
@@ -57,104 +62,52 @@ const ContainerButton = styled.div`
   }
 
 `
-const SkeletonButton = styled(Skeleton)`
-  align-self: flex-end;
-  &.MuiSkeleton-root {
-    margin-right: 4rem;
 
-  }
-
-`
-const ContainerButtonSkeleton = styled.div`
-  display: flex;
-  gap: 3rem;
-
-  & > *:first-child {
-    width: 45%;
-
-  }
-  & > *:nth-child(2)  {
-    width: 35%;
-  }
-`
-
-const SkeletonLoader = () => (
-  <Main>
-    <ProfileInfo>
-      <Skeleton variant="circular" width={120} height={120} />
-      <Skeleton variant="text" width={300} height={40} />
-    </ProfileInfo>
-
-    <Divider />
-    <TitleHelp>
-      <Skeleton variant="text" width={200} height={30} />
-    </TitleHelp>
-
-    <Form>
-      {[...Array(6)].map((_, index) => (
-        <Skeleton
-          key={index}
-          variant="rectangular"
-          height={56}
-          sx={{ borderRadius: "4px", backgroundColor: "#e0e0e0" }}
-        />
-      ))}
-
-      <ContainerButtonSkeleton>
-        <SkeletonButton variant="rectangular" height={36} />
-        <SkeletonButton variant="rectangular" height={36} />
-      </ContainerButtonSkeleton>
-    </Form>
-  </Main>
-);
-
-const EditClientAd = () => {
+const EditAdminPageAd = () => {
 
   const navigate = useNavigate();
-  const {id} = useParams();
 
   const [userAdmin, setUserAdmin] = useState();
   const [IdCard, setIdCard] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  
-  const [originalData, setOriginalData] = useState({});
-
+    
   const handleChange = (setter) => (e) => {
     setter(e.target.value);
+    if (showSuccess) setShowSuccess(false);
   };
 
   const handleSubmit = async(event) => {
     event.preventDefault(); 
     setIsSubmitting(true);
+    const token = sessionStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+    const id = decoded.id;
 
     try {
-      await handleUpdateClient(
+      await handleUpdateAdmin(
         id,
         IdCard,
         nameUser,
         lastName,
-        email,
-        phone,
-        address
+        email
       );
 
       setFieldErrors("");
       setErrorMsg("");
       setShowSuccess(true);
+      handleLimpiar();
 
       
       setTimeout(() => {
-        navigate(`/profile-client/${id}`);
+        navigate("/profileAd");
       }, 3000);
       
     } catch (err) {
@@ -170,53 +123,48 @@ const EditClientAd = () => {
   };
 
   useEffect(() => {
-    handleGetClient(id)
-      .then((res) => {
-        const data = res.data;
-        setUserAdmin(data);
-        setIdCard(data.numero_de_cedula || "");
-        setNameUser(data.nombre || "");
-        setLastName(data.apellido || "");
-        setEmail(data.correo_electronico || "");
-        setAddress(data.direccion || "");
-        setPhone(data.telefono || "");
+    const token = sessionStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+    const id = decoded.id;
 
-        setOriginalData({
-          numero_de_cedula: data.numero_de_cedula || "",
-          nombre: data.nombre || "",
-          apellido: data.apellido || "",
-          correo_electronico: data.correo_electronico || "",
-          direccion: data.direccion || "",
-          telefono: data.telefono || ""
-        });
+    handleGetAdminId(id)
+      .then((res) => {
+        setUserAdmin(res.data);
+        setIdCard(res.data.numero_cedula || "");
+        setNameUser(res.data.nombre || "");
+        setLastName(res.data.apellido || "");
+        setEmail(res.data.correo_electronico || "");
       })
+      .catch((err) => {
+        console.error("Error fetching admin:", err);
+      });
   }, []);
 
-  const hasChanges = () => {
-    return (
-      IdCard !== originalData.numero_de_cedula ||
-      nameUser !== originalData.nombre ||
-      lastName !== originalData.apellido ||
-      email !== originalData.correo_electronico ||
-      address !== originalData.direccion ||
-      phone !== originalData.telefono
-    );
+  const handleLimpiar = () => {
+    setNameUser("");
+    setLastName("");
+    setIdCard("");
+    setEmail("");
+
   };
 
 
+  
   if (!userAdmin) {
-    return <SkeletonLoader />
+    return <p>Cargando datos del perfil...</p>;
   }
 
   return (
     <Main>
-      <ProfileInfo>
-        <Avatar
-          src={adminProfile}
-          alt="Avatar"
-        />
-        <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
-      </ProfileInfo>      
+      <ProfileSection>
+        <ProfileInfo>
+          <Avatar
+            src={adminProfile}
+            alt="Avatar"
+          />
+          <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
+        </ProfileInfo>      
+      </ProfileSection>
 
       <Divider />
 
@@ -262,26 +210,6 @@ const EditClientAd = () => {
           error={Boolean(fieldErrors.correo_electronico)}
           helperText={fieldErrors.correo_electronico}
         /> 
-        <TextField 
-          label="Dirrecion" 
-          fullWidth 
-          size="medium" 
-          value={address} 
-          onChange={handleChange(setAddress)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.direccion)}
-          helperText={fieldErrors.direccion}
-        /> 
-        <TextField 
-          label="Celular" 
-          fullWidth 
-          size="medium" 
-          value={phone} 
-          onChange={handleChange(setPhone)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.telefono)}
-          helperText={fieldErrors.telefono}
-        /> 
 
 
         <Collapse in={!!errorMsg}>
@@ -322,10 +250,10 @@ const EditClientAd = () => {
           </Alert>
         </Collapse>
         <ContainerButton>
-          <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
-            {isSubmitting ? "Guardando..." : "Guardar cambios"}
+          <Button type="submit" variant="contained" disabled={isSubmitting}>
+            {isSubmitting ? "Editando..." : "Editar"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to={`/profile-client/${id}`}>Cancelar</Button>
+          <Button type="button" variant="contained" LinkComponent={Link} to="/profileAd">Cancelar</Button>
         </ContainerButton>
 
       </Form>
@@ -333,4 +261,4 @@ const EditClientAd = () => {
   );
 };
 
-export default EditClientAd;
+export default EditAdminPageAd;

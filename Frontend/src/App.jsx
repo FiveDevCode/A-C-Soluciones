@@ -25,6 +25,13 @@ import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
 import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
 import EditServicePageAd from './pages/administrator/EditServicePageAd';
+import RecoverPasswordPage from './pages/common/RecoverPasswordPage';
+import FormRecoverCode from './components/common/FormRecoverCode';
+import RecoverCodePage from './pages/common/RecoverCodePage';
+import RecoverChangePage from './pages/common/RecoverChangePage';
+import ProfilePageAd from './pages/administrator/ProfilePageAd';
+import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
+import UserProfileClientAd from './pages/administrator/UseProfileClientAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -65,6 +72,9 @@ function AppContent() {
   const hideMenuAndHeader =
     location.pathname === '/login' ||
     location.pathname === '/register' ||
+    location.pathname === '/recover' ||
+    location.pathname === '/recover-code' ||
+    location.pathname === '/recover-change' ||
     location.pathname === '/' ||
     role === 'cliente';
 
@@ -79,8 +89,13 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<CreateAccountPageCl />} />
+          <Route path="/recover" element={<RecoverPasswordPage />} />
+          <Route path="/recover-code" element={<RecoverCodePage />} />
+          <Route path="/recover-change" element={<RecoverChangePage />} />
 
           {/* Rutas protegidas por tipo de usuario */}
+          {/* ********************************* Rutas Cliente ********************************** */}
+
           <Route path="/home" element={
             <PrivateRoute roleRequired="cliente">
               <HomeSessionPageCl />
@@ -92,6 +107,8 @@ function AppContent() {
               <ServicesAllPageCl />
             </PrivateRoute>
           } />
+
+          {/* ********************************* Rutas Tecnico ********************************** */}
 
           <Route path="/services" element={
             <PrivateRoute roleRequired="tecnico">
@@ -117,6 +134,8 @@ function AppContent() {
             </PrivateRoute>
           } />
           
+          {/* ********************************* Rutas Administrador ********************************** */}
+
           <Route path="/register-employee" element={
             <PrivateRoute roleRequired="administrador">
               <CreateEmployeeAd />
@@ -132,6 +151,12 @@ function AppContent() {
           <Route path="/profile-technical/:id" element={
             <PrivateRoute roleRequired="administrador">
               <UserProfileAd />
+            </PrivateRoute>
+          } />
+
+          <Route path="/profile-client/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <UserProfileClientAd />
             </PrivateRoute>
           } />
 
@@ -171,6 +196,17 @@ function AppContent() {
             </PrivateRoute>
           } />
 
+          <Route path="/profileAd" element={
+            <PrivateRoute roleRequired="administrador">
+              <ProfilePageAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/edit-profileAd" element={
+            <PrivateRoute roleRequired="administrador">
+              <EditAdminPageAd/>
+            </PrivateRoute>
+          } />
 
           {/* Ruta para acceso denegado */}
           <Route path="/login" element={<LoginPage />} />

@@ -92,6 +92,9 @@ const HeaderBar = () => {
     "/administrator-permit": "Crear administrador permisos",
     "/assing-visit": "Asignar visita",
     "/register-administrator" : "Crear administrador",
+    "/profileTc":"Perfil",
+    "/profileAd":"Perfil",
+    "/edit-profileAd":"Editar perfil",
     "/homeTc": "Home",
     "/homeAd": "Home",
   };

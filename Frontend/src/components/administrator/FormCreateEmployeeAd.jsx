@@ -2,7 +2,6 @@ import { TextField, Button, Collapse, Alert, IconButton } from '@mui/material';
 import { useState } from 'react';
 import {handleCreateSubmitTechnical} from "../../controllers/administrator/createTc.controller"
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -32,9 +31,6 @@ const ContainerButton = styled.div`
 `
 
 const FormCreateEmployeeAd = () => {
-
-  const navigate = useNavigate();
-
 
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
@@ -78,7 +74,6 @@ const FormCreateEmployeeAd = () => {
       
     } catch (err) {
       setErrorMsg("");
-      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {

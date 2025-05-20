@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { handleLogin } from '../../controllers/common/login.controller';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from 'jwt-decode';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Form = styled.form`
   display: flex;
@@ -14,14 +12,6 @@ const Form = styled.form`
   width: 35%;
   max-width: 500px;
 `
-const LinkForgot = styled(Link)`
-  align-self: flex-end;
-  color: #0000EE;
-  text-decoration: underline;
-  font-size: 1.05rem;
-
-`
-
 
 const ContainerButton = styled.div`
   display: flex;
@@ -40,20 +30,15 @@ const ContainerButton = styled.div`
 `
 
 
-const FormLogin = () => {
+const FormRecoverPassword = () => {
   
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     if (token) {
@@ -145,36 +130,6 @@ const FormLogin = () => {
           },
         }}
       />
-      <TextField 
-        label="Contraseña" 
-        fullWidth size="medium" 
-        type={showPassword ? 'text' : 'password'}
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.contrasenia)}
-        helperText={fieldErrors.contrasenia}
-        FormHelperTextProps={{
-          sx: {
-            backgroundColor: '#F2F5F7',
-            margin: 0,
-
-          },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={handleClickShowPassword}
-                edge="end"
-                aria-label="toggle password visibility"
-              >
-                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} style={{fontSize:"22px"}}/>
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
       
       {errorMsg && (
         <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
@@ -182,12 +137,9 @@ const FormLogin = () => {
         </Typography>
       )}
 
-      <LinkForgot to="/recover">Has olvidado tu contraseña?</LinkForgot>
-
       <ContainerButton>
-        <Button type="submit" variant="contained">Iniciar sesion</Button>
-        <Button type="button" variant="contained" LinkComponent={Link} to="/register">Crear Cuenta</Button>
-
+        <Button type="submit" variant="contained">Siguiente</Button>
+        <Button type="button" variant="contained" LinkComponent={Link} to="/login">Cancelar</Button>
       </ContainerButton>
 
     </Form>
@@ -195,4 +147,4 @@ const FormLogin = () => {
   )
 }
 
-export default FormLogin;
+export default FormRecoverPassword;
