@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import { ClienteModel } from '../models/cliente.model.js';
 import { generarPDF } from '../services/ficha_mantenimiento.services.js';
 import { sendEmail } from '../services/email.services.js';
@@ -6,47 +8,124 @@ import { TecnicoModel } from '../models/tecnico.model.js';
 
 export const crearFichaMantenimiento = async (req, res) => {
   try {
-    const data = req.body;
+    // Log completo del body recibido
+    console.log('req.body:', req.body);
 
-    const ficha = await fichaRepo.crearFicha(data);
+    // Extraer campos del cuerpo
+    const {
+      id_cliente,
+      id_tecnico,
+      introduccion,
+      detalles_servicio,
+      observaciones,
+      estado_antes,
+      descripcion_trabajo,
+      materiales_utilizados,
+      estado_final,
+      tiempo_de_trabajo,
+      recomendaciones,
+      fecha_de_mantenimiento
+    } = req.body;
 
-    const cliente = await ClienteModel.Cliente.findByPk(ficha.id_cliente);
+    // Log específico de los campos requeridos
+    console.log('Campos requeridos extraídos:', {
+      id_cliente,
+      id_tecnico,
+      introduccion,
+      detalles_servicio,
+      observaciones,
+      estado_antes,
+      descripcion_trabajo,
+      materiales_utilizados,
+      estado_final,
+      tiempo_de_trabajo,
+      recomendaciones,
+      fecha_de_mantenimiento
+    });
+
+    // Extraer archivos si están presentes
+    const fotoAntes = req.files?.foto_estado_antes?.[0];
+    const fotoFinal = req.files?.foto_estado_final?.[0];
+    const fotoDescripcion = req.files?.foto_descripcion_trabajo?.[0];
+
+    // Log de los archivos subidos
+    console.log('Archivos recibidos:', {
+      fotoAntes: fotoAntes?.filename,
+      fotoFinal: fotoFinal?.filename,
+      fotoDescripcion: fotoDescripcion?.filename,
+    });
+
+    // Crear objeto para guardar
+    const nuevaFicha = await fichaRepo.crearFicha({
+      id_cliente,
+      id_tecnico,
+      fecha_de_mantenimiento,
+      introduccion,
+      detalles_servicio,
+      observaciones,
+      estado_antes,
+      descripcion_trabajo,
+      materiales_utilizados,
+      estado_final,
+      tiempo_de_trabajo,
+      recomendaciones,
+      foto_estado_antes: fotoAntes?.filename || null,
+      foto_estado_final: fotoFinal?.filename || null,
+      foto_descripcion_trabajo: fotoDescripcion?.filename || null,
+    });
+
+    // Buscar cliente
+    const cliente = await ClienteModel.Cliente.findByPk(id_cliente);
     if (!cliente) return res.status(404).json({ error: 'Cliente no encontrado' });
 
     const clienteInfo = {
       nombre: cliente.nombre,
       telefono: cliente.telefono || 'No especificado',
-      correo: cliente.correo_electronico
+      correo: cliente.correo_electronico,
     };
 
-    const tecnico = await TecnicoModel.Tecnico.findByPk(ficha.id_tecnico); 
-    if (!tecnico) return res.status(404).json({ error: 'Tecnico no encontrado'}); 
+    // Buscar técnico
+    const tecnico = await TecnicoModel.Tecnico.findByPk(id_tecnico);
+    if (!tecnico) return res.status(404).json({ error: 'Técnico no encontrado' });
+
     const tecnicoInfo = {
       nombre: tecnico.nombre,
-      apellido: tecnico.apellido, 
-      telefono: cliente.telefono, 
-      correo: tecnico.correo_electronico
-    };  
+      apellido: tecnico.apellido,
+      telefono: tecnico.telefono || 'No especificado',
+      correo: tecnico.correo_electronico,
+    };
 
-    const pdfPath = await generarPDF(ficha, clienteInfo, tecnicoInfo);
+    // Ruta de imágenes para pasar al PDF
+    const imagenes = {
+      estadoAntes: fotoAntes ? path.join('uploads', 'fotos_fichas', fotoAntes.filename) : null,
+      estadoFinal: fotoFinal ? path.join('uploads', 'fotos_fichas', fotoFinal.filename) : null,
+      descripcion: fotoDescripcion ? path.join('uploads', 'fotos_fichas', fotoDescripcion.filename) : null,
+    };
 
-    await fichaRepo.actualizarPDFPath(ficha.id, pdfPath);
+    // Generar PDF
+    const pdfPath = await generarPDF(nuevaFicha, clienteInfo, tecnicoInfo, imagenes);
 
+    // Guardar path PDF en BD
+    await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfPath);
+
+    // Enviar email con PDF
     await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
 
     res.status(201).json({
       mensaje: 'Ficha creada correctamente y enviada al cliente.',
       ficha: {
-        ...ficha.toJSON(),
-        pdf_path: pdfPath
-      }
+        ...nuevaFicha.toJSON(),
+        pdf_path: pdfPath,
+      },
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('Error en crearFichaMantenimiento:', error);
     res.status(500).json({ error: 'Error al crear la ficha' });
   }
 };
+
+
 
 export const listarFichas = async (req, res) => {
   try {

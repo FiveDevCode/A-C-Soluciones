@@ -1,84 +1,78 @@
 import request from 'supertest';
 import express from 'express';
 import path from 'path';
+import fichaRouter from '../../../src/routers/ficha.routes.js';
+import * as controller from '../../../src/controllers/ficha_mantenimiento.controller.js';
+import * as auth from '../../../src/middlewares/autenticacion.js';
 
-// Mock de middlewares y controladores
-jest.mock('../../../src/controllers/ficha_mantenimiento.controller.js', () => ({
-  crearFichaMantenimiento: jest.fn((req, res) => res.status(201).send('crearFichaMantenimiento called')),
-  listarFichas: jest.fn((req, res) => res.status(200).send('listarFichas called')),
+jest.mock('../../../src/middlewares/autenticacion.js');
+jest.mock('../../../src/controllers/ficha_mantenimiento.controller.js');
+jest.mock('../../../src/middlewares/uploadImages.js', () => ({
+  fields: () => (req, res, next) => next()
 }));
 
-jest.mock('../../../src/middlewares/autenticacion.js', () => ({
-  isAdminOrTecnico: jest.fn((req, res, next) => next()),
-  isCliente: jest.fn((req, res, next) => next()),
-  authenticate: jest.fn((req, res, next) => next()),
-}));
+const app = express();
+app.use(express.json());
+app.use('/', fichaRouter);
 
-// Importar el router con mocks ya cargados
-import router from '../../../src/routers/ficha.routes.js';
+// 🧪 Mocks
+const dummyFicha = { mensaje: 'creada' };
+const dummyList = [{ id: 1 }];
 
-describe('Rutas ficha_mantenimiento', () => {
-  let app;
+beforeEach(() => {
+  jest.clearAllMocks();
+  auth.isAdminOrTecnico.mockImplementation((req, res, next) => next());
+  auth.authenticate.mockImplementation((req, res, next) => next());
+  auth.isCliente.mockImplementation((req, res, next) => next());
 
-  beforeEach(() => {
-    app = express();
-    app.use(express.json());
-    app.use('/api', router);
-  });
+  controller.crearFichaMantenimiento.mockImplementation((req, res) =>
+    res.status(201).json(dummyFicha)
+  );
 
-  test('POST /api/fichas debe llamar a isAdminOrTecnico y crearFichaMantenimiento', async () => {
-    const res = await request(app).post('/api/fichas').send({});
+  controller.listarFichas.mockImplementation((req, res) =>
+    res.status(200).json(dummyList)
+  );
+});
 
-    expect(res.status).toBe(201);
-    expect(res.text).toBe('crearFichaMantenimiento called');
-  });
+it('debería crear una ficha con POST /fichas', async () => {
+  const res = await request(app).post('/fichas').send({ id_cliente: 1 });
 
-  test('GET /api/fichas debe llamar a authenticate y listarFichas', async () => {
-    const res = await request(app).get('/api/fichas');
+  expect(res.statusCode).toBe(201);
+  expect(res.body).toEqual(dummyFicha);
+  expect(controller.crearFichaMantenimiento).toHaveBeenCalled();
+});
 
-    expect(res.status).toBe(200);
-    expect(res.text).toBe('listarFichas called');
-  });
+it('debería listar fichas con GET /fichas', async () => {
+  const res = await request(app).get('/fichas');
 
-  test('GET /api/descargar/:nombreArchivo debe enviar archivo correctamente', async () => {
-    // Como sendFile usa callback, debemos espiar res.sendFile para simular
-    const fakeFileName = 'archivo.pdf';
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toEqual(dummyList);
+  expect(controller.listarFichas).toHaveBeenCalled();
+});
 
-    // Setup app con router, pero interceptar sendFile
-    app.get('/api/descargar/:nombreArchivo', (req, res) => {
-      const filePath = path.resolve(`uploads/fichas/${req.params.nombreArchivo}`);
+it('debería enviar un archivo con GET /descargar/:nombreArchivo', async () => {
+  const filePath = path.resolve('uploads/fichas/test.pdf');
 
-      res.sendFile(filePath, (err) => {
-        if (err) {
-          return res.status(404).json({ error: 'Archivo no encontrado' });
-        }
-      });
-    });
+  // Creamos el archivo temporal para test
+  const fs = await import('fs');
+  fs.writeFileSync(filePath, 'contenido');
 
-    // Mock res.sendFile para simular envio exitoso
-    const res = await request(app).get(`/api/descargar/${fakeFileName}`);
+  const res = await request(app).get('/descargar/test.pdf');
 
-    expect([200, 404]).toContain(res.status);
-  });
+  expect(res.statusCode).toBe(200);
 
-  test('GET /api/descargar/:nombreArchivo debe manejar error si archivo no existe', async () => {
-    const fakeFileName = 'archivo_no_existente.pdf';
+  fs.unlinkSync(filePath);
+});
 
-    app.get('/api/descargar/:nombreArchivo', (req, res) => {
-      const filePath = path.resolve(`uploads/fichas/${req.params.nombreArchivo}`);
+it('debería devolver 404 si el archivo no se encuentra', async () => {
+  const originalSendFile = express.response.sendFile;
+  express.response.sendFile = function (filePath, cb) {
+    cb(new Error('No encontrado'));
+  };
 
-      // Simulamos error manualmente
-      res.sendFile = (path, callback) => callback(new Error('File not found'));
-      res.sendFile(filePath, (err) => {
-        if (err) {
-          return res.status(404).json({ error: 'Archivo no encontrado' });
-        }
-      });
-    });
+  const res = await request(app).get('/descargar/no-existe.pdf');
+  expect(res.statusCode).toBe(404);
+  expect(res.body).toEqual({ error: 'Archivo no encontrado' });
 
-    const res = await request(app).get(`/api/descargar/${fakeFileName}`);
-
-    expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: 'Archivo no encontrado' });
-  });
+  express.response.sendFile = originalSendFile; // restaurar
 });
