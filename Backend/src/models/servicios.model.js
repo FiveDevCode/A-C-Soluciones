@@ -19,7 +19,7 @@ const Servicio = sequelize.define('Servicio', {
         msg: 'El nombre del servicio debe tener entre 2 y 100 caracteres.',
       },
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,&()-]+$/i,
+        args: /^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
         msg: 'El nombre del servicio contiene caracteres no válidos.',
       },
       noSpacesEdges(value) {

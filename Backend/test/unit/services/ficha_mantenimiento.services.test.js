@@ -7,109 +7,109 @@ jest.mock('fs');
 jest.mock('pdfkit');
 
 describe('generarPDF', () => {
-  let mockDoc;
-  let mockStream;
+  let mockDoc, mockWriteStream;
 
   beforeEach(() => {
-    // Mock fs methods
-    fs.existsSync.mockReset();
-    fs.mkdirSync.mockReset();
-    fs.createWriteStream.mockReset();
-
-    // Mock stream as event emitter
-    mockStream = {
+    mockWriteStream = {
       on: jest.fn((event, cb) => {
-        // Store callback for later triggering in tests
-        if (event === 'finish') mockStream._finishCallback = cb;
-        if (event === 'error') mockStream._errorCallback = cb;
-        return mockStream;
+        if (event === 'finish') setTimeout(cb, 0);
       }),
+      once: jest.fn(),
+      emit: jest.fn(),
     };
 
-    fs.createWriteStream.mockReturnValue(mockStream);
-
-    // Mock PDFDocument instance and methods
     mockDoc = {
-      pipe: jest.fn(() => mockDoc),
-      fontSize: jest.fn(() => mockDoc),
-      text: jest.fn(() => mockDoc),
-      moveDown: jest.fn(() => mockDoc),
+      pipe: jest.fn(),
+      fontSize: jest.fn().mockReturnThis(),
+      text: jest.fn().mockReturnThis(),
+      moveDown: jest.fn().mockReturnThis(),
+      image: jest.fn().mockReturnThis(),
       end: jest.fn(),
     };
+
     PDFDocument.mockImplementation(() => mockDoc);
-
-    // Mock existsSync to false by default (folder does not exist)
-    fs.existsSync.mockReturnValue(false);
+    fs.createWriteStream.mockReturnValue(mockWriteStream);
+    fs.existsSync.mockImplementation((p) => true);
+    fs.mkdirSync.mockImplementation(() => {});
   });
 
-  test('crea la carpeta si no existe', async () => {
-    const ficha = { id: 1, fecha_de_mantenimiento: new Date() };
-    const clienteInfo = { nombre: 'Cliente', telefono: '123' };
-    const tecnicoInfo = { nombre: 'Tecnico', apellido: 'Uno', telefono: '456', correo: 'tech@mail.com' };
+  const ficha = {
+    id: 1,
+    fecha_de_mantenimiento: '2024-05-01T00:00:00Z',
+    introduccion: 'Intro',
+    detalles_servicio: 'Detalles',
+    observaciones: 'Obs',
+    estado_antes: 'Antes',
+    descripcion_trabajo: 'Trabajo',
+    materiales_utilizados: 'Materiales',
+    estado_final: 'Final',
+    tiempo_de_trabajo: '5h',
+    recomendaciones: 'Recomendaciones'
+  };
 
-    const promise = generarPDF(ficha, clienteInfo, tecnicoInfo);
+  const clienteInfo = {
+    nombre: 'Juan',
+    telefono: '123',
+    correo: 'juan@test.com'
+  };
 
-    // Simula el finish
-    mockStream._finishCallback();
+  const tecnicoInfo = {
+    nombre: 'Carlos',
+    apellido: 'Pérez',
+    telefono: '456',
+    correo: 'carlos@test.com'
+  };
 
-    await expect(promise).resolves.toBe(path.join('uploads', 'fichas', `ficha_${ficha.id}.pdf`));
+  const imagenes = {
+    estadoAntes: 'ruta/antes.jpg',
+    descripcion: 'ruta/desc.jpg',
+    estadoFinal: 'ruta/final.jpg'
+  };
+  it('debería generar un PDF con imágenes si existen', async () => {
+    fs.existsSync.mockImplementation((p) => true); // todas las imágenes existen
 
-    expect(fs.existsSync).toHaveBeenCalledWith(path.join('uploads', 'fichas'));
-    expect(fs.mkdirSync).toHaveBeenCalledWith(path.join('uploads', 'fichas'), { recursive: true });
+    const result = await generarPDF(ficha, clienteInfo, tecnicoInfo, imagenes);
+
+    expect(fs.mkdirSync).not.toHaveBeenCalled(); // carpeta ya existe
+    expect(mockDoc.image).toHaveBeenCalledTimes(3); // las 3 imágenes
+    expect(result).toContain('ficha_1.pdf');
   });
 
-  test('no crea carpeta si ya existe', async () => {
+
+it('debería crear el folder si no existe', async () => {
+  fs.existsSync.mockImplementation((p) => false); 
+
+  const result = await generarPDF(ficha, clienteInfo, tecnicoInfo, {});
+
+  expect(fs.mkdirSync).toHaveBeenCalledWith(
+    path.join('uploads', 'fichas'),
+    { recursive: true }
+  );
+  expect(mockDoc.image).not.toHaveBeenCalled();
+  expect(result).toContain('ficha_1.pdf');
+});
+  it('no debería agregar imágenes si fs.existsSync devuelve false', async () => {
+    fs.existsSync.mockImplementation((p) => p.includes('uploads/fichas')); 
+
+    const result = await generarPDF(ficha, clienteInfo, tecnicoInfo, imagenes);
+
+    expect(mockDoc.image).not.toHaveBeenCalled();
+    expect(result).toContain('ficha_1.pdf');
+  });
+  it('debería rechazar la promesa si el stream da error', async () => {
     fs.existsSync.mockReturnValue(true);
 
-    const ficha = { id: 2, fecha_de_mantenimiento: new Date() };
-    const clienteInfo = { nombre: 'Cliente', telefono: '123' };
-    const tecnicoInfo = { nombre: 'Tecnico', apellido: 'Uno', telefono: '456', correo: 'tech@mail.com' };
+    mockWriteStream.on = jest.fn((event, cb) => {
+      if (event === 'error') setTimeout(() => cb(new Error('Stream error')), 0);
+    });
 
-    const promise = generarPDF(ficha, clienteInfo, tecnicoInfo);
-    mockStream._finishCallback();
-
-    await expect(promise).resolves.toBe(path.join('uploads', 'fichas', `ficha_${ficha.id}.pdf`));
-
-    expect(fs.mkdirSync).not.toHaveBeenCalled();
+    await expect(generarPDF(ficha, clienteInfo, tecnicoInfo, {})).rejects.toThrow('Stream error');
   });
+  it('no debería incluir recomendaciones si no existen', async () => {
+    const fichaSinRecom = { ...ficha, recomendaciones: '' };
 
-  test('invoca los métodos PDFDocument correctos', async () => {
-    const ficha = {
-      id: 3,
-      fecha_de_mantenimiento: new Date(),
-      introduccion: 'Intro',
-      detalles_servicio: 'Detalles',
-      observaciones: 'Obs',
-      estado_antes: 'Antes',
-      descripcion_trabajo: 'Trabajo',
-      materiales_utilizados: 'Materiales',
-      estado_final: 'Final',
-      tiempo_de_trabajo: '2 horas',
-      recomendaciones: 'Recomendaciones',
-    };
-    const clienteInfo = { nombre: 'Cliente', telefono: '123' };
-    const tecnicoInfo = { nombre: 'Tecnico', apellido: 'Uno', telefono: '456', correo: 'tech@mail.com' };
+    await generarPDF(fichaSinRecom, clienteInfo, tecnicoInfo, {});
 
-    const promise = generarPDF(ficha, clienteInfo, tecnicoInfo);
-    mockStream._finishCallback();
-
-    await promise;
-
-    expect(mockDoc.fontSize).toHaveBeenCalled();
-    expect(mockDoc.text).toHaveBeenCalledWith('Ficha de Mantenimiento', { align: 'center' });
-    expect(mockDoc.end).toHaveBeenCalled();
-  });
-
-  test('rechaza la promesa si hay error en el stream', async () => {
-    const ficha = { id: 4, fecha_de_mantenimiento: new Date() };
-    const clienteInfo = { nombre: 'Cliente', telefono: '123' };
-    const tecnicoInfo = { nombre: 'Tecnico', apellido: 'Uno', telefono: '456', correo: 'tech@mail.com' };
-
-    const promise = generarPDF(ficha, clienteInfo, tecnicoInfo);
-
-    const error = new Error('Stream error');
-    mockStream._errorCallback(error);
-
-    await expect(promise).rejects.toThrow(error);
+    expect(mockDoc.text).not.toHaveBeenCalledWith(expect.stringContaining('Recomendaciones:'));
   });
 });

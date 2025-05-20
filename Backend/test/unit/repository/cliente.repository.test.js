@@ -168,4 +168,28 @@ describe('ClienteRepository', () => {
       expect(result).toBeNull();
     });
   });
+
+  describe('actualizarinfoCliente', () => {
+    it('debe actualizar la información del cliente si existe', async () => {
+      ClienteModel.Cliente.findByPk.mockResolvedValue(mockCliente);
+      const camposActualizados = { telefono: '3100000000' };
+
+      const result = await clienteRepository.actualizarinfoCliente(1, camposActualizados);
+
+      expect(ClienteModel.Cliente.findByPk).toHaveBeenCalledWith(1);
+      expect(mockCliente.update).toHaveBeenCalledWith(camposActualizados);
+      expect(result).toEqual(mockCliente);
+    });
+
+    it('debe retornar null si el cliente no existe', async () => {
+      ClienteModel.Cliente.findByPk.mockResolvedValue(null);
+
+      const result = await clienteRepository.actualizarinfoCliente(999, { telefono: '000' });
+
+      expect(ClienteModel.Cliente.findByPk).toHaveBeenCalledWith(999);
+      expect(result).toBeNull();
+    });
+  });
+
+
 });

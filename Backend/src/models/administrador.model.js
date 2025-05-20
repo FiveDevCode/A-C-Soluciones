@@ -38,7 +38,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+        args: /^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {

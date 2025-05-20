@@ -1,9 +1,13 @@
 import { ClienteService } from "../services/cliente.services.js";
 import { ValidationError } from 'sequelize'; 
+import { camposPermitidosCliente } from '../services/allowedFields.js';
+
+
 
 export class ClienteController {
-constructor() {
-    this.clienteService = new ClienteService();
+constructor(clienteService = new ClienteService()) {
+    this.clienteService = clienteService;
+    this.actualizarMiPerfil = this.actualizarMiPerfil.bind(this);
 }    crearCliente = async (req, res) => {
         try {
             const { numero_de_cedula } = req.body;
@@ -112,5 +116,31 @@ constructor() {
         }
     };
 
+
+    
+
+    actualizarMiPerfil = async (req, res) => {
+        try {
+            const clienteId = req.user.id;
+            const dataFiltrada = {};
+
+            camposPermitidosCliente.forEach((campo) => {
+                if (campo in req.body) {
+                    dataFiltrada[campo] = req.body[campo];
+                }
+            });
+
+            const clienteActualizado = await this.clienteService.actualizarPerfilCliente(clienteId, dataFiltrada);
+
+            if (!clienteActualizado) {
+                return res.status(404).json({ message: 'Cliente no encontrado.' });
+            }
+
+            return res.status(200).json(clienteActualizado);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error al actualizar el perfil del cliente.' });
+         }
+    };
 
 }
