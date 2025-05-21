@@ -58,15 +58,15 @@ const CategoryRecomendAd = () => {
     <ContainerCategory>
       <h1>Categorias recomendadas</h1>
       <ContainerOption>
-        <Option to="/register-employee">
+        <Option to="/admin/registrar-empleado">
           <Icon icon={faUserPlus} style={{stroke:"#28A745"}}/>
           <OptionTitle>Registra un empleado</OptionTitle>
         </Option>
-        <Option to="/register-service">
+        <Option to="/admin/registrar-servicio">
           <Icon icon={faPlusSquare} style={{stroke:"#007BFF"}}/>
           <OptionTitle>Crea un nuevo servicio</OptionTitle>
         </Option>
-        <Option to="/assing-visit">
+        <Option to="/admin/asignar-visita">
           <Icon icon={faTasks} style={{stroke:"#FD7E14"}}/>
           <OptionTitle>Asigna una visita</OptionTitle>
         </Option>

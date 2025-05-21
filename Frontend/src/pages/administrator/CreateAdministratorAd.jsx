@@ -148,7 +148,7 @@ const CreateAdministratorAd = () => {
             )}
 
             <ContainerButton>
-              <Button type="submit" variant="contained" LinkComponent={Link} to="/administrator-permit">Siguiente</Button>
+              <Button type="submit" variant="contained" LinkComponent={Link} to="/admin/permisos">Siguiente</Button>
               <Button type="button" variant="contained">Limpiar Campos</Button>
             </ContainerButton>
 

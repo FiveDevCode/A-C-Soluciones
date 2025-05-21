@@ -201,7 +201,7 @@ const UserProfileAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
-          to={`/edit-technical/${id}`}
+          to={`/admin/editar-tecnico/${id}`}
         >
             EDITAR
         </Button>

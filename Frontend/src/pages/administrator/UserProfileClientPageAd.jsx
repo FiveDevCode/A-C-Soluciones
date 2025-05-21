@@ -198,7 +198,7 @@ const UserProfileClientPageAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
-          to={`/edit-client/${id}`}
+          to={`/admin/editar-cliente/${id}`}
         >
             EDITAR
         </Button>

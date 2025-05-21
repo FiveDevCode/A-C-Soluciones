@@ -162,7 +162,7 @@ const FormRecoverCode = () => {
       
       <Button type="submit" variant="contained">Enviar</Button>
       
-      <LinkForgot to="/recover">Reenviar código</LinkForgot>
+      <LinkForgot to="/recuperar-contrasena">Reenviar código</LinkForgot>
 
     </Form>
 

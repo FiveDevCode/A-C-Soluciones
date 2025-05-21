@@ -140,7 +140,7 @@ const ProfilePageAd = () => {
           />
           <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
         </ProfileInfo>
-        <ButtonProfile variant='contained' LinkComponent={Link} to="/edit-profileAd">Editar infomarcion</ButtonProfile>
+        <ButtonProfile variant='contained' LinkComponent={Link} to="/admin/editar-cliente/">Editar infomarcion</ButtonProfile>
       
       </ProfileSection>
 

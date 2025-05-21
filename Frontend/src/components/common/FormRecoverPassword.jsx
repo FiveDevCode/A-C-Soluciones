@@ -139,7 +139,7 @@ const FormRecoverPassword = () => {
 
       <ContainerButton>
         <Button type="submit" variant="contained">Siguiente</Button>
-        <Button type="button" variant="contained" LinkComponent={Link} to="/login">Cancelar</Button>
+        <Button type="button" variant="contained" LinkComponent={Link} to="/iniciar-sesion">Cancelar</Button>
       </ContainerButton>
 
     </Form>

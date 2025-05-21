@@ -253,7 +253,7 @@ const EditAdminPageAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting}>
             {isSubmitting ? "Editando..." : "Editar"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to="/profileAd">Cancelar</Button>
+          <Button type="button" variant="contained" LinkComponent={Link} to="/admin/perfil">Cancelar</Button>
         </ContainerButton>
 
       </Form>

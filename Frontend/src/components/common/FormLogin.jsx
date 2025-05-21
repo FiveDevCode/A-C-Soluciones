@@ -182,11 +182,11 @@ const FormLogin = () => {
         </Typography>
       )}
 
-      <LinkForgot to="/recover">Has olvidado tu contraseña?</LinkForgot>
+      <LinkForgot to="/recuperar-contrasena">Has olvidado tu contraseña?</LinkForgot>
 
       <ContainerButton>
         <Button type="submit" variant="contained">Iniciar sesion</Button>
-        <Button type="button" variant="contained" LinkComponent={Link} to="/register">Crear Cuenta</Button>
+        <Button type="button" variant="contained" LinkComponent={Link} to="/registrarse">Crear Cuenta</Button>
 
       </ContainerButton>
 

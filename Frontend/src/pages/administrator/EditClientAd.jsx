@@ -325,7 +325,7 @@ const EditClientAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
             {isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to={`/profile-client/${id}`}>Cancelar</Button>
+          <Button type="button" variant="contained" LinkComponent={Link} to={`/admin/perfil-cliente/${id}`}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

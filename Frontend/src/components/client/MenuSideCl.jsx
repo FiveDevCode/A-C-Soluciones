@@ -161,11 +161,11 @@ const MenuSideCl = ({ onClose }) => {
   return (
     <SectionMenu>
       <ContainerMenu>
-        <Link to="/home"><Logo src={logo} size="157px"/></Link>
+        <Link to="/cliente/inicio"><Logo src={logo} size="157px"/></Link>
         <TitleMenu>Menu</TitleMenu>
         <Divider/> 
         <ContainerAllOption>
-          <ContainerOption to="/home">
+          <ContainerOption to="/cliente/inicio">
             <IconOption 
               icon={faHouse}           
             />

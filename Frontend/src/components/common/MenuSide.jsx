@@ -144,11 +144,9 @@ const MenuSide = () => {
   const getHomeRouteByRole = (role) => {
     switch (role) {
       case 'tecnico':
-        return '/homeTc';
+        return '/tecnico/inicio';
       case 'administrador':
-        return '/homeAd';
-      default:
-        return '/login';
+        return '/administrador/inicio';
     }
   };
   

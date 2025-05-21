@@ -67,10 +67,10 @@ const HeaderBar = () => {
 
     switch (role) {
       case "tecnico":
-        setProfilePath("/profileTc");
+        setProfilePath("/admin/perfil");
         break;
       case "administrador":
-        setProfilePath("/profileAd");
+        setProfilePath("/tecnico/perfil");
         break;
     }
     

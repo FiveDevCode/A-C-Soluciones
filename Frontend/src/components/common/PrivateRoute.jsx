@@ -5,7 +5,7 @@ const PrivateRoute = ({ children, roleRequired }) => {
   const token = sessionStorage.getItem("authToken");
 
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/iniciar-sesion" />;
   }
 
   try {
@@ -18,13 +18,13 @@ const PrivateRoute = ({ children, roleRequired }) => {
     console.log("roleRequired: ", roleRequired)
 
     if (userRole !== roleRequired) {
-      return <Navigate to="/login" />;
+      return <Navigate to="/iniciar-sesion" />;
     }
 
     return children;
   } catch (error) {
     console.error("Error al decodificar el token:", error);
-    return <Navigate to="/login" />;
+    return <Navigate to="/iniciar-sesion" />;
   }
 };
 

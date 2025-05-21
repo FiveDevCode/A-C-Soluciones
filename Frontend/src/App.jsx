@@ -86,151 +86,152 @@ function AppContent() {
       <Content hideStyles={hideMenuAndHeader}>
         {!hideMenuAndHeader && !isCliente && <HeaderBar />}
         {isCliente && role && <HeaderBarCl />}
-        <Routes>
-          {/* Rutas públicas */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<CreateAccountPageCl />} />
-          <Route path="/recover" element={<RecoverPasswordPage />} />
-          <Route path="/recover-code" element={<RecoverCodePage />} />
-          <Route path="/recover-change" element={<RecoverChangePage />} />
 
-          {/* Rutas protegidas por tipo de usuario */}
-          {/* ********************************* Rutas Cliente ********************************** */}
+          {/* 
+            * Estructura de rutas:
+            * - /public/* -> Acceso abierto
+            * - /cliente/* -> Requiere rol cliente
+            * - /tecnico/* -> Requiere rol tecnico
+            * - /admin/* -> Requiere rol administrador
+          */}
+          <Routes>
+            {/* Rutas públicas */}
+            <Route path="/" element={<Home />} />
+            <Route path="/iniciar-sesion" element={<LoginPage />} />
+            <Route path="/registrarse" element={<CreateAccountPageCl />} />
+            <Route path="/recuperar-contrasena" element={<RecoverPasswordPage />} />
+            <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
+            <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
 
-          <Route path="/home" element={
-            <PrivateRoute roleRequired="cliente">
-              <HomeSessionPageCl />
-            </PrivateRoute>
-          } />
+            {/* ********************************* Rutas Cliente ********************************** */}
+            <Route path="/cliente/inicio" element={
+              <PrivateRoute roleRequired="cliente">
+                <HomeSessionPageCl />
+              </PrivateRoute>
+            } />
 
-          <Route path="/services-all" element={
-            <PrivateRoute roleRequired="cliente">
-              <ServicesAllPageCl />
-            </PrivateRoute>
-          } />
+            <Route path="/cliente/servicios" element={
+              <PrivateRoute roleRequired="cliente">
+                <ServicesAllPageCl />
+              </PrivateRoute>
+            } />
 
-          {/* ********************************* Rutas Tecnico ********************************** */}
+            {/* ********************************* Rutas Técnico ********************************** */}
+            <Route path="/tecnico/inicio" element={
+              <PrivateRoute roleRequired="tecnico">
+                <HomeTc />
+              </PrivateRoute>
+            } />
 
-          <Route path="/services" element={
-            <PrivateRoute roleRequired="tecnico">
-              <ServicesPageTc />
-            </PrivateRoute>
-          } />
+            <Route path="/tecnico/servicios" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ServicesPageTc />
+              </PrivateRoute>
+            } />
 
-          <Route path="/view-service/:id" element={
-            <PrivateRoute roleRequired="tecnico">
-              <ServiceTc />
-            </PrivateRoute>
-          } />
+            <Route path="/tecnico/ver-servicio/:id" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ServiceTc />
+              </PrivateRoute>
+            } />
 
-          <Route path="/profileTc" element={
-            <PrivateRoute roleRequired="tecnico">
-              <ProfileUserTc />
-            </PrivateRoute>
-          } />
+            <Route path="/tecnico/perfil" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ProfileUserTc />
+              </PrivateRoute>
+            } />
 
-          <Route path="/homeTc" element={
-            <PrivateRoute roleRequired="tecnico">
-              <HomeTc />
-            </PrivateRoute>
-          } />
-          
-          <Route path="/report" element={
-            <PrivateRoute roleRequired="tecnico">
-              <ReportFormTc />
-            </PrivateRoute>
-          } />
-          
-          {/* ********************************* Rutas Administrador ********************************** */}
+            <Route path="/tecnico/reporte" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ReportFormTc />
+              </PrivateRoute>
+            } />
 
-          <Route path="/register-employee" element={
-            <PrivateRoute roleRequired="administrador">
-              <CreateEmployeeAd />
-            </PrivateRoute>
-          } />
+            {/* ********************************* Rutas Administrador ********************************** */}
+            <Route path="/admin/inicio" element={
+              <PrivateRoute roleRequired="administrador">
+                <HomeAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/homeAd" element={
-            <PrivateRoute roleRequired="administrador">
-              <HomeAd />
-            </PrivateRoute>
-          } />
+            <Route path="/admin/registrar-empleado" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateEmployeeAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/profile-technical/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <UserProfileAd />
-            </PrivateRoute>
-          } />
+            <Route path="/admin/perfil-tecnico/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <UserProfileAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/profile-client/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <UserProfileClientPageAd />
-            </PrivateRoute>
-          } />
+            <Route path="/admin/perfil-cliente/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <UserProfileClientPageAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/viewMore-service/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <ViewServicePageAd />
-            </PrivateRoute>
-          } />
+            <Route path="/admin/ver-mas-servicio/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewServicePageAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/edit-client/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <EditClientAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/editar-cliente/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditClientAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/edit-technical/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <EditTechnicalPageAd/>
-            </PrivateRoute>
-          } />
-          
-          <Route path="/register-service" element={
-            <PrivateRoute roleRequired="administrador">
-              <CreateServiceAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/editar-tecnico/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditTechnicalPageAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/register-administrator" element={
-            <PrivateRoute roleRequired="administrador">
-              <CreateAdministratorAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/registrar-servicio" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateServiceAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/administrator-permit" element={
-            <PrivateRoute roleRequired="administrador">
-              <CreateAdminPermit/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/registrar-administrador" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateAdministratorAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/assing-visit" element={
-            <PrivateRoute roleRequired="administrador">
-              <AssignVisitPageAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/permisos" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateAdminPermit />
+              </PrivateRoute>
+            } />
 
-          <Route path="/edit-service/:id" element={
-            <PrivateRoute roleRequired="administrador">
-              <EditServicePageAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/asignar-visita" element={
+              <PrivateRoute roleRequired="administrador">
+                <AssignVisitPageAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/profileAd" element={
-            <PrivateRoute roleRequired="administrador">
-              <ProfilePageAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/editar-servicio/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditServicePageAd />
+              </PrivateRoute>
+            } />
 
-          <Route path="/edit-profileAd" element={
-            <PrivateRoute roleRequired="administrador">
-              <EditAdminPageAd/>
-            </PrivateRoute>
-          } />
+            <Route path="/admin/perfil" element={
+              <PrivateRoute roleRequired="administrador">
+                <ProfilePageAd />
+              </PrivateRoute>
+            } />
 
-          {/* Ruta para acceso denegado */}
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>
+            <Route path="/admin/editar-cliente/" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditAdminPageAd />
+              </PrivateRoute>
+            } />
+          </Routes>
         {isCliente && role && <FooterHomeCl />}
         </Content>
     </Container>

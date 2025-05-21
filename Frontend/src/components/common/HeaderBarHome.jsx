@@ -113,7 +113,7 @@ const HeaderBarHome = () => {
             ),
           }}
         />
-        <ButtonProfile to="/login"><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
+        <ButtonProfile to="/iniciar-sesion"><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
       </MenuBar>
       <Menu>
         <Logo src={logo} size="13%" max="150px"/> 
