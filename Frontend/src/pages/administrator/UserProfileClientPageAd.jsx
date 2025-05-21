@@ -109,7 +109,7 @@ const SkeletonLoader = () => (
   </Container>
 );
 
-const UserProfileClientAd = () => {
+const UserProfileClientPageAd = () => {
 
   const { id } = useParams(); 
   const [clientData, setClientData] = useState(null);
@@ -146,8 +146,8 @@ const UserProfileClientAd = () => {
   };
 
   const confirmationMessage = clientData.estado === "activo"
-    ? "¿Quieres deshabilitar este técnico?"
-    : "¿Quieres habilitar este técnico?";
+    ? "¿Quieres deshabilitar este cliente?"
+    : "¿Quieres habilitar este cliente?";
 
   return (
     <Container>
@@ -175,11 +175,11 @@ const UserProfileClientAd = () => {
       <Seccion>
         <Label style={{ marginBottom: "30px" }}>Informacion personal</Label>
 
+        <Label>Cedula:</Label>
+        <Texto>{clientData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
+        
         <Label>Nombre:</Label>
         <Texto>{clientData.nombre} {clientData.apellido}</Texto>
-
-        <Label>Cedula:</Label>
-        <Texto>{clientData.numero_de_cedula}</Texto>
 
         <Label>Telefono:</Label>
         <Texto>{clientData.telefono}</Texto>
@@ -215,4 +215,4 @@ const UserProfileClientAd = () => {
   );
 };
 
-export default UserProfileClientAd;
+export default UserProfileClientPageAd;

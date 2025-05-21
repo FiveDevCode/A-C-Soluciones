@@ -26,12 +26,14 @@ import FooterHomeCl from './components/client/FooterHomeCl';
 import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
 import EditServicePageAd from './pages/administrator/EditServicePageAd';
 import RecoverPasswordPage from './pages/common/RecoverPasswordPage';
-import FormRecoverCode from './components/common/FormRecoverCode';
 import RecoverCodePage from './pages/common/RecoverCodePage';
 import RecoverChangePage from './pages/common/RecoverChangePage';
 import ProfilePageAd from './pages/administrator/ProfilePageAd';
 import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
-import UserProfileClientAd from './pages/administrator/UseProfileClientAd';
+import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
+import UserProfileClientPageAd from './pages/administrator/UserProfileClientPageAd';
+import ReportFormTc from './components/technical/ReportFormTc';
+import ViewServicePageAd from './pages/administrator/ViewServicePageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -134,6 +136,12 @@ function AppContent() {
             </PrivateRoute>
           } />
           
+          <Route path="/report" element={
+            <PrivateRoute roleRequired="tecnico">
+              <ReportFormTc />
+            </PrivateRoute>
+          } />
+          
           {/* ********************************* Rutas Administrador ********************************** */}
 
           <Route path="/register-employee" element={
@@ -156,13 +164,25 @@ function AppContent() {
 
           <Route path="/profile-client/:id" element={
             <PrivateRoute roleRequired="administrador">
-              <UserProfileClientAd />
+              <UserProfileClientPageAd />
+            </PrivateRoute>
+          } />
+
+          <Route path="/viewMore-service/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <ViewServicePageAd />
             </PrivateRoute>
           } />
 
           <Route path="/edit-client/:id" element={
             <PrivateRoute roleRequired="administrador">
               <EditClientAd/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/edit-technical/:id" element={
+            <PrivateRoute roleRequired="administrador">
+              <EditTechnicalPageAd/>
             </PrivateRoute>
           } />
           

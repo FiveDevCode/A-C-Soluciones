@@ -109,6 +109,9 @@ const HeaderBar = () => {
     if (path.startsWith("/profile-client/")) {
       return "Perfil cliente";
     }
+    if (path.startsWith("/profile-technical/")) {
+      return "Perfil técnico";
+    }
 
     return titles[path] || "Ruta desconocida";
   }

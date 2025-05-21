@@ -4,7 +4,7 @@ import { Button, Skeleton } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
-import { handleGetTechnical } from "../../controllers/administrator/getTechnicalAd.controller";
+import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -65,6 +65,7 @@ const Footer = styled.div`
   text-align: left;
 `;
 
+
 const SkeletonButton = styled(Skeleton)`
   align-self: flex-end;
   &.MuiSkeleton-root {
@@ -83,12 +84,13 @@ const DetailsSkeleton = styled.div`
 `
 
 
+
 const SkeletonLoader = () => (
   <Container>
     <Header>
       <UsuarioInfo>
         <Skeleton variant="circular" width={120} height={120} />
-        <Skeleton variant="text" width={400} height={40} />
+        <Skeleton variant="text" width={300} height={40} />
       </UsuarioInfo>
       <SkeletonButton variant="rectangular" width={150} height={36}/>
     </Header>
@@ -99,77 +101,72 @@ const SkeletonLoader = () => (
       <Skeleton variant="text" width="80%" />
       <Skeleton variant="text" width="50%" />
       <Skeleton variant="text" width="70%" />
-      <Skeleton variant="text" width="80%" />
+      <Skeleton variant="text" width="60%" />
       <Skeleton variant="text" width="50%" />
       <Skeleton variant="text" width="70%" />
     </DetailsSkeleton>
-    <SkeletonButton variant="rectangular" width={250} height={36} style={{ marginTop: '2rem' }}/>
+    <SkeletonButton variant="rectangular" width={250} height={36} sx={{marginTop: "1rem"}}/>
   </Container>
 );
 
-
-const UserProfileAd = () => {
+const ViewServicePageAd = () => {
 
   const { id } = useParams(); 
-  const [technicalData, setTechnicalData] = useState(null);
+  const [serviceData, setServiceData] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
 
   useEffect(() => {
-    const fetchClient = async () => {
+    const fetchService = async () => {
       try {
-        const response = await handleGetTechnical(id);
-        console.log(response)
-        setTechnicalData(response.data);  
+        const response = await handleGetService(id);
+        setServiceData(response.data.data);  
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false); 
       }
     };
 
-    fetchClient();
+    fetchService();
   }, [id]); 
-  
-  if (!technicalData) {
-    return <SkeletonLoader/>;
+
+  if (!serviceData) {
+    return <SkeletonLoader />
   }
-  
+
   const handleToggleState = async () => {
-    const newState = technicalData.estado === "activo" ? "inactivo" : "activo";
+    const newState = serviceData.estado === "activo" ? "inactivo" : "activo";
     try {
       await handleChangeStateTechnical(id, newState);
-      setTechnicalData(prev => ({ ...prev, estado: newState }));
+      setServiceData(prev => ({ ...prev, estado: newState }));
     } catch (error) {
       console.error("Error al cambiar el estado:", error);
     } finally {
       setShowConfirmation(false); // oculta el modal tras la acción
     }
   };
-  
-  const confirmationMessage = technicalData.estado === "activo"
-    ? "¿Quieres deshabilitar este técnico?"
-    : "¿Quieres habilitar este técnico?";
 
-  
+  const confirmationMessage = serviceData.estado === "activo"
+    ? "¿Quieres deshabilitar este servicio?"
+    : "¿Quieres habilitar este servicio?";
+
   return (
     <Container>
       <Header>
         <UsuarioInfo>
           <Imagen
-            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             alt="usuario"
           />
-          <Nombre>{technicalData.nombre} {technicalData.apellido}</Nombre>
+          <Nombre>{serviceData.nombre} {serviceData.apellido}</Nombre>
         </UsuarioInfo>
 
         <Button
           variant="contained"
           onClick={() => setShowConfirmation(true)}
-          color={technicalData.estado === "activo" ? "error" : "success"}
-          style={{ alignSelf: "flex-end", width: "200px", marginRight: "4rem" }}
+          color={serviceData.estado === "activo" ? "error" : "success"}
+          style={{ alignSelf: "end", marginRight: "4rem", width: "200px"}}
         >
-          {technicalData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
+          {serviceData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
         </Button>
       </Header>
 
@@ -178,22 +175,20 @@ const UserProfileAd = () => {
       <Seccion>
         <Label style={{ marginBottom: "30px" }}>Informacion personal</Label>
 
-        <Label>Cedula:</Label>
-        <Texto>{technicalData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
+        <Label>Nombre servicio:</Label>
+        <Texto>{serviceData.nombre}</Texto>
+        
+        <Label>Descripcion:</Label>
+        <Texto>{serviceData.descripcion}</Texto>
 
-        <Label>Nombre:</Label>
-        <Texto>{technicalData.nombre} {technicalData.apellido}</Texto>
-
-        <Label>Telefono:</Label>
-        <Texto>{technicalData.telefono}</Texto>
-
-        <Label>Cargo:</Label>
-        <Texto>{technicalData.especialidad}</Texto>
-
-        <Label>Correo electronico:</Label>
-        <Correo href={`mailto:${technicalData.correo_electronico}`}>
-          {technicalData.correo_electronico}
-        </Correo>
+        <Label>Fecha de creacion:</Label>
+        <Texto>{new Date(serviceData.fecha_creacion).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</Texto>
       </Seccion>
 
       <Footer>
@@ -201,7 +196,7 @@ const UserProfileAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
-          to={`/edit-technical/${id}`}
+          to={`/edit-client/${id}`}
         >
             EDITAR
         </Button>
@@ -218,4 +213,4 @@ const UserProfileAd = () => {
   );
 };
 
-export default UserProfileAd;
+export default ViewServicePageAd;

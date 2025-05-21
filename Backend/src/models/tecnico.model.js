@@ -58,7 +58,7 @@ const Tecnico = sequelize.define('Tecnico', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/i,
+        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
         msg: 'El primer apellido solo puede contener letras.',
       },
       len: {

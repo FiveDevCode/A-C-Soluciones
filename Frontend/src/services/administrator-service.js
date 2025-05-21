@@ -153,6 +153,22 @@ const updateAdmin = (id, idCard, nameUser, lastName, email) => {
   });
 }
 
+const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position) => {
+  return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
+    numero_de_cedula: idCard,
+    nombre: nameUser,
+    apellido: lastName,
+    telefono: phone, 
+    correo_electronico: email,
+    especialidad: position,
+
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
 
 export const administratorService = {
   createTechnical,
@@ -168,5 +184,6 @@ export const administratorService = {
   updateService,
   getServiceList,
   getAdminId,
-  updateAdmin
+  updateAdmin,
+  updateTechnical,
 }
