@@ -107,7 +107,7 @@ const EditAdminPageAd = () => {
 
       
       setTimeout(() => {
-        navigate("/profileAd");
+        navigate("/admin/perfil");
       }, 3000);
       
     } catch (err) {

@@ -146,7 +146,7 @@ const MenuSide = () => {
       case 'tecnico':
         return '/tecnico/inicio';
       case 'administrador':
-        return '/administrador/inicio';
+        return '/admin/inicio';
     }
   };
   

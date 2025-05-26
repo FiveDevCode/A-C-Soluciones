@@ -67,10 +67,10 @@ const HeaderBar = () => {
 
     switch (role) {
       case "tecnico":
-        setProfilePath("/admin/perfil");
+        setProfilePath("/tecnico/perfil");
         break;
       case "administrador":
-        setProfilePath("/tecnico/perfil");
+        setProfilePath("/admin/perfil");
         break;
     }
     
@@ -79,38 +79,42 @@ const HeaderBar = () => {
 
 
   const titles = {
-    "/services": "Servicios",
-    "/register-employee": "Crear empleado",
-    "/register": "Crear cuenta",
-    "/account": "Perfil de usuario",
-    "/home": "Inicio",
-    "/profile": "Perfil",
-    "/view-service": "Ver servicio",
-    "/profile-client": "Perfil cliente",
-    "/edit-client": "Editar cliente",
-    "/register-service": "Crear servicio",
-    "/administrator-permit": "Crear administrador permisos",
-    "/assing-visit": "Asignar visita",
-    "/register-administrator" : "Crear administrador",
-    "/profileTc":"Perfil",
-    "/profileAd":"Perfil",
-    "/edit-profileAd":"Editar perfil",
-    "/homeTc": "Home",
-    "/homeAd": "Home",
+    "/tecnico/inicio": "Inicio técnico",
+    "/tecnico/servicios": "Servicios técnico",
+    "/tecnico/perfil": "Perfil técnico",
+    "/tecnico/reporte": "Reporte técnico",
+
+    "/admin/inicio": "Inicio administrador",
+    "/admin/registrar-empleado": "Crear empleado",
+    "/admin/perfil": "Perfil administrador",
+    "/admin/registrar-servicio": "Crear servicio",
+    "/admin/registrar-administrador": "Crear administrador",
+    "/admin/permisos": "Permisos administrador",
+    "/admin/asignar-visita": "Asignar visita",
+    "/admin/editar-cliente/": "Editar cliente", // sin id
   };
 
   function getRouteName(path) {
-    if (path.startsWith("/edit-client/")) {
+    if (path.startsWith("/admin/editar-cliente/") && path !== "/admin/editar-cliente/") {
       return "Editar cliente";
     }
-    if (path.startsWith("/view-service/")) {
+    if (path.startsWith("/admin/ver-mas-servicio/")) {
       return "Ver servicio";
     }
-    if (path.startsWith("/profile-client/")) {
+    if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";
     }
-    if (path.startsWith("/profile-technical/")) {
+    if (path.startsWith("/admin/perfil-tecnico/")) {
       return "Perfil técnico";
+    }
+    if (path.startsWith("/admin/editar-tecnico/")) {
+      return "Editar técnico";
+    }
+    if (path.startsWith("/admin/editar-servicio/")) {
+      return "Editar servicio";
+    }
+    if (path.startsWith("/tecnico/ver-servicio/")) {
+      return "Ver servicio";
     }
 
     return titles[path] || "Ruta desconocida";

@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
 import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
+import logoService from "../../assets/administrator/service-view.png"
 
 const Container = styled.div`
   padding: 2rem;
@@ -29,7 +30,7 @@ const UsuarioInfo = styled.div`
 const Imagen = styled.img`
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 5%;
 `;
 
 const Nombre = styled.h3`
@@ -154,7 +155,7 @@ const ViewServicePageAd = () => {
       <Header>
         <UsuarioInfo>
           <Imagen
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            src={logoService}
             alt="usuario"
           />
           <Nombre>{serviceData.nombre} {serviceData.apellido}</Nombre>

@@ -72,11 +72,11 @@ function AppContent() {
 
   const isCliente = role === 'cliente';
   const hideMenuAndHeader =
-    location.pathname === '/login' ||
-    location.pathname === '/register' ||
-    location.pathname === '/recover' ||
-    location.pathname === '/recover-code' ||
-    location.pathname === '/recover-change' ||
+    location.pathname === '/iniciar-sesion' ||
+    location.pathname === '/registrarse' ||
+    location.pathname === '/recuperar-contrasena' ||
+    location.pathname === '/codigo-recuperacion' ||
+    location.pathname === '/cambiar-contrasena' ||
     location.pathname === '/' ||
     role === 'cliente';
 

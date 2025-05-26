@@ -74,7 +74,7 @@ const FormCreateCl = () => {
         address
       );
 
-      navigate("/login");
+      navigate("/iniciar-sesion");
       setErrorMsg("");
     } catch (err) {
       console.log(err)

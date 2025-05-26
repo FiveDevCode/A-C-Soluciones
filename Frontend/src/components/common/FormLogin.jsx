@@ -63,13 +63,13 @@ const FormLogin = () => {
   
         switch (role) {
           case "cliente":
-            navigate("/home");
+            navigate("/cliente/inicio");
             break;
           case "tecnico":
-            navigate("/homeTc");
+            navigate("/tecnico/inicio");
             break;
           case "administrador":
-            navigate("/homeAd");
+            navigate("/admin/inicio");
             break;
           default:
             break;
@@ -102,16 +102,16 @@ const FormLogin = () => {
 
       switch (role) {
         case "cliente":
-          navigate("/home");
+          navigate("/cliente/inicio");
           break;
         case "tecnico":
-          navigate("/homeTc");
+          navigate("/tecnico/inicio");
           break;
         case "administrador":
-          navigate("/homeAd");
+          navigate("/admin/inicio");
           break;
         default:
-          navigate("/login"); // o una página de error
+          navigate("/iniciar-sesion"); // o una página de error
       }
 
     } catch (err) {
