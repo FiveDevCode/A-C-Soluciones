@@ -113,7 +113,7 @@ const EditClientAd = () => {
   const navigate = useNavigate();
   const {id} = useParams();
 
-  const [userAdmin, setUserAdmin] = useState();
+  const [userClient, setUserClient] = useState();
   const [IdCard, setIdCard] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
@@ -173,7 +173,7 @@ const EditClientAd = () => {
     handleGetClient(id)
       .then((res) => {
         const data = res.data;
-        setUserAdmin(data);
+        setUserClient(data);
         setIdCard(data.numero_de_cedula || "");
         setNameUser(data.nombre || "");
         setLastName(data.apellido || "");
@@ -204,7 +204,7 @@ const EditClientAd = () => {
   };
 
 
-  if (!userAdmin) {
+  if (!userClient) {
     return <SkeletonLoader />
   }
 
@@ -215,7 +215,7 @@ const EditClientAd = () => {
           src={adminProfile}
           alt="Avatar"
         />
-        <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
+        <h2>{`${userClient.nombre} ${userClient.apellido}`}</h2>
       </ProfileInfo>      
 
       <Divider />

@@ -158,7 +158,7 @@ const CreateAdministratorAd = () => {
               </ScreenSuccess>
             )}
           </Form>
-          <ImgRegister src={logoRegister}></ImgRegister>
+          <ImgRegister src={logoRegister} alt="logo registrar administrador"></ImgRegister>
         </ContainerRegister>
 
 

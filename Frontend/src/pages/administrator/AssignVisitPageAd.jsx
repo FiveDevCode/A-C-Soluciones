@@ -377,7 +377,7 @@ const AssignVisitPageAd = () => {
             </ContainerButton>
 
           </Form>
-          <ImgRegister src={assignTask}></ImgRegister>
+          <ImgRegister src={assignTask} alt="logo asignar tarea"></ImgRegister>
         </ContainerRegister>
         
       </ContainerPage>

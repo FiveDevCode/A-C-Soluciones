@@ -197,7 +197,7 @@ const ViewServicePageAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
-          to={`/admin/${id}`}
+          to={`/admin/editar-servicio/${id}`}
         >
             EDITAR
         </Button>

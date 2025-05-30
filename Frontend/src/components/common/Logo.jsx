@@ -10,7 +10,7 @@ const ImagenLogo = styled.img`
 const Logo = (props) => {
   
   return (
-    <ImagenLogo size={props.size} min={props.min}  max={props.max} src={props.src} ></ImagenLogo>
+    <ImagenLogo size={props.size} min={props.min}  max={props.max} src={props.src} alt="logo A&C soluciones"></ImagenLogo>
   )
 }
 

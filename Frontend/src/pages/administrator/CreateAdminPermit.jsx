@@ -333,7 +333,7 @@ const CreateAdminPermit = () => {
                 <Button type="button" variant="contained">Reiniciar Seleccion</Button>
             </ContainerButton>
           </Selection>
-          <ImgSelection src={logoPermit}></ImgSelection>
+          <ImgSelection src={logoPermit} alt="logo administrador permisos"></ImgSelection>
           
         </ContainerSelection>
 

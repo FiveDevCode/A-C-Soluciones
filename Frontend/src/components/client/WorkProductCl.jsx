@@ -31,12 +31,12 @@ const WorkProductCl = () => {
     <ContainerWork>
       <TitleWork>TRABAJAMOS CON PRODUCTOS DE CALIDAD</TitleWork>
       <ContainerLogo>
-        <img src={logoPentair}/>
-        <img src={logoPanda}/>
-        <img src={logoAltamira}/>
-        <img src={logoWeg}/>
-        <img src={logoJohn}/>
-        <img src={logoBft}/>
+        <img src={logoPentair} alt="logo de pentair"/>
+        <img src={logoPanda} alt="logo de panda"/>
+        <img src={logoAltamira} alt="logo de altamira"/>
+        <img src={logoWeg} alt="logo de weg"/>
+        <img src={logoJohn} alt="logo de John"/>
+        <img src={logoBft} alt="logo de bft"/>
       </ContainerLogo>
 
     </ContainerWork>

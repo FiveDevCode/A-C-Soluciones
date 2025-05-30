@@ -206,7 +206,7 @@ const CreateServiceAd = () => {
             </ContainerButton>
 
           </Form>
-          <ImgRegisterService src={registerService}/>
+          <ImgRegisterService src={registerService} alt="logo crear servicio"/>
         </ContentForm>
 
       </ContainerRegister>
