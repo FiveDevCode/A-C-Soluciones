@@ -82,7 +82,6 @@ const HeaderBar = () => {
     "/tecnico/inicio": "Inicio técnico",
     "/tecnico/servicios": "Servicios técnico",
     "/tecnico/perfil": "Perfil técnico",
-    "/tecnico/reporte": "Reporte técnico",
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
@@ -91,7 +90,7 @@ const HeaderBar = () => {
     "/admin/registrar-administrador": "Crear administrador",
     "/admin/permisos": "Permisos administrador",
     "/admin/asignar-visita": "Asignar visita",
-    "/admin/editar-cliente/": "Editar cliente", // sin id
+    "/admin/editar-cliente/": "Editar cliente", 
   };
 
   function getRouteName(path) {
@@ -115,6 +114,9 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/tecnico/ver-servicio/")) {
       return "Ver servicio";
+    }
+    if (path.startsWith("/tecnico/reporte/")) {
+      return "Reporte técnico";
     }
 
     return titles[path] || "Ruta desconocida";

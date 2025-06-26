@@ -32,8 +32,8 @@ import ProfilePageAd from './pages/administrator/ProfilePageAd';
 import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
 import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
 import UserProfileClientPageAd from './pages/administrator/UserProfileClientPageAd';
-import ReportFormTc from './components/technical/ReportFormTc';
 import ViewServicePageAd from './pages/administrator/ViewServicePageAd';
+import CreateReportPageTc from './pages/technical/CreateReportPageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -141,9 +141,9 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/tecnico/reporte" element={
+            <Route path="/tecnico/reporte/:id" element={
               <PrivateRoute roleRequired="tecnico">
-                <ReportFormTc />
+                <CreateReportPageTc />
               </PrivateRoute>
             } />
 

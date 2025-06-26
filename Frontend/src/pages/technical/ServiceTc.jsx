@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { handleGetServiceAssign } from '../../controllers/technical/getServiceAssignTc.controller';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -63,6 +63,7 @@ const ServiceTc = () => {
   const { id } = useParams();
   const [servicioData, setServicioData] = useState(null);
   const [estadoVisita, setEstadoVisita] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -92,6 +93,10 @@ const ServiceTc = () => {
 
   const handleEstadoChange = (e) => {
     setEstadoVisita(e.target.value);
+  };
+
+  const handleGenerarReporte = () => {
+    navigate(`/tecnico/reporte/${id}`);
   };
 
   return (
@@ -162,7 +167,14 @@ const ServiceTc = () => {
       </Accordion>
 
       <Botones>
-        <Button variant="contained" color="primary" sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}>Generar reporte</Button>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }} 
+          onClick={handleGenerarReporte}
+        >
+          Generar reporte
+        </Button>
         <Button variant="contained" color="primary" sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}>Editar reporte</Button>
       </Botones>
     </Container>

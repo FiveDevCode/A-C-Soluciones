@@ -5,6 +5,7 @@ import { generarPDF } from '../services/ficha_mantenimiento.services.js';
 import { sendEmail } from '../services/email.services.js';
 import * as fichaRepo from '../repository/ficha_mantenimiento.repository.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
+import { ValidationError } from 'sequelize';
 
 export const crearFichaMantenimiento = async (req, res) => {
   try {
@@ -24,7 +25,8 @@ export const crearFichaMantenimiento = async (req, res) => {
       estado_final,
       tiempo_de_trabajo,
       recomendaciones,
-      fecha_de_mantenimiento
+      fecha_de_mantenimiento,
+      id_visitas
     } = req.body;
 
     // Log específico de los campos requeridos
@@ -40,7 +42,8 @@ export const crearFichaMantenimiento = async (req, res) => {
       estado_final,
       tiempo_de_trabajo,
       recomendaciones,
-      fecha_de_mantenimiento
+      fecha_de_mantenimiento,
+      id_visitas
     });
 
     // Extraer archivos si están presentes
@@ -69,6 +72,7 @@ export const crearFichaMantenimiento = async (req, res) => {
       estado_final,
       tiempo_de_trabajo,
       recomendaciones,
+      id_visitas,
       foto_estado_antes: fotoAntes?.filename || null,
       foto_estado_final: fotoFinal?.filename || null,
       foto_descripcion_trabajo: fotoDescripcion?.filename || null,
@@ -111,17 +115,29 @@ export const crearFichaMantenimiento = async (req, res) => {
     // Enviar email con PDF
     await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
 
+    const pdfFileName = path.basename(pdfPath);
+    const publicPdfUrl = `/static/fichas/${pdfFileName}`;
+
     res.status(201).json({
       mensaje: 'Ficha creada correctamente y enviada al cliente.',
       ficha: {
         ...nuevaFicha.toJSON(),
-        pdf_path: pdfPath,
+        pdf_path: publicPdfUrl,
       },
     });
 
   } catch (error) {
     console.error('Error en crearFichaMantenimiento:', error);
-    res.status(500).json({ error: 'Error al crear la ficha' });
+
+    if (error instanceof ValidationError) {
+      const errors = error.errors.map(err => ({
+        path: err.path,
+        message: err.message
+      }));
+      return res.status(400).json({ errors }); 
+    }
+
+    res.status(500).json({ message: 'Error al crear la ficha' });
   }
 };
 

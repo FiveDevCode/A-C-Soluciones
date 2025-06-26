@@ -12,11 +12,6 @@ const PrivateRoute = ({ children, roleRequired }) => {
     const decoded = jwtDecode(token);
     const userRole = decoded.rol;
 
-
-    console.log({decoded})
-    console.log("userRole: ", userRole)
-    console.log("roleRequired: ", roleRequired)
-
     if (userRole !== roleRequired) {
       return <Navigate to="/iniciar-sesion" />;
     }
