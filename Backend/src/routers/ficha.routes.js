@@ -18,7 +18,7 @@ router.post(
   crearFichaMantenimiento
 );
 
-router.get('/fichas', authenticate, listarFichas);
+router.get('/fichas', isAdminOrTecnico, listarFichas);
 
 router.get('/descargar/:nombreArchivo', isCliente, (req, res) => {
   const { nombreArchivo } = req.params;

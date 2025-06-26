@@ -26,6 +26,7 @@ const createMaintenanceSheet = ({
   tiempo_de_trabajo,
   recomendaciones,
   fecha_de_mantenimiento,
+  id_visitas,
   foto_estado_antes,
   foto_estado_final,
   foto_descripcion_trabajo
@@ -46,6 +47,7 @@ const createMaintenanceSheet = ({
   formData.append("tiempo_de_trabajo", tiempo_de_trabajo);
   formData.append("recomendaciones", recomendaciones);
   formData.append("fecha_de_mantenimiento", fecha_de_mantenimiento);
+  formData.append("id_visitas", id_visitas);
 
   if (foto_estado_antes) formData.append("foto_estado_antes", foto_estado_antes);
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
@@ -58,8 +60,19 @@ const createMaintenanceSheet = ({
   });
 };
 
+const getPDFIdVisit = (id) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get(`http://localhost:8000/api/fichas?id_visitas=${id}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  });
+}
+
 export const commonService = {
   login,
   createMaintenanceSheet,
+  getPDFIdVisit
 
 }

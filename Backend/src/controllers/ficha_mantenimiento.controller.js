@@ -115,14 +115,11 @@ export const crearFichaMantenimiento = async (req, res) => {
     // Enviar email con PDF
     await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
 
-    const pdfFileName = path.basename(pdfPath);
-    const publicPdfUrl = `/static/fichas/${pdfFileName}`;
-
     res.status(201).json({
       mensaje: 'Ficha creada correctamente y enviada al cliente.',
       ficha: {
         ...nuevaFicha.toJSON(),
-        pdf_path: publicPdfUrl,
+        pdf_path: pdfPath,
       },
     });
 
@@ -145,21 +142,21 @@ export const crearFichaMantenimiento = async (req, res) => {
 
 export const listarFichas = async (req, res) => {
   try {
-
     if (!req.user) {
       return res.status(401).json({ error: "Usuario no autenticado (req.user no existe)" });
     }
 
     const { rol, id } = req.user;
+    const { id_visitas } = req.query; 
 
     let fichas;
 
     if (rol === 'admin' || rol === 'administrador') {
-      fichas = await fichaRepo.obtenerTodasFichas();
+      fichas = await fichaRepo.obtenerTodasFichas(id_visitas);
     } else if (rol === 'tecnico') {
-      fichas = await fichaRepo.obtenerFichasPorTecnico(id);
+      fichas = await fichaRepo.obtenerTodasFichas(id_visitas); //CORRECCION: esta es para todas las fichas no solo las que maneja tecnico corregir eso
     } else if (rol === 'cliente') {
-      fichas = await fichaRepo.obtenerFichasPorCliente(id);
+      fichas = await fichaRepo.obtenerFichasPorCliente(id, id_visitas);
     } else {
       return res.status(403).json({ error: 'Rol no autorizado' });
     }

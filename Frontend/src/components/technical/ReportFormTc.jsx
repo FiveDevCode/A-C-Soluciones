@@ -96,6 +96,7 @@ const ReportFormTc = () => {
         tiempo_de_trabajo: formData.tiempo_de_trabajo,
         recomendaciones: formData.recomendaciones,
         fecha_de_mantenimiento: formData.fecha_de_mantenimiento,
+        id_visitas: parseInt(id),
         foto_estado_antes: imagenes.foto_estado_antes,
         foto_estado_final: imagenes.foto_estado_final,
         foto_descripcion_trabajo: imagenes.foto_descripcion_trabajo,
@@ -373,28 +374,18 @@ const ReportFormTc = () => {
         </Alert>
       </Collapse>
 
-      {pdfUrl ? (
-        <Button
-          variant="contained"
-          fullWidth
-          color="secondary"
-          style={{ marginTop: '1rem' }}
-          onClick={() => window.open(`${import.meta.env.VITE_BACKEND_URL}${pdfUrl}`, '_blank')}
-        >
-          Ver PDF
-        </Button>
-      ) : (
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          color="primary"
-          style={{ marginTop: '1rem' }}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Generando reporte..." : "Generar reporte"}
-        </Button>
-      )}
+
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        color="primary"
+        style={{ marginTop: '1rem' }}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Generando reporte..." : "Generar reporte"}
+      </Button>
+    
 
     </FormContainer>
   );
