@@ -70,9 +70,38 @@ const getPDFIdVisit = (id) => {
   });
 }
 
+const getListClient = () => {
+  return axios.get("http://localhost:8000/api/cliente");
+
+}
+
+const getVisitId = (id_visita) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get(`http://localhost:8000/api/visitas/${id_visita}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  });
+}
+
+const getRequestId = (id_solicitud) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get(`http://localhost:8000/api/solicitudes/${id_solicitud}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  });
+}
+
+
 export const commonService = {
   login,
   createMaintenanceSheet,
-  getPDFIdVisit
+  getPDFIdVisit,
+  getListClient,
+  getVisitId,
+  getRequestId
 
 }

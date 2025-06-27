@@ -232,6 +232,7 @@ const AssignVisitPageAd = () => {
             <TextField 
               label="Duracion estimada" 
               fullWidth size="medium" 
+              type="number"
               value={estimatedDuration} 
               onChange={(e) => setEstimatedDuration(e.target.value)}
               sx={{ backgroundColor: 'white' }}
@@ -256,7 +257,6 @@ const AssignVisitPageAd = () => {
               onChange={(event, newValue) => {
                 setSelectedRequest(newValue);
                 setRequest(newValue ? newValue.id : "");
-                console.log(newValue.id)
               }}
               renderInput={(params) => (
                 <TextField
@@ -300,6 +300,11 @@ const AssignVisitPageAd = () => {
                 setSelectedService(newValue);
                 setService(newValue ? newValue.id : "");
               }}
+              renderOption={(props, option) => (
+                <li {...props} key={option.id}>
+                  {`${option.nombre} - ${option.descripcion.slice(0, 50)}`}
+                </li>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -313,7 +318,7 @@ const AssignVisitPageAd = () => {
             <TextField 
               label="Fecha programada" 
               size="medium" 
-              type="date"
+              type="datetime-local"
               value={scheduledDate} 
               onChange={(e) => setScheduledDate(e.target.value)}
               sx={{ backgroundColor: 'white', width: "60%" }}

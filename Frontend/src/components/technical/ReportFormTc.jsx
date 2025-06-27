@@ -1,11 +1,15 @@
 import styled from 'styled-components';
-import { TextField, Button, Collapse, Alert, IconButton } from '@mui/material';
+import { TextField, Button, Collapse, Alert, IconButton, Autocomplete } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { handleCreateMaintenanceSheet } from '../../controllers/common/createMaintenanceSheet.controller';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { handleGetListTechnical } from '../../controllers/administrator/getTechnicalListAd.controller';
+import { handleGetListClient } from '../../controllers/common/getListClient.controller';
+import { handleGetClientVisit } from '../../controllers/common/getClientVisit.controller';
+import { handleGetTechnicalVisit } from '../../controllers/common/getTechnicalVisit.controller';
 
 
 const FormContainer = styled.form`
@@ -37,6 +41,22 @@ const UploadButton = styled.label`
   cursor: pointer;
 `;
 
+const ContainerButton = styled.div`
+  display: flex;
+  gap: 3rem;
+
+  & > *:first-child {
+    width: 45%;
+
+  }
+  & > *:nth-child(2)  {
+    width: 35%;
+    background-color:#17A2B8;
+  }
+
+
+`
+
 const ReportFormTc = () => {
   const [imagenes, setImagenes] = useState({
     foto_estado_antes: null,
@@ -64,6 +84,12 @@ const ReportFormTc = () => {
   const navigate = useNavigate();
   const {id} = useParams();
 
+  const [selectedTechnical, setSelectedTechnical] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null);
+
+  const [technicalList, setTechnicalList] = useState([]);
+  const [clientList, setClientList] = useState([]);
+
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
@@ -81,11 +107,14 @@ const ReportFormTc = () => {
   const handleSubmit = async(event) => {
     event.preventDefault(); 
     setIsSubmitting(true);
+    const id_cliente = await handleGetClientVisit(id);
+    const id_tecnico = await handleGetTechnicalVisit(id);
 
+    console.log(id_cliente, " - ", id_tecnico)
     try {
       await handleCreateMaintenanceSheet({
-        id_cliente: parseInt(formData.cliente),
-        id_tecnico: parseInt(formData.tecnico),
+        id_cliente: id_cliente,
+        id_tecnico: id_tecnico,
         introduccion: formData.introduccion,
         detalles_servicio: formData.detalles_servicio,
         observaciones: formData.observaciones,
@@ -128,28 +157,20 @@ const ReportFormTc = () => {
     }
   };
 
-  return (
 
+  return (
     <FormContainer onSubmit={handleSubmit}>
       <TextField 
-        label="Cliente" 
-        name="cliente" 
+        label="Introducción" 
+        name="introduccion" 
         fullWidth 
+        multiline 
+        rows={3} 
         margin="normal" 
-        value={formData.cliente} 
+        value={formData.introduccion} 
         onChange={handleInputChange}
-        error={Boolean(fieldErrors.cliente)}
-        helperText={fieldErrors.cliente}
-      />
-      <TextField 
-        label="Técnico Responsable" 
-        name="tecnico" 
-        fullWidth 
-        margin="normal" 
-        value={formData.tecnico} 
-        onChange={handleInputChange} 
-        error={Boolean(fieldErrors.tecnico)}
-        helperText={fieldErrors.tecnico}
+        error={Boolean(fieldErrors.introduccion)}
+        helperText={fieldErrors.introduccion} 
       />
       <TextField
         label="Fecha del mantenimiento"
@@ -165,18 +186,6 @@ const ReportFormTc = () => {
         InputLabelProps={{
           shrink: true,
         }}
-      />
-      <TextField 
-        label="Introducción" 
-        name="introduccion" 
-        fullWidth 
-        multiline 
-        rows={3} 
-        margin="normal" 
-        value={formData.introduccion} 
-        onChange={handleInputChange}
-        error={Boolean(fieldErrors.introduccion)}
-        helperText={fieldErrors.introduccion} 
       />
       <TextField 
         label="Detalles del servicio" 
@@ -374,17 +383,29 @@ const ReportFormTc = () => {
         </Alert>
       </Collapse>
 
+      <ContainerButton>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          color="primary"
+          style={{ marginTop: '1rem' }}
+          disabled={isSubmitting}
+          >
+          {isSubmitting ? "Generando reporte..." : "Generar reporte"}
+        </Button>
+        <Button
+          variant="contained"
+          fullWidth
+          color="primary"
+          style={{ marginTop: '1rem' }}
+          LinkComponent={Link}
+          to={`/tecnico/ver-servicio/${id}`}
+        >
+          Cancelar
+        </Button>
 
-      <Button
-        type="submit"
-        variant="contained"
-        fullWidth
-        color="primary"
-        style={{ marginTop: '1rem' }}
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Generando reporte..." : "Generar reporte"}
-      </Button>
+      </ContainerButton>
     
 
     </FormContainer>

@@ -186,46 +186,52 @@ const ServiceTc = () => {
         </AccordionDetails>
       </Accordion>
       
-      <Button
-        variant="contained"
-        color="success"
-        sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
-        onClick={async () => {
-          try {
-            const token = sessionStorage.getItem('authToken');
+      <Botones>
+        {pathName ? (
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
+            onClick={async () => {
+              try {
+                const token = sessionStorage.getItem('authToken');
 
-            const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-            const publicUrl = `http://localhost:8000/${relativePath}`;
-            const response = await fetch(publicUrl, {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${token}`
+                const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
+                const publicUrl = `http://localhost:8000/${relativePath}`;
+                const response = await fetch(publicUrl, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+
+                if (!response.ok) {
+                  throw new Error('No se pudo obtener el PDF');
+                }
+
+                const blob = await response.blob();
+                const fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+              } catch (err) {
+                console.error('Error al abrir el PDF protegido:', err);
               }
-            });
+            }}
+          >
+            Ver reporte
+          </Button>
+        ):(
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
+            onClick={handleGenerarReporte}
+          >
+            Generar reporte
+          </Button>
+        )}
+        <Button variant="contained" color="primary" sx={{textTransform: 'none', fontSize: "1rem", fontWeight: "600"}}>Editar reporte</Button>
+      </Botones>
 
-            if (!response.ok) {
-              throw new Error('No se pudo obtener el PDF');
-            }
-
-            const blob = await response.blob();
-            const fileURL = URL.createObjectURL(blob);
-            window.open(fileURL, '_blank');
-          } catch (err) {
-            console.error('Error al abrir el PDF protegido:', err);
-          }
-        }}
-      >
-        Ver reporte
-      </Button>
-
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
-        onClick={handleGenerarReporte}
-      >
-        Generar reporte
-      </Button>
     </Container>
   );
 };
