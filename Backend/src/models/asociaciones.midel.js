@@ -3,6 +3,7 @@ import { ClienteModel } from './cliente.model.js';
 import { VisitaModel } from './visita.model.js';
 import { TecnicoModel } from './tecnico.model.js';
 import { AdminModel } from './administrador.model.js';
+import { ServicioModel } from './servicios.model.js'; 
 
 export const setupAssociations = () => {
  
@@ -30,4 +31,16 @@ export const setupAssociations = () => {
     foreignKey: 'tecnico_id_fk',
     as: 'tecnico'
   });
+
+  VisitaModel.Visita.belongsTo(ServicioModel.Servicio, {
+    foreignKey: 'servicio_id_fk',
+    as: 'servicio'
+  });
+  
+  ServicioModel.Servicio.hasMany(VisitaModel.Visita, {
+    foreignKey: 'servicio_id_fk',
+    as: 'visitas'
+  });
+
+  console.log('🔗 Asociaciones establecidas correctamente');
 };

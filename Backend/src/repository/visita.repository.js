@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import { VisitaModel } from '../models/visita.model.js';
 import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
+import { ServicioModel } from '../models/servicios.model.js';
 
 
 export class VisitaRepository {
@@ -9,6 +10,7 @@ export class VisitaRepository {
     this.model = VisitaModel.Visita;
     this.solicitudModel = SolicitudModel.Solicitud;
     this.tecnicoModel = TecnicoModel.Tecnico;
+    this.servicioModel = ServicioModel.Servicio;
     this.setupAssociations();
   }
   setupAssociations() {
@@ -24,7 +26,16 @@ export class VisitaRepository {
         as: 'tecnico'
       });
     }
+
+    if (!this.model.associations?.servicio) {
+      this.model.belongsTo(this.servicioModel, {
+        foreignKey: 'servicio_id_fk',
+        as: 'servicio'
+      });
+    }
+    
   }
+
   async crearVisita(data) {
     return await this.model.create(data);
   }
@@ -34,7 +45,7 @@ export class VisitaRepository {
          {
           model: this.solicitudModel,
           as: 'solicitud',
-          attributes: ['id', 'tipo', 'descripcion', 'estado']
+          attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado']
          },
         {
           model: this.tecnicoModel,
@@ -123,4 +134,36 @@ export class VisitaRepository {
   
     return visitas.length === 0;
   }
-}  
+
+  async obtenerServiciosPorTecnico(tecnico_id) {
+    return await VisitaModel.Visita.findAll({
+      where: {
+        tecnico_id_fk: tecnico_id
+      },
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
+      include: [{
+        model: ServicioModel.Servicio,
+        as: 'servicio',
+        attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
+      }],
+      order: [['fecha_creacion', 'DESC']]
+    });
+  }
+
+  async obtenerServicioAsignadoPorId(tecnico_id, visita_id) {
+    return await VisitaModel.Visita.findOne({
+      where: {
+        id: visita_id,
+        tecnico_id_fk: tecnico_id
+      },
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
+      include: [{
+        model: ServicioModel.Servicio,
+        as: 'servicio',
+        attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
+      }]
+    });
+  }
+}
+
+ 
