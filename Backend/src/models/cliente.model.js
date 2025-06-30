@@ -161,6 +161,14 @@ const Cliente= sequelize.define('Cliente',{
       defaultValue: 'cliente',
       allowNull: false
     },
+    recovery_code: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    recovery_expires: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     estado: {
 
         type: DataTypes.ENUM('activo', 'inactivo'),

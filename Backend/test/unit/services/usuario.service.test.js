@@ -108,7 +108,7 @@ describe('AuthService', () => {
     });
 
     it('debería lanzar error si el token tiene estructura incorrecta', async () => {
-      jwt.verify.mockReturnValue({ id: 1 }); // falta rol y email
+      jwt.verify.mockReturnValue({ id: 1 }); 
 
       await expect(service.verifyToken('invalid-struct-token'))
         .rejects.toThrow('Token inválido: estructura incorrecta');
@@ -120,6 +120,39 @@ describe('AuthService', () => {
       });
 
       await expect(service.verifyToken('bad-token')).rejects.toThrow('jwt malformed');
+    });
+  });
+
+  describe('sendRecoveryCode', () => {
+    it('debería generar y guardar el código de recuperación si el usuario existe', async () => {
+      const mockUser = {
+        id: 10,
+        correo_electronico: 'example32@gmail.com',
+        update: jest.fn().mockResolvedValue(true)
+      };
+
+      AdminModel.Admin.findOne.mockResolvedValue(null);
+      TecnicoModel.Tecnico.findOne.mockResolvedValue(null);
+      ClienteModel.Cliente.findOne.mockResolvedValue(mockUser);
+
+      await service.sendRecoveryCode('example32@gmail.com');
+
+      expect(mockUser.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          recovery_code: expect.stringMatching(/^\d{6}$/), 
+          recovery_expires: expect.any(Date)
+        })
+      );
+    });
+
+    it('debería lanzar error si el usuario no existe', async () => {
+      AdminModel.Admin.findOne.mockResolvedValue(null);
+      ClienteModel.Cliente.findOne.mockResolvedValue(null);
+      TecnicoModel.Tecnico.findOne.mockResolvedValue(null);
+
+      await expect(
+        service.sendRecoveryCode('noexiste@correo.com')
+      ).rejects.toThrow('Usuario no encontrado');
     });
   });
 });
