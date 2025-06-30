@@ -18,15 +18,15 @@ const createTechnical = (IdCard, name, lastName, email, phone, password, positio
 };
 
 const getClient = (id) => {
-  return axios.get(`http://localhost:8000/api/cliente/${id}`)
+  return axios.get(`http://localhost:7000/api/cliente/${id}`)
 };
 
 const getTechnical = (id) => {
-  return axios.get(`http://localhost:8000/api/tecnico/${id}`)
+  return axios.get(`http://localhost:7000/api/tecnico/${id}`)
 };
 
 const updateClient = (id, IdCard, name, lastName, email, phone, address) => {
-  return axios.put(`http://localhost:8000/api/cliente/${id}`, {
+  return axios.put(`http://localhost:7000/api/cliente/${id}`, {
     numero_de_cedula: IdCard,
     nombre: name,
     apellido: lastName,
@@ -41,13 +41,13 @@ const updateClient = (id, IdCard, name, lastName, email, phone, address) => {
 };
 
 const getListTechnical = () => {
-  return axios.get("http://localhost:8000/api/tecnico")
+  return axios.get("http://localhost:7000/api/tecnico")
 };
 
 const createService = (nameService, descripcion) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/servicios", {
+  return axios.post("http://localhost:7000/api/servicios", {
     nombre: nameService,
     descripcion: descripcion
   }, {
@@ -59,7 +59,7 @@ const createService = (nameService, descripcion) => {
 };
 
 const stateChange = (id, state) => {
-  return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
+  return axios.put(`http://localhost:7000/api/tecnico/${id}`, {
     estado: state
   }, {
     headers: {
@@ -71,7 +71,7 @@ const stateChange = (id, state) => {
 const getListRequest = () => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get("http://localhost:8000/api/solicitudes", {
+  return axios.get("http://localhost:7000/api/solicitudes", {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -81,7 +81,7 @@ const getListRequest = () => {
 const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId ) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/visitas", {
+  return axios.post("http://localhost:7000/api/visitas", {
     duracion_estimada: estimatedDuration,
     notas_previas: previousNotes,
     fecha_programada: scheduledDate,

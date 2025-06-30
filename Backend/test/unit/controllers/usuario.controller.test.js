@@ -87,4 +87,56 @@ describe('AuthController', () => {
       expect(jsonMock).toHaveBeenCalledWith({ message: 'Token inválido o expirado' });
     });
   });
+   
+  describe('AuthController - sendRecoveryCode', () => {
+  let authController;
+  let authServiceMock;
+
+  beforeEach(() => {
+    authServiceMock = {
+      sendRecoveryCode: jest.fn(),
+    };
+    authController = new AuthController(authServiceMock);
+  });
+
+  it('debe retornar 400 si no se proporciona correo', async () => {
+    const req = { body: {} };
+    const jsonMock = jest.fn();
+    const statusMock = jest.fn().mockReturnValue({ json: jsonMock });
+    const res = {
+      status: statusMock,
+      json: jsonMock, 
+    };
+
+    await authController.sendRecoveryCode(req, res);
+
+    expect(statusMock).toHaveBeenCalledWith(400);
+    expect(jsonMock).toHaveBeenCalledWith({
+      success: false,
+      message: 'El correo es requerido',
+    });
+  });
+
+  it('debe retornar 200 si el código se envía correctamente', async () => {
+    const req = { body: { correo_electronico: 'example32344@gmail.com' } };
+    const jsonMock = jest.fn();
+    const statusMock = jest.fn().mockReturnValue({ json: jsonMock });
+    const res = {
+      status: statusMock,
+      json: jsonMock, 
+    };
+
+    authServiceMock.sendRecoveryCode.mockResolvedValueOnce(undefined);
+
+    await authController.sendRecoveryCode(req, res);
+
+    expect(jsonMock).toHaveBeenCalledWith({
+      success: true,
+      message: 'Código enviado al correo',
+    });
+  });
+
+
+  });
+
 });

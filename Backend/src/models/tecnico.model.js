@@ -133,6 +133,14 @@ const Tecnico = sequelize.define('Tecnico', {
     defaultValue: 'tecnico',
     allowNull: false
   },
+  recovery_code: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    recovery_expires: {
+      type: DataTypes.DATE,
+      allowNull: true
+  },
   fecha_registro: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,

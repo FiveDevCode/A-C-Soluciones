@@ -139,10 +139,18 @@ const Admin = sequelize.define('Admin', {
     defaultValue: 'administrador',
     allowNull: false
   },
-}, {
-  tableName: 'administrador',
-  timestamps: false,
-});
+  recovery_code: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  recovery_expires: {
+    type: DataTypes.DATE,
+    allowNull: true
+  }
+  }, {
+    tableName: 'administrador',
+    timestamps: false,
+  });
 
 Admin.beforeCreate(encryptPasswordHook);
 
