@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751250369911" clover="3.2.0">
-  <project timestamp="1751250369911" name="All files">
+<coverage generated="1751257788213" clover="3.2.0">
+  <project timestamp="1751257788213" name="All files">
     <metrics statements="1119" coveredstatements="1054" conditionals="415" coveredconditionals="356" methods="245" coveredmethods="234" elements="1779" coveredelements="1644" complexity="0" loc="1119" ncloc="1119" packages="6" files="48" classes="48"/>
     <package name="controllers">
       <metrics statements="555" coveredstatements="540" conditionals="196" coveredconditionals="182" methods="74" coveredmethods="72"/>
@@ -435,18 +435,18 @@
       </file>
       <file name="usuario.controller.js" path="/home/matius/Escritorio/A-C-Soluciones/Backend/src/controllers/usuario.controller.js">
         <metrics statements="41" coveredstatements="27" conditionals="14" coveredconditionals="5" methods="6" coveredmethods="4"/>
-        <line num="5" count="11" type="stmt"/>
-        <line num="7" count="11" type="stmt"/>
-        <line num="8" count="11" type="stmt"/>
-        <line num="9" count="11" type="stmt"/>
-        <line num="12" count="11" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="25" count="11" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
         <line num="26" count="3" type="stmt"/>
         <line num="27" count="3" type="stmt"/>
         <line num="29" count="3" type="cond" truecount="2" falsecount="0"/>
@@ -455,7 +455,7 @@
         <line num="34" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="37" count="1" type="stmt"/>
-        <line num="42" count="3" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
         <line num="43" count="2" type="stmt"/>
         <line num="45" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="46" count="1" type="stmt"/>

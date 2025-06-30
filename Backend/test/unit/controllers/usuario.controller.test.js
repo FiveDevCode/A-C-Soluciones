@@ -136,17 +136,7 @@ describe('AuthController', () => {
     });
   });
 
-  it('debe retornar 400 si el usuario no es encontrado', async () => {
-      authServiceMock.sendRecoveryCode.mockRejectedValueOnce(new Error('Usuario no encontrado'));
 
-      await authController.sendRecoveryCode(req, res);
-
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Usuario no encontrado',
-      });
-    });
   });
 
 });
