@@ -38,7 +38,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
+        args:/^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {
@@ -57,7 +57,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
+        args:/^[A-ZÁÉÍÓÚÑ0-9 !,.&()\-]+$/i,
         msg: 'El apellido solo puede contener letras.',
       },
       len: {
@@ -82,7 +82,7 @@ const Admin = sequelize.define('Admin', {
         msg: 'El correo debe tener máximo 320 caracteres.',
       },
       is: {
-        args: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+        args: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
         msg: 'El correo electrónico tiene un formato incorrecto.',
       },
     },
@@ -95,9 +95,35 @@ const Admin = sequelize.define('Admin', {
         args: [8, 64],
         msg: 'La contraseña debe tener entre 8 y 64 caracteres.',
       },
-      is: {
-        args: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!])(?!.*\s)(?!.*(.)\1{2,}).{8,64}$/,
-        msg: 'La contraseña debe incluir mayúscula, minúscula, número, carácter especial y no repetir caracteres.',
+      tieneMayuscula(value) {
+        if (!/[A-Z]/.test(value)) {
+          throw new Error('La contraseña debe contener al menos una letra mayúscula.');
+        }
+      },
+      tieneMinuscula(value) {
+        if (!/[a-z]/.test(value)) {
+          throw new Error('La contraseña debe contener al menos una letra minúscula.');
+        }
+      },
+      tieneNumero(value) {
+        if (!/\d/.test(value)) {
+          throw new Error('La contraseña debe contener al menos un número.');
+        }
+      },
+      tieneEspecial(value) {
+        if (!/[@#$%&*!]/.test(value)) {
+          throw new Error('La contraseña debe contener al menos un carácter especial (@#$%&*!).');
+        }
+      },
+      sinEspacios(value) {
+        if (/\s/.test(value)) {
+          throw new Error('La contraseña no debe contener espacios.');
+        }
+      },
+      sinRepetidos(value) {
+        if (/(.)\1{2,}/.test(value)) {
+          throw new Error('La contraseña no debe tener más de 2 caracteres repetidos seguidos.');
+        }
       },
       notCommonPassword(value) {
         const commonPasswords = ['123456', 'abcdef', 'qwerty', '12345678', '111111'];
@@ -107,6 +133,7 @@ const Admin = sequelize.define('Admin', {
       },
     },
   },
+
   rol: {
     type: DataTypes.ENUM('administrador'),
     defaultValue: 'administrador',

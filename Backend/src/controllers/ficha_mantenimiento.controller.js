@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 import { ClienteModel } from '../models/cliente.model.js';
 import { generarPDF } from '../services/ficha_mantenimiento.services.js';
 import { sendEmail } from '../services/email.services.js';
