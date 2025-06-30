@@ -169,6 +169,27 @@ const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position)
   });
 }
 
+const getListVisit = () => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get(`http://localhost:8000/api/visitas`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const getVisit =  (id_visit) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.get(`http://localhost:8000/api/visitas/${id_visit}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
 
 export const administratorService = {
   createTechnical,
@@ -186,4 +207,7 @@ export const administratorService = {
   getAdminId,
   updateAdmin,
   updateTechnical,
+  getListVisit,
+  getVisit,
+  
 }

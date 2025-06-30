@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Global from "./Global";
 import LoginPage from './pages/common/LoginPage';
-import ServicesPageTc from './pages/technical/ServicesPageTc';
 import styled from 'styled-components';
 import MenuSide from './components/common/MenuSide';
 import HeaderBar from './components/common/HeaderBar';
@@ -12,9 +11,9 @@ import ProfileUserTc from './pages/technical/ProfileUserTc';
 import HomeAd from './pages/administrator/HomeAd';
 import HomeTc from './pages/technical/HomeTc';
 import PrivateRoute from './components/common/PrivateRoute';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Home from './pages/common/Home';
-import ServiceTc from './pages/technical/ServiceTc';
+import ViewVisitPageTc from './pages/technical/ViewVisitPageTc';
 import UserProfileAd from './pages/administrator/UserProfileAd';
 import EditClientAd from './pages/administrator/EditClientAd';
 import CreateServiceAd from './pages/administrator/CreateServiceAd';
@@ -34,6 +33,10 @@ import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
 import UserProfileClientPageAd from './pages/administrator/UserProfileClientPageAd';
 import ViewServicePageAd from './pages/administrator/ViewServicePageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
+import VisitListPageAd from './pages/administrator/VisitListPageAd';
+import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
+import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
+import VisitListPageTc from './pages/technical/VisitListPageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -123,15 +126,15 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/tecnico/servicios" element={
+            <Route path="/tecnico/visitas" element={
               <PrivateRoute roleRequired="tecnico">
-                <ServicesPageTc />
+                <VisitListPageTc />
               </PrivateRoute>
             } />
 
-            <Route path="/tecnico/ver-servicio/:id" element={
+            <Route path="/tecnico/ver-visita/:id" element={
               <PrivateRoute roleRequired="tecnico">
-                <ServiceTc />
+                <ViewVisitPageTc />
               </PrivateRoute>
             } />
 
@@ -229,6 +232,24 @@ function AppContent() {
             <Route path="/admin/editar-cliente/" element={
               <PrivateRoute roleRequired="administrador">
                 <EditAdminPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/visitas" element={
+              <PrivateRoute roleRequired="administrador">
+                <VisitListPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/ver-visita/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewVisitPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/reporte/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateReportPageAd />
               </PrivateRoute>
             } />
           </Routes>

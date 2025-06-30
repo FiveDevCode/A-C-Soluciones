@@ -2,7 +2,7 @@ import { technicalService } from "../../services/techical-service";
 
 
 
-const handleGetServiceAssign= (id) => {
+const handleGetVisitAssign= (id) => {
     
   return technicalService
   .getServiceAssign(id);
@@ -10,4 +10,4 @@ const handleGetServiceAssign= (id) => {
 };
 
 
-export {handleGetServiceAssign};
+export {handleGetVisitAssign};

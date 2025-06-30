@@ -158,7 +158,7 @@ const ViewServicePageAd = () => {
             src={logoService}
             alt="usuario"
           />
-          <Nombre>{serviceData.nombre} {serviceData.apellido}</Nombre>
+          <Nombre>{serviceData.nombre}</Nombre>
         </UsuarioInfo>
 
         <Button

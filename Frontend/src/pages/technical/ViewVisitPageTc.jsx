@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { handleGetServiceAssign } from '../../controllers/technical/getServiceAssignTc.controller';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { handleGetPDFIdVisit } from '../../controllers/common/getPDFIdVisit.controller';
 import { useEffect, useState } from 'react';
+import { handleGetVisitAssign } from '../../controllers/technical/getVisitAssignTc.controller';
 
 
 const Container = styled.div`
@@ -60,23 +60,23 @@ const Botones = styled.div`
 `;
 
 
-const ServiceTc = () => {
+const ViewVisitPageTc = () => {
   const { id } = useParams();
-  const [servicioData, setServicioData] = useState(null);
-  const [estadoVisita, setEstadoVisita] = useState('');
+  const [visitData, setVisitData] = useState(null);
+  const [stateVisit, setStateVisit] = useState('');
   const [pathName, setPathName] = useState(null)
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      handleGetServiceAssign(id)
+      handleGetVisitAssign(id)
         .then((res) => {
           const data = res.data.data;
-          setServicioData(data);
-          setEstadoVisita(data.estado || 'programada');
+          setVisitData(data);
+          setStateVisit(data.estado || 'programada');
         })
         .catch((err) => {
-          console.error('Error al obtener el servicio asignado:', err);
+          console.error('Error al obtener el visit asignado:', err);
         });
     }
   }, [id]);
@@ -97,28 +97,28 @@ const ServiceTc = () => {
     }
   }, [id]);
 
-
-  if (!servicioData) {
-    return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del servicio...</Typography>;
+  
+  if (!visitData) {
+    return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del visit...</Typography>;
   }
-
+  
   const {
     fecha_programada,
     duracion_estimada,
     notas_previas,
     notas_posteriores,
     servicio,
-  } = servicioData;
-
-  const handleEstadoChange = (e) => {
-    setEstadoVisita(e.target.value);
+  } = visitData;
+  
+  const handleStateChange = (e) => {
+    setStateVisit(e.target.value);
   };
-
-  const handleGenerarReporte = () => {
+  
+  const handleCreateReport = () => {
     navigate(`/tecnico/reporte/${id}`);
   };
-
-
+  
+  
   return (
     <Container>
       <Header>
@@ -143,7 +143,7 @@ const ServiceTc = () => {
       <Typography sx={{ color: 'black' }}>{duracion_estimada} minutos</Typography>
 
       <Label>Estado de la visita:</Label>
-      <EstadoSelect value={estadoVisita} onChange={handleEstadoChange}>
+      <EstadoSelect value={stateVisit} onChange={handleStateChange}>
         <MenuItem value="programada">Programada</MenuItem>
         <MenuItem value="en camino">En camino</MenuItem>
         <MenuItem value="iniciada">Iniciada</MenuItem>
@@ -170,7 +170,7 @@ const ServiceTc = () => {
       
         >
         <Typography sx={{ fontWeight: 'bold', color: '#EFEBE9' }}>
-          Servicio asignado: {servicio?.nombre}
+          visit asignado: {servicio?.nombre}
         </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ padding: '16px', color: '#424242', backgroundColor: '#FBF8F6', borderLeft: '4px solid #8D6E63' }}>
@@ -224,7 +224,7 @@ const ServiceTc = () => {
             variant="contained"
             color="primary"
             sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
-            onClick={handleGenerarReporte}
+            onClick={handleCreateReport}
           >
             Generar reporte
           </Button>
@@ -236,4 +236,4 @@ const ServiceTc = () => {
   );
 };
 
-export default ServiceTc;
+export default ViewVisitPageTc;

@@ -55,7 +55,7 @@ const ContainerButton = styled.div`
 
 `
 
-const ReportFormTc = () => {
+const ReportFormAd = () => {
   const [imagenes, setImagenes] = useState({
     foto_estado_antes: null,
     foto_estado_final: null,
@@ -392,7 +392,7 @@ const ReportFormTc = () => {
           color="primary"
           style={{ marginTop: '1rem' }}
           LinkComponent={Link}
-          to={`/tecnico/ver-visita/${id}`}
+          to={`/admin/ver-visita/${id}`}
         >
           Cancelar
         </Button>
@@ -404,4 +404,4 @@ const ReportFormTc = () => {
   );
 };
 
-export default ReportFormTc;
+export default ReportFormAd;

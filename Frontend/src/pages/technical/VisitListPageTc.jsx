@@ -12,7 +12,7 @@ const ContainerServices = styled.div`
 `
 
 
-const ServicesPageTc = () => {
+const VisitListPageTc = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
@@ -41,4 +41,4 @@ const ServicesPageTc = () => {
   )
 }
 
-export default ServicesPageTc;
+export default VisitListPageTc;

@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
-import Logo from "../../components/common/Logo";
+import Logo from "../common/Logo";
+import { FormControl, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { handleGetServiceList } from "../../controllers/technical/getServiceListTc.controller";
 
 
 const ContainerNoti = styled.div`
@@ -68,41 +67,38 @@ const SeeMore = styled.div`
 
 
 
-
-
-const ActivityListTc = ({services}) => {
-
-
-
-
+const ListServicesAd = ({services}) => {
   return (
     <ContainerNoti>
       {services.map((service, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={serviceTehc} />
+            <Logo src={serviceTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {service.notas_posteriores.length > 50
+                {service.notas_posteriores && service.notas_posteriores.length > 50
                   ? `${service.notas_posteriores.slice(0, 50)}...`
-                  : service.notas_posteriores}
+                  : service.notas_posteriores || "Sin notas posteriores"}
               </TitleNoti>
               <Description>
-                {service.notas_previas.length > 50
+                {service.notas_previas && service.notas_previas.length > 50
                   ? `${service.notas_previas.slice(0, 50)}...`
-                  : service.notas_previas}
+                  : service.notas_previas || "Sin notas previas"}
               </Description>
               <Date>{service.fecha_programada.substring(0, 10)}</Date>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <SeeMore>
-              <FontAwesomeIcon icon={faTrash} />
-              <Link to="/">Eliminar</Link>
-            </SeeMore>
+            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
+              <TextField
+                value={service.estado}
+                label="Estado"
+                disabled
+              />
+            </FormControl>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/tecnico/ver-visita/${service.id}`}>Ver</Link>
+              <Link to={`/admin/ver-visita/${service.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>
@@ -112,4 +108,4 @@ const ActivityListTc = ({services}) => {
 }
 
 
-export default ActivityListTc;
+export default ListServicesAd
