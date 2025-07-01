@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { handleGetServiceList } from "../../controllers/client/getServiceListCl.controller";
 import { useEffect, useState } from "react";
 import ServiceOpenCl from "../../components/client/ServiceOpenCl";
+import getIconByService from "../../components/client/GetIconServiceCl";
 
 
 
@@ -84,6 +85,7 @@ const ServicesAllPageCl = () => {
       <ContentServices>
         {services.map((service) => (
           <Service key={service.id} onClick={() => setSelectedService(service)}>
+            {getIconByService(service.nombre)}
             <TitleService>{service.nombre}</TitleService>
             <Description title={service.descripcion}>
               {service.descripcion.length > 30

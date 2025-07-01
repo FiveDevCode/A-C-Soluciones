@@ -92,7 +92,7 @@ const CreateAdministratorAd = () => {
         password
       );
 
-      setFieldErrors("");
+      setFieldErrors({});
       setErrorMsg("");
       setShowSuccess(true);
       handleLimpiar();

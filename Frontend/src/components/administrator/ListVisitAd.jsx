@@ -67,7 +67,7 @@ const SeeMore = styled.div`
 
 
 
-const ListServicesAd = ({services}) => {
+const ListVisitAd = ({services}) => {
   return (
     <ContainerNoti>
       {services.map((service, index) => (
@@ -108,4 +108,4 @@ const ListServicesAd = ({services}) => {
 }
 
 
-export default ListServicesAd
+export default ListVisitAd

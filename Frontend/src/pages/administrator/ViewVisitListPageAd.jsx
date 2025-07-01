@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ListServicesAd from "../../components/administrator/ListServicesAd";
+import ListVisitAd from "../../components/administrator/ListVisitAd";
 import styled from "styled-components";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
@@ -16,7 +16,7 @@ const ContainerServices = styled.div`
 
 
 
-const VisitListPageAd = () => {
+const ViewVisitListPageAd = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const VisitListPageAd = () => {
       {services.length === 0 ? (
         <p style={{textAlign: "center"}}>No hay ninguna visita asignada por el momento.</p>
       ) : (
-        <ListServicesAd services={services} />
+        <ListVisitAd services={services} />
       )}
 
     </ContainerServices>
@@ -46,4 +46,4 @@ const VisitListPageAd = () => {
 
 
 
-export default VisitListPageAd
+export default ViewVisitListPageAd

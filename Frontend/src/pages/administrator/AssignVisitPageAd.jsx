@@ -114,12 +114,20 @@ const AssignVisitPageAd = () => {
       setFieldErrors({});
       handleLimpiar();
     } catch (err) {
+      setErrorMsg("");
+      setFieldErrors({});
       console.log(err)
+
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+      } 
+      
+      if (err.response?.data?.message) {
+        setErrorMsg(err.response.data.message);
       } else {
-        setErrorMsg("Hubo un error al registrar el técnico.");
+        setErrorMsg("Hubo un error al registrar al administrador.");
       }
+      
     } finally {
       setIsSubmitting(false);
     }
@@ -202,12 +210,6 @@ const AssignVisitPageAd = () => {
               sx={{ backgroundColor: 'white' }}
               error={Boolean(fieldErrors.notas_previas)}
               helperText={fieldErrors.notas_previas}
-              FormHelperTextProps={{
-                sx: {
-                  backgroundColor: '#F2F5F7',
-                  margin: 0,
-                },
-              }}
             />
             <TextField 
               label="Notas posteriores" 
@@ -219,16 +221,7 @@ const AssignVisitPageAd = () => {
               sx={{ backgroundColor: 'white' }}
               error={Boolean(fieldErrors.notas_posteriores)}
               helperText={fieldErrors.notas_posteriores}
-              FormHelperTextProps={{
-                sx: {
-                  backgroundColor: '#F2F5F7',
-                  margin: 0,
-                  
-                },
-              }}
             />
-
-
             <TextField 
               label="Duracion estimada" 
               fullWidth size="medium" 
@@ -238,15 +231,7 @@ const AssignVisitPageAd = () => {
               sx={{ backgroundColor: 'white' }}
               error={Boolean(fieldErrors.duracion_estimada)}
               helperText={fieldErrors.duracion_estimada}
-              FormHelperTextProps={{
-                sx: {
-                  backgroundColor: '#F2F5F7',
-                  margin: 0,
-                },
-              }}
-
             />
-
             <Autocomplete
               fullWidth
               options={requestList}
@@ -322,14 +307,9 @@ const AssignVisitPageAd = () => {
               value={scheduledDate} 
               onChange={(e) => setScheduledDate(e.target.value)}
               sx={{ backgroundColor: 'white', width: "60%" }}
-              error={Boolean(fieldErrors.notas_posteriores)}
-              helperText={fieldErrors.notas_posteriores}
-              FormHelperTextProps={{
-                sx: {
-                  backgroundColor: '#F2F5F7',
-                  margin: 0,
-                },
-              }}
+              error={Boolean(fieldErrors.fecha_programada)}
+              helperText={fieldErrors.fecha_programada}
+
               InputLabelProps={{
                 shrink: true,
               }}

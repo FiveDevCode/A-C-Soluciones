@@ -18,7 +18,6 @@ import UserProfileAd from './pages/administrator/UserProfileAd';
 import EditClientAd from './pages/administrator/EditClientAd';
 import CreateServiceAd from './pages/administrator/CreateServiceAd';
 import CreateAdministratorAd from './pages/administrator/CreateAdministratorAd';
-import CreateAdminPermit from './pages/administrator/CreateAdminPermit';
 import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
 import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
@@ -33,10 +32,12 @@ import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
 import UserProfileClientPageAd from './pages/administrator/UserProfileClientPageAd';
 import ViewServicePageAd from './pages/administrator/ViewServicePageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
-import VisitListPageAd from './pages/administrator/VisitListPageAd';
+import ViewVisitListPageAd from './pages/administrator/ViewVisitListPageAd';
 import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
 import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
 import VisitListPageTc from './pages/technical/VisitListPageTc';
+import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
+import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -231,7 +232,7 @@ function AppContent() {
 
             <Route path="/admin/visitas" element={
               <PrivateRoute roleRequired="administrador">
-                <VisitListPageAd />
+                <ViewVisitListPageAd />
               </PrivateRoute>
             } />
 
@@ -246,6 +247,20 @@ function AppContent() {
                 <CreateReportPageAd />
               </PrivateRoute>
             } />
+            
+            <Route path="/admin/solicitudes" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewRequestListPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/solicitud/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewRequestPageAd />
+              </PrivateRoute>
+            } />
+
+            
           </Routes>
         {isCliente && role && <FooterHomeCl />}
         </Content>

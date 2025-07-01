@@ -91,7 +91,8 @@ const HeaderBar = () => {
     "/admin/permisos": "Permisos administrador",
     "/admin/asignar-visita": "Asignar visita",
     "/admin/editar-cliente/": "Editar cliente", 
-    "/admin/visitas": "Visitas"
+    "/admin/visitas": "Visitas",
+    "/admin/solicitudes": "Solicitudes"
   };
 
   function getRouteName(path) {
