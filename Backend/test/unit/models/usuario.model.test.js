@@ -140,22 +140,40 @@ describe('Admin Model Tests', () => {
     expect(() => emailField.validate.is.msg).not.toThrow();
   });
 
-  test('Debería hacer el campo de contraseña con validaciones correctas', () => {
+   test('Debe hacer el campo contrasenia con todas sus validaciones personalizadas', () => {
     const passwordField = modelDefinition.attributes.contrasenia;
     expect(passwordField.allowNull).toBe(false);
-    
-    // Test length validacion
     expect(passwordField.validate.len.args).toEqual([8, 64]);
-    expect(() => passwordField.validate.len.msg).not.toThrow();
-    
-    // Test regex validacion
-    expect(passwordField.validate.is.args).toBeDefined();
-    expect(() => passwordField.validate.is.msg).not.toThrow();
-    
-    // Test  validaciones
-    expect(() => passwordField.validate.notCommonPassword('Strong@Password123')).not.toThrow();
+
+    // Validación de mayúscula
+    expect(() => passwordField.validate.tieneMayuscula('Password133!')).not.toThrow();
+    expect(() => passwordField.validate.tieneMayuscula('password133!')).toThrow();
+
+    // Validación de minúscula
+    expect(() => passwordField.validate.tieneMinuscula('Password133!')).not.toThrow();
+    expect(() => passwordField.validate.tieneMinuscula('PASSWORD133!')).toThrow();
+
+    // Validación de número
+    expect(() => passwordField.validate.tieneNumero('Password133!')).not.toThrow();
+    expect(() => passwordField.validate.tieneNumero('Password!')).toThrow();
+
+    // Validación de especial
+    expect(() => passwordField.validate.tieneEspecial('Password133!')).not.toThrow();
+    expect(() => passwordField.validate.tieneEspecial('Password133')).toThrow();
+
+    // Validación de sin espacios
+    expect(() => passwordField.validate.sinEspacios('Password133!')).not.toThrow();
+    expect(() => passwordField.validate.sinEspacios('Pass word133!')).toThrow();
+
+    // Validación de repetidos
+    expect(() => passwordField.validate.sinRepetidos('Passsword133!')).toThrow();
+    expect(() => passwordField.validate.sinRepetidos('Password133!')).not.toThrow();
+
+    // Validación de contraseñas comunes
     expect(() => passwordField.validate.notCommonPassword('123456')).toThrow();
+    expect(() => passwordField.validate.notCommonPassword('Password123!')).not.toThrow();
   });
+
 
   test('Deberia hacer el campo rol correctamente', () => {
     const rolField = modelDefinition.attributes.rol;

@@ -39,7 +39,8 @@ const Tecnico = sequelize.define('Tecnico', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/i,
+        args: /^[a-záéíóúñ\s]+$/i,
+
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {
@@ -58,7 +59,7 @@ const Tecnico = sequelize.define('Tecnico', {
     allowNull: false,
     validate: {
       is: {
-        args: /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/i,
+        args: /^[a-záéíóúñ\s]+$/i,
         msg: 'El primer apellido solo puede contener letras.',
       },
       len: {
@@ -82,7 +83,7 @@ const Tecnico = sequelize.define('Tecnico', {
         msg: 'El correo debe tener máximo 320 caracteres.',
       },
       is: {
-        args: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+        args: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
         msg: 'El correo electrónico tiene un formato incorrecto.',
       },
     },
