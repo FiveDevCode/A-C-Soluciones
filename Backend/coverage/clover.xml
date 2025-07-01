@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751316635626" clover="3.2.0">
-  <project timestamp="1751316635634" name="All files">
-    <metrics statements="1131" coveredstatements="1066" conditionals="427" coveredconditionals="368" methods="251" coveredmethods="240" elements="1809" coveredelements="1674" complexity="0" loc="1131" ncloc="1131" packages="6" files="48" classes="48"/>
+<coverage generated="1751396653955" clover="3.2.0">
+  <project timestamp="1751396653955" name="All files">
+    <metrics statements="1132" coveredstatements="1067" conditionals="427" coveredconditionals="368" methods="251" coveredmethods="240" elements="1810" coveredelements="1675" complexity="0" loc="1132" ncloc="1132" packages="6" files="48" classes="48"/>
     <package name="controllers">
       <metrics statements="555" coveredstatements="540" conditionals="196" coveredconditionals="182" methods="74" coveredmethods="72"/>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
@@ -637,9 +637,9 @@
       </file>
     </package>
     <package name="models">
-      <metrics statements="90" coveredstatements="90" conditionals="56" coveredconditionals="56" methods="30" coveredmethods="30"/>
+      <metrics statements="91" coveredstatements="91" conditionals="56" coveredconditionals="56" methods="30" coveredmethods="30"/>
       <file name="administrador.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\administrador.model.js">
-        <metrics statements="27" coveredstatements="27" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
+        <metrics statements="28" coveredstatements="28" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
         <line num="6" count="21" type="stmt"/>
         <line num="24" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="25" count="1" type="stmt"/>
@@ -650,23 +650,24 @@
         <line num="50" count="2" type="stmt"/>
         <line num="68" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="69" count="2" type="stmt"/>
-        <line num="99" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="104" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="105" count="1" type="stmt"/>
-        <line num="109" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="110" count="1" type="stmt"/>
-        <line num="114" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="115" count="1" type="stmt"/>
-        <line num="119" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="120" count="1" type="stmt"/>
-        <line num="124" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="125" count="1" type="stmt"/>
-        <line num="129" count="6" type="stmt"/>
-        <line num="130" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="131" count="1" type="stmt"/>
-        <line num="155" count="21" type="stmt"/>
+        <line num="99" count="6" type="stmt"/>
+        <line num="100" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="106" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="111" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="116" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="121" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="126" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="131" count="6" type="stmt"/>
+        <line num="132" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="1" type="stmt"/>
         <line num="157" count="21" type="stmt"/>
+        <line num="159" count="21" type="stmt"/>
       </file>
       <file name="asociaciones.midel.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\asociaciones.midel.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>

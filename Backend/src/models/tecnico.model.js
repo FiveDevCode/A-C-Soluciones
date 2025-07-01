@@ -83,7 +83,7 @@ const Tecnico = sequelize.define('Tecnico', {
         msg: 'El correo debe tener máximo 320 caracteres.',
       },
       is: {
-        args: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+        args: /^[a-z0-9._%+]+@[a-z0-9.-]+\.[a-z]{2,3}$/i,
         msg: 'El correo electrónico tiene un formato incorrecto.',
       },
     },
