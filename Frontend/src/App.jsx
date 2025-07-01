@@ -205,12 +205,6 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/permisos" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateAdminPermit />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/asignar-visita" element={
               <PrivateRoute roleRequired="administrador">
                 <AssignVisitPageAd />

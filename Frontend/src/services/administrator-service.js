@@ -190,6 +190,22 @@ const getVisit =  (id_visit) => {
 
 }
 
+const createAdmin = (idCard, name, lastName, email, password) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.post("http://localhost:8000/api/admin", {
+    numero_cedula: idCard,
+    nombre: name,
+    apellido: lastName, 
+    correo_electronico: email,
+    contrasenia: password
+
+  }, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
 
 export const administratorService = {
   createTechnical,
@@ -209,5 +225,6 @@ export const administratorService = {
   updateTechnical,
   getListVisit,
   getVisit,
+  createAdmin
   
 }

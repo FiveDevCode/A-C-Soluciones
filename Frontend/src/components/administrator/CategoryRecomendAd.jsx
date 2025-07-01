@@ -74,7 +74,7 @@ const CategoryRecomendAd = () => {
           <Icon icon={faInbox} style={{stroke:"#343A40"}}/>
           <OptionTitle>Solicitudes de clientes</OptionTitle>
         </Option>
-        <Option to="/">
+        <Option to="/admin/registrar-administrador">
           <Icon icon={faUserShield} style={{stroke:"#6F42C1"}}/>
           <OptionTitle>Crear nuevo administrador</OptionTitle>
         </Option>
