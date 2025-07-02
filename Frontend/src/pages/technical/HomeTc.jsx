@@ -4,7 +4,9 @@ import { Divider } from "@mui/material";
 import ActivityFilterTc from "../../components/technical/ActivityFilterTc";
 import ActivityListTc from "../../components/technical/ActivityListTc";
 import { useEffect, useState } from "react";
-import { handleGetServiceList } from "../../controllers/technical/getServiceListTc.controller";
+import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
+import { jwtDecode } from "jwt-decode";
+import { handleGetVisitAssign } from "../../controllers/technical/getVisitAssignTc.controller";
 
 
 
@@ -20,17 +22,28 @@ const ContainerHome = styled.section`
 const HomeTc = () => {
 
   const [services, setServices] = useState([]);
-
+  const [technicalId, setTechnicalId] = useState("");
   
+
   useEffect(() => {
-    handleGetServiceList()
+    const token = sessionStorage.getItem("authToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setTechnicalId(decoded.id); 
+    }
+  }, []);
+
+
+  useEffect(() => {
+    handleGetVisitAssign(technicalId)
       .then((res) => {
-        setServices(res.data.data); // Ajusta según la estructura real del backend
+        setServices(res.data.data); 
+        console.log(res.data.data)
       })
       .catch((err) => {
         console.error("Error fetching service list:", err);
       });
-  }, []);
+  }, [technicalId]);
 
 
   return (

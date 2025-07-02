@@ -61,3 +61,5 @@ const getIconByService = (name = "") => {
   // === Default ===
   return <FaTools size={28} />;
 };
+
+export default getIconByService

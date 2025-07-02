@@ -77,20 +77,20 @@ const ActivityListTc = ({services}) => {
 
   return (
     <ContainerNoti>
-      {services.map((service, index) => (
+      {Array.isArray(services) && services.map((service, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={serviceTehc} />
             <NotificationInfo>
               <TitleNoti>
-                {service.notas_posteriores.length > 50
+                {service.notas_posteriores && service.notas_posteriores.length > 50
                   ? `${service.notas_posteriores.slice(0, 50)}...`
-                  : service.notas_posteriores}
+                  : service.notas_posteriores || "No hay notas posteriores"}
               </TitleNoti>
               <Description>
-                {service.notas_previas.length > 50
+                {service.notas_previas && service.notas_previas.length > 50
                   ? `${service.notas_previas.slice(0, 50)}...`
-                  : service.notas_previas}
+                  : service.notas_previas || "No hay notas previas"}
               </Description>
               <Date>{service.fecha_programada.substring(0, 10)}</Date>
             </NotificationInfo>
