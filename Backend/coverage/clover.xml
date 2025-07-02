@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747759023631" clover="3.2.0">
-  <project timestamp="1747759023631" name="All files">
-    <metrics statements="1060" coveredstatements="1028" conditionals="382" coveredconditionals="347" methods="238" coveredmethods="231" elements="1680" coveredelements="1606" complexity="0" loc="1060" ncloc="1060" packages="6" files="48" classes="48"/>
+<coverage generated="1751316635626" clover="3.2.0">
+  <project timestamp="1751316635634" name="All files">
+    <metrics statements="1131" coveredstatements="1066" conditionals="427" coveredconditionals="368" methods="251" coveredmethods="240" elements="1809" coveredelements="1674" complexity="0" loc="1131" ncloc="1131" packages="6" files="48" classes="48"/>
     <package name="controllers">
-      <metrics statements="531" coveredstatements="530" conditionals="186" coveredconditionals="180" methods="71" coveredmethods="71"/>
+      <metrics statements="555" coveredstatements="540" conditionals="196" coveredconditionals="182" methods="74" coveredmethods="72"/>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
         <metrics statements="78" coveredstatements="78" conditionals="18" coveredconditionals="18" methods="12" coveredmethods="12"/>
         <line num="7" count="25" type="stmt"/>
@@ -173,44 +173,44 @@
       </file>
       <file name="ficha_mantenimiento.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\ficha_mantenimiento.controller.js">
         <metrics statements="38" coveredstatements="38" conditionals="30" coveredconditionals="28" methods="2" coveredmethods="2"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="28" count="5" type="stmt"/>
-        <line num="31" count="5" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="27" count="5" type="stmt"/>
+        <line num="30" count="5" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
         <line num="47" count="5" type="stmt"/>
         <line num="48" count="5" type="stmt"/>
-        <line num="49" count="5" type="stmt"/>
-        <line num="52" count="5" type="stmt"/>
-        <line num="59" count="5" type="stmt"/>
-        <line num="78" count="4" type="stmt"/>
-        <line num="79" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="81" count="3" type="stmt"/>
-        <line num="88" count="3" type="stmt"/>
-        <line num="89" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="91" count="2" type="stmt"/>
-        <line num="99" count="2" type="stmt"/>
-        <line num="106" count="2" type="stmt"/>
-        <line num="109" count="2" type="stmt"/>
-        <line num="112" count="2" type="stmt"/>
-        <line num="114" count="2" type="stmt"/>
+        <line num="51" count="5" type="stmt"/>
+        <line num="58" count="5" type="stmt"/>
+        <line num="77" count="4" type="stmt"/>
+        <line num="78" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="3" type="stmt"/>
+        <line num="87" count="3" type="stmt"/>
+        <line num="88" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="105" count="2" type="stmt"/>
+        <line num="108" count="2" type="stmt"/>
+        <line num="111" count="2" type="stmt"/>
+        <line num="113" count="2" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
         <line num="123" count="1" type="stmt"/>
-        <line num="124" count="1" type="stmt"/>
-        <line num="130" count="2" type="stmt"/>
-        <line num="131" count="6" type="stmt"/>
-        <line num="133" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="134" count="1" type="stmt"/>
-        <line num="137" count="5" type="stmt"/>
-        <line num="141" count="5" type="cond" truecount="4" falsecount="0"/>
-        <line num="142" count="2" type="stmt"/>
-        <line num="143" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="144" count="1" type="stmt"/>
-        <line num="145" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="146" count="1" type="stmt"/>
-        <line num="148" count="1" type="stmt"/>
-        <line num="151" count="3" type="stmt"/>
+        <line num="129" count="2" type="stmt"/>
+        <line num="130" count="6" type="stmt"/>
+        <line num="132" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="1" type="stmt"/>
+        <line num="136" count="5" type="stmt"/>
+        <line num="140" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="142" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="143" count="1" type="stmt"/>
+        <line num="144" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="145" count="1" type="stmt"/>
+        <line num="147" count="1" type="stmt"/>
+        <line num="150" count="3" type="stmt"/>
+        <line num="153" count="1" type="stmt"/>
         <line num="154" count="1" type="stmt"/>
-        <line num="155" count="1" type="stmt"/>
       </file>
       <file name="servicio.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\servicio.controller.js">
         <metrics statements="97" coveredstatements="97" conditionals="30" coveredconditionals="30" methods="13" coveredmethods="13"/>
@@ -434,24 +434,48 @@
         <line num="111" count="1" type="stmt"/>
       </file>
       <file name="usuario.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\usuario.controller.js">
-        <metrics statements="17" coveredstatements="17" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
-        <line num="5" count="5" type="stmt"/>
-        <line num="8" count="5" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="21" count="5" type="stmt"/>
-        <line num="22" count="3" type="stmt"/>
-        <line num="23" count="3" type="stmt"/>
-        <line num="25" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="26" count="1" type="stmt"/>
-        <line num="29" count="2" type="stmt"/>
+        <metrics statements="41" coveredstatements="27" conditionals="14" coveredconditionals="5" methods="6" coveredmethods="4"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="29" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="30" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
       </file>
       <file name="visita.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\visita.controller.js">
         <metrics statements="103" coveredstatements="102" conditionals="48" coveredconditionals="46" methods="11" coveredmethods="11"/>
@@ -613,9 +637,9 @@
       </file>
     </package>
     <package name="models">
-      <metrics statements="78" coveredstatements="78" conditionals="44" coveredconditionals="44" methods="24" coveredmethods="24"/>
+      <metrics statements="90" coveredstatements="90" conditionals="56" coveredconditionals="56" methods="30" coveredmethods="30"/>
       <file name="administrador.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\administrador.model.js">
-        <metrics statements="15" coveredstatements="15" conditionals="10" coveredconditionals="10" methods="5" coveredmethods="5"/>
+        <metrics statements="27" coveredstatements="27" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
         <line num="6" count="21" type="stmt"/>
         <line num="24" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="25" count="1" type="stmt"/>
@@ -626,11 +650,23 @@
         <line num="50" count="2" type="stmt"/>
         <line num="68" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="69" count="2" type="stmt"/>
-        <line num="103" count="6" type="stmt"/>
+        <line num="99" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="100" count="1" type="stmt"/>
         <line num="104" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="105" count="1" type="stmt"/>
-        <line num="120" count="21" type="stmt"/>
-        <line num="122" count="21" type="stmt"/>
+        <line num="109" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="114" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="119" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="120" count="1" type="stmt"/>
+        <line num="124" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="129" count="6" type="stmt"/>
+        <line num="130" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="131" count="1" type="stmt"/>
+        <line num="155" count="21" type="stmt"/>
+        <line num="157" count="21" type="stmt"/>
       </file>
       <file name="asociaciones.midel.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\asociaciones.midel.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -666,8 +702,8 @@
         <line num="130" count="2" type="stmt"/>
         <line num="131" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="132" count="1" type="stmt"/>
-        <line num="176" count="27" type="stmt"/>
-        <line num="179" count="27" type="stmt"/>
+        <line num="184" count="27" type="stmt"/>
+        <line num="187" count="27" type="stmt"/>
       </file>
       <file name="ficha_mantenimiento.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\ficha_mantenimiento.model.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -700,17 +736,17 @@
         <line num="30" count="2" type="stmt"/>
         <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="32" count="1" type="stmt"/>
-        <line num="50" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="51" count="2" type="stmt"/>
-        <line num="69" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="70" count="2" type="stmt"/>
-        <line num="100" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="101" count="1" type="stmt"/>
-        <line num="119" count="2" type="stmt"/>
-        <line num="120" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="121" count="1" type="stmt"/>
-        <line num="148" count="27" type="stmt"/>
-        <line num="150" count="27" type="stmt"/>
+        <line num="51" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="70" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="101" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="120" count="2" type="stmt"/>
+        <line num="121" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="157" count="27" type="stmt"/>
+        <line num="159" count="27" type="stmt"/>
       </file>
       <file name="usuario.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\usuario.model.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -907,7 +943,7 @@
       </file>
     </package>
     <package name="routers">
-      <metrics statements="73" coveredstatements="73" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <metrics statements="76" coveredstatements="76" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="administrador.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\administrador.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
@@ -988,10 +1024,13 @@
         <line num="23" count="1" type="stmt"/>
       </file>
       <file name="usuario.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\usuario.routes.js">
-        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
       </file>
       <file name="visita.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\visita.routes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -1007,7 +1046,7 @@
       </file>
     </package>
     <package name="services">
-      <metrics statements="182" coveredstatements="154" conditionals="80" coveredconditionals="56" methods="68" coveredmethods="63"/>
+      <metrics statements="214" coveredstatements="167" conditionals="103" coveredconditionals="63" methods="72" coveredmethods="65"/>
       <file name="administrador.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\administrador.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="6" count="7" type="stmt"/>
@@ -1157,32 +1196,64 @@
         <line num="33" count="2" type="stmt"/>
       </file>
       <file name="usuario.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\usuario.services.js">
-        <metrics statements="25" coveredstatements="23" conditionals="27" coveredconditionals="21" methods="2" coveredmethods="2"/>
+        <metrics statements="57" coveredstatements="36" conditionals="50" coveredconditionals="28" methods="6" coveredmethods="4"/>
         <line num="11" count="4" type="stmt"/>
         <line num="13" count="4" type="cond" truecount="3" falsecount="1"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="34" count="4" type="cond" truecount="3" falsecount="0"/>
-        <line num="35" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="40" count="3" type="cond" truecount="2" falsecount="3"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="49" count="2" type="stmt"/>
-        <line num="50" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="51" count="1" type="stmt"/>
-        <line num="57" count="1" type="stmt"/>
-        <line num="69" count="1" type="stmt"/>
-        <line num="80" count="3" type="stmt"/>
-        <line num="85" count="3" type="stmt"/>
-        <line num="90" count="3" type="stmt"/>
-        <line num="91" count="3" type="stmt"/>
-        <line num="94" count="2" type="cond" truecount="5" falsecount="0"/>
-        <line num="95" count="1" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
-        <line num="100" count="2" type="stmt"/>
-        <line num="105" count="2" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="32" count="4" type="cond" truecount="3" falsecount="0"/>
+        <line num="33" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="38" count="3" type="cond" truecount="2" falsecount="3"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="43" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="78" count="3" type="stmt"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="89" count="3" type="stmt"/>
+        <line num="92" count="2" type="cond" truecount="5" falsecount="0"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="109" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="113" count="2" type="stmt"/>
+        <line num="115" count="2" type="stmt"/>
+        <line num="116" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="118" count="1" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="129" count="1" type="stmt"/>
+        <line num="131" count="1" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="161" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="163" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="171" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="188" count="0" type="stmt"/>
+        <line num="190" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="192" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="196" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="206" count="2" type="stmt"/>
+        <line num="211" count="2" type="cond" truecount="4" falsecount="0"/>
       </file>
       <file name="visita.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\visita.services.js">
         <metrics statements="36" coveredstatements="32" conditionals="16" coveredconditionals="13" methods="11" coveredmethods="10"/>

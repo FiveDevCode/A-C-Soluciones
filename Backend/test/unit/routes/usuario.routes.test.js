@@ -7,6 +7,10 @@ import request from 'supertest';
 jest.mock('../../../src/controllers/usuario.controller.js', () => {
   const mockControllerMethods = {
     login: jest.fn((req, res) => res.status(200).json({ message: 'login' })),
+    sendRecoveryCode: jest.fn((req, res) => res.status(200).json({ message: 'sendRecoveryCode' })),
+    sendRecoveryCode: jest.fn((req, res) => res.status(200).json({ message: 'sendRecoveryCode' })),
+    verifyRecoveryCode: jest.fn((req, res) => res.status(200).json({ message: 'verifyRecoveryCode' })), // Añadir
+    resetPassword: jest.fn((req, res) => res.status(200).json({ message: 'resetPassword' })), // Añadir
   };
 
   return {
@@ -17,6 +21,7 @@ jest.mock('../../../src/controllers/usuario.controller.js', () => {
 
 import router from '../../../src/routers/usuario.routes.js';
 import { __mockAuthMethods } from '../../../src/controllers/usuario.controller.js';
+
 
 describe('Rutas de Usuario', () => {
   let app;
@@ -33,4 +38,18 @@ describe('Rutas de Usuario', () => {
     expect(response.status).toBe(200);
     expect(__mockAuthMethods.login).toHaveBeenCalled();
   },10000);
+
+  test('POST /api/forgot-password llama a sendRecoveryCode', async () => {
+    const response = await request(app)
+      .post('/api/forgot-password')
+      .send({ correo_electronico: 'example32344@gmail.com' });
+
+    expect(response.status).toBe(200);
+    expect(__mockAuthMethods.sendRecoveryCode).toHaveBeenCalled();
+  });
+
+
 });
+
+
+
