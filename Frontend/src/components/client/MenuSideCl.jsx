@@ -153,19 +153,19 @@ const MenuSideCl = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem('userRole');
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem('userRole');
     navigate("/");
   };
 
   return (
     <SectionMenu>
       <ContainerMenu>
-        <Link to="/home"><Logo src={logo} size="157px"/></Link>
+        <Link to="/cliente/inicio"><Logo src={logo} size="157px"/></Link>
         <TitleMenu>Menu</TitleMenu>
         <Divider/> 
         <ContainerAllOption>
-          <ContainerOption to="/home">
+          <ContainerOption to="/cliente/inicio">
             <IconOption 
               icon={faHouse}           
             />

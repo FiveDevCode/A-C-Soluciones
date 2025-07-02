@@ -59,7 +59,7 @@ const BackgroundHomeCl = () => {
     <ContainerBackground>
       <CompanyName>A & C Soluciones</CompanyName>
       <CompanyPhrase>Expertos en reparaciones hidroeléctricas: pequeña empresa, gran ingeniería.</CompanyPhrase>
-      <ButtonService variant='contained' LinkComponent={Link} to="/services-all">Ver nuestro servicios</ButtonService>
+      <ButtonService variant='contained' LinkComponent={Link} to="/cliente/servicios">Ver nuestro servicios</ButtonService>
       
     </ContainerBackground>
 

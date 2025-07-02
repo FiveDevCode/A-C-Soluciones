@@ -4,6 +4,8 @@ import Logo from "../../components/common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { handleGetServiceList } from "../../controllers/technical/getServiceListTc.controller";
 
 
 const ContainerNoti = styled.div`
@@ -68,138 +70,45 @@ const SeeMore = styled.div`
 
 
 
-const ActivityListTc = () => {
+const ActivityListTc = ({services}) => {
+
+
+
+
   return (
     <ContainerNoti>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-
+      {Array.isArray(services) && services.map((service, index) => (
+        <Notification key={index}>
+          <NotificationDescription>
+            <Logo src={serviceTehc} />
+            <NotificationInfo>
+              <TitleNoti>
+                {service.notas_posteriores && service.notas_posteriores.length > 50
+                  ? `${service.notas_posteriores.slice(0, 50)}...`
+                  : service.notas_posteriores || "No hay notas posteriores"}
+              </TitleNoti>
+              <Description>
+                {service.notas_previas && service.notas_previas.length > 50
+                  ? `${service.notas_previas.slice(0, 50)}...`
+                  : service.notas_previas || "No hay notas previas"}
+              </Description>
+              <Date>{service.fecha_programada.substring(0, 10)}</Date>
+            </NotificationInfo>
+          </NotificationDescription>
+          <ContainerOption>
+            <SeeMore>
+              <FontAwesomeIcon icon={faTrash} />
+              <Link to="/">Eliminar</Link>
+            </SeeMore>
+            <SeeMore>
+              <FontAwesomeIcon icon={faArrowRight} />
+              <Link to={`/tecnico/ver-visita/${service.id}`}>Ver</Link>
+            </SeeMore>
+          </ContainerOption>
+        </Notification>
+      ))}
     </ContainerNoti>
-  )
+  );
 }
 
 

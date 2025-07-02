@@ -22,7 +22,7 @@ const getServiceList = () => {
 }
 
 const createRequest = (serviceAddress, description, comments, requestId, clientId) => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/solicitudes", {
     direccion_servicio: serviceAddress,

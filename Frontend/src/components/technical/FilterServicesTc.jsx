@@ -15,10 +15,10 @@ const TitleSearch = styled.h1`
 
 
 
-const FilterServicesTc = () => {
+const FilterServicesTc = ({ count }) => {
   return (
     <ContainerInfo>
-      <TitleSearch>Se encontraron 56 resultados    |   filtros</TitleSearch>
+      <TitleSearch>Se encontraron {count} resultados | filtros</TitleSearch>
       <FontAwesomeIcon data-testid="filter-icon" icon={faFilter} style={{fontSize:"20px"}}/>
     </ContainerInfo>
   )

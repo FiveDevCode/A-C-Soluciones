@@ -153,48 +153,6 @@ const ActivityListAd = () => {
 
         </ContainerOption>
       </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
 
 
 

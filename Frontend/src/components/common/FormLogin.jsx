@@ -55,7 +55,7 @@ const FormLogin = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -63,21 +63,21 @@ const FormLogin = () => {
   
         switch (role) {
           case "cliente":
-            navigate("/home");
+            navigate("/cliente/inicio");
             break;
           case "tecnico":
-            navigate("/homeTc");
+            navigate("/tecnico/inicio");
             break;
           case "administrador":
-            navigate("/homeAd");
+            navigate("/admin/inicio");
             break;
           default:
             break;
         }
       } catch (error) {
         console.error("Token inválido:", error);
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userRole');
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('userRole');
       }
     }
   }, []);
@@ -94,24 +94,24 @@ const FormLogin = () => {
       );
 
       console.log(data)
-      localStorage.setItem('authToken', data.token);
+      sessionStorage.setItem('authToken', data.token);
 
       const decoded = jwtDecode(data.token);
       const role = decoded.rol;
-      localStorage.setItem('userRole', role);
+      sessionStorage.setItem('userRole', role);
 
       switch (role) {
         case "cliente":
-          navigate("/home");
+          navigate("/cliente/inicio");
           break;
         case "tecnico":
-          navigate("/homeTc");
+          navigate("/tecnico/inicio");
           break;
         case "administrador":
-          navigate("/homeAd");
+          navigate("/admin/inicio");
           break;
         default:
-          navigate("/login"); // o una página de error
+          navigate("/iniciar-sesion"); // o una página de error
       }
 
     } catch (err) {
@@ -182,11 +182,11 @@ const FormLogin = () => {
         </Typography>
       )}
 
-      <LinkForgot to="/ForgotPasswordPage">Has olvidado tu contraseña?</LinkForgot>
+      <LinkForgot to="/recuperar-contrasena">Has olvidado tu contraseña?</LinkForgot>
 
       <ContainerButton>
         <Button type="submit" variant="contained">Iniciar sesion</Button>
-        <Button type="button" variant="contained" LinkComponent={Link} to="/register">Crear Cuenta</Button>
+        <Button type="button" variant="contained" LinkComponent={Link} to="/registrarse">Crear Cuenta</Button>
 
       </ContainerButton>
 

@@ -74,7 +74,7 @@ const FormCreateCl = () => {
         address
       );
 
-      navigate("/login");
+      navigate("/iniciar-sesion");
       setErrorMsg("");
     } catch (err) {
       console.log(err)
@@ -239,7 +239,7 @@ const FormCreateCl = () => {
 
       <ContainerButton>
         <Button type="submit" variant="contained" disabled={!termsAccepted}>Crear cuenta</Button>
-        <LinkForgot to="/login">¿Ya tienes cuenta?</LinkForgot>
+        <LinkForgot to="/iniciar-sesion">¿Ya tienes cuenta?</LinkForgot>
       </ContainerButton>
 
     </Form>

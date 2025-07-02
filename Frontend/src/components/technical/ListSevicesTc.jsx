@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../../components/common/Logo";
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { useState } from "react";
+import { FormControl, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -68,112 +67,45 @@ const SeeMore = styled.div`
 
 
 
-const ListSevicesTc = () => {
-
-  const [state, setState] = useState("Pendiente");
-
-  const handleChange = (e) => {
-    setState(e.target.value)
-  }
+const ListSevicesTc = ({services}) => {
 
   return (
     <ContainerNoti>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pendiente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pediente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pediente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-
-
-
+      {services.map((service, index) => (
+        <Notification key={index}>
+          <NotificationDescription>
+            <Logo src={serviceTehc}/>
+            <NotificationInfo>
+              <TitleNoti>
+                {service.notas_posteriores.length > 50
+                  ? `${service.notas_posteriores.slice(0, 50)}...`
+                  : service.notas_posteriores}
+              </TitleNoti>
+              <Description>
+                {service.notas_previas.length > 50
+                  ? `${service.notas_previas.slice(0, 50)}...`
+                  : service.notas_previas}
+              </Description>
+              <Date>{service.fecha_programada.substring(0, 10)}</Date>
+            </NotificationInfo>
+          </NotificationDescription>
+          <ContainerOption>
+            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
+              <TextField
+                value={service.estado}
+                label="Estado"
+                disabled
+              />
+            </FormControl>
+            <SeeMore>
+              <FontAwesomeIcon icon={faArrowRight} />
+              <Link to={`/tecnico/ver-visita/${service.id}`}>Ver</Link>
+            </SeeMore>
+          </ContainerOption>
+        </Notification>
+      ))}
     </ContainerNoti>
-  )
-}
+  );
+};
 
 export default ListSevicesTc;

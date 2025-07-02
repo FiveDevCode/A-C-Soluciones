@@ -1,7 +1,7 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleGetTechical = (id) => {
+const handleGetTechnical = (id) => {
     
   return administratorService
   .getTechnical(id)
@@ -9,4 +9,4 @@ const handleGetTechical = (id) => {
 };
 
 
-export {handleGetTechical};
+export {handleGetTechnical};
