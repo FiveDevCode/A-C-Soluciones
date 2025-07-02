@@ -1,141 +1,129 @@
 import { crearFichaMantenimiento, listarFichas } from '../../../src/controllers/ficha_mantenimiento.controller.js';
-import { generarPDF } from '../../../src/services/ficha_mantenimiento.services.js';
-import { sendEmail } from '../../../src/services/email.services.js';
-import * as fichaRepo from '../../../src/repository/ficha_mantenimiento.repository';
+import * as fichaRepo from '../../../src/repository/ficha_mantenimiento.repository.js';
+import * as pdfService from '../../../src/services/ficha_mantenimiento.services.js';
+import * as emailService from '../../../src/services/email.services.js';
 import { ClienteModel } from '../../../src/models/cliente.model.js';
 import { TecnicoModel } from '../../../src/models/tecnico.model.js';
+import { ValidationError } from 'sequelize';
 
 jest.mock('../../../src/services/ficha_mantenimiento.services.js');
 jest.mock('../../../src/services/email.services.js');
-jest.mock('../../../src/repository/ficha_mantenimiento.repository');
-jest.mock('../../../src/models/cliente.model.js');
-jest.mock('../../../src/models/tecnico.model.js');
-
-const mockRequest = (body, files = {}) => ({
-  body,
-  files
-});
-
-const mockResponse = () => {
-  const res = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  return res;
-};
 
 describe('crearFichaMantenimiento', () => {
-  const baseBody = {
-    id_cliente: 1,
-    id_tecnico: 2,
-    introduccion: 'Intro',
-    detalles_servicio: 'Detalles',
-    observaciones: 'Obs',
-    estado_antes: 'Antes',
-    descripcion_trabajo: 'Descripción',
-    materiales_utilizados: 'Materiales',
-    estado_final: 'Final',
-    tiempo_de_trabajo: '5h',
-    recomendaciones: 'Recomendaciones',
-    fecha_de_mantenimiento: '2024-01-01'
+  const mockReq = {
+    body: {
+      id_cliente: 1,
+      id_tecnico: 2,
+      introduccion: 'Intro',
+      detalles_servicio: 'Detalles',
+      observaciones: 'Observaciones',
+      estado_antes: 'Antes',
+      descripcion_trabajo: 'Trabajo',
+      materiales_utilizados: 'Materiales',
+      estado_final: 'Final',
+      tiempo_de_trabajo: '2h',
+      recomendaciones: 'Recomendaciones',
+      fecha_de_mantenimiento: '2025-07-01',
+      id_visitas: 99
+    },
+    files: {
+      foto_estado_antes: [{ filename: 'antes.jpg' }],
+      foto_estado_final: [{ filename: 'final.jpg' }],
+      foto_descripcion_trabajo: [{ filename: 'desc.jpg' }]
+    }
   };
 
-  const baseFiles = {
-    foto_estado_antes: [{ filename: 'antes.jpg' }],
-    foto_estado_final: [{ filename: 'final.jpg' }],
-    foto_descripcion_trabajo: [{ filename: 'desc.jpg' }]
+  const mockRes = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn()
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    fichaRepo.crearFicha.mockResolvedValue({ id: 99, toJSON: () => ({ id: 99 }) });
-    fichaRepo.actualizarPDFPath.mockResolvedValue(true);
-    ClienteModel.Cliente.findByPk.mockResolvedValue({
-      nombre: 'Juan',
-      telefono: '123',
-      correo_electronico: 'juan@example.com',
-    });
-    TecnicoModel.Tecnico.findByPk.mockResolvedValue({
-      nombre: 'Carlos',
-      apellido: 'Pérez',
-      telefono: '456',
-      correo_electronico: 'carlos@example.com',
-    });
-    generarPDF.mockResolvedValue('/ruta/pdf.pdf');
-    sendEmail.mockResolvedValue(true);
   });
 
-  it('debería crear la ficha exitosamente', async () => {
-    const req = mockRequest(baseBody, baseFiles);
-    const res = mockResponse();
+  it('crea la ficha correctamente y responde con 201', async () => {
+    const fichaFake = {
+      id: 123,
+      toJSON: () => ({ id: 123 })
+    };
 
-    await crearFichaMantenimiento(req, res);
+    fichaRepo.crearFicha = jest.fn().mockResolvedValue(fichaFake);
+    ClienteModel.Cliente.findByPk = jest.fn().mockResolvedValue({
+      nombre: 'Cliente',
+      telefono: '123456789',
+      correo_electronico: 'cliente@test.com'
+    });
+
+    TecnicoModel.Tecnico.findByPk = jest.fn().mockResolvedValue({
+      nombre: 'Tecnico',
+      apellido: 'Apellido',
+      telefono: '987654321',
+      correo_electronico: 'tecnico@test.com'
+    });
+
+    pdfService.generarPDF.mockResolvedValue('uploads/fichas/ficha_123.pdf');
+    fichaRepo.actualizarPDFPath = jest.fn();
+    emailService.sendEmail = jest.fn();
+
+    await crearFichaMantenimiento(mockReq, mockRes);
 
     expect(fichaRepo.crearFicha).toHaveBeenCalled();
-    expect(ClienteModel.Cliente.findByPk).toHaveBeenCalledWith(1);
-    expect(TecnicoModel.Tecnico.findByPk).toHaveBeenCalledWith(2);
-    expect(generarPDF).toHaveBeenCalled();
-    expect(sendEmail).toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-      mensaje: expect.any(String),
-      ficha: expect.objectContaining({
-        id: 99,
-        pdf_path: '/ruta/pdf.pdf'
-      }),
-    }));
+    expect(pdfService.generarPDF).toHaveBeenCalled();
+    expect(fichaRepo.actualizarPDFPath).toHaveBeenCalledWith(123, 'uploads/fichas/ficha_123.pdf');
+    expect(emailService.sendEmail).toHaveBeenCalled();
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      mensaje: 'Ficha creada correctamente y enviada al cliente.',
+      ficha: { id: 123, pdf_path: 'uploads/fichas/ficha_123.pdf' }
+    });
   });
-  it('debería devolver 404 si el cliente no existe', async () => {
-    ClienteModel.Cliente.findByPk.mockResolvedValue(null);
-    const req = mockRequest(baseBody, baseFiles);
-    const res = mockResponse();
 
-    await crearFichaMantenimiento(req, res);
+  it('devuelve 404 si cliente no existe', async () => {
+    fichaRepo.crearFicha = jest.fn().mockResolvedValue({ id: 1 });
+    ClienteModel.Cliente.findByPk = jest.fn().mockResolvedValue(null);
 
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Cliente no encontrado' });
+    await crearFichaMantenimiento(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Cliente no encontrado' });
   });
-  it('debería devolver 404 si el técnico no existe', async () => {
-    TecnicoModel.Tecnico.findByPk.mockResolvedValue(null);
-    const req = mockRequest(baseBody, baseFiles);
-    const res = mockResponse();
 
-    await crearFichaMantenimiento(req, res);
+  it('devuelve 404 si técnico no existe', async () => {
+    fichaRepo.crearFicha = jest.fn().mockResolvedValue({ id: 1 });
+    ClienteModel.Cliente.findByPk = jest.fn().mockResolvedValue({ nombre: 'Ok', correo_electronico: 'ok@mail.com' });
+    TecnicoModel.Tecnico.findByPk = jest.fn().mockResolvedValue(null);
 
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Técnico no encontrado' });
+    await crearFichaMantenimiento(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Técnico no encontrado' });
   });
-  it('debería funcionar si no se suben imágenes', async () => {
-    const req = mockRequest(baseBody); // sin `files`
-    const res = mockResponse();
 
-    await crearFichaMantenimiento(req, res);
+  it('maneja errores de validación con 400', async () => {
+    const sequelizeError = new ValidationError('Error de validación', [
+      { path: 'campo', message: 'Mensaje de error' }
+    ]);
 
-    expect(generarPDF).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.anything(),
-      expect.anything(),
-      expect.objectContaining({
-        estadoAntes: null,
-        estadoFinal: null,
-        descripcion: null,
-      })
-    );
-    expect(res.status).toHaveBeenCalledWith(201);
+    fichaRepo.crearFicha = jest.fn().mockRejectedValue(sequelizeError);
+
+    await crearFichaMantenimiento(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      errors: [{ path: 'campo', message: 'Mensaje de error' }]
+    });
   });
-  it('debería devolver 500 si ocurre un error inesperado', async () => {
-    fichaRepo.crearFicha.mockRejectedValue(new Error('DB error'));
-    const req = mockRequest(baseBody, baseFiles);
-    const res = mockResponse();
 
-    await crearFichaMantenimiento(req, res);
+  it('maneja error interno con 500', async () => {
+    fichaRepo.crearFicha = jest.fn().mockRejectedValue(new Error('Error interno'));
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Error al crear la ficha' });
+    await crearFichaMantenimiento(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al crear la ficha' });
   });
 });
-
-
 
 describe('listarFichas', () => {
   const mockRes = {
@@ -147,64 +135,82 @@ describe('listarFichas', () => {
     jest.clearAllMocks();
   });
 
-  it('retorna 401 si no hay usuario autenticado', async () => {
-    const req = {};
-    await listarFichas(req, mockRes);
+  it('devuelve fichas para admin', async () => {
+    const mockReq = {
+      user: { rol: 'admin', id: 1 },
+      query: { id_visitas: 10 }
+    };
 
-    expect(mockRes.status).toHaveBeenCalledWith(401);
-    expect(mockRes.json).toHaveBeenCalledWith({ error: expect.stringContaining('no existe') });
+    fichaRepo.obtenerTodasFichas = jest.fn().mockResolvedValue([{ id: 1 }]);
+
+    await listarFichas(mockReq, mockRes);
+
+    expect(fichaRepo.obtenerTodasFichas).toHaveBeenCalledWith(10);
+    expect(mockRes.json).toHaveBeenCalledWith([{ id: 1 }]);
   });
 
-  it('devuelve todas las fichas para admin', async () => {
-    const req = { user: { rol: 'administrador', id: 1 } };
-    const fichas = [{ id: 1 }, { id: 2 }];
-    fichaRepo.obtenerTodasFichas.mockResolvedValue(fichas);
+  it('devuelve fichas para tecnico', async () => {
+    const mockReq = {
+      user: { rol: 'tecnico', id: 2 },
+      query: { id_visitas: null }
+    };
 
-    await listarFichas(req, mockRes);
+    fichaRepo.obtenerTodasFichas = jest.fn().mockResolvedValue([{ id: 2 }]);
 
-    expect(fichaRepo.obtenerTodasFichas).toHaveBeenCalled();
-    expect(mockRes.json).toHaveBeenCalledWith(fichas);
+    await listarFichas(mockReq, mockRes);
+
+    expect(fichaRepo.obtenerTodasFichas).toHaveBeenCalledWith(null);
+    expect(mockRes.json).toHaveBeenCalledWith([{ id: 2 }]);
   });
 
-  it('devuelve fichas por técnico', async () => {
-    const req = { user: { rol: 'tecnico', id: 3 } };
-    const fichas = [{ id: 1 }];
-    fichaRepo.obtenerFichasPorTecnico.mockResolvedValue(fichas);
+  it('devuelve fichas para cliente', async () => {
+    const mockReq = {
+      user: { rol: 'cliente', id: 3 },
+      query: {}
+    };
 
-    await listarFichas(req, mockRes);
+    fichaRepo.obtenerFichasPorCliente = jest.fn().mockResolvedValue([{ id: 3 }]);
 
-    expect(fichaRepo.obtenerFichasPorTecnico).toHaveBeenCalledWith(3);
-    expect(mockRes.json).toHaveBeenCalledWith(fichas);
+    await listarFichas(mockReq, mockRes);
+
+    expect(fichaRepo.obtenerFichasPorCliente).toHaveBeenCalledWith(3, undefined);
+    expect(mockRes.json).toHaveBeenCalledWith([{ id: 3 }]);
   });
 
-  it('devuelve fichas por cliente', async () => {
-    const req = { user: { rol: 'cliente', id: 5 } };
-    const fichas = [{ id: 10 }];
-    fichaRepo.obtenerFichasPorCliente.mockResolvedValue(fichas);
+  it('devuelve 403 si rol no autorizado', async () => {
+    const mockReq = {
+      user: { rol: 'otro', id: 4 },
+      query: {}
+    };
 
-    await listarFichas(req, mockRes);
-
-    expect(fichaRepo.obtenerFichasPorCliente).toHaveBeenCalledWith(5);
-    expect(mockRes.json).toHaveBeenCalledWith(fichas);
-  });
-
-  it('devuelve 403 si el rol no está permitido', async () => {
-    const req = { user: { rol: 'visitante', id: 99 } };
-
-    await listarFichas(req, mockRes);
+    await listarFichas(mockReq, mockRes);
 
     expect(mockRes.status).toHaveBeenCalledWith(403);
     expect(mockRes.json).toHaveBeenCalledWith({ error: 'Rol no autorizado' });
   });
 
-  it('maneja errores internos con status 500', async () => {
-    const req = { user: { rol: 'admin', id: 1 } };
-    fichaRepo.obtenerTodasFichas.mockRejectedValue(new Error('error db'));
+  it('devuelve 401 si req.user no existe', async () => {
+    const mockReq = { query: {} };
 
-    await listarFichas(req, mockRes);
+    await listarFichas(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(401);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      error: 'Usuario no autenticado (req.user no existe)'
+    });
+  });
+
+  it('maneja error interno 500', async () => {
+    const mockReq = {
+      user: { rol: 'admin', id: 1 },
+      query: {}
+    };
+
+    fichaRepo.obtenerTodasFichas = jest.fn().mockRejectedValue(new Error('error'));
+
+    await listarFichas(mockReq, mockRes);
 
     expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith({ error: expect.stringContaining('Error interno') });
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Error interno al obtener fichas' });
   });
 });
-

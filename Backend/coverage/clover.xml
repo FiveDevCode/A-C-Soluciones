@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751423182623" clover="3.2.0">
-  <project timestamp="1751423182624" name="All files">
-    <metrics statements="1209" coveredstatements="1043" conditionals="454" coveredconditionals="352" methods="256" coveredmethods="238" elements="1919" coveredelements="1633" complexity="0" loc="1209" ncloc="1209" packages="6" files="48" classes="48"/>
+<coverage generated="1751441145747" clover="3.2.0">
+  <project timestamp="1751441145747" name="All files">
+    <metrics statements="1210" coveredstatements="1135" conditionals="454" coveredconditionals="384" methods="256" coveredmethods="245" elements="1920" coveredelements="1764" complexity="0" loc="1210" ncloc="1210" packages="6" files="48" classes="48"/>
     <package name="controllers">
-      <metrics statements="565" coveredstatements="539" conditionals="202" coveredconditionals="177" methods="75" coveredmethods="72"/>
-      <file name="administrador.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
+      <metrics statements="565" coveredstatements="549" conditionals="202" coveredconditionals="181" methods="75" coveredmethods="73"/>
+      <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
         <metrics statements="81" coveredstatements="81" conditionals="20" coveredconditionals="19" methods="12" coveredmethods="12"/>
         <line num="7" count="25" type="stmt"/>
         <line num="9" count="25" type="stmt"/>
@@ -88,7 +88,7 @@
         <line num="172" count="1" type="stmt"/>
         <line num="173" count="1" type="stmt"/>
       </file>
-      <file name="cliente.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\cliente.controller.js">
+      <file name="cliente.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\cliente.controller.js">
         <metrics statements="83" coveredstatements="83" conditionals="21" coveredconditionals="20" methods="12" coveredmethods="12"/>
         <line num="9" count="29" type="stmt"/>
         <line num="10" count="29" type="stmt"/>
@@ -174,8 +174,8 @@
         <line num="141" count="1" type="stmt"/>
         <line num="142" count="1" type="stmt"/>
       </file>
-      <file name="ficha_mantenimiento.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\ficha_mantenimiento.controller.js">
-        <metrics statements="42" coveredstatements="32" conditionals="32" coveredconditionals="21" methods="3" coveredmethods="2"/>
+      <file name="ficha_mantenimiento.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\ficha_mantenimiento.controller.js">
+        <metrics statements="42" coveredstatements="42" conditionals="32" coveredconditionals="25" methods="3" coveredmethods="3"/>
         <line num="9" count="2" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
@@ -186,21 +186,21 @@
         <line num="51" count="5" type="stmt"/>
         <line num="54" count="5" type="stmt"/>
         <line num="61" count="5" type="stmt"/>
-        <line num="81" count="4" type="stmt"/>
-        <line num="82" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="84" count="3" type="stmt"/>
-        <line num="91" count="3" type="stmt"/>
-        <line num="92" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="94" count="2" type="stmt"/>
-        <line num="102" count="2" type="stmt"/>
-        <line num="109" count="2" type="stmt"/>
-        <line num="112" count="2" type="stmt"/>
-        <line num="115" count="2" type="stmt"/>
-        <line num="117" count="2" type="stmt"/>
-        <line num="126" count="1" type="stmt"/>
-        <line num="128" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
+        <line num="81" count="3" type="stmt"/>
+        <line num="82" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="84" count="2" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="126" count="2" type="stmt"/>
+        <line num="128" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="129" count="1" type="stmt"/>
+        <line num="133" count="1" type="stmt"/>
         <line num="136" count="1" type="stmt"/>
         <line num="142" count="2" type="stmt"/>
         <line num="143" count="6" type="stmt"/>
@@ -208,18 +208,18 @@
         <line num="145" count="1" type="stmt"/>
         <line num="148" count="5" type="stmt"/>
         <line num="149" count="5" type="stmt"/>
-        <line num="153" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
-        <line num="166" count="5" type="stmt"/>
-        <line num="167" count="5" type="stmt"/>
+        <line num="153" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="154" count="2" type="stmt"/>
+        <line num="155" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="156" count="1" type="stmt"/>
+        <line num="157" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="158" count="1" type="stmt"/>
+        <line num="160" count="1" type="stmt"/>
+        <line num="163" count="3" type="stmt"/>
+        <line num="166" count="1" type="stmt"/>
+        <line num="167" count="1" type="stmt"/>
       </file>
-      <file name="servicio.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\servicio.controller.js">
+      <file name="servicio.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\servicio.controller.js">
         <metrics statements="100" coveredstatements="99" conditionals="32" coveredconditionals="31" methods="13" coveredmethods="13"/>
         <line num="6" count="33" type="stmt"/>
         <line num="8" count="33" type="stmt"/>
@@ -322,7 +322,7 @@
         <line num="214" count="1" type="stmt"/>
         <line num="216" count="1" type="stmt"/>
       </file>
-      <file name="solicitud.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\solicitud.controller.js">
+      <file name="solicitud.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\solicitud.controller.js">
         <metrics statements="57" coveredstatements="57" conditionals="19" coveredconditionals="19" methods="9" coveredmethods="9"/>
         <line num="6" count="21" type="stmt"/>
         <line num="10" count="21" type="stmt"/>
@@ -382,7 +382,7 @@
         <line num="121" count="1" type="stmt"/>
         <line num="122" count="1" type="stmt"/>
       </file>
-      <file name="tecnico.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\tecnico.controller.js">
+      <file name="tecnico.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\tecnico.controller.js">
         <metrics statements="58" coveredstatements="58" conditionals="16" coveredconditionals="16" methods="9" coveredmethods="9"/>
         <line num="6" count="21" type="stmt"/>
         <line num="10" count="21" type="stmt"/>
@@ -443,7 +443,7 @@
         <line num="110" count="1" type="stmt"/>
         <line num="111" count="1" type="stmt"/>
       </file>
-      <file name="usuario.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\usuario.controller.js">
+      <file name="usuario.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\usuario.controller.js">
         <metrics statements="41" coveredstatements="27" conditionals="14" coveredconditionals="5" methods="6" coveredmethods="4"/>
         <line num="5" count="9" type="stmt"/>
         <line num="7" count="9" type="stmt"/>
@@ -487,7 +487,7 @@
         <line num="82" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
       </file>
-      <file name="visita.controller.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\controllers\visita.controller.js">
+      <file name="visita.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\visita.controller.js">
         <metrics statements="103" coveredstatements="102" conditionals="48" coveredconditionals="46" methods="11" coveredmethods="11"/>
         <line num="6" count="39" type="stmt"/>
         <line num="9" count="39" type="stmt"/>
@@ -596,7 +596,7 @@
     </package>
     <package name="middlewares">
       <metrics statements="40" coveredstatements="40" conditionals="16" coveredconditionals="16" methods="7" coveredmethods="7"/>
-      <file name="autenticacion.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\middlewares\autenticacion.js">
+      <file name="autenticacion.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\middlewares\autenticacion.js">
         <metrics statements="29" coveredstatements="29" conditionals="11" coveredconditionals="11" methods="4" coveredmethods="4"/>
         <line num="4" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
@@ -628,10 +628,10 @@
         <line num="79" count="2" type="stmt"/>
         <line num="80" count="2" type="stmt"/>
       </file>
-      <file name="permisos.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\middlewares\permisos.js">
+      <file name="permisos.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\middlewares\permisos.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="uploadImages.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\middlewares\uploadImages.js">
+      <file name="uploadImages.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\middlewares\uploadImages.js">
         <metrics statements="11" coveredstatements="11" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="3"/>
         <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -647,9 +647,9 @@
       </file>
     </package>
     <package name="models">
-      <metrics statements="90" coveredstatements="90" conditionals="56" coveredconditionals="56" methods="30" coveredmethods="30"/>
-      <file name="administrador.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\administrador.model.js">
-        <metrics statements="27" coveredstatements="27" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
+      <metrics statements="91" coveredstatements="91" conditionals="56" coveredconditionals="56" methods="30" coveredmethods="30"/>
+      <file name="administrador.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\administrador.model.js">
+        <metrics statements="28" coveredstatements="28" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
         <line num="6" count="21" type="stmt"/>
         <line num="24" count="6" type="cond" truecount="2" falsecount="0"/>
         <line num="25" count="1" type="stmt"/>
@@ -660,25 +660,26 @@
         <line num="50" count="2" type="stmt"/>
         <line num="68" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="69" count="2" type="stmt"/>
-        <line num="99" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="104" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="105" count="1" type="stmt"/>
-        <line num="109" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="110" count="1" type="stmt"/>
-        <line num="114" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="115" count="1" type="stmt"/>
-        <line num="119" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="120" count="1" type="stmt"/>
-        <line num="124" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="125" count="1" type="stmt"/>
-        <line num="129" count="6" type="stmt"/>
-        <line num="130" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="131" count="1" type="stmt"/>
-        <line num="155" count="21" type="stmt"/>
+        <line num="99" count="6" type="stmt"/>
+        <line num="100" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="106" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="111" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="116" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="121" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="126" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="131" count="6" type="stmt"/>
+        <line num="132" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="133" count="1" type="stmt"/>
         <line num="157" count="21" type="stmt"/>
+        <line num="159" count="21" type="stmt"/>
       </file>
-      <file name="asociaciones.midel.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\asociaciones.midel.js">
+      <file name="asociaciones.midel.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\asociaciones.midel.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -691,7 +692,7 @@
         <line num="40" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
       </file>
-      <file name="cliente.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\cliente.model.js">
+      <file name="cliente.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\cliente.model.js">
         <metrics statements="21" coveredstatements="21" conditionals="16" coveredconditionals="16" methods="8" coveredmethods="8"/>
         <line num="6" count="27" type="stmt"/>
         <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
@@ -715,15 +716,15 @@
         <line num="184" count="27" type="stmt"/>
         <line num="187" count="27" type="stmt"/>
       </file>
-      <file name="ficha_mantenimiento.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\ficha_mantenimiento.model.js">
+      <file name="ficha_mantenimiento.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\ficha_mantenimiento.model.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="2" type="stmt"/>
         <line num="256" count="2" type="stmt"/>
       </file>
-      <file name="index.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\index.js">
+      <file name="index.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="servicios.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\servicios.model.js">
+      <file name="servicios.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\servicios.model.js">
         <metrics statements="7" coveredstatements="7" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
         <line num="4" count="8" type="stmt"/>
         <line num="26" count="3" type="cond" truecount="2" falsecount="0"/>
@@ -733,12 +734,12 @@
         <line num="105" count="1" type="stmt"/>
         <line num="111" count="8" type="stmt"/>
       </file>
-      <file name="solicitud.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\solicitud.model.js">
+      <file name="solicitud.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\solicitud.model.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="7" count="5" type="stmt"/>
         <line num="130" count="5" type="stmt"/>
       </file>
-      <file name="tecnico.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\tecnico.model.js">
+      <file name="tecnico.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\tecnico.model.js">
         <metrics statements="17" coveredstatements="17" conditionals="12" coveredconditionals="12" methods="6" coveredmethods="6"/>
         <line num="7" count="27" type="stmt"/>
         <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
@@ -758,10 +759,10 @@
         <line num="157" count="27" type="stmt"/>
         <line num="159" count="27" type="stmt"/>
       </file>
-      <file name="usuario.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\usuario.model.js">
+      <file name="usuario.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\usuario.model.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="visita.model.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\models\visita.model.js">
+      <file name="visita.model.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\models\visita.model.js">
         <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="4" count="3" type="stmt"/>
         <line num="19" count="7" type="cond" truecount="2" falsecount="0"/>
@@ -770,8 +771,8 @@
       </file>
     </package>
     <package name="repository">
-      <metrics statements="162" coveredstatements="159" conditionals="60" coveredconditionals="52" methods="66" coveredmethods="64"/>
-      <file name="administrador.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\administrador.repository.js">
+      <metrics statements="162" coveredstatements="159" conditionals="60" coveredconditionals="55" methods="66" coveredmethods="64"/>
+      <file name="administrador.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\administrador.repository.js">
         <metrics statements="16" coveredstatements="15" conditionals="6" coveredconditionals="4" methods="7" coveredmethods="7"/>
         <line num="5" count="1" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
@@ -790,7 +791,7 @@
         <line num="36" count="0" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
       </file>
-      <file name="cliente.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\cliente.repository.js">
+      <file name="cliente.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\cliente.repository.js">
         <metrics statements="20" coveredstatements="20" conditionals="6" coveredconditionals="6" methods="10" coveredmethods="10"/>
         <line num="6" count="1" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
@@ -813,30 +814,30 @@
         <line num="45" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
       </file>
-      <file name="ficha_mantenimiento.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\ficha_mantenimiento.repository.js">
-        <metrics statements="20" coveredstatements="20" conditionals="6" coveredconditionals="3" methods="7" coveredmethods="7"/>
+      <file name="ficha_mantenimiento.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\ficha_mantenimiento.repository.js">
+        <metrics statements="20" coveredstatements="20" conditionals="6" coveredconditionals="6" methods="7" coveredmethods="7"/>
         <line num="3" count="3" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="7" count="3" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="15" count="3" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="2" type="stmt"/>
         <line num="25" count="3" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="29" count="3" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
         <line num="36" count="3" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="40" count="1" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="38" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="2" type="stmt"/>
         <line num="46" count="3" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
-        <line num="48" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="50" count="1" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="2" type="stmt"/>
       </file>
-      <file name="servicio.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\servicio.repository.js">
+      <file name="servicio.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\servicio.repository.js">
         <metrics statements="24" coveredstatements="24" conditionals="8" coveredconditionals="8" methods="10" coveredmethods="10"/>
         <line num="7" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -863,7 +864,7 @@
         <line num="56" count="1" type="stmt"/>
         <line num="57" count="1" type="stmt"/>
       </file>
-      <file name="solicitud.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\solicitud.repository.js">
+      <file name="solicitud.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\solicitud.repository.js">
         <metrics statements="31" coveredstatements="31" conditionals="14" coveredconditionals="11" methods="10" coveredmethods="10"/>
         <line num="8" count="18" type="stmt"/>
         <line num="9" count="18" type="stmt"/>
@@ -897,7 +898,7 @@
         <line num="111" count="1" type="stmt"/>
         <line num="112" count="1" type="stmt"/>
       </file>
-      <file name="tecnico.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\tecnico.repository.js">
+      <file name="tecnico.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\tecnico.repository.js">
         <metrics statements="15" coveredstatements="15" conditionals="4" coveredconditionals="4" methods="8" coveredmethods="8"/>
         <line num="5" count="2" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -915,12 +916,12 @@
         <line num="39" count="1" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
       </file>
-      <file name="usuario.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\usuario.repository.js">
+      <file name="usuario.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\usuario.repository.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
       </file>
-      <file name="visita.repository.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\repository\visita.repository.js">
+      <file name="visita.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\visita.repository.js">
         <metrics statements="34" coveredstatements="34" conditionals="16" coveredconditionals="16" methods="12" coveredmethods="12"/>
         <line num="10" count="21" type="stmt"/>
         <line num="11" count="21" type="stmt"/>
@@ -960,7 +961,7 @@
     </package>
     <package name="routers">
       <metrics statements="76" coveredstatements="67" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-      <file name="administrador.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\administrador.routes.js">
+      <file name="administrador.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\administrador.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -973,7 +974,7 @@
         <line num="27" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
       </file>
-      <file name="cliente.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\cliente.routes.js">
+      <file name="cliente.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\cliente.routes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -987,7 +988,7 @@
         <line num="25" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
       </file>
-      <file name="ficha.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\ficha.routes.js">
+      <file name="ficha.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\ficha.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -1000,7 +1001,7 @@
         <line num="29" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
       </file>
-      <file name="servicio.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\servicio.routes.js">
+      <file name="servicio.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\servicio.routes.js">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1016,7 +1017,7 @@
         <line num="38" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
       </file>
-      <file name="solicitud.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\solicitud.routes.js">
+      <file name="solicitud.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\solicitud.routes.js">
         <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -1028,7 +1029,7 @@
         <line num="27" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
       </file>
-      <file name="tecnico.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\tecnico.routes.js">
+      <file name="tecnico.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\tecnico.routes.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -1039,7 +1040,7 @@
         <line num="20" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
       </file>
-      <file name="usuario.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\usuario.routes.js">
+      <file name="usuario.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\usuario.routes.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1048,7 +1049,7 @@
         <line num="15" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
       </file>
-      <file name="visita.routes.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\routers\visita.routes.js">
+      <file name="visita.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\visita.routes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1062,8 +1063,8 @@
       </file>
     </package>
     <package name="services">
-      <metrics statements="276" coveredstatements="148" conditionals="118" coveredconditionals="49" methods="76" coveredmethods="63"/>
-      <file name="administrador.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\administrador.services.js">
+      <metrics statements="276" coveredstatements="229" conditionals="118" coveredconditionals="74" methods="76" coveredmethods="69"/>
+      <file name="administrador.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\administrador.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="6" count="7" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -1074,11 +1075,11 @@
         <line num="30" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
       </file>
-      <file name="allowedFields.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\allowedFields.js">
+      <file name="allowedFields.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\allowedFields.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="2" type="stmt"/>
       </file>
-      <file name="cliente.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\cliente.services.js">
+      <file name="cliente.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\cliente.services.js">
         <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="10" coveredmethods="10"/>
         <line num="6" count="12" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -1095,7 +1096,7 @@
         <line num="42" count="1" type="stmt"/>
         <line num="44" count="2" type="stmt"/>
       </file>
-      <file name="correo.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\correo.services.js">
+      <file name="correo.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\correo.services.js">
         <metrics statements="22" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
@@ -1120,7 +1121,7 @@
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
       </file>
-      <file name="email.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\email.services.js">
+      <file name="email.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\email.services.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="4" count="3" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
@@ -1129,9 +1130,9 @@
         <line num="19" count="2" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
       </file>
-      <file name="ficha_mantenimiento.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\ficha_mantenimiento.services.js">
-        <metrics statements="102" coveredstatements="21" conditionals="32" coveredconditionals="2" methods="7" coveredmethods="1"/>
-        <line num="5" count="3" type="cond" truecount="0" falsecount="1"/>
+      <file name="ficha_mantenimiento.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\ficha_mantenimiento.services.js">
+        <metrics statements="102" coveredstatements="102" conditionals="32" coveredconditionals="27" methods="7" coveredmethods="7"/>
+        <line num="5" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="6" count="5" type="stmt"/>
         <line num="7" count="5" type="stmt"/>
         <line num="8" count="5" type="stmt"/>
@@ -1146,95 +1147,95 @@
         <line num="22" count="5" type="stmt"/>
         <line num="23" count="5" type="stmt"/>
         <line num="24" count="5" type="stmt"/>
-        <line num="27" count="5" type="cond" truecount="0" falsecount="1"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="27" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="28" count="47" type="stmt"/>
+        <line num="31" count="47" type="stmt"/>
+        <line num="35" count="47" type="stmt"/>
+        <line num="44" count="47" type="stmt"/>
         <line num="48" count="5" type="cond" truecount="0" falsecount="2"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="72" count="5" type="cond" truecount="0" falsecount="1"/>
-        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
+        <line num="49" count="35" type="stmt"/>
+        <line num="52" count="35" type="stmt"/>
+        <line num="57" count="35" type="stmt"/>
+        <line num="63" count="35" type="stmt"/>
+        <line num="68" count="35" type="stmt"/>
+        <line num="72" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="73" count="32" type="cond" truecount="1" falsecount="1"/>
+        <line num="75" count="32" type="stmt"/>
+        <line num="84" count="32" type="stmt"/>
         <line num="88" count="5" type="cond" truecount="0" falsecount="1"/>
-        <line num="89" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
+        <line num="89" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="91" count="3" type="stmt"/>
+        <line num="92" count="3" type="stmt"/>
+        <line num="93" count="3" type="stmt"/>
+        <line num="94" count="3" type="stmt"/>
+        <line num="97" count="3" type="stmt"/>
+        <line num="102" count="3" type="stmt"/>
+        <line num="108" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="109" count="3" type="stmt"/>
+        <line num="118" count="3" type="stmt"/>
+        <line num="119" count="3" type="stmt"/>
         <line num="123" count="5" type="stmt"/>
         <line num="126" count="5" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="136" count="0" type="stmt"/>
-        <line num="140" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="147" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
-        <line num="166" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="173" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="180" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="181" count="0" type="stmt"/>
-        <line num="182" count="0" type="stmt"/>
-        <line num="183" count="0" type="stmt"/>
-        <line num="187" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="188" count="0" type="stmt"/>
-        <line num="189" count="0" type="stmt"/>
-        <line num="190" count="0" type="stmt"/>
-        <line num="194" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="195" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
-        <line num="197" count="0" type="stmt"/>
-        <line num="201" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="203" count="0" type="stmt"/>
-        <line num="204" count="0" type="stmt"/>
-        <line num="208" count="0" type="stmt"/>
-        <line num="210" count="0" type="stmt"/>
-        <line num="211" count="0" type="stmt"/>
-        <line num="213" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="214" count="0" type="stmt"/>
-        <line num="215" count="0" type="stmt"/>
-        <line num="216" count="0" type="stmt"/>
-        <line num="219" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="220" count="0" type="stmt"/>
-        <line num="221" count="0" type="stmt"/>
-        <line num="225" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="230" count="0" type="stmt"/>
-        <line num="238" count="0" type="stmt"/>
-        <line num="240" count="0" type="stmt"/>
-        <line num="241" count="0" type="stmt"/>
-        <line num="242" count="0" type="stmt"/>
+        <line num="130" count="5" type="stmt"/>
+        <line num="136" count="5" type="stmt"/>
+        <line num="140" count="5" type="stmt"/>
+        <line num="143" count="5" type="stmt"/>
+        <line num="145" count="5" type="stmt"/>
+        <line num="146" count="5" type="stmt"/>
+        <line num="147" count="5" type="stmt"/>
+        <line num="148" count="5" type="stmt"/>
+        <line num="149" count="5" type="stmt"/>
+        <line num="152" count="5" type="stmt"/>
+        <line num="155" count="5" type="stmt"/>
+        <line num="157" count="5" type="stmt"/>
+        <line num="158" count="5" type="stmt"/>
+        <line num="159" count="5" type="stmt"/>
+        <line num="160" count="5" type="stmt"/>
+        <line num="161" count="5" type="stmt"/>
+        <line num="163" count="5" type="stmt"/>
+        <line num="166" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="167" count="4" type="stmt"/>
+        <line num="168" count="4" type="stmt"/>
+        <line num="169" count="4" type="stmt"/>
+        <line num="173" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="174" count="4" type="stmt"/>
+        <line num="175" count="4" type="stmt"/>
+        <line num="176" count="4" type="stmt"/>
+        <line num="180" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="181" count="4" type="stmt"/>
+        <line num="182" count="4" type="stmt"/>
+        <line num="183" count="4" type="stmt"/>
+        <line num="187" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="188" count="4" type="stmt"/>
+        <line num="189" count="4" type="stmt"/>
+        <line num="190" count="4" type="stmt"/>
+        <line num="194" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="195" count="4" type="stmt"/>
+        <line num="196" count="4" type="stmt"/>
+        <line num="197" count="4" type="stmt"/>
+        <line num="201" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="202" count="4" type="stmt"/>
+        <line num="203" count="4" type="stmt"/>
+        <line num="204" count="4" type="stmt"/>
+        <line num="208" count="5" type="stmt"/>
+        <line num="210" count="5" type="stmt"/>
+        <line num="211" count="5" type="stmt"/>
+        <line num="213" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="214" count="4" type="stmt"/>
+        <line num="215" count="4" type="stmt"/>
+        <line num="216" count="4" type="stmt"/>
+        <line num="219" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="220" count="4" type="stmt"/>
+        <line num="221" count="4" type="stmt"/>
+        <line num="225" count="5" type="stmt"/>
+        <line num="226" count="5" type="stmt"/>
+        <line num="230" count="5" type="stmt"/>
+        <line num="238" count="5" type="stmt"/>
+        <line num="240" count="5" type="stmt"/>
+        <line num="241" count="5" type="stmt"/>
+        <line num="242" count="5" type="stmt"/>
       </file>
-      <file name="servicio.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\servicio.services.js">
+      <file name="servicio.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\servicio.services.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="11"/>
         <line num="4" count="10" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
@@ -1248,7 +1249,7 @@
         <line num="40" count="1" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
       </file>
-      <file name="solicitud.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\solicitud.services.js">
+      <file name="solicitud.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\solicitud.services.js">
         <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9"/>
         <line num="5" count="12" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
@@ -1262,7 +1263,7 @@
         <line num="35" count="1" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
       </file>
-      <file name="tecnico.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\tecnico.services.js">
+      <file name="tecnico.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\tecnico.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="5" count="13" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
@@ -1273,7 +1274,7 @@
         <line num="29" count="2" type="stmt"/>
         <line num="33" count="2" type="stmt"/>
       </file>
-      <file name="usuario.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\usuario.services.js">
+      <file name="usuario.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\usuario.services.js">
         <metrics statements="57" coveredstatements="36" conditionals="50" coveredconditionals="28" methods="6" coveredmethods="4"/>
         <line num="11" count="4" type="stmt"/>
         <line num="13" count="4" type="cond" truecount="3" falsecount="1"/>
@@ -1333,7 +1334,7 @@
         <line num="206" count="2" type="stmt"/>
         <line num="211" count="2" type="cond" truecount="4" falsecount="0"/>
       </file>
-      <file name="visita.services.js" path="C:\Users\Roberto Carlos\Documents\A-C-Soluciones\Backend\src\services\visita.services.js">
+      <file name="visita.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\visita.services.js">
         <metrics statements="36" coveredstatements="32" conditionals="16" coveredconditionals="13" methods="11" coveredmethods="10"/>
         <line num="7" count="14" type="stmt"/>
         <line num="8" count="14" type="stmt"/>
