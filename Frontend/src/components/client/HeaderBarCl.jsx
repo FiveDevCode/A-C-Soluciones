@@ -146,11 +146,11 @@ const HeaderBarCl = () => {
         <MenuHamburger>
           <IconButtonMenu onClick={handleShowMenuSide}><FontAwesomeIcon icon={faBars} style={{fontSize:"24px"}} /></IconButtonMenu>
           {showMenu && <MenuSideCl onClose={() => setShowMenu(false)}/>}
-          <Link to="/home"><Logo src={logo} size="45%"/></Link>
+          <Link to="/cliente/inicio"><Logo src={logo} size="45%"/></Link>
         </MenuHamburger>
         <MenuOption>
           <LinkOption to="/">Acerca de nosotros</LinkOption>
-          <LinkOption to="/services-all">Servicios</LinkOption>
+          <LinkOption to="/cliente/servicios">Servicios</LinkOption>
           <LinkOption to="/">Contacte con nosotros</LinkOption>
         </MenuOption>
 

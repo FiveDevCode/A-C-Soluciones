@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { SolicitudController } from '../controllers/solicitud.controller.js';
-import { authenticate, isAdminOrCliente, isCliente } from '../middlewares/autenticacion.js';
+import { authenticate, isAdminOrCliente, isAdminOrTecnico, isCliente } from '../middlewares/autenticacion.js';
 
 // Crear instancia del router
 const router = Router();
@@ -18,7 +18,7 @@ router.post('/api/solicitudes', isCliente, solicitudController.crear);
 router.get('/api/solicitudes', isAdminOrCliente,  solicitudController.obtenerTodos);
 
 // Obtener solicitudes por cliente
-router.get('/api/solicitudes/:id', isAdminOrCliente , solicitudController.obtenerPorId);
+router.get('/api/solicitudes/:id', isAdminOrTecnico , solicitudController.obtenerPorId);
 
 // Obtener una solicitud específica por ID
 router.get('/api/solicitudes/cliente/:cliente_id_fk', isAdminOrCliente, solicitudController.obtenerPorCliente);

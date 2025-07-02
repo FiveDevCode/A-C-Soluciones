@@ -62,11 +62,11 @@ const CategoryRecomendTc = () => {
           <Icon icon={faFileAlt} style={{stroke:"#6C757D"}}/>
           <OptionTitle>Generar reporte</OptionTitle>
         </Option > 
-        <Option to="/">
+        <Option to="/tecnico/servicios">
           <Icon icon={faCalendarCheck} style={{stroke:"#17A2B8"}}/>
           <OptionTitle>Visitas programadas</OptionTitle>
         </Option>
-        <Option to="/services">
+        <Option to="/tecnico/servicios">
           <Icon icon={faBriefcase} style={{stroke:"#E67E22"}}/>
           <OptionTitle>Servicios en curso</OptionTitle>
         </Option>

@@ -1,7 +1,8 @@
 import { faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputAdornment, TextField } from "@mui/material";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -48,6 +49,7 @@ const InputSearch = styled(TextField)`
 
 const HeaderBar = () => {
   const [busqueda, setBusqueda] = useState('');
+  const [profilePath, setProfilePath] = useState("");
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
@@ -59,26 +61,70 @@ const HeaderBar = () => {
   };
 
 
+
+  useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
+
+    switch (role) {
+      case "tecnico":
+        setProfilePath("/tecnico/perfil");
+        break;
+      case "administrador":
+        setProfilePath("/admin/perfil");
+        break;
+    }
+    
+  }, []);
+
+
+
   const titles = {
-    "/services": "Servicios",
-    "/register-employee": "Crear empleado",
-    "/register": "Crear cuenta",
-    "/account": "Perfil de usuario",
-    "/home": "Inicio",
-    "/profile": "Perfil",
-    "/view-service": "Ver servicio",
-    "/profile-client": "Perfil cliente",
-    "/edit-client": "Editar cliente", // clave base
-    "/register-service": "Crear servicio",
-    "/administrator-permit": "Crear administrador permisos",
-    "/assing-visit": "Asignar visita",
-    "/homeTc": "Home",
-    "/homeAd": "Home",
+    "/tecnico/inicio": "Inicio técnico",
+    "/tecnico/servicios": "Servicios técnico",
+    "/tecnico/perfil": "Perfil técnico",
+
+    "/admin/inicio": "Inicio administrador",
+    "/admin/registrar-empleado": "Crear empleado",
+    "/admin/perfil": "Perfil administrador",
+    "/admin/registrar-servicio": "Crear servicio",
+    "/admin/registrar-administrador": "Crear administrador",
+    "/admin/permisos": "Permisos administrador",
+    "/admin/asignar-visita": "Asignar visita",
+    "/admin/editar-cliente/": "Editar cliente", 
+    "/admin/visitas": "Visitas",
+    "/admin/solicitudes": "Solicitudes"
   };
 
   function getRouteName(path) {
-    if (path.startsWith("/edit-client/")) {
+    if (path.startsWith("/admin/editar-cliente/") && path !== "/admin/editar-cliente/") {
       return "Editar cliente";
+    }
+    if (path.startsWith("/admin/ver-mas-servicio/")) {
+      return "Ver servicio";
+    }
+    if (path.startsWith("/admin/ver-visita/")) {
+      return "Ver visita";
+    }
+    if (path.startsWith("/admin/perfil-cliente/")) {
+      return "Perfil cliente";
+    }
+    if (path.startsWith("/admin/perfil-tecnico/")) {
+      return "Perfil técnico";
+    }
+    if (path.startsWith("/admin/editar-tecnico/")) {
+      return "Editar técnico";
+    }
+    if (path.startsWith("/admin/editar-servicio/")) {
+      return "Editar servicio";
+    }
+    if (path.startsWith("/tecnico/ver-servicio/")) {
+      return "Ver servicio";
+    }
+    if (path.startsWith("/tecnico/reporte/")) {
+      return "Reporte técnico";
+    }
+    if (path.startsWith("/tecnico/ver-visita/")) {
+      return "Ver visita";
     }
 
     return titles[path] || "Ruta desconocida";
@@ -112,10 +158,10 @@ const HeaderBar = () => {
             style={{fontSize: '24px'}}
           />
         </Link>
-        <Link to="/profile" >
+        <Link to={profilePath}>
           <FontAwesomeIcon 
             icon={faCircleUser}
-            style={{fontSize: '24px'}}
+            style={{ fontSize: '24px' }}
           />
         </Link>
       </ContainerOption>

@@ -22,12 +22,13 @@ export class VisitaController {
     } catch (error) {
       console.error('Error al crear visita:', error);
       if (error instanceof ValidationError) {
-        const fieldErrors = {};
-        error.errors.forEach((err) => {
-          const path = err.path || 'general'
-          fieldErrors[path] = err.message;
-        });
-        return res.status(400).json({ errors: fieldErrors });
+          const fieldErrors = {};
+          error.errors.forEach((err) => {
+              if (err.path) {
+                  fieldErrors[err.path] = err.message;
+              }
+          });
+          return res.status(400).json({ errors: fieldErrors });
       }
       //extraer el mensaje error o usar el predeterminado de forma explicita
       let mensajeDeError = 'Error al agendar la visita. Intente nuevamente.'
