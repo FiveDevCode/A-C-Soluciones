@@ -146,12 +146,12 @@ const ViewVisitPageAd = () => {
       <Typography variant="subtitle1" sx={{ color: 'black' }}><strong>Información</strong></Typography>
 
       <Label>Notas previas:</Label>
-      <Typography sx={{ color: 'black' }}>
+      <Typography sx={{ color: 'black', wordBreak: 'break-all'  }}>
         {notas_previas?.trim() ? notas_previas : 'No hay notas previas registradas'}
       </Typography>
 
       <Label>Notas posteriores:</Label>
-      <Typography sx={{ color: 'black' }}>
+      <Typography sx={{ color: 'black', wordBreak: 'break-all'  }}>
         {notas_posteriores?.trim() ? notas_posteriores : 'No hay notas posteriores registradas'}
       </Typography>
 

@@ -128,7 +128,7 @@ const ReportFormTc = () => {
       setShowSuccess(true);
 
       setTimeout(() => {
-        navigate(`/tecnico/ver-servicio/${id}`)      
+        navigate(`/tecnico/ver-visita/${id}`)      
       }, 3000);
     } catch (err) {
       console.log(err)
