@@ -2,7 +2,7 @@ import path from 'path';
 
 import express from 'express';
 import { crearFichaMantenimiento, listarFichas} from '../controllers/ficha_mantenimiento.controller.js';
-import { isAdminOrTecnico, isCliente, authenticate} from '../middlewares/autenticacion.js';
+import { isAdminOrTecnico, isCliente} from '../middlewares/autenticacion.js';
 import upload from '../middlewares/uploadImages.js';
 
 const router = express.Router();
