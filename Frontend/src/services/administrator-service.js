@@ -207,6 +207,7 @@ const createAdmin = (idCard, name, lastName, email, password) => {
   });
 }
 
+
 export const administratorService = {
   createTechnical,
   getListTechnical,

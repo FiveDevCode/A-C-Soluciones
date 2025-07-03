@@ -38,6 +38,7 @@ import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
 import VisitListPageTc from './pages/technical/VisitListPageTc';
 import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
 import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
+import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -257,6 +258,12 @@ function AppContent() {
             <Route path="/admin/solicitud/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewRequestPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/tecnicos" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewTechnicalListPageAd />
               </PrivateRoute>
             } />
 

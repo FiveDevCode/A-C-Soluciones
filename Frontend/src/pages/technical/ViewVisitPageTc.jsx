@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { handleGetPDFIdVisit } from '../../controllers/common/getPDFIdVisit.controller';
 import { useEffect, useState } from 'react';
 import { handleGetVisitAssign } from '../../controllers/technical/getVisitAssignTc.controller';
+import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 
 
 const Container = styled.div`
@@ -85,7 +86,7 @@ const ViewVisitPageTc = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data[0].pdf_path)
+        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -110,8 +111,16 @@ const ViewVisitPageTc = () => {
     servicio,
   } = visitData;
   
-  const handleStateChange = (e) => {
-    setStateVisit(e.target.value);
+  const handleStateChange = async(e) => {
+    const newState = e.target.value;
+    setStateVisit(newState); 
+
+    try {
+      await handleUpdateStateVisit(id, newState); // Llama al backend
+      console.log('Estado de la visita actualizado exitosamente');
+    } catch (error) {
+      console.error('Error al actualizar el estado de la visita:', error);
+    }
   };
   
   const handleCreateReport = () => {
@@ -131,16 +140,24 @@ const ViewVisitPageTc = () => {
       <Typography variant="subtitle1" sx={{ color: 'black' }}><strong>Información</strong></Typography>
 
       <Label>Notas previas:</Label>
-      <Typography sx={{ color: 'black' }}>{notas_previas}</Typography>
+      <Typography sx={{ color: 'black', wordBreak: 'break-all'  }}>
+        {notas_previas?.trim() ? notas_previas : 'No hay notas previas registradas'}
+      </Typography>
 
       <Label>Notas posteriores:</Label>
-      <Typography sx={{ color: 'black' }}>{notas_posteriores}</Typography>
+      <Typography sx={{ color: 'black', wordBreak: 'break-all'  }}>
+        {notas_posteriores?.trim() ? notas_posteriores : 'No hay notas posteriores registradas'}
+      </Typography>
 
       <Label>Fecha programada:</Label>
-      <Typography sx={{ color: 'black' }}>{fecha_programada?.substring(0, 10)}</Typography>
+      <Typography sx={{ color: 'black' }}>
+        {fecha_programada ? fecha_programada.substring(0, 10) : 'No hay fecha programada'}
+      </Typography>
 
       <Label>Duración estimada:</Label>
-      <Typography sx={{ color: 'black' }}>{duracion_estimada} minutos</Typography>
+      <Typography sx={{ color: 'black' }}>
+        {duracion_estimada ? `${duracion_estimada} minutos` : 'No se especificó duración'}
+      </Typography>
 
       <Label>Estado de la visita:</Label>
       <EstadoSelect value={stateVisit} onChange={handleStateChange}>

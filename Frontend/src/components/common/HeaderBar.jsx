@@ -117,6 +117,9 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/editar-servicio/")) {
       return "Editar servicio";
     }
+    if (path.startsWith("/admin/solicitud/")) {
+      return "Ver solicitud";
+    }
     if (path.startsWith("/tecnico/ver-servicio/")) {
       return "Ver servicio";
     }

@@ -6,6 +6,7 @@ import { handleGetPDFIdVisit } from '../../controllers/common/getPDFIdVisit.cont
 import { useEffect, useState } from 'react';
 import { handleGetVisit } from '../../controllers/administrator/getVisitAd.controller';
 import { handleGetService } from '../../controllers/administrator/getServiceAd.controller';
+import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 
 
 const Container = styled.div`
@@ -68,6 +69,8 @@ const ViewVisitPageAd = () => {
   const [pathName, setPathName] = useState(null)
   const [servicio, setServicio] = useState(null)
   const navigate = useNavigate();
+  
+  handleUpdateStateVisit
 
   useEffect(() => {
     if (id) {
@@ -88,7 +91,7 @@ const ViewVisitPageAd = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data[0].pdf_path)
+        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -125,8 +128,18 @@ const ViewVisitPageAd = () => {
     return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del servicio...</Typography>;
   }
   
-  const handleStateChange = (e) => {
-    setStateVisit(e.target.value);
+  const handleStateChange = async(e) => {
+    const newState = e.target.value;
+    setStateVisit(newState); 
+
+
+
+    try {
+      await handleUpdateStateVisit(id, newState); // Llama al backend
+      console.log('Estado de la visita actualizado exitosamente');
+    } catch (error) {
+      console.error('Error al actualizar el estado de la visita:', error);
+    }
   };
 
   const handleCreateReport = () => {

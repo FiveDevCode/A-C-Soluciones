@@ -5,6 +5,7 @@ import {
   faInbox, 
   faPlusSquare, 
   faTasks, 
+  faTools, 
   faUserPlus, 
   faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,6 +82,10 @@ const CategoryRecomendAd = () => {
         <Option to="/admin/visitas">
           <Icon icon={faCalendarCheck} style={{stroke:"#17A2B8"}}/>
           <OptionTitle>Visitas programadas</OptionTitle>
+        </Option>
+        <Option to="/admin/tecnicos">
+          <Icon icon={faTools} style={{stroke:"#138f51"}}/>
+          <OptionTitle>Tecnicos</OptionTitle>
         </Option>
       </ContainerOption>
     </ContainerCategory>

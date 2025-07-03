@@ -95,6 +95,19 @@ const getRequestId = (id_solicitud) => {
   });
 }
 
+const updateStateVisit = (id_visit, state) => {
+  const token = sessionStorage.getItem("authToken");
+
+  return axios.put(`http://localhost:8000/api/visitas/${id_visit}`, {
+    estado: state,
+ 
+
+  }, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
 
 export const commonService = {
   login,
@@ -102,6 +115,7 @@ export const commonService = {
   getPDFIdVisit,
   getListClient,
   getVisitId,
-  getRequestId
+  getRequestId,
+  updateStateVisit
 
 }

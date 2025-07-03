@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
+import requestTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../../components/common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -64,100 +64,68 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+const MoreButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #f0f1ff;
+  border: 1px solid #343875;
+  color: #343875;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  margin-top: 1.5rem;
+  align-self: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background-color: #343875;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+`;
 
 
-const ActivityListAd = () => {
+const ActivityListAd = ({requests}) => {
   return (
     <ContainerNoti>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>      
-          <SeeMore>
-            <FontAwesomeIcon icon={faTrash} />
-            <Link to="/">Eliminar</Link>    
-          </SeeMore>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-
-        </ContainerOption>
-      </Notification>
-
-
-
-
-
+      {Array.isArray(requests) && requests.slice(0, 4).map((request, index) => (
+        <Notification key={index}>
+          <NotificationDescription>
+            <Logo src={requestTehc} />
+            <NotificationInfo>
+              <TitleNoti>
+                {request.comentarios && request.comentarios.length > 50
+                  ? `${request.comentarios.slice(0, 50)}...`
+                  : request.comentarios || "No hay comentarios"}
+              </TitleNoti>
+              <Description>
+                {request.descripcion && request.descripcion.length > 50
+                  ? `${request.descripcion.slice(0, 50)}...`
+                  : request.descripcion || "No hay descripcion"}
+              </Description>
+              <Date>{request.fecha_solicitud.substring(0, 10)}</Date>
+            </NotificationInfo>
+          </NotificationDescription>
+          <ContainerOption>
+            <SeeMore>
+              <FontAwesomeIcon icon={faTrash} />
+              <Link to="/">Eliminar</Link>
+            </SeeMore>
+            <SeeMore>
+              <FontAwesomeIcon icon={faArrowRight} />
+              <Link to={`/admin/solicitud/${request.id}`}>Ver</Link>
+            </SeeMore>
+          </ContainerOption>
+        </Notification>
+      ))}
+      <MoreButton to="/admin/solicitudes">
+        Ver más solicitudes <FontAwesomeIcon icon={faArrowRight} />
+      </MoreButton>
     </ContainerNoti>
   )
 }
