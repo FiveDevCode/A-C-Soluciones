@@ -211,7 +211,7 @@ const ViewVisitPageTc = () => {
             sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
             onClick={async () => {
               try {
-                const token = sessionStorage.getItem('authToken');
+                const token = localStorage.getItem('authToken');
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
                 const publicUrl = `http://localhost:8000/${relativePath}`;

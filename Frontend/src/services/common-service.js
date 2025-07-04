@@ -31,7 +31,7 @@ const createMaintenanceSheet = ({
   foto_estado_final,
   foto_descripcion_trabajo
 }) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   const formData = new FormData();
 
@@ -61,7 +61,7 @@ const createMaintenanceSheet = ({
 };
 
 const getPDFIdVisit = (id) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get(`http://localhost:8000/api/fichas?id_visitas=${id}`,{
     headers: {
@@ -76,7 +76,7 @@ const getListClient = () => {
 }
 
 const getVisitId = (id_visita) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get(`http://localhost:8000/api/visitas/${id_visita}`,{
     headers: {
@@ -86,7 +86,7 @@ const getVisitId = (id_visita) => {
 }
 
 const getRequestId = (id_solicitud) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get(`http://localhost:8000/api/solicitudes/${id_solicitud}`,{
     headers: {
@@ -96,7 +96,7 @@ const getRequestId = (id_solicitud) => {
 }
 
 const updateStateVisit = (id_visit, state) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.put(`http://localhost:8000/api/visitas/${id_visit}`, {
     estado: state,

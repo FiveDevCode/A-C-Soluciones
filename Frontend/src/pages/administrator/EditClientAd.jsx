@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Alert, Button, Collapse, Divider, IconButton, Skeleton, TextField } from '@mui/material';
-import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import adminProfile from "../../assets/administrator/admin.png"
 import CloseIcon from '@mui/icons-material/Close';
@@ -325,7 +324,7 @@ const EditClientAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
             {isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to={`/admin/perfil-cliente/${id}`}>Cancelar</Button>
+          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

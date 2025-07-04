@@ -113,7 +113,7 @@ const ProfilePageAd = () => {
 
   useEffect(() => {
 
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
 
     handleGetAdminId(decoded.id)
@@ -140,7 +140,7 @@ const ProfilePageAd = () => {
           />
           <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
         </ProfileInfo>
-        <ButtonProfile variant='contained' LinkComponent={Link} to="/admin/editar-cliente/">Editar infomarcion</ButtonProfile>
+        <ButtonProfile variant='contained' LinkComponent={Link} to="/admin/editar-perfil">Editar infomarcion</ButtonProfile>
       
       </ProfileSection>
 

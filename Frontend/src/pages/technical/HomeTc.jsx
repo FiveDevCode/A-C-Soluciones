@@ -26,7 +26,7 @@ const HomeTc = () => {
   
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     if (token) {
       const decoded = jwtDecode(token);
       setTechnicalId(decoded.id); 

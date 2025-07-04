@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
+import clientTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 
@@ -65,39 +64,35 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
-const ListRequestAd = ({requests}) => {
+
+
+const ListClientAd = ({clients}) => {
   return (
     <ContainerNoti>
-      {requests.map((request, index) => (
+      {clients.map((client, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={serviceTehc}/>
+            <Logo src={clientTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {request.comentarios && request.comentarios.length > 50
-                  ? `${request.comentarios.slice(0, 50)}...`
-                  : request.comentarios || "Sin dirrecion"
-                }
+                {client.numero_de_cedula || 'Sin numero de cedula'}
               </TitleNoti>
               <Description>
-                {request.descripcion && request.descripcion.length > 50
-                  ? `${request.descripcion.slice(0, 50)}...`
-                  : request.descripcion || "Sin descripcion"
-                }
+                {client.nombre} {client.apellido}
               </Description>
-              <Date>{request.fecha_solicitud.substring(0, 10)}</Date>
+              <TitleNoti>
+                {client.correo_electronico}
+              </TitleNoti>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
-              <TextField
-                value={request.estado}
-                label="Estado"
-                disabled
-              />
-            </FormControl>
-
-            <Link to={`/admin/solicitud/${request.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/editar-cliente/${client.id}`} style={{ textDecoration: 'none' }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faEdit} />
+                <span>Editar</span>
+              </SeeMore>
+            </Link>
+            <Link to={`/admin/perfil-cliente/${client.id}`} style={{ textDecoration: 'none' }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>
@@ -110,4 +105,5 @@ const ListRequestAd = ({requests}) => {
   );
 }
 
-export default ListRequestAd;
+
+export default ListClientAd

@@ -6,8 +6,12 @@ import {
   faPlusSquare, 
   faTasks, 
   faTools, 
+  faUserGear, 
   faUserPlus, 
-  faUserShield } from "@fortawesome/free-solid-svg-icons";
+  faUsers, 
+  faUserShield, 
+  faUserTie,
+  faWrench} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -71,21 +75,25 @@ const CategoryRecomendAd = () => {
           <Icon icon={faTasks} style={{stroke:"#FD7E14"}}/>
           <OptionTitle>Asigna una visita</OptionTitle>
         </Option>
-        <Option to="/admin/solicitudes">
-          <Icon icon={faInbox} style={{stroke:"#343A40"}}/>
-          <OptionTitle>Solicitudes de clientes</OptionTitle>
-        </Option>
         <Option to="/admin/registrar-administrador">
           <Icon icon={faUserShield} style={{stroke:"#6F42C1"}}/>
           <OptionTitle>Crear nuevo administrador</OptionTitle>
         </Option>
-        <Option to="/admin/visitas">
-          <Icon icon={faCalendarCheck} style={{stroke:"#17A2B8"}}/>
-          <OptionTitle>Visitas programadas</OptionTitle>
-        </Option>
         <Option to="/admin/tecnicos">
           <Icon icon={faTools} style={{stroke:"#138f51"}}/>
           <OptionTitle>Tecnicos</OptionTitle>
+        </Option>
+        <Option to="/admin/clientes">
+          <Icon icon={faUsers} style={{stroke:"#91165e"}}/>
+          <OptionTitle>Clientes</OptionTitle>
+        </Option>
+        <Option to="/admin/administradores">
+          <Icon icon={faUserTie} style={{stroke:"#343A40"}}/>
+          <OptionTitle>Administradores</OptionTitle>
+        </Option>
+        <Option to="/admin/servicios">
+          <Icon icon={faWrench} style={{stroke:"#343A40"}}/>
+          <OptionTitle>Servicios</OptionTitle>
         </Option>
       </ContainerOption>
     </ContainerCategory>

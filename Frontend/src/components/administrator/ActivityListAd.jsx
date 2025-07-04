@@ -4,6 +4,7 @@ import Logo from "../../components/common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { FormControl, TextField } from "@mui/material";
 
 
 const ContainerNoti = styled.div`
@@ -112,14 +113,19 @@ const ActivityListAd = ({requests}) => {
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <SeeMore>
-              <FontAwesomeIcon icon={faTrash} />
-              <Link to="/">Eliminar</Link>
-            </SeeMore>
-            <SeeMore>
-              <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/admin/solicitud/${request.id}`}>Ver</Link>
-            </SeeMore>
+            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
+              <TextField
+                value={request.estado}
+                label="Estado"
+                disabled
+              />
+            </FormControl>
+            <Link to={`/admin/solicitud/${request.id}`} style={{ textDecoration: 'none', alignSelf: "center"}}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faArrowRight} />
+                <span>Ver</span>
+              </SeeMore>
+            </Link>
           </ContainerOption>
         </Notification>
       ))}

@@ -134,12 +134,12 @@ const MenuSide = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem('userRole');
+    localStorage.removeItem("authToken");
+    localStorage.removeItem('userRole');
     navigate("/");
   };
 
-  const role = sessionStorage.getItem('userRole');
+  const role = localStorage.getItem('userRole');
 
   const getHomeRouteByRole = (role) => {
     switch (role) {

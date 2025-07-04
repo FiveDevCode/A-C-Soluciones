@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
+import administratorTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Pagination } from "@mui/material";
 
 
 const ContainerNoti = styled.div`
@@ -65,39 +66,46 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
-const ListRequestAd = ({requests}) => {
+const ITEMS_PER_PAGE = 6;
+
+
+const ListAdministratorAd = ({administrators}) => {
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(administrators.length / ITEMS_PER_PAGE);
+
+  const paginatedAdmins = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return administrators.slice(start, start + ITEMS_PER_PAGE);
+  }, [administrators, currentPage]);
+
   return (
     <ContainerNoti>
-      {requests.map((request, index) => (
+      {paginatedAdmins.map((administrator, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={serviceTehc}/>
+            <Logo src={administratorTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {request.comentarios && request.comentarios.length > 50
-                  ? `${request.comentarios.slice(0, 50)}...`
-                  : request.comentarios || "Sin dirrecion"
-                }
+                {administrator.numero_cedula || 'Sin numero de cedula'}
               </TitleNoti>
               <Description>
-                {request.descripcion && request.descripcion.length > 50
-                  ? `${request.descripcion.slice(0, 50)}...`
-                  : request.descripcion || "Sin descripcion"
-                }
+                {administrator.nombre} {administrator.apellido}
               </Description>
-              <Date>{request.fecha_solicitud.substring(0, 10)}</Date>
+              <TitleNoti>
+                {administrator.correo_electronico}
+              </TitleNoti>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
-              <TextField
-                value={request.estado}
-                label="Estado"
-                disabled
-              />
-            </FormControl>
-
-            <Link to={`/admin/solicitud/${request.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/editar-administratore/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faEdit} />
+                <span>Editar</span>
+              </SeeMore>
+            </Link>
+            <Link to={`/admin/perfil-administratore/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>
@@ -106,8 +114,17 @@ const ListRequestAd = ({requests}) => {
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }
 
-export default ListRequestAd;
+
+export default ListAdministratorAd

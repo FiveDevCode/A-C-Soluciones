@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { Pagination } from "@mui/material";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -65,39 +66,52 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
-const ListRequestAd = ({requests}) => {
+const ITEMS_PER_PAGE = 6;
+
+
+const ListServiceAd = ({services}) => {
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(services.length / ITEMS_PER_PAGE);
+
+  const paginatedServices = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return services.slice(start, start + ITEMS_PER_PAGE);
+  }, [services, currentPage]);
+
+
+
   return (
     <ContainerNoti>
-      {requests.map((request, index) => (
+      {paginatedServices.map((service, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={serviceTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {request.comentarios && request.comentarios.length > 50
-                  ? `${request.comentarios.slice(0, 50)}...`
-                  : request.comentarios || "Sin dirrecion"
+                {service.nombre && service.nombre.length > 50
+                  ? `${service.nombre.slice(0, 50)}...`
+                  : service.nombre || "Sin dirrecion"
                 }
               </TitleNoti>
               <Description>
-                {request.descripcion && request.descripcion.length > 50
-                  ? `${request.descripcion.slice(0, 50)}...`
-                  : request.descripcion || "Sin descripcion"
+                {service.descripcion && service.descripcion.length > 50
+                  ? `${service.descripcion.slice(0, 50)}...`
+                  : service.descripcion || "Sin descripcion"
                 }
               </Description>
-              <Date>{request.fecha_solicitud.substring(0, 10)}</Date>
+              <Date>{service.fecha_creacion.substring(0, 10)}</Date>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
-              <TextField
-                value={request.estado}
-                label="Estado"
-                disabled
-              />
-            </FormControl>
-
-            <Link to={`/admin/solicitud/${request.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/editar-servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faEdit} />
+                <span>Editar</span>
+              </SeeMore>
+            </Link>
+            <Link to={`/admin/servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>
@@ -106,8 +120,17 @@ const ListRequestAd = ({requests}) => {
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }
 
-export default ListRequestAd;
+
+export default ListServiceAd

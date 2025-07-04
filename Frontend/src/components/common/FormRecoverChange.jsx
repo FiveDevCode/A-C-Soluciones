@@ -42,7 +42,7 @@ const FormRecoverChange = () => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -63,8 +63,8 @@ const FormRecoverChange = () => {
         }
       } catch (error) {
         console.error("Token inválido:", error);
-        sessionStorage.removeItem('authToken');
-        sessionStorage.removeItem('userRole');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userRole');
       }
     }
   }, []);
@@ -81,11 +81,11 @@ const FormRecoverChange = () => {
       );
 
       console.log(data)
-      sessionStorage.setItem('authToken', data.token);
+      localStorage.setItem('authToken', data.token);
 
       const decoded = jwtDecode(data.token);
       const role = decoded.rol;
-      sessionStorage.setItem('userRole', role);
+      localStorage.setItem('userRole', role);
 
       switch (role) {
         case "cliente":

@@ -63,7 +63,7 @@ const HeaderBar = () => {
 
 
   useEffect(() => {
-    const role = sessionStorage.getItem("userRole");
+    const role = localStorage.getItem("userRole");
 
     switch (role) {
       case "tecnico":
@@ -92,17 +92,21 @@ const HeaderBar = () => {
     "/admin/asignar-visita": "Asignar visita",
     "/admin/editar-cliente/": "Editar cliente", 
     "/admin/visitas": "Visitas",
-    "/admin/solicitudes": "Solicitudes"
+    "/admin/solicitudes": "Solicitudes",
+    "/admin/tecnicos": "Tecnicos",
+    "/admin/clientes":"Clientes",
+    "/admin/administradores":"Administradores",
+    "/admin/servicios":"Servicios"
   };
 
   function getRouteName(path) {
     if (path.startsWith("/admin/editar-cliente/") && path !== "/admin/editar-cliente/") {
       return "Editar cliente";
     }
-    if (path.startsWith("/admin/ver-mas-servicio/")) {
+    if (path.startsWith("/admin/servicio/")) {
       return "Ver servicio";
     }
-    if (path.startsWith("/admin/ver-visita/")) {
+    if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }
     if (path.startsWith("/admin/perfil-cliente/")) {

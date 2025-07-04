@@ -39,6 +39,9 @@ import VisitListPageTc from './pages/technical/VisitListPageTc';
 import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
 import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
 import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPageAd';
+import ViewClientListPageAd from './pages/administrator/ViewClientListPageAd';
+import ViewAdministratorListPageAd from './pages/administrator/ViewAdministratorListPageAd';
+import ViewServiceListPageAd from './pages/administrator/ViewServiceListPageAd';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -71,9 +74,51 @@ function AppContent() {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const storedRole = sessionStorage.getItem('userRole');
+    const storedRole = localStorage.getItem('userRole');
     setRole(storedRole);
   }, [location.pathname]);
+
+  const getTabKey = () => {
+    const sessionId = localStorage.getItem('sessionId') || `${Date.now()}_${Math.random()}`;
+    localStorage.setItem('sessionId', sessionId);
+    return `tab_${sessionId}_${window.name || Math.random()}`;
+  };
+
+  useEffect(() => {
+    const tabKey = getTabKey();
+    localStorage.setItem(tabKey, 'open');
+
+    const cleanUpIfNoTabs = () => {
+      const openTabs = Object.keys(localStorage).filter(k => k.startsWith('tab_'));
+      if (openTabs.length === 0) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
+      }
+    };
+
+    const handleUnload = () => {
+      localStorage.removeItem(tabKey);
+      setTimeout(cleanUpIfNoTabs, 200);
+    };
+
+    const handleStorage = (event) => {
+      if (event.key?.startsWith('tab_')) {
+        setTimeout(cleanUpIfNoTabs, 200);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener('storage', handleStorage);
+      localStorage.removeItem(tabKey);
+      cleanUpIfNoTabs();
+    };
+  }, []);
+
 
   const isCliente = role === 'cliente';
   const hideMenuAndHeader =
@@ -177,7 +222,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/ver-mas-servicio/:id" element={
+            <Route path="/admin/servicio/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewServicePageAd />
               </PrivateRoute>
@@ -225,19 +270,13 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/editar-cliente/" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditAdminPageAd />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/visitas" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewVisitListPageAd />
               </PrivateRoute>
             } />
 
-            <Route path="/admin/ver-visita/:id" element={
+            <Route path="/admin/visita/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewVisitPageAd />
               </PrivateRoute>
@@ -260,10 +299,34 @@ function AppContent() {
                 <ViewRequestPageAd />
               </PrivateRoute>
             } />
+            
+            <Route path="/admin/editar-perfil" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditAdminPageAd />
+              </PrivateRoute>
+            } />
 
             <Route path="/admin/tecnicos" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewTechnicalListPageAd />
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/clientes" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewClientListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/administradores" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewAdministratorListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/servicios" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewServiceListPageAd/>
               </PrivateRoute>
             } />
 

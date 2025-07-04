@@ -128,7 +128,7 @@ const ReportFormAd = () => {
       setShowSuccess(true);
 
       setTimeout(() => {
-        navigate(`/admin/ver-visita/${id}`)      
+        navigate(`/admin/visita/${id}`)      
       }, 3000);
     } catch (err) {
       console.log(err)
@@ -392,7 +392,7 @@ const ReportFormAd = () => {
           color="primary"
           style={{ marginTop: '1rem' }}
           LinkComponent={Link}
-          to={`/admin/ver-visita/${id}`}
+          to={`/admin/visita/${id}`}
         >
           Cancelar
         </Button>

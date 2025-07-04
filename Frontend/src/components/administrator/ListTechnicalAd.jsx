@@ -86,13 +86,13 @@ const ListTechicalAd = ({technicals}) => {
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <Link to={`/admin/editar-tecnico/${technical.id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/admin/editar-tecnico/${technical.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faEdit} />
                 <span>Editar</span>
               </SeeMore>
             </Link>
-            <Link to={`/admin/perfil-tecnico/${technical.id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/admin/perfil-tecnico/${technical.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>

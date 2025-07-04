@@ -87,7 +87,7 @@ const EditAdminPageAd = () => {
   const handleSubmit = async(event) => {
     event.preventDefault(); 
     setIsSubmitting(true);
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
     const id = decoded.id;
 
@@ -123,7 +123,7 @@ const EditAdminPageAd = () => {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
     const id = decoded.id;
 
@@ -253,7 +253,7 @@ const EditAdminPageAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting}>
             {isSubmitting ? "Editando..." : "Editar"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to="/admin/perfil">Cancelar</Button>
+          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

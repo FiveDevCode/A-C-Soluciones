@@ -45,7 +45,7 @@ const getListTechnical = () => {
 };
 
 const createService = (nameService, descripcion) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/servicios", {
     nombre: nameService,
@@ -59,7 +59,7 @@ const createService = (nameService, descripcion) => {
 };
 
 const updateService = (id, nameService, descripcion) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.put(`http://localhost:8000/api/servicios/${id}`, {
     nombre: nameService,
@@ -73,7 +73,7 @@ const updateService = (id, nameService, descripcion) => {
 };
 
 const getService = (id) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
 
   return axios.get(`http://localhost:8000/api/servicios/${id}`, {
@@ -96,7 +96,7 @@ const stateChange = (id, state) => {
 }
 
 const getListRequest = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get("http://localhost:8000/api/solicitudes", {
     headers: {
@@ -106,7 +106,7 @@ const getListRequest = () => {
 }
 
 const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId, serviceId) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/visitas", {
     duracion_estimada: estimatedDuration,
@@ -126,7 +126,7 @@ const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate,
 }
 
 const getServiceList = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get("http://localhost:8000/api/servicios", {
     headers: {
@@ -170,7 +170,7 @@ const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position)
 }
 
 const getListVisit = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get(`http://localhost:8000/api/visitas`, {
     headers: {
@@ -180,7 +180,7 @@ const getListVisit = () => {
 }
 
 const getVisit =  (id_visit) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.get(`http://localhost:8000/api/visitas/${id_visit}`, {
     headers: {
@@ -191,7 +191,7 @@ const getVisit =  (id_visit) => {
 }
 
 const createAdmin = (idCard, name, lastName, email, password) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   return axios.post("http://localhost:8000/api/admin", {
     numero_cedula: idCard,
@@ -205,6 +205,12 @@ const createAdmin = (idCard, name, lastName, email, password) => {
       "Authorization": `Bearer ${token}`
     }
   });
+}
+
+
+const getListAdministrator = () => {
+  return axios.get("http://localhost:8000/api/admin")
+
 }
 
 
@@ -226,6 +232,7 @@ export const administratorService = {
   updateTechnical,
   getListVisit,
   getVisit,
-  createAdmin
+  createAdmin,
+  getListAdministrator
   
 }

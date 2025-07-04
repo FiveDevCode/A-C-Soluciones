@@ -56,7 +56,7 @@ const ProfileUserTc = () => {
 
   useEffect(() => {
 
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
 
     handleGetTechnicalId(decoded.id)

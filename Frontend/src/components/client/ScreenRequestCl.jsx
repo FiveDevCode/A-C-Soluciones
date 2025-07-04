@@ -66,7 +66,7 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
   
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     if (token) {
       const decoded = jwtDecode(token);
       setClientId(decoded.id); 
