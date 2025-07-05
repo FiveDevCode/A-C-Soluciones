@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
+import { FormControl, Pagination, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -65,44 +66,64 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+const ITEMS_PER_PAGE = 6;
 
 
-const ListVisitAd = ({services}) => {
+const ListVisitAd = ({visits}) => {
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
+
+  const paginatedVisit = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return visits.slice(start, start + ITEMS_PER_PAGE);
+  }, [visits, currentPage]);
+
+
   return (
     <ContainerNoti>
-      {services.map((service, index) => (
+      {paginatedVisit.map((visit, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={serviceTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {service.notas_posteriores && service.notas_posteriores.length > 50
-                  ? `${service.notas_posteriores.slice(0, 50)}...`
-                  : service.notas_posteriores || "Sin notas posteriores"}
+                {visit.notas_posteriores && visit.notas_posteriores.length > 50
+                  ? `${visit.notas_posteriores.slice(0, 50)}...`
+                  : visit.notas_posteriores || "Sin notas posteriores"}
               </TitleNoti>
               <Description>
-                {service.notas_previas && service.notas_previas.length > 50
-                  ? `${service.notas_previas.slice(0, 50)}...`
-                  : service.notas_previas || "Sin notas previas"}
+                {visit.notas_previas && visit.notas_previas.length > 50
+                  ? `${visit.notas_previas.slice(0, 50)}...`
+                  : visit.notas_previas || "Sin notas previas"}
               </Description>
-              <Date>{service.fecha_programada.substring(0, 10)}</Date>
+              <Date>{visit.fecha_programada.substring(0, 10)}</Date>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
             <FormControl sx={{ width: "30%", minWidth: "200px" }}>
               <TextField
-                value={service.estado}
+                value={visit.estado}
                 label="Estado"
                 disabled
               />
             </FormControl>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/admin/visita/${service.id}`}>Ver</Link>
+              <Link to={`/admin/visita/${visit.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }

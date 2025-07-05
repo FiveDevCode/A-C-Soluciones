@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
+import { FormControl, Pagination, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -65,10 +66,25 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+
+const ITEMS_PER_PAGE = 6;
+
+
 const ListRequestAd = ({requests}) => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(requests.length / ITEMS_PER_PAGE);
+
+  const paginatedRequests = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return requests.slice(start, start + ITEMS_PER_PAGE);
+  }, [requests, currentPage]);
+
+
+
   return (
     <ContainerNoti>
-      {requests.map((request, index) => (
+      {paginatedRequests.map((request, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={serviceTehc}/>
@@ -106,6 +122,14 @@ const ListRequestAd = ({requests}) => {
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }

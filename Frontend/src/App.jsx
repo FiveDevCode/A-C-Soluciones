@@ -81,7 +81,15 @@ function AppContent() {
   const getTabKey = () => {
     const sessionId = localStorage.getItem('sessionId') || `${Date.now()}_${Math.random()}`;
     localStorage.setItem('sessionId', sessionId);
-    return `tab_${sessionId}_${window.name || Math.random()}`;
+
+    // Persist tabKey during session
+    let tabKey = sessionStorage.getItem('tabKey');
+    if (!tabKey) {
+      tabKey = `tab_${sessionId}_${Math.random()}`;
+      sessionStorage.setItem('tabKey', tabKey);
+    }
+
+    return tabKey;
   };
 
   useEffect(() => {
@@ -99,12 +107,12 @@ function AppContent() {
 
     const handleUnload = () => {
       localStorage.removeItem(tabKey);
-      setTimeout(cleanUpIfNoTabs, 200);
+      setTimeout(cleanUpIfNoTabs, 1000);
     };
 
     const handleStorage = (event) => {
       if (event.key?.startsWith('tab_')) {
-        setTimeout(cleanUpIfNoTabs, 200);
+        setTimeout(cleanUpIfNoTabs, 1000);
       }
     };
 

@@ -159,12 +159,6 @@ const HeaderBar = () => {
       />
 
       <ContainerOption>
-        <Link >
-          <FontAwesomeIcon 
-            icon={faBell}
-            style={{fontSize: '24px'}}
-          />
-        </Link>
         <Link to={profilePath}>
           <FontAwesomeIcon 
             icon={faCircleUser}

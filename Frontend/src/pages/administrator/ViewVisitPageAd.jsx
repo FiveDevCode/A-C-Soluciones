@@ -181,7 +181,7 @@ const ViewVisitPageAd = () => {
       <Label>Estado de la visita:</Label>
       <EstadoSelect value={stateVisit} onChange={handleStateChange}>
         <MenuItem value="programada">Programada</MenuItem>
-        <MenuItem value="en camino">En camino</MenuItem>
+        <MenuItem value="en_camino">En camino</MenuItem>
         <MenuItem value="iniciada">Iniciada</MenuItem>
         <MenuItem value="completada">Completada</MenuItem>
         <MenuItem value="cancelada">Cancelada</MenuItem>

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
 import { handleGetRequest } from '../../controllers/common/getRequest.controller';
+import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 
 
 const Container = styled.div`
@@ -93,8 +94,18 @@ const ViewRequestPageAd = () => {
   } = requestData;
   
   
-  const handleStateChange = (e) => {
-    setStateRequest(e.target.value);
+  const handleStateChange = async(e) => {
+    const newState = e.target.value;
+    setStateVisit(newState); 
+
+
+
+    try {
+      await handleUpdateStateVisit(id, newState); // Llama al backend
+      console.log('Estado de la visita actualizado exitosamente');
+    } catch (error) {
+      console.error('Error al actualizar el estado de la visita:', error);
+    }
   };
 
 

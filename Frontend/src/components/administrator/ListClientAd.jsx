@@ -4,6 +4,8 @@ import Logo from "../common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { Pagination } from "@mui/material";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -64,12 +66,24 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+const ITEMS_PER_PAGE = 6;
 
 
 const ListClientAd = ({clients}) => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(clients.length / ITEMS_PER_PAGE);
+
+  const paginatedClients = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return clients.slice(start, start + ITEMS_PER_PAGE);
+  }, [clients, currentPage]);
+
+
+
   return (
     <ContainerNoti>
-      {clients.map((client, index) => (
+      {paginatedClients.map((client, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={clientTehc}/>
@@ -101,6 +115,14 @@ const ListClientAd = ({clients}) => {
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }

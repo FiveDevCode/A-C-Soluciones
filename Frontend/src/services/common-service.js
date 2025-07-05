@@ -1,15 +1,12 @@
 
 import axios from "axios";
+import api from "../controllers/common/Api.controller";
 
 
 const login = (email, password) => {
-  return axios.post("http://localhost:8000/api/login", {
+  return api.post('/login', {
     correo_electronico: email,
     contrasenia: password,
-  }, {
-    headers: {
-      "Content-Type": "application/json"
-    }
   });
 };
 

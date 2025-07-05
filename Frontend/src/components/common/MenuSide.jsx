@@ -10,7 +10,13 @@ import {
   faDiagramProject, 
   faClockRotateLeft, 
   faGear, 
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faMapLocationDot,
+  faClipboardList,
+  faFileLines,
+  faRoute,
+  faUserCheck,
+  faCompass
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
@@ -163,23 +169,23 @@ const MenuSide = () => {
           />
           <TitleOption>Inicio</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/solicitudes">
           <IconOption 
-            icon={faDiagramProject} 
+            icon={faClipboardList} 
           />
-          <TitleOption>Mis solicitudes</TitleOption>
+          <TitleOption>Solicitudes</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/visitas">
           <IconOption 
-            icon={faPaperPlane} 
+            icon={faCompass} 
           />
-          <TitleOption>Enviar solicitud</TitleOption>
+          <TitleOption>Visitas</TitleOption>
         </ContainerOption>
         <ContainerOption>
           <IconOption 
             icon={faFile} 
           />
-          <TitleOption>Mis reportes</TitleOption>
+          <TitleOption>Reportes</TitleOption>
         </ContainerOption>
         <ContainerOption>
           <IconOption 
