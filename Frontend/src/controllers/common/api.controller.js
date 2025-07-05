@@ -36,7 +36,7 @@ api.interceptors.response.use(
         if (key.startsWith('tab_')) localStorage.removeItem(key);
       });
 
-      window.location.href = '/iniciar-sesion';
+      window.location.href = '/iniciar-sesion?sessionExpired=true';
     }
 
     return Promise.reject(error);

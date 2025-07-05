@@ -1,11 +1,11 @@
-import axios from "axios";
+import api from "../controllers/common/Api.controller";
 
 
 
 const getServiceAssign = (id) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas/asignados/${id}`, {
+  return api.get(`/visitas/asignados/${id}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -15,7 +15,7 @@ const getServiceAssign = (id) => {
 const getListVisits = () => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas/asignados`, {
+  return api.get(`/visitas/asignados`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -23,7 +23,7 @@ const getListVisits = () => {
 }
 
 const getTechnicalId = (id) => {
-  return axios.get(`http://localhost:8000/api/tecnico/${id}`)
+  return api.get(`/tecnico/${id}`)
 }
 
 

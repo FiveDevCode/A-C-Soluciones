@@ -1,6 +1,5 @@
-
-import axios from "axios";
 import api from "../controllers/common/Api.controller";
+
 
 
 const login = (email, password) => {
@@ -50,7 +49,7 @@ const createMaintenanceSheet = ({
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
   if (foto_descripcion_trabajo) formData.append("foto_descripcion_trabajo", foto_descripcion_trabajo);
 
-  return axios.post("http://localhost:8000/api/fichas", formData, {
+  return api.post("/fichas", formData, {
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -60,7 +59,7 @@ const createMaintenanceSheet = ({
 const getPDFIdVisit = (id) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/fichas?id_visitas=${id}`,{
+  return api.get(`/fichas?id_visitas=${id}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -68,14 +67,14 @@ const getPDFIdVisit = (id) => {
 }
 
 const getListClient = () => {
-  return axios.get("http://localhost:8000/api/cliente");
+  return api.get("/cliente");
 
 }
 
 const getVisitId = (id_visita) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas/${id_visita}`,{
+  return api.get(`/visitas/${id_visita}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -85,7 +84,7 @@ const getVisitId = (id_visita) => {
 const getRequestId = (id_solicitud) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/solicitudes/${id_solicitud}`,{
+  return api.get(`/solicitudes/${id_solicitud}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -95,7 +94,7 @@ const getRequestId = (id_solicitud) => {
 const updateStateVisit = (id_visit, state) => {
   const token = localStorage.getItem("authToken");
 
-  return axios.put(`http://localhost:8000/api/visitas/${id_visit}`, {
+  return api.put(`/visitas/${id_visit}`, {
     estado: state,
  
 

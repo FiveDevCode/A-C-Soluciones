@@ -6,6 +6,7 @@ import { handleLogin } from '../../controllers/common/login.controller';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from 'jwt-decode';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useLocation } from 'react-router-dom';
 
 const Form = styled.form`
   display: flex;
@@ -37,6 +38,7 @@ const ContainerButton = styled.div`
 
 const FormLogin = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +49,15 @@ const FormLogin = () => {
   const [loading, setLoading] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sessionExpired = params.get('sessionExpired');
+
+    if (sessionExpired === 'true') {
+      setErrorMsg("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -138,6 +149,8 @@ const FormLogin = () => {
       setLoading(false);
     }
   };
+
+  
 
   return (
     <Form onSubmit={handleSubmit}>
