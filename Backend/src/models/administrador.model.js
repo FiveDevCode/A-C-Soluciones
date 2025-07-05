@@ -38,7 +38,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: [/^[A-ZÁÉÍÓÚÑ0-9 !,.&()-]+$/i],
+        args: [/^[-A-ZÁÉÍÓÚÑ0-9 !,.&()]+$/i],
         msg: 'El nombre solo puede contener letras y espacios.',
       },
       len: {
@@ -57,7 +57,7 @@ const Admin = sequelize.define('Admin', {
     allowNull: false,
     validate: {
       is: {
-        args: [/^[A-ZÁÉÍÓÚÑ0-9 !,.&()-]+$/i],
+        args: [/^[-A-ZÁÉÍÓÚÑ0-9 !,.&()]+$/i],
         msg: 'El apellido solo puede contener letras.',
       },
       len: {
@@ -82,7 +82,7 @@ const Admin = sequelize.define('Admin', {
         msg: 'El correo debe tener máximo 320 caracteres.',
       },
       is: {
-        args: [/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/i],
+        args: [/^[a-z0-9_%+.-]+@[a-z0-9.-]+\.[a-z]{2,3}$/i],
         msg: 'El correo electrónico tiene un formato incorrecto.',
       },
     },
@@ -96,10 +96,12 @@ const Admin = sequelize.define('Admin', {
         msg: 'La contraseña debe tener entre 8 y 64 caracteres.',
       },
       tieneMayuscula(value) {
-        if (!/[A-Z]/.test(value)) {
+        const mayusculaRegex = /[A-Z]/;
+        if (!mayusculaRegex.test(value)) {
           throw new Error('La contraseña debe contener al menos una letra mayúscula.');
         }
       },
+
       tieneMinuscula(value) {
         if (!/[a-z]/.test(value)) {
           throw new Error('La contraseña debe contener al menos una letra minúscula.');

@@ -6,7 +6,7 @@ const FichaMantenimiento = sequelize.define('FichaMantenimiento', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    },
+    },  
     fecha_de_mantenimiento: {
         type: DataTypes.DATE,
         allowNull: false,
