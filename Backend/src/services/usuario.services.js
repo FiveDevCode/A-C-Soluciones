@@ -179,7 +179,10 @@ async sendRecoveryCode(correo) {
 
 // Método para verificar el código de recuperación
 async verifyRecoveryCode(correo_electronico, code) {
-  const correo = correo_electronico?.trim().toLowerCase();
+  if (typeof correo_electronico !== 'string') {
+    throw new Error('El correo electrónico es inválido o no fue proporcionado');
+  }
+  const correo = correo_electronico.trim().toLowerCase();
 
   const user = await this._findUserByEmail(correo);
   if (!user) throw new Error('Usuario no encontrado');
