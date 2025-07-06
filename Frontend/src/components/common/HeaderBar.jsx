@@ -56,7 +56,7 @@ const HeaderBar = () => {
   
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
+      navigate(`/resultado?data=${busqueda}`);
     }
   };
 
@@ -96,7 +96,8 @@ const HeaderBar = () => {
     "/admin/tecnicos": "Tecnicos",
     "/admin/clientes":"Clientes",
     "/admin/administradores":"Administradores",
-    "/admin/servicios":"Servicios"
+    "/admin/servicios":"Servicios",
+    "/admin/reportes":"Reportes"
   };
 
   function getRouteName(path) {

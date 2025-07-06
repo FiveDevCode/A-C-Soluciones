@@ -112,7 +112,7 @@ const ViewRequestPageAd = () => {
   return (
     <Container>
       <Header>
-        <Imagen src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="icono" />
+        <Imagen src="https://cdn-icons-png.flaticon.com/512/8392/8392178.png" alt="icono" />
         <Titulo>{servicio?.nombre || 'Sin nombre'}</Titulo>
       </Header>
 

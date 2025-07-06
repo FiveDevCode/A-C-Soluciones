@@ -66,6 +66,19 @@ const getPDFIdVisit = (id) => {
   });
 }
 
+const getListToken = () => {
+  const token = localStorage.getItem("authToken");
+
+  return api.get("/fichas",{
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  });
+}
+
+
+
+
 const getListClient = () => {
   return api.get("/cliente");
 
@@ -112,6 +125,7 @@ export const commonService = {
   getListClient,
   getVisitId,
   getRequestId,
-  updateStateVisit
+  updateStateVisit,
+  getListToken
 
 }

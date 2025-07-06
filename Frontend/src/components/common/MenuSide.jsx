@@ -181,7 +181,7 @@ const MenuSide = () => {
           />
           <TitleOption>Visitas</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/reportes">
           <IconOption 
             icon={faFile} 
           />

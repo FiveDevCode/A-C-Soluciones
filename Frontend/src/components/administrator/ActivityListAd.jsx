@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import requestTehc from "../../assets/technical/serviceTehc.png";
+import requestLogo from "../../assets/common/requestLogo.png";
 import Logo from "../../components/common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -97,7 +97,7 @@ const ActivityListAd = ({requests}) => {
       {Array.isArray(requests) && requests.slice(0, 4).map((request, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={requestTehc} />
+            <Logo src={requestLogo} size="100px"/>
             <NotificationInfo>
               <TitleNoti>
                 {request.comentarios && request.comentarios.length > 50

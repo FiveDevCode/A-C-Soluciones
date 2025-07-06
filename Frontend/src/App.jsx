@@ -42,6 +42,8 @@ import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPage
 import ViewClientListPageAd from './pages/administrator/ViewClientListPageAd';
 import ViewAdministratorListPageAd from './pages/administrator/ViewAdministratorListPageAd';
 import ViewServiceListPageAd from './pages/administrator/ViewServiceListPageAd';
+import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
+import SearchResultsPage from './pages/administrator/SearchResultsPage';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -77,55 +79,6 @@ function AppContent() {
     const storedRole = localStorage.getItem('userRole');
     setRole(storedRole);
   }, [location.pathname]);
-
-  const getTabKey = () => {
-    const sessionId = localStorage.getItem('sessionId') || `${Date.now()}_${Math.random()}`;
-    localStorage.setItem('sessionId', sessionId);
-
-    // Persist tabKey during session
-    let tabKey = sessionStorage.getItem('tabKey');
-    if (!tabKey) {
-      tabKey = `tab_${sessionId}_${Math.random()}`;
-      sessionStorage.setItem('tabKey', tabKey);
-    }
-
-    return tabKey;
-  };
-
-  useEffect(() => {
-    const tabKey = getTabKey();
-    localStorage.setItem(tabKey, 'open');
-
-    const cleanUpIfNoTabs = () => {
-      const openTabs = Object.keys(localStorage).filter(k => k.startsWith('tab_'));
-      if (openTabs.length === 0) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('sessionId');
-      }
-    };
-
-    const handleUnload = () => {
-      localStorage.removeItem(tabKey);
-      setTimeout(cleanUpIfNoTabs, 1000);
-    };
-
-    const handleStorage = (event) => {
-      if (event.key?.startsWith('tab_')) {
-        setTimeout(cleanUpIfNoTabs, 1000);
-      }
-    };
-
-    window.addEventListener('beforeunload', handleUnload);
-    window.addEventListener('storage', handleStorage);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleUnload);
-      window.removeEventListener('storage', handleStorage);
-      localStorage.removeItem(tabKey);
-      cleanUpIfNoTabs();
-    };
-  }, []);
 
 
   const isCliente = role === 'cliente';
@@ -335,6 +288,18 @@ function AppContent() {
             <Route path="/admin/servicios" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewServiceListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/reportes" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewReportListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/resultado" element={
+              <PrivateRoute roleRequired="administrador">
+                <SearchResultsPage/>
               </PrivateRoute>
             } />
 

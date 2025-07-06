@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
+import crypto from 'crypto';
+
 
 export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {}) => {
   const doc = new PDFDocument({ margin: 40 });
-  const filename = `ficha_${ficha.id}.pdf`;
+  const randomString = crypto.randomBytes(8).toString('hex'); // 16 caracteres hex
+  const filename = `ficha_${randomString}.pdf`;
   const folderPath = path.join('uploads', 'fichas');
   const filePath = path.join(folderPath, filename);
 

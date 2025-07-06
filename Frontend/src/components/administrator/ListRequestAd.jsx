@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
+import requestLogo from "../../assets/common/requestLogo.png";
 import Logo from "../common/Logo";
 import { FormControl, Pagination, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -87,7 +87,7 @@ const ListRequestAd = ({requests}) => {
       {paginatedRequests.map((request, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={serviceTehc}/>
+            <Logo src={requestLogo}/>
             <NotificationInfo>
               <TitleNoti>
                 {request.comentarios && request.comentarios.length > 50
