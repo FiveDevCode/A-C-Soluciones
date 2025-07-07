@@ -49,6 +49,11 @@ import ViewReportListPageTc from './pages/technical/ViewReportListPageTc';
 import UserProfileAdministratorPageAd from './pages/administrator/UserProfileAdministratorPageAd';
 import EditAdministratorAd from './pages/administrator/EditAdministratorPageAd';
 import ViewServicePageTc from './pages/technical/ViewServicePageTc';
+import ViewViewVisitListCompletePageTc from './pages/technical/ViewVisitListCompletePageTc';
+import ViewViewVisitListCanceledPageTc from './pages/technical/ViewVisitListCanceledPageTc';
+import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc';
+import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
+import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -158,9 +163,39 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/tecnico/ver-visita/:id" element={
+            <Route path="/tecnico/visita/:id" element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewVisitPageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/visitas-completadas" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewViewVisitListCompletePageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/visitas-canceladas" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewViewVisitListCanceledPageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/visitas-en-camino" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewViewVisitListWayPageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/visitas-programadas" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewViewVisitListProgramedPageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/visitas-iniciadas" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewViewVisitListStartPageTc/>
               </PrivateRoute>
             } />
 

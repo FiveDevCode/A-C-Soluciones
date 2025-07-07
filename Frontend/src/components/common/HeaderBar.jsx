@@ -84,6 +84,12 @@ const HeaderBar = () => {
     "/tecnico/perfil": "Perfil técnico",
     "/tecnico/visitas": "Visitas",
     "/tecnico/reportes": "Reportes",
+    "/tecnico/visitas-iniciadas": "Visitas iniciadas",
+    "/tecnico/visitas-completadas": "Visitas completadas",
+    "/tecnico/visitas-programadas": "Visitas programadas",
+    "/tecnico/visitas-canceladas": "Visitas canceladas",
+    "/tecnico/visitas-en-camino": "Visitas en camino",
+
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
@@ -101,6 +107,7 @@ const HeaderBar = () => {
     "/admin/servicios":"Servicios",
     "/admin/reportes":"Reportes",
     "/admin/editar-perfil":"Editar perfil",
+    
     
     
   };
@@ -139,7 +146,7 @@ const HeaderBar = () => {
     if (path.startsWith("/tecnico/reporte/")) {
       return "Reporte técnico";
     }
-    if (path.startsWith("/tecnico/ver-visita/")) {
+    if (path.startsWith("/tecnico/visita/")) {
       return "Ver visita";
     }
     if (path.startsWith("/tecnico/servicio/")) {

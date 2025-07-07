@@ -104,7 +104,7 @@ const ListVisitAd = ({visits}) => {
           <ContainerOption>
             <FormControl sx={{ width: "30%", minWidth: "200px" }}>
               <TextField
-                value={visit.estado}
+                value={visit.estado === "en_camino" ? "en camino" : visit.estado}
                 label="Estado"
                 disabled
               />

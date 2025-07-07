@@ -1,8 +1,14 @@
 import { 
   faBriefcase,
+  faCalendarAlt,
   faCalendarCheck, 
+  faCheckCircle, 
+  faClipboardList, 
   faFileAlt, 
-  faInbox, 
+  faInbox,
+  faPlayCircle,
+  faTimesCircle,
+  faTruck, 
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -33,6 +39,21 @@ const Option = styled(Link)`
   width: calc((100% - 3rem) / 4);
   height: 60px;
 
+  &:hover {
+    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
+    cursor: pointer;
+
+  h2 {
+    font-weight: bold;
+  }
+
+    svg {
+      color: #000000;
+      stroke-width: 0;
+
+    }
+  } 
+
 `
 
 const Icon = styled(FontAwesomeIcon)`
@@ -55,10 +76,30 @@ const CategoryRecomendTc = () => {
       <h1>Categorias recomendadas</h1>
       <ContainerOption>
         <Option to="/tecnico/visitas">
-          <Icon icon={faCalendarCheck} style={{stroke:"#17A2B8"}}/>
+          <Icon icon={faClipboardList} style={{ stroke: "#17A2B8" }} />
           <OptionTitle>Visitas</OptionTitle>
         </Option>
-      </ContainerOption>
+        <Option to="/tecnico/visitas-programadas">
+          <Icon icon={faCalendarAlt} style={{ stroke: "#4a8838" }} />
+          <OptionTitle>Visitas programadas</OptionTitle>
+        </Option>
+        <Option to="/tecnico/visitas-en-camino">
+          <Icon icon={faTruck} style={{ stroke: "#a72063" }} />
+          <OptionTitle>Visitas en camino</OptionTitle>
+        </Option>
+        <Option to="/tecnico/visitas-iniciadas">
+          <Icon icon={faPlayCircle} style={{ stroke: "#3151aa" }} />
+          <OptionTitle>Visitas iniciadas</OptionTitle>
+        </Option>
+        <Option to="/tecnico/visitas-completadas">
+          <Icon icon={faCheckCircle} style={{ stroke: "#21da21" }} />
+          <OptionTitle>Visitas completadas</OptionTitle>
+        </Option>
+        <Option to="/tecnico/visitas-canceladas">
+          <Icon icon={faTimesCircle} style={{ stroke: "#b8103a" }} />
+          <OptionTitle>Visitas canceladas</OptionTitle>
+        </Option>
+              </ContainerOption>
     </ContainerCategory>
   )
 }

@@ -102,14 +102,14 @@ const ListVisitTc = ({visits}) => {
           <ContainerOption>
             <FormControl sx={{ width: "30%", minWidth: "200px" }}>
               <TextField
-                value={visit.estado}
+                value={visit.estado === "en_camino" ? "en camino" : visit.estado}
                 label="Estado"
                 disabled
               />
             </FormControl>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/tecnico/ver-visita/${visit.id}`}>Ver</Link>
+              <Link to={`/tecnico/visita/${visit.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>

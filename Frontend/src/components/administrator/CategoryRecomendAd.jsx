@@ -41,6 +41,20 @@ const Option = styled(Link)`
   width: calc((100% - 3rem) / 4);
   height: 60px;
   
+  &:hover {
+    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
+    cursor: pointer;
+
+    h2 {
+      font-weight: bold;
+    }
+
+    svg {
+      color: #000000;
+      stroke-width: 0;
+
+    }
+  }
 
 `
 
