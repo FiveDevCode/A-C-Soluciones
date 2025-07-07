@@ -6,6 +6,7 @@ import { handleChangeStateTechnical } from "../../controllers/administrator/upda
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import { handleChangeStateClient } from "../../controllers/administrator/updateStateClientAd.controller";
+import { handleGetAdminId } from "../../controllers/administrator/getAdminIdAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -93,7 +94,6 @@ const SkeletonLoader = () => (
         <Skeleton variant="circular" width={120} height={120} />
         <Skeleton variant="text" width={300} height={40} />
       </UsuarioInfo>
-      <SkeletonButton variant="rectangular" width={150} height={36}/>
     </Header>
     <Divider />
     <Skeleton variant="text" width={200} height={30} style={{ marginTop: '1rem' }} />
@@ -110,18 +110,18 @@ const SkeletonLoader = () => (
   </Container>
 );
 
-const UserProfileClientPageAd = () => {
+const UserProfileAdministratorPageAd = () => {
 
   const { id } = useParams(); 
-  const [clientData, setClientData] = useState(null);
+  const [adminData, setAdminData] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
 
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const response = await handleGetClient(id);
-        setClientData(response.data);  
+        const response = await handleGetAdminId(id);
+        setAdminData(response.data);  
       } catch (error) {
         console.log(error);
       }
@@ -130,25 +130,9 @@ const UserProfileClientPageAd = () => {
     fetchClient();
   }, [id]); 
 
-  if (!clientData) {
+  if (!adminData) {
     return <SkeletonLoader />
   }
-
-  const handleToggleState = async () => {
-    const newState = clientData.estado === "activo" ? "inactivo" : "activo";
-    try {
-      await handleChangeStateClient(id, newState);
-      setClientData(prev => ({ ...prev, estado: newState }));
-    } catch (error) {
-      console.error("Error al cambiar el estado:", error);
-    } finally {
-      setShowConfirmation(false); // oculta el modal tras la acción
-    }
-  };
-
-  const confirmationMessage = clientData.estado === "activo"
-    ? "¿Quieres deshabilitar este cliente?"
-    : "¿Quieres habilitar este cliente?";
 
   return (
     <Container>
@@ -158,17 +142,8 @@ const UserProfileClientPageAd = () => {
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             alt="usuario"
           />
-          <Nombre>{clientData.nombre} {clientData.apellido}</Nombre>
+          <Nombre>{adminData.nombre} {adminData.apellido}</Nombre>
         </UsuarioInfo>
-
-        <Button
-          variant="contained"
-          onClick={() => setShowConfirmation(true)}
-          color={clientData.estado === "activo" ? "error" : "success"}
-          style={{ alignSelf: "end", marginRight: "4rem", width: "200px"}}
-        >
-          {clientData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
-        </Button>
       </Header>
 
       <Divider />
@@ -177,23 +152,17 @@ const UserProfileClientPageAd = () => {
         <Label style={{ marginBottom: "30px" }}>Informacion personal</Label>
 
         <Label>Cedula:</Label>
-        <Texto>{clientData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
+        <Texto>{adminData.numero_cedula.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
         
         <Label>Nombre:</Label>
-        <Texto>{clientData.nombre}</Texto>
-          
+        <Texto>{adminData.nombre}</Texto>
+        
         <Label>Apellido:</Label>
-        <Texto>{clientData.apellido}</Texto>
-
-        <Label>Telefono:</Label>
-        <Texto>{clientData.telefono}</Texto>
-
-        <Label>Dirrecion:</Label>
-        <Texto>{clientData.direccion}</Texto>
+        <Texto>{adminData.apellido}</Texto>
 
         <Label>Correo electronico:</Label>
-        <Correo href={`mailto:${clientData.correo_electronico}`}>
-          {clientData.correo_electronico}
+        <Correo href={`mailto:${adminData.correo_electronico}`}>
+          {adminData.correo_electronico}
         </Correo>
       </Seccion>
 
@@ -219,4 +188,4 @@ const UserProfileClientPageAd = () => {
   );
 };
 
-export default UserProfileClientPageAd;
+export default UserProfileAdministratorPageAd;

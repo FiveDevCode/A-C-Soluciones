@@ -4,8 +4,9 @@ import { Button, Skeleton } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
-import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
-import { handleChangeStateClient } from "../../controllers/administrator/updateStateClientAd.controller";
+import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
+import logoService from "../../assets/administrator/service-view.png"
+import { handleChangeStateService } from "../../controllers/administrator/updateStateServiceAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -30,7 +31,7 @@ const UsuarioInfo = styled.div`
 const Imagen = styled.img`
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 5%;
 `;
 
 const Nombre = styled.h3`
@@ -110,65 +111,39 @@ const SkeletonLoader = () => (
   </Container>
 );
 
-const UserProfileClientPageAd = () => {
+const ViewServicePageTc = () => {
 
   const { id } = useParams(); 
-  const [clientData, setClientData] = useState(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [serviceData, setServiceData] = useState(null);
 
 
   useEffect(() => {
-    const fetchClient = async () => {
+    const fetchService = async () => {
       try {
-        const response = await handleGetClient(id);
-        setClientData(response.data);  
+        const response = await handleGetService(id);
+        setServiceData(response.data.data);  
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchClient();
+    fetchService();
   }, [id]); 
 
-  if (!clientData) {
+  if (!serviceData) {
     return <SkeletonLoader />
   }
-
-  const handleToggleState = async () => {
-    const newState = clientData.estado === "activo" ? "inactivo" : "activo";
-    try {
-      await handleChangeStateClient(id, newState);
-      setClientData(prev => ({ ...prev, estado: newState }));
-    } catch (error) {
-      console.error("Error al cambiar el estado:", error);
-    } finally {
-      setShowConfirmation(false); // oculta el modal tras la acción
-    }
-  };
-
-  const confirmationMessage = clientData.estado === "activo"
-    ? "¿Quieres deshabilitar este cliente?"
-    : "¿Quieres habilitar este cliente?";
 
   return (
     <Container>
       <Header>
         <UsuarioInfo>
           <Imagen
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            src={logoService}
             alt="usuario"
           />
-          <Nombre>{clientData.nombre} {clientData.apellido}</Nombre>
+          <Nombre>{serviceData.nombre}</Nombre>
         </UsuarioInfo>
-
-        <Button
-          variant="contained"
-          onClick={() => setShowConfirmation(true)}
-          color={clientData.estado === "activo" ? "error" : "success"}
-          style={{ alignSelf: "end", marginRight: "4rem", width: "200px"}}
-        >
-          {clientData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
-        </Button>
       </Header>
 
       <Divider />
@@ -176,47 +151,23 @@ const UserProfileClientPageAd = () => {
       <Seccion>
         <Label style={{ marginBottom: "30px" }}>Informacion personal</Label>
 
-        <Label>Cedula:</Label>
-        <Texto>{clientData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
+        <Label>Nombre servicio:</Label>
+        <Texto>{serviceData.nombre}</Texto>
         
-        <Label>Nombre:</Label>
-        <Texto>{clientData.nombre}</Texto>
-          
-        <Label>Apellido:</Label>
-        <Texto>{clientData.apellido}</Texto>
+        <Label>Descripcion:</Label>
+        <Texto>{serviceData.descripcion}</Texto>
 
-        <Label>Telefono:</Label>
-        <Texto>{clientData.telefono}</Texto>
-
-        <Label>Dirrecion:</Label>
-        <Texto>{clientData.direccion}</Texto>
-
-        <Label>Correo electronico:</Label>
-        <Correo href={`mailto:${clientData.correo_electronico}`}>
-          {clientData.correo_electronico}
-        </Correo>
+        <Label>Fecha de creacion:</Label>
+        <Texto>{new Date(serviceData.fecha_creacion).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</Texto>
       </Seccion>
-
-      <Footer>
-        <Button 
-          variant="contained" color="primary"
-          style={{width:"15rem"}}
-          LinkComponent={Link}
-          to={`/admin/editar-cliente/${id}`}
-        >
-            EDITAR
-        </Button>
-      </Footer>
-
-      {showConfirmation && (
-        <ScreenConfirmation 
-          onConfirm={handleToggleState} 
-          onCancel={() => setShowConfirmation(false)} 
-          message={confirmationMessage}
-        />
-      )}
     </Container>
   );
 };
 
-export default UserProfileClientPageAd;
+export default ViewServicePageTc;

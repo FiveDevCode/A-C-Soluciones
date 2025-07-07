@@ -90,7 +90,8 @@ const ProfileUserTc = () => {
 
       <Details>
         <p><strong>Cédula:</strong><br/>{`${userTechnical.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</p>
-        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre} ${userTechnical.apellido}`}</p>
+        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre}`}</p>
+        <p><strong>Apellido:</strong><br/>{`${userTechnical.apellido}`}</p>
         <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
         <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
         <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>

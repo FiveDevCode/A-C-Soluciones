@@ -27,7 +27,6 @@ const getTechnicalId = (id) => {
 }
 
 
-
 export const technicalService = {
   getServiceAssign,
   getListVisits,

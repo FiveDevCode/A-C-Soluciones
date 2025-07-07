@@ -80,14 +80,14 @@ const HeaderBar = () => {
 
   const titles = {
     "/tecnico/inicio": "Inicio técnico",
-    "/tecnico/servicios": "Servicios técnico",
+    "/tecnico/servicios": "Servicios",
     "/tecnico/perfil": "Perfil técnico",
     "/tecnico/visitas": "Visitas",
     "/tecnico/reportes": "Reportes",
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
-    "/admin/perfil": "Perfil administrador",
+    "/admin/perfil": "Perfil",
     "/admin/registrar-servicio": "Crear servicio",
     "/admin/registrar-administrador": "Crear administrador",
     "/admin/permisos": "Permisos administrador",
@@ -100,7 +100,9 @@ const HeaderBar = () => {
     "/admin/administradores":"Administradores",
     "/admin/servicios":"Servicios",
     "/admin/reportes":"Reportes",
-    "/admin/editar-perfil":"Editar perfil"
+    "/admin/editar-perfil":"Editar perfil",
+    
+    
   };
 
   function getRouteName(path) {
@@ -115,6 +117,9 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";
+    }
+    if (path.startsWith("/admin/perfil-administrador/")) {
+      return "Perfil administrador";
     }
     if (path.startsWith("/admin/perfil-tecnico/")) {
       return "Perfil técnico";
@@ -136,6 +141,9 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/tecnico/ver-visita/")) {
       return "Ver visita";
+    }
+    if (path.startsWith("/tecnico/servicio/")) {
+      return "Ver servicio";
     }
 
     return titles[path] || "Ruta desconocida";

@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { handleUpdateClient } from '../../controllers/administrator/updateClient.controller';
 import { handleGetClient } from '../../controllers/administrator/getClientAd.controller';
+import { handleUpdateAdmin } from '../../controllers/administrator/updateAdminAd.controller';
+import { handleGetAdminId } from '../../controllers/administrator/getAdminIdAd.controller';
 
 
 const Main = styled.main`
@@ -107,18 +109,16 @@ const SkeletonLoader = () => (
   </Main>
 );
 
-const EditClientAd = () => {
+const EditAdministratorAd = () => {
 
   const navigate = useNavigate();
   const {id} = useParams();
 
-  const [userClient, setUserClient] = useState();
+  const [userAdmin, setUserAdmin] = useState();
   const [IdCard, setIdCard] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -137,14 +137,12 @@ const EditClientAd = () => {
     setIsSubmitting(true);
 
     try {
-      await handleUpdateClient(
+      await handleUpdateAdmin(
         id,
         IdCard,
         nameUser,
         lastName,
-        email,
-        phone,
-        address
+        email
       );
 
       setFieldErrors("");
@@ -153,7 +151,7 @@ const EditClientAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/admin/perfil-cliente/${id}`);
+        navigate(`/admin/perfil-administrador/${id}`);
       }, 3000);
       
     } catch (err) {
@@ -169,41 +167,36 @@ const EditClientAd = () => {
   };
 
   useEffect(() => {
-    handleGetClient(id)
+    handleGetAdminId(id)
       .then((res) => {
         const data = res.data;
-        setUserClient(data);
-        setIdCard(data.numero_de_cedula || "");
+        console.log(data)
+        setUserAdmin(data);
+        setIdCard(data.numero_cedula || "");
         setNameUser(data.nombre || "");
         setLastName(data.apellido || "");
         setEmail(data.correo_electronico || "");
-        setAddress(data.direccion || "");
-        setPhone(data.telefono || "");
 
         setOriginalData({
-          numero_de_cedula: data.numero_de_cedula || "",
+          numero_cedula: data.numero_cedula || "",
           nombre: data.nombre || "",
           apellido: data.apellido || "",
           correo_electronico: data.correo_electronico || "",
-          direccion: data.direccion || "",
-          telefono: data.telefono || ""
         });
       })
   }, []);
 
   const hasChanges = () => {
     return (
-      IdCard !== originalData.numero_de_cedula ||
+      IdCard !== originalData.numero_cedula ||
       nameUser !== originalData.nombre ||
       lastName !== originalData.apellido ||
-      email !== originalData.correo_electronico ||
-      address !== originalData.direccion ||
-      phone !== originalData.telefono
+      email !== originalData.correo_electronico
     );
   };
 
 
-  if (!userClient) {
+  if (!userAdmin) {
     return <SkeletonLoader />
   }
 
@@ -214,7 +207,7 @@ const EditClientAd = () => {
           src={adminProfile}
           alt="Avatar"
         />
-        <h2>{`${userClient.nombre} ${userClient.apellido}`}</h2>
+        <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
       </ProfileInfo>      
 
       <Divider />
@@ -228,8 +221,8 @@ const EditClientAd = () => {
           value={IdCard} 
           onChange={handleChange(setIdCard)}
           sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.numero_de_cedula)}
-          helperText={fieldErrors.numero_de_cedula}
+          error={Boolean(fieldErrors.numero_cedula)}
+          helperText={fieldErrors.numero_cedula}
         />
         <TextField 
           label="Nombre" 
@@ -261,27 +254,6 @@ const EditClientAd = () => {
           error={Boolean(fieldErrors.correo_electronico)}
           helperText={fieldErrors.correo_electronico}
         /> 
-        <TextField 
-          label="Dirrecion" 
-          fullWidth 
-          size="medium" 
-          value={address} 
-          onChange={handleChange(setAddress)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.direccion)}
-          helperText={fieldErrors.direccion}
-        /> 
-        <TextField 
-          label="Celular" 
-          fullWidth 
-          size="medium" 
-          value={phone} 
-          onChange={handleChange(setPhone)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.telefono)}
-          helperText={fieldErrors.telefono}
-        /> 
-
 
         <Collapse in={!!errorMsg}>
           <Alert
@@ -332,4 +304,4 @@ const EditClientAd = () => {
   );
 };
 
-export default EditClientAd;
+export default EditAdministratorAd;

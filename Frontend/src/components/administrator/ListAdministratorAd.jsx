@@ -99,7 +99,7 @@ const ListAdministratorAd = ({administrators}) => {
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <Link to={`/admin/editar-administratore/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/editar-administrador/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faEdit} />
                 <span>Editar</span>

@@ -95,6 +95,26 @@ const stateChange = (id, state) => {
   });
 }
 
+const UpdateStateClient = (id, state) => {
+  return api.put(`/cliente/${id}`, {
+    estado: state
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+const UpdateStateService = (id, state) => {
+  return api.put(`/servicios/${id}`, {
+    estado: state
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
 const getListRequest = () => {
   const token = localStorage.getItem("authToken");
 
@@ -233,6 +253,8 @@ export const administratorService = {
   getListVisit,
   getVisit,
   createAdmin,
-  getListAdministrator
+  getListAdministrator,
+  UpdateStateClient,
+  UpdateStateService
   
 }

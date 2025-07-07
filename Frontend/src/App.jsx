@@ -46,6 +46,9 @@ import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
 import SearchResultsPage from './pages/administrator/SearchResultsPage';
 import MenuSideTc from './components/technical/MenuSideTc';
 import ViewReportListPageTc from './pages/technical/ViewReportListPageTc';
+import UserProfileAdministratorPageAd from './pages/administrator/UserProfileAdministratorPageAd';
+import EditAdministratorAd from './pages/administrator/EditAdministratorPageAd';
+import ViewServicePageTc from './pages/technical/ViewServicePageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -170,6 +173,12 @@ function AppContent() {
             <Route path="/tecnico/reporte/:id" element={
               <PrivateRoute roleRequired="tecnico">
                 <CreateReportPageTc />
+              </PrivateRoute>
+            } />
+
+            <Route path="/tecnico/servicio/:id" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewServicePageTc />
               </PrivateRoute>
             } />
 
@@ -315,6 +324,18 @@ function AppContent() {
             <Route path="/resultado" element={
               <PrivateRoute roleRequired="administrador">
                 <SearchResultsPage/>
+              </PrivateRoute>
+            } />
+ 
+            <Route path="/admin/perfil-administrador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <UserProfileAdministratorPageAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/editar-administrador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditAdministratorAd/>
               </PrivateRoute>
             } />
 

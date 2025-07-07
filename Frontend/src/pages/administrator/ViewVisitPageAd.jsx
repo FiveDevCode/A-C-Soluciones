@@ -85,7 +85,6 @@ const ViewVisitPageAd = () => {
   const [pendingState, setPendingState] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   
-  handleUpdateStateVisit
 
   useEffect(() => {
     if (id) {

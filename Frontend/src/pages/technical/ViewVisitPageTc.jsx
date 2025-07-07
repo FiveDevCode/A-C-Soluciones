@@ -1,10 +1,23 @@
 import styled from 'styled-components';
-import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  MenuItem,
+  Select,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
+} from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { handleGetPDFIdVisit } from '../../controllers/common/getPDFIdVisit.controller';
 import { useEffect, useState } from 'react';
 import { handleGetVisitAssign } from '../../controllers/technical/getVisitAssignTc.controller';
+import { FaExclamationTriangle } from 'react-icons/fa';
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 
 
@@ -66,6 +79,8 @@ const ViewVisitPageTc = () => {
   const [visitData, setVisitData] = useState(null);
   const [stateVisit, setStateVisit] = useState('');
   const [pathName, setPathName] = useState(null)
+  const [pendingState, setPendingState] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,35 +114,50 @@ const ViewVisitPageTc = () => {
   }, [id]);
 
   
-  if (!visitData) {
-    return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del visit...</Typography>;
-  }
-  
   const {
     fecha_programada,
     duracion_estimada,
     notas_previas,
     notas_posteriores,
     servicio,
-  } = visitData;
+  } = visitData || {};
   
-  const handleStateChange = async(e) => {
-    const newState = e.target.value;
-    setStateVisit(newState); 
+  
+  
+  if (!visitData) {
+    return <Typography sx={{ color: 'black', textAlign: 'center' }}>Cargando datos del visit...</Typography>;
+  }
 
-    try {
-      await handleUpdateStateVisit(id, newState); // Llama al backend
-      console.log('Estado de la visita actualizado exitosamente');
-    } catch (error) {
-      console.error('Error al actualizar el estado de la visita:', error);
+  const handleStateChange = (e) => {
+    const selected = e.target.value;
+
+    if (['completada', 'cancelada'].includes(selected)) {
+      setPendingState(selected);
+      setOpenConfirm(true);
+    } else {
+      updateState(selected);
     }
   };
-  
+
+  const updateState = async (newState) => {
+    setStateVisit(newState);
+
+    try {
+      console.log(id, newState)
+      await handleUpdateStateVisit(id, newState);
+      console.log('Estado actualizado con éxito');
+    } catch (error) {
+      console.error('Error al actualizar el estado:', error);
+      alert('No se pudo actualizar el estado. Verifica si la visita ya fue completada o cancelada.');
+      setStateVisit(visitData.estado);
+    }
+  };  
+
   const handleCreateReport = () => {
     navigate(`/tecnico/reporte/${id}`);
   };
-  
-  
+
+
   return (
     <Container>
       <Header>
@@ -160,9 +190,8 @@ const ViewVisitPageTc = () => {
       </Typography>
 
       <Label>Estado de la visita:</Label>
-      <EstadoSelect value={stateVisit} onChange={handleStateChange}>
-        <MenuItem value="programada">Programada</MenuItem>
-        <MenuItem value="en camino">En camino</MenuItem>
+      <EstadoSelect value={stateVisit} onChange={handleStateChange} disabled={['completada', 'cancelada'].includes(stateVisit)}>        <MenuItem value="programada">Programada</MenuItem>
+        <MenuItem value="en_camino">En camino</MenuItem>
         <MenuItem value="iniciada">Iniciada</MenuItem>
         <MenuItem value="completada">Completada</MenuItem>
         <MenuItem value="cancelada">Cancelada</MenuItem>
@@ -187,7 +216,7 @@ const ViewVisitPageTc = () => {
       
         >
         <Typography sx={{ fontWeight: 'bold', color: '#EFEBE9' }}>
-          visit asignado: {servicio?.nombre}
+          servicio asignado: {servicio?.nombre}
         </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ padding: '16px', color: '#424242', backgroundColor: '#FBF8F6', borderLeft: '4px solid #8D6E63' }}>
@@ -248,7 +277,33 @@ const ViewVisitPageTc = () => {
         )}
         <Button variant="contained" color="primary" sx={{textTransform: 'none', fontSize: "1rem", fontWeight: "600"}}>Editar reporte</Button>
       </Botones>
-
+      <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <FaExclamationTriangle color="#FFA726" size={20} />
+          Confirmar cambio de estado
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            ¿Estás seguro de que deseas marcar esta visita como <strong>{pendingState}</strong>? Esta acción podría ser irreversible.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirm(false)} color="inherit">
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => {
+              setOpenConfirm(false);
+              updateState(pendingState);
+              setPendingState(null);
+            }}
+            color="error"
+            variant="contained"
+          >
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
