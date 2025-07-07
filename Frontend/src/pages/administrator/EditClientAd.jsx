@@ -153,7 +153,7 @@ const EditClientAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/admin/perfil-cliente/${id}`);
+        navigate(`/admin/perfil/-cliente/${id}`);
       }, 3000);
       
     } catch (err) {

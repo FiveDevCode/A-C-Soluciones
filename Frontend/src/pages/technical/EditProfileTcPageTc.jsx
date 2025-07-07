@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 import { Alert, Button, Collapse, Divider, IconButton, Skeleton, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import adminProfile from "../../assets/administrator/admin.png"
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { handleUpdateClient } from '../../controllers/administrator/updateClient.controller';
-import { handleGetClient } from '../../controllers/administrator/getClientAd.controller';
-import { handleUpdateAdmin } from '../../controllers/administrator/updateAdminAd.controller';
-import { handleGetAdminId } from '../../controllers/administrator/getAdminIdAd.controller';
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
+import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
+import { handleUpdateProfileTechnical } from '../../controllers/technical/updateProfileTechnicalTc.controller';
 
 
 const Main = styled.main`
@@ -109,16 +107,15 @@ const SkeletonLoader = () => (
   </Main>
 );
 
-const EditAdministratorAd = () => {
+const EditProfileTc = () => {
 
   const navigate = useNavigate();
-  const {id} = useParams();
 
   const [userAdmin, setUserAdmin] = useState();
-  const [IdCard, setIdCard] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -135,13 +132,16 @@ const EditAdministratorAd = () => {
   const handleSubmit = async(event) => {
     event.preventDefault(); 
     setIsSubmitting(true);
+    const token = localStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+    const id = decoded.id;
 
     try {
-      await handleUpdateAdmin(
+      await handleUpdateProfileTechnical(
         id,
-        IdCard,
         nameUser,
         lastName,
+        phone,
         email
       );
 
@@ -151,11 +151,12 @@ const EditAdministratorAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/admin/perfil/${id}`);
+        navigate(`/tecnico/perfil/`);
       }, 3000);
       
     } catch (err) {
       setErrorMsg("");
+      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
@@ -167,30 +168,33 @@ const EditAdministratorAd = () => {
   };
 
   useEffect(() => {
-    handleGetAdminId(id)
+    const token = localStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+
+    handleGetTechnicalId(decoded.id)
       .then((res) => {
         const data = res.data;
         console.log(data)
         setUserAdmin(data);
-        setIdCard(data.numero_cedula || "");
         setNameUser(data.nombre || "");
         setLastName(data.apellido || "");
+        setPhone(data.telefono || "");
         setEmail(data.correo_electronico || "");
 
         setOriginalData({
-          numero_cedula: data.numero_cedula || "",
           nombre: data.nombre || "",
           apellido: data.apellido || "",
-          correo_electronico: data.correo_electronico || "",
+          telefono: data.telefono || "",
+          correo_electronico: data.correo_electronico || ""
         });
       })
   }, []);
 
   const hasChanges = () => {
     return (
-      IdCard !== originalData.numero_cedula ||
       nameUser !== originalData.nombre ||
       lastName !== originalData.apellido ||
+      phone !== originalData.telefono ||
       email !== originalData.correo_electronico
     );
   };
@@ -204,7 +208,7 @@ const EditAdministratorAd = () => {
     <Main>
       <ProfileInfo>
         <Avatar
-          src={adminProfile}
+          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
           alt="Avatar"
         />
         <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
@@ -214,16 +218,6 @@ const EditAdministratorAd = () => {
 
       <TitleHelp>Informacion personal</TitleHelp>
       <Form onSubmit={handleSubmit}>
-        <TextField 
-          label="Cedula" 
-          fullWidth 
-          size="medium" 
-          value={IdCard} 
-          onChange={handleChange(setIdCard)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.numero_cedula)}
-          helperText={fieldErrors.numero_cedula}
-        />
         <TextField 
           label="Nombre" 
           fullWidth 
@@ -243,6 +237,16 @@ const EditAdministratorAd = () => {
           sx={{ backgroundColor: 'white' }}
           error={Boolean(fieldErrors.apellido)}
           helperText={fieldErrors.apellido}
+        />
+        <TextField 
+          label="Telefono" 
+          fullWidth 
+          size="medium" 
+          value={phone} 
+          onChange={handleChange(setPhone)}
+          sx={{ backgroundColor: 'white' }}
+          error={Boolean(fieldErrors.telefono)}
+          helperText={fieldErrors.telefono}
         />
         <TextField 
           label="Correo electrónico" 
@@ -304,4 +308,4 @@ const EditAdministratorAd = () => {
   );
 };
 
-export default EditAdministratorAd;
+export default EditProfileTc;

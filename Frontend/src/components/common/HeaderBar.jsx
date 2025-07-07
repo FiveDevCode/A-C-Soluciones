@@ -70,7 +70,7 @@ const HeaderBar = () => {
         setProfilePath("/tecnico/perfil");
         break;
       case "administrador":
-        setProfilePath("/admin/perfil");
+        setProfilePath("/admin/perfil/");
         break;
     }
     
@@ -93,7 +93,7 @@ const HeaderBar = () => {
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
-    "/admin/perfil": "Perfil",
+    "/admin/perfil/": "Perfil",
     "/admin/registrar-servicio": "Crear servicio",
     "/admin/registrar-administrador": "Crear administrador",
     "/admin/permisos": "Permisos administrador",
@@ -122,13 +122,13 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }
-    if (path.startsWith("/admin/perfil-cliente/")) {
+    if (path.startsWith("/admin/perfil/-cliente/")) {
       return "Perfil cliente";
     }
-    if (path.startsWith("/admin/perfil-administrador/")) {
+    if (path.startsWith("/admin/perfil/")) {
       return "Perfil administrador";
     }
-    if (path.startsWith("/admin/perfil-tecnico/")) {
+    if (path.startsWith("/admin/perfil/-tecnico/")) {
       return "Perfil técnico";
     }
     if (path.startsWith("/admin/editar-tecnico/")) {

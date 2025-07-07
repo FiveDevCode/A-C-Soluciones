@@ -105,7 +105,7 @@ const ListAdministratorAd = ({administrators}) => {
                 <span>Editar</span>
               </SeeMore>
             </Link>
-            <Link to={`/admin/perfil-administrador/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/perfil/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>

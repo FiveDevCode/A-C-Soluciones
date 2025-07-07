@@ -180,7 +180,7 @@ const EditAdminPageAd = () => {
       setIsSubmitting(false);
       
       setTimeout(() => {
-        navigate("/admin/perfil");
+        navigate("/admin/perfil/");
       }, 3000);
       
     } catch (err) {

@@ -54,6 +54,7 @@ import ViewViewVisitListCanceledPageTc from './pages/technical/ViewVisitListCanc
 import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc';
 import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
 import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
+import EditProfileTc from './pages/technical/EditProfileTcPageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -217,6 +218,12 @@ function AppContent() {
               </PrivateRoute>
             } />
 
+            <Route path="/tecnico/editar-perfil" element={
+              <PrivateRoute roleRequired="tecnico">
+                <EditProfileTc />
+              </PrivateRoute>
+            } />
+
             {/* ********************************* Rutas Administrador ********************************** */}
             <Route path="/admin/inicio" element={
               <PrivateRoute roleRequired="administrador">
@@ -230,13 +237,13 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/perfil-tecnico/:id" element={
+            <Route path="/admin/perfil/-tecnico/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileAd />
               </PrivateRoute>
             } />
 
-            <Route path="/admin/perfil-cliente/:id" element={
+            <Route path="/admin/perfil/-cliente/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileClientPageAd />
               </PrivateRoute>
@@ -284,7 +291,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/perfil" element={
+            <Route path="/admin/perfil/" element={
               <PrivateRoute roleRequired="administrador">
                 <ProfilePageAd />
               </PrivateRoute>
@@ -362,7 +369,7 @@ function AppContent() {
               </PrivateRoute>
             } />
  
-            <Route path="/admin/perfil-administrador/:id" element={
+            <Route path="/admin/perfil/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileAdministratorPageAd/>
               </PrivateRoute>

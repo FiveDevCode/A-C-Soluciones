@@ -106,7 +106,7 @@ const ListClientAd = ({clients}) => {
                 <span>Editar</span>
               </SeeMore>
             </Link>
-            <Link to={`/admin/perfil-cliente/${client.id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/admin/perfil/-cliente/${client.id}`} style={{ textDecoration: 'none' }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>

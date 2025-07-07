@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Divider } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
 import { jwtDecode } from 'jwt-decode';
 
@@ -96,6 +96,14 @@ const ProfileUserTc = () => {
         <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
         <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
       </Details>
+      <Button 
+        variant='contained' 
+        sx={{textTransform: "none", fontSize: "1rem", fontWeight: "700", mt: "2rem"}}
+        LinkComponent={Link}
+        to="/tecnico/editar-perfil"
+      >
+        Editar informacion personal
+      </Button>
     </Main>
   );
 };
