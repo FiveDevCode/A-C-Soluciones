@@ -82,6 +82,8 @@ const HeaderBar = () => {
     "/tecnico/inicio": "Inicio técnico",
     "/tecnico/servicios": "Servicios técnico",
     "/tecnico/perfil": "Perfil técnico",
+    "/tecnico/visitas": "Visitas",
+    "/tecnico/reportes": "Reportes",
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
@@ -97,7 +99,8 @@ const HeaderBar = () => {
     "/admin/clientes":"Clientes",
     "/admin/administradores":"Administradores",
     "/admin/servicios":"Servicios",
-    "/admin/reportes":"Reportes"
+    "/admin/reportes":"Reportes",
+    "/admin/editar-perfil":"Editar perfil"
   };
 
   function getRouteName(path) {

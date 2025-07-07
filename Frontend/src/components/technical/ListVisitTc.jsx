@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import administratorTehc from "../../assets/technical/serviceTehc.png";
-import Logo from "../common/Logo";
+import serviceTehc from "../../assets/technical/serviceTehc.png";
+import Logo from "../../components/common/Logo";
+import { FormControl, Pagination, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
-import { Pagination } from "@mui/material";
 
 
 const ContainerNoti = styled.div`
@@ -69,48 +69,48 @@ const SeeMore = styled.div`
 const ITEMS_PER_PAGE = 6;
 
 
-const ListAdministratorAd = ({administrators}) => {
-
+const ListVisitTc = ({visits}) => {
 
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(administrators.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
 
-  const paginatedAdmins = useMemo(() => {
+  const paginatedVisit = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return administrators.slice(start, start + ITEMS_PER_PAGE);
-  }, [administrators, currentPage]);
+    return visits.slice(start, start + ITEMS_PER_PAGE);
+  }, [visits, currentPage]);
 
   return (
     <ContainerNoti>
-      {paginatedAdmins.map((administrator, index) => (
+      {paginatedVisit.map((visit, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={administratorTehc}/>
+            <Logo src={serviceTehc}/>
             <NotificationInfo>
               <TitleNoti>
-                {administrator.numero_cedula || 'Sin numero de cedula'}
+                {visit.notas_posteriores && visit.notas_posteriores.length > 50
+                  ? `${visit.notas_posteriores.slice(0, 50)}...`
+                  : visit.notas_posteriores || "Sin notas posteriores"}
               </TitleNoti>
               <Description>
-                {administrator.nombre} {administrator.apellido}
+                {visit.notas_previas && visit.notas_previas.length > 50
+                  ? `${visit.notas_previas.slice(0, 50)}...`
+                  : visit.notas_previas || "Sin notas previas"}
               </Description>
-              <TitleNoti>
-                {administrator.correo_electronico}
-              </TitleNoti>
+              <Date>{visit.fecha_programada?.substring(0, 10) || "No hay fecha"}</Date>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <Link to={`/admin/editar-administratore/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
-              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
-                <FontAwesomeIcon icon={faEdit} />
-                <span>Editar</span>
-              </SeeMore>
-            </Link>
-            <Link to={`/admin/perfil-administrador/${administrator.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
-              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
-                <FontAwesomeIcon icon={faArrowRight} />
-                <span>Ver</span>
-              </SeeMore>
-            </Link>
+            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
+              <TextField
+                value={visit.estado}
+                label="Estado"
+                disabled
+              />
+            </FormControl>
+            <SeeMore>
+              <FontAwesomeIcon icon={faArrowRight} />
+              <Link to={`/tecnico/ver-visita/${visit.id}`}>Ver</Link>
+            </SeeMore>
           </ContainerOption>
         </Notification>
       ))}
@@ -124,7 +124,6 @@ const ListAdministratorAd = ({administrators}) => {
       />
     </ContainerNoti>
   );
-}
+};
 
-
-export default ListAdministratorAd
+export default ListVisitTc;

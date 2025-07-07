@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Global from "./Global";
 import LoginPage from './pages/common/LoginPage';
 import styled from 'styled-components';
-import MenuSide from './components/common/MenuSide';
+import MenuSideAd from './components/administrator/MenuSideAd';
 import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
@@ -35,7 +35,7 @@ import CreateReportPageTc from './pages/technical/CreateReportPageTc';
 import ViewVisitListPageAd from './pages/administrator/ViewVisitListPageAd';
 import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
 import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
-import VisitListPageTc from './pages/technical/VisitListPageTc';
+import ViewVisitListPageTc from './pages/technical/ViewVisitListPageTc';
 import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
 import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
 import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPageAd';
@@ -44,6 +44,8 @@ import ViewAdministratorListPageAd from './pages/administrator/ViewAdministrator
 import ViewServiceListPageAd from './pages/administrator/ViewServiceListPageAd';
 import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
 import SearchResultsPage from './pages/administrator/SearchResultsPage';
+import MenuSideTc from './components/technical/MenuSideTc';
+import ViewReportListPageTc from './pages/technical/ViewReportListPageTc';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -91,12 +93,13 @@ function AppContent() {
     location.pathname === '/' ||
     role === 'cliente';
 
-  return (
-    <Container hideStyles={hideMenuAndHeader}>
-      {!hideMenuAndHeader && !isCliente && <MenuSide />}
-      <Content hideStyles={hideMenuAndHeader}>
-        {!hideMenuAndHeader && !isCliente && <HeaderBar />}
-        {isCliente && role && <HeaderBarCl />}
+    return (
+      <Container hideStyles={hideMenuAndHeader}>
+        {!hideMenuAndHeader && role === 'administrador' && <MenuSideAd />}
+        {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
+        <Content hideStyles={hideMenuAndHeader}>
+          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico') && <HeaderBar />}
+          {isCliente && role && <HeaderBarCl />}
 
           {/* 
             * Estructura de rutas:
@@ -134,9 +137,21 @@ function AppContent() {
               </PrivateRoute>
             } />
 
+            <Route path="/tecnico/servicios" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewServiceListPageAd />
+              </PrivateRoute>
+            } />
+
             <Route path="/tecnico/visitas" element={
               <PrivateRoute roleRequired="tecnico">
-                <VisitListPageTc />
+                <ViewVisitListPageTc />
+              </PrivateRoute>
+            } />
+            
+            <Route path="/tecnico/reportes" element={
+              <PrivateRoute roleRequired="tecnico">
+                <ViewReportListPageTc />
               </PrivateRoute>
             } />
 

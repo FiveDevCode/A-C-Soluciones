@@ -1,4 +1,3 @@
-import Logo from './Logo';
 import logo from '../../assets/common/logoA&C.png';
 import { Divider } from '@mui/material';
 import styled from 'styled-components';
@@ -19,6 +18,7 @@ import {
   faCompass
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import Logo from '../common/Logo';
 
 const SectionMenu = styled.section`
   display: flex;
@@ -135,7 +135,7 @@ const ContainerOptionClose = styled.button`
 `
 
 
-const MenuSide = () => {
+const MenuSideAd = () => {
   
   const navigate = useNavigate();
 
@@ -217,4 +217,4 @@ const MenuSide = () => {
   )
 }
 
-export default MenuSide;
+export default MenuSideAd;

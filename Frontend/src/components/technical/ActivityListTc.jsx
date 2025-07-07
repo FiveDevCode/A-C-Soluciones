@@ -70,29 +70,29 @@ const SeeMore = styled.div`
 
 
 
-const ActivityListTc = ({services}) => {
+const ActivityListTc = ({visits}) => {
 
 
 
 
   return (
     <ContainerNoti>
-      {Array.isArray(services) && services.map((service, index) => (
+      {Array.isArray(visits) && visits.slice(0, 4).map((visit, index) => (
         <Notification key={index}>
           <NotificationDescription>
             <Logo src={serviceTehc} />
             <NotificationInfo>
               <TitleNoti>
-                {service.notas_posteriores && service.notas_posteriores.length > 50
-                  ? `${service.notas_posteriores.slice(0, 50)}...`
-                  : service.notas_posteriores || "No hay notas posteriores"}
+                {visit.notas_posteriores && visit.notas_posteriores.length > 50
+                  ? `${visit.notas_posteriores.slice(0, 50)}...`
+                  : visit.notas_posteriores || "No hay notas posteriores"}
               </TitleNoti>
               <Description>
-                {service.notas_previas && service.notas_previas.length > 50
-                  ? `${service.notas_previas.slice(0, 50)}...`
-                  : service.notas_previas || "No hay notas previas"}
+                {visit.notas_previas && visit.notas_previas.length > 50
+                  ? `${visit.notas_previas.slice(0, 50)}...`
+                  : visit.notas_previas || "No hay notas previas"}
               </Description>
-              <Date>{service.fecha_programada.substring(0, 10)}</Date>
+              <Date>{visit.fecha_programada.substring(0, 10)}</Date>
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
@@ -102,7 +102,7 @@ const ActivityListTc = ({services}) => {
             </SeeMore>
             <SeeMore>
               <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/tecnico/ver-visita/${service.id}`}>Ver</Link>
+              <Link to={`/tecnico/ver-visita/${visit.id}`}>Ver</Link>
             </SeeMore>
           </ContainerOption>
         </Notification>

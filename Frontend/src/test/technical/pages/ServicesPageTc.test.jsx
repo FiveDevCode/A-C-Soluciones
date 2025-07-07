@@ -7,12 +7,12 @@ import '@testing-library/jest-dom';
 jest.mock("../../../components/technical/FilterServicesTc", () => () => (
   <div>Filtro</div>
 ));
-jest.mock("../../../components/technical/ListSevicesTc", () => () => (
+jest.mock("../../../components/technical/ListVisitTc", () => () => (
   <div>Lista de servicios</div>
 ));
 
 describe("ServicesPageTc", () => {
-  test("renderiza los componentes FilterServicesTc y ListSevicesTc", () => {
+  test("renderiza los componentes FilterServicesTc y ListVisitTc", () => {
     render(
       <MemoryRouter>
         <ServicesPageTc />
