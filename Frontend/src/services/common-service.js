@@ -118,6 +118,39 @@ const updateStateVisit = (id_visit, state) => {
   });
 }
 
+const createForgotPassword = (email) => {
+  return api.post(`/forgot-password`, {
+    correo_electronico: email,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const createVerificCode = (email, code) => {
+  return api.post(`/verify-code`, {
+    correo: email,
+    code: code,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const updatePassword = (email, code, newPassword) => {
+  return api.post(`/reset-password`, {
+    correo: email,
+    code: code,
+    newPassword: newPassword,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 export const commonService = {
   login,
   createMaintenanceSheet,
@@ -126,6 +159,9 @@ export const commonService = {
   getVisitId,
   getRequestId,
   updateStateVisit,
-  getListToken
+  getListToken,
+  createForgotPassword,
+  createVerificCode,
+  updatePassword
 
 }

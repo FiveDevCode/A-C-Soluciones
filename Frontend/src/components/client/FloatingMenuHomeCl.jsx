@@ -1,4 +1,5 @@
 import { Divider } from "@mui/material";
+import { forwardRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -52,31 +53,24 @@ const OptionClose = styled.button`
 
 
 
-const FloatingMenuHomeCl = () => {
+const FloatingMenuHomeCl = forwardRef((props, ref) => {
 
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem('userRole');
-    navigate("/");
-  };
-
+  const { handleLogout } = props;
 
   return (
-    <ContainerFloating data-testid="floating-menu">
+    <ContainerFloating ref={ref} data-testid="floating-menu">
       <Option to="/accesibility">
         <OptionText>Accesibilidad</OptionText>
       </Option>
       <Divider />
-      <Option to="/profile">
+      <Option to="/cliente/perfil">
         <OptionText>Perfil</OptionText>
       </Option>
       <Option to="/notifications">
         <OptionText>Notificaciones</OptionText>
       </Option>
-      <Option to="/reports">
+      <Option to="/cliente/reports">
         <OptionText>Informes</OptionText>
       </Option>
       <Divider />
@@ -92,7 +86,7 @@ const FloatingMenuHomeCl = () => {
       </OptionClose>
     </ContainerFloating>
   )
-}
+});
 
 
 export default FloatingMenuHomeCl;

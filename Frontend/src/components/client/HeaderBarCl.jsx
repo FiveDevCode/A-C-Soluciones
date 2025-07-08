@@ -4,7 +4,7 @@ import { InputAdornment, TextField } from "@mui/material";
 import styled from "styled-components";
 import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FloatingMenuHomeCl from "./FloatingMenuHomeCl";
 import MenuSideCl from "./MenuSideCl";
@@ -103,11 +103,41 @@ const HeaderBarCl = () => {
   const [show, setShow] = useState(false)
   const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
-  
+  const profileButtonRef = useRef(null);
+  const menuRef = useRef(null);
+
+  // Cierra el menú si se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        profileButtonRef.current &&
+        !profileButtonRef.current.contains(event.target)
+      ) {
+        setShow(false);
+      }
+    };
+
+    if (show) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [show]);
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
         navigate(`/resultado?data=${busqueda}`);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    navigate("/");
   };
 
   const handleShowMenu = () => {
@@ -138,8 +168,10 @@ const HeaderBarCl = () => {
           }}
         />
         <FontAwesomeIcon icon={faBell} style={{fontSize:"24px"}}/>
-        <ButtonProfile onClick={handleShowMenu}><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
-        {show && <FloatingMenuHomeCl />}
+        <ButtonProfile ref={profileButtonRef} onClick={handleShowMenu}>
+          <FontAwesomeIcon icon={faCircleUser} style={{ fontSize: "24px" }} />
+        </ButtonProfile>
+        {show && <FloatingMenuHomeCl ref={menuRef} handleLogout={handleLogout}/>}
 
       </MenuBar>
       <Menu>

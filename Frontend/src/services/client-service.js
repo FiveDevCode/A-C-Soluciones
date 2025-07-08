@@ -40,8 +40,13 @@ const createRequest = (serviceAddress, description, comments, requestId, clientI
 
 }
 
+const getClient = (id) => {
+  return api.get(`/cliente/${id}`)
+}
+
 export const clientService = {
   createClient,
   getServiceList,
   createRequest,
+  getClient
 }
