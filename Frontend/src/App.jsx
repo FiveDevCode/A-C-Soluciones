@@ -55,6 +55,7 @@ import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc
 import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
 import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
 import EditProfileTc from './pages/technical/EditProfileTcPageTc';
+import ErrorPage from './errorPages/errorpage';
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -86,6 +87,19 @@ function AppContent() {
   const location = useLocation();
   const [role, setRole] = useState(null);
 
+
+
+  const publicRoutes = [
+    '/',
+    '/iniciar-sesion',
+    '/registrarse',
+    '/recuperar-contrasena',
+    '/codigo-recuperacion',
+    '/cambiar-contrasena'
+  ];
+
+  const isPublicPage = publicRoutes.includes(location.pathname);
+
   useEffect(() => {
     const storedRole = localStorage.getItem('userRole');
     setRole(storedRole);
@@ -108,7 +122,7 @@ function AppContent() {
         {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
         <Content hideStyles={hideMenuAndHeader}>
           {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico') && <HeaderBar />}
-          {isCliente && role && <HeaderBarCl />}
+          {isCliente && !isPublicPage && <HeaderBarCl />}
 
           {/* 
             * Estructura de rutas:
@@ -381,9 +395,10 @@ function AppContent() {
               </PrivateRoute>
             } />
 
+            <Route path="*" element={<ErrorPage />} />
             
           </Routes>
-        {isCliente && role && <FooterHomeCl />}
+        {isCliente && !isPublicPage && <FooterHomeCl />}
         </Content>
     </Container>
   );
