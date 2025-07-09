@@ -42,7 +42,6 @@ App.use(UsuarioRouter);
 App.use(ServicioRouter); 
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
-App.use(FaqRouter)
 App.use('/fichas', fichaClienteRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
@@ -53,6 +52,7 @@ if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
+App.use(FaqRouter)
 
 
 

@@ -9,24 +9,24 @@ const router = Router();
 const solicitudController = new SolicitudController();
 
 
-router.use(authenticate);
+//router.use(authenticate);
 
 // Crear una nueva solicitud
-router.post('/api/solicitudes', isCliente, solicitudController.crear);
+router.post('/api/solicitudes', authenticate, isCliente, solicitudController.crear);
 
 // Obtener todas las solicitudes
-router.get('/api/solicitudes', isAdminOrCliente,  solicitudController.obtenerTodos);
+router.get('/api/solicitudes', authenticate, isAdminOrCliente,  solicitudController.obtenerTodos);
 
 // Obtener solicitudes por cliente
-router.get('/api/solicitudes/:id', isAdminOrTecnico , solicitudController.obtenerPorId);
+router.get('/api/solicitudes/:id', authenticate, isAdminOrTecnico , solicitudController.obtenerPorId);
 
 // Obtener una solicitud específica por ID
-router.get('/api/solicitudes/cliente/:cliente_id_fk', isAdminOrCliente, solicitudController.obtenerPorCliente);
+router.get('/api/solicitudes/cliente/:cliente_id_fk', authenticate, isAdminOrCliente, solicitudController.obtenerPorCliente);
 
 // Actualizar el estado de una solicitud
-router.patch('/api/solicitudes/:id/estado', isAdminOrCliente,solicitudController.actualizarEstado);
+router.patch('/api/solicitudes/:id/estado', authenticate, isAdminOrCliente,solicitudController.actualizarEstado);
 
 // Eliminar una solicitud
-router.delete('/api/solicitud/:id', isAdminOrCliente,solicitudController.eliminar);
+router.delete('/api/solicitud/:id', authenticate, isAdminOrCliente,solicitudController.eliminar);
 
 export default router;

@@ -12,7 +12,7 @@ router.get('/api/visitas/asignados', visitaController.obtenerServiciosAsignados)
 router.get('/api/visitas/asignados/:id', visitaController.obtenerServicioAsignadoPorId);
 router.get('/api/visitas', authenticate, isAdminOrTecnico, visitaController.obtenerVisitas); 
 
-router.get('/api/visitas/:id', isAdminOrTecnico, visitaController.obtenerVisitaPorId);
+router.get('/api/visitas/:id', authenticate, isAdminOrTecnico, visitaController.obtenerVisitaPorId);
 
 router.put('/api/visitas/:id', authenticate, isAdmin, visitaController.actualizarVisita);
 
