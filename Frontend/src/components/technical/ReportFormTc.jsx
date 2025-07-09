@@ -128,7 +128,7 @@ const ReportFormTc = () => {
       setShowSuccess(true);
 
       setTimeout(() => {
-        navigate(`/tecnico/ver-visita/${id}`)      
+        navigate(`/tecnico/visita/${id}`)      
       }, 3000);
     } catch (err) {
       console.log(err)
@@ -392,7 +392,7 @@ const ReportFormTc = () => {
           color="primary"
           style={{ marginTop: '1rem' }}
           LinkComponent={Link}
-          to={`/tecnico/ver-visita/${id}`}
+          to={`/tecnico/visita/${id}`}
         >
           Cancelar
         </Button>

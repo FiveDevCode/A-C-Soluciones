@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
+import requestLogo from "../../assets/common/requestLogo.png";
 import Logo from "../common/Logo";
-import { FormControl, TextField } from '@mui/material';
+import { FormControl, Pagination, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -65,18 +66,33 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+
+const ITEMS_PER_PAGE = 6;
+
+
 const ListRequestAd = ({requests}) => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(requests.length / ITEMS_PER_PAGE);
+
+  const paginatedRequests = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return requests.slice(start, start + ITEMS_PER_PAGE);
+  }, [requests, currentPage]);
+
+
+
   return (
     <ContainerNoti>
-      {requests.map((request, index) => (
+      {paginatedRequests.map((request, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={serviceTehc}/>
+            <Logo src={requestLogo}/>
             <NotificationInfo>
               <TitleNoti>
-                {request.direccion_servicio && request.direccion_servicio.length > 50
-                  ? `${request.direccion_servicio.slice(0, 50)}...`
-                  : request.direccion_servicio || "Sin dirrecion"
+                {request.comentarios && request.comentarios.length > 50
+                  ? `${request.comentarios.slice(0, 50)}...`
+                  : request.comentarios || "Sin dirrecion"
                 }
               </TitleNoti>
               <Description>
@@ -96,13 +112,24 @@ const ListRequestAd = ({requests}) => {
                 disabled
               />
             </FormControl>
-            <SeeMore>
-              <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/admin/solicitud/${request.id}`}>Ver</Link>
-            </SeeMore>
+
+            <Link to={`/admin/solicitud/${request.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faArrowRight} />
+                <span>Ver</span>
+              </SeeMore>
+            </Link>
           </ContainerOption>
         </Notification>
       ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
   );
 }

@@ -145,7 +145,7 @@ const EditServicePageAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/admin/ver-mas-servicio/${id}`);
+        navigate(`/admin/servicio/${id}`);
       }, 3000);
       
     } catch (err) {
@@ -266,7 +266,7 @@ const EditServicePageAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
             {isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to={`/admin/ver-mas-servicio/${id}`}>Cancelar</Button>
+          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

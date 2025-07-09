@@ -3,6 +3,8 @@ import CategoryRecomendAd from "../../components/administrator/CategoryRecomendA
 import styled from "styled-components";
 import ActivityFilterAd from "../../components/administrator/ActivityFilterAd";
 import ActivityListAd from "../../components/administrator/ActivityListAd";
+import { useEffect, useState } from "react";
+import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
 
 
 
@@ -12,12 +14,32 @@ const ContainerHome = styled.section`
   gap: 2rem;
 `
 const HomeAd = () => {
+
+  const [requests, setRequests] = useState({})
+
+  useEffect(() => {
+      handleGetListRequest().then((res) => {
+        console.log(res.data)
+        setRequests(res.data)
+      }).catch((err) => {
+        console.log("No se pudo obtener el listado de solicitudes", err)
+      })
+
+
+  }, [])
+
+
+
   return (
     <ContainerHome>
       <CategoryRecomendAd />
       <Divider />
       <ActivityFilterAd />
-      <ActivityListAd />
+      {requests.length === 0 ? (
+        <p style={{textAlign: "center"}}>No tienes ninguna solicitud asignada por el momento.</p>
+      ) : (
+        <ActivityListAd requests={requests} />
+      )}
 
     </ContainerHome>
   )

@@ -92,8 +92,13 @@ export class TecnicoController {
     } catch (error) {
       console.error(error);
       if (error instanceof ValidationError) {
-        const mensajes = error.errors.map((err) => err.message);
-        return res.status(400).json({ errors: mensajes });
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+            if (err.path) {
+                fieldErrors[err.path] = err.message;
+            }
+        });
+        return res.status(400).json({ errors: fieldErrors });
       }
       return res.status(500).json({ message: 'Error al actualizar el empleado.' });
     }

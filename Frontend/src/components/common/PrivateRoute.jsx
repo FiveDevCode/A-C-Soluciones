@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const PrivateRoute = ({ children, roleRequired }) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   if (!token) {
     return <Navigate to="/iniciar-sesion" />;

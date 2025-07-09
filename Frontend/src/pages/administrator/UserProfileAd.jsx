@@ -182,7 +182,10 @@ const UserProfileAd = () => {
         <Texto>{technicalData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
 
         <Label>Nombre:</Label>
-        <Texto>{technicalData.nombre} {technicalData.apellido}</Texto>
+        <Texto>{technicalData.nombre}</Texto>
+
+        <Label>Apellido:</Label>
+        <Texto>{technicalData.apellido}</Texto>
 
         <Label>Telefono:</Label>
         <Texto>{technicalData.telefono}</Texto>

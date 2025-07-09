@@ -1,9 +1,11 @@
-import { TextField, Button, Typography, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Button, Typography} from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
-import { handleLogin } from '../../controllers/common/login.controller';
-import { jwtDecode } from 'jwt-decode';
+import { handleCreateForgotPassword } from '../../controllers/common/createForgotPassword.controller';
+import { handleCreateVerificCode } from '../../controllers/common/createVerificCode.controller';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const Form = styled.form`
   display: flex;
@@ -12,14 +14,17 @@ const Form = styled.form`
   width: 35%;
   max-width: 500px;
 `
-const LinkForgot = styled(Link)`
+const LinkForgot = styled.button`
   align-self: center;
   color: #0000EE;
+  background: none;
+  border: none;
   text-decoration: underline;
   font-size: 1rem;
   margin-top: 1rem;
-
-`
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+  color: ${({ disabled }) => (disabled ? '#999' : '#0000EE')};
+`;
 
 const ContainerButton = styled.div`
   display: flex;
@@ -41,85 +46,82 @@ const ContainerButton = styled.div`
 const FormRecoverCode = () => {
   
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email || "";
 
   const [code, setCode] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        const role = decoded.rol;
-  
-        switch (role) {
-          case "cliente":
-            navigate("/home");
-            break;
-          case "tecnico":
-            navigate("/homeTc");
-            break;
-          case "administrador":
-            navigate("/homeAd");
-            break;
-          default:
-            break;
-        }
-      } catch (error) {
-        console.error("Token inválido:", error);
-        sessionStorage.removeItem('authToken');
-        sessionStorage.removeItem('userRole');
-      }
+    let timer;
+    if (resendCooldown > 0) {
+      timer = setInterval(() => {
+        setResendCooldown((prev) => prev - 1);
+      }, 1000);
     }
-  }, []);
 
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
 
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
+    setFieldErrors({});
+    setIsSubmitting(true);
 
     try {
-      const {data} = await handleLogin(
-        email,
-        password
-      );
+      console.log(code)
+      await handleCreateVerificCode(email, code);
+      setSuccessMsg("El codigo ingresado es correcto, redirigiendo...");
+      setIsVerified(true);
 
-      console.log(data)
-      sessionStorage.setItem('authToken', data.token);
-
-      const decoded = jwtDecode(data.token);
-      const role = decoded.rol;
-      sessionStorage.setItem('userRole', role);
-
-      switch (role) {
-        case "cliente":
-          navigate("/home");
-          break;
-        case "tecnico":
-          navigate("/homeTc");
-          break;
-        case "administrador":
-          navigate("/homeAd");
-          break;
-        default:
-          navigate("/login"); // o una página de error
-      }
-
+      setTimeout(() => {
+        navigate("/cambiar-contrasena", { state: { email, code } })
+      }, 3000)
     } catch (err) {
+      setErrorMsg("");
+      setFieldErrors({});
       console.log(err)
+      setIsSubmitting(false);
+
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+      } 
+      
+      if (err.response?.data?.message) {
+        setErrorMsg(err.response.data.message);
       } else {
-        setErrorMsg("Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.");
+        setErrorMsg("Hubo un error al registrar al administrador.");
       }
+    } finally {
+      setIsSubmitting(false);
     }
-
-  }
-
+  };
 
   
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    try {
+      await handleCreateForgotPassword(email);
+      setSuccessMsg("Se ha reenviado el código a tu correo.");
+      setResendCooldown(30);
+    } catch (err) {
+      console.log(err);
+      setErrorMsg("No se pudo reenviar el código.");
+    }
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       <TextField 
@@ -154,16 +156,53 @@ const FormRecoverCode = () => {
       />
       
       {errorMsg && (
-        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+        <Typography
+          color="error"
+          sx={{
+            backgroundColor: '#FDECEA',
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            borderLeft: '6px solid #f44336',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontWeight: 500
+          }}
+        >
+          <ErrorOutlineIcon />
           {errorMsg}
         </Typography>
       )}
 
+      {successMsg && (
+        <Typography
+          color="primary"
+          sx={{
+            backgroundColor: '#E6F4EA',
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            borderLeft: '6px solid #4CAF50',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontWeight: 500
+          }}
+        >
+          <CheckCircleIcon />
+          {successMsg}
+        </Typography>
+      )}
       
-      <Button type="submit" variant="contained">Enviar</Button>
-      
-      <LinkForgot to="/recuperar-contrasena">Reenviar código</LinkForgot>
-
+      <Button type="submit" variant="contained" disabled={isSubmitting || isVerified}>
+        {isSubmitting ? "Enviando..." : "Enviar"}
+      </Button>
+      <LinkForgot
+        type="button"
+        onClick={handleResend}
+        disabled={resendCooldown > 0}
+      >
+        {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : "Reenviar código"}
+      </LinkForgot>
     </Form>
 
   )

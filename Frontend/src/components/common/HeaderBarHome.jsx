@@ -1,6 +1,5 @@
-import { faBars, faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputAdornment, TextField } from "@mui/material";
+
+import { Button, InputAdornment, TextField } from "@mui/material";
 import styled from "styled-components";
 import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
@@ -98,22 +97,22 @@ const HeaderBarHome = () => {
   return (
     <ContainerHeader>
       <MenuBar>
-        <InputSearch
-          value={busqueda}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar"
-          size="small"
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <FontAwesomeIcon icon={faSearch} style={{ color: '#9e9e9e' }} />
-              </InputAdornment>
-            ),
+        <Button
+          variant="contained" 
+          size="small" 
+          sx={{ 
+            textTransform: 'none', 
+            height: '32px', 
+            paddingX: 2, 
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: 500
           }}
-        />
-        <ButtonProfile to="/iniciar-sesion"><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
+          LinkComponent={Link}
+          to="/iniciar-sesion"
+        >
+          Iniciar sesion
+        </Button>
       </MenuBar>
       <Menu>
         <Logo src={logo} size="13%" max="150px"/> 

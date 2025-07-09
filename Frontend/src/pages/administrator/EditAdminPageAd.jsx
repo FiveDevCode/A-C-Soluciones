@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Alert, Button, Collapse, Divider, IconButton, TextField } from '@mui/material';
+import { Alert, Button, Collapse, Divider, IconButton, Skeleton, TextField } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { handleGetAdminId } from '../../controllers/administrator/getAdminIdAd.controller';
@@ -7,6 +7,8 @@ import adminProfile from "../../assets/administrator/admin.png"
 import { handleUpdateAdmin } from '../../controllers/administrator/updateAdminAd.controller';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link, useNavigate } from "react-router-dom";
+import { keyframes } from 'styled-components';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 const Main = styled.main`
@@ -63,6 +65,75 @@ const ContainerButton = styled.div`
 
 `
 
+const SkeletonButton = styled(Skeleton)`
+  align-self: flex-end;
+  &.MuiSkeleton-root {
+    margin-right: 4rem;
+
+  }
+
+`
+const ContainerButtonSkeleton = styled.div`
+  display: flex;
+  gap: 3rem;
+
+  & > *:first-child {
+    width: 45%;
+
+  }
+  & > *:nth-child(2)  {
+    width: 35%;
+  }
+`
+
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const AnimatedCheck = styled(CheckCircleIcon)`
+  margin-left: 0.5rem;
+  color: white;
+  animation: ${fadeIn} 0.4s ease-in-out;
+`;
+
+const SkeletonLoader = () => (
+  <Main>
+    <ProfileInfo>
+      <Skeleton variant="circular" width={120} height={120} />
+      <Skeleton variant="text" width={300} height={40} />
+    </ProfileInfo>
+
+    <Divider />
+    <TitleHelp>
+      <Skeleton variant="text" width={200} height={30} />
+    </TitleHelp>
+
+    <Form>
+      {[...Array(6)].map((_, index) => (
+        <Skeleton
+          key={index}
+          variant="rectangular"
+          height={56}
+          sx={{ borderRadius: "4px", backgroundColor: "#e0e0e0" }}
+        />
+      ))}
+
+      <ContainerButtonSkeleton>
+        <SkeletonButton variant="rectangular" height={36} />
+        <SkeletonButton variant="rectangular" height={36} />
+      </ContainerButtonSkeleton>
+    </Form>
+  </Main>
+);
+
 const EditAdminPageAd = () => {
 
   const navigate = useNavigate();
@@ -79,6 +150,9 @@ const EditAdminPageAd = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
     
+
+  const [originalData, setOriginalData] = useState({});
+
   const handleChange = (setter) => (e) => {
     setter(e.target.value);
     if (showSuccess) setShowSuccess(false);
@@ -87,7 +161,7 @@ const EditAdminPageAd = () => {
   const handleSubmit = async(event) => {
     event.preventDefault(); 
     setIsSubmitting(true);
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
     const id = decoded.id;
 
@@ -103,27 +177,31 @@ const EditAdminPageAd = () => {
       setFieldErrors("");
       setErrorMsg("");
       setShowSuccess(true);
-      handleLimpiar();
-
+      setIsSubmitting(false);
       
       setTimeout(() => {
-        navigate("/admin/perfil");
+        navigate("/admin/perfil/");
       }, 3000);
       
     } catch (err) {
+      setFieldErrors({});
       setErrorMsg("");
+      setIsSubmitting(false);
+
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
-      } else {
+      } 
+      
+      if (err.response?.data?.message) {
         setErrorMsg(err.response.data.message);
+      } else {
+        setErrorMsg("Ocurrió un error inesperado.");
       }
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
     const id = decoded.id;
 
@@ -134,24 +212,32 @@ const EditAdminPageAd = () => {
         setNameUser(res.data.nombre || "");
         setLastName(res.data.apellido || "");
         setEmail(res.data.correo_electronico || "");
+
+
+        setOriginalData({
+          numero_cedula: res.data.numero_cedula || "",
+          nombre: res.data.nombre || "",
+          apellido: res.data.apellido || "",
+          correo_electronico: res.data.correo_electronico || "",
+        });
+
       })
       .catch((err) => {
         console.error("Error fetching admin:", err);
       });
   }, []);
 
-  const handleLimpiar = () => {
-    setNameUser("");
-    setLastName("");
-    setIdCard("");
-    setEmail("");
-
+  const hasChanges = () => {
+    return (
+      IdCard !== originalData.numero_cedula ||
+      nameUser !== originalData.nombre ||
+      lastName !== originalData.apellido ||
+      email !== originalData.correo_electronico
+    );
   };
 
-
-  
   if (!userAdmin) {
-    return <p>Cargando datos del perfil...</p>;
+    return <SkeletonLoader />
   }
 
   return (
@@ -177,8 +263,8 @@ const EditAdminPageAd = () => {
           value={IdCard} 
           onChange={handleChange(setIdCard)}
           sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.numero_de_cedula)}
-          helperText={fieldErrors.numero_de_cedula}
+          error={Boolean(fieldErrors.numero_cedula)}
+          helperText={fieldErrors.numero_cedula}
         />
         <TextField 
           label="Nombre" 
@@ -250,10 +336,17 @@ const EditAdminPageAd = () => {
           </Alert>
         </Collapse>
         <ContainerButton>
-          <Button type="submit" variant="contained" disabled={isSubmitting}>
-            {isSubmitting ? "Editando..." : "Editar"}
+          <Button type="submit" variant="contained" disabled={isSubmitting || showSuccess || !hasChanges()}>
+            {isSubmitting
+              ? "Editando..."
+              : showSuccess
+                ? <>
+                    Editado
+                    <AnimatedCheck />
+                  </>
+                : "Editar"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to="/admin/perfil">Cancelar</Button>
+          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

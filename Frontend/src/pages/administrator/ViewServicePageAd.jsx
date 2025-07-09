@@ -6,6 +6,7 @@ import { handleChangeStateTechnical } from "../../controllers/administrator/upda
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
 import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
 import logoService from "../../assets/administrator/service-view.png"
+import { handleChangeStateService } from "../../controllers/administrator/updateStateServiceAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -137,7 +138,7 @@ const ViewServicePageAd = () => {
   const handleToggleState = async () => {
     const newState = serviceData.estado === "activo" ? "inactivo" : "activo";
     try {
-      await handleChangeStateTechnical(id, newState);
+      await handleChangeStateService(id, newState);
       setServiceData(prev => ({ ...prev, estado: newState }));
     } catch (error) {
       console.error("Error al cambiar el estado:", error);

@@ -1,8 +1,8 @@
-import axios from "axios";
+import api from "../controllers/common/Api.controller";
 
 
 const createClient = (IdCard, name, lastName, email, phone, password, address) => {
-  return axios.post("http://localhost:8000/api/cliente", {
+  return api.post("/cliente", {
     numero_de_cedula: IdCard,
     nombre: name,
     apellido: lastName,
@@ -18,13 +18,13 @@ const createClient = (IdCard, name, lastName, email, phone, password, address) =
 };
 
 const getServiceList = () => {
-  return axios.get("http://localhost:8000/api/servicios/activos")
+  return api.get("/servicios/activos")
 }
 
 const createRequest = (serviceAddress, description, comments, requestId, clientId) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/solicitudes", {
+  return api.post("/solicitudes", {
     direccion_servicio: serviceAddress,
     descripcion: description,
     comentarios: comments,
@@ -40,8 +40,13 @@ const createRequest = (serviceAddress, description, comments, requestId, clientI
 
 }
 
+const getClient = (id) => {
+  return api.get(`/cliente/${id}`)
+}
+
 export const clientService = {
   createClient,
   getServiceList,
   createRequest,
+  getClient
 }

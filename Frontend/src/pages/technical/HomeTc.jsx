@@ -4,7 +4,6 @@ import { Divider } from "@mui/material";
 import ActivityFilterTc from "../../components/technical/ActivityFilterTc";
 import ActivityListTc from "../../components/technical/ActivityListTc";
 import { useEffect, useState } from "react";
-import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import { jwtDecode } from "jwt-decode";
 import { handleGetVisitAssign } from "../../controllers/technical/getVisitAssignTc.controller";
 
@@ -21,12 +20,12 @@ const ContainerHome = styled.section`
 
 const HomeTc = () => {
 
-  const [services, setServices] = useState([]);
+  const [visits, setVisits] = useState([]);
   const [technicalId, setTechnicalId] = useState("");
   
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     if (token) {
       const decoded = jwtDecode(token);
       setTechnicalId(decoded.id); 
@@ -37,7 +36,7 @@ const HomeTc = () => {
   useEffect(() => {
     handleGetVisitAssign(technicalId)
       .then((res) => {
-        setServices(res.data.data); 
+        setVisits(res.data.data); 
         console.log(res.data.data)
       })
       .catch((err) => {
@@ -51,10 +50,10 @@ const HomeTc = () => {
       <CategoryRecomendTc />
       <Divider />
       <ActivityFilterTc />
-      {services.length === 0 ? (
+      {visits.length === 0 ? (
           <p style={{textAlign: "center"}}>No tienes ninguna actividad asignada por el momento.</p>
       ) : (
-        <ActivityListTc services={services}/>
+        <ActivityListTc visits={visits}/>
       )}
 
     </ContainerHome>

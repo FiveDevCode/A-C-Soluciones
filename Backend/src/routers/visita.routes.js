@@ -14,7 +14,7 @@ router.get('/api/visitas', authenticate, isAdminOrTecnico, visitaController.obte
 
 router.get('/api/visitas/:id', authenticate, isAdminOrTecnico, visitaController.obtenerVisitaPorId);
 
-router.put('/api/visitas/:id', authenticate, isAdmin, visitaController.actualizarVisita);
+router.put('/api/visitas/:id', authenticate, isAdminOrTecnico, visitaController.actualizarVisita);
 
 router.post('/api/visitas/:id/cancelar', authenticate, isAdmin, visitaController.cancelarVisita);
 
