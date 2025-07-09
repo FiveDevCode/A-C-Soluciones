@@ -11,6 +11,8 @@ const Global = createGlobalStyle`
         font-family: 'Inter', sans-serif;
     }
 
+    
+
 `
 
 export default Global

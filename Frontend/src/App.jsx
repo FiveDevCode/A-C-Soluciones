@@ -55,7 +55,10 @@ import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc
 import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
 import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
 import EditProfileTc from './pages/technical/EditProfileTcPageTc';
-import ErrorPage from './errorPages/errorpage';
+import ErrorPage from './errorPages/ErrorPage';
+import ProfileClientPageCl from './pages/client/profileClientPageCl';
+import EditProfileCl from './pages/client/editProfileCl';
+
 
 const Container = styled.div`
   ${({ hideStyles }) => hideStyles ? `
@@ -150,6 +153,18 @@ function AppContent() {
             <Route path="/cliente/servicios" element={
               <PrivateRoute roleRequired="cliente">
                 <ServicesAllPageCl />
+              </PrivateRoute>
+            } />
+
+            <Route path="/cliente/perfil" element={
+              <PrivateRoute roleRequired="cliente">
+                <ProfileClientPageCl />
+              </PrivateRoute>
+            } />
+
+            <Route path="/cliente/editar-perfil" element={
+              <PrivateRoute roleRequired="cliente">
+                <EditProfileCl />
               </PrivateRoute>
             } />
 

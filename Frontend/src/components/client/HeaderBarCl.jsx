@@ -56,6 +56,9 @@ const Menu = styled.div`
   height: 95px;
   justify-content: space-between;
   padding: 0 8rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+
   @media screen and (max-width: 1520px) {
     padding: 0 4rem;
     
@@ -152,21 +155,6 @@ const HeaderBarCl = () => {
   return (
     <ContainerHeader>
       <MenuBar>
-        <InputSearch
-          value={busqueda}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar"
-          size="small"
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <FontAwesomeIcon icon={faSearch} style={{ color: '#9e9e9e' }} />
-              </InputAdornment>
-            ),
-          }}
-        />
         <FontAwesomeIcon icon={faBell} style={{fontSize:"24px"}}/>
         <ButtonProfile ref={profileButtonRef} onClick={handleShowMenu}>
           <FontAwesomeIcon icon={faCircleUser} style={{ fontSize: "24px" }} />
