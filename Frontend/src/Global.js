@@ -9,10 +9,9 @@ const Global = createGlobalStyle`
         padding: 0;
         text-decoration: none;
         font-family: 'Inter', sans-serif;
-
-        
     }
 
+    
 
 `
 

@@ -17,13 +17,13 @@ const ContainerServices = styled.div`
 
 
 const ViewVisitListPageAd = () => {
-  const [services, setServices] = useState([]);
+  const [visits, setVisits] = useState([]);
 
   useEffect(() => {
     handleGetListVisitAd()
       .then((res) => {
         console.log("respuesta:" , res)
-        setServices(res.data.data);
+        setVisits(res.data.data);
       })
       .catch((err) => {
         console.error("Error fetching service list:", err);
@@ -33,11 +33,11 @@ const ViewVisitListPageAd = () => {
   return (
     <ContainerServices>
 
-      <FilterServicesAd count={services.length} />
-      {services.length === 0 ? (
+      <FilterServicesAd count={visits.length} />
+      {visits.length === 0 ? (
         <p style={{textAlign: "center"}}>No hay ninguna visita asignada por el momento.</p>
       ) : (
-        <ListVisitAd services={services} />
+        <ListVisitAd visits={visits} />
       )}
 
     </ContainerServices>

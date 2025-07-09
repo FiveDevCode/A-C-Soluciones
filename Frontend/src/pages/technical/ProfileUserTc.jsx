@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Divider } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
 import { jwtDecode } from 'jwt-decode';
 
@@ -56,7 +56,7 @@ const ProfileUserTc = () => {
 
   useEffect(() => {
 
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
 
     handleGetTechnicalId(decoded.id)
@@ -90,11 +90,20 @@ const ProfileUserTc = () => {
 
       <Details>
         <p><strong>Cédula:</strong><br/>{`${userTechnical.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</p>
-        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre} ${userTechnical.apellido}`}</p>
+        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre}`}</p>
+        <p><strong>Apellido:</strong><br/>{`${userTechnical.apellido}`}</p>
         <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
         <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
         <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
       </Details>
+      <Button 
+        variant='contained' 
+        sx={{textTransform: "none", fontSize: "1rem", fontWeight: "700", mt: "2rem"}}
+        LinkComponent={Link}
+        to="/tecnico/editar-perfil"
+      >
+        Editar informacion personal
+      </Button>
     </Main>
   );
 };

@@ -1,15 +1,11 @@
+import api from "../controllers/common/Api.controller";
 
-import axios from "axios";
 
 
 const login = (email, password) => {
-  return axios.post("http://localhost:8000/api/login", {
+  return api.post('/login', {
     correo_electronico: email,
     contrasenia: password,
-  }, {
-    headers: {
-      "Content-Type": "application/json"
-    }
   });
 };
 
@@ -31,7 +27,7 @@ const createMaintenanceSheet = ({
   foto_estado_final,
   foto_descripcion_trabajo
 }) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   const formData = new FormData();
 
@@ -53,7 +49,7 @@ const createMaintenanceSheet = ({
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
   if (foto_descripcion_trabajo) formData.append("foto_descripcion_trabajo", foto_descripcion_trabajo);
 
-  return axios.post("http://localhost:8000/api/fichas", formData, {
+  return api.post("/fichas", formData, {
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -61,24 +57,37 @@ const createMaintenanceSheet = ({
 };
 
 const getPDFIdVisit = (id) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/fichas?id_visitas=${id}`,{
+  return api.get(`/fichas?id_visitas=${id}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
   });
 }
 
+const getListToken = () => {
+  const token = localStorage.getItem("authToken");
+
+  return api.get("/fichas",{
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  });
+}
+
+
+
+
 const getListClient = () => {
-  return axios.get("http://localhost:8000/api/cliente");
+  return api.get("/cliente");
 
 }
 
 const getVisitId = (id_visita) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas/${id_visita}`,{
+  return api.get(`/visitas/${id_visita}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
@@ -86,15 +95,61 @@ const getVisitId = (id_visita) => {
 }
 
 const getRequestId = (id_solicitud) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/solicitudes/${id_solicitud}`,{
+  return api.get(`/solicitudes/${id_solicitud}`,{
     headers: {
       "Authorization": `Bearer ${token}`,
     }
   });
 }
 
+const updateStateVisit = (id_visit, state) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/visitas/${id_visit}`, {
+    estado: state,
+ 
+
+  }, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const createForgotPassword = (email) => {
+  return api.post(`/forgot-password`, {
+    correo_electronico: email,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const createVerificCode = (email, code) => {
+  return api.post(`/verify-code`, {
+    correo: email,
+    code: code,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const updatePassword = (email, code, newPassword) => {
+  return api.post(`/reset-password`, {
+    correo: email,
+    code: code,
+    newPassword: newPassword,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
 
 export const commonService = {
   login,
@@ -102,6 +157,11 @@ export const commonService = {
   getPDFIdVisit,
   getListClient,
   getVisitId,
-  getRequestId
+  getRequestId,
+  updateStateVisit,
+  getListToken,
+  createForgotPassword,
+  createVerificCode,
+  updatePassword
 
 }

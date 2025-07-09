@@ -4,6 +4,7 @@ import BackgroundHome from "../../components/common/BackgroundHome";
 import FooterHome from "../../components/common/FooterHome";
 import ServicieCatalog from "../../components/common/ServicieCatalog";
 import styled from "styled-components";
+import WorkProductCl from "../../components/client/WorkProductCl";
 
 
 const ContainerHome = styled.section`
@@ -21,6 +22,7 @@ const Home = () => {
         <BackgroundHome />
       </div>
       <ContentHome />
+      <WorkProductCl />
       <ServicieCatalog />
       <FooterHome />
     </ContainerHome>

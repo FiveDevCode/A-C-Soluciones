@@ -61,7 +61,7 @@ export class AuthService {
           ...(user.especialidad && { especialidad: user.especialidad }) // Campo adicional para técnicos
         },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '2h' }
       );
 
       return {

@@ -153,7 +153,7 @@ const EditTechnicalPageAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/profile-technical/${id}`);
+        navigate(`/admin/perfil/-tecnico/${id}`);
       }, 3000);
       
     } catch (err) {
@@ -324,7 +324,7 @@ const EditTechnicalPageAd = () => {
           <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
             {isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button type="button" variant="contained" LinkComponent={Link} to={`/admin/perfil-tecnico/${id}`}>Cancelar</Button>
+          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
       </Form>

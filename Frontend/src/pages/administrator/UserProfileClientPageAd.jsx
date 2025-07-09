@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
+import { handleChangeStateClient } from "../../controllers/administrator/updateStateClientAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -136,7 +137,7 @@ const UserProfileClientPageAd = () => {
   const handleToggleState = async () => {
     const newState = clientData.estado === "activo" ? "inactivo" : "activo";
     try {
-      await handleChangeStateTechnical(id, newState);
+      await handleChangeStateClient(id, newState);
       setClientData(prev => ({ ...prev, estado: newState }));
     } catch (error) {
       console.error("Error al cambiar el estado:", error);
@@ -179,7 +180,10 @@ const UserProfileClientPageAd = () => {
         <Texto>{clientData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
         
         <Label>Nombre:</Label>
-        <Texto>{clientData.nombre} {clientData.apellido}</Texto>
+        <Texto>{clientData.nombre}</Texto>
+          
+        <Label>Apellido:</Label>
+        <Texto>{clientData.apellido}</Texto>
 
         <Label>Telefono:</Label>
         <Texto>{clientData.telefono}</Texto>

@@ -1,4 +1,3 @@
-import Logo from './Logo';
 import logo from '../../assets/common/logoA&C.png';
 import { Divider } from '@mui/material';
 import styled from 'styled-components';
@@ -10,9 +9,16 @@ import {
   faDiagramProject, 
   faClockRotateLeft, 
   faGear, 
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faMapLocationDot,
+  faClipboardList,
+  faFileLines,
+  faRoute,
+  faUserCheck,
+  faCompass
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import Logo from '../common/Logo';
 
 const SectionMenu = styled.section`
   display: flex;
@@ -129,17 +135,17 @@ const ContainerOptionClose = styled.button`
 `
 
 
-const MenuSide = () => {
+const MenuSideAd = () => {
   
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem('userRole');
+    localStorage.removeItem("authToken");
+    localStorage.removeItem('userRole');
     navigate("/");
   };
 
-  const role = sessionStorage.getItem('userRole');
+  const role = localStorage.getItem('userRole');
 
   const getHomeRouteByRole = (role) => {
     switch (role) {
@@ -163,23 +169,23 @@ const MenuSide = () => {
           />
           <TitleOption>Inicio</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/solicitudes">
           <IconOption 
-            icon={faDiagramProject} 
+            icon={faClipboardList} 
           />
-          <TitleOption>Mis solicitudes</TitleOption>
+          <TitleOption>Solicitudes</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/visitas">
           <IconOption 
-            icon={faPaperPlane} 
+            icon={faCompass} 
           />
-          <TitleOption>Enviar solicitud</TitleOption>
+          <TitleOption>Visitas</TitleOption>
         </ContainerOption>
-        <ContainerOption>
+        <ContainerOption to="admin/reportes">
           <IconOption 
             icon={faFile} 
           />
-          <TitleOption>Mis reportes</TitleOption>
+          <TitleOption>Reportes</TitleOption>
         </ContainerOption>
         <ContainerOption>
           <IconOption 
@@ -211,4 +217,4 @@ const MenuSide = () => {
   )
 }
 
-export default MenuSide;
+export default MenuSideAd;

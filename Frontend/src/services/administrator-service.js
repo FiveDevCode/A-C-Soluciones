@@ -1,8 +1,8 @@
-import axios from "axios";
+import api from "../controllers/common/Api.controller";
 
 
 const createTechnical = (IdCard, name, lastName, email, phone, password, position) => {
-  return axios.post("http://localhost:8000/api/tecnico", {
+  return api.post("/tecnico", {
     numero_de_cedula: IdCard,
     nombre: name,
     apellido: lastName,
@@ -18,15 +18,15 @@ const createTechnical = (IdCard, name, lastName, email, phone, password, positio
 };
 
 const getClient = (id) => {
-  return axios.get(`http://localhost:8000/api/cliente/${id}`)
+  return api.get(`/cliente/${id}`)
 };
 
 const getTechnical = (id) => {
-  return axios.get(`http://localhost:8000/api/tecnico/${id}`)
+  return api.get(`/tecnico/${id}`)
 };
 
 const updateClient = (id, IdCard, name, lastName, email, phone, address) => {
-  return axios.put(`http://localhost:8000/api/cliente/${id}`, {
+  return api.put(`/cliente/${id}`, {
     numero_de_cedula: IdCard,
     nombre: name,
     apellido: lastName,
@@ -41,13 +41,13 @@ const updateClient = (id, IdCard, name, lastName, email, phone, address) => {
 };
 
 const getListTechnical = () => {
-  return axios.get("http://localhost:8000/api/tecnico")
+  return api.get("/tecnico")
 };
 
 const createService = (nameService, descripcion) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/servicios", {
+  return api.post("/servicios", {
     nombre: nameService,
     descripcion: descripcion
   }, {
@@ -59,9 +59,9 @@ const createService = (nameService, descripcion) => {
 };
 
 const updateService = (id, nameService, descripcion) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.put(`http://localhost:8000/api/servicios/${id}`, {
+  return api.put(`/servicios/${id}`, {
     nombre: nameService,
     descripcion: descripcion
   }, {
@@ -73,10 +73,10 @@ const updateService = (id, nameService, descripcion) => {
 };
 
 const getService = (id) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
 
-  return axios.get(`http://localhost:8000/api/servicios/${id}`, {
+  return api.get(`/servicios/${id}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -86,7 +86,27 @@ const getService = (id) => {
 
 
 const stateChange = (id, state) => {
-  return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
+  return api.put(`/tecnico/${id}`, {
+    estado: state
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+const UpdateStateClient = (id, state) => {
+  return api.put(`/cliente/${id}`, {
+    estado: state
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+const UpdateStateService = (id, state) => {
+  return api.put(`/servicios/${id}`, {
     estado: state
   }, {
     headers: {
@@ -96,9 +116,9 @@ const stateChange = (id, state) => {
 }
 
 const getListRequest = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get("http://localhost:8000/api/solicitudes", {
+  return api.get("/solicitudes", {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -106,9 +126,9 @@ const getListRequest = () => {
 }
 
 const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId, serviceId) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/visitas", {
+  return api.post("/visitas", {
     duracion_estimada: estimatedDuration,
     notas_previas: previousNotes,
     fecha_programada: scheduledDate,
@@ -126,9 +146,9 @@ const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate,
 }
 
 const getServiceList = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get("http://localhost:8000/api/servicios", {
+  return api.get("/servicios", {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -136,12 +156,12 @@ const getServiceList = () => {
 }
 
 const getAdminId = (id) => {
-  return axios.get(`http://localhost:8000/api/admin/${id}`)
+  return api.get(`/admin/${id}`)
 }
 
 const updateAdmin = (id, idCard, nameUser, lastName, email) => {
   
-  return axios.put(`http://localhost:8000/api/admin/${id}`, {
+  return api.put(`/admin/${id}`, {
     numero_cedula: idCard,
     nombre: nameUser,
     apellido: lastName,
@@ -154,7 +174,7 @@ const updateAdmin = (id, idCard, nameUser, lastName, email) => {
 }
 
 const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position) => {
-  return axios.put(`http://localhost:8000/api/tecnico/${id}`, {
+  return api.put(`/tecnico/${id}`, {
     numero_de_cedula: idCard,
     nombre: nameUser,
     apellido: lastName,
@@ -170,9 +190,9 @@ const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position)
 }
 
 const getListVisit = () => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas`, {
+  return api.get(`/visitas`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -180,9 +200,9 @@ const getListVisit = () => {
 }
 
 const getVisit =  (id_visit) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.get(`http://localhost:8000/api/visitas/${id_visit}`, {
+  return api.get(`/visitas/${id_visit}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
@@ -191,9 +211,9 @@ const getVisit =  (id_visit) => {
 }
 
 const createAdmin = (idCard, name, lastName, email, password) => {
-  const token = sessionStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
-  return axios.post("http://localhost:8000/api/admin", {
+  return api.post("/admin", {
     numero_cedula: idCard,
     nombre: name,
     apellido: lastName, 
@@ -206,6 +226,13 @@ const createAdmin = (idCard, name, lastName, email, password) => {
     }
   });
 }
+
+
+const getListAdministrator = () => {
+  return api.get("/admin")
+
+}
+
 
 export const administratorService = {
   createTechnical,
@@ -225,6 +252,9 @@ export const administratorService = {
   updateTechnical,
   getListVisit,
   getVisit,
-  createAdmin
+  createAdmin,
+  getListAdministrator,
+  UpdateStateClient,
+  UpdateStateService
   
 }

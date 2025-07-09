@@ -56,21 +56,21 @@ const HeaderBar = () => {
   
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
+      navigate(`/resultado?data=${busqueda}`);
     }
   };
 
 
 
   useEffect(() => {
-    const role = sessionStorage.getItem("userRole");
+    const role = localStorage.getItem("userRole");
 
     switch (role) {
       case "tecnico":
         setProfilePath("/tecnico/perfil");
         break;
       case "administrador":
-        setProfilePath("/admin/perfil");
+        setProfilePath("/admin/perfil/");
         break;
     }
     
@@ -80,35 +80,55 @@ const HeaderBar = () => {
 
   const titles = {
     "/tecnico/inicio": "Inicio técnico",
-    "/tecnico/servicios": "Servicios técnico",
+    "/tecnico/servicios": "Servicios",
     "/tecnico/perfil": "Perfil técnico",
+    "/tecnico/visitas": "Visitas",
+    "/tecnico/reportes": "Reportes",
+    "/tecnico/visitas-iniciadas": "Visitas iniciadas",
+    "/tecnico/visitas-completadas": "Visitas completadas",
+    "/tecnico/visitas-programadas": "Visitas programadas",
+    "/tecnico/visitas-canceladas": "Visitas canceladas",
+    "/tecnico/visitas-en-camino": "Visitas en camino",
+
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
-    "/admin/perfil": "Perfil administrador",
+    "/admin/perfil/": "Perfil",
     "/admin/registrar-servicio": "Crear servicio",
     "/admin/registrar-administrador": "Crear administrador",
     "/admin/permisos": "Permisos administrador",
     "/admin/asignar-visita": "Asignar visita",
     "/admin/editar-cliente/": "Editar cliente", 
     "/admin/visitas": "Visitas",
-    "/admin/solicitudes": "Solicitudes"
+    "/admin/solicitudes": "Solicitudes",
+    "/admin/tecnicos": "Tecnicos",
+    "/admin/clientes":"Clientes",
+    "/admin/administradores":"Administradores",
+    "/admin/servicios":"Servicios",
+    "/admin/reportes":"Reportes",
+    "/admin/editar-perfil":"Editar perfil",
+    
+    
+    
   };
 
   function getRouteName(path) {
     if (path.startsWith("/admin/editar-cliente/") && path !== "/admin/editar-cliente/") {
       return "Editar cliente";
     }
-    if (path.startsWith("/admin/ver-mas-servicio/")) {
+    if (path.startsWith("/admin/servicio/")) {
       return "Ver servicio";
     }
-    if (path.startsWith("/admin/ver-visita/")) {
+    if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }
-    if (path.startsWith("/admin/perfil-cliente/")) {
+    if (path.startsWith("/admin/perfil/-cliente/")) {
       return "Perfil cliente";
     }
-    if (path.startsWith("/admin/perfil-tecnico/")) {
+    if (path.startsWith("/admin/perfil/")) {
+      return "Perfil administrador";
+    }
+    if (path.startsWith("/admin/perfil/-tecnico/")) {
       return "Perfil técnico";
     }
     if (path.startsWith("/admin/editar-tecnico/")) {
@@ -117,14 +137,20 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/editar-servicio/")) {
       return "Editar servicio";
     }
+    if (path.startsWith("/admin/solicitud/")) {
+      return "Ver solicitud";
+    }
     if (path.startsWith("/tecnico/ver-servicio/")) {
       return "Ver servicio";
     }
     if (path.startsWith("/tecnico/reporte/")) {
       return "Reporte técnico";
     }
-    if (path.startsWith("/tecnico/ver-visita/")) {
+    if (path.startsWith("/tecnico/visita/")) {
       return "Ver visita";
+    }
+    if (path.startsWith("/tecnico/servicio/")) {
+      return "Ver servicio";
     }
 
     return titles[path] || "Ruta desconocida";
@@ -152,12 +178,6 @@ const HeaderBar = () => {
       />
 
       <ContainerOption>
-        <Link >
-          <FontAwesomeIcon 
-            icon={faBell}
-            style={{fontSize: '24px'}}
-          />
-        </Link>
         <Link to={profilePath}>
           <FontAwesomeIcon 
             icon={faCircleUser}

@@ -153,8 +153,8 @@ const MenuSideCl = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem('userRole');
+    localStorage.removeItem("authToken");
+    localStorage.removeItem('userRole');
     navigate("/");
   };
 

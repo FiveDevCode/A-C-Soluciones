@@ -110,10 +110,10 @@ export class VisitaController {
   actualizarVisita = async (req, res) => {
     try {
       // Corregir la verificación de permisos
-      if (req.user.rol !== 'administrador') {
+      if (req.user.rol !== 'administrador' && req.user.rol !== 'tecnico') {
         return res.status(403).json({
           success: false,
-          message: 'Solo los administradores pueden actualizar visitas'
+          message: 'Solo administradores o técnicos pueden actualizar visitas'
         });
       }
 

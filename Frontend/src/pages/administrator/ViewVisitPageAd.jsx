@@ -1,12 +1,25 @@
 import styled from 'styled-components';
-import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  MenuItem,
+  Select,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
+} from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { handleGetPDFIdVisit } from '../../controllers/common/getPDFIdVisit.controller';
 import { useEffect, useState } from 'react';
 import { handleGetVisit } from '../../controllers/administrator/getVisitAd.controller';
 import { handleGetService } from '../../controllers/administrator/getServiceAd.controller';
-
+import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 const Container = styled.div`
   padding-top: 0.5rem;
@@ -63,11 +76,15 @@ const Botones = styled.div`
 
 const ViewVisitPageAd = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  
   const [visitData, setVisitData] = useState(null);
   const [stateVisit, setStateVisit] = useState('');
   const [pathName, setPathName] = useState(null)
   const [servicio, setServicio] = useState(null)
-  const navigate = useNavigate();
+  const [pendingState, setPendingState] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  
 
   useEffect(() => {
     if (id) {
@@ -88,7 +105,7 @@ const ViewVisitPageAd = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data[0].pdf_path)
+        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -126,7 +143,28 @@ const ViewVisitPageAd = () => {
   }
   
   const handleStateChange = (e) => {
-    setStateVisit(e.target.value);
+    const selected = e.target.value;
+
+    // Si es completada o cancelada, pedimos confirmación
+    if (['completada', 'cancelada'].includes(selected)) {
+      setPendingState(selected);
+      setOpenConfirm(true);
+    } else {
+      updateState(selected);
+    }
+  };
+
+  const updateState = async (newState) => {
+    setStateVisit(newState);
+
+    try {
+      await handleUpdateStateVisit(id, newState);
+      console.log('Estado actualizado con éxito');
+    } catch (error) {
+      console.error('Error al actualizar el estado:', error);
+      alert('No se pudo actualizar el estado. Verifica si la visita ya fue completada o cancelada.');
+      setStateVisit(visitData.estado);
+    }
   };
 
   const handleCreateReport = () => {
@@ -166,9 +204,9 @@ const ViewVisitPageAd = () => {
       </Typography>
 
       <Label>Estado de la visita:</Label>
-      <EstadoSelect value={stateVisit} onChange={handleStateChange}>
+      <EstadoSelect value={stateVisit} onChange={handleStateChange} disabled={['completada', 'cancelada'].includes(stateVisit)}>
         <MenuItem value="programada">Programada</MenuItem>
-        <MenuItem value="en camino">En camino</MenuItem>
+        <MenuItem value="en_camino">En camino</MenuItem>
         <MenuItem value="iniciada">Iniciada</MenuItem>
         <MenuItem value="completada">Completada</MenuItem>
         <MenuItem value="cancelada">Cancelada</MenuItem>
@@ -217,7 +255,7 @@ const ViewVisitPageAd = () => {
             sx={{ textTransform: 'none', fontSize: "1rem", fontWeight: "600" }}
             onClick={async () => {
               try {
-                const token = sessionStorage.getItem('authToken');
+                const token = localStorage.getItem('authToken');
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
                 const publicUrl = `http://localhost:8000/${relativePath}`;
@@ -254,6 +292,33 @@ const ViewVisitPageAd = () => {
         )}
         <Button variant="contained" color="primary" sx={{textTransform: 'none', fontSize: "1rem", fontWeight: "600"}}>Editar reporte</Button>
       </Botones>
+      <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <FaExclamationTriangle color="#FFA726" size={20} />
+          Confirmar cambio de estado
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            ¿Estás seguro de que deseas marcar esta visita como <strong>{pendingState}</strong>? Esta acción podría ser irreversible.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirm(false)} color="inherit">
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => {
+              setOpenConfirm(false);
+              updateState(pendingState);
+              setPendingState(null);
+            }}
+            color="error"
+            variant="contained"
+          >
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     </Container>
   );
