@@ -55,10 +55,11 @@ import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc
 import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
 import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
 import EditProfileTc from './pages/technical/EditProfileTcPageTc';
-import ErrorPage from './errorPages/ErrorPage';
 import ProfileClientPageCl from './pages/client/profileClientPageCl';
 import EditProfileCl from './pages/client/editProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
+import ErrorPage from './errorPages/ErrorPage'; 
+
 
 
 const Container = styled.div`
@@ -411,7 +412,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="*" element={<ErrorPage />} />
+            <Route path="*" element={<ErrorPage/>} />
             
           </Routes>
         {isCliente && !isPublicPage && <FooterHomeCl />}
