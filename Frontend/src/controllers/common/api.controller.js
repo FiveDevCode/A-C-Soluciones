@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api', // puedes usar una variable de entorno
-
+  baseURL: `${API_KEY}/api`, // puedes usar una variable de entorno
+  
 });
 
 // Agrega el token en cada request si existe

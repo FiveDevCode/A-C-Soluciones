@@ -30,7 +30,7 @@ App.use(express.json());
 
 // configuracion de CORS
 App.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: 'https://a-c-soluciones.vercel.app/', 
   credentials: true
 }));
 
