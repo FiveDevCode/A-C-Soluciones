@@ -12,7 +12,6 @@ router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos)
 router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
 // Rutas protegidas - requieren autenticación
-//router.use(authenticate);
 
 // Crear servicio (solo lo peude hacer administradores)
 router.post('/api/servicios', authenticate, isAdmin, servicioController.crearServicio);
