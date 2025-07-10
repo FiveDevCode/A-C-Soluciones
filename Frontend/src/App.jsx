@@ -58,6 +58,7 @@ import EditProfileTc from './pages/technical/EditProfileTcPageTc';
 import ErrorPage from './errorPages/ErrorPage';
 import ProfileClientPageCl from './pages/client/profileClientPageCl';
 import EditProfileCl from './pages/client/editProfileCl';
+import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
 
 
 const Container = styled.div`
@@ -177,7 +178,7 @@ function AppContent() {
 
             <Route path="/tecnico/servicios" element={
               <PrivateRoute roleRequired="tecnico">
-                <ViewServiceListPageAd />
+                <ViewServiceListPageTc />
               </PrivateRoute>
             } />
 
@@ -266,13 +267,13 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/perfil/-tecnico/:id" element={
+            <Route path="/admin/perfil-tecnico/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileAd />
               </PrivateRoute>
             } />
 
-            <Route path="/admin/perfil/-cliente/:id" element={
+            <Route path="/admin/perfil-cliente/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileClientPageAd />
               </PrivateRoute>
@@ -398,7 +399,7 @@ function AppContent() {
               </PrivateRoute>
             } />
  
-            <Route path="/admin/perfil/:id" element={
+            <Route path="/admin/perfil-administrador/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <UserProfileAdministratorPageAd/>
               </PrivateRoute>

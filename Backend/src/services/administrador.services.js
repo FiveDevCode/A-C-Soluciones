@@ -26,30 +26,11 @@ export class AdminService {
     return await this.adminRepository.obtenerAdmins();
   }
 
-  async autenticarAdmin(correo_electronico, contrasenia) {
-    const admin = await this.adminRepository.obtenerAdminPorCorreo(correo_electronico);
-    console.log('ADMIN ENCONTRADO:', admin?.estado);
-    if (!admin) {
-      throw new Error('Correo o contraseña incorrectos');
+  async actualizarAdmin(id, data) {
+    return await this.adminRepository.actualizarAdmin(id, data);
   }
-
-    if (admin.estado !== 'activo') {
-        console.log('ADMIN INACTIVO BLOQUEADO'); 
-
-      throw new Error('El administrador está inactivo');
-  }
-
-    const passwordValida = await bcrypt.compare(contrasenia, admin.contrasenia);
-      if (!passwordValida) {
-        throw new Error('Correo o contraseña incorrectos');
-  }
-
-    return admin;
-}
 
   async eliminarAdmin(id) {
     return await this.adminRepository.eliminarAdmin(id);
   }
 }
-
-

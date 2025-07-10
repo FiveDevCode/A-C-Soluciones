@@ -233,6 +233,16 @@ const getListAdministrator = () => {
 
 }
 
+const updateStateRequest = (id, state) => {
+  return api.patch(`/solicitudes/${id}/estado`, 
+    { estado: state }, // Aquí va el body
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
+};
 
 export const administratorService = {
   createTechnical,
@@ -255,6 +265,7 @@ export const administratorService = {
   createAdmin,
   getListAdministrator,
   UpdateStateClient,
-  UpdateStateService
+  UpdateStateService,
+  updateStateRequest
   
 }

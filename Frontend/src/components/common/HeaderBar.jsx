@@ -89,7 +89,7 @@ const HeaderBar = () => {
     "/tecnico/visitas-programadas": "Visitas programadas",
     "/tecnico/visitas-canceladas": "Visitas canceladas",
     "/tecnico/visitas-en-camino": "Visitas en camino",
-
+    "/tecnico/editar-perfil":"Editar perfil",
 
     "/admin/inicio": "Inicio administrador",
     "/admin/registrar-empleado": "Crear empleado",
@@ -98,7 +98,7 @@ const HeaderBar = () => {
     "/admin/registrar-administrador": "Crear administrador",
     "/admin/permisos": "Permisos administrador",
     "/admin/asignar-visita": "Asignar visita",
-    "/admin/editar-cliente/": "Editar cliente", 
+    "/admin/editar-cliente": "Editar cliente", 
     "/admin/visitas": "Visitas",
     "/admin/solicitudes": "Solicitudes",
     "/admin/tecnicos": "Tecnicos",
@@ -122,13 +122,22 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }
-    if (path.startsWith("/admin/perfil/-cliente/")) {
+    if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";
     }
     if (path.startsWith("/admin/perfil/")) {
+      return "Perfil";
+    }
+    if (path.startsWith("/admin/perfil-administrador/")) {
       return "Perfil administrador";
     }
-    if (path.startsWith("/admin/perfil/-tecnico/")) {
+    if (path.startsWith("/admin/editar-administrador/")) {
+      return "Editar administrador";
+    }
+    if (path.startsWith("/admin/reporte/")) {
+      return "Reporte";
+    }
+    if (path.startsWith("/admin/perfil-tecnico/")) {
       return "Perfil técnico";
     }
     if (path.startsWith("/admin/editar-tecnico/")) {
@@ -139,9 +148,6 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/admin/solicitud/")) {
       return "Ver solicitud";
-    }
-    if (path.startsWith("/tecnico/ver-servicio/")) {
-      return "Ver servicio";
     }
     if (path.startsWith("/tecnico/reporte/")) {
       return "Reporte técnico";
