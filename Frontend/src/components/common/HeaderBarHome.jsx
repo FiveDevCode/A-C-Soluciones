@@ -38,7 +38,6 @@ const LoginButton = styled(Link)`
 const ContainerHeader = styled.div`
   display: flex;
   flex-direction: column;
-  
 `
 
 
@@ -113,15 +112,8 @@ const ButtonProfile = styled(Link)`
 
 const HeaderBarHome = () => {
 
-  const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
-    }
-  };
-
   return (
     <ContainerHeader>
       <MenuBar>
@@ -131,11 +123,10 @@ const HeaderBarHome = () => {
       </LoginButton>
       </MenuBar>
       <Menu>
-        <Logo src={logo} size="13%" max="150px"/> 
+        <Link to="/"><Logo src={logo} size="100%" max="150px"/></Link> 
         <MenuOption>
-          <LinkOption to="/">Acerca de nosotros</LinkOption>
+          <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
           <LinkOption to="/">Servicios</LinkOption>
-          <LinkOption to="/">Contacte con nosotros</LinkOption>
         </MenuOption>
 
 

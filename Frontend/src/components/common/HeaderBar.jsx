@@ -54,13 +54,6 @@ const HeaderBar = () => {
 
   const { pathname } = useLocation();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      navigate(`/resultado?data=${busqueda}`);
-    }
-  };
-
-
 
   useEffect(() => {
     const role = localStorage.getItem("userRole");
@@ -167,31 +160,16 @@ const HeaderBar = () => {
   return (
     <ContainerBar>
       <TitleCategory>{title}</TitleCategory>
-      <InputSearch
-        value={busqueda}
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setBusqueda(e.target.value)}
-        placeholder="Buscar"
-        size="small"
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <FontAwesomeIcon icon={faSearch} style={{ color: '#9e9e9e' }} />
-            </InputAdornment>
-          ),
-        }}
-      />
 
-      <ContainerOption>
-        <Link to={profilePath}>
+      <ContainerOption style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Link to={profilePath} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', gap: "0.725rem", color: "blue" }}>
+          <span style={{ fontSize: '16px' }}>Perfil</span>
           <FontAwesomeIcon 
             icon={faCircleUser}
-            style={{ fontSize: '24px' }}
+            style={{ fontSize: '28px' }}
           />
         </Link>
       </ContainerOption>
-
 
     </ContainerBar>
   )

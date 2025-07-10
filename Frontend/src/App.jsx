@@ -58,7 +58,8 @@ import EditProfileTc from './pages/technical/EditProfileTcPageTc';
 import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
 import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
-//import ErrorPage from './errorPages/ErrorPage'; 
+import AboutUsPage from './pages/common/AboutUsPage';
+import ErrorPage from './errorPages/ErrorPage'; 
 
 
 
@@ -82,7 +83,7 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0 4rem;
+    padding: 0rem 8rem;
     gap: 2.5rem;
     margin-bottom: 1rem;
   `}
@@ -100,7 +101,8 @@ function AppContent() {
     '/registrarse',
     '/recuperar-contrasena',
     '/codigo-recuperacion',
-    '/cambiar-contrasena'
+    '/cambiar-contrasena',
+    '/acerca-de-nosotros'
   ];
 
   const isPublicPage = publicRoutes.includes(location.pathname);
@@ -118,6 +120,7 @@ function AppContent() {
     location.pathname === '/recuperar-contrasena' ||
     location.pathname === '/codigo-recuperacion' ||
     location.pathname === '/cambiar-contrasena' ||
+    location.pathname === '/acerca-de-nosotros' ||
     location.pathname === '/' ||
     role === 'cliente';
 
@@ -144,6 +147,7 @@ function AppContent() {
             <Route path="/recuperar-contrasena" element={<RecoverPasswordPage />} />
             <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
             <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
+            <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
 
             {/* ********************************* Rutas Cliente ********************************** */}
             <Route path="/cliente/inicio" element={
@@ -412,7 +416,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            {/* <Route path="*" element={<ErrorPage/>} /> */}
+            <Route path="*" element={<ErrorPage/>} />
             
           </Routes>
         {isCliente && !isPublicPage && <FooterHomeCl />}

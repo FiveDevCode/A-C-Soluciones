@@ -155,7 +155,6 @@ const HeaderBarCl = () => {
   return (
     <ContainerHeader>
       <MenuBar>
-        <FontAwesomeIcon icon={faBell} style={{fontSize:"24px"}}/>
         <ButtonProfile ref={profileButtonRef} onClick={handleShowMenu}>
           <FontAwesomeIcon icon={faCircleUser} style={{ fontSize: "24px" }} />
         </ButtonProfile>
@@ -169,9 +168,8 @@ const HeaderBarCl = () => {
           <Link to="/cliente/inicio"><Logo src={logo} size="45%"/></Link>
         </MenuHamburger>
         <MenuOption>
-          <LinkOption to="/">Acerca de nosotros</LinkOption>
+          <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
           <LinkOption to="/cliente/servicios">Servicios</LinkOption>
-          <LinkOption to="/">Contacte con nosotros</LinkOption>
         </MenuOption>
 
 
