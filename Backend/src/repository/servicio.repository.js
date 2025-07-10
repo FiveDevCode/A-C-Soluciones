@@ -1,57 +1,60 @@
-import { ServicioModel } from "../models/servicio.model.js";
+import { Op } from 'sequelize'; 
+import { ServicioModel } from '../models/servicios.model.js';
 
-const crearServicioRepository = async ({ titulo, descripcion, costo, adicionales }) => {
-  if (!titulo || !descripcion || !costo || !adicionales) {
-    throw new Error("Faltan campos por completar");
+
+export class ServicioRepository {
+  async crearServicio(data) {
+    return await ServicioModel.Servicio.create(data);
+  }
+  async obtenerServicioPorId(id) {
+    return await ServicioModel.Servicio.findByPk(id);
+  }
+  async obtenerServicioPorNombre(nombre) {
+    return await ServicioModel.Servicio.findOne({
+      where: { nombre: {[Op.iLike]: nombre }}});
+    }
+  async buscarServicios(termino) {
+    return await ServicioModel.Servicio.findAll({
+      where: {
+        nombre: {
+          [Op.iLike]: `%${termino}%` 
+        }
+      }
+    });
+  }
+  async obtenerServicios() {
+    return await ServicioModel.Servicio.findAll();
+  }
+  async obtenerServiciosActivos() {
+    return await ServicioModel.Servicio.findAll({
+      where: { estado: 'activo' }
+    });
+  }
+  async actualizarServicio(id, data) {
+    const servicio = await ServicioModel.Servicio.findByPk(id);
+    if (!servicio) return null;
+    await servicio.update(data);
+    return servicio;
+  }
+  async eliminarServicio(id) {
+    const servicio = await ServicioModel.Servicio.findByPk(id);
+    if (!servicio) return null;
+    await servicio.destroy();
+    return true;
+  }
+  async deshabilitarServicio(id) {
+    const servicio = await ServicioModel.Servicio.findByPk(id);
+    if (!servicio) return null;
+    servicio.estado = 'inactivo';
+    await servicio.save();
+    return servicio;
+  }
+  async habilitarServicio(id) {
+    const servicio = await ServicioModel.Servicio.findByPk(id);
+    if (!servicio) return null;
+    servicio.estado = 'activo';
+    await servicio.save();
+    return servicio;
   }
 
-  const nuevoServicio = await ServicioModel.crearServicio(titulo, descripcion, costo, adicionales);
-  return nuevoServicio;
-};
-
-
-const obtenerServicioRepository = async () => {
-    const servicios = await ServicioModel.consultarServicios();
-    return servicios;
-    };
-
-const obtenerServicioIDRepository = async (id) => {
-    const servicio = await ServicioModel.buscarServicio(id);
-    return servicio;
-};
-
-const actualizarServicioRepository = async (id, datos) => {
-  const { titulo, descripcion, costo, adicionales } = datos;
-  const servicioActualizado = await ServicioModel.actualizarServicio(
-    id,
-    titulo,
-    descripcion,
-    costo,
-    adicionales
-  );
-  return servicioActualizado;
-};
-
-const eliminarServicioRepository = async (id) =>{
-   const servicio = await ServicioModel.eliminarServicio(id);
-   return servicio
-};
-
-
-
-
-
-export const ServicioRepository = {
-    crearServicioRepository,
-    obtenerServicioRepository,
-    obtenerServicioIDRepository,
-    eliminarServicioRepository,
-    actualizarServicioRepository
-
-};
-
-
-
-
-
-
+}
