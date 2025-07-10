@@ -1,4 +1,4 @@
-import api from "../controllers/common/Api.controller";
+import api from "../controllers/common/api.controller";
 
 
 const createTechnical = (IdCard, name, lastName, email, phone, password, position) => {
