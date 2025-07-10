@@ -17,11 +17,11 @@ export class AuthService {
       const [admin, cliente, tecnico] = await Promise.all([
         AdminModel.Admin.findOne({
           where: { correo_electronico: correo.trim().toLowerCase() },
-          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol']
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol', 'estado']
         }),
         ClienteModel.Cliente.findOne({ 
           where: { correo_electronico: correo.trim().toLowerCase() },
-          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol']
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol', 'estado']
         }),
         TecnicoModel.Tecnico.findOne({
           where: { correo_electronico: correo.trim().toLowerCase() },
@@ -38,6 +38,15 @@ export class AuthService {
       if(tecnico && tecnico.correo_electronico === tecnico.correo_electronico && tecnico.estado === 'inactivo'){
         throw new Error('El empleado no está activo para ingresar al sistema');
       }
+
+      if(admin && admin.correo_electronico === admin.correo_electronico && admin.estado === 'inactivo'){
+        throw new Error('El administrador no está activo para ingresar al sistema');
+      }
+
+      if(cliente && cliente.correo_electronico === cliente.correo_electronico && cliente.estado === 'inactivo'){
+        throw new Error('El cliente no está activo para ingresar al sistema');
+      }
+
 
       // Verificación de contraseña con hash
       if (!user.contrasenia?.startsWith('$2b$')) {

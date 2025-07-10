@@ -148,7 +148,11 @@ const Admin = sequelize.define('Admin', {
   recovery_expires: {
     type: DataTypes.DATE,
     allowNull: true
-  }
+  },
+  estado: {
+    type: DataTypes.ENUM('activo', 'inactivo'),
+    defaultValue: 'activo',
+  },
   }, {
     tableName: 'administrador',
     timestamps: false,

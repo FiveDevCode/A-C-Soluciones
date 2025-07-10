@@ -170,7 +170,6 @@ const Cliente= sequelize.define('Cliente',{
       allowNull: true
     },
     estado: {
-
         type: DataTypes.ENUM('activo', 'inactivo'),
         allowNull: false,
         defaultValue: 'activo'
