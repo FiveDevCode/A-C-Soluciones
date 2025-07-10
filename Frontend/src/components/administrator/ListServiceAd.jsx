@@ -105,7 +105,13 @@ const ListServiceAd = ({services}) => {
             </NotificationInfo>
           </NotificationDescription>
           <ContainerOption>
-            <Link to={`/tecnico/servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+            <Link to={`/admin/servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faEdit} />
+                <span>Editar</span>
+              </SeeMore>
+            </Link>
+            <Link to={`/admin/servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>

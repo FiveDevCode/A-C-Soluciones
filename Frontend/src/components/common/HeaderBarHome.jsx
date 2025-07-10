@@ -5,7 +5,35 @@ import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
+
+
+
+const LoginButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #007BFF 0%, #0056b3 100%);
+  color: #ffffff;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #00408a 100%);
+    box-shadow: 0 6px 14px rgba(0, 86, 179, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
 
 const ContainerHeader = styled.div`
   display: flex;
@@ -97,22 +125,10 @@ const HeaderBarHome = () => {
   return (
     <ContainerHeader>
       <MenuBar>
-        <Button
-          variant="contained" 
-          size="small" 
-          sx={{ 
-            textTransform: 'none', 
-            height: '32px', 
-            paddingX: 2, 
-            borderRadius: '8px',
-            fontSize: '1rem',
-            fontWeight: 500
-          }}
-          LinkComponent={Link}
-          to="/iniciar-sesion"
-        >
-          Iniciar sesion
-        </Button>
+      <LoginButton to="/iniciar-sesion">
+        <FaUser />
+        Iniciar sesión
+      </LoginButton>
       </MenuBar>
       <Menu>
         <Logo src={logo} size="13%" max="150px"/> 
