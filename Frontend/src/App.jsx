@@ -58,7 +58,7 @@ import EditProfileTc from './pages/technical/EditProfileTcPageTc';
 import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
 import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
-import ErrorPage from './errorPages/ErrorPage'; 
+//import ErrorPage from './errorPages/ErrorPage'; 
 
 
 
@@ -412,7 +412,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="*" element={<ErrorPage/>} />
+            {/* <Route path="*" element={<ErrorPage/>} /> */}
             
           </Routes>
         {isCliente && !isPublicPage && <FooterHomeCl />}
