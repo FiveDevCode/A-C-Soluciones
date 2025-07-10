@@ -55,8 +55,8 @@ import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc
 import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
 import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
 import EditProfileTc from './pages/technical/EditProfileTcPageTc';
-import ProfileClientPageCl from './pages/client/profileClientPageCl';
-import EditProfileCl from './pages/client/editProfileCl';
+import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
+import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
 import ErrorPage from './errorPages/ErrorPage'; 
 
