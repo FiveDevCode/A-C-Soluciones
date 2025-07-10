@@ -38,7 +38,6 @@ const LoginButton = styled(Link)`
 const ContainerHeader = styled.div`
   display: flex;
   flex-direction: column;
-  
 `
 
 
@@ -81,6 +80,8 @@ const Menu = styled.div`
   height: 95px;
   justify-content: space-between;
   padding: 0 8rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   @media screen and (max-width: 1520px) {
     padding: 0 4rem;
     
@@ -113,15 +114,8 @@ const ButtonProfile = styled(Link)`
 
 const HeaderBarHome = () => {
 
-  const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
-    }
-  };
-
   return (
     <ContainerHeader>
       <MenuBar>
@@ -131,11 +125,10 @@ const HeaderBarHome = () => {
       </LoginButton>
       </MenuBar>
       <Menu>
-        <Logo src={logo} size="13%" max="150px"/> 
+        <Link to="/"><Logo src={logo} size="100%" max="150px"/></Link> 
         <MenuOption>
-          <LinkOption to="/">Acerca de nosotros</LinkOption>
-          <LinkOption to="/">Servicios</LinkOption>
-          <LinkOption to="/">Contacte con nosotros</LinkOption>
+          <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
+          <LinkOption to="/iniciar-sesion">Servicios</LinkOption>
         </MenuOption>
 
 

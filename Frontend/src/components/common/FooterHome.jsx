@@ -45,10 +45,10 @@ const FooterHome = () => {
       </ContainerFooterInfo>
       <DividerFooter />
       <ContainerFooterOption>
-        <OptionFooter to="/about-us">Acerca de nosotros</OptionFooter>
-        <OptionFooter to="/privacy-policy">Politicas de privacidad</OptionFooter>
-        <OptionFooter to="/faq">Preguntas Frecuentes (FAQ)</OptionFooter>
-        <OptionFooter to="/terms-and-conditions">Términos y Condiciones</OptionFooter>
+        <OptionFooter to="/acerca-de-nosotros">Acerca de nosotros</OptionFooter>
+        <OptionFooter to="/politicas-de-privacidad">Politicas de privacidad</OptionFooter>
+        <OptionFooter to="/preguntas-frecuentes">Preguntas Frecuentes (FAQ)</OptionFooter>
+        <OptionFooter to="/terminos-y-condiciones">Términos y Condiciones</OptionFooter>
       </ContainerFooterOption>
     </ContainerFooter>
   )

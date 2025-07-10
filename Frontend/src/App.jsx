@@ -58,7 +58,11 @@ import EditProfileTc from './pages/technical/EditProfileTcPageTc';
 import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
 import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
-//import ErrorPage from './errorPages/ErrorPage'; 
+import AboutUsPage from './pages/common/AboutUsPage';
+import ErrorPage from './errorPages/ErrorPage.jsx'; 
+import ClientFaqsPage from './pages/common/ClientFaqsPage';
+import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
+import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
 
 
 
@@ -82,7 +86,7 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0 4rem;
+    padding: 0rem 8rem;
     gap: 2.5rem;
     margin-bottom: 1rem;
   `}
@@ -100,7 +104,8 @@ function AppContent() {
     '/registrarse',
     '/recuperar-contrasena',
     '/codigo-recuperacion',
-    '/cambiar-contrasena'
+    '/cambiar-contrasena',
+
   ];
 
   const isPublicPage = publicRoutes.includes(location.pathname);
@@ -118,6 +123,10 @@ function AppContent() {
     location.pathname === '/recuperar-contrasena' ||
     location.pathname === '/codigo-recuperacion' ||
     location.pathname === '/cambiar-contrasena' ||
+    location.pathname === '/acerca-de-nosotros' ||
+    location.pathname === '/preguntas-frecuentes' ||
+    location.pathname === '/terminos-y-condiciones' ||
+    location.pathname === '/politicas-de-privacidad' ||
     location.pathname === '/' ||
     role === 'cliente';
 
@@ -144,6 +153,10 @@ function AppContent() {
             <Route path="/recuperar-contrasena" element={<RecoverPasswordPage />} />
             <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
             <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
+            <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
+            <Route path="/preguntas-frecuentes" element={<ClientFaqsPage />} />
+            <Route path="/terminos-y-condiciones" element={<TermsAndConditionsPage />} />
+            <Route path="/politicas-de-privacidad" element={<PrivacyPolicyPage />} />
 
             {/* ********************************* Rutas Cliente ********************************** */}
             <Route path="/cliente/inicio" element={
@@ -412,7 +425,7 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            {/* <Route path="*" element={<ErrorPage/>} /> */}
+            <Route path="*" element={<ErrorPage/>} />
             
           </Routes>
         {isCliente && !isPublicPage && <FooterHomeCl />}

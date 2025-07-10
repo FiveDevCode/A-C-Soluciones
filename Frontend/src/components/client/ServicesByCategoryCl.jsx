@@ -61,7 +61,6 @@ const SliderWrapper = styled.div`
 
   .slick-prev,
   .slick-next {
-    z-index: 2;
     width: 40px;
     height: 40px;
     background-color: #e3f2fd;
@@ -103,7 +102,6 @@ const Container = styled.section`
 const ArrowButtonBase = styled.button`
   position: absolute;
   top: 40%;
-  z-index: 3;
   width: 40px;
   height: 40px;
   border-radius: 50%;

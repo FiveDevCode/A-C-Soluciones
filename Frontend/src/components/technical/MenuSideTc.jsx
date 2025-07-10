@@ -188,23 +188,11 @@ const MenuSideTc = () => {
           />
           <TitleOption>Reportes</TitleOption>
         </ContainerOption>
-        <ContainerOption>
-          <IconOption 
-            icon={faClockRotateLeft} 
-          />
-          <TitleOption>Ver historial</TitleOption>
-        </ContainerOption>
       </ContainerAllOption>
       
 
       <ContainerAllConfiguration>
         <Divider/> 
-        <ContainerOption>
-          <IconOption 
-            icon={faGear} 
-          />
-          <TitleOption>Configuracion</TitleOption>
-        </ContainerOption>
         <ContainerOptionClose onClick={handleLogout}>
           <IconOption 
             icon={faArrowRightFromBracket} 

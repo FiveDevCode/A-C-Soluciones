@@ -1,6 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
+import { useEffect, useState } from "react";
+import { faTasks } from "@fortawesome/free-solid-svg-icons";
+import ServiceOpenCl from "./ServiceOpenCl";
 
 const FullWidthCard = styled.section`
   display: flex;
@@ -126,31 +130,57 @@ const RightIllustration = styled.div`
 `;
 
 const RecommendedServiceFullWidth = ({
-  icon,
-  title,
-  description,
-  to,
+  id,
   color = "#007bff",
   tag = "Recomendado",
   image // opcional: URL o import de imagen ilustrativa
 }) => {
+
+  const [service, setService] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  
+  useEffect(() => {
+    handleGetService(id)
+      .then(res => {
+        setService(res.data.data); // o donde esté el dato
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error al obtener servicio recomendado:", err);
+        setError("No se pudo cargar el servicio.");
+        setLoading(false);
+      });
+  }, [id]);
+  if (loading) return null; // o un spinner
+  if (error || !service) return null;
+
   return (
     <FullWidthCard highlightColor={color}>
       <RecommendedTag color={color}>{tag}</RecommendedTag>
       <LeftContent>
         <IconBox color={color}>
-          <FontAwesomeIcon icon={icon} />
+          <FontAwesomeIcon icon={faTasks} />
         </IconBox>
         <TextSection>
-          <Title>{title}</Title>
-          <Description>{description}</Description>
-          <ActionButton to={to} color={color}>Ver más</ActionButton>
+          <Title>{service.nombre}</Title>
+          <Description>{service.descripcion}</Description>
+          <ActionButton onClick={() => setSelectedService(service)} color={color}>
+            Ver más
+          </ActionButton>
         </TextSection>
       </LeftContent>
       {image && (
         <RightIllustration>
           <img src={image} alt="Ilustración del servicio" />
         </RightIllustration>
+      )}
+      {selectedService && (
+        <ServiceOpenCl
+          servicio={selectedService}
+          onClose={() => setSelectedService(null)}
+        />
       )}
     </FullWidthCard>
   );

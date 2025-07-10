@@ -60,25 +60,8 @@ const FloatingMenuHomeCl = forwardRef((props, ref) => {
 
   return (
     <ContainerFloating ref={ref} data-testid="floating-menu">
-      <Option to="/accesibility">
-        <OptionText>Accesibilidad</OptionText>
-      </Option>
-      <Divider />
       <Option to="/cliente/perfil">
         <OptionText>Perfil</OptionText>
-      </Option>
-      <Option to="/notifications">
-        <OptionText>Notificaciones</OptionText>
-      </Option>
-      <Option to="/cliente/reports">
-        <OptionText>Informes</OptionText>
-      </Option>
-      <Divider />
-      <Option to="/preferences">
-        <OptionText>Preferencias</OptionText>
-      </Option>
-      <Option to="/dark-mode">
-        <OptionText>Modo Oscuro</OptionText>
       </Option>
       <Divider />
       <OptionClose onClick={handleLogout}>

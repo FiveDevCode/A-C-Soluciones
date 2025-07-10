@@ -18,8 +18,7 @@ const TitleSearch = styled.h1`
 const FilterTechnicalsAd = ({ count }) => {
   return (
     <ContainerInfo>
-      <TitleSearch>Se encontraron {count} resultados | filtros</TitleSearch>
-      <FontAwesomeIcon data-testid="filter-icon" icon={faFilter} style={{fontSize:"20px"}}/>
+      <TitleSearch>Se encontraron {count} resultados </TitleSearch>
     </ContainerInfo>
   )
 }

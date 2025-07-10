@@ -18,10 +18,7 @@ const HomeSessionPageCl = () => {
   return (
     <ContentHome>
       <RecommendedService
-        icon={faTasks}
-        title="Asignación de visitas"
-        description="Organiza fácilmente el cronograma de trabajo asignando visitas técnicas desde el panel."
-        to="/admin/asignar-visita"
+        id="2"
         color="#28a745"
         image={servicio}
       />
