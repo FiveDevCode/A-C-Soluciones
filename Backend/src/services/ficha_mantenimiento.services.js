@@ -36,7 +36,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     
     // Texto del encabezado
     doc.fillColor('white')
-       .fontSize(9)  // Reducido de 10 a 9
+       .fontSize(8)  // Reducido de 10 a 9
        .font('Helvetica-Bold')
        .text(text, 50, currentY + 4, {  // Reducido padding de 5 a 4
          width: doc.page.width - 100,
@@ -58,7 +58,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     
     // Etiqueta
     doc.fillColor(primaryColor)
-       .fontSize(7)
+       .fontSize(8)
        .font('Helvetica-Bold')
        .text(label, x + 5, currentY + 1);  // Reducido de 2 a 1
     
@@ -76,7 +76,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     if (!text) return;
     
     doc.fillColor(textColor)
-       .fontSize(9)
+       .fontSize(11.5)
        .font('Helvetica')
        .text(text, indent, doc.y, { 
          width: doc.page.width - (indent * 2),
@@ -110,7 +110,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     // Caption si existe
     if (caption) {
       doc.fillColor('#718096')
-         .fontSize(7)
+         .fontSize(8)
          .font('Helvetica-Oblique')
          .text(caption, imageX, doc.y + maxHeight + 2, {  // Reducido de 3 a 2
            width: maxWidth,
@@ -118,7 +118,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
          });
     }
     
-    doc.y += maxHeight + 8;  // Reducido de 15 a 8
+    doc.y += maxHeight + 2;  // Reducido de 15 a 8
     doc.fillColor(textColor);
   };
 
@@ -136,11 +136,11 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
      .text('FICHA DE MANTENIMIENTO', 0, 18, { align: 'center' });  // Reducido de 20 a 18
   
   // Subtítulo
-  doc.fontSize(10)  // Reducido de 11 a 10
+  doc.fontSize(8)  // Reducido de 11 a 10
      .font('Helvetica')
      .text(`Documento N° ${ficha.id} | ${new Date().toLocaleDateString('es-CO')}`, 0, 40, { align: 'center' });  // Reducido de 45 a 40
 
-  doc.y = headerHeight + 8;  // Reducido de 10 a 8
+  doc.y = headerHeight + 2;  // Reducido de 10 a 8
 
   // INFORMACIÓN DEL CLIENTE
   createSectionHeader('INFORMACIÓN DEL CLIENTE', secondaryColor);

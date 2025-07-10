@@ -10,7 +10,7 @@ export const authenticate = async (req, res, next) => {
     // Obtener el token del header Authorization
     const authHeader = req.headers.authorization;
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer ')) {
       return res.status(401).json({ 
         success: false,
         message: 'Formato de token inválido. Use: Bearer <token>' 

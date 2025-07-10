@@ -2,13 +2,13 @@ import path from 'path';
 
 import express from 'express';
 import { crearFichaMantenimiento, listarFichas} from '../controllers/ficha_mantenimiento.controller.js';
-import { isAdminOrTecnico, isCliente} from '../middlewares/autenticacion.js';
+import { isAdminOrTecnico, isCliente, authenticate} from '../middlewares/autenticacion.js';
 import upload from '../middlewares/uploadImages.js';
 
 const router = express.Router();
 
 router.post(
-  '/fichas',
+  '/fichas', authenticate,
   isAdminOrTecnico,
   upload.fields([
     { name: 'foto_estado_antes', maxCount: 1 },
@@ -18,9 +18,9 @@ router.post(
   crearFichaMantenimiento
 );
 
-router.get('/fichas', isAdminOrTecnico, listarFichas);
+router.get('/fichas', authenticate, isAdminOrTecnico, listarFichas);
 
-router.get('/descargar/:nombreArchivo', isCliente, (req, res) => {
+router.get('/descargar/:nombreArchivo', authenticate, isCliente, (req, res) => {
   const { nombreArchivo } = req.params;
   const filePath = path.resolve(`uploads/fichas/${nombreArchivo}`);
 
