@@ -8,9 +8,6 @@ const router = Router();
 // Crear una instancia del controlador
 const solicitudController = new SolicitudController();
 
-
-//router.use(authenticate);
-
 // Crear una nueva solicitud
 router.post('/api/solicitudes', authenticate, isCliente, solicitudController.crear);
 
