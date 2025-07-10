@@ -60,6 +60,7 @@ import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
 import AboutUsPage from './pages/common/AboutUsPage';
 import ErrorPage from './errorPages/ErrorPage'; 
+import ClientFaqs from './components/common/ClientFaqs';
 
 
 
@@ -148,6 +149,7 @@ function AppContent() {
             <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
             <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
             <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
+            <Route path="/preguntas-frecuentes" element={<ClientFaqs />} />
 
             {/* ********************************* Rutas Cliente ********************************** */}
             <Route path="/cliente/inicio" element={

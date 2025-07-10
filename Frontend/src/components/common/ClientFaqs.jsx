@@ -61,7 +61,7 @@ const Respuesta = styled.p`
   color: black;
 `;
 
-const ClientFaqsCl = () => {
+const ClientFaqs = () => {
   return (
     <Container>
       <FiltroContainer>
@@ -116,4 +116,4 @@ const ClientFaqsCl = () => {
   );
 };
 
-export default ClientFaqsCl;
+export default ClientFaqs;
