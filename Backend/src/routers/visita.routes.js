@@ -9,7 +9,7 @@ const visitaController = new VisitaController();
 router.post('/api/visitas', authenticate, isAdmin, visitaController.crearVisita);
 // Obtener servicios asignados a un técnico autenticado
 router.get('/api/visitas/asignados', authenticate, isTecnico, visitaController.obtenerServiciosAsignados);
-router.get('/api/visitas/asignados/:id', visitaController.obtenerServicioAsignadoPorId);
+router.get('/api/visitas/asignados/:id', authenticate, isTecnico, visitaController.obtenerServicioAsignadoPorId);
 router.get('/api/visitas', authenticate, isAdminOrTecnico, visitaController.obtenerVisitas); 
 
 router.get('/api/visitas/:id', authenticate, isAdminOrTecnico, visitaController.obtenerVisitaPorId);
