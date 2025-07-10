@@ -37,9 +37,6 @@ const ActivityFilterAd = () => {
     <Container>
       <span>Actividades</span>
       <Divider />
-      <FilterText>
-        filtros <FontAwesomeIcon icon={faFilter} />
-      </FilterText>
     </Container>
   )
 }

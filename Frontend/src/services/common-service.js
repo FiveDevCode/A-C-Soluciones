@@ -151,6 +151,10 @@ const updatePassword = (email, code, newPassword) => {
   });
 };
 
+const getListFaqs = () => {
+  return api.get("/faqs")
+}
+
 export const commonService = {
   login,
   createMaintenanceSheet,
@@ -162,6 +166,7 @@ export const commonService = {
   getListToken,
   createForgotPassword,
   createVerificCode,
-  updatePassword
+  updatePassword,
+  getListFaqs
 
 }

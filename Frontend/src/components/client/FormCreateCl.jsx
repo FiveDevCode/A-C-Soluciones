@@ -218,7 +218,7 @@ const FormCreateCl = () => {
         }
         label={
           <Typography variant="body2">
-            Aceptas los <Link href="#">Términos y condiciones</Link>
+            Aceptas los <Link to="/terminos-y-condiciones">Términos y condiciones</Link>
           </Typography>
         }
       />
@@ -231,7 +231,7 @@ const FormCreateCl = () => {
         }
         label={
           <Typography variant="body2">
-            Quiero recibir ofertas personalizadas de A&C Soluciones. Consulta las <Link href="#">Políticas de privacidad</Link>
+            Quiero recibir ofertas personalizadas de A&C Soluciones. Consulta las <Link to="/politicas-de-privacidad">Políticas de privacidad</Link>
           </Typography>
         }
       />
