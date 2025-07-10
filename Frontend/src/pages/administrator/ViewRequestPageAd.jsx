@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
 import { handleGetRequest } from '../../controllers/common/getRequest.controller';
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
+import { handleUpdateStateRequest } from '../../controllers/administrator/UpdateStateRequestAd.controller';
 
 
 const Container = styled.div`
@@ -96,12 +97,12 @@ const ViewRequestPageAd = () => {
   
   const handleStateChange = async(e) => {
     const newState = e.target.value;
-    setStateVisit(newState); 
+    setStateRequest(newState); 
 
 
 
     try {
-      await handleUpdateStateVisit(id, newState); // Llama al backend
+      await handleUpdateStateRequest(id, newState); // Llama al backend
       console.log('Estado de la visita actualizado exitosamente');
     } catch (error) {
       console.error('Error al actualizar el estado de la visita:', error);
@@ -140,14 +141,14 @@ const ViewRequestPageAd = () => {
         {direccion_servicio ? `${direccion_servicio}` : 'No se especificó direccion'}
       </Typography>
 
-      <Label>Estado de la visita:</Label>
+      <Label>Estado de la solicitud:</Label>
       <EstadoSelect value={stateRequest} onChange={handleStateChange}>
         <MenuItem value="pendiente">Pendiente</MenuItem>
         <MenuItem value="cotizada">Cotizada</MenuItem>
         <MenuItem value="aceptada">Aceptada</MenuItem>
-        <MenuItem value="en proceso">En proceso</MenuItem>
+        <MenuItem value="en_proceso">En proceso</MenuItem>
         <MenuItem value="completada">Completada</MenuItem>
-        <MenuItem value="cancelada">Cancelada</MenuItem>
+        <MenuItem value="anulada">Cancelada</MenuItem>
       </EstadoSelect>
 
       <Accordion

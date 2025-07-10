@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import ListVisitAd from "../../components/administrator/ListVisitAd";
 import styled from "styled-components";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
-import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
-import ListServiceAd from "../../components/administrator/ListServiceAd";
+import ListServiceTc from "../../components/technical/ListSevicesTc";
 
 
 
@@ -39,7 +37,7 @@ const ViewServiceListPageTc = () => {
       {services.length === 0 ? (
         <p style={{textAlign: "center"}}>No hay ninguna visita asignada por el momento.</p>
       ) : (
-        <ListServiceAd services={services} />
+        <ListServiceTc services={services} />
       )}
 
     </ContainerServices>

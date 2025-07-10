@@ -31,6 +31,7 @@ const createMaintenanceSheet = ({
 
   const formData = new FormData();
 
+  console.log(foto_estado_antes)
   formData.append("id_cliente", id_cliente);
   formData.append("id_tecnico", id_tecnico);
   formData.append("introduccion", introduccion);
@@ -45,14 +46,13 @@ const createMaintenanceSheet = ({
   formData.append("fecha_de_mantenimiento", fecha_de_mantenimiento);
   formData.append("id_visitas", id_visitas);
 
-  if (foto_estado_antes) formData.append("foto_estado_antes", foto_estado_antes);
+  if (foto_estado_antes) formData.append("foto_estado_antes", foto_estado_antes, );
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
   if (foto_descripcion_trabajo) formData.append("foto_descripcion_trabajo", foto_descripcion_trabajo);
-
   return api.post("/fichas", formData, {
     headers: {
-      "Authorization": `Bearer ${token}`,
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
 
