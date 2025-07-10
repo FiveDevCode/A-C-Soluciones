@@ -60,7 +60,9 @@ import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
 import AboutUsPage from './pages/common/AboutUsPage';
 import ErrorPage from './errorPages/ErrorPage'; 
-import ClientFaqs from './components/common/ClientFaqs';
+import ClientFaqsPage from './pages/common/ClientFaqsPage';
+import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
+import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
 
 
 
@@ -103,7 +105,7 @@ function AppContent() {
     '/recuperar-contrasena',
     '/codigo-recuperacion',
     '/cambiar-contrasena',
-    '/acerca-de-nosotros'
+
   ];
 
   const isPublicPage = publicRoutes.includes(location.pathname);
@@ -122,6 +124,9 @@ function AppContent() {
     location.pathname === '/codigo-recuperacion' ||
     location.pathname === '/cambiar-contrasena' ||
     location.pathname === '/acerca-de-nosotros' ||
+    location.pathname === '/preguntas-frecuentes' ||
+    location.pathname === '/terminos-y-condiciones' ||
+    location.pathname === '/politicas-de-privacidad' ||
     location.pathname === '/' ||
     role === 'cliente';
 
@@ -149,7 +154,9 @@ function AppContent() {
             <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
             <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
             <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
-            <Route path="/preguntas-frecuentes" element={<ClientFaqs />} />
+            <Route path="/preguntas-frecuentes" element={<ClientFaqsPage />} />
+            <Route path="/terminos-y-condiciones" element={<TermsAndConditionsPage />} />
+            <Route path="/politicas-de-privacidad" element={<PrivacyPolicyPage />} />
 
             {/* ********************************* Rutas Cliente ********************************** */}
             <Route path="/cliente/inicio" element={
