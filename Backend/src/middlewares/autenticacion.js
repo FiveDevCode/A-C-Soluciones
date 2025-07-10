@@ -5,11 +5,12 @@ const authService = new AuthService();
 
 // Middleware de autenticación que verifica el token JWT
 export const authenticate = async (req, res, next) => {
+  console.log(`🔐 Ejecutando authenticate en: ${req.method} ${req.originalUrl}`);
   try {
     // Obtener el token del header Authorization
     const authHeader = req.headers.authorization;
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer ')) {
       return res.status(401).json({ 
         success: false,
         message: 'Formato de token inválido. Use: Bearer <token>' 
@@ -45,9 +46,6 @@ export const authenticate = async (req, res, next) => {
 
 export const authorize = (roles = []) => {
   return (req, res, next) => {
-    console.log(`Rol recibido: "${req.user.rol}"`);
-
-
     // Si no se especifican roles, permitir acceso a cualquier rol autenticado
     if (roles.length === 0) {
       return next();

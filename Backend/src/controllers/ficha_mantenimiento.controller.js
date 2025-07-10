@@ -7,6 +7,8 @@ import { TecnicoModel } from '../models/tecnico.model.js';
 import { ValidationError } from 'sequelize';
 
 export const crearFichaMantenimiento = async (req, res) => {
+  
+
   try {
     // Log completo del body recibido
     console.log('req.body:', req.body);
@@ -100,12 +102,13 @@ export const crearFichaMantenimiento = async (req, res) => {
 
     // Ruta de imágenes para pasar al PDF
     const imagenes = {
-      estadoAntes: fotoAntes ? path.join('uploads', 'fotos_fichas', fotoAntes.filename) : null,
-      estadoFinal: fotoFinal ? path.join('uploads', 'fotos_fichas', fotoFinal.filename) : null,
-      descripcion: fotoDescripcion ? path.join('uploads', 'fotos_fichas', fotoDescripcion.filename) : null,
+      estadoAntes: fotoAntes ? path.resolve('uploads', 'fotos_fichas', fotoAntes.filename) : null,
+      estadoFinal: fotoFinal ? path.resolve('uploads', 'fotos_fichas', fotoFinal.filename) : null,
+      descripcion: fotoDescripcion ? path.resolve('uploads', 'fotos_fichas', fotoDescripcion.filename) : null,
     };
 
     // Generar PDF
+
     const pdfPath = await generarPDF(nuevaFicha, clienteInfo, tecnicoInfo, imagenes);
 
     // Guardar path PDF en BD

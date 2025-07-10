@@ -1,44 +1,51 @@
 import request from 'supertest';
 import express from 'express';
 
-// Mock del controlador ANTES de importar las rutas
-const mockSolicitudController = {
-  crear: jest.fn((req, res) => res.status(201).json({ message: 'Solicitud creada' })),
-  obtenerTodos: jest.fn((req, res) => res.status(200).json([])),
-  obtenerPorId: jest.fn((req, res) => res.status(200).json({ id: req.params.id })),
-  obtenerPorCliente: jest.fn((req, res) => res.status(200).json({ cliente_id: req.params.cliente_id_fk })),
-  actualizarEstado: jest.fn((req, res) => res.status(200).json({ message: 'Estado actualizado' })),
-  eliminar: jest.fn((req, res) => res.status(200).json({ message: 'Solicitud eliminada' }))
-};
-
-// Mock de la clase SolicitudController
-jest.mock('../../../src/controllers/solicitud.controller.js', () => ({
-  SolicitudController: jest.fn().mockImplementation(() => mockSolicitudController)
-}));
-
-// Mock de los middlewares de autenticación
-const mockAuthenticate = jest.fn((req, res, next) => {
-  req.user = { id: 1, rol: 'cliente' };
-  next();
-});
-
-const mockIsAdminOrCliente = jest.fn((req, res, next) => next());
-const mockIsAdminOrTecnico = jest.fn((req, res, next) => next());
-const mockIsCliente = jest.fn((req, res, next) => next());
+// ======= Middlewares =======
+let mockAuthenticate;
+let mockIsAdminOrCliente;
+let mockIsAdminOrTecnico;
+let mockIsCliente;
 
 jest.mock('../../../src/middlewares/autenticacion.js', () => ({
-  authenticate: mockAuthenticate,
-  isAdminOrCliente: mockIsAdminOrCliente,
-  isAdminOrTecnico: mockIsAdminOrTecnico,
-  isCliente: mockIsCliente
+  authenticate: (...args) => mockAuthenticate(...args),
+  isAdminOrCliente: (...args) => mockIsAdminOrCliente(...args),
+  isAdminOrTecnico: (...args) => mockIsAdminOrTecnico(...args),
+  isCliente: (...args) => mockIsCliente(...args),
 }));
 
-// Importar las rutas DESPUÉS de los mocks
+// ======= Mock del controlador directamente en jest.mock =======
+jest.mock('../../../src/controllers/solicitud.controller.js', () => {
+  const mockController = {
+    crear: jest.fn((req, res) => res.status(201).json({ message: 'Solicitud creada' })),
+    obtenerTodos: jest.fn((req, res) => res.status(200).json([])),
+    obtenerPorId: jest.fn((req, res) => res.status(200).json({ id: req.params.id })),
+    obtenerPorCliente: jest.fn((req, res) => res.status(200).json({ cliente_id: req.params.cliente_id_fk })),
+    actualizarEstado: jest.fn((req, res) => res.status(200).json({ message: 'Estado actualizado' })),
+    eliminar: jest.fn((req, res) => res.status(200).json({ message: 'Solicitud eliminada' }))
+  };
+
+  return {
+    SolicitudController: jest.fn(() => mockController),
+    __esModule: true
+  };
+});
+
+// ======= Importar rutas luego de mocks =======
 import solicitudRoutes from '../../../src/routers/solicitud.routes.js';
 
 const app = express();
 app.use(express.json());
 app.use(solicitudRoutes);
+
+// Inicializar middlewares después de mockear
+mockAuthenticate = jest.fn((req, res, next) => {
+  req.user = { id: 1, rol: 'cliente' };
+  next();
+});
+mockIsAdminOrCliente = jest.fn((req, res, next) => next());
+mockIsAdminOrTecnico = jest.fn((req, res, next) => next());
+mockIsCliente = jest.fn((req, res, next) => next());
 
 describe('Solicitud Routes', () => {
   beforeEach(() => {

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">99.04% </span>
+                <span class="strong">99.05% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>104/105</span>
+                <span class='fraction'>105/106</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>102/102</span>
+                <span class='fraction'>103/103</span>
             </div>
         
             
@@ -306,11 +306,17 @@
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -552,10 +558,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
+import crypto from 'crypto';
+&nbsp;
 &nbsp;
 export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {}) =&gt; {
   const doc = new PDFDocument({ margin: 40 });
-  const filename = `ficha_${ficha.id}.pdf`;
+  const randomString = crypto.randomBytes(8).toString('hex'); // 16 caracteres hex
+  const filename = `ficha_${randomString}.pdf`;
   const folderPath = path.join('uploads', 'fichas');
   const filePath = path.join(folderPath, filename);
 &nbsp;
@@ -584,7 +593,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     
     // Texto del encabezado
     doc.fillColor('white')
-       .fontSize(9)  // Reducido de 10 a 9
+       .fontSize(8)  // Reducido de 10 a 9
        .font('Helvetica-Bold')
        .text(text, 50, currentY + 4, {  // Reducido padding de 5 a 4
          width: doc.page.width - 100,
@@ -606,7 +615,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     
     // Etiqueta
     doc.fillColor(primaryColor)
-       .fontSize(7)
+       .fontSize(8)
        .font('Helvetica-Bold')
        .text(label, x + 5, currentY + 1);  // Reducido de 2 a 1
     
@@ -624,7 +633,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!text) <span class="cstat-no" title="statement not covered" >return;</span>
     
     doc.fillColor(textColor)
-       .fontSize(9)
+       .fontSize(11.5)
        .font('Helvetica')
        .text(text, indent, doc.y, { 
          width: doc.page.width - (indent * 2),
@@ -658,7 +667,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     // Caption si existe
     <span class="missing-if-branch" title="else path not taken" >E</span>if (caption) {
       doc.fillColor('#718096')
-         .fontSize(7)
+         .fontSize(8)
          .font('Helvetica-Oblique')
          .text(caption, imageX, doc.y + maxHeight + 2, {  // Reducido de 3 a 2
            width: maxWidth,
@@ -666,7 +675,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
          });
     }
     
-    doc.y += maxHeight + 8;  // Reducido de 15 a 8
+    doc.y += maxHeight + 2;  // Reducido de 15 a 8
     doc.fillColor(textColor);
   };
 &nbsp;
@@ -684,11 +693,11 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
      .text('FICHA DE MANTENIMIENTO', 0, 18, { align: 'center' });  // Reducido de 20 a 18
   
   // Subtítulo
-  doc.fontSize(10)  // Reducido de 11 a 10
+  doc.fontSize(8)  // Reducido de 11 a 10
      .font('Helvetica')
      .text(`Documento N° ${ficha.id} | ${new Date().toLocaleDateString('es-CO')}`, 0, 40, { align: 'center' });  // Reducido de 45 a 40
 &nbsp;
-  doc.y = headerHeight + 8;  // Reducido de 10 a 8
+  doc.y = headerHeight + 2;  // Reducido de 10 a 8
 &nbsp;
   // INFORMACIÓN DEL CLIENTE
   createSectionHeader('INFORMACIÓN DEL CLIENTE', secondaryColor);
@@ -799,7 +808,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-04T22:19:32.538Z
+                at 2025-07-09T16:46:10.293Z
             </div>
         <script src="../prettify.js"></script>
         <script>

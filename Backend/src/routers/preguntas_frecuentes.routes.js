@@ -9,11 +9,9 @@ const faqController = new FaqController();
 router.get('/api/faqs', faqController.obtenerTodas);
 router.get('/api/faqs/categoria/:categoria', faqController.obtenerPorCategoria);
 
-// Rutas protegidas
-router.use(authenticate);
-
-router.post('/api/faqs', isAdmin, faqController.crear);
-router.put('/api/faqs/:id', isAdmin, faqController.actualizar);
-router.delete('/api/faqs/:id', isAdmin, faqController.eliminar);
+// Rutas protegidas (requieren autenticación y ser admin)
+router.post('/api/faqs', authenticate, isAdmin, faqController.crear);
+router.put('/api/faqs/:id', authenticate, isAdmin, faqController.actualizar);
+router.delete('/api/faqs/:id', authenticate, isAdmin, faqController.eliminar);
 
 export default router;

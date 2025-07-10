@@ -34,5 +34,3 @@ export class AdminService {
     return await this.adminRepository.eliminarAdmin(id);
   }
 }
-
-
