@@ -244,6 +244,16 @@ const updateStateRequest = (id, state) => {
   );
 };
 
+const updateStateAdministrator = (id, state) => {
+  return api.put(`/admin/${id}`, {
+    estado:state
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -266,6 +276,8 @@ export const administratorService = {
   getListAdministrator,
   UpdateStateClient,
   UpdateStateService,
-  updateStateRequest
+  updateStateRequest,
+  updateStateAdministrator,
+
   
 }

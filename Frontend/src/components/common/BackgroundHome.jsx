@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import logoHome from '../../assets/client/backgroundHome.png'
 import logoHome1 from '../../assets/client/backgroundHome1.png'
 import logoHome2 from '../../assets/client/backgroundHome2.png'
+import { Link } from 'react-router-dom'
 
 const images = [logoHome, logoHome1, logoHome2]
 
@@ -99,7 +100,7 @@ const BackgroundHome = () => {
         <CompanyPhrase>
           Expertos en reparaciones hidroeléctricas: pequeña empresa, gran ingeniería.
         </CompanyPhrase>
-        <ButtonService variant="contained">Ver nuestros servicios</ButtonService>
+        <ButtonService variant="contained" LinkComponent={Link} to="/iniciar-sesion">Ver nuestros servicios</ButtonService>
       </Content>
     </BackgroundWrapper>
   )

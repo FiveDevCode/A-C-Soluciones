@@ -8,6 +8,7 @@ const ContainerService = styled.section`
   align-items: center;
   justify-content: center;
   position: fixed;
+  z-index: 5000;
   top: 0;
   left: 0;
   background-color: rgba(0,0,0,0.35);

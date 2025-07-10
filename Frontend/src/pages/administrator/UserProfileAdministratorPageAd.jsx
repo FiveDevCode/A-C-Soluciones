@@ -7,6 +7,7 @@ import { ScreenConfirmation } from "../../components/administrator/ScreenConfirm
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import { handleChangeStateClient } from "../../controllers/administrator/updateStateClientAd.controller";
 import { handleGetAdminId } from "../../controllers/administrator/getAdminIdAd.controller";
+import { handleUpdateStateAdministrator } from "../../controllers/administrator/updateStateAdministratorAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -134,6 +135,24 @@ const UserProfileAdministratorPageAd = () => {
     return <SkeletonLoader />
   }
 
+  const handleToggleState = async () => {
+    const newState = adminData.estado === "activo" ? "inactivo" : "activo";
+    try {
+      await handleUpdateStateAdministrator(id, newState);
+      setAdminData(prev => ({ ...prev, estado: newState }));
+    } catch (error) {
+      console.error("Error al cambiar el estado:", error);
+    } finally {
+      setShowConfirmation(false); // oculta el modal tras la acción
+    }
+  };
+
+  const confirmationMessage = adminData.estado === "activo"
+    ? "¿Quieres deshabilitar este cliente?"
+    : "¿Quieres habilitar este cliente?";
+
+
+
   return (
     <Container>
       <Header>
@@ -143,6 +162,14 @@ const UserProfileAdministratorPageAd = () => {
             alt="usuario"
           />
           <Nombre>{adminData.nombre} {adminData.apellido}</Nombre>
+          <Button
+            variant="contained"
+            onClick={() => setShowConfirmation(true)}
+            color={adminData.estado === "activo" ? "error" : "success"}
+            style={{ alignSelf: "end", marginRight: "4rem", width: "200px"}}
+          >
+            {adminData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
+          </Button>
         </UsuarioInfo>
       </Header>
 
