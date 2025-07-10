@@ -19,7 +19,10 @@ import { useEffect, useState } from 'react';
 import { handleGetVisit } from '../../controllers/administrator/getVisitAd.controller';
 import { handleGetService } from '../../controllers/administrator/getServiceAd.controller';
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
-import { FaExclamationTriangle } from 'react-icons/fa';
+import { FaExclamationTriangle } from 'react-icons/fa'; 
+
+const API_KEY = import.meta.env.VITE_API_URL;
+
 
 const Container = styled.div`
   padding-top: 0.5rem;
@@ -258,7 +261,7 @@ const ViewVisitPageAd = () => {
                 const token = localStorage.getItem('authToken');
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                const publicUrl = `http://localhost:8000/${relativePath}`;
+                const publicUrl = `${API_KEY}/${relativePath}`;
                 const response = await fetch(publicUrl, {
                   method: 'GET',
                   headers: {

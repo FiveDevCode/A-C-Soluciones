@@ -21,6 +21,9 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 
 
+const API_KEY = import.meta.env.VITE_API_URL;
+
+
 const Container = styled.div`
   padding-top: 0.5rem;
   padding-left: 2rem;
@@ -243,7 +246,7 @@ const ViewVisitPageTc = () => {
                 const token = localStorage.getItem('authToken');
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                const publicUrl = `http://localhost:8000/${relativePath}`;
+                const publicUrl = `${API_KEY}/${relativePath}`;
                 const response = await fetch(publicUrl, {
                   method: 'GET',
                   headers: {
