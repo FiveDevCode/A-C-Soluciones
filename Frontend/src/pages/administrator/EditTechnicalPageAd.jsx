@@ -153,7 +153,7 @@ const EditTechnicalPageAd = () => {
 
       
       setTimeout(() => {
-        navigate(`/admin/perfil/-tecnico/${id}`);
+        navigate(`/admin/perfil-tecnico/${id}`);
       }, 3000);
       
     } catch (err) {

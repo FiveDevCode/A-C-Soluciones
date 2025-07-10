@@ -171,7 +171,7 @@ const UserProfileAdministratorPageAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
-          to={`/admin/editar-cliente/${id}`}
+          to={`/admin/editar-administrador/${id}`}
         >
             EDITAR
         </Button>
