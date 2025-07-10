@@ -59,7 +59,7 @@ import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
 import EditProfileCl from './pages/client/EditProfileCl';
 import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
 import AboutUsPage from './pages/common/AboutUsPage';
-import ErrorPage from './errorPages/ErrorPage'; 
+import ErrorPage from './errorPages/ErrorPage.jsx'; 
 import ClientFaqsPage from './pages/common/ClientFaqsPage';
 import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
 import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
