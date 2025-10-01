@@ -73,6 +73,7 @@ export const authorize = (roles = []) => {
 // Exportar middlewares de autorización para roles específicos
 export const isAdmin = authorize(['admin', 'administrador']);
 export const isTecnico = authorize(['tecnico']);
+export const isContable = authorize(['contable']);
 export const isCliente = authorize(['cliente']);
 export const isAdminOrTecnico = authorize(['admin', 'administrador', 'tecnico']);
 export const isAdminOrCliente = authorize(['admin', 'administrador', 'cliente']);

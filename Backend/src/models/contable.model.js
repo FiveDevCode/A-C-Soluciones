@@ -4,7 +4,7 @@ import { sequelize } from '../database/conexion.js';
 import { encryptPasswordHook } from '../hooks/encryptPassword.js'; // Importar el hook
 
 
-const Tecnico = sequelize.define('Tecnico', {
+const Contable = sequelize.define('Contable', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -124,13 +124,9 @@ const Tecnico = sequelize.define('Tecnico', {
       },
     },
   },
-  especialidad: {
-    type: DataTypes.STRING(100),
-    allowNull: true,
-  },
   rol: {
-    type: DataTypes.ENUM('tecnico'),
-    defaultValue: 'tecnico',
+    type: DataTypes.ENUM('contable'),
+    defaultValue: 'contable',
     allowNull: false
   },
   recovery_code: {
@@ -149,14 +145,13 @@ const Tecnico = sequelize.define('Tecnico', {
     type: DataTypes.ENUM('activo', 'inactivo'),
     defaultValue: 'activo',
   },
-}, 
-{
-  tableName: 'tecnico',
+}, {
+  tableName: 'contabilidad',
   timestamps: false,
 });
 
-Tecnico.beforeCreate(encryptPasswordHook); 
+Contable.beforeCreate(encryptPasswordHook); 
 
-export const TecnicoModel = {
-  Tecnico
+export const ContableModel = {
+  Contable
 }
