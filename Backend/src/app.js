@@ -17,6 +17,7 @@ import VisitaRouter from './routers/visita.routes.js';
 import fichaRouter from './routers/ficha.routes.js';
 import fichaClienteRouter from './routers/ficha.routes.js'; 
 import FaqRouter from './routers/preguntas_frecuentes.routes.js';
+import ContabilidadRouter from './routers/contabilidad.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,6 +43,9 @@ App.use(UsuarioRouter);
 App.use(ServicioRouter); 
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
+App.use(ContabilidadRouter);
+
+// debes de mejorar la forma en la que defines la ruta, porque se esta saliendo del estandar que tenemos 
 App.use('/fichas', fichaClienteRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
