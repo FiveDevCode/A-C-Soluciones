@@ -93,7 +93,7 @@ export class ContabilidadController {
         }
       };
 
-      // autenticar contabilidad  
+      // autenticar contabilidad y generar token  
       autenticarContabilidad = async (req, res) => {
         try {
         const { correo_electronico, contrasenia } = req.body;
