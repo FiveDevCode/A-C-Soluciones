@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import { handleGetTechical } from "../../controllers/administrator/getTechnicalAd.controller";
 import { handleChangeStateTechnical } from "../../controllers/administrator/updateStateTechnical.controller";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
+import { handleGetTechnical } from "../../controllers/administrator/getTechnicalAd.controller";
 
 const Container = styled.div`
   padding: 2rem;
@@ -23,12 +23,12 @@ const Header = styled.div`
 const UsuarioInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
 `;
 
 const Imagen = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
 `;
 
@@ -65,18 +65,60 @@ const Footer = styled.div`
   text-align: left;
 `;
 
+const SkeletonButton = styled(Skeleton)`
+  align-self: flex-end;
+  &.MuiSkeleton-root {
+    margin-right: 4rem;
+
+  }
+
+`
+
+const DetailsSkeleton = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  gap: 1rem;
+
+`
+
+
+const SkeletonLoader = () => (
+  <Container>
+    <Header>
+      <UsuarioInfo>
+        <Skeleton variant="circular" width={120} height={120} />
+        <Skeleton variant="text" width={400} height={40} />
+      </UsuarioInfo>
+      <SkeletonButton variant="rectangular" width={150} height={36}/>
+    </Header>
+    <Divider />
+    <Skeleton variant="text" width={200} height={30} style={{ marginTop: '1rem' }} />
+    <DetailsSkeleton>
+      <Skeleton variant="text" width="60%" />
+      <Skeleton variant="text" width="80%" />
+      <Skeleton variant="text" width="50%" />
+      <Skeleton variant="text" width="70%" />
+      <Skeleton variant="text" width="80%" />
+      <Skeleton variant="text" width="50%" />
+      <Skeleton variant="text" width="70%" />
+    </DetailsSkeleton>
+    <SkeletonButton variant="rectangular" width={250} height={36} style={{ marginTop: '2rem' }}/>
+  </Container>
+);
+
+
 const UserProfileAd = () => {
 
   const { id } = useParams(); 
   const [technicalData, setTechnicalData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
 
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const response = await handleGetTechical(id);
+        const response = await handleGetTechnical(id);
         console.log(response)
         setTechnicalData(response.data);  
       } catch (error) {
@@ -88,15 +130,11 @@ const UserProfileAd = () => {
 
     fetchClient();
   }, [id]); 
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
-
+  
   if (!technicalData) {
-    return <p>No se encontró el cliente.</p>;
+    return <SkeletonLoader/>;
   }
-
+  
   const handleToggleState = async () => {
     const newState = technicalData.estado === "activo" ? "inactivo" : "activo";
     try {
@@ -108,17 +146,18 @@ const UserProfileAd = () => {
       setShowConfirmation(false); // oculta el modal tras la acción
     }
   };
-
+  
   const confirmationMessage = technicalData.estado === "activo"
     ? "¿Quieres deshabilitar este técnico?"
     : "¿Quieres habilitar este técnico?";
 
+  
   return (
     <Container>
       <Header>
         <UsuarioInfo>
           <Imagen
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
             alt="usuario"
           />
           <Nombre>{technicalData.nombre} {technicalData.apellido}</Nombre>
@@ -128,7 +167,7 @@ const UserProfileAd = () => {
           variant="contained"
           onClick={() => setShowConfirmation(true)}
           color={technicalData.estado === "activo" ? "error" : "success"}
-          style={{ marginTop: "70px", marginRight: "15rem", width: "15rem" }}
+          style={{ alignSelf: "flex-end", width: "200px", marginRight: "4rem" }}
         >
           {technicalData.estado === "activo" ? "DESHABILITAR" : "HABILITAR"}
         </Button>
@@ -139,11 +178,14 @@ const UserProfileAd = () => {
       <Seccion>
         <Label style={{ marginBottom: "30px" }}>Informacion personal</Label>
 
-        <Label>Nombre:</Label>
-        <Texto>{technicalData.nombre} {technicalData.apellido}</Texto>
-
         <Label>Cedula:</Label>
-        <Texto>{technicalData.numero_de_cedula}</Texto>
+        <Texto>{technicalData.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Texto>
+
+        <Label>Nombre:</Label>
+        <Texto>{technicalData.nombre}</Texto>
+
+        <Label>Apellido:</Label>
+        <Texto>{technicalData.apellido}</Texto>
 
         <Label>Telefono:</Label>
         <Texto>{technicalData.telefono}</Texto>
@@ -162,6 +204,7 @@ const UserProfileAd = () => {
           variant="contained" color="primary"
           style={{width:"15rem"}}
           LinkComponent={Link}
+          to={`/admin/editar-tecnico/${id}`}
         >
             EDITAR
         </Button>

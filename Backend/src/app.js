@@ -16,6 +16,7 @@ import SolicitudRouter from './routers/solicitud.routes.js';
 import VisitaRouter from './routers/visita.routes.js';
 import fichaRouter from './routers/ficha.routes.js';
 import fichaClienteRouter from './routers/ficha.routes.js'; 
+import FaqRouter from './routers/preguntas_frecuentes.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +30,7 @@ App.use(express.json());
 
 // configuracion de CORS
 App.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: 'https://a-c-soluciones.vercel.app', 
   credentials: true
 }));
 
@@ -51,6 +52,7 @@ if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
+App.use(FaqRouter)
 
 
 

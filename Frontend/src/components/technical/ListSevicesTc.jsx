@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import serviceTehc from "../../assets/technical/serviceTehc.png";
-import Logo from "../../components/common/Logo";
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { useState } from "react";
+import Logo from "../common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { Pagination } from "@mui/material";
+import { useMemo, useState } from "react";
 
 
 const ContainerNoti = styled.div`
@@ -66,114 +66,65 @@ const SeeMore = styled.div`
   gap: 0.5rem;
 `
 
+const ITEMS_PER_PAGE = 6;
 
 
-const ListSevicesTc = () => {
+const ListServiceTc = ({services}) => {
 
-  const [state, setState] = useState("Pendiente");
 
-  const handleChange = (e) => {
-    setState(e.target.value)
-  }
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(services.length / ITEMS_PER_PAGE);
+
+  const paginatedServices = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return services.slice(start, start + ITEMS_PER_PAGE);
+  }, [services, currentPage]);
+
+
 
   return (
     <ContainerNoti>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pendiente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pediente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-
-      <Notification>
-        <NotificationDescription>
-          <Logo src={serviceTehc}/>
-          <NotificationInfo>
-            <TitleNoti>Inspección del sistema de enfriamiento del generador</TitleNoti>
-            <Description>Técnico asignado visitará la Central Hidráulica Río Claro para ...</Description>
-            <Date>15/04/2025 10:30 AM</Date>
-          </NotificationInfo>
-        </NotificationDescription>
-        <ContainerOption>          
-          <FormControl sx={{width:"30%", minWidth:"200px"}}>
-            <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state}
-              label="Estado"
-              onChange={handleChange}
-            >
-              <MenuItem value="Pendiente">Pediente</MenuItem>
-              <MenuItem value="Completada">Completada</MenuItem>
-              <MenuItem value="Cancelada">Cancelada</MenuItem>
-            </Select>
-          </FormControl>
-          <SeeMore>
-            <FontAwesomeIcon icon={faArrowRight} />
-            <Link to="/">Ver</Link>
-          </SeeMore>
-        </ContainerOption>
-      </Notification>
-
-
-
+      {paginatedServices.map((service, index) => (
+        <Notification key={index}>
+          <NotificationDescription>
+            <Logo src={serviceTehc}/>
+            <NotificationInfo>
+              <TitleNoti>
+                {service.nombre && service.nombre.length > 50
+                  ? `${service.nombre.slice(0, 50)}...`
+                  : service.nombre || "Sin dirrecion"
+                }
+              </TitleNoti>
+              <Description>
+                {service.descripcion && service.descripcion.length > 50
+                  ? `${service.descripcion.slice(0, 50)}...`
+                  : service.descripcion || "Sin descripcion"
+                }
+              </Description>
+              <Date>{service.fecha_creacion.substring(0, 10)}</Date>
+            </NotificationInfo>
+          </NotificationDescription>
+          <ContainerOption>
+            <Link to={`/tecnico/servicio/${service.id}`} style={{ textDecoration: 'none', alignSelf: "center" }}>
+              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
+                <FontAwesomeIcon icon={faArrowRight} />
+                <span>Ver</span>
+              </SeeMore>
+            </Link>
+          </ContainerOption>
+        </Notification>
+      ))}
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(e, page) => setCurrentPage(page)}
+        color="primary"
+        shape="rounded"
+        sx={{ marginTop: "3rem", alignSelf: "center" }}
+      />
     </ContainerNoti>
-  )
+  );
 }
 
-export default ListSevicesTc;
+
+export default ListServiceTc

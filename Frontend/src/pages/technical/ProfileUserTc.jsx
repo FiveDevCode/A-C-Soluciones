@@ -1,7 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Divider } from '@mui/material';
+import { Button, Divider } from '@mui/material';
+import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -24,8 +26,8 @@ const ProfileInfo = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
 `;
 
@@ -49,21 +51,37 @@ const Details = styled.div`
 `;
 
 const ProfileUserTc = () => {
-  const navigate = useNavigate();
 
-  const handleCerrarSesion = () => {
-    navigate('/login');
-  };
+  const [userTechnical, setUserTechnical] = useState();
+
+  useEffect(() => {
+
+    const token = localStorage.getItem("authToken");
+    const decoded = jwtDecode(token);
+
+    handleGetTechnicalId(decoded.id)
+      .then((res) => {
+        console.log(res)
+        setUserTechnical(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching technical:", err);
+      });
+  }, []);
+  
+  if (!userTechnical) {
+    return <p>Cargando datos del perfil...</p>;
+  }
 
   return (
     <Main>
       <ProfileSection>
         <ProfileInfo>
           <Avatar
-            src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png"
+            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
             alt="Avatar"
           />
-          <h2>María Fernanda Toro Delgado</h2>
+          <h2>{`${userTechnical.nombre} ${userTechnical.apellido}`}</h2>
         </ProfileInfo>
       
       </ProfileSection>
@@ -71,11 +89,21 @@ const ProfileUserTc = () => {
       <Divider />
 
       <Details>
-        <p><strong>Nombre:</strong><br/>María Fernanda Toro Delgado</p>
-        <p><strong>Dirección:</strong> <br/>Calle Las Turbinas 234, Urb. Energía Verde, Arequipa 04001, Perú</p>
-        <p><strong>Correo electrónico:</strong> <br/><a href="mailto:maria.toro@hidrosoluciones.pe">maria.toro@hidrosoluciones.pe</a></p>
-        <p><strong>Teléfono:</strong> <br/>+51 312 688 3598</p>
+        <p><strong>Cédula:</strong><br/>{`${userTechnical.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</p>
+        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre}`}</p>
+        <p><strong>Apellido:</strong><br/>{`${userTechnical.apellido}`}</p>
+        <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
+        <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
+        <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
       </Details>
+      <Button 
+        variant='contained' 
+        sx={{textTransform: "none", fontSize: "1rem", fontWeight: "700", mt: "2rem"}}
+        LinkComponent={Link}
+        to="/tecnico/editar-perfil"
+      >
+        Editar informacion personal
+      </Button>
     </Main>
   );
 };

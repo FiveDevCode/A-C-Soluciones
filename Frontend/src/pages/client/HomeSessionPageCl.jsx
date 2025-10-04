@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import BackgroundHomeCl from "../../components/client/BackgroundHomeCl";
-import ContentHomeCl from "../../components/client/ContentHomeCl";
-import HeaderBarCl from "../../components/client/HeaderBarCl";
-import WorkProductCl from "../../components/client/WorkProductCl";
-import ServicieCatalogCl from "../../components/client/ServicieCatalogCl";
-import FooterHomeCl from "../../components/client/FooterHomeCl";
+import RecommendedService from "../../components/client/RecomendCategoryHomeCl";
+import { faTasks } from "@fortawesome/free-solid-svg-icons";
+import servicio from "../../assets/client/Servicio.png"
+import ServicesByCategoryCl from "../../components/client/ServicesByCategoryCl";
 
 const ContentHome = styled.section`
   display: flex;
@@ -19,11 +17,13 @@ const ContentHome = styled.section`
 const HomeSessionPageCl = () => {
   return (
     <ContentHome>
-      <BackgroundHomeCl />
-      <ContentHomeCl />
-      <WorkProductCl />
-      <ServicieCatalogCl />
-
+      <RecommendedService
+        id="2"
+        color="#28a745"
+        image={servicio}
+      />
+      <ServicesByCategoryCl />
+      
     </ContentHome>
   )
 }

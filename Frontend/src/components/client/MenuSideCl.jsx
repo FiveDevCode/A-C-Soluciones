@@ -10,7 +10,8 @@ import {
   faDiagramProject, 
   faClockRotateLeft, 
   faGear, 
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faWrench
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
@@ -161,51 +162,25 @@ const MenuSideCl = ({ onClose }) => {
   return (
     <SectionMenu>
       <ContainerMenu>
-        <Link to="/home"><Logo src={logo} size="157px"/></Link>
+        <Link to="/cliente/inicio"><Logo src={logo} size="157px"/></Link>
         <TitleMenu>Menu</TitleMenu>
         <Divider/> 
         <ContainerAllOption>
-          <ContainerOption to="/home">
+          <ContainerOption to="/cliente/inicio">
             <IconOption 
               icon={faHouse}           
             />
             <TitleOption>Inicio</TitleOption>
           </ContainerOption>
-          <ContainerOption>
+          <ContainerOption to="/cliente/servicios">
             <IconOption 
-              icon={faDiagramProject} 
+              icon={faWrench} 
             />
-            <TitleOption>Mis solicitudes</TitleOption>
-          </ContainerOption>
-          <ContainerOption>
-            <IconOption 
-              icon={faPaperPlane} 
-            />
-            <TitleOption>Enviar solicitud</TitleOption>
-          </ContainerOption>
-          <ContainerOption>
-            <IconOption 
-              icon={faFile} 
-            />
-            <TitleOption>Mis reportes</TitleOption>
-          </ContainerOption>
-          <ContainerOption>
-            <IconOption 
-              icon={faClockRotateLeft} 
-            />
-            <TitleOption>Ver historial</TitleOption>
+            <TitleOption>Servicios</TitleOption>
           </ContainerOption>
         </ContainerAllOption>
-        
-
         <ContainerAllConfiguration>
           <Divider/> 
-          <ContainerOption>
-            <IconOption 
-              icon={faGear} 
-            />
-            <TitleOption>Configuracion</TitleOption>
-          </ContainerOption>
           <ContainerOptionClose onClick={handleLogout}>
             <IconOption 
               icon={faArrowRightFromBracket} 

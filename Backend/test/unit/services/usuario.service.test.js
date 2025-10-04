@@ -1,3 +1,22 @@
+// Mock completo de sib-api-v3-sdk
+jest.mock('sib-api-v3-sdk', () => {
+  const mockSendTransacEmail = jest.fn().mockResolvedValue({});
+  return {
+    ApiClient: {
+      instance: {
+        authentications: {
+          'api-key': { apiKey: '' }
+        }
+      }
+    },
+    TransactionalEmailsApi: jest.fn().mockImplementation(() => ({
+      sendTransacEmail: mockSendTransacEmail
+    }))
+  };
+});
+
+
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthService } from '../../../src/services/usuario.services.js';

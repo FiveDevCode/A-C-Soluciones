@@ -8,7 +8,7 @@ import upload from '../middlewares/uploadImages.js';
 const router = express.Router();
 
 router.post(
-  '/fichas',
+  '/fichas', authenticate,
   isAdminOrTecnico,
   upload.fields([
     { name: 'foto_estado_antes', maxCount: 1 },
@@ -18,9 +18,9 @@ router.post(
   crearFichaMantenimiento
 );
 
-router.get('/fichas', authenticate, listarFichas);
+router.get('/fichas', authenticate, isAdminOrTecnico, listarFichas);
 
-router.get('/descargar/:nombreArchivo', isCliente, (req, res) => {
+router.get('/descargar/:nombreArchivo', authenticate, isCliente, (req, res) => {
   const { nombreArchivo } = req.params;
   const filePath = path.resolve(`uploads/fichas/${nombreArchivo}`);
 

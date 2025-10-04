@@ -74,7 +74,7 @@ const FormCreateCl = () => {
         address
       );
 
-      navigate("/login");
+      navigate("/iniciar-sesion");
       setErrorMsg("");
     } catch (err) {
       console.log(err)
@@ -218,7 +218,7 @@ const FormCreateCl = () => {
         }
         label={
           <Typography variant="body2">
-            Aceptas los <Link href="#">Términos y condiciones</Link>
+            Aceptas los <Link to="/terminos-y-condiciones">Términos y condiciones</Link>
           </Typography>
         }
       />
@@ -231,7 +231,7 @@ const FormCreateCl = () => {
         }
         label={
           <Typography variant="body2">
-            Quiero recibir ofertas personalizadas de A&C Soluciones. Consulta las <Link href="#">Políticas de privacidad</Link>
+            Quiero recibir ofertas personalizadas de A&C Soluciones. Consulta las <Link to="/politicas-de-privacidad">Políticas de privacidad</Link>
           </Typography>
         }
       />
@@ -239,7 +239,7 @@ const FormCreateCl = () => {
 
       <ContainerButton>
         <Button type="submit" variant="contained" disabled={!termsAccepted}>Crear cuenta</Button>
-        <LinkForgot to="/login">¿Ya tienes cuenta?</LinkForgot>
+        <LinkForgot to="/iniciar-sesion">¿Ya tienes cuenta?</LinkForgot>
       </ContainerButton>
 
     </Form>

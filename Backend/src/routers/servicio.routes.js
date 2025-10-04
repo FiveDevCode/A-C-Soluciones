@@ -12,12 +12,9 @@ router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos)
 router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
 // Rutas protegidas - requieren autenticación
-router.use(authenticate);
-
-
 
 // Crear servicio (solo lo peude hacer administradores)
-router.post('/api/servicios', isAdmin, servicioController.crearServicio);
+router.post('/api/servicios', authenticate, isAdmin, servicioController.crearServicio);
 
 // Obtener todos los servicios
 router.get('/api/servicios', servicioController.obtenerServicios);
@@ -29,15 +26,15 @@ router.get('/api/servicios/:id', servicioController.obtenerServicioPorId);
 router.get('/api/servicios/nombre/:nombre', servicioController.obtenerServicioPorNombre);
 
 // Actualizar servicio (Solo administradores tiene este permiso)
-router.put('/api/servicios/:id', isAdmin, servicioController.actualizarServicio);
+router.put('/api/servicios/:id', authenticate, isAdmin, servicioController.actualizarServicio);
 
 // Eliminar servicio (Solo administradores tienen este permiso)
-router.delete('/api/servicios/:id', isAdmin, servicioController.eliminarServicio);
+router.delete('/api/servicios/:id', authenticate, isAdmin, servicioController.eliminarServicio);
 
 // Deshabilitar servicio (Solo administradores tienen este permiso)
-router.patch('/api/servicios/:id/deshabilitar', isAdmin, servicioController.deshabilitarServicio);
+router.patch('/api/servicios/:id/deshabilitar', authenticate, isAdmin, servicioController.deshabilitarServicio);
 
 // Habilitar servicio (Solo administradores tienen este permiso)
-router.patch('/api/servicios/:id/habilitar', isAdmin, servicioController.habilitarServicio);
+router.patch('/api/servicios/:id/habilitar', authenticate, isAdmin, servicioController.habilitarServicio);
 
 export default router;

@@ -1,16 +1,16 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import ListSevicesTc from "../../../components/technical/ListSevicesTc";
+import ListVisitTc from "../../../components/technical/ListVisitTc";
 import { MemoryRouter } from 'react-router-dom'; // Importamos MemoryRouter
 
 jest.mock('../../../assets/technical/serviceTehc.png', () => 'logoA&C.png');
 
-describe("ListSevicesTc", () => {
+describe("ListVisitTc", () => {
 
   test("Verify that the 'View' icon is present", () => {
     render(
       <MemoryRouter>
-        <ListSevicesTc />
+        <ListVisitTc />
       </MemoryRouter>
     );
 
@@ -21,7 +21,7 @@ describe("ListSevicesTc", () => {
   test("The 'View' link is present in every notification", () => {
     render(
       <MemoryRouter>
-        <ListSevicesTc />
+        <ListVisitTc />
       </MemoryRouter>
     );
 

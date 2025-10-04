@@ -110,10 +110,10 @@ describe('AdminController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ 
-        errors: [
-          { field: 'numero_cedula', message: 'Campo requerido' },
-          { field: 'correo_electronico', message: 'Correo inválido' }
-        ]
+        errors: {
+          numero_cedula: 'Campo requerido',
+          correo_electronico: 'Correo inválido'
+        }
       });
     });
 

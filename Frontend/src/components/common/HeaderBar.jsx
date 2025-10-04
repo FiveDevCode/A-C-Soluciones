@@ -1,7 +1,8 @@
 import { faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputAdornment, TextField } from "@mui/material";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -48,37 +49,107 @@ const InputSearch = styled(TextField)`
 
 const HeaderBar = () => {
   const [busqueda, setBusqueda] = useState('');
+  const [profilePath, setProfilePath] = useState("");
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+
+    switch (role) {
+      case "tecnico":
+        setProfilePath("/tecnico/perfil");
+        break;
+      case "administrador":
+        setProfilePath("/admin/perfil/");
+        break;
     }
-  };
+    
+  }, []);
+
 
 
   const titles = {
-    "/services": "Servicios",
-    "/register-employee": "Crear empleado",
-    "/register": "Crear cuenta",
-    "/account": "Perfil de usuario",
-    "/home": "Inicio",
-    "/profile": "Perfil",
-    "/view-service": "Ver servicio",
-    "/profile-client": "Perfil cliente",
-    "/edit-client": "Editar cliente", // clave base
-    "/register-service": "Crear servicio",
-    "/administrator-permit": "Crear administrador permisos",
-    "/assing-visit": "Asignar visita",
-    "/homeTc": "Home",
-    "/homeAd": "Home",
+    "/tecnico/inicio": "Inicio técnico",
+    "/tecnico/servicios": "Servicios",
+    "/tecnico/perfil": "Perfil técnico",
+    "/tecnico/visitas": "Visitas",
+    "/tecnico/reportes": "Reportes",
+    "/tecnico/visitas-iniciadas": "Visitas iniciadas",
+    "/tecnico/visitas-completadas": "Visitas completadas",
+    "/tecnico/visitas-programadas": "Visitas programadas",
+    "/tecnico/visitas-canceladas": "Visitas canceladas",
+    "/tecnico/visitas-en-camino": "Visitas en camino",
+    "/tecnico/editar-perfil":"Editar perfil",
+
+    "/admin/inicio": "Inicio administrador",
+    "/admin/registrar-empleado": "Crear empleado",
+    "/admin/perfil/": "Perfil",
+    "/admin/registrar-servicio": "Crear servicio",
+    "/admin/registrar-administrador": "Crear administrador",
+    "/admin/permisos": "Permisos administrador",
+    "/admin/asignar-visita": "Asignar visita",
+    "/admin/editar-cliente": "Editar cliente", 
+    "/admin/visitas": "Visitas",
+    "/admin/solicitudes": "Solicitudes",
+    "/admin/tecnicos": "Tecnicos",
+    "/admin/clientes":"Clientes",
+    "/admin/administradores":"Administradores",
+    "/admin/servicios":"Servicios",
+    "/admin/reportes":"Reportes",
+    "/admin/editar-perfil":"Editar perfil",
+    
+    
+    
   };
 
   function getRouteName(path) {
-    if (path.startsWith("/edit-client/")) {
+    if (path.startsWith("/admin/editar-cliente/") && path !== "/admin/editar-cliente/") {
       return "Editar cliente";
+    }
+    if (path.startsWith("/admin/servicio/")) {
+      return "Ver servicio";
+    }
+    if (path.startsWith("/admin/visita/")) {
+      return "Ver visita";
+    }
+    if (path.startsWith("/admin/perfil-cliente/")) {
+      return "Perfil cliente";
+    }
+    if (path.startsWith("/admin/perfil/")) {
+      return "Perfil";
+    }
+    if (path.startsWith("/admin/perfil-administrador/")) {
+      return "Perfil administrador";
+    }
+    if (path.startsWith("/admin/editar-administrador/")) {
+      return "Editar administrador";
+    }
+    if (path.startsWith("/admin/reporte/")) {
+      return "Reporte";
+    }
+    if (path.startsWith("/admin/perfil-tecnico/")) {
+      return "Perfil técnico";
+    }
+    if (path.startsWith("/admin/editar-tecnico/")) {
+      return "Editar técnico";
+    }
+    if (path.startsWith("/admin/editar-servicio/")) {
+      return "Editar servicio";
+    }
+    if (path.startsWith("/admin/solicitud/")) {
+      return "Ver solicitud";
+    }
+    if (path.startsWith("/tecnico/reporte/")) {
+      return "Reporte técnico";
+    }
+    if (path.startsWith("/tecnico/visita/")) {
+      return "Ver visita";
+    }
+    if (path.startsWith("/tecnico/servicio/")) {
+      return "Ver servicio";
     }
 
     return titles[path] || "Ruta desconocida";
@@ -89,37 +160,16 @@ const HeaderBar = () => {
   return (
     <ContainerBar>
       <TitleCategory>{title}</TitleCategory>
-      <InputSearch
-        value={busqueda}
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setBusqueda(e.target.value)}
-        placeholder="Buscar"
-        size="small"
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <FontAwesomeIcon icon={faSearch} style={{ color: '#9e9e9e' }} />
-            </InputAdornment>
-          ),
-        }}
-      />
 
-      <ContainerOption>
-        <Link >
-          <FontAwesomeIcon 
-            icon={faBell}
-            style={{fontSize: '24px'}}
-          />
-        </Link>
-        <Link to="/profile" >
+      <ContainerOption style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Link to={profilePath} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', gap: "0.725rem", color: "blue" }}>
+          <span style={{ fontSize: '16px' }}>Perfil</span>
           <FontAwesomeIcon 
             icon={faCircleUser}
-            style={{fontSize: '24px'}}
+            style={{ fontSize: '28px' }}
           />
         </Link>
       </ContainerOption>
-
 
     </ContainerBar>
   )

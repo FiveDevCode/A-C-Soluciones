@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import whoHome from "../../assets/client/whoHome.png"
 import serviceHome from "../../assets/client/serviceHome.png";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 
 const ContainerHome = styled.section`
@@ -153,7 +154,7 @@ const ContentHome = () => {
             y cuenta con un equipo humano calificado que busca 
             satisfacer las necesidades de nuestros clientes.
           </WhoDescription>
-          <CustomButton variant="contained">Seguir leyendo</CustomButton>
+          <CustomButton variant="contained" LinkComponent={Link} to="/acerca-de-nosotros" >Seguir leyendo</CustomButton>
         </ContainerWhoInfo>
 
         <Img src={whoHome} alt="whoHome.png" />
@@ -175,7 +176,7 @@ const ContentHome = () => {
             incendio, instalaciones eléctricas, piscinas y brazos hidráulicos con un cubrimiento 
             de emergencias 24 horas al día, los 7 días de la semana.
           </ServiceDescription>
-          <CustomButton variant="contained" >Seguir leyendo</CustomButton>
+          <CustomButton variant="contained" LinkComponent={Link} to="/acerca-de-nosotros" >Seguir leyendo</CustomButton>
 
         </ContainerServiceInfo>
 

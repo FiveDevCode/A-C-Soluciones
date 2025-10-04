@@ -1,17 +1,43 @@
-import { faBars, faBell, faCircleUser, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputAdornment, TextField } from "@mui/material";
+
+import { Button, InputAdornment, TextField } from "@mui/material";
 import styled from "styled-components";
 import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
+
+
+
+const LoginButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #007BFF 0%, #0056b3 100%);
+  color: #ffffff;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #00408a 100%);
+    box-shadow: 0 6px 14px rgba(0, 86, 179, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
 
 const ContainerHeader = styled.div`
   display: flex;
   flex-direction: column;
-  
 `
 
 
@@ -54,6 +80,8 @@ const Menu = styled.div`
   height: 95px;
   justify-content: space-between;
   padding: 0 8rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   @media screen and (max-width: 1520px) {
     padding: 0 4rem;
     
@@ -86,41 +114,21 @@ const ButtonProfile = styled(Link)`
 
 const HeaderBarHome = () => {
 
-  const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-        navigate(`/resultado?data=${busqueda}`);
-    }
-  };
-
   return (
     <ContainerHeader>
       <MenuBar>
-        <InputSearch
-          value={busqueda}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar"
-          size="small"
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <FontAwesomeIcon icon={faSearch} style={{ color: '#9e9e9e' }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <ButtonProfile to="/login"><FontAwesomeIcon icon={faCircleUser} style={{fontSize:"24px"}}/></ButtonProfile>
+      <LoginButton to="/iniciar-sesion">
+        <FaUser />
+        Iniciar sesión
+      </LoginButton>
       </MenuBar>
       <Menu>
-        <Logo src={logo} size="13%" max="150px"/> 
+        <Link to="/"><Logo src={logo} size="100%" max="150px"/></Link> 
         <MenuOption>
-          <LinkOption to="/">Acerca de nosotros</LinkOption>
-          <LinkOption to="/">Servicios</LinkOption>
-          <LinkOption to="/">Contacte con nosotros</LinkOption>
+          <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
+          <LinkOption to="/iniciar-sesion">Servicios</LinkOption>
         </MenuOption>
 
 
