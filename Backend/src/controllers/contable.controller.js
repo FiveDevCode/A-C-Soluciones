@@ -1,4 +1,4 @@
-import { ContableService } from "../services/contable.service";
+import { ContableService } from "../services/contable.services.js";
 import { ValidationError } from "sequelize";
 
 export class ContableController {

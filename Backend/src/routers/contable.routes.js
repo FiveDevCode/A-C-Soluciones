@@ -1,4 +1,4 @@
-import { express } from 'express';
+import express  from 'express';
 import { ContableController } from '../controllers/contable.controller.js';
 import { authenticate, isAdmin} from '../middlewares/autenticacion.js';
 

@@ -1,4 +1,3 @@
-// src/models/tecnico.model.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/conexion.js';
 import { encryptPasswordHook } from '../hooks/encryptPassword.js'; // Importar el hook
