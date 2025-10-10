@@ -39,15 +39,22 @@ App.use(express.json());
 
 App.use(cors({
   origin: function (origin, callback) {
-    // Si no hay 'origin' (Flutter) o viene de tu frontend web, se acepta
-    if (!origin || origin === 'https://a-c-soluciones.vercel.app') {
+    const allowedOrigins = [
+      'https://a-c-soluciones.vercel.app',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000'
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.warn(`❌ CORS bloqueado para origen: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true
 }));
+
 
 // rutas de la API
 App.use(AministradorRouter)
