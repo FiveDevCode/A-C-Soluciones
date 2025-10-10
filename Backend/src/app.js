@@ -37,7 +37,25 @@ App.use(express.json());
 //  credentials: true
 //}));
 
-App.use(cors({
+//App.use(cors({
+// origin: function (origin, callback) {
+//    const allowedOrigins = [
+//     'https://a-c-soluciones.vercel.app',
+//      'http://localhost:3000',
+//      'http://127.0.0.1:3000'
+//    ];
+//
+//    if (!origin || allowedOrigins.includes(origin)) {
+//      callback(null, true);
+//    } else {
+//      console.warn(`❌ CORS bloqueado para origen: ${origin}`);
+//      callback(new Error('Not allowed by CORS'));
+//    }
+//  },
+//  credentials: true
+//}));
+
+app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
       'https://a-c-soluciones.vercel.app',
@@ -45,15 +63,22 @@ App.use(cors({
       'http://127.0.0.1:3000'
     ];
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`❌ CORS bloqueado para origen: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
+    // Si no hay origin (por ejemplo, app móvil Flutter), permitir
+    if (!origin) {
+      return callback(null, true);
     }
+
+    // Permitir si coincide con los orígenes definidos
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.warn(`❌ CORS bloqueado para origen: ${origin}`);
+    return callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
+
 
 
 // rutas de la API
