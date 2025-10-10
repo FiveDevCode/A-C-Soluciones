@@ -32,8 +32,8 @@ App.use(express.json());
 App.use(cors({
   origin: [
     '*',
-    'https://a-c-soluciones.vercel.app',
-  ] 
+    'https://a-c-soluciones.vercel.app'
+  ],
   credentials: true
 }));
 
