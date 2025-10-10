@@ -29,11 +29,23 @@ App.use(morgan('dev'));
 App.use(express.json());
 
 // configuracion de CORS
+//App.use(cors({
+//  origin: [
+//    '*',
+//    'https://a-c-soluciones.vercel.app'
+//  ],
+//  credentials: true
+//}));
+
 App.use(cors({
-  origin: [
-    '*',
-    'https://a-c-soluciones.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    // Si no hay 'origin' (Flutter) o viene de tu frontend web, se acepta
+    if (!origin || origin === 'https://a-c-soluciones.vercel.app') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
