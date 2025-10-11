@@ -7,6 +7,8 @@ import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 
+const API_KEY = import.meta.env.VITE_API_URL;
+
 
 const ContainerNoti = styled.div`
   display: flex;
@@ -109,7 +111,7 @@ const ListReportAd = ({visits}) => {
                   const token = localStorage.getItem('authToken');
 
                   const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                  const publicUrl = `http://localhost:8000/${relativePath}`;
+                  const publicUrl = `${API_KEY}/${relativePath}`;
 
                   const response = await fetch(publicUrl, {
                     method: 'GET',
@@ -147,7 +149,7 @@ const ListReportAd = ({visits}) => {
                     const token = localStorage.getItem('authToken');
 
                     const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                    const publicUrl = `http://localhost:8000/${relativePath}`;
+                    const publicUrl = `${API_KEY}/${relativePath}`;
                     
                     const response = await fetch(publicUrl, {
                       method: 'GET',
