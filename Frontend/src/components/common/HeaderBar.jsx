@@ -100,6 +100,7 @@ const HeaderBar = () => {
     "/admin/servicios":"Servicios",
     "/admin/reportes":"Reportes",
     "/admin/editar-perfil":"Editar perfil",
+    "/admin/registrar-contador":"Crear empleado contador"
     
     
     

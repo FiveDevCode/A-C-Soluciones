@@ -63,6 +63,7 @@ import ErrorPage from './errorPages/ErrorPage.jsx';
 import ClientFaqsPage from './pages/common/ClientFaqsPage';
 import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
 import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
+import CreateAccountingAd from './pages/administrator/CreateAccountingAd.jsx';
 
 
 
@@ -422,6 +423,12 @@ function AppContent() {
             <Route path="/admin/editar-administrador/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <EditAdministratorAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/registrar-contador" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateAccountingAd/>
               </PrivateRoute>
             } />
 

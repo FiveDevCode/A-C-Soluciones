@@ -254,6 +254,32 @@ const updateStateAdministrator = (id, state) => {
   });
 }
 
+const createAccounting = (
+  numero_de_cedula,
+  nombre,
+  apellido,
+  correo_electronico,
+  telefono,
+  contrasenia
+) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.post("/contabilidad", {
+    numero_de_cedula,
+    nombre,
+    apellido,
+    correo_electronico,
+    telefono,
+    contrasenia
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -278,6 +304,6 @@ export const administratorService = {
   UpdateStateService,
   updateStateRequest,
   updateStateAdministrator,
-
+  createAccounting
   
 }
