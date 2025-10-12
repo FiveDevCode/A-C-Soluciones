@@ -320,6 +320,18 @@ const updateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronic
   );
 };
 
+const createBill = (billData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.post("/registrar-factura", billData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+};
+
+
 
 export const administratorService = {
   createTechnical,
@@ -349,6 +361,7 @@ export const administratorService = {
   getListAccounting,
   getAccounting,
   updateStateAccounting,
-  updateAccounting
+  updateAccounting,
+  createBill
   
 }
