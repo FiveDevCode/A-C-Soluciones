@@ -1,7 +1,9 @@
 import { 
   faBriefcase, 
+  faCalculator, 
   faCalendarCheck, 
   faFileAlt, 
+  faFileInvoiceDollar, 
   faInbox, 
   faPlusSquare, 
   faTasks, 
@@ -93,21 +95,9 @@ const CategoryRecomendAd = () => {
           <Icon icon={faUserShield} style={{stroke:"#6F42C1"}}/>
           <OptionTitle>Crear nuevo administrador</OptionTitle>
         </Option>
-        <Option to="/admin/tecnicos">
-          <Icon icon={faTools} style={{stroke:"#138f51"}}/>
-          <OptionTitle>Tecnicos</OptionTitle>
-        </Option>
-        <Option to="/admin/clientes">
-          <Icon icon={faUsers} style={{stroke:"#91165e"}}/>
-          <OptionTitle>Clientes</OptionTitle>
-        </Option>
-        <Option to="/admin/administradores">
-          <Icon icon={faUserTie} style={{stroke:"#343A40"}}/>
-          <OptionTitle>Administradores</OptionTitle>
-        </Option>
-        <Option to="/admin/servicios">
-          <Icon icon={faWrench} style={{stroke:"#343A40"}}/>
-          <OptionTitle>Servicios</OptionTitle>
+        <Option to="/admin/registrar-contador">
+          <Icon icon={faFileInvoiceDollar} style={{ stroke: "#6F42C1" }} />
+          <OptionTitle>Crear nuevo contador</OptionTitle>
         </Option>
       </ContainerOption>
     </ContainerCategory>

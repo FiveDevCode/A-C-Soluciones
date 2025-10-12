@@ -279,6 +279,47 @@ const createAccounting = (
   });
 };
 
+const getListAccounting = () => {
+  return api.get("/contabilidad")
+};
+
+const getAccounting = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/contabilidad/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+const updateStateAccounting = (id) => {
+  return api.delete(`/contabilidad/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+const updateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronico, telefono) => {
+  return api.put(`/contabilidad/${id}`,
+    {
+      numero_de_cedula: numeroDeCedula,
+      nombre,
+      apellido,
+      correo_electronico: correoElectronico,
+      telefono
+    },
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
 
 export const administratorService = {
   createTechnical,
@@ -304,6 +345,10 @@ export const administratorService = {
   UpdateStateService,
   updateStateRequest,
   updateStateAdministrator,
-  createAccounting
+  createAccounting,
+  getListAccounting,
+  getAccounting,
+  updateStateAccounting,
+  updateAccounting
   
 }

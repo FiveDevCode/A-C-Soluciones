@@ -100,7 +100,8 @@ const HeaderBar = () => {
     "/admin/servicios":"Servicios",
     "/admin/reportes":"Reportes",
     "/admin/editar-perfil":"Editar perfil",
-    "/admin/registrar-contador":"Crear empleado contador"
+    "/admin/registrar-contador":"Crear empleado contador",
+    "/admin/contadores":"Contadores"
     
     
     
@@ -118,6 +119,9 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";
+    }
+    if (path.startsWith("/admin/perfil-contador/")) {
+      return "Perfil contador";
     }
     if (path.startsWith("/admin/perfil/")) {
       return "Perfil";
@@ -152,6 +156,7 @@ const HeaderBar = () => {
     if (path.startsWith("/tecnico/servicio/")) {
       return "Ver servicio";
     }
+
 
     return titles[path] || "Ruta desconocida";
   }

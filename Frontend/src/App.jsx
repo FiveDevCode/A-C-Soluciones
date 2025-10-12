@@ -64,6 +64,9 @@ import ClientFaqsPage from './pages/common/ClientFaqsPage';
 import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
 import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
 import CreateAccountingAd from './pages/administrator/CreateAccountingAd.jsx';
+import ViewAccountingListPageAd from './pages/administrator/ViewAccountingListPageAd.jsx';
+import { UserProfileAccountingAd } from './pages/administrator/UserProfileAccountingAd.jsx';
+import EditAccountingAd from './pages/administrator/EditAccountingAd.jsx';
 
 
 
@@ -429,6 +432,24 @@ function AppContent() {
             <Route path="/admin/registrar-contador" element={
               <PrivateRoute roleRequired="administrador">
                 <CreateAccountingAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/contadores" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewAccountingListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/perfil-contador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <UserProfileAccountingAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/editar-contador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditAccountingAd/>
               </PrivateRoute>
             } />
 

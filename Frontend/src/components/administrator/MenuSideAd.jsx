@@ -15,7 +15,12 @@ import {
   faFileLines,
   faRoute,
   faUserCheck,
-  faCompass
+  faCompass,
+  faTools,
+  faUsers,
+  faUserTie,
+  faWrench,
+  faCalculator
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
@@ -187,6 +192,31 @@ const MenuSideAd = () => {
           />
           <TitleOption>Reportes</TitleOption>
         </ContainerOption>
+        <ContainerOption to="/admin/tecnicos">
+          <IconOption icon={faTools} />
+          <TitleOption>Técnicos</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/admin/clientes">
+          <IconOption icon={faUsers} />
+          <TitleOption>Clientes</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/admin/administradores">
+          <IconOption icon={faUserTie} />
+          <TitleOption>Administradores</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/admin/servicios">
+          <IconOption icon={faWrench} />
+          <TitleOption>Servicios</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/admin/contadores">
+          <IconOption icon={faCalculator} />
+          <TitleOption>Contabilidad</TitleOption>
+        </ContainerOption>
+
       </ContainerAllOption>
       
 
