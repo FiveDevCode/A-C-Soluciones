@@ -17,6 +17,7 @@ import VisitaRouter from './routers/visita.routes.js';
 import fichaRouter from './routers/ficha.routes.js';
 import fichaClienteRouter from './routers/ficha.routes.js'; 
 import FaqRouter from './routers/preguntas_frecuentes.routes.js';
+import InventarioRouter from './routers/inventario.routes.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,7 +31,7 @@ App.use(express.json());
 
 // configuracion de CORS
 App.use(cors({
-  origin: 'https://a-c-soluciones.vercel.app', 
+  origin: 'http://localhost:5173', 
   credentials: true
 }));
 
@@ -42,6 +43,7 @@ App.use(UsuarioRouter);
 App.use(ServicioRouter); 
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
+App.use(InventarioRouter); 
 App.use('/fichas', fichaClienteRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
