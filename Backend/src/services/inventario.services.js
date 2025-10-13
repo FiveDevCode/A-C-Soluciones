@@ -37,4 +37,9 @@ export class InventarioService {
   async actualizarInventario(id, data) {
       return await this.inventarioRepository.actualizarHerramienta(id, data);
   }
+
+async eliminarInventario(id){
+  return await this.inventarioRepository.eliminarInventario(id);
+}
+
 }

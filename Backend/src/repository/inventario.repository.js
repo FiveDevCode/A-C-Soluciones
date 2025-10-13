@@ -32,4 +32,12 @@ export class InventarioRepository {
     await inventario.update(data);
     return inventario;
   }
+
+async eliminarInventario(id){
+    const inventario = await InventarioModel.Inventario.findByPk(id);
+    if(!inventario) return null;
+    inventario.estado = 'En mantenimiento';
+    await inventario.save();
+    return inventario;
+}
 }

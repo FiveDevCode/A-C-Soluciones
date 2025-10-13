@@ -16,6 +16,9 @@ router.get('/api/inventario/:id', inventarioController.obtenerInventarioPorId);
 
 router.put('/api/inventario/:id', inventarioController.actualizarInventario);
 
+router.delete('/api/inventario/:id', inventarioController.eliminarInventario);
+
+
 
 
 export default router;

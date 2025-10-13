@@ -80,12 +80,7 @@ const Inventario = sequelize.define('Inventario', {
     type: DataTypes.STRING(20),
     defaultValue: 'Nueva',
     allowNull: false,
-    validate: {
-      isIn: {
-        args: [['Nueva', 'Dañada', 'Mantenimiento']],
-        msg: 'El estado debe ser seleccionado de la lista predefinida.',
-      },
-    },
+
   },
  
   id_administrador: {

@@ -106,4 +106,20 @@ export class InventarioController {
             return res.status(500).json({ message: 'Error al actualizar el item de inventario. Intente nuevamente.' });
         }
     };
+
+    eliminarInventario = async (req, res) => {
+        try {
+            const inventarioEliminado = await this.inventarioService.eliminarInventario(req.params.id);
+            
+            if (!inventarioEliminado) {
+                return res.status(404).json({ message: 'La herramienta no fue encontrada.' });
+            }
+            
+            return res.status(200).json({ message: 'Herramienta eliminada correctamente del inventario.' });
+        } catch (error) {
+            console.error('Error al eliminar la herramienta:', error);
+            return res.status(500).json({ message: 'Error al eliminar la herramienta. Intente nuevamente.' });
+        }
+        
+    }
 }
