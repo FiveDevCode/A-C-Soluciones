@@ -20,7 +20,8 @@ import {
   faUsers,
   faUserTie,
   faWrench,
-  faCalculator
+  faCalculator,
+  faMoneyBill
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
@@ -215,6 +216,11 @@ const MenuSideAd = () => {
         <ContainerOption to="/admin/contadores">
           <IconOption icon={faCalculator} />
           <TitleOption>Contabilidad</TitleOption>
+        </ContainerOption>
+        
+        <ContainerOption to="/admin/facturas">
+          <IconOption icon={faMoneyBill} />
+          <TitleOption>Facturas</TitleOption>
         </ContainerOption>
 
       </ContainerAllOption>

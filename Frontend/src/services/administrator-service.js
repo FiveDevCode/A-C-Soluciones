@@ -331,7 +331,39 @@ const createBill = (billData) => {
   });
 };
 
+const getListBill = () => {
+  const token = localStorage.getItem("authToken");
 
+
+  return api.get("/facturas", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const getBill = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/factura/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const updateStateBill = (id, state) => {
+  return api.put(`/factura/${id}`, 
+    {
+      estado_factura:state
+    },
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+};
 
 export const administratorService = {
   createTechnical,
@@ -362,6 +394,9 @@ export const administratorService = {
   getAccounting,
   updateStateAccounting,
   updateAccounting,
-  createBill
+  createBill,
+  getListBill,
+  getBill,
+  updateStateBill
   
 }

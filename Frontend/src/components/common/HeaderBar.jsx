@@ -101,7 +101,8 @@ const HeaderBar = () => {
     "/admin/reportes":"Reportes",
     "/admin/editar-perfil":"Editar perfil",
     "/admin/registrar-contador":"Crear empleado contador",
-    "/admin/contadores":"Contadores"
+    "/admin/contadores":"Contadores",
+    "/admin/facturas":"Facturas",
     
     
     
