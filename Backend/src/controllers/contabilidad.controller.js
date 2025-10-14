@@ -81,8 +81,25 @@ export class ContabilidadController {
         }
       };
 
-      // falta el de actualizar contabilidad lo cual hace referencia al rol
-
+      actualizarContabilidad = async (req, res) => {
+        try {
+          const contabilidadActualizada = await this.contabilidadService.actualizarContabilidad(
+            req.params.id, 
+            req.body
+          );
+          if (!contabilidadActualizada) {
+            return res.status(404).json({ message: 'Contador no encontrado' });
+          }
+          return res.status(200).json({
+            message: 'Contador actualizado exitosamente',
+            data: contabilidadActualizada
+          });
+        } catch (error) {
+          console.error('Error en actualizar el Contador:', error);
+          return res.status(500).json({ message: 'Error al actualizar el Contador' });
+        }
+      };
+      
       eliminarContabilidad = async (req, res) => {
         try {
           await this.contabilidadService.eliminarContabilidad(req.params.id);
