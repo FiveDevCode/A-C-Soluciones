@@ -69,6 +69,8 @@ import { UserProfileAccountingAd } from './pages/administrator/UserProfileAccoun
 import EditAccountingAd from './pages/administrator/EditAccountingAd.jsx';
 import CreateBillPageAd from './pages/administrator/CreateBillPageAd.jsx';
 import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
+import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
+import EditBillAd from './pages/administrator/EditBillAd.jsx';
 
 
 
@@ -455,7 +457,7 @@ function AppContent() {
               </PrivateRoute>
             } />
             
-            <Route path="/admin/factura" element={
+            <Route path="/admin/registrar-factura" element={
               <PrivateRoute roleRequired="administrador">
                 <CreateBillPageAd/>
               </PrivateRoute>
@@ -464,6 +466,18 @@ function AppContent() {
             <Route path="/admin/facturas" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewBillListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/factura/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewBillPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/editar-factura/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditBillAd/>
               </PrivateRoute>
             } />
 

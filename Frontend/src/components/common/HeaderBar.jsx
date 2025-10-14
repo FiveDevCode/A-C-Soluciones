@@ -115,6 +115,15 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/servicio/")) {
       return "Ver servicio";
     }
+    if (path.startsWith("/admin/factura/")) {
+      return "Ver factura";
+    }
+    if (path.startsWith("/admin/editar-factura/")) {
+      return "Editar factura";
+    }
+    if (path.startsWith("/admin/editar-contador/")) {
+      return "Editar contador";
+    }
     if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }

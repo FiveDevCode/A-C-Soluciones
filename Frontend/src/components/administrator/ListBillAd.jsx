@@ -136,7 +136,7 @@ const ListBillAd = ({ bills }) => {
 
             {/* Botones */}
             <Link
-              to={`/admin/factura/editar/${bill.id}`}
+              to={`/admin/editar-factura/cd${bill.id}`}
               style={{ textDecoration: "none" }}
             >
               <SeeMore style={{ cursor: "pointer", color: "#343875" }}>

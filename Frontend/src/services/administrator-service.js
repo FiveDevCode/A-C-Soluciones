@@ -354,16 +354,33 @@ const getBill = (id) => {
 }
 
 const updateStateBill = (id, state) => {
+  const token = localStorage.getItem("authToken");
+
   return api.put(`/factura/${id}`, 
     {
       estado_factura:state
     },
-    {
+      {
       headers: {
         "Authorization": `Bearer ${token}`
       }
     });
 };
+
+const updateBill = (id, formData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/factura/${id}`, 
+    formData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+
 
 export const administratorService = {
   createTechnical,
@@ -397,6 +414,7 @@ export const administratorService = {
   createBill,
   getListBill,
   getBill,
-  updateStateBill
+  updateStateBill,
+  updateBill
   
 }

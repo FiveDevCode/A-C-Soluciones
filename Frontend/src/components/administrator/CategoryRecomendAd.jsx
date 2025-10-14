@@ -5,6 +5,7 @@ import {
   faFileAlt, 
   faFileInvoiceDollar, 
   faInbox, 
+  faMoneyBills, 
   faPlusSquare, 
   faTasks, 
   faTools, 
@@ -98,6 +99,11 @@ const CategoryRecomendAd = () => {
         <Option to="/admin/registrar-contador">
           <Icon icon={faFileInvoiceDollar} style={{ stroke: "#6F42C1" }} />
           <OptionTitle>Crear nuevo contador</OptionTitle>
+        </Option>
+        
+        <Option to="/admin/registrar-factura">
+          <Icon icon={faMoneyBills} style={{ stroke: "#1ac762" }} />
+          <OptionTitle>Crear nueva factura</OptionTitle>
         </Option>
       </ContainerOption>
     </ContainerCategory>

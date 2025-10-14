@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { Button, Skeleton } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
-import billLogo from "../../assets/administrator/bill-view.png"; // Usa el ícono que tengas para facturas
+import billLogo from "../../assets/administrator/billIcon.png"; // Usa el ícono que tengas para facturas
 import { handleGetBillAd } from "../../controllers/administrator/getBillAd.controller";
 import { handleChangeStateBill } from "../../controllers/administrator/updateStateBillAd.controller";
+import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
+
 
 const Container = styled.div`
   padding: 2rem;
@@ -102,14 +104,25 @@ export const ViewBillPageAd = () => {
   const { id } = useParams();
   const [billData, setBillData] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [clientName, setClientName] = useState("");
+  const [lastName, setClientLastName] = useState("");
 
   useEffect(() => {
     const fetchBill = async () => {
       try {
         const response = await handleGetBillAd(id);
-        setBillData(response.data.data);
+        const bill = response.data;
+        setBillData(bill);
+
+        if (bill.id_cliente) {
+          const clientResponse = await handleGetClient(bill.id_cliente);
+          console.log(clientResponse);
+          setClientName(clientResponse.data.nombre);
+          setClientLastName(clientResponse.data.apellido);
+        }
       } catch (error) {
-        console.error("Error al obtener la factura:", error);
+        console.error("Error al obtener la factura o el cliente:", error);
+
       }
     };
 
@@ -200,6 +213,9 @@ export const ViewBillPageAd = () => {
 
         <Label>Saldo pendiente:</Label>
         <Texto>${Number(billData.saldo_pendiente).toFixed(2)}</Texto>
+
+        <Label>cliente:</Label>
+        <Texto>{clientName + " " + lastName}</Texto>
 
         <Label>Estado actual:</Label>
         <Texto
