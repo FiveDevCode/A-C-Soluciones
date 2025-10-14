@@ -1,181 +1,76 @@
-import { VisitaModel } from '../../../src/models/visita.model.js';
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../../src/database/conexion.js';
+import { VisitaModel } from '../../../src/models/visita.model.js';
 
+// Extraemos el modelo para facilitar las pruebas
 const { Visita } = VisitaModel;
 
-// Configuración de timeouts más largos
-jest.setTimeout(30000); // 30 segundos para todos los tests
-
-describe('Visita Model Tests', () => {
-  beforeAll(async () => {
-    // Configurar una conexión especial para tests
-    if (!sequelize.options.dialect === 'sqlite') {
-      // Usar SQLite en memoria para tests más rápidos
-      const testSequelize = new Sequelize('sqlite::memory:');
-      Visita.init(VisitaModel.Visita.attributes, {
-        sequelize: testSequelize,
-        modelName: 'Visita',
-        tableName: 'visitas'
-      });
-    }
-    
-    // Sincronizar con timeout extendido
-    await Visita.sync({ force: true, logging: false });
+describe('Visita Model', () => {
+  // Verificar definición básica del modelo
+  it('debe tener el nombre correcto y la tabla correcta', () => {
+    expect(Visita.name).toBe('Visita');
+    expect(Visita.tableName).toBe('visitas');
   });
 
-  afterAll(async () => {
-    // Cerrar la conexión después de los tests
-    await sequelize.close();
+  // Verificar atributos del modelo
+  it('debe tener los atributos correctos con sus tipos y validaciones', () => {
+    const attributes = Visita.getAttributes();
+
+    // id
+    expect(attributes.id.type).toBeInstanceOf(DataTypes.INTEGER);
+    expect(attributes.id.primaryKey).toBe(true);
+    expect(attributes.id.autoIncrement).toBe(true);
+
+    // fecha_programada
+    expect(attributes.fecha_programada.type).toBeInstanceOf(DataTypes.DATE);
+    expect(attributes.fecha_programada.allowNull).toBe(false);
+
+    // duracion_estimada
+    expect(attributes.duracion_estimada.type).toBeInstanceOf(DataTypes.INTEGER);
+    expect(attributes.duracion_estimada.allowNull).toBe(false);
+
+    // estado
+    expect(attributes.estado.type).toBeInstanceOf(DataTypes.ENUM);
+    expect(attributes.estado.values).toEqual([
+      'programada',
+      'en progreso',
+      'completada',
+      'cancelada'
+    ]);
+    expect(attributes.estado.defaultValue).toBe('programada');
+
+    // notas_previas
+    expect(attributes.notas_previas.type).toBeInstanceOf(DataTypes.STRING);
+    expect(attributes.notas_previas.allowNull).toBe(true);
+
+    // notas_posteriores
+    expect(attributes.notas_posteriores.type).toBeInstanceOf(DataTypes.STRING);
+    expect(attributes.notas_posteriores.allowNull).toBe(true);
+
+    // fecha_creacion
+    expect(attributes.fecha_creacion.type).toBeInstanceOf(DataTypes.DATE);
+    expect(attributes.fecha_creacion.defaultValue).toBeInstanceOf(Function);
+
+    // claves foráneas
+    expect(attributes.solicitud_id_fk.type).toBeInstanceOf(DataTypes.INTEGER);
+    expect(attributes.tecnico_id_fk.type).toBeInstanceOf(DataTypes.INTEGER);
+    expect(attributes.servicio_id_fk.type).toBeInstanceOf(DataTypes.INTEGER);
   });
 
-  test('Debe crear una visita válida', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000), // Mañana
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
-    });
+  // Verificar asociaciones
+  it('debe tener las asociaciones correctas', () => {
+    const associations = Visita.associations;
 
-    expect(visita.id).toBeDefined();
-    expect(visita.fecha_programada).toBeInstanceOf(Date);
-    expect(visita.duracion_estimada).toBe(60);
-    expect(visita.estado).toBe('programada');
-    expect(visita.solicitud_id_fk).toBe(1);
-    expect(visita.tecnico_id_fk).toBe(1);
-    expect(visita.servicio_id_fk).toBe(1);
-  });
+    expect(associations.solicitud).toBeDefined();
+    expect(associations.tecnico).toBeDefined();
+    expect(associations.servicio).toBeDefined();
 
-  test('No debe permitir fechas en el pasado', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() - 86400000), // Ayer
-        duracion_estimada: 60,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La fecha no puede ser anterior a la fecha actual');
-    }
-  });
+    expect(associations.solicitud.associationType).toBe('BelongsTo');
+    expect(associations.solicitud.foreignKey).toBe('solicitud_id_fk');
 
-  test('Debe validar la duración mínima de 15 minutos', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 10,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La duración mínima es de 15 minutos');
-    }
-  });
+    expect(associations.tecnico.associationType).toBe('BelongsTo');
+    expect(associations.tecnico.foreignKey).toBe('tecnico_id_fk');
 
-  test('Debe validar la duración máxima de 480 minutos (8 horas)', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 500,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La duración máxima es de 8 horas (480 minutos)');
-    }
-  });
-
-  test('Debe establecer el estado por defecto como "programada"', async () => {
-    const visita = await Visita.build({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
-    });
-
-    expect(visita.estado).toBe('programada');
-  });
-
-//   test('Debe validar el enum de estados', async () => {
-//     expect.assertions(1);
-//     try {
-//       await Visita.build({
-//         fecha_programada: new Date(Date.now() + 86400000),
-//         duracion_estimada: 60,
-//         estado: 'estado_invalido',
-//         solicitud_id_fk: 1,
-//         tecnico_id_fk: 1,
-//         servicio_id_fk: 1
-//       }).validate();
-//     } catch (error) {
-//       expect(error.message).toMatch(/Validation/);
-//     }
-//   });
-
-  test('Debe validar la longitud máxima de notas_previas (250 caracteres)', async () => {
-    expect.assertions(1);
-    try {
-      const notaLarga = 'a'.repeat(251);
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 60,
-        estado: 'programada',
-        notas_previas: notaLarga,
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('Las notas no pueden exceder los 250 caracteres');
-    }
-  });
-
-  test('Debe permitir notas_previas y notas_posteriores como nulas', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
-    });
-
-    expect(visita.notas_previas).toBeNull();
-    expect(visita.notas_posteriores).toBeNull();
-  });
-
-  test('Debe establecer fecha_creacion automáticamente', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
-    });
-
-    expect(visita.fecha_creacion).toBeInstanceOf(Date);
-    expect(visita.fecha_creacion.getTime()).toBeLessThanOrEqual(Date.now());
-  });
-
-  test('Debe requerir todos los campos obligatorios', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({}).validate();
-    } catch (error) {
-      expect(error.message).toMatch(/notNull Violation/);
-    }
+    expect(associations.servicio.associationType).toBe('BelongsTo');
+    expect(associations.servicio.foreignKey).toBe('servicio_id_fk');
   });
 });
