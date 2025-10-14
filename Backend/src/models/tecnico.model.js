@@ -149,7 +149,8 @@ const Tecnico = sequelize.define('Tecnico', {
     type: DataTypes.ENUM('activo', 'inactivo'),
     defaultValue: 'activo',
   },
-}, {
+}, 
+{
   tableName: 'tecnico',
   timestamps: false,
 });

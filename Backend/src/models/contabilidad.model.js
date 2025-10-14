@@ -162,14 +162,7 @@ const Contabilidad = sequelize.define('Contabilidad', {
     type: DataTypes.ENUM('activo', 'inactivo'),
     defaultValue: 'activo',
   },
-  id_administrador: {  
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'administrador',
-      key: 'id',
-    },
-  },
+  
   recovery_code: {
     type: DataTypes.STRING,
     allowNull: true,
