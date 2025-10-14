@@ -18,7 +18,8 @@ import fichaRouter from './routers/ficha.routes.js';
 import fichaClienteRouter from './routers/ficha.routes.js'; 
 import FaqRouter from './routers/preguntas_frecuentes.routes.js';
 import ContabilidadRouter from './routers/contabilidad.routes.js';
-
+import RegistrarFacturas from './routers/registrar_factura.routes.js';
+import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -31,7 +32,8 @@ App.use(express.json());
 
 // configuracion de CORS
 App.use(cors({
-  origin: 'https://a-c-soluciones.vercel.app', 
+  origin: ['https://a-c-soluciones.vercel.app', 'http://localhost:5173', 'http://localhost:8001'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
@@ -44,7 +46,8 @@ App.use(ServicioRouter);
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
 App.use(ContabilidadRouter);
-
+App.use(RegistrarFacturas);
+App.use(RegistarCuentas);
 // debes de mejorar la forma en la que defines la ruta, porque se esta saliendo del estandar que tenemos 
 App.use('/fichas', fichaClienteRouter);
 

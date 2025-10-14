@@ -25,7 +25,9 @@ export class ContabilidadService {
         return await this.contabilidadRepository.obtenerContabilidads();
     }
 
-    // falta el metodo de actualizar
+    async actualizarContabilidad(id, data) {
+        return await this.contabilidadRepository.actualizarContabilidad(id, data);
+    }
 
     async eliminarContabilidad(id) {
         return await this.contabilidadRepository.eliminarContabilidad(id);
