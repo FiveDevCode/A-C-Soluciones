@@ -37,6 +37,17 @@ export class ContabilidadController {
           });
         }
       };
+
+      obtenerContabilidad = async (req, res) => {
+        try {
+          const contabilidad = await this.contabilidadService.obtenerContabilidads();
+          return res.status(200).json({ contabilidad });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error al obtener el Contador' });
+        }
+      };
+
       obtenerContabilidadPorId = async (req, res) => {
         try {
           const contabilidad = await this.contabilidadService.obtenerContabilidadPorId(req.params.id);
@@ -110,7 +121,7 @@ export class ContabilidadController {
         }
       };
 
-      // autenticar contabilidad  
+      // autenticar contabilidad y generar token  
       autenticarContabilidad = async (req, res) => {
         try {
         const { correo_electronico, contrasenia } = req.body;
