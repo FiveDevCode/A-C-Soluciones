@@ -97,14 +97,14 @@ const ListPaymentAccountAd = ({ accounts }) => {
               </Date>
               <Date>
                 Cliente asociado:{" "}
-                {account.cliente?.nombre || "Sin cliente vinculado"}
+                {account.cliente?.nombre  + " " + account.cliente?.apellido|| "Sin cliente vinculado"}
               </Date>
             </ItemInfo>
           </ItemDescription>
 
           <ContainerOption>
             <Link
-              to={`/admin/editar-cuenta/cd${account.id}`}
+              to={`/admin/editar-cuenta/${account.id}`}
               style={{ textDecoration: "none" }}
             >
               <SeeMore style={{ cursor: "pointer", color: "#343875" }}>

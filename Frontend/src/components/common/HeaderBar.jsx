@@ -103,6 +103,7 @@ const HeaderBar = () => {
     "/admin/registrar-contador":"Crear empleado contador",
     "/admin/contadores":"Contadores",
     "/admin/facturas":"Facturas",
+    "/admin/cuentas":"Cuentas de pago del cliente",
     
     
     
@@ -117,6 +118,12 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/admin/factura/")) {
       return "Ver factura";
+    }
+    if (path.startsWith("/admin/cuenta/")) {
+      return "Ver cuenta";
+    }
+    if (path.startsWith("/admin/editar-cuenta/")) {
+      return "Editar cuenta";
     }
     if (path.startsWith("/admin/editar-factura/")) {
       return "Editar factura";

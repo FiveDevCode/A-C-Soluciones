@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Skeleton } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { ScreenConfirmation } from "../../components/administrator/ScreenConfirmation";
-import billLogo from "../../assets/administrator/billIcon.png"; // Usa el ícono que tengas para facturas
+import billLogo from "../../assets/administrator/billIcon.png";
 import { handleGetBillAd } from "../../controllers/administrator/getBillAd.controller";
 import { handleChangeStateBill } from "../../controllers/administrator/updateStateBillAd.controller";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
-
+import { handleDeleteBill } from "../../controllers/administrator/deleteBillAd.controller"; // ✅ Importa tu método
 
 const Container = styled.div`
   padding: 2rem;
@@ -59,6 +59,8 @@ const Texto = styled.p`
 `;
 
 const Footer = styled.div`
+  display: flex;
+  gap: 1rem;
   text-align: left;
 `;
 
@@ -102,8 +104,10 @@ const SkeletonLoader = () => (
 
 export const ViewBillPageAd = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [billData, setBillData] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationType, setConfirmationType] = useState(null); // ✅ tipo de acción
   const [clientName, setClientName] = useState("");
   const [lastName, setClientLastName] = useState("");
 
@@ -116,13 +120,11 @@ export const ViewBillPageAd = () => {
 
         if (bill.id_cliente) {
           const clientResponse = await handleGetClient(bill.id_cliente);
-          console.log(clientResponse);
           setClientName(clientResponse.data.nombre);
           setClientLastName(clientResponse.data.apellido);
         }
       } catch (error) {
         console.error("Error al obtener la factura o el cliente:", error);
-
       }
     };
 
@@ -143,13 +145,33 @@ export const ViewBillPageAd = () => {
       console.error("Error al cambiar el estado:", error);
     } finally {
       setShowConfirmation(false);
+      setConfirmationType(null);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await handleDeleteBill(id);
+      navigate("/admin/facturas"); // ✅ redirige a la lista
+    } catch (error) {
+      console.error("Error al eliminar la factura:", error);
+    } finally {
+      setShowConfirmation(false);
+      setConfirmationType(null);
     }
   };
 
   const confirmationMessage =
-    billData.estado_factura === "pagada"
-      ? "¿Quieres marcar esta factura como pendiente?"
-      : "¿Quieres marcar esta factura como pagada?";
+    confirmationType === "state"
+      ? billData.estado_factura === "pagada"
+        ? "¿Quieres marcar esta factura como pendiente?"
+        : "¿Quieres marcar esta factura como pagada?"
+      : "¿Estás seguro de que quieres eliminar esta factura? Esta acción no se puede deshacer.";
+
+  const handleConfirm = () => {
+    if (confirmationType === "state") handleToggleState();
+    if (confirmationType === "delete") handleDelete();
+  };
 
   return (
     <Container>
@@ -161,10 +183,11 @@ export const ViewBillPageAd = () => {
 
         <Button
           variant="contained"
-          onClick={() => setShowConfirmation(true)}
-          color={
-            billData.estado_factura === "pagada" ? "error" : "success"
-          }
+          onClick={() => {
+            setConfirmationType("state");
+            setShowConfirmation(true);
+          }}
+          color={billData.estado_factura === "pagada" ? "error" : "success"}
           style={{
             alignSelf: "end",
             marginRight: "4rem",
@@ -214,7 +237,7 @@ export const ViewBillPageAd = () => {
         <Label>Saldo pendiente:</Label>
         <Texto>${Number(billData.saldo_pendiente).toFixed(2)}</Texto>
 
-        <Label>cliente:</Label>
+        <Label>Cliente:</Label>
         <Texto>{clientName + " " + lastName}</Texto>
 
         <Label>Estado actual:</Label>
@@ -243,12 +266,27 @@ export const ViewBillPageAd = () => {
         >
           EDITAR
         </Button>
+
+        <Button
+          variant="contained"
+          color="error"
+          style={{ width: "15rem" }}
+          onClick={() => {
+            setConfirmationType("delete");
+            setShowConfirmation(true);
+          }}
+        >
+          ELIMINAR
+        </Button>
       </Footer>
 
       {showConfirmation && (
         <ScreenConfirmation
-          onConfirm={handleToggleState}
-          onCancel={() => setShowConfirmation(false)}
+          onConfirm={handleConfirm}
+          onCancel={() => {
+            setShowConfirmation(false);
+            setConfirmationType(null);
+          }}
           message={confirmationMessage}
         />
       )}

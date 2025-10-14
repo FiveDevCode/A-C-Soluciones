@@ -295,13 +295,37 @@ const getAccounting = (id) => {
 
 }
 
-const updateStateAccounting = (id) => {
-  return api.delete(`/contabilidad/${id}`, {
+const updateStateAccounting = (id, state) => {
+  return api.put(`/contabilidad/${id}`, {
+    estado:state
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const deleteBill = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.delete(`/eliminar-factura/${id}`,{
     headers: {
       "Authorization": `Bearer ${token}`
     }
   });
-};
+}
+
+const deleteAccount = (id) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.delete(`/eliminar-cuenta/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 
 const updateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronico, telefono) => {
   const token = localStorage.getItem("authToken");
@@ -404,7 +428,35 @@ const getListPaymentAccount = () => {
       "Authorization": `Bearer ${token}`
     }
   });
+};
+
+const updatePaymentAccount = (id, paymentAccountData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/cuenta/${id}`, 
+    paymentAccountData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+const getPaymentAccount = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/cuenta-id/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
 }
+
+
+
 
 export const administratorService = {
   createTechnical,
@@ -441,6 +493,10 @@ export const administratorService = {
   updateStateBill,
   updateBill,
   createPaymentAccount,
-  getListPaymentAccount
+  getListPaymentAccount,
+  getPaymentAccount,
+  updatePaymentAccount,
+  deleteBill,
+  deleteAccount
   
 }

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import ListPaymentAccountAd from "../../components/administrator/ListPaymentAccountAd";
 import { handleGetListPaymentAccountAd } from "../../controllers/administrator/getListPaymentAccountAd.controller";
+import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 
 const ContainerAccounts = styled.div`
   display: flex;
@@ -15,14 +16,35 @@ const ViewPaymentAccountListAd = () => {
 
   useEffect(() => {
     handleGetListPaymentAccountAd()
-      .then((res) => {
+      .then(async (res) => {
         console.log("Respuesta del backend:", res);
-        setAccounts(res.data);
+        const accountsData = res.data;
+
+        const enrichedAccounts = await Promise.all(
+          accountsData.map(async (account) => {
+            if (account.id_cliente) {
+              try {
+                const clientRes = await handleGetClient(account.id_cliente);
+                return {
+                  ...account,
+                  cliente: clientRes.data, // agrega objeto cliente con nombre y apellido
+                };
+              } catch (err) {
+                console.error(`Error al obtener cliente ${account.id_cliente}:`, err);
+                return account; // devuelve la cuenta sin cliente si hay error
+              }
+            }
+            return account;
+          })
+        );
+
+        setAccounts(enrichedAccounts);
       })
       .catch((err) => {
         console.error("Error al obtener la lista de cuentas:", err);
       });
   }, []);
+
 
   return (
     <ContainerAccounts>
