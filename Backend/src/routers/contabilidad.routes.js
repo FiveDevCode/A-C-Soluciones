@@ -17,6 +17,7 @@ router.delete('/api/contabilidad/:id',authenticate, isAdmin, contabilidadControl
 
 router.post('/api/admin/login', contabilidadController.autenticarContabilidad);
 
+router.put('/api/contabilidad/:id', authenticate, isAdmin, contabilidadController.actualizarContabilidad);
 
 export default router;
 

@@ -22,7 +22,12 @@ export class ContabilidadRepository {
     return await ContabilidadModel.Contabilidad.findAll();
   }
 
-  // solo falta el mentodo para actualizar
+  async actualizarContabilidad(id, data) {
+    const contabilidad = await ContabilidadModel.Contabilidad.findByPk(id);
+    if (!contabilidad) return null;
+    return await contabilidad.update(data);
+  }
+  
 
   async eliminarContabilidad(id) {
     const contabilidad = await ContabilidadModel.Contabilidad.findByPk(id);

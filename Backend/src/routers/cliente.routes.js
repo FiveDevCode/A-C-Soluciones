@@ -1,6 +1,6 @@
 import express from 'express';
 import { ClienteController } from '../controllers/cliente.controller.js';
-import { authenticate } from '../middlewares/autenticacion.js'
+import { authenticate, isAdmin } from '../middlewares/autenticacion.js'
 const router = express.Router();
 const clienteController = new ClienteController();
 
@@ -10,7 +10,7 @@ router.get('/api/cliente/todos', clienteController.obtenerTodosLosClientes);
 router.put('/api/mi-perfil', authenticate, clienteController.actualizarMiPerfil);
 
 // obtener todos los clientes registrados
-router.get('/api/cliente', clienteController.obtenerClientesActivos);
+router.get('/api/cliente', authenticate, isAdmin,clienteController.obtenerClientesActivos);
 
 // obtener cliente por id
 router.get('/api/cliente/:id', clienteController.obtenerClientePorId);
