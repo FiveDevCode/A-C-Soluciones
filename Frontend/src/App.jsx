@@ -71,6 +71,8 @@ import CreateBillPageAd from './pages/administrator/CreateBillPageAd.jsx';
 import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
 import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
 import EditBillAd from './pages/administrator/EditBillAd.jsx';
+import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccountAd.jsx';
+import ViewPaymentAccountListAd from './pages/administrator/ViewPaymentAccountListAd.jsx';
 
 
 
@@ -480,6 +482,20 @@ function AppContent() {
                 <EditBillAd/>
               </PrivateRoute>
             } />
+
+            <Route path="/admin/registrar-cuenta" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreatePaymentAccountAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/cuentas" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewPaymentAccountListAd/>
+              </PrivateRoute>
+            } />
+
+            
 
 
             <Route path="*" element={<ErrorPage/>} />

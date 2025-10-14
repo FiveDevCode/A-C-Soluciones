@@ -2,6 +2,9 @@ import {
   faBriefcase, 
   faCalculator, 
   faCalendarCheck, 
+  faCreditCard, 
+  faCreditCardAlt, 
+  faFile, 
   faFileAlt, 
   faFileInvoiceDollar, 
   faInbox, 
@@ -80,6 +83,10 @@ const CategoryRecomendAd = () => {
     <ContainerCategory>
       <h1>Categorias recomendadas</h1>
       <ContainerOption>
+        <Option to="/admin/reportes">
+          <Icon icon={faFile} style={{stroke:"#28A745"}}/>
+          <OptionTitle>Reportes</OptionTitle>
+        </Option>
         <Option to="/admin/registrar-empleado">
           <Icon icon={faUserPlus} style={{stroke:"#28A745"}}/>
           <OptionTitle>Registra un empleado</OptionTitle>
@@ -103,6 +110,11 @@ const CategoryRecomendAd = () => {
         
         <Option to="/admin/registrar-factura">
           <Icon icon={faMoneyBills} style={{ stroke: "#1ac762" }} />
+          <OptionTitle>Crear nueva factura</OptionTitle>
+        </Option>
+
+        <Option to="/admin/registrar-cuenta">
+          <Icon icon={faCreditCardAlt} style={{ stroke: "#1ac762" }} />
           <OptionTitle>Crear nueva factura</OptionTitle>
         </Option>
       </ContainerOption>

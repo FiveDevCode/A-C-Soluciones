@@ -21,7 +21,8 @@ import {
   faUserTie,
   faWrench,
   faCalculator,
-  faMoneyBill
+  faMoneyBill,
+  faCreditCard
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
@@ -187,12 +188,6 @@ const MenuSideAd = () => {
           />
           <TitleOption>Visitas</TitleOption>
         </ContainerOption>
-        <ContainerOption to="admin/reportes">
-          <IconOption 
-            icon={faFile} 
-          />
-          <TitleOption>Reportes</TitleOption>
-        </ContainerOption>
         <ContainerOption to="/admin/tecnicos">
           <IconOption icon={faTools} />
           <TitleOption>Técnicos</TitleOption>
@@ -221,6 +216,11 @@ const MenuSideAd = () => {
         <ContainerOption to="/admin/facturas">
           <IconOption icon={faMoneyBill} />
           <TitleOption>Facturas</TitleOption>
+        </ContainerOption>
+        
+        <ContainerOption to="/admin/cuentas">
+          <IconOption icon={faCreditCard} />
+          <TitleOption>Cuentas de pago</TitleOption>
         </ContainerOption>
 
       </ContainerAllOption>

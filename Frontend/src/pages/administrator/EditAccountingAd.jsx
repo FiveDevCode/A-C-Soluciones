@@ -141,7 +141,7 @@ const EditAccountingAd = () => {
       setShowSuccess(true);
 
       setTimeout(() => {
-        navigate(`/admin/perfil-contable/${id}`);
+        navigate(`/admin/perfil-contador/${id}`);
       }, 3000);
     } catch (err) {
       setErrorMsg("");

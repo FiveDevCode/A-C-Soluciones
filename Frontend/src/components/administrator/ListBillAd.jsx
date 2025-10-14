@@ -108,7 +108,7 @@ const ListBillAd = ({ bills }) => {
       {paginatedBills.map((bill, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={billIcon} size="10%" />
+            <Logo src={billIcon} size="100px" />
             <NotificationInfo>
               <TitleNoti>
                 {bill.numero_factura

@@ -304,6 +304,9 @@ const updateStateAccounting = (id) => {
 };
 
 const updateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronico, telefono) => {
+  const token = localStorage.getItem("authToken");
+
+
   return api.put(`/contabilidad/${id}`,
     {
       numero_de_cedula: numeroDeCedula,
@@ -380,7 +383,28 @@ const updateBill = (id, formData) => {
   );
 };
 
+const createPaymentAccount = (paymentAccountData) => {
+  const token = localStorage.getItem("authToken");
+  console.log("Datos enviados al backend:", paymentAccountData);
 
+  return api.post("/registrar-cuenta", paymentAccountData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const getListPaymentAccount = () => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get("/cuentas", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
 
 export const administratorService = {
   createTechnical,
@@ -415,6 +439,8 @@ export const administratorService = {
   getListBill,
   getBill,
   updateStateBill,
-  updateBill
+  updateBill,
+  createPaymentAccount,
+  getListPaymentAccount
   
 }
