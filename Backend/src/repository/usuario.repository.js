@@ -10,4 +10,9 @@ export class UsuarioRepository {
   async crearUsuario(data) {
     return await UsuarioModel.Usuario.create(data);
   }
+
+   async eliminarUsuario(id) {
+    return await UsuarioModel.Usuario.findOne({ where: { id } });
+  }
+ 
 }
