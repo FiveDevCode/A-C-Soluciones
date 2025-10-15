@@ -1,30 +1,40 @@
-import { Router } from "express";
+import express from 'express';
+import { ServicioController } from '../controllers/servicio.controller.js';
+import { authenticate, isAdmin} from '../middlewares/autenticacion.js';
 
-import { ServicioController } from "../controllers/servicio.controller.js";
-//aaa 
-const router = Router();
+const router = express.Router();
+const servicioController = new ServicioController();
 
-// ruta para registrar servicios
-router.post("/api/servicio", ServicioController.crear);
+// Rutas públicas
+router.get('/api/servicios/activos', servicioController.obtenerServiciosActivos);
 
-// ruta para listar todos los servicios
-router.get("/api/servicio", ServicioController.listar);
+// Buscar servicios por nombre o descripción
+router.get('/api/servicios/buscar', servicioController.buscarServicios);
 
-// ruta para obtener un solo servicio
-router.get("/api/servicio/:id", ServicioController.obtenerPorId); 
+// Rutas protegidas - requieren autenticación
 
-// ruta para eliminar un servicio
-router.delete("/api/servicio/:id", ServicioController.eliminar); 
+// Crear servicio (solo lo peude hacer administradores)
+router.post('/api/servicios', authenticate, isAdmin, servicioController.crearServicio);
 
-// ruta para actualizar un servicio
-router.put("/api/servicio/:id", ServicioController.actualizar);
+// Obtener todos los servicios
+router.get('/api/servicios', servicioController.obtenerServicios);
 
+// Obtener servicio por ID
+router.get('/api/servicios/:id', servicioController.obtenerServicioPorId);
 
+// Obtener servicio por nombre
+router.get('/api/servicios/nombre/:nombre', servicioController.obtenerServicioPorNombre);
 
+// Actualizar servicio (Solo administradores tiene este permiso)
+router.put('/api/servicios/:id', authenticate, isAdmin, servicioController.actualizarServicio);
 
+// Eliminar servicio (Solo administradores tienen este permiso)
+router.delete('/api/servicios/:id', authenticate, isAdmin, servicioController.eliminarServicio);
 
+// Deshabilitar servicio (Solo administradores tienen este permiso)
+router.patch('/api/servicios/:id/deshabilitar', authenticate, isAdmin, servicioController.deshabilitarServicio);
+
+// Habilitar servicio (Solo administradores tienen este permiso)
+router.patch('/api/servicios/:id/habilitar', authenticate, isAdmin, servicioController.habilitarServicio);
 
 export default router;
-
-
-
