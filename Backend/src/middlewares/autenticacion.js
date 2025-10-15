@@ -78,3 +78,4 @@ export const isContador = authorize(['contador']);
 export const isAdminOrTecnico = authorize(['admin', 'administrador', 'tecnico']);
 export const isAdminOrCliente = authorize(['admin', 'administrador', 'cliente']);
 export const isAdminOrContador = authorize(['admin', 'administrador', 'contador']);
+export const isAdminOrContadorOrTecnico = authorize(['admin','administrador','contador','tecnico'])
