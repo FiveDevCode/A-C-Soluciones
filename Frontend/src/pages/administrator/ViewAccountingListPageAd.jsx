@@ -16,8 +16,7 @@ const ViewAccountingListPageAd = () => {
   useEffect(() => {
     handleGetListAccounting()
       .then((res) => {
-        console.log("respuesta contable:", res.data);
-        setAccountings(res.data);
+        setAccountings(res.data.contabilidad);
       })
       .catch((err) => {
         console.error("Error fetching accounting list:", err);

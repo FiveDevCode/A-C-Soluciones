@@ -63,7 +63,10 @@ const HeaderBar = () => {
         setProfilePath("/tecnico/perfil");
         break;
       case "administrador":
-        setProfilePath("/admin/perfil/");
+        setProfilePath("/admin/perfil");
+        break;
+      case "Contador":
+        setProfilePath("/contador/perfil");
         break;
     }
     
@@ -72,6 +75,9 @@ const HeaderBar = () => {
 
 
   const titles = {
+    "/contador/inicio": "Inicio contador",
+
+
     "/tecnico/inicio": "Inicio técnico",
     "/tecnico/servicios": "Servicios",
     "/tecnico/perfil": "Perfil técnico",

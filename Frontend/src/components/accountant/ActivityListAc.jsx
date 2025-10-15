@@ -118,7 +118,7 @@ export const ActivityListAc = ({bills}) => {
                 disabled
               />
             </FormControl>
-            <Link to={`/admin/factura/${bill.id}`} style={{ textDecoration: 'none', alignSelf: "center"}}>
+            <Link to={`/contador/factura/${bill.id}`} style={{ textDecoration: 'none', alignSelf: "center"}}>
               <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
                 <FontAwesomeIcon icon={faArrowRight} />
                 <span>Ver</span>
@@ -127,7 +127,7 @@ export const ActivityListAc = ({bills}) => {
           </ContainerOption>
         </Notification>
       ))}
-      <MoreButton to="/admin/facturas">
+      <MoreButton to="/contador/facturas">
         Ver más facturas <FontAwesomeIcon icon={faArrowRight} />
       </MoreButton>
     </ContainerNoti>

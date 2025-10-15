@@ -1,5 +1,5 @@
 import styled from "styled-components";
-//import accountingImg from "../../assets/accounting/accountingEmployee.png"; // cambia la ruta por la imagen que tengas para contabilidad
+import accountingImg from "../../assets/accountant/accountingEmployee.png"; // cambia la ruta por la imagen que tengas para contabilidad
 import Logo from "../common/Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -82,7 +82,7 @@ const ListAccountingAd = ({ accountings }) => {
       {paginatedAccountings.map((employee, index) => (
         <Notification key={index}>
           <NotificationDescription>
-            <Logo src={accountingImg} />
+            <Logo src={accountingImg} size="100px"/>
             <NotificationInfo>
               <TitleNoti>
                 {employee.numero_de_cedula || "Sin número de cédula"}

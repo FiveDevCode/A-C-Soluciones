@@ -1,24 +1,9 @@
 import React from 'react';
 import { 
-  faBriefcase, 
-  faCalculator, 
-  faCalendarCheck, 
-  faCreditCard, 
-  faCreditCardAlt, 
-  faFile, 
-  faFileAlt, 
   faFileInvoiceDollar, 
-  faInbox, 
-  faMoneyBills, 
-  faPlusSquare, 
-  faTasks, 
-  faTools, 
-  faUserGear, 
-  faUserPlus, 
-  faUsers, 
-  faUserShield, 
-  faUserTie,
-  faWrench
+  faCreditCardAlt, 
+  faChartLine, 
+  faClipboardList
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -80,38 +65,21 @@ export const CategoryRecomendAc = () => {
     <ContainerCategory>
       <h1>Categorías recomendadas</h1>
       <ContainerOption>
-        <Option to="/admin/reportes">
-          <Icon icon={faFile} style={{stroke:"#28A745"}}/>
-          <OptionTitle>Reportes</OptionTitle>
+        <Option to="/contador/facturas">
+          <Icon icon={faFileInvoiceDollar} style={{ stroke: "#1ac762" }} />
+          <OptionTitle>Gestionar facturas</OptionTitle>
         </Option>
-        <Option to="/admin/registrar-empleado">
-          <Icon icon={faUserPlus} style={{stroke:"#28A745"}}/>
-          <OptionTitle>Registra un empleado</OptionTitle>
+
+        <Option to="/contador/cuentas">
+          <Icon icon={faCreditCardAlt} style={{ stroke: "#007BFF" }} />
+          <OptionTitle>Gestionar cuentas de pago</OptionTitle>
         </Option>
-        <Option to="/admin/registrar-servicio">
-          <Icon icon={faPlusSquare} style={{stroke:"#007BFF"}}/>
-          <OptionTitle>Crea un nuevo servicio</OptionTitle>
+
+        <Option to="/contador/reportes">
+          <Icon icon={faChartLine} style={{ stroke: "#6F42C1" }} />
+          <OptionTitle>Ver reportes contables</OptionTitle>
         </Option>
-        <Option to="/admin/asignar-visita">
-          <Icon icon={faTasks} style={{stroke:"#FD7E14"}}/>
-          <OptionTitle>Asigna una visita</OptionTitle>
-        </Option>
-        <Option to="/admin/registrar-administrador">
-          <Icon icon={faUserShield} style={{stroke:"#6F42C1"}}/>
-          <OptionTitle>Crear nuevo administrador</OptionTitle>
-        </Option>
-        <Option to="/admin/registrar-contador">
-          <Icon icon={faFileInvoiceDollar} style={{ stroke: "#6F42C1" }} />
-          <OptionTitle>Crear nuevo contador</OptionTitle>
-        </Option>
-        <Option to="/admin/registrar-factura">
-          <Icon icon={faMoneyBills} style={{ stroke: "#1ac762" }} />
-          <OptionTitle>Crear nueva factura</OptionTitle>
-        </Option>
-        <Option to="/admin/registrar-cuenta">
-          <Icon icon={faCreditCardAlt} style={{ stroke: "#1ac762" }} />
-          <OptionTitle>Crear nueva factura</OptionTitle>
-        </Option>
+
       </ContainerOption>
     </ContainerCategory>
   );

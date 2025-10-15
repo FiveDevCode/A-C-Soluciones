@@ -156,11 +156,6 @@ export const MenuSideAc = () => {
           <IconOption icon={faChartLine} />
           <TitleOption>Reportes</TitleOption>
         </ContainerOption>
-
-        <ContainerOption to="/contador/solicitudes">
-          <IconOption icon={faClipboardList} />
-          <TitleOption>Solicitudes</TitleOption>
-        </ContainerOption>
       </ContainerAllOption>
 
       <ContainerAllConfiguration>
