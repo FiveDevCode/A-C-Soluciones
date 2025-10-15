@@ -1,14 +1,23 @@
-import styled from 'styled-components';
-import { TextField, Button, Collapse, Alert, IconButton, MenuItem } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components";
+import {
+  TextField,
+  Button,
+  Collapse,
+  Alert,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { handleCreateInventory } from '../../controllers/accountant/createInventoryAc.controller';
+import { handleCreateInventory } from "../../controllers/accountant/createInventoryAc.controller";
 
-const FormContainer = styled.form`
-  max-width: 700px;
-  margin: auto;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 600px;
 `;
 
 const ContainerButton = styled.div`
@@ -21,30 +30,41 @@ const ContainerButton = styled.div`
 
   & > *:nth-child(2) {
     width: 35%;
-    background-color: #17A2B8;
+    background-color: #17a2b8;
   }
 `;
 
-export const FormCreateInventoryAd = () => {
+const FormCreateInventoryAd = () => {
   const [formData, setFormData] = useState({
-    nombre: '',
-    codigo: '',
-    categoria: '',
-    cantidad_disponible: '',
-    estado: 'Disponible',
-    id_administrador: '',
-    estado_herramienta: 'activo'
+    nombre: "",
+    codigo: "",
+    categoria: "",
+    cantidad_disponible: "",
+    estado: "Nueva",
+    id_administrador: "",
+    estado_herramienta: "activo",
   });
+
+  const categorias = [
+    "electricas",
+    "manuales",
+    "medicion",
+    "neumaticas",
+    "jardineria",
+    "seguridad",
+    "otras",
+  ];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (showSuccess) setShowSuccess(false);
   };
 
   const handleSubmit = async (e) => {
@@ -56,27 +76,21 @@ export const FormCreateInventoryAd = () => {
     const id = decoded.id;
 
     try {
-
       await handleCreateInventory({
         ...formData,
         id_administrador: parseInt(id),
       });
 
-      console.log({
-        ...formData,
-        id_administrador: parseInt(id),
-      });
-
-      setShowSuccess(true);
       setFieldErrors({});
-      setErrorMsg('');
+      setErrorMsg("");
+      setShowSuccess(true);
+      handleLimpiar();
 
       setTimeout(() => {
         navigate(`/admin/inventario`);
       }, 3000);
     } catch (err) {
-      console.error(err);
-      setErrorMsg('');
+      setErrorMsg("");
       setFieldErrors({});
 
       if (err.response?.data?.errors) {
@@ -86,60 +100,82 @@ export const FormCreateInventoryAd = () => {
         });
         setFieldErrors(formattedErrors);
       } else {
-        setErrorMsg(err.response?.data?.message || 'Error al registrar el inventario');
+        setErrorMsg(
+          err.response?.data?.message || "Error al registrar la herramienta"
+        );
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleLimpiar = () => {
+    setFormData({
+      nombre: "",
+      codigo: "",
+      categoria: "",
+      cantidad_disponible: "",
+      estado: "Disponible",
+      id_administrador: "",
+      estado_herramienta: "activo",
+    });
+  };
+
   return (
-    <FormContainer onSubmit={handleSubmit}>
-      {/* Campo: Nombre */}
+    <Form onSubmit={handleSubmit}>
       <TextField
         label="Nombre"
         name="nombre"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.nombre}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
         error={Boolean(fieldErrors.nombre)}
         helperText={fieldErrors.nombre}
       />
 
-      {/* Campo: Código */}
       <TextField
         label="Código"
         name="codigo"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.codigo}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
         error={Boolean(fieldErrors.codigo)}
         helperText={fieldErrors.codigo}
       />
 
-      {/* Campo: Categoría */}
+      {/* Campo: Categoría con opciones predefinidas */}
       <TextField
+        select
         label="Categoría"
         name="categoria"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.categoria}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
         error={Boolean(fieldErrors.categoria)}
         helperText={fieldErrors.categoria}
-      />
+      >
+        {categorias.map((cat) => (
+          <MenuItem key={cat} value={cat}>
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </MenuItem>
+        ))}
+      </TextField>
 
-      {/* Campo: Cantidad disponible */}
       <TextField
         label="Cantidad disponible"
         name="cantidad_disponible"
         type="number"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.cantidad_disponible}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
         error={Boolean(fieldErrors.cantidad_disponible)}
         helperText={fieldErrors.cantidad_disponible}
       />
@@ -149,30 +185,34 @@ export const FormCreateInventoryAd = () => {
         label="Estado"
         name="estado"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.estado}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
+        error={Boolean(fieldErrors.estado)}
+        helperText={fieldErrors.estado}
       >
-        <MenuItem value="Disponible">Disponible</MenuItem>
+        <MenuItem value="Nueva">Nueva</MenuItem>
+        <MenuItem value="Dañada">Dañada</MenuItem>
         <MenuItem value="En mantenimiento">En mantenimiento</MenuItem>
-        <MenuItem value="No disponible">No disponible</MenuItem>
       </TextField>
 
-      {/* Campo: Estado herramienta */}
+
+
       <TextField
         select
         label="Estado de herramienta"
         name="estado_herramienta"
         fullWidth
-        margin="normal"
+        size="medium"
         value={formData.estado_herramienta}
         onChange={handleInputChange}
+        sx={{ backgroundColor: "white" }}
       >
         <MenuItem value="activo">Activo</MenuItem>
         <MenuItem value="inactivo">Inactivo</MenuItem>
       </TextField>
 
-      {/* Alertas */}
       <Collapse in={!!errorMsg}>
         <Alert
           severity="error"
@@ -181,7 +221,7 @@ export const FormCreateInventoryAd = () => {
               aria-label="close"
               color="inherit"
               size="small"
-              onClick={() => setErrorMsg('')}
+              onClick={() => setErrorMsg("")}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
@@ -211,30 +251,15 @@ export const FormCreateInventoryAd = () => {
         </Alert>
       </Collapse>
 
-      {/* Botones */}
       <ContainerButton>
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          color="primary"
-          style={{ marginTop: '1rem' }}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Registrando herramienta...' : 'Registrar herramienta'}
+        <Button type="submit" variant="contained" disabled={isSubmitting}>
+          {isSubmitting ? "Registrando..." : "Registrar"}
         </Button>
-
-        <Button
-          variant="contained"
-          fullWidth
-          color="primary"
-          style={{ marginTop: '1rem' }}
-          onClick={() => navigate('/admin/inventario')}
-        >
-          Cancelar
+        <Button type="button" variant="contained" onClick={handleLimpiar}>
+          Limpiar campos
         </Button>
       </ContainerButton>
-    </FormContainer>
+    </Form>
   );
 };
 

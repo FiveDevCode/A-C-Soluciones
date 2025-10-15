@@ -110,7 +110,11 @@ const HeaderBar = () => {
     "/admin/contadores":"Contadores",
     "/admin/facturas":"Facturas",
     "/admin/cuentas":"Cuentas de pago del cliente",
-    
+    "/admin/registrar-cuenta":"Crear cuenta de pago del cliente",
+    "/admin/registrar-factura": "Crear factura",
+    "/admin/registrar-inventario": "Registrar herramienta",
+    "/admin/inventario": "Inventario",
+
     
     
   };
@@ -131,6 +135,9 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/editar-cuenta/")) {
       return "Editar cuenta";
     }
+    if (path.startsWith("/admin/editar-inventario/")) {
+      return "Editar herramienta";
+    }
     if (path.startsWith("/admin/editar-factura/")) {
       return "Editar factura";
     }
@@ -139,6 +146,9 @@ const HeaderBar = () => {
     }
     if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
+    }
+    if (path.startsWith("/admin/inventario/")) {
+      return "Ver herramienta";
     }
     if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";

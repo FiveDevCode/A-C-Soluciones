@@ -32,7 +32,7 @@ const SectionMenu = styled.section`
   flex-direction: column;
   width: 13%;
   padding: 0.5rem;
-  gap: 1rem;
+  gap: 0.975rem;
   padding-bottom: 1.5rem;
   min-width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -221,6 +221,11 @@ const MenuSideAd = () => {
         <ContainerOption to="/admin/cuentas">
           <IconOption icon={faCreditCard} />
           <TitleOption>Cuentas de pago</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/admin/inventario">
+          <IconOption icon={faTools} />
+          <TitleOption>Inventario</TitleOption>
         </ContainerOption>
 
       </ContainerAllOption>

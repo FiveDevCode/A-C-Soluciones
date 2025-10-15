@@ -443,6 +443,19 @@ const updatePaymentAccount = (id, paymentAccountData) => {
   );
 };
 
+const updateInventory = (id, inventoryData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/inventario/${id}`, 
+    inventoryData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
 const getPaymentAccount = (id) => {
   const token = localStorage.getItem("authToken");
 
@@ -455,7 +468,28 @@ const getPaymentAccount = (id) => {
 
 }
 
+const getInventory = (id) => {
+  const token = localStorage.getItem("authToken");
 
+
+  return api.get(`/inventario/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+
+export const getListInventory = () => {
+  const token = localStorage.getItem("authToken");
+
+  return api.get("/inventario", {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+};
 
 
 export const administratorService = {
@@ -497,6 +531,9 @@ export const administratorService = {
   getPaymentAccount,
   updatePaymentAccount,
   deleteBill,
-  deleteAccount
+  deleteAccount,
+  getListInventory,
+  getInventory,
+  updateInventory
   
 }
