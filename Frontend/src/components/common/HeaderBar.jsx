@@ -63,7 +63,10 @@ const HeaderBar = () => {
         setProfilePath("/tecnico/perfil");
         break;
       case "administrador":
-        setProfilePath("/admin/perfil/");
+        setProfilePath("/admin/perfil");
+        break;
+      case "Contador":
+        setProfilePath("/contador/perfil");
         break;
     }
     
@@ -72,6 +75,9 @@ const HeaderBar = () => {
 
 
   const titles = {
+    "/contador/inicio": "Inicio contador",
+
+
     "/tecnico/inicio": "Inicio técnico",
     "/tecnico/servicios": "Servicios",
     "/tecnico/perfil": "Perfil técnico",
@@ -100,7 +106,15 @@ const HeaderBar = () => {
     "/admin/servicios":"Servicios",
     "/admin/reportes":"Reportes",
     "/admin/editar-perfil":"Editar perfil",
-    
+    "/admin/registrar-contador":"Crear empleado contador",
+    "/admin/contadores":"Contadores",
+    "/admin/facturas":"Facturas",
+    "/admin/cuentas":"Cuentas de pago del cliente",
+    "/admin/registrar-cuenta":"Crear cuenta de pago del cliente",
+    "/admin/registrar-factura": "Crear factura",
+    "/admin/registrar-inventario": "Registrar herramienta",
+    "/admin/inventario": "Inventario",
+
     
     
   };
@@ -112,11 +126,35 @@ const HeaderBar = () => {
     if (path.startsWith("/admin/servicio/")) {
       return "Ver servicio";
     }
+    if (path.startsWith("/admin/factura/")) {
+      return "Ver factura";
+    }
+    if (path.startsWith("/admin/cuenta/")) {
+      return "Ver cuenta";
+    }
+    if (path.startsWith("/admin/editar-cuenta/")) {
+      return "Editar cuenta";
+    }
+    if (path.startsWith("/admin/editar-inventario/")) {
+      return "Editar herramienta";
+    }
+    if (path.startsWith("/admin/editar-factura/")) {
+      return "Editar factura";
+    }
+    if (path.startsWith("/admin/editar-contador/")) {
+      return "Editar contador";
+    }
     if (path.startsWith("/admin/visita/")) {
       return "Ver visita";
     }
+    if (path.startsWith("/admin/inventario/")) {
+      return "Ver herramienta";
+    }
     if (path.startsWith("/admin/perfil-cliente/")) {
       return "Perfil cliente";
+    }
+    if (path.startsWith("/admin/perfil-contador/")) {
+      return "Perfil contador";
     }
     if (path.startsWith("/admin/perfil/")) {
       return "Perfil";
@@ -151,6 +189,7 @@ const HeaderBar = () => {
     if (path.startsWith("/tecnico/servicio/")) {
       return "Ver servicio";
     }
+
 
     return titles[path] || "Ruta desconocida";
   }

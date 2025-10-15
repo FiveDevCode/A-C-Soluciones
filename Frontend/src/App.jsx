@@ -63,6 +63,24 @@ import ErrorPage from './errorPages/ErrorPage.jsx';
 import ClientFaqsPage from './pages/common/ClientFaqsPage';
 import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
 import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
+import CreateAccountingAd from './pages/administrator/CreateAccountingAd.jsx';
+import ViewAccountingListPageAd from './pages/administrator/ViewAccountingListPageAd.jsx';
+import { UserProfileAccountingAd } from './pages/administrator/UserProfileAccountingAd.jsx';
+import EditAccountingAd from './pages/administrator/EditAccountingAd.jsx';
+import CreateBillPageAd from './pages/administrator/CreateBillPageAd.jsx';
+import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
+import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
+import EditBillAd from './pages/administrator/EditBillAd.jsx';
+import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccountAd.jsx';
+import ViewPaymentAccountListAd from './pages/administrator/ViewPaymentAccountListAd.jsx';
+import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx';
+import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
+import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
+import HomeAc from './pages/accountant/HomeAc.jsx';
+import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
+import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
+import ViewInventoryPageAd from './pages/administrator/ViewInventoryPageAd.jsx';
+import { EditInventoryPageAd } from './pages/administrator/EditInventoryPageAd.jsx';
 
 
 
@@ -134,8 +152,9 @@ function AppContent() {
       <Container hideStyles={hideMenuAndHeader}>
         {!hideMenuAndHeader && role === 'administrador' && <MenuSideAd />}
         {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
+        {!hideMenuAndHeader && role === 'Contador' && <MenuSideAc />}
         <Content hideStyles={hideMenuAndHeader}>
-          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico') && <HeaderBar />}
+          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />}
           {isCliente && !isPublicPage && <HeaderBarCl />}
 
           {/* 
@@ -180,6 +199,13 @@ function AppContent() {
             <Route path="/cliente/editar-perfil" element={
               <PrivateRoute roleRequired="cliente">
                 <EditProfileCl />
+              </PrivateRoute>
+            } />
+            {/* ********************************* Rutas Contador ********************************** */}
+            
+            <Route path="/contador/inicio" element={
+              <PrivateRoute roleRequired="Contador">
+                <HomeAc />
               </PrivateRoute>
             } />
 
@@ -424,6 +450,105 @@ function AppContent() {
                 <EditAdministratorAd/>
               </PrivateRoute>
             } />
+
+            <Route path="/admin/registrar-contador" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateAccountingAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/contadores" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewAccountingListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/perfil-contador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <UserProfileAccountingAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/editar-contador/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditAccountingAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/registrar-factura" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateBillPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/facturas" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewBillListPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/factura/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewBillPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/editar-factura/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditBillAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/registrar-cuenta" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreatePaymentAccountAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/cuentas" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewPaymentAccountListAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/cuenta/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewPaymentAccountAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/editar-cuenta/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditPaymentAccountAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/registrar-inventario" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateInventoryPageAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/inventario" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewInventoryListPageAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/inventario/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <ViewInventoryPageAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/editar-inventario/:id" element={
+              <PrivateRoute roleRequired="administrador">
+                <EditInventoryPageAd/>
+              </PrivateRoute>
+            } />
+
+            
+
 
             <Route path="*" element={<ErrorPage/>} />
             

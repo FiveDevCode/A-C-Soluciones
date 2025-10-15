@@ -1,8 +1,14 @@
 import { 
   faBriefcase, 
+  faCalculator, 
   faCalendarCheck, 
+  faCreditCard, 
+  faCreditCardAlt, 
+  faFile, 
   faFileAlt, 
+  faFileInvoiceDollar, 
   faInbox, 
+  faMoneyBills, 
   faPlusSquare, 
   faTasks, 
   faTools, 
@@ -77,6 +83,14 @@ const CategoryRecomendAd = () => {
     <ContainerCategory>
       <h1>Categorias recomendadas</h1>
       <ContainerOption>
+        {/* <Option to="/admin/reportes">
+          <Icon icon={faFile} style={{stroke:"#28A745"}}/>
+          <OptionTitle>Reportes</OptionTitle>
+        </Option> */}
+        <Option to="/admin/registrar-inventario">
+          <Icon icon={faTools} style={{stroke:"#28A745"}}/>
+          <OptionTitle>Registra una nueva herramienta</OptionTitle>
+        </Option>
         <Option to="/admin/registrar-empleado">
           <Icon icon={faUserPlus} style={{stroke:"#28A745"}}/>
           <OptionTitle>Registra un empleado</OptionTitle>
@@ -93,21 +107,19 @@ const CategoryRecomendAd = () => {
           <Icon icon={faUserShield} style={{stroke:"#6F42C1"}}/>
           <OptionTitle>Crear nuevo administrador</OptionTitle>
         </Option>
-        <Option to="/admin/tecnicos">
-          <Icon icon={faTools} style={{stroke:"#138f51"}}/>
-          <OptionTitle>Tecnicos</OptionTitle>
+        <Option to="/admin/registrar-contador">
+          <Icon icon={faFileInvoiceDollar} style={{ stroke: "#6F42C1" }} />
+          <OptionTitle>Crear nuevo contador</OptionTitle>
         </Option>
-        <Option to="/admin/clientes">
-          <Icon icon={faUsers} style={{stroke:"#91165e"}}/>
-          <OptionTitle>Clientes</OptionTitle>
+        
+        <Option to="/admin/registrar-factura">
+          <Icon icon={faMoneyBills} style={{ stroke: "#1ac762" }} />
+          <OptionTitle>Crear nueva factura</OptionTitle>
         </Option>
-        <Option to="/admin/administradores">
-          <Icon icon={faUserTie} style={{stroke:"#343A40"}}/>
-          <OptionTitle>Administradores</OptionTitle>
-        </Option>
-        <Option to="/admin/servicios">
-          <Icon icon={faWrench} style={{stroke:"#343A40"}}/>
-          <OptionTitle>Servicios</OptionTitle>
+
+        <Option to="/admin/registrar-cuenta">
+          <Icon icon={faCreditCardAlt} style={{ stroke: "#1ac762" }} />
+          <OptionTitle>Crear nueva factura</OptionTitle>
         </Option>
       </ContainerOption>
     </ContainerCategory>

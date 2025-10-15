@@ -66,6 +66,9 @@ const ErrorPage = () => {
       case "administrador":
         navigate("/admin/inicio");
         break;
+      case "Contador":
+        navigate("/contador/inicio");
+        break;
       default:
         navigate("/");
         break;
