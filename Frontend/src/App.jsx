@@ -75,6 +75,8 @@ import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccou
 import ViewPaymentAccountListAd from './pages/administrator/ViewPaymentAccountListAd.jsx';
 import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx';
 import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
+import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
+import HomeAc from './pages/accountant/HomeAc.jsx';
 
 
 
@@ -146,8 +148,9 @@ function AppContent() {
       <Container hideStyles={hideMenuAndHeader}>
         {!hideMenuAndHeader && role === 'administrador' && <MenuSideAd />}
         {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
+        {!hideMenuAndHeader && role === 'Contador' && <MenuSideAc />}
         <Content hideStyles={hideMenuAndHeader}>
-          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico') && <HeaderBar />}
+          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />}
           {isCliente && !isPublicPage && <HeaderBarCl />}
 
           {/* 
@@ -192,6 +195,13 @@ function AppContent() {
             <Route path="/cliente/editar-perfil" element={
               <PrivateRoute roleRequired="cliente">
                 <EditProfileCl />
+              </PrivateRoute>
+            } />
+            {/* ********************************* Rutas Contador ********************************** */}
+            
+            <Route path="/contador/inicio" element={
+              <PrivateRoute roleRequired="Contador">
+                <HomeAc />
               </PrivateRoute>
             } />
 
