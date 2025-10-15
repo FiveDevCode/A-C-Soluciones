@@ -93,6 +93,20 @@ const Inventario = sequelize.define('Inventario', {
 
     
   },
+
+  estado_herramienta: {
+    type: DataTypes.STRING(20), 
+    defaultValue: 'activo', 
+    allowNull: false,
+    validate: {
+      isIn: {
+        args: [['activo', 'inactivo']], 
+        msg: 'El estado de la herramienta debe ser "activo" o "inactivo".',
+      },
+    },
+  },
+
+
 }, {
   tableName: 'inventario',
   timestamps: false, 

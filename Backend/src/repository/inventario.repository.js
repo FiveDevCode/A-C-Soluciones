@@ -36,7 +36,7 @@ export class InventarioRepository {
 async eliminarInventario(id){
     const inventario = await InventarioModel.Inventario.findByPk(id);
     if(!inventario) return null;
-    inventario.estado = 'En mantenimiento';
+    inventario.estado_herramienta = 'inactivo';
     await inventario.save();
     return inventario;
 }
