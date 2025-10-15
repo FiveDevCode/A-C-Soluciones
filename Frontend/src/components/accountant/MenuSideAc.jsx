@@ -3,28 +3,14 @@ import { Divider } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faHouse, 
-  faFile, 
-  faPaperPlane, 
-  faDiagramProject, 
-  faClockRotateLeft, 
-  faGear, 
-  faArrowRightFromBracket,
-  faMapLocationDot,
+  faHouse,
+  faFileInvoiceDollar,
+  faCreditCard,
+  faChartLine,
   faClipboardList,
-  faFileLines,
-  faRoute,
-  faUserCheck,
-  faCompass,
-  faTools,
-  faUsers,
-  faUserTie,
-  faWrench,
-  faCalculator,
-  faMoneyBill,
-  faCreditCard
+  faArrowRightFromBracket
 } from '@fortawesome/free-solid-svg-icons';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 
 const SectionMenu = styled.section`
@@ -32,28 +18,27 @@ const SectionMenu = styled.section`
   flex-direction: column;
   width: 13%;
   padding: 0.5rem;
-  gap: 0.975rem;
+  gap: 1rem;
   padding-bottom: 1.5rem;
   min-width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0 10px 10px 0;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   min-height: 100vh;
-`
+`;
 
 const TitleMenu = styled.h1`
   font-size: 1rem;
   font-weight: 300;
   color: #505050;
-
-`
+`;
 
 const ContainerAllOption = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.725rem;
+`;
 
-`
 const ContainerOption = styled(Link)`
   display: flex;
   flex-direction: row;
@@ -80,32 +65,30 @@ const ContainerOption = styled(Link)`
     svg {
       color: #000000;
       stroke-width: 0;
-
     }
   }
-  
-`
+`;
+
 const TitleOption = styled.h2`
   font-size: 1rem;
   font-weight: normal;
   color: #505050;
+`;
 
-`
 const ContainerAllConfiguration = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   height: 100%;
   justify-content: flex-end;
   gap: 0.725rem;
+`;
 
-`
 const IconOption = styled(FontAwesomeIcon)`
   color: white;
   stroke: black;
   stroke-width: 15px;
   font-size: 32px;
-`
+`;
 
 const ContainerOptionClose = styled.button`
   display: flex;
@@ -135,15 +118,11 @@ const ContainerOptionClose = styled.button`
     svg {
       color: #000000;
       stroke-width: 0;
-
     }
   }
+`;
 
-`
-
-
-const MenuSideAd = () => {
-  
+export const MenuSideAc = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -152,98 +131,40 @@ const MenuSideAd = () => {
     navigate("/");
   };
 
-  const role = localStorage.getItem('userRole');
-
-  const getHomeRouteByRole = (role) => {
-    switch (role) {
-      case 'tecnico':
-        return '/tecnico/inicio';
-      case 'administrador':
-        return '/admin/inicio';
-    }
-  };
-  
-
   return (
     <SectionMenu>
-      <Link to={getHomeRouteByRole(role)}><Logo src={logo} size="157px"/></Link>
-      <TitleMenu>Menu</TitleMenu>
+      <Link to="/contador/inicio"><Logo src={logo} size="157px" /></Link>
+      <TitleMenu>Menú</TitleMenu>
       <Divider/> 
       <ContainerAllOption>
-        <ContainerOption to={getHomeRouteByRole(role)}>
-          <IconOption 
-            icon={faHouse}           
-          />
+        <ContainerOption to="/contador/inicio">
+          <IconOption icon={faHouse} />
           <TitleOption>Inicio</TitleOption>
         </ContainerOption>
-        <ContainerOption to="admin/solicitudes">
-          <IconOption 
-            icon={faClipboardList} 
-          />
-          <TitleOption>Solicitudes</TitleOption>
-        </ContainerOption>
-        <ContainerOption to="admin/visitas">
-          <IconOption 
-            icon={faCompass} 
-          />
-          <TitleOption>Visitas</TitleOption>
-        </ContainerOption>
-        <ContainerOption to="/admin/tecnicos">
-          <IconOption icon={faTools} />
-          <TitleOption>Técnicos</TitleOption>
-        </ContainerOption>
 
-        <ContainerOption to="/admin/clientes">
-          <IconOption icon={faUsers} />
-          <TitleOption>Clientes</TitleOption>
-        </ContainerOption>
-
-        <ContainerOption to="/admin/administradores">
-          <IconOption icon={faUserTie} />
-          <TitleOption>Administradores</TitleOption>
-        </ContainerOption>
-
-        <ContainerOption to="/admin/servicios">
-          <IconOption icon={faWrench} />
-          <TitleOption>Servicios</TitleOption>
-        </ContainerOption>
-
-        <ContainerOption to="/admin/contadores">
-          <IconOption icon={faCalculator} />
-          <TitleOption>Contabilidad</TitleOption>
-        </ContainerOption>
-        
-        <ContainerOption to="/admin/facturas">
-          <IconOption icon={faMoneyBill} />
+        <ContainerOption to="/contador/facturas">
+          <IconOption icon={faFileInvoiceDollar} />
           <TitleOption>Facturas</TitleOption>
         </ContainerOption>
-        
-        <ContainerOption to="/admin/cuentas">
+
+        <ContainerOption to="/contador/cuentas">
           <IconOption icon={faCreditCard} />
           <TitleOption>Cuentas de pago</TitleOption>
         </ContainerOption>
 
-        <ContainerOption to="/admin/inventario">
-          <IconOption icon={faTools} />
-          <TitleOption>Inventario</TitleOption>
+        <ContainerOption to="/contador/reportes">
+          <IconOption icon={faChartLine} />
+          <TitleOption>Reportes</TitleOption>
         </ContainerOption>
-
       </ContainerAllOption>
-      
 
       <ContainerAllConfiguration>
         <Divider/> 
         <ContainerOptionClose onClick={handleLogout}>
-          <IconOption 
-            icon={faArrowRightFromBracket} 
-            
-          />
+          <IconOption icon={faArrowRightFromBracket} />
           <TitleOption>Salir</TitleOption>
         </ContainerOptionClose>
       </ContainerAllConfiguration>
-
     </SectionMenu>
-  )
-}
-
-export default MenuSideAd;
+  );
+};

@@ -7,6 +7,8 @@ const contabilidadController = new ContabilidadController();
 // Rutas para la entidad Contabilidad
 router.post('/api/contabilidad',authenticate, isAdmin, contabilidadController.crearContabilidad);
 
+router.get('/api/contabilidad',authenticate, isAdmin, contabilidadController.obtenerContabilidad);
+
 router.get('/api/contabilidad/:id', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorId);
 
 router.get('/api/contabilidad/cedula/:numero_cedula', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorCedula);
