@@ -77,6 +77,7 @@ import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx
 import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
+import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
 
 
 
@@ -516,6 +517,12 @@ function AppContent() {
             <Route path="/admin/editar-cuenta/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <EditPaymentAccountAd/>
+              </PrivateRoute>
+            } />
+
+            <Route path="/admin/registrar-herramienta" element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateInventoryPageAd/>
               </PrivateRoute>
             } />
 

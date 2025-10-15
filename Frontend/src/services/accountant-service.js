@@ -13,7 +13,23 @@ const getListBill = () => {
 }
 
 
+const createInventory = (data) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.post("/inventario", data, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+};
+
+
+
+
+
 
 export const accountantService = {
   getListBill,
+  createInventory
 }
