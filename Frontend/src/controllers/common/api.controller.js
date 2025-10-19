@@ -4,7 +4,7 @@ import axios from 'axios';
 const API_KEY = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
-  baseURL: `http://localhost:8000/api`, // puedes usar una variable de entorno
+  baseURL: `http://localhost:8001/api`, // puedes usar una variable de entorno
   
 });
 
