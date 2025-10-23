@@ -91,6 +91,7 @@ const Container = styled.div`
   ` : `
     display: flex;
     width: 100%;
+    height: 100vh;
   `}
 `;
 
@@ -104,7 +105,6 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0rem 8rem;
     gap: 2.5rem;
     margin-bottom: 1rem;
   `}
@@ -154,7 +154,7 @@ function AppContent() {
         {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
         {!hideMenuAndHeader && role === 'Contador' && <MenuSideAc />}
         <Content hideStyles={hideMenuAndHeader}>
-          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />}
+          {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
           {isCliente && !isPublicPage && <HeaderBarCl />}
 
           {/* 
