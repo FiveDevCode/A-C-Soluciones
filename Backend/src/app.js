@@ -4,7 +4,7 @@ import cors from 'cors'
 import expressOasGenerator from 'express-oas-generator';
 import fs from 'fs';
 import path from 'path';
-import {dirname} from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 import AministradorRouter from './routers/administrador.routes.js';
@@ -15,7 +15,7 @@ import ServicioRouter from "./routers/servicio.routes.js"
 import SolicitudRouter from './routers/solicitud.routes.js';
 import VisitaRouter from './routers/visita.routes.js';
 import fichaRouter from './routers/ficha.routes.js';
-import fichaClienteRouter from './routers/ficha.routes.js'; 
+import fichaClienteRouter from './routers/ficha.routes.js';
 import FaqRouter from './routers/preguntas_frecuentes.routes.js';
 import ContabilidadRouter from './routers/contabilidad.routes.js';
 import RegistrarFacturas from './routers/registrar_factura.routes.js';
@@ -33,9 +33,28 @@ App.use(morgan('dev'));
 App.use(express.json());
 
 // configuracion de CORS
+//App.use(cors({
+  //origin: ['https://a-c-soluciones.vercel.app', 'http://localhost:5173', 'http://localhost:8001'],
+  //methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  //credentials: true
+//}));
 App.use(cors({
-  origin: ['https://a-c-soluciones.vercel.app', 'http://localhost:5173', 'http://localhost:8001'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+ origin: function (origin, callback) {
+    const allowedOrigins = [
+     'https://a-c-soluciones.vercel.app',
+     'capacitor://localhost',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'http://localhost:5173'
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`❌ CORS bloqueado para origen: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
@@ -44,7 +63,7 @@ App.use(AministradorRouter)
 App.use(TecnicoRouter);
 App.use(ClienteRouter);
 App.use(UsuarioRouter);
-App.use(ServicioRouter); 
+App.use(ServicioRouter);
 App.use(SolicitudRouter);
 App.use(VisitaRouter);
 App.use(ContabilidadRouter);

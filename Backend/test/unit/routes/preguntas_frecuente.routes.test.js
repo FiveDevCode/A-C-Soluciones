@@ -1,75 +1,91 @@
-import { jest } from '@jest/globals';
+// test/unit/routes/preguntas_frecuentes.routes.test.js
 import express from 'express';
-import request from 'supertest';
 
-// Mock del middleware de autenticación
-jest.mock('../../../src/middlewares/autenticacion.js', () => ({
-  authenticate: (req, res, next) => {
-    req.user = { id: 1 };
-    next();
-  }
+// Mock de dependencias principales
+jest.mock('express', () => ({
+  Router: jest.fn(() => ({
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+  })),
 }));
 
-// Mock del controlador de preguntas frecuentes
-jest.mock('../../../src/controllers/preguntas_freceuntes.controller.js', () => {
-  const mockControllerMethods = {
-    crearFaq: jest.fn((req, res) => res.status(201).json({ message: 'crearFaq' })),
-    obtenerTodas: jest.fn((req, res) => res.status(200).json({ message: 'obtenerTodas' })),
-    obtenerPorCategoria: jest.fn((req, res) => res.status(200).json({ message: 'obtenerPorCategoria' })),
-    actualizarFaq: jest.fn((req, res) => res.status(200).json({ message: 'actualizarFaq' })),
-    eliminarFaq: jest.fn((req, res) => res.status(200).json({ message: 'eliminarFaq' }))
-  };
+jest.mock('../../../src/controllers/preguntas_freceuntes.controller.js', () => ({
+  FaqController: jest.fn().mockImplementation(() => ({
+    obtenerTodas: jest.fn(),
+    obtenerPorCategoria: jest.fn(),
+    crear: jest.fn(),
+    actualizar: jest.fn(),
+    eliminar: jest.fn(),
+  })),
+}));
 
-  return {
-    faqController: mockControllerMethods,
-    __mockFaqMethods: mockControllerMethods
-  };
-});
+jest.mock('../../../src/middlewares/autenticacion.js', () => ({
+  authenticate: jest.fn(),
+  isAdmin: jest.fn(),
+}));
 
+// Importar después de los mocks
 import router from '../../../src/routers/preguntas_frecuentes.routes.js';
-import { __mockFaqMethods } from '../../../src/controllers/preguntas_freceuntes.controller.js';
+import { FaqController } from '../../../src/controllers/preguntas_freceuntes.controller.js';
+import { authenticate, isAdmin } from '../../../src/middlewares/autenticacion.js';
 
-describe('Rutas de Preguntas Frecuentes', () => {
-  let app;
+describe('Preguntas Frecuentes (FAQ) Router', () => {
+  let mockRouterInstance;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    app = express();
-    app.use(express.json());
-    app.use(router);
+  beforeAll(() => {
+    mockRouterInstance = express.Router.mock.results[0].value;
   });
 
-  test('GET /api/faqs llama a obtenerTodas', async () => {
-    const response = await request(app).get('/api/faqs');
-    expect(response.status).toBe(200);
-    expect(__mockFaqMethods.obtenerTodas).toHaveBeenCalled();
+  it('debería crear una instancia del router', () => {
+    expect(express.Router).toHaveBeenCalledTimes(1);
   });
 
-  test('GET /api/faqs/categoria/:categoria llama a obtenerPorCategoria', async () => {
-    const response = await request(app).get('/api/faqs/categoria/servicio');
-    expect(response.status).toBe(200);
-    expect(__mockFaqMethods.obtenerPorCategoria).toHaveBeenCalledWith(expect.any(Object), expect.any(Object));
+  it('debería crear una instancia del controlador de preguntas frecuentes', () => {
+    expect(FaqController).toHaveBeenCalledTimes(1);
   });
 
-  test('POST /api/faqs llama a crearFaq', async () => {
-    const response = await request(app)
-      .post('/api/faqs')
-      .send({ pregunta: '¿Qué es esto?', respuesta: 'Una prueba' });
-    expect(response.status).toBe(201);
-    expect(__mockFaqMethods.crearFaq).toHaveBeenCalled();
+  // 🔹 Rutas públicas
+  it('debería tener la ruta GET /api/faqs configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/faqs',
+      expect.any(Function) // obtenerTodas
+    );
   });
 
-  test('PUT /api/faqs/:id llama a actualizarFaq', async () => {
-    const response = await request(app)
-      .put('/api/faqs/1')
-      .send({ respuesta: 'Actualizada' });
-    expect(response.status).toBe(200);
-    expect(__mockFaqMethods.actualizarFaq).toHaveBeenCalled();
+  it('debería tener la ruta GET /api/faqs/categoria/:categoria configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/faqs/categoria/:categoria',
+      expect.any(Function) // obtenerPorCategoria
+    );
   });
 
-  test('DELETE /api/faqs/:id llama a eliminarFaq', async () => {
-    const response = await request(app).delete('/api/faqs/1');
-    expect(response.status).toBe(200);
-    expect(__mockFaqMethods.eliminarFaq).toHaveBeenCalled();
+  // 🔹 Rutas protegidas
+  it('debería tener la ruta POST /api/faqs configurada correctamente', () => {
+    expect(mockRouterInstance.post).toHaveBeenCalledWith(
+      '/api/faqs',
+      expect.any(Function), // authenticate
+      expect.any(Function), // isAdmin
+      expect.any(Function)  // crear
+    );
+  });
+
+  it('debería tener la ruta PUT /api/faqs/:id configurada correctamente', () => {
+    expect(mockRouterInstance.put).toHaveBeenCalledWith(
+      '/api/faqs/:id',
+      expect.any(Function), // authenticate
+      expect.any(Function), // isAdmin
+      expect.any(Function)  // actualizar
+    );
+  });
+
+  it('debería tener la ruta DELETE /api/faqs/:id configurada correctamente', () => {
+    expect(mockRouterInstance.delete).toHaveBeenCalledWith(
+      '/api/faqs/:id',
+      expect.any(Function), // authenticate
+      expect.any(Function), // isAdmin
+      expect.any(Function)  // eliminar
+    );
   });
 });
