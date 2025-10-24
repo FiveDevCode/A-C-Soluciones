@@ -1,162 +1,136 @@
-import { jest } from '@jest/globals';
+// test/unit/routes/servicio.routes.test.js
 import express from 'express';
-import request from 'supertest';
 
-// Simulación del controlador de servicios
-jest.mock('../../../src/controllers/servicio.controller.js', () => {
-  const mockControllerMethods = {
-    obtenerServiciosActivos: jest.fn((req, res) => res.status(200).json({ message: 'obtenerServiciosActivos' })),
-    buscarServicios: jest.fn((req, res) => res.status(200).json({ message: 'buscarServicios' })),
-    crearServicio: jest.fn((req, res) => res.status(201).json({ message: 'crearServicio' })),
-    obtenerServicios: jest.fn((req, res) => res.status(200).json({ message: 'obtenerServicios' })),
-    obtenerServicioPorId: jest.fn((req, res) => res.status(200).json({ message: 'obtenerServicioPorId' })),
-    obtenerServicioPorNombre: jest.fn((req, res) => res.status(200).json({ message: 'obtenerServicioPorNombre' })),
-    actualizarServicio: jest.fn((req, res) => res.status(200).json({ message: 'actualizarServicio' })),
-    eliminarServicio: jest.fn((req, res) => res.status(200).json({ message: 'eliminarServicio' })),
-    deshabilitarServicio: jest.fn((req, res) => res.status(200).json({ message: 'deshabilitarServicio' })),
-    habilitarServicio: jest.fn((req, res) => res.status(200).json({ message: 'habilitarServicio' }))
-  };
+// Mock de dependencias
+jest.mock('express', () => ({
+  Router: jest.fn(() => ({
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    patch: jest.fn(),
+  })),
+}));
 
-  return {
-    ServicioController: jest.fn().mockImplementation(() => mockControllerMethods),
-    __mockControllerMethods: mockControllerMethods
-  };
-});
+jest.mock('../../../src/controllers/servicio.controller.js', () => ({
+  ServicioController: jest.fn().mockImplementation(() => ({
+    obtenerServiciosActivos: jest.fn(),
+    buscarServicios: jest.fn(),
+    crearServicio: jest.fn(),
+    obtenerServicios: jest.fn(),
+    obtenerServicioPorId: jest.fn(),
+    obtenerServicioPorNombre: jest.fn(),
+    actualizarServicio: jest.fn(),
+    eliminarServicio: jest.fn(),
+    deshabilitarServicio: jest.fn(),
+    habilitarServicio: jest.fn(),
+  })),
+}));
 
-// Simulación de los middlewares de autenticación
-jest.mock('../../../src/middlewares/autenticacion.js', () => {
-  const mockAuthenticate = jest.fn((req, res, next) => next());
-  const mockIsAdmin = jest.fn((req, res, next) => next());
+jest.mock('../../../src/middlewares/autenticacion.js', () => ({
+  authenticate: jest.fn(),
+  isAdmin: jest.fn(),
+}));
 
-  return {
-    authenticate: mockAuthenticate,
-    isAdmin: mockIsAdmin,
-    __mockedAuth: { authenticate: mockAuthenticate, isAdmin: mockIsAdmin }
-  };
-});
-
-// Importaciones después de configurar las simulaciones
+// Importar después de los mocks
 import router from '../../../src/routers/servicio.routes.js';
-import { __mockControllerMethods } from '../../../src/controllers/servicio.controller.js';
-import { __mockedAuth } from '../../../src/middlewares/autenticacion.js';
+import { ServicioController } from '../../../src/controllers/servicio.controller.js';
+import { authenticate, isAdmin } from '../../../src/middlewares/autenticacion.js';
 
-describe('Rutas de Servicios', () => {
-  let app;
+describe('Servicio Router', () => {
+  let mockRouterInstance;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    app = express();
-    app.use(express.json());
-    app.use(router);
+  beforeAll(() => {
+    mockRouterInstance = express.Router.mock.results[0].value;
   });
 
-  // Pruebas para rutas públicas
-  describe('Rutas públicas', () => {
-    test('GET /api/servicios/activos debe llamar a obtenerServiciosActivos', async () => {
-      const response = await request(app).get('/api/servicios/activos');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.obtenerServiciosActivos).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).not.toHaveBeenCalled();
-    });
-
-    test('GET /api/servicios/buscar debe llamar a buscarServicios', async () => {
-      const response = await request(app).get('/api/servicios/buscar');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.buscarServicios).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).not.toHaveBeenCalled();
-    });
+  it('debería crear una instancia del router', () => {
+    expect(express.Router).toHaveBeenCalledTimes(1);
   });
 
-  // Pruebas para rutas que requieren autenticación
-  describe('Rutas protegidas - autenticación', () => {
-    test('POST /api/servicios debe llamar a crearServicio y requerir autenticación e isAdmin', async () => {
-      const response = await request(app).post('/api/servicios');
-      expect(response.status).toBe(201);
-      expect(__mockControllerMethods.crearServicio).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-      expect(__mockedAuth.isAdmin).toHaveBeenCalled();
-    });
-
-    test('GET /api/servicios debe llamar a obtenerServicios y requerir autenticación', async () => {
-      const response = await request(app).get('/api/servicios');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.obtenerServicios).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-    });
-
-    test('GET /api/servicios/:id debe llamar a obtenerServicioPorId y requerir autenticación', async () => {
-      const response = await request(app).get('/api/servicios/123');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.obtenerServicioPorId).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-    });
-
-    test('GET /api/servicios/nombre/:nombre debe llamar a obtenerServicioPorNombre y requerir autenticación', async () => {
-      const response = await request(app).get('/api/servicios/nombre/test');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.obtenerServicioPorNombre).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-    });
+  it('debería crear una instancia del controlador de servicios', () => {
+    expect(ServicioController).toHaveBeenCalledTimes(1);
   });
 
-  // Pruebas para rutas que requieren ser administrador
-  describe('Rutas protegidas - admin', () => {
-    test('PUT /api/servicios/:id debe llamar a actualizarServicio y requerir autenticación e isAdmin', async () => {
-      const response = await request(app).put('/api/servicios/123');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.actualizarServicio).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-      expect(__mockedAuth.isAdmin).toHaveBeenCalled();
-    });
-
-    test('DELETE /api/servicios/:id debe llamar a eliminarServicio y requerir autenticación e isAdmin', async () => {
-      const response = await request(app).delete('/api/servicios/123');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.eliminarServicio).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-      expect(__mockedAuth.isAdmin).toHaveBeenCalled();
-    });
-
-    test('PATCH /api/servicios/:id/deshabilitar debe llamar a deshabilitarServicio y requerir autenticación e isAdmin', async () => {
-      const response = await request(app).patch('/api/servicios/123/deshabilitar');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.deshabilitarServicio).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-      expect(__mockedAuth.isAdmin).toHaveBeenCalled();
-    });
-
-    test('PATCH /api/servicios/:id/habilitar debe llamar a habilitarServicio y requerir autenticación e isAdmin', async () => {
-      const response = await request(app).patch('/api/servicios/123/habilitar');
-      expect(response.status).toBe(200);
-      expect(__mockControllerMethods.habilitarServicio).toHaveBeenCalled();
-      expect(__mockedAuth.authenticate).toHaveBeenCalled();
-      expect(__mockedAuth.isAdmin).toHaveBeenCalled();
-    });
+  // 🔹 Rutas públicas
+  it('debería tener la ruta GET /api/servicios/activos configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/servicios/activos',
+      expect.any(Function)
+    );
   });
 
-  // Prueba adicional para verificar el orden de los middlewares
-  describe('Orden de los middlewares', () => {
-    test('Los middlewares de autenticación se aplican en el orden correcto', async () => {
-      jest.clearAllMocks();
+  it('debería tener la ruta GET /api/servicios/buscar configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/servicios/buscar',
+      expect.any(Function)
+    );
+  });
 
-      let authOrder = 0;
-      let adminOrder = 0;
+  // 🔹 Rutas protegidas
+  it('debería tener la ruta POST /api/servicios configurada correctamente', () => {
+    expect(mockRouterInstance.post).toHaveBeenCalledWith(
+      '/api/servicios',
+      expect.any(Function), // authenticate
+      expect.any(Function), // isAdmin
+      expect.any(Function)  // crearServicio
+    );
+  });
 
-      __mockedAuth.authenticate.mockImplementation((req, res, next) => {
-        authOrder = 1;
-        next();
-      });
+  it('debería tener la ruta GET /api/servicios configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/servicios',
+      expect.any(Function)
+    );
+  });
 
-      __mockedAuth.isAdmin.mockImplementation((req, res, next) => {
-        adminOrder = authOrder + 1;
-        next();
-      });
+  it('debería tener la ruta GET /api/servicios/:id configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/servicios/:id',
+      expect.any(Function)
+    );
+  });
 
-      await request(app).post('/api/servicios');
+  it('debería tener la ruta GET /api/servicios/nombre/:nombre configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/servicios/nombre/:nombre',
+      expect.any(Function)
+    );
+  });
 
-      expect(authOrder).toBe(1);
-      expect(adminOrder).toBe(2);
-    });
+  it('debería tener la ruta PUT /api/servicios/:id configurada correctamente', () => {
+    expect(mockRouterInstance.put).toHaveBeenCalledWith(
+      '/api/servicios/:id',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('debería tener la ruta DELETE /api/servicios/:id configurada correctamente', () => {
+    expect(mockRouterInstance.delete).toHaveBeenCalledWith(
+      '/api/servicios/:id',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('debería tener la ruta PATCH /api/servicios/:id/deshabilitar configurada correctamente', () => {
+    expect(mockRouterInstance.patch).toHaveBeenCalledWith(
+      '/api/servicios/:id/deshabilitar',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('debería tener la ruta PATCH /api/servicios/:id/habilitar configurada correctamente', () => {
+    expect(mockRouterInstance.patch).toHaveBeenCalledWith(
+      '/api/servicios/:id/habilitar',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 });

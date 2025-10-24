@@ -1,148 +1,134 @@
 import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
-import { generarPDF } from '../../../src/services/ficha_mantenimiento.services';
+import crypto from 'crypto';
+import { generarPDF } from '../../../src/services/ficha_mantenimiento.services.js';
 
+// Mocks
 jest.mock('fs');
 jest.mock('path');
 jest.mock('pdfkit');
+jest.mock('crypto');
 
-describe('generarPDF', () => {
-  let pipeMock, endMock, textMock, writeStreamMock;
-
-  beforeEach(() => {
-    jest.resetAllMocks();
-
-    writeStreamMock = {
-      on: jest.fn(),
-      once: jest.fn(),
-    };
-
-    pipeMock = jest.fn();
-    endMock = jest.fn();
-    textMock = jest.fn().mockReturnThis();
-
-    PDFDocument.mockImplementation(() => ({
-      pipe: pipeMock,
-      end: endMock,
-      text: textMock,
-      rect: jest.fn().mockReturnThis(),
-      fill: jest.fn().mockReturnThis(),
-      fillColor: jest.fn().mockReturnThis(),
-      font: jest.fn().mockReturnThis(),
-      fontSize: jest.fn().mockReturnThis(),
-      moveDown: jest.fn().mockReturnThis(),
-      image: jest.fn().mockReturnThis(),
-      stroke: jest.fn().mockReturnThis(),
-      y: 100,
-      page: { width: 595.28, height: 841.89 },
-    }));
-
-    fs.createWriteStream.mockReturnValue(writeStreamMock);
-    fs.existsSync.mockReturnValue(true);
-    fs.mkdirSync.mockImplementation(() => {});
-    path.join.mockImplementation((...args) => args.join('/'));
-  });
+describe('📄 Servicio generarPDF', () => {
+  let docMock;
+  let streamMock;
 
   const fichaMock = {
-    id: 123,
-    fecha_de_mantenimiento: new Date().toISOString(),
-    introduccion: 'Introducción texto.',
-    detalles_servicio: 'Detalles del servicio.',
-    estado_antes: 'Estado antes del mantenimiento.',
-    descripcion_trabajo: 'Descripción del trabajo.',
-    materiales_utilizados: 'Materiales utilizados.',
-    estado_final: 'Estado final.',
-    tiempo_de_trabajo: '2 horas',
-    recomendaciones: 'Recomendaciones de mantenimiento.',
-    observaciones: 'Observaciones adicionales.'
+    fecha_de_mantenimiento: '2025-10-22T00:00:00Z',
+    introduccion: 'Mantenimiento preventivo de sistema eléctrico.',
+    detalles_servicio: 'Revisión y limpieza de componentes.',
+    estado_antes: 'Equipo con fallas menores.',
+    descripcion_trabajo: 'Se realizaron ajustes y calibraciones.',
+    materiales_utilizados: 'Aceite dieléctrico, limpiador de contactos.',
+    estado_final: 'Equipo funcionando correctamente.',
+    recomendaciones: 'Revisión mensual sugerida.',
+    observaciones: 'Cliente satisfecho con el servicio.',
   };
 
-  const clienteMock = {
-    nombre: 'Cliente Ejemplo',
-    telefono: '3126753209'
+  const clienteInfoMock = {
+    nombre: 'Carlos Pérez',
+    telefono: '3001234567',
+    correo: 'carlos@example.com',
   };
 
-  const tecnicoMock = {
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    telefono: '6741890210',
-    correo: 'juan@example.com'
+  const tecnicoInfoMock = {
+    nombre: 'Luis',
+    apellido: 'Gómez',
+    telefono: '3119876543',
+    correo: 'luis@example.com',
   };
 
   const imagenesMock = {
-    estadoAntes: 'ruta/imagen1.png',
-    descripcion: 'ruta/imagen2.png',
-    estadoFinal: 'ruta/imagen3.png'
+    estadoAntes: 'ruta/antes.jpg',
+    descripcion: 'ruta/trabajo.jpg',
+    estadoFinal: 'ruta/final.jpg',
   };
 
-  it('genera PDF exitosamente con todas las secciones e imágenes existentes', async () => {
-    fs.existsSync.mockImplementation((path) => {
-      return path.includes('imagen') || path.includes('uploads/fichas');
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
 
-    const finishCallback = jest.fn();
-    const errorCallback = jest.fn();
-    writeStreamMock.on.mockImplementation((event, cb) => {
-      if (event === 'finish') cb();
-      if (event === 'error') errorCallback;
-    });
+    // Mock de path
+    path.join.mockImplementation((...args) => args.join('/'));
 
-    const result = await generarPDF(fichaMock, clienteMock, tecnicoMock, imagenesMock);
+    // Mock de crypto con buffer HEX válido
+    crypto.randomBytes.mockReturnValue(Buffer.from('abcd1234efab5678', 'hex'));
 
-    expect(pipeMock).toHaveBeenCalled();
-    expect(endMock).toHaveBeenCalled();
-    expect(result).toContain('uploads/fichas/ficha_123.pdf');
+    // Mock de PDFDocument y sus métodos
+    docMock = {
+      pipe: jest.fn(),
+      end: jest.fn(),
+      fontSize: jest.fn().mockReturnThis(),
+      font: jest.fn().mockReturnThis(),
+      fillColor: jest.fn().mockReturnThis(),
+      text: jest.fn().mockReturnThis(),
+      moveDown: jest.fn().mockReturnThis(),
+      strokeColor: jest.fn().mockReturnThis(),
+      lineWidth: jest.fn().mockReturnThis(),
+      moveTo: jest.fn().mockReturnThis(),
+      lineTo: jest.fn().mockReturnThis(),
+      stroke: jest.fn().mockReturnThis(),
+      rect: jest.fn().mockReturnThis(),
+      image: jest.fn().mockReturnThis(),
+      getImageWidth: jest.fn().mockReturnValue(150),
+      getImageHeight: jest.fn().mockReturnValue(100),
+      page: { width: 600, height: 800 },
+      y: 100,
+      x: 50,
+    };
+    PDFDocument.mockImplementation(() => docMock);
+
+    // Mock del stream
+    streamMock = {
+      on: jest.fn((event, cb) => {
+        if (event === 'finish') setImmediate(cb);
+      }),
+    };
+
+    fs.createWriteStream.mockReturnValue(streamMock);
+    fs.existsSync.mockReturnValue(true);
+    fs.mkdirSync.mockReturnValue(undefined);
   });
 
-  it('crea la carpeta si no existe', async () => {
+  test('✅ Genera un PDF correctamente y devuelve la ruta del archivo', async () => {
+    const result = await generarPDF(fichaMock, clienteInfoMock, tecnicoInfoMock, imagenesMock);
+
+    expect(fs.existsSync).toHaveBeenCalledWith('uploads/fichas');
+    expect(fs.createWriteStream).toHaveBeenCalledWith('uploads/fichas/ficha_abcd1234efab5678.pdf');
+    expect(PDFDocument).toHaveBeenCalledTimes(1);
+    expect(docMock.pipe).toHaveBeenCalledWith(streamMock);
+    expect(docMock.end).toHaveBeenCalled();
+    expect(result).toBe('uploads/fichas/ficha_abcd1234efab5678.pdf');
+  });
+
+  test('📁 Crea la carpeta si no existe', async () => {
     fs.existsSync.mockReturnValue(false);
-    const finishCallback = jest.fn();
-    writeStreamMock.on.mockImplementation((event, cb) => {
-      if (event === 'finish') cb();
-    });
-
-    await generarPDF(fichaMock, clienteMock, tecnicoMock, {});
-
+    await generarPDF(fichaMock, clienteInfoMock, tecnicoInfoMock);
     expect(fs.mkdirSync).toHaveBeenCalledWith('uploads/fichas', { recursive: true });
   });
 
-  it('omite secciones si no existen en ficha', async () => {
-    const fichaParcial = {
-      id: 999,
-      fecha_de_mantenimiento: new Date().toISOString(),
-      tiempo_de_trabajo: '1h'
-    };
-
-    writeStreamMock.on.mockImplementation((event, cb) => {
-      if (event === 'finish') cb();
-    });
-
-    const result = await generarPDF(fichaParcial, clienteMock, tecnicoMock);
-    expect(result).toContain('ficha_999.pdf');
-  });
-
-  it('omite imágenes si no existen', async () => {
+  test('⚙️ Maneja correctamente cuando no hay imágenes', async () => {
     fs.existsSync.mockReturnValue(false);
-
-    writeStreamMock.on.mockImplementation((event, cb) => {
-      if (event === 'finish') cb();
-    });
-
-    const result = await generarPDF(fichaMock, clienteMock, tecnicoMock, {
-      estadoAntes: 'noexiste1.png',
-      descripcion: 'noexiste2.png',
-      estadoFinal: 'noexiste3.png'
-    });
-
-    expect(result).toContain('ficha_123.pdf');
+    const result = await generarPDF(fichaMock, clienteInfoMock, tecnicoInfoMock, {});
+    expect(result).toContain('uploads/fichas/ficha_');
   });
 
-  it('rechaza si ocurre un error en el stream', async () => {
-    writeStreamMock.on.mockImplementation((event, cb) => {
-      if (event === 'error') cb(new Error('Stream error'));
+  test('🧨 Lanza error si el stream falla', async () => {
+    streamMock.on.mockImplementation((event, cb) => {
+      if (event === 'error') setImmediate(() => cb(new Error('Error de escritura')));
     });
 
-    await expect(generarPDF(fichaMock, clienteMock, tecnicoMock)).rejects.toThrow('Stream error');
+    await expect(
+      generarPDF(fichaMock, clienteInfoMock, tecnicoInfoMock)
+    ).rejects.toThrow('Error de escritura');
+  });
+
+  test('🖋️ Dibuja correctamente las secciones principales', async () => {
+    await generarPDF(fichaMock, clienteInfoMock, tecnicoInfoMock, imagenesMock);
+
+    expect(docMock.text).toHaveBeenCalled();
+    expect(docMock.stroke).toHaveBeenCalled();
+    expect(docMock.font).toHaveBeenCalledWith('Helvetica-Bold');
+    expect(docMock.fontSize).toHaveBeenCalledWith(20);
   });
 });

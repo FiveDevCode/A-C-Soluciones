@@ -1,134 +1,140 @@
-
 import { ContabilidadRepository } from '../../../src/repository/contabilidad.repository.js';
 import { ContabilidadModel } from '../../../src/models/contabilidad.model.js';
 
-jest.mock('../../../src/models/contabilidad.model.js');
+// Mock del modelo Sequelize
+jest.mock('../../../src/models/contabilidad.model.js', () => ({
+  ContabilidadModel: {
+    Contabilidad: {
+      create: jest.fn(),
+      findByPk: jest.fn(),
+      findOne: jest.fn(),
+      findAll: jest.fn(),
+    },
+  },
+}));
 
-describe('ContabilidadRepository', () => {
+describe('📘 ContabilidadRepository', () => {
   let repository;
-  let modelMock;
+  const mockContabilidad = { id: 1, nombre: 'Jonier', estado: 'activo' };
 
   beforeEach(() => {
-    repository = new ContabilidadRepository();
-    modelMock = ContabilidadModel.Contabilidad;
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
+    repository = new ContabilidadRepository();
   });
 
-  describe('crearContabilidad', () => {
-    it('debería llamar a Contabilidad.create con los datos proporcionados', async () => {
-      const data = { nombre: 'Contador Test' };
-      const expectedResult = { id: 1, ...data };
-      modelMock.create.mockResolvedValue(expectedResult);
+  // 📄 crearContabilidad
+  test('✅ crearContabilidad crea un nuevo registro correctamente', async () => {
+    ContabilidadModel.Contabilidad.create.mockResolvedValue(mockContabilidad);
+    const result = await repository.crearContabilidad(mockContabilidad);
 
-      const result = await repository.crearContabilidad(data);
-
-      expect(modelMock.create).toHaveBeenCalledWith(data);
-      expect(result).toEqual(expectedResult);
-    });
+    expect(ContabilidadModel.Contabilidad.create).toHaveBeenCalledWith(mockContabilidad);
+    expect(result).toEqual(mockContabilidad);
   });
 
-  describe('obtenerContabilidadPorId', () => {
-    it('debería llamar a Contabilidad.findByPk con el id proporcionado', async () => {
-      const id = 1;
-      const expectedResult = { id: 1, nombre: 'Contador Test' };
-      modelMock.findByPk.mockResolvedValue(expectedResult);
+  // 🔍 obtenerContabilidadPorId
+  test('✅ obtenerContabilidadPorId devuelve el registro correcto', async () => {
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue(mockContabilidad);
+    const result = await repository.obtenerContabilidadPorId(1);
 
-      const result = await repository.obtenerContabilidadPorId(id);
-
-      expect(modelMock.findByPk).toHaveBeenCalledWith(id);
-      expect(result).toEqual(expectedResult);
-    });
+    expect(ContabilidadModel.Contabilidad.findByPk).toHaveBeenCalledWith(1);
+    expect(result).toEqual(mockContabilidad);
   });
 
-  describe('obtenerContabilidadPorCedula', () => {
-    it('debería llamar a Contabilidad.findOne con la cédula proporcionada', async () => {
-      const cedula = '123456789';
-      const expectedResult = { id: 1, numero_de_cedula: cedula };
-      modelMock.findOne.mockResolvedValue(expectedResult);
-
-      const result = await repository.obtenerContabilidadPorCedula(cedula);
-
-      expect(modelMock.findOne).toHaveBeenCalledWith({ where: { numero_de_cedula: cedula } });
-      expect(result).toEqual(expectedResult);
-    });
+  test('❌ obtenerContabilidadPorId devuelve null si no existe', async () => {
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue(null);
+    const result = await repository.obtenerContabilidadPorId(999);
+    expect(result).toBeNull();
   });
 
-  describe('obtenerContabilidadPorCorreo', () => {
-    it('debería llamar a Contabilidad.findOne con el correo proporcionado', async () => {
-      const correo = 'test@correo.com';
-      const expectedResult = { id: 1, correo_electronico: correo };
-      modelMock.findOne.mockResolvedValue(expectedResult);
+  // 🔢 obtenerContabilidadPorCedula
+  test('✅ obtenerContabilidadPorCedula busca correctamente por número de cédula', async () => {
+    ContabilidadModel.Contabilidad.findOne.mockResolvedValue(mockContabilidad);
+    const cedula = '123456789';
+    const result = await repository.obtenerContabilidadPorCedula(cedula);
 
-      const result = await repository.obtenerContabilidadPorCorreo(correo);
-
-      expect(modelMock.findOne).toHaveBeenCalledWith({ where: { correo_electronico: correo } });
-      expect(result).toEqual(expectedResult);
+    expect(ContabilidadModel.Contabilidad.findOne).toHaveBeenCalledWith({
+      where: { numero_de_cedula: cedula },
     });
+    expect(result).toEqual(mockContabilidad);
   });
 
-  describe('obtenerContabilidads', () => {
-    it('debería llamar a Contabilidad.findAll', async () => {
-      const expectedResult = [{ id: 1, nombre: 'Contador Test' }];
-      modelMock.findAll.mockResolvedValue(expectedResult);
+  // 📧 obtenerContabilidadPorCorreo
+  test('✅ obtenerContabilidadPorCorreo busca correctamente por correo electrónico', async () => {
+    ContabilidadModel.Contabilidad.findOne.mockResolvedValue(mockContabilidad);
+    const correo = 'test@example.com';
+    const result = await repository.obtenerContabilidadPorCorreo(correo);
 
-      const result = await repository.obtenerContabilidads();
-
-      expect(modelMock.findAll).toHaveBeenCalled();
-      expect(result).toEqual(expectedResult);
+    expect(ContabilidadModel.Contabilidad.findOne).toHaveBeenCalledWith({
+      where: { correo_electronico: correo },
     });
+    expect(result).toEqual(mockContabilidad);
   });
 
-  describe('eliminarContabilidad', () => {
-    it('debería cambiar el estado a inactivo si el contador existe y tiene estado', async () => {
-      const id = 1;
-      const mockContador = { id: 1, estado: 'activo', save: jest.fn().mockResolvedValue(true) };
-      modelMock.findByPk.mockResolvedValue(mockContador);
+  // 📋 obtenerContabilidads
+  test('✅ obtenerContabilidads devuelve todos los registros', async () => {
+    const registros = [mockContabilidad, { id: 2, nombre: 'Luis' }];
+    ContabilidadModel.Contabilidad.findAll.mockResolvedValue(registros);
 
-      const result = await repository.eliminarContabilidad(id);
+    const result = await repository.obtenerContabilidads();
 
-      expect(modelMock.findByPk).toHaveBeenCalledWith(id);
-      expect(mockContador.estado).toBe('inactivo');
-      expect(mockContador.save).toHaveBeenCalled();
-      expect(result).toEqual(mockContador);
-    });
-
-    it('debería llamar a destroy si el contador no tiene estado', async () => {
-        const id = 1;
-        const mockContador = { id: 1, destroy: jest.fn().mockResolvedValue(true) };
-        modelMock.findByPk.mockResolvedValue(mockContador);
-  
-        const result = await repository.eliminarContabilidad(id);
-  
-        expect(modelMock.findByPk).toHaveBeenCalledWith(id);
-        expect(mockContador.destroy).toHaveBeenCalled();
-        expect(result).toEqual(mockContador);
-      });
-
-    it('debería devolver null si el contador no se encuentra', async () => {
-      const id = 1;
-      modelMock.findByPk.mockResolvedValue(null);
-
-      const result = await repository.eliminarContabilidad(id);
-
-      expect(modelMock.findByPk).toHaveBeenCalledWith(id);
-      expect(result).toBeNull();
-    });
+    expect(ContabilidadModel.Contabilidad.findAll).toHaveBeenCalled();
+    expect(result).toEqual(registros);
   });
 
-  describe('actualizarContabilidad', () => {
-    it('debería llamar a Contabilidad.update con el id y los datos proporcionados', async () => {
-      const id = 1;
-      const data = { nombre: 'Contador Actualizado' };
-      const expectedResult = [1]; 
-      modelMock.update.mockResolvedValue(expectedResult);
+  // 🔄 actualizarContabilidad
+  test('✅ actualizarContabilidad actualiza un registro existente', async () => {
+    const updated = { ...mockContabilidad, nombre: 'Carlos' };
+    const mockUpdate = jest.fn().mockResolvedValue(updated);
 
-      const result = await repository.actualizarContabilidad(id, data);
-
-      expect(modelMock.update).toHaveBeenCalledWith(data, { where: { id } });
-      expect(result).toEqual(expectedResult);
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue({
+      update: mockUpdate,
     });
+
+    const result = await repository.actualizarContabilidad(1, { nombre: 'Carlos' });
+
+    expect(ContabilidadModel.Contabilidad.findByPk).toHaveBeenCalledWith(1);
+    expect(mockUpdate).toHaveBeenCalledWith({ nombre: 'Carlos' });
+    expect(result).toEqual(updated);
+  });
+
+  test('❌ actualizarContabilidad devuelve null si no existe el registro', async () => {
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue(null);
+
+    const result = await repository.actualizarContabilidad(999, { nombre: 'X' });
+
+    expect(result).toBeNull();
+  });
+
+  // 🗑️ eliminarContabilidad
+  test('✅ eliminarContabilidad cambia estado a inactivo si está activo', async () => {
+    const saveMock = jest.fn();
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue({
+      ...mockContabilidad,
+      save: saveMock,
+    });
+
+    const result = await repository.eliminarContabilidad(1);
+
+    expect(result.estado).toBe('inactivo');
+    expect(saveMock).toHaveBeenCalled();
+  });
+
+  test('✅ eliminarContabilidad elimina el registro si no tiene estado activo', async () => {
+    const destroyMock = jest.fn();
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue({
+      estado: null,
+      destroy: destroyMock,
+    });
+
+    const result = await repository.eliminarContabilidad(2);
+
+    expect(destroyMock).toHaveBeenCalled();
+    expect(result.estado).toBeNull();
+  });
+
+  test('❌ eliminarContabilidad devuelve null si no se encuentra el registro', async () => {
+    ContabilidadModel.Contabilidad.findByPk.mockResolvedValue(null);
+    const result = await repository.eliminarContabilidad(999);
+    expect(result).toBeNull();
   });
 });
