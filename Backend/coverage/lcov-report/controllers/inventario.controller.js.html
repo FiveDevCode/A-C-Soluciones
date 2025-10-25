@@ -30,16 +30,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>22/25</span>
+                <span class='fraction'>18/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -187,7 +187,9 @@
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,6 +231,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -284,6 +287,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -316,77 +320,78 @@ import { ValidationError } from 'sequelize';
 &nbsp;
 &nbsp;
 export class InventarioController {
-    constructor() {
-        this.inventarioService = new InventarioService();
-    }
+    constructor() {
+        this.inventarioService = new InventarioService();
+    }
 &nbsp;
-    crearInventario = async (req, res) =&gt; {
-        
-        try {
-            
+    crearInventario = async (req, res) =&gt; {
 &nbsp;
-            const nuevoItem = await this.inventarioService.crearInventario(req.body);
-            
-&nbsp;
-            return res.status(201).json({ 
-                message: 'Item de inventario registrado exitosamente.',
-                item: nuevoItem 
-            });
-&nbsp;
-        } catch (error) {
-&nbsp;
-            console.error('Error al registrar item de inventario:', error);
+        try {
 &nbsp;
 &nbsp;
-            if (error.name === 'CodigoDuplicadoError' || (error instanceof ValidationError &amp;&amp; error.errors.some(e =&gt; e.type === 'unique violation' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >e.path === 'codigo')</span>)) {
-&nbsp;
-                return res.status(400).json({ 
-                    message: INVENTARIO_ERRORS.CODIGO_DUPLICADO 
-                });
-            }
+            const nuevoItem = await this.inventarioService.crearInventario(req.body);
 &nbsp;
 &nbsp;
-            if (error instanceof ValidationError) {
-                const fieldErrors = {};
-                error.errors.forEach((err) =&gt; {
-                    <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path &amp;&amp; err.message) {
-                        fieldErrors[err.path] = err.message;
-                    }
-                });
-                return res.status(400).json({ 
-                    message: 'Error de validación en el formulario.', 
-                    errors: fieldErrors 
-                });
-            }
-            
-            return res.status(500).json({ 
-                message: 'Error al registrar el item de inventario. Intente nuevamente.' 
-            });
-        }
-    };
-    
-    obtenerTodos = async (req, res) =&gt; {
-        try {
-            const items = await this.inventarioService.obtenerTodos();
-            return res.status(200).json(items);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Error al obtener los items de inventario.' });
-        }
-    };
+            return res.status(201).json({
+                message: 'Item de inventario registrado exitosamente.',
+                item: nuevoItem
+            });
 &nbsp;
-    obtenerInventarioPorId = async (req, res) =&gt; {
-        try {
-            const item = await this.inventarioService.obtenerInventarioPorId(req.params.id);
-            if (!item) {
-                return res.status(404).json({ message: 'Item de inventario no encontrado.' });
-            }
-            return res.status(200).json(item);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Error al obtener el item de inventario.' });
-        }
-    };
+        } catch (error) {
+&nbsp;
+            console.error('Error al registrar item de inventario:', error);
+&nbsp;
+&nbsp;
+            if (error.name === 'CodigoDuplicadoError' || (error instanceof ValidationError &amp;&amp; error.errors.some(e =&gt; e.type === 'unique violation' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >e.path === 'codigo')</span>)) {
+&nbsp;
+                return res.status(400).json({
+                    message: INVENTARIO_ERRORS.CODIGO_DUPLICADO
+                });
+            }
+&nbsp;
+&nbsp;
+            if (error instanceof ValidationError) {
+                const fieldErrors = {};
+                for (const err of error.errors) {
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
+                        fieldErrors[err.path] = err.message;
+                    }
+                }
+&nbsp;
+                return res.status(400).json({
+                    message: 'Error de validación en el formulario.',
+                    errors: fieldErrors
+                });
+            }
+&nbsp;
+            return res.status(500).json({
+                message: 'Error al registrar el item de inventario. Intente nuevamente.'
+            });
+        }
+    };
+&nbsp;
+    obtenerTodos = async (req, res) =&gt; {
+        try {
+            const items = await this.inventarioService.obtenerTodos();
+            return res.status(200).json(items);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error al obtener los items de inventario.' });
+        }
+    };
+&nbsp;
+    obtenerInventarioPorId = async (req, res) =&gt; {
+        try {
+            const item = await this.inventarioService.obtenerInventarioPorId(req.params.id);
+            if (!item) {
+                return res.status(404).json({ message: 'Item de inventario no encontrado.' });
+            }
+            return res.status(200).json(item);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error al obtener el item de inventario.' });
+        }
+    };
 &nbsp;
     actualizarInventario = async (req, res) =&gt; {
         try {
@@ -405,14 +410,15 @@ export class InventarioController {
 &nbsp;
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) =&gt; {
-                    <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path &amp;&amp; err.message) {
+                for (const err of error.errors) {
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
-                return res.status(400).json({ 
-                    message: 'Error de validación al actualizar el item.', 
-                    errors: fieldErrors 
+                }
+&nbsp;
+                return res.status(400).json({
+                    message: 'Error de validación al actualizar el item.',
+                    errors: fieldErrors
                 });
             }
 &nbsp;
@@ -423,17 +429,17 @@ export class InventarioController {
     eliminarInventario = async (req, res) =&gt; {
         try {
             const inventarioEliminado = await this.inventarioService.eliminarInventario(req.params.id);
-            
+&nbsp;
             if (!inventarioEliminado) {
                 return res.status(404).json({ message: 'La herramienta no fue encontrada.' });
             }
-            
+&nbsp;
             return res.status(200).json({ message: 'Herramienta eliminada correctamente del inventario.' });
         } catch (error) {
             console.error('Error al eliminar la herramienta:', error);
             return res.status(500).json({ message: 'Error al eliminar la herramienta. Intente nuevamente.' });
         }
-        
+&nbsp;
     }
 }</pre></td></tr></table></pre>
 
@@ -442,7 +448,7 @@ export class InventarioController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T05:01:59.354Z
+                at 2025-10-25T18:58:08.018Z
             </div>
         <script src="../prettify.js"></script>
         <script>

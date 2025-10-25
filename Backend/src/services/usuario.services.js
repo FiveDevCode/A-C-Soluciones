@@ -220,12 +220,13 @@ async verifyRecoveryCode(correo_electronico, code) {
 
   // Utilidad para buscar usuario entre los tres modelos
   async _findUserByEmail(correo) {
-    const [admin, cliente, tecnico] = await Promise.all([
+    const [admin, cliente, tecnico, contabilidad] = await Promise.all([
       AdminModel.Admin.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }),
       ClienteModel.Cliente.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }),
-      TecnicoModel.Tecnico.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } })
+      TecnicoModel.Tecnico.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }), 
+      ContabilidadModel.Contabilidad.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } })
     ]);
-    return admin || cliente || tecnico || null;
+    return admin || cliente || tecnico || contabilidad || null;
   }
 
 
