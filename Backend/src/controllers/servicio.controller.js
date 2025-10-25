@@ -136,7 +136,7 @@ export class ServicioController {
 
         const servicioConNombre = await this.servicioService.obtenerServicioPorNombre(req.body.nombre);
 
-        if (servicioConNombre && servicioConNombre.id !== parseInt(id)) {
+        if (servicioConNombre && servicioConNombre.id !== Number.parseInt(id)) {
 
           return res.status(400).json({ success: false, message: 'Ya existe otro servicio con ese nombre.' });
         }
