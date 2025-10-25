@@ -24,11 +24,12 @@ export class RegistrarFacturasController {
             console.error('Error en registrarFactura:', error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({
@@ -67,7 +68,7 @@ export class RegistrarFacturasController {
                 });
             }
             return res.status(200).json(factura);
-                
+
         }
         catch (error) {
             console.error('Error en obtenerFacturaPorId:', error);
@@ -80,7 +81,7 @@ export class RegistrarFacturasController {
 
     obtenerRegistroPorNumero = async (req, res) => {
         try {
-            const {numero_factura} = req.params;
+            const { numero_factura } = req.params;
             const factura = await this.registroFacturaService.obtenerRegistroPorNumero(numero_factura);
             if (!factura) {
                 return res.status(404).json({ message: 'Factura no encontrada' });
@@ -148,11 +149,12 @@ export class RegistrarFacturasController {
             console.error('Error en actualizarFactura:', error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({
@@ -164,7 +166,7 @@ export class RegistrarFacturasController {
 
     eliminarRegistroFactura = async (req, res) => {
         try {
-            const facturaEliminada = await this.registroFacturaService.eliminarRegistroFactura(req.params.id);    
+            const facturaEliminada = await this.registroFacturaService.eliminarRegistroFactura(req.params.id);
             if (!facturaEliminada) {
                 return res.status(404).json({ message: 'Factura no encontrada' });
             }

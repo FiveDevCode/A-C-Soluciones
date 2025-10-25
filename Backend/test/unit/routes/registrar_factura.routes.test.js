@@ -30,7 +30,7 @@ jest.mock('../../../src/middlewares/autenticacion.js', () => ({
   isAdminOrContador: jest.fn(),
 }));
 
-// ✅ Importar después de los mocks
+// importar despue de los mocks
 import router from '../../../src/routers/registrar_factura.routes.js';
 import { RegistrarFacturasController } from '../../../src/controllers/registrar_facturas.controller.js';
 import { authenticate, isAdminOrContador } from '../../../src/middlewares/autenticacion.js';
@@ -50,7 +50,7 @@ describe('Registrar Facturas Router', () => {
     expect(RegistrarFacturasController).toHaveBeenCalledTimes(1);
   });
 
-  // 🔹 POST /api/registrar-factura
+  // POST /api/registrar-factura
   it('debería tener la ruta POST /api/registrar-factura configurada correctamente', () => {
     expect(mockRouterInstance.post).toHaveBeenCalledWith(
       '/api/registrar-factura',
@@ -60,7 +60,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/facturas
+  // GET /api/facturas
   it('debería tener la ruta GET /api/facturas configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/facturas',
@@ -70,7 +70,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/facturas-cliente/:id_cliente
+  // GET /api/facturas-cliente/:id_cliente
   it('debería tener la ruta GET /api/facturas-cliente/:id_cliente configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/facturas-cliente/:id_cliente',
@@ -80,7 +80,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/facturas-estado/:estado_factura
+  // GET /api/facturas-estado/:estado_factura
   it('debería tener la ruta GET /api/facturas-estado/:estado_factura configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/facturas-estado/:estado_factura',
@@ -90,7 +90,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/facturas-saldo
+  // GET /api/facturas-saldo
   it('debería tener la ruta GET /api/facturas-saldo configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/facturas-saldo',
@@ -100,7 +100,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/factura-numero/:numero_factura
+  // GET /api/factura-numero/:numero_factura
   it('debería tener la ruta GET /api/factura-numero/:numero_factura configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/factura-numero/:numero_factura',
@@ -110,7 +110,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 GET /api/factura/:id
+  // GET /api/factura/:id
   it('debería tener la ruta GET /api/factura/:id configurada correctamente', () => {
     expect(mockRouterInstance.get).toHaveBeenCalledWith(
       '/api/factura/:id',
@@ -120,7 +120,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 PUT /api/factura/:id
+  // PUT /api/factura/:id
   it('debería tener la ruta PUT /api/factura/:id configurada correctamente', () => {
     expect(mockRouterInstance.put).toHaveBeenCalledWith(
       '/api/factura/:id',
@@ -130,7 +130,7 @@ describe('Registrar Facturas Router', () => {
     );
   });
 
-  // 🔹 DELETE /api/eliminar-factura/:id
+  // DELETE /api/eliminar-factura/:id
   it('debería tener la ruta DELETE /api/eliminar-factura/:id configurada correctamente', () => {
     expect(mockRouterInstance.delete).toHaveBeenCalledWith(
       '/api/eliminar-factura/:id',

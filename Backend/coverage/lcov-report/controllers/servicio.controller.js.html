@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -283,7 +283,14 @@
 <a name='L218'></a><a href='#L218'>218</a>
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,12 +307,15 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,6 +329,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,6 +392,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -430,6 +442,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -437,6 +450,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -513,21 +527,24 @@ export class ServicioController {
   crearServicio = async (req, res) =&gt; {
     try {
       const { nombre } = req.body;
-      
+&nbsp;
       const servicioExistente = await this.servicioService.obtenerServicioPorNombre(nombre);
-      
+&nbsp;
       if (servicioExistente) {
-        return res.status(400).json({ success: false,message: 'Ya existe un servicio con ese nombre.' 
+        return res.status(400).json({
+          success: false, message: 'Ya existe un servicio con ese nombre.'
         });
       }
-      const dataServicio = {...req.body, creada_por_fk: req.user.id, id_administrador: req.user.id
+      const dataServicio = {
+        ...req.body, creada_por_fk: req.user.id, id_administrador: req.user.id
       };
 &nbsp;
       const nuevoServicio = await this.servicioService.crearServicio(dataServicio);
-      
-      return res.status(201).json({success: true, message: 'Servicio creado correctamente', data: nuevoServicio
+&nbsp;
+      return res.status(201).json({
+        success: true, message: 'Servicio creado correctamente', data: nuevoServicio
       });
-      
+&nbsp;
     } catch (error) {
 &nbsp;
       console.error('Error al crear servicio:', error);
@@ -536,9 +553,10 @@ export class ServicioController {
 &nbsp;
         const mensajes = error.errors.map((err) =&gt; err.message);
 &nbsp;
-        return res.status(400).json({ success: false, errors: mensajes});
+        return res.status(400).json({ success: false, errors: mensajes });
       }
-      return res.status(500).json({ success: false, message: 'Error al crear el servicio.' 
+      return res.status(500).json({
+        success: false, message: 'Error al crear el servicio.'
       });
     }
   };
@@ -548,7 +566,7 @@ export class ServicioController {
 &nbsp;
       if (!servicio) {
 &nbsp;
-        return res.status(404).json({ success: false, message: 'Servicio no encontrado.'});
+        return res.status(404).json({ success: false, message: 'Servicio no encontrado.' });
       }
       return res.status(200).json({ success: true, data: servicio });
 &nbsp;
@@ -556,7 +574,7 @@ export class ServicioController {
 &nbsp;
       console.error('Error al obtener servicio por ID:', error);
 &nbsp;
-      return res.status(500).json({ success: false,message: 'Error al obtener el servicio.' });
+      return res.status(500).json({ success: false, message: 'Error al obtener el servicio.' });
     }
   };
   obtenerServicioPorNombre = async (req, res) =&gt; {
@@ -564,18 +582,18 @@ export class ServicioController {
       const { nombre } = req.params;
 &nbsp;
       const servicio = await this.servicioService.obtenerServicioPorNombre(nombre);
-      
+&nbsp;
       if (!servicio) {
 &nbsp;
-        return res.status(404).json({ success: false,message: 'Servicio no encontrado.'});
+        return res.status(404).json({ success: false, message: 'Servicio no encontrado.' });
       }
-      return res.status(200).json({ success: true, data: servicio});
+      return res.status(200).json({ success: true, data: servicio });
 &nbsp;
     } catch (error) {
 &nbsp;
       console.error('Error al obtener servicio por nombre:', error);
 &nbsp;
-      return res.status(500).json({ success: false,message: 'Error al obtener el servicio.'});
+      return res.status(500).json({ success: false, message: 'Error al obtener el servicio.' });
     }
   };
   buscarServicios = async (req, res) =&gt; {
@@ -584,30 +602,31 @@ export class ServicioController {
 &nbsp;
       if (!termino || termino.trim() === '') {
 &nbsp;
-        return res.status(400).json({success: false,message: 'El término de búsqueda es requerido'});
+        return res.status(400).json({ success: false, message: 'El término de búsqueda es requerido' });
       }
       const servicios = await this.servicioService.buscarServicios(termino);
 &nbsp;
-      return res.status(200).json({success: true,count: servicios.length,data: servicios});
+      return res.status(200).json({ success: true, count: servicios.length, data: servicios });
     } catch (error) {
 &nbsp;
       console.error('Error al buscar servicios:', error);
 &nbsp;
-      return res.status(500).json({ success: false,message: 'Error al buscar servicios.'});
+      return res.status(500).json({ success: false, message: 'Error al buscar servicios.' });
     }
   };
   obtenerServicios = async (req, res) =&gt; {
     try {
       const servicios = await this.servicioService.obtenerServicios();
 &nbsp;
-      return res.status(200).json({success: true, count: servicios.length,data: servicios
+      return res.status(200).json({
+        success: true, count: servicios.length, data: servicios
       });
-      
+&nbsp;
     } catch (error) {
 &nbsp;
       console.error('Error al obtener servicios:', error);
 &nbsp;
-      return res.status(500).json({ success: false, message: 'Error al obtener los servicios.'});
+      return res.status(500).json({ success: false, message: 'Error al obtener los servicios.' });
     }
   };
   obtenerServiciosActivos = async (req, res) =&gt; {
@@ -619,7 +638,7 @@ export class ServicioController {
 &nbsp;
       console.error('Error al obtener servicios activos:', error);
 &nbsp;
-      return res.status(500).json({ success: false, message: 'Error al obtener los servicios activos.'});
+      return res.status(500).json({ success: false, message: 'Error al obtener los servicios activos.' });
     }
   };
   actualizarServicio = async (req, res) =&gt; {
@@ -638,7 +657,7 @@ export class ServicioController {
 &nbsp;
         if (servicioConNombre &amp;&amp; servicioConNombre.id !== parseInt(id)) {
 &nbsp;
-          return res.status(400).json({ success: false, message: 'Ya existe otro servicio con ese nombre.'});
+          return res.status(400).json({ success: false, message: 'Ya existe otro servicio con ese nombre.' });
         }
       }
       const servicioActualizado = await this.servicioService.actualizarServicio(id, {
@@ -646,25 +665,27 @@ export class ServicioController {
         fecha_modificacion: new Date(),
         id_administrador: req.user.id // El administrador que hace la modificación
       });
-      return res.status(200).json({success: true,message: 'Servicio actualizado correctamente',data: servicioActualizado
+      return res.status(200).json({
+        success: true, message: 'Servicio actualizado correctamente', data: servicioActualizado
       });
     } catch (error) {
 &nbsp;
       console.error('Error al actualizar servicio:', error);
-      
-      if (error instanceof ValidationError) { 
-        const fieldErrors = {}; 
-        error.errors.forEach((err) =&gt; { 
-          <span class="missing-if-branch" title="if path not taken" >I</span>if (err.path) { 
-<span class="cstat-no" title="statement not covered" >            fieldErrors[err.path] = err.message; </span>
-          } 
-        }); 
-        return res.status(400).json({ errors: fieldErrors }); 
-      } 
 &nbsp;
-      return res.status(500).json({ 
+      if (error instanceof ValidationError) {
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          <span class="missing-if-branch" title="if path not taken" >I</span>if (err.path) {
+<span class="cstat-no" title="statement not covered" >            fieldErrors[err.path] = err.message;</span>
+          }
+        }
+&nbsp;
+        return res.status(400).json({ errors: fieldErrors });
+      }
+&nbsp;
+      return res.status(500).json({
         success: false,
-        message: 'Error al actualizar el servicio.' 
+        message: 'Error al actualizar el servicio.'
       });
     }
   };
@@ -675,14 +696,14 @@ export class ServicioController {
       const resultado = await this.servicioService.eliminarServicio(id);
 &nbsp;
       if (!resultado) {
-        return res.status(404).json({ success: false, message: 'Servicio no encontrado.'});
+        return res.status(404).json({ success: false, message: 'Servicio no encontrado.' });
       }
-      return res.status(200).json({ success: true, message: 'Servicio eliminado correctamente.'});
+      return res.status(200).json({ success: true, message: 'Servicio eliminado correctamente.' });
     } catch (error) {
 &nbsp;
       console.error('Error al eliminar servicio:', error);
 &nbsp;
-      return res.status(500).json({ success: false, message: 'Error al eliminar el servicio.'});
+      return res.status(500).json({ success: false, message: 'Error al eliminar el servicio.' });
     }
   };
   deshabilitarServicio = async (req, res) =&gt; {
@@ -692,15 +713,15 @@ export class ServicioController {
       const servicio = await this.servicioService.deshabilitarServicio(id);
       if (!servicio) {
 &nbsp;
-        return res.status(404).json({ success: false, message: 'Servicio no encontrado.'});
+        return res.status(404).json({ success: false, message: 'Servicio no encontrado.' });
       }
-      return res.status(200).json({ success: true, message: 'Servicio deshabilitado correctamente.', data: servicio});
+      return res.status(200).json({ success: true, message: 'Servicio deshabilitado correctamente.', data: servicio });
 &nbsp;
     } catch (error) {
 &nbsp;
       console.error('Error al deshabilitar servicio:', error);
 &nbsp;
-      return res.status(500).json({  success: false, message: 'Error al deshabilitar el servicio.'});
+      return res.status(500).json({ success: false, message: 'Error al deshabilitar el servicio.' });
     }
   };
   habilitarServicio = async (req, res) =&gt; {
@@ -710,7 +731,7 @@ export class ServicioController {
       const servicio = await this.servicioService.habilitarServicio(id);
 &nbsp;
       if (!servicio) {
-        return res.status(404).json({ success: false, message: 'Servicio no encontrado.'});
+        return res.status(404).json({ success: false, message: 'Servicio no encontrado.' });
       }
       return res.status(200).json({ success: true, message: 'Servicio habilitado correctamente.', data: servicio });
 &nbsp;
@@ -718,19 +739,19 @@ export class ServicioController {
 &nbsp;
       console.error('Error al habilitar servicio:', error);
 &nbsp;
-      return res.status(500).json({  success: false, message: 'Error al habilitar el servicio.'});
+      return res.status(500).json({ success: false, message: 'Error al habilitar el servicio.' });
     }
   };
 }
 &nbsp;
-  </pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T05:01:59.354Z
+                at 2025-10-25T18:52:46.700Z
             </div>
         <script src="../prettify.js"></script>
         <script>

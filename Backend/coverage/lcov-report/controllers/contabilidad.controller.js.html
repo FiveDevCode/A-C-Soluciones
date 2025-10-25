@@ -37,9 +37,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>8/9</span>
             </div>
         
             
@@ -214,7 +214,8 @@
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,6 +244,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -366,156 +368,157 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ContabilidadService } from '../services/contabilidad.services.js';
-import { ValidationError } from 'sequelize';    
+import { ValidationError } from 'sequelize';
 &nbsp;
 export class ContabilidadController {
-    constructor() {
-        this.contabilidadService = new ContabilidadService();
+  constructor() {
+    this.contabilidadService = new ContabilidadService();
+  }
+  crearContabilidad = async (req, res) =&gt; {
+    try {
+      const { numero_de_cedula, correo_electronico } = req.body;
+      const contabilidadExistente = await this.contabilidadService.obtenerContabilidadPorCedula(numero_de_cedula) ||
+        await this.contabilidadService.obtenerContabilidadPorCorreo(correo_electronico);
+      if (contabilidadExistente) {
+        return res.status(400).json({
+          message: 'El Contador ya está registrada (cédula o correo en uso)'
+        });
+      }
+      const nuevaContabilidad = await this.contabilidadService.crearContabilidad(req.body);
+      return res.status(201).json({
+        message: 'Contador creado exitosamente',
+        data: nuevaContabilidad
+      });
+    } catch (error) {
+      console.error('Error en crearContabilidad:', error);
+      if (error instanceof ValidationError) {
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        }
+&nbsp;
+        return res.status(400).json({ errors: fieldErrors });
+      }
+      return res.status(500).json({
+        message: 'Error al crear el Contador',
+        error: error.message
+      });
     }
-    crearContabilidad = async (req, res) =&gt; {
-        try {
-          const { numero_de_cedula, correo_electronico } = req.body;
-          const contabilidadExistente = await this.contabilidadService.obtenerContabilidadPorCedula(numero_de_cedula) || 
-                                       await this.contabilidadService.obtenerContabilidadPorCorreo(correo_electronico);
-          if (contabilidadExistente) {
-            return res.status(400).json({ 
-              message: 'El Contador ya está registrada (cédula o correo en uso)' 
-            });
-          }
-          const nuevaContabilidad = await this.contabilidadService.crearContabilidad(req.body);
-          return res.status(201).json({
-            message: 'Contador creado exitosamente',
-            data: nuevaContabilidad
-          });
-        } catch (error) {
-          console.error('Error en crearContabilidad:', error);
-          if (error instanceof ValidationError) {
-              const fieldErrors = {};
-              error.errors.forEach((err) =&gt; {
-                  <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
-                      fieldErrors[err.path] = err.message;
-                  }
-              });
-              return res.status(400).json({ errors: fieldErrors });
-          }
-          return res.status(500).json({ 
-            message: 'Error al crear el Contador',
-            error: error.message 
-          });
-        }
-      };
+  };
 &nbsp;
-      obtenerContabilidad = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >        try {</span>
-          const contabilidad = <span class="cstat-no" title="statement not covered" >await this.contabilidadService.obtenerContabilidads();</span>
-<span class="cstat-no" title="statement not covered" >          return res.status(200).json({ contabilidad });</span>
-        } catch (error) {
-<span class="cstat-no" title="statement not covered" >          console.error(error);</span>
-<span class="cstat-no" title="statement not covered" >          return res.status(500).json({ message: 'Error al obtener el Contador' });</span>
-        }
-      };
+  obtenerContabilidad = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const contabilidad = <span class="cstat-no" title="statement not covered" >await this.contabilidadService.obtenerContabilidads();</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(200).json({ contabilidad });</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      console.error(error);</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(500).json({ message: 'Error al obtener el Contador' });</span>
+    }
+  };
 &nbsp;
-      obtenerContabilidadPorId = async (req, res) =&gt; {
-        try {
-          const contabilidad = await this.contabilidadService.obtenerContabilidadPorId(req.params.id);
-          
-          if (!contabilidad) {
-            return res.status(404).json({ 
-              message: 'Contador no encontrado' 
-            });
-          }
-          const contabilidadSinPassword = { ...contabilidad.get(), contrasenia: undefined };
-          return res.status(200).json(contabilidadSinPassword);
-        } catch (error) {
-          console.error('Error en obtener el Contador:', error);
-          return res.status(500).json({ 
-            message: 'Error al obtener el Contador',
-            error: error.message 
-          });
-        }
-      };
-      obtenerContabilidadPorCedula = async (req, res) =&gt; {
-        try {
-          const contabilidad = await this.contabilidadService.obtenerContabilidadPorCedula(req.params.numero_cedula);
-          if (!contabilidad) {
-            return res.status(404).json({ message: 'Contador no encontrado' });
-          }
-          return res.status(200).json({ contabilidad });
-        } catch (error) {
-          console.error(error);
-          return res.status(500).json({ message: 'Error al obtener el Contador' });
-        }
-      };
-      obtenerContabilidadPorCorreo = async (req, res) =&gt; {
-        try {
-          const contabilidad = await this.contabilidadService.obtenerContabilidadPorCorreo(req.params.correo_electronico);
-          if (!contabilidad) {
-            return res.status(404).json({ message: 'Contador no encontrado' });
-          }
-          return res.status(200).json({ contabilidad });
-        } catch (error) {
-          console.error(error);
-          return res.status(500).json({ message: 'Error al obtener el Contador' });
-        }
-      };
+  obtenerContabilidadPorId = async (req, res) =&gt; {
+    try {
+      const contabilidad = await this.contabilidadService.obtenerContabilidadPorId(req.params.id);
 &nbsp;
-      actualizarContabilidad = async (req, res) =&gt; {
-        try {
-          const contabilidadActualizada = await this.contabilidadService.actualizarContabilidad(
-            req.params.id, 
-            req.body
-          );
-          if (!contabilidadActualizada) {
-            return res.status(404).json({ message: 'Contador no encontrado' });
-          }
-          return res.status(200).json({
-            message: 'Contador actualizado exitosamente',
-            data: contabilidadActualizada
-          });
-        } catch (error) {
-          console.error('Error en actualizar el Contador:', error);
-          return res.status(500).json({ message: 'Error al actualizar el Contador' });
-        }
-      };
-      
-      eliminarContabilidad = async (req, res) =&gt; {
-        try {
-          await this.contabilidadService.eliminarContabilidad(req.params.id);
-          return res.status(200).json({ message: 'Contador eliminada exitosamente' });
-        } catch (error) {
-          console.error('Error en eliminar el Contador:', error);
-          return res.status(500).json({ message: 'Error al eliminar el Contador' });
-        }
-      };
-&nbsp;
-      // autenticar contabilidad y generar token  
-      autenticarContabilidad = async (req, res) =&gt; {
-        try {
-        const { correo_electronico, contrasenia } = req.body;
-        
-        const contabilidad = await this.contabilidadService.autenticarContabilidad(
-            correo_electronico, 
-            contrasenia
-        );
-        const token = 'generar-token-jwt-aqui'; 
-        return res.status(200).json({
-            message: 'Autenticación exitosa',
-            token,
-            contabilidad: {
-            id: contabilidad.id,
-            nombre: contabilidad.nombre,
-            correo_electronico: contabilidad.correo_electronico,
-            rol: contabilidad.rol
-            }
+      if (!contabilidad) {
+        return res.status(404).json({
+          message: 'Contador no encontrado'
         });
-        } catch (error) {
-        console.error('Error en autenticarAdmin:', error);
-        return res.status(401).json({ 
-            message: 'Error de autenticación',
-            error: error.message 
-        });
+      }
+      const contabilidadSinPassword = { ...contabilidad.get(), contrasenia: undefined };
+      return res.status(200).json(contabilidadSinPassword);
+    } catch (error) {
+      console.error('Error en obtener el Contador:', error);
+      return res.status(500).json({
+        message: 'Error al obtener el Contador',
+        error: error.message
+      });
+    }
+  };
+  obtenerContabilidadPorCedula = async (req, res) =&gt; {
+    try {
+      const contabilidad = await this.contabilidadService.obtenerContabilidadPorCedula(req.params.numero_cedula);
+      if (!contabilidad) {
+        return res.status(404).json({ message: 'Contador no encontrado' });
+      }
+      return res.status(200).json({ contabilidad });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error al obtener el Contador' });
+    }
+  };
+  obtenerContabilidadPorCorreo = async (req, res) =&gt; {
+    try {
+      const contabilidad = await this.contabilidadService.obtenerContabilidadPorCorreo(req.params.correo_electronico);
+      if (!contabilidad) {
+        return res.status(404).json({ message: 'Contador no encontrado' });
+      }
+      return res.status(200).json({ contabilidad });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error al obtener el Contador' });
+    }
+  };
+&nbsp;
+  actualizarContabilidad = async (req, res) =&gt; {
+    try {
+      const contabilidadActualizada = await this.contabilidadService.actualizarContabilidad(
+        req.params.id,
+        req.body
+      );
+      if (!contabilidadActualizada) {
+        return res.status(404).json({ message: 'Contador no encontrado' });
+      }
+      return res.status(200).json({
+        message: 'Contador actualizado exitosamente',
+        data: contabilidadActualizada
+      });
+    } catch (error) {
+      console.error('Error en actualizar el Contador:', error);
+      return res.status(500).json({ message: 'Error al actualizar el Contador' });
+    }
+  };
+&nbsp;
+  eliminarContabilidad = async (req, res) =&gt; {
+    try {
+      await this.contabilidadService.eliminarContabilidad(req.params.id);
+      return res.status(200).json({ message: 'Contador eliminada exitosamente' });
+    } catch (error) {
+      console.error('Error en eliminar el Contador:', error);
+      return res.status(500).json({ message: 'Error al eliminar el Contador' });
+    }
+  };
+&nbsp;
+  // autenticar contabilidad y generar token  
+  autenticarContabilidad = async (req, res) =&gt; {
+    try {
+      const { correo_electronico, contrasenia } = req.body;
+&nbsp;
+      const contabilidad = await this.contabilidadService.autenticarContabilidad(
+        correo_electronico,
+        contrasenia
+      );
+      const token = 'generar-token-jwt-aqui';
+      return res.status(200).json({
+        message: 'Autenticación exitosa',
+        token,
+        contabilidad: {
+          id: contabilidad.id,
+          nombre: contabilidad.nombre,
+          correo_electronico: contabilidad.correo_electronico,
+          rol: contabilidad.rol
         }
-    };
+      });
+    } catch (error) {
+      console.error('Error en autenticarAdmin:', error);
+      return res.status(401).json({
+        message: 'Error de autenticación',
+        error: error.message
+      });
+    }
+  };
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -523,7 +526,7 @@ export class ContabilidadController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T05:01:59.354Z
+                at 2025-10-25T18:52:46.700Z
             </div>
         <script src="../prettify.js"></script>
         <script>

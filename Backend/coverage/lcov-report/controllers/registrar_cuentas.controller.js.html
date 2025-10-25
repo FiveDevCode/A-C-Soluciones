@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -246,7 +246,9 @@
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
 <a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,6 +283,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -397,6 +400,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -433,45 +437,46 @@
 import { ValidationError } from "sequelize";
 &nbsp;
 export class RegistrarCuentasController {
-  constructor() {
-    this.registrarCuentasService = new RegistrarCuentasService();
-  }
-&nbsp;
-  crearRegistroCuenta = async (req, res) =&gt; {
-    try {
-      const { numero_cuenta, nit } = req.body;
-      const cuentaExistente =
-        await this.registrarCuentasService.obtenerCuentaPorNumero(
-          numero_cuenta
-        );
-      if (cuentaExistente) {
-        return res.status(400).json({
-          message: "La cuenta ya está registrada (número de cuenta en uso)",
-        });
-      }
-      const nuevaCuenta =
-        await this.registrarCuentasService.crearRegistroCuenta(req.body);
-      return res.status(201).json({
-        message: "Cuenta registrada exitosamente",
-        data: nuevaCuenta,
-      });
-    } catch (error) {
-      console.error("Error en crearRegistroCuenta:", error);
-      if (error instanceof ValidationError) {
-        const fieldErrors = {};
-        error.errors.forEach((err) =&gt; {
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
-            fieldErrors[err.path] = err.message;
-          }
-        });
-        return res.status(400).json({ errors: fieldErrors });
-      }
-      return res.status(500).json({
-        message: "Error al registrar la cuenta",
-        error: error.message,
-      });
+    constructor() {
+        this.registrarCuentasService = new RegistrarCuentasService();
     }
-  };
+&nbsp;
+    crearRegistroCuenta = async (req, res) =&gt; {
+        try {
+            const { numero_cuenta, nit } = req.body;
+            const cuentaExistente =
+                await this.registrarCuentasService.obtenerCuentaPorNumero(
+                    numero_cuenta
+                );
+            if (cuentaExistente) {
+                return res.status(400).json({
+                    message: "La cuenta ya está registrada (número de cuenta en uso)",
+                });
+            }
+            const nuevaCuenta =
+                await this.registrarCuentasService.crearRegistroCuenta(req.body);
+            return res.status(201).json({
+                message: "Cuenta registrada exitosamente",
+                data: nuevaCuenta,
+            });
+        } catch (error) {
+            console.error("Error en crearRegistroCuenta:", error);
+            if (error instanceof ValidationError) {
+                const fieldErrors = {};
+                for (const err of error.errors) {
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
+                        fieldErrors[err.path] = err.message;
+                    }
+                }
+&nbsp;
+                return res.status(400).json({ errors: fieldErrors });
+            }
+            return res.status(500).json({
+                message: "Error al registrar la cuenta",
+                error: error.message,
+            });
+        }
+    };
 &nbsp;
     obtenerCuentaPorId = async (req, res) =&gt; {
         try {
@@ -531,7 +536,7 @@ export class RegistrarCuentasController {
 &nbsp;
     obtenerCuentaPorNit = async (req, res) =&gt; {
         try {
-            const { nit } = req.params; 
+            const { nit } = req.params;
             const cuenta = await this.registrarCuentasService.obtenerCuentaPorNit(nit);
             if (!cuenta) {
                 return res.status(404).json({
@@ -577,23 +582,24 @@ export class RegistrarCuentasController {
             console.error('Error en actualizarRegistroCuenta:', error);
             <span class="missing-if-branch" title="else path not taken" >E</span>if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) =&gt; {
+                for (const err of error.errors) {
                     <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+&nbsp;
                 return res.status(400).json({ errors: fieldErrors });
             }
 <span class="cstat-no" title="statement not covered" >            return res.status(500).json({</span>
                 message: 'Error al actualizar la cuenta',
                 error: error.message
             });
-        }   
+        }
     };
 &nbsp;
     eliminarRegistroCuenta = async (req, res) =&gt; {
         try {
-            const cuentaEliminada = await this.registrarCuentasService.eliminarRegistroCuenta(req.params.id);   
+            const cuentaEliminada = await this.registrarCuentasService.eliminarRegistroCuenta(req.params.id);
             if (!cuentaEliminada) {
                 return res.status(404).json({
                     message: 'Cuenta no encontrada'
@@ -619,7 +625,7 @@ export class RegistrarCuentasController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T05:01:59.354Z
+                at 2025-10-25T18:52:46.700Z
             </div>
         <script src="../prettify.js"></script>
         <script>

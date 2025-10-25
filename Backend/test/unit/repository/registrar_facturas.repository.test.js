@@ -28,7 +28,7 @@ describe('RegistroFacturaRepository', () => {
     jest.clearAllMocks();
   });
 
-  // Pruebas para el método crearRegistroFactura
+  // Pruebas para el metodo crear registro
   describe('crearRegistroFactura', () => {
     it('debe llamar a RegistroFactura.create con los datos correctos', async () => {
       const data = { numero_factura: 'F-001', monto: 100 };
@@ -42,7 +42,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorCliente
+  // Pruebas para el metodo obtener registro por cliente
   describe('obtenerRegistroPorCliente', () => {
     it('debe llamar a RegistroFactura.findAll con el id del cliente', async () => {
       const id_cliente = 1;
@@ -56,7 +56,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorId
+  // Pruebas para el metodo por registro por ID
   describe('obtenerRegistroPorId', () => {
     it('debe llamar a RegistroFactura.findByPk con el id correcto', async () => {
       const id = 1;
@@ -70,7 +70,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistros
+  // Pruebas para el metodo obtener los registros
   describe('obtenerRegistros', () => {
     it('debe llamar a RegistroFactura.findAll sin argumentos', async () => {
       const expectedResponse = [{ id: 1 }, { id: 2 }];
@@ -83,7 +83,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorNumero
+  // Pruebas para el metodo por numero
   describe('obtenerRegistroPorNumero', () => {
     it('debe llamar a RegistroFactura.findOne con el número de factura', async () => {
       const numero_factura = 'F-001';
@@ -97,7 +97,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerPorSaldoPendiente
+  // Pruebas para el metodo saldo pendiente
   describe('obtenerPorSaldoPendiente', () => {
     it('debe llamar a RegistroFactura.findAll con la condición de saldo pendiente > 0', async () => {
       const expectedResponse = [{ id: 1, saldo_pendiente: 100 }];
@@ -116,7 +116,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método obtenerPorEstado
+  // Pruebas para el metodo obtener por estado
   describe('obtenerPorEstado', () => {
     it('debe llamar a RegistroFactura.findAll con el estado de la factura', async () => {
       const estado_factura = 'pendiente';
@@ -130,7 +130,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método actualizarRegistroFactura
+  // Pruebas para el metodo actualizar registro factura
   describe('actualizarRegistroFactura', () => {
     it('debe actualizar y devolver el registro si se encuentra', async () => {
       const id = 1;
@@ -159,7 +159,7 @@ describe('RegistroFacturaRepository', () => {
     });
   });
 
-  // Pruebas para el método eliminarRegistroFactura
+  // Pruebas para el metodo eliminar registro factura
   describe('eliminarRegistroFactura', () => {
     it('debe eliminar y devolver el registro si se encuentra', async () => {
       const id = 1;
