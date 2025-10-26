@@ -25,6 +25,7 @@ import Logo from '../common/Logo';
 const SectionMenu = styled.section`
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* 👈 separa el contenido superior e inferior */
   width: ${(props) => (props.collapsed ? '80px' : '250px')};
   background-color: #fff;
   color: #1e1f23;
@@ -35,17 +36,24 @@ const SectionMenu = styled.section`
   position: relative;
 `;
 
-const LogoContainer = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 1rem;
-`;
-
 const ContainerMenu = styled.div`
   display: flex;
   align-items: center;
+  justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
+  flex-direction: ${(props) => (props.collapsed ? 'column' : 'row')};
+  width: 100%;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
 `;
+
+const LogoContainer = styled(Link)`
+  display: ${(props) => (props.collapsed ? 'none' : 'flex')};
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1rem;
+  transition: opacity 0.3s ease;
+`;
+
 
 
 
@@ -168,17 +176,22 @@ const MenuSideAd = () => {
 
   return (
     <SectionMenu collapsed={collapsed}>
-      <ContainerMenu>
+      <ContainerMenu collapsed={collapsed}>
         <CollapseButton onClick={() => setCollapsed(!collapsed)}>
           <PanelLeft size={22} color="black" strokeWidth={1} />
         </CollapseButton>
-        <LogoContainer to={getHomeRouteByRole(role)}>
+
+        <LogoContainer
+          to={getHomeRouteByRole(role)}
+          collapsed={collapsed} // <-- pasa prop para esconder
+        >
           <Logo src={logo} size={collapsed ? '45px' : '120px'} />
         </LogoContainer>
       </ContainerMenu>
       
       {/* Parte superior */}
-      <div>
+{/* Parte superior */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
         <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)' }} />
 
         <MenuGroup>
@@ -198,6 +211,7 @@ const MenuSideAd = () => {
           ))}
         </MenuGroup>
       </div>
+
 
       {/* Parte inferior */}
       <div>
