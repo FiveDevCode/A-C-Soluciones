@@ -55,8 +55,7 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
     categoria: "",
     cantidad_disponible: "",
     estado: "",
-    observacion: "",
-    id_administrador: "",
+    id_administrador: ""
   });
 
   // Categorías
@@ -123,7 +122,6 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
       categoria: "",
       cantidad_disponible: "",
       estado: "",
-      observacion: "",
       id_administrador: "",
     });
   };
@@ -204,17 +202,6 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
               </MenuItem>
             ))}
           </TextField>
-
-          <TextField
-            label="Observación"
-            name="observacion"
-            fullWidth
-            size="small"
-            value={formData.observacion}
-            onChange={handleChange}
-            placeholder="Observaciones respectivas de la herramienta..."
-            sx={{ mb: 2 }}
-          />
 
           <Collapse in={!!errorMsg}>
             <Alert

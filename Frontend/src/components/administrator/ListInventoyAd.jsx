@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Pagination } from "@mui/material";
 import { Link } from "react-router-dom";
+import useItemsPerPage from "../../hooks/useItemPerPage";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -77,9 +78,8 @@ const EstadoHerramientaBadge = styled.span`
 `;
 
 
-const ITEMS_PER_PAGE = 5;
-
 const ListInventoryAd = ({ inventory }) => {
+  const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(inventory.length / ITEMS_PER_PAGE);
 

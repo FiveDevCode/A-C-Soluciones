@@ -93,7 +93,6 @@ const AddButton = styled.button`
   }
 `;
 
-// --- Componente principal ---
 const ViewInventoryListPageAd = () => {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +107,7 @@ const ViewInventoryListPageAd = () => {
     handleGetListInventoryAd()
       .then((res) => {
         console.log("Respuesta del backend (inventario):", res);
-        setInventory(res.data || []);
+        setInventory((res.data || []).slice().reverse());
       })
       .catch((err) => {
         console.error("Error al obtener la lista de inventario:", err);
