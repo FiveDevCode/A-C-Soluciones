@@ -1,5 +1,5 @@
 import logo from '../../assets/common/logoA&C.png';
-import { Divider } from '@mui/material';
+import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,21 +13,25 @@ import {
   faCalculator,
   faMoneyBill,
   faCreditCard,
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import Logo from '../common/Logo';
 
 const SectionMenu = styled.section`
   display: flex;
   flex-direction: column;
-  width: 250px;
-  background-color: #1e1f23;
-  color: #e5e5e5;
+  width: ${(props) => (props.collapsed ? '80px' : '250px')};
+  background-color: #fff;
+  color: #1e1f23;
   min-height: 100vh;
   padding: 1rem 0.5rem;
   justify-content: space-between;
-  box-shadow: inset -1px 0px 0px rgba(255, 255, 255, 0.1);
+  box-shadow: inset -1px 0px 0px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
+  position: relative;
 `;
 
 const LogoContainer = styled(Link)`
@@ -46,42 +50,48 @@ const MenuGroup = styled.div`
 
 const MenuTitle = styled.h3`
   font-size: 0.85rem;
-  font-weight: 500;
-  color: #a0a0a0;
+  font-weight: 600;
+  color: #8a8a8a;
   text-transform: uppercase;
   margin: 0.5rem 0;
   letter-spacing: 0.5px;
+  display: ${(props) => (props.collapsed ? 'none' : 'block')};
 `;
 
 const MenuOption = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: ${(props) => (props.collapsed ? '0' : '0.8rem')};
+  justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
   padding: 0.6rem 0.9rem;
   text-decoration: none;
-  color: #e5e5e5;
+  color: #1e1f23;
   border-radius: 10px;
   transition: background 0.2s, color 0.2s;
 
   &:hover {
-    background-color: #2a2b31;
-    color: #fff;
+    background-color: #f2f2f2;
+    color: #000;
   }
 
   svg {
     font-size: 1.1rem;
-    opacity: 0.8;
+  }
+
+  span {
+    display: ${(props) => (props.collapsed ? 'none' : 'inline')};
   }
 `;
 
 const LogoutButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: ${(props) => (props.collapsed ? '0' : '0.8rem')};
+  justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
   padding: 0.7rem 0.9rem;
   background: none;
   border: none;
-  color: #e5e5e5;
+  color: #1e1f23;
   border-radius: 10px;
   text-align: left;
   font-size: 1rem;
@@ -89,18 +99,34 @@ const LogoutButton = styled.button`
   transition: background 0.2s, color 0.2s;
 
   &:hover {
-    background-color: #2a2b31;
-    color: #fff;
+    background-color: #f2f2f2;
+    color: #000;
   }
 
   svg {
     font-size: 1.1rem;
-    opacity: 0.8;
+  }
+
+  span {
+    display: ${(props) => (props.collapsed ? 'none' : 'inline')};
+  }
+`;
+
+const CollapseButton = styled(IconButton)`
+  position: absolute !important;
+  top: 15px;
+  right: -15px;
+  background-color: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  &:hover {
+    background-color: #f2f2f2 !important;
   }
 `;
 
 const MenuSideAd = () => {
   const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -121,73 +147,61 @@ const MenuSideAd = () => {
     }
   };
 
+  const options = [
+    { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
+    { to: '/admin/solicitudes', icon: faClipboardList, label: 'Solicitudes' },
+    { to: '/admin/visitas', icon: faCompass, label: 'Visitas' },
+    { to: '/admin/tecnicos', icon: faTools, label: 'Técnicos' },
+    { to: '/admin/clientes', icon: faUsers, label: 'Clientes' },
+    { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
+    { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
+    { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
+    { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
+    { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
+    { to: '/admin/inventario', icon: faTools, label: 'Inventario' },
+  ];
+
   return (
-    <SectionMenu>
-      {/* Logo */}
+    <SectionMenu collapsed={collapsed}>
+      <CollapseButton onClick={() => setCollapsed(!collapsed)}>
+        <FontAwesomeIcon icon={faBars} />
+      </CollapseButton>
+
+      {/* Parte superior */}
       <div>
         <LogoContainer to={getHomeRouteByRole(role)}>
-          <Logo src={logo} size="120px" />
+          <Logo src={logo} size={collapsed ? '45px' : '120px'} />
         </LogoContainer>
 
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)' }} />
 
-        {/* Grupo de opciones */}
         <MenuGroup>
-          <MenuTitle>Principal</MenuTitle>
-          <MenuOption to={getHomeRouteByRole(role)}>
-            <FontAwesomeIcon icon={faHouse} />
-            Inicio
-          </MenuOption>
-          <MenuOption to="admin/solicitudes">
-            <FontAwesomeIcon icon={faClipboardList} />
-            Solicitudes
-          </MenuOption>
-          <MenuOption to="admin/visitas">
-            <FontAwesomeIcon icon={faCompass} />
-            Visitas
-          </MenuOption>
-          <MenuOption to="/admin/tecnicos">
-            <FontAwesomeIcon icon={faTools} />
-            Técnicos
-          </MenuOption>
-          <MenuOption to="/admin/clientes">
-            <FontAwesomeIcon icon={faUsers} />
-            Clientes
-          </MenuOption>
-          <MenuOption to="/admin/administradores">
-            <FontAwesomeIcon icon={faUserTie} />
-            Administradores
-          </MenuOption>
-          <MenuOption to="/admin/servicios">
-            <FontAwesomeIcon icon={faWrench} />
-            Servicios
-          </MenuOption>
-          <MenuOption to="/admin/contadores">
-            <FontAwesomeIcon icon={faCalculator} />
-            Contabilidad
-          </MenuOption>
-          <MenuOption to="/admin/facturas">
-            <FontAwesomeIcon icon={faMoneyBill} />
-            Facturas
-          </MenuOption>
-          <MenuOption to="/admin/cuentas">
-            <FontAwesomeIcon icon={faCreditCard} />
-            Cuentas de pago
-          </MenuOption>
-          <MenuOption to="/admin/inventario">
-            <FontAwesomeIcon icon={faTools} />
-            Inventario
-          </MenuOption>
+          <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
+          {options.map((opt) => (
+            <Tooltip
+              key={opt.to}
+              title={collapsed ? opt.label : ''}
+              placement="right"
+              arrow
+            >
+              <MenuOption to={opt.to} collapsed={collapsed}>
+                <FontAwesomeIcon icon={opt.icon} />
+                <span>{opt.label}</span>
+              </MenuOption>
+            </Tooltip>
+          ))}
         </MenuGroup>
       </div>
 
-      {/* Sección inferior */}
+      {/* Parte inferior */}
       <div>
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', marginBottom: '0.8rem' }} />
-        <LogoutButton onClick={handleLogout}>
-          <FontAwesomeIcon icon={faArrowRightFromBracket} />
-          Salir
-        </LogoutButton>
+        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.8rem' }} />
+        <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
+          <LogoutButton onClick={handleLogout} collapsed={collapsed}>
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            <span>Salir</span>
+          </LogoutButton>
+        </Tooltip>
       </div>
     </SectionMenu>
   );
