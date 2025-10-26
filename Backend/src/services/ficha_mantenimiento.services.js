@@ -3,7 +3,6 @@ import path from 'path';
 import PDFDocument from 'pdfkit';
 import crypto from 'crypto';
 
-
 // Cambio de diseño para un estilo más formal y profesional.
 export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {}) => {
   const doc = new PDFDocument({ margin: 50 });
@@ -216,3 +215,4 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
     stream.on('error', reject);
   });
 };
+
