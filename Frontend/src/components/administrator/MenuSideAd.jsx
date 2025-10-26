@@ -2,6 +2,8 @@ import logo from '../../assets/common/logoA&C.png';
 import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PanelLeft } from "lucide-react"
+
 import {
   faHouse,
   faClipboardList,
@@ -28,7 +30,6 @@ const SectionMenu = styled.section`
   color: #1e1f23;
   min-height: 100vh;
   padding: 1rem 0.5rem;
-  justify-content: space-between;
   box-shadow: inset -1px 0px 0px rgba(0, 0, 0, 0.1);
   transition: width 0.3s ease;
   position: relative;
@@ -40,6 +41,13 @@ const LogoContainer = styled(Link)`
   justify-content: center;
   padding-bottom: 1rem;
 `;
+
+const ContainerMenu = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+
 
 const MenuGroup = styled.div`
   display: flex;
@@ -113,9 +121,6 @@ const LogoutButton = styled.button`
 `;
 
 const CollapseButton = styled(IconButton)`
-  position: absolute !important;
-  top: 15px;
-  right: -15px;
   background-color: #fff !important;
   border: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 10;
@@ -163,16 +168,17 @@ const MenuSideAd = () => {
 
   return (
     <SectionMenu collapsed={collapsed}>
-      <CollapseButton onClick={() => setCollapsed(!collapsed)}>
-        <FontAwesomeIcon icon={faBars} />
-      </CollapseButton>
-
-      {/* Parte superior */}
-      <div>
+      <ContainerMenu>
+        <CollapseButton onClick={() => setCollapsed(!collapsed)}>
+          <PanelLeft size={22} color="black" strokeWidth={1} />
+        </CollapseButton>
         <LogoContainer to={getHomeRouteByRole(role)}>
           <Logo src={logo} size={collapsed ? '45px' : '120px'} />
         </LogoContainer>
-
+      </ContainerMenu>
+      
+      {/* Parte superior */}
+      <div>
         <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)' }} />
 
         <MenuGroup>
