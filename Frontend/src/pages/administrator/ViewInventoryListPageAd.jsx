@@ -157,9 +157,10 @@ const ViewInventoryListPageAd = () => {
       {/* --- Modal flotante --- */}
       {showModal && (
         <FormCreateInventory
-          onClose={() => {
+          onClose={() => setShowModal(false)} // solo cierra
+          onSuccess={() => {
             setShowModal(false);
-            loadInventory(); // recarga la lista cuando se cierra
+            loadInventory(); // recarga solo si se guardó correctamente
           }}
         />
       )}

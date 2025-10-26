@@ -48,7 +48,7 @@ const ButtonsContainer = styled.div`
   margin-top: 25px;
 `;
 
-const FormCreateInventory = ({ onClose }) => {
+const FormCreateInventory = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     codigo: "",
@@ -59,17 +59,21 @@ const FormCreateInventory = ({ onClose }) => {
     id_administrador: "",
   });
 
+  // Categorías
   const categorias = [
-    "Eléctricas",
-    "Manuales",
-    "Medición",
-    "Neumáticas",
-    "Jardinería",
-    "Seguridad",
-    "Otras",
+    "electricas",
+    "manuales",
+    "medicion"
   ];
 
-  const estados = ["Disponible", "Dañada", "En mantenimiento"];
+  const categoriasDisplay = {
+    electricas: "Eléctricas",
+    manuales: "Manuales",
+    medicion: "Medición"
+  };
+
+  // Estados sin modificar
+  const estados = ["Nueva", "Dañada", "En mantenimiento"];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -101,8 +105,7 @@ const FormCreateInventory = ({ onClose }) => {
 
       setTimeout(() => {
         setShowSuccess(false);
-        onClose();
-        navigate(`/admin/inventario`);
+        onSuccess();
       }, 2000);
     } catch (err) {
       setErrorMsg(
@@ -155,6 +158,7 @@ const FormCreateInventory = ({ onClose }) => {
             helperText={fieldErrors.codigo}
           />
 
+          {/* Categorías */}
           <TextField
             select
             label="Categoría"
@@ -167,7 +171,7 @@ const FormCreateInventory = ({ onClose }) => {
           >
             {categorias.map((cat) => (
               <MenuItem key={cat} value={cat}>
-                {cat}
+                {categoriasDisplay[cat]}
               </MenuItem>
             ))}
           </TextField>
@@ -183,6 +187,7 @@ const FormCreateInventory = ({ onClose }) => {
             sx={{ mb: 2 }}
           />
 
+          {/* Estados con valores exactos */}
           <TextField
             select
             label="Estado"
@@ -193,9 +198,9 @@ const FormCreateInventory = ({ onClose }) => {
             onChange={handleChange}
             sx={{ mb: 2 }}
           >
-            {estados.map((est) => (
-              <MenuItem key={est} value={est}>
-                {est}
+            {estados.map((estado) => (
+              <MenuItem key={estado} value={estado}>
+                {estado}
               </MenuItem>
             ))}
           </TextField>
@@ -279,11 +284,10 @@ const FormCreateInventory = ({ onClose }) => {
               type="button"
               variant="contained"
               color="error"
-              onClick={onClose} // usa la función que cierra el modal
+              onClick={onClose}
             >
               Cancelar
             </Button>
-
           </ButtonsContainer>
         </form>
       </ModalContent>
