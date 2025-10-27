@@ -10,6 +10,10 @@ const TableContainer = styled.div`
   width: 100%;
   margin-top: 20px;
   overflow-x: auto;
+
+  @media (max-width: 1280px) {
+    margin-top: 10px;
+  }
 `;
 
 const Table = styled.table`
@@ -23,6 +27,11 @@ const Table = styled.table`
     padding: 10px;
     font-size: 14px;
     color: #000;
+
+    @media (max-width: 1280px) {
+      padding: 6px;
+      font-size: 12px;
+    }
   }
 
   td {
@@ -31,6 +40,11 @@ const Table = styled.table`
     border-bottom: 1px solid #ddd;
     font-size: 14px;
     color: #555;
+
+    @media (max-width: 1280px) {
+      padding: 6px;
+      font-size: 12px;
+    }
   }
 `;
 
@@ -47,15 +61,13 @@ const ActionButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
-`;
 
-const ResultMessage = styled.p`
-  text-align: center;
-  color: #555;
-  margin-top: 10px;
-  font-size: 14px;
+  @media (max-width: 1280px) {
+    padding: 3px 6px;
+    font-size: 11px;
+    margin: 0 2px;
+  }
 `;
-
 
 const EstadoHerramientaBadge = styled.span`
   display: inline-block;
@@ -75,6 +87,22 @@ const EstadoHerramientaBadge = styled.span`
   border: none;
   letter-spacing: 0.3px;
 
+  @media (max-width: 1280px) {
+    padding: 3px 12px;
+    font-size: 11px;
+  }
+`;
+
+const ResultMessage = styled.p`
+  text-align: center;
+  color: #555;
+  margin-top: 10px;
+  font-size: 14px;
+
+  @media (max-width: 1280px) {
+    font-size: 12px;
+    margin-top: 8px;
+  }
 `;
 
 
