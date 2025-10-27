@@ -33,7 +33,6 @@ const ModalContent = styled.div`
   width: 400px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
 
-  /* 🔹 Para pantallas más pequeñas (≤1280px): más compacto */
   @media (max-width: 1280px) {
     width: 330px;
     padding: 20px;
@@ -57,10 +56,10 @@ const Title = styled.h2`
 const FormCreate = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Espaciado cómodo entre inputs */
+  gap: 1rem;
 
   @media (max-width: 1280px) {
-    gap: 0.5rem; /* 🔹 Menos espacio en pantallas pequeñas */
+    gap: 0.5rem;
   }
 `;
 
@@ -72,7 +71,6 @@ const StyledTextField = styled(TextField)`
     font-size: 14px;
   }
 
-  /* 🔹 Margen inferior estándar */
   margin-bottom: 16px;
 
   @media (max-width: 1280px) {
@@ -93,28 +91,28 @@ const ButtonsContainer = styled.div`
 
   @media (max-width: 1280px) {
     margin-top: 15px;
-    gap: 6px; /* 🔹 Más espacio entre botones en pantallas pequeñas */
+    gap: 6px;
   }
 `;
 
 const StyledButton = styled(Button)`
   && {
-    font-size: 0.875rem;   
-    padding: 0.375rem 1rem;   
-    border-radius: 0.375rem;   
-    text-transform: none;      
+    font-size: 0.875rem;
+    padding: 0.375rem 1rem;
+    border-radius: 0.375rem;
+    text-transform: none;
     font-weight: 600;
-    min-width: 5.625rem;       
-    height: 2.25rem;           
+    min-width: 5.625rem;
+    height: 2.25rem;
   }
 
   @media (max-width: 1280px) {
     && {
-      font-size: 0.6875rem;      
-      padding: 0.125rem 1rem; 
-      min-width: 4.375rem;      
-      height: 1.75rem;           
-      border-radius: 0.3125rem;  
+      font-size: 0.6875rem;
+      padding: 0.125rem 1rem;
+      min-width: 4.375rem;
+      height: 1.75rem;
+      border-radius: 0.3125rem;
     }
   }
 `;
@@ -129,6 +127,11 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
     id_administrador: "",
   });
 
+  const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const categorias = ["electricas", "manuales", "medicion"];
   const categoriasDisplay = {
     electricas: "Eléctricas",
@@ -137,14 +140,12 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
   };
   const estados = ["Nueva", "Dañada", "En mantenimiento"];
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (showSuccess) setShowSuccess(false);
   };
 
   const handleSubmit = async (e) => {
@@ -161,6 +162,8 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
         id_administrador: parseInt(id),
       });
 
+      setFieldErrors({});
+      setErrorMsg("");
       setShowSuccess(true);
       handleLimpiar();
 
@@ -169,9 +172,13 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
         onSuccess();
       }, 2000);
     } catch (err) {
-      setErrorMsg(
-        err.response?.data?.message || "Error al registrar la herramienta"
-      );
+      setShowSuccess(false);
+      setErrorMsg("");
+      if (err.response?.data?.errors) {
+        setFieldErrors(err.response.data.errors);
+      } else {
+        setErrorMsg(err.response?.data?.message || "Error al registrar la herramienta");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -186,6 +193,8 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
       estado: "",
       id_administrador: "",
     });
+    setFieldErrors({});
+    setErrorMsg("");
   };
 
   return (
@@ -201,6 +210,8 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.nombre}
             onChange={handleChange}
+            error={Boolean(fieldErrors.nombre)}
+            helperText={fieldErrors.nombre}
           />
 
           <StyledTextField
@@ -210,6 +221,8 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.codigo}
             onChange={handleChange}
+            error={Boolean(fieldErrors.codigo)}
+            helperText={fieldErrors.codigo}
           />
 
           <StyledTextField
@@ -220,6 +233,13 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.categoria}
             onChange={handleChange}
+            error={Boolean(fieldErrors.categoria)}
+            helperText={fieldErrors.categoria}
+            SelectProps={{
+              onClose: () => document.activeElement.blur(),
+              MenuProps: { disableScrollLock: true },
+            }}
+            onBlur={(e) => e.target.blur()}
           >
             {categorias.map((cat) => (
               <MenuItem key={cat} value={cat}>
@@ -236,6 +256,8 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.cantidad_disponible}
             onChange={handleChange}
+            error={Boolean(fieldErrors.cantidad_disponible)}
+            helperText={fieldErrors.cantidad_disponible}
           />
 
           <StyledTextField
@@ -246,6 +268,13 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.estado}
             onChange={handleChange}
+            error={Boolean(fieldErrors.estado)}
+            helperText={fieldErrors.estado}
+            SelectProps={{
+              onClose: () => document.activeElement.blur(),
+              MenuProps: { disableScrollLock: true },
+            }}
+            onBlur={(e) => e.target.blur()}
           >
             {estados.map((estado) => (
               <MenuItem key={estado} value={estado}>
@@ -296,7 +325,6 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             </Collapse>
           )}
 
-
           <ButtonsContainer>
             <StyledButton
               type="submit"
@@ -307,7 +335,7 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
                 "&:hover": { backgroundColor: "#0056b3" },
               }}
             >
-              Guardar
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </StyledButton>
 
             <StyledButton

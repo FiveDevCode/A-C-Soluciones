@@ -191,7 +191,6 @@ const ViewInventoryListPageAd = () => {
         )}
       </Card>
 
-      {/* --- Modal flotante --- */}
       {showModal && (
         <FormCreateInventory
           onClose={() => setShowModal(false)} // solo cierra
