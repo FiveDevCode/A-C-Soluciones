@@ -113,7 +113,7 @@ const SearchBox = styled.div`
   }
 
   @media (max-width: 1280px) {
-    width: 200px;
+    width: 230px;
     padding: 5px 8px;
   }
 `;

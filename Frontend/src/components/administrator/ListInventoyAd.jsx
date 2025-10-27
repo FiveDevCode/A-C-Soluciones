@@ -106,6 +106,7 @@ const ResultMessage = styled.p`
 `;
 
 
+
 const ListInventoryAd = ({ inventory }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -184,11 +185,27 @@ const ListInventoryAd = ({ inventory }) => {
             color="primary"
             shape="rounded"
             sx={{
-              marginTop: "20px",
+              marginTop: "1.25rem", /* ≈20px */
               display: "flex",
               justifyContent: "center",
+
+              "& .MuiPaginationItem-root": {
+                fontSize: "0.875rem",   /* ≈14px normal */
+                minWidth: "2.25rem",    /* ≈36px */
+                height: "2.25rem",
+              },
+
+              "@media (max-width: 1280px)": {
+                "& .MuiPaginationItem-root": {
+                  fontSize: "0.6875rem", /* ≈11px */
+                  minWidth: "1.75rem",   /* ≈28px */
+                  height: "1.75rem",
+                  margin: "0 0.125rem",  /* ≈2px entre botones */
+                },
+              },
             }}
           />
+
         </>
       )}
     </>

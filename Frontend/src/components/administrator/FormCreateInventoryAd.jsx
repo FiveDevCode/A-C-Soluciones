@@ -98,15 +98,24 @@ const ButtonsContainer = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  font-size: 14px;
-  padding: 6px 16px;
-  border-radius: 6px;
-  text-transform: uppercase;
-  font-weight: 600;
+  && {
+    font-size: 0.875rem;   
+    padding: 0.375rem 1rem;   
+    border-radius: 0.375rem;   
+    text-transform: none;      
+    font-weight: 600;
+    min-width: 5.625rem;       
+    height: 2.25rem;           
+  }
 
   @media (max-width: 1280px) {
-    font-size: 11px;
-    padding: 3px 8px; /* 🔹 Botones más bajos en pantallas pequeñas */
+    && {
+      font-size: 0.6875rem;      
+      padding: 0.125rem 1rem; 
+      min-width: 4.375rem;      
+      height: 1.75rem;           
+      border-radius: 0.3125rem;  
+    }
   }
 `;
 
@@ -245,43 +254,48 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             ))}
           </StyledTextField>
 
-          <Collapse in={!!errorMsg}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => setErrorMsg("")}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2 }}
-            >
-              {errorMsg}
-            </Alert>
-          </Collapse>
+          {errorMsg && (
+            <Collapse in={!!errorMsg}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setErrorMsg("")}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+                {errorMsg}
+              </Alert>
+            </Collapse>
+          )}
 
-          <Collapse in={showSuccess}>
-            <Alert
-              severity="success"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => setShowSuccess(false)}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2 }}
-            >
-              ¡Herramienta registrada exitosamente!
-            </Alert>
-          </Collapse>
+          {showSuccess && (
+            <Collapse in={showSuccess}>
+              <Alert
+                severity="success"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setShowSuccess(false)}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+                ¡Herramienta registrada exitosamente!
+              </Alert>
+            </Collapse>
+          )}
+
 
           <ButtonsContainer>
             <StyledButton
