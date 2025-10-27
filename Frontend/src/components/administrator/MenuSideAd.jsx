@@ -2,8 +2,7 @@ import logo from '../../assets/common/logoA&C.png';
 import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PanelLeft } from "lucide-react"
-
+import { PanelLeft } from "lucide-react";
 import {
   faHouse,
   faClipboardList,
@@ -16,7 +15,6 @@ import {
   faMoneyBill,
   faCreditCard,
   faArrowRightFromBracket,
-  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -25,15 +23,20 @@ import Logo from '../common/Logo';
 const SectionMenu = styled.section`
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 👈 separa el contenido superior e inferior */
-  width: ${(props) => (props.collapsed ? '80px' : '250px')};
+  justify-content: space-between;
+  width: ${(props) => (props.collapsed ? '80px' : '220px')};
   background-color: #fff;
   color: #1e1f23;
   min-height: 100vh;
-  padding: 1rem 0.5rem;
-  box-shadow: inset -1px 0px 0px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+  box-shadow: inset -1px 0px 0px rgba(0,0,0,0.1);
   transition: width 0.3s ease;
   position: relative;
+
+  @media (max-width: 1280px) {
+    width: ${(props) => (props.collapsed ? '60px' : '180px')};
+    padding: 0.25rem 0;
+  }
 `;
 
 const ContainerMenu = styled.div`
@@ -43,35 +46,47 @@ const ContainerMenu = styled.div`
   flex-direction: ${(props) => (props.collapsed ? 'column' : 'row')};
   width: 100%;
   transition: all 0.3s ease;
-  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 1280px) {
+    padding: 0 0.25rem;
+    margin-bottom: 0.25rem;
+  }
 `;
 
 const LogoContainer = styled(Link)`
   display: ${(props) => (props.collapsed ? 'none' : 'flex')};
   align-items: center;
   justify-content: center;
-  padding-bottom: 1rem;
-  transition: opacity 0.3s ease;
+  padding: 1rem 0;
+
+  @media (max-width: 1280px) {
+    padding: 0.5rem 0;
+  }
 `;
-
-
-
 
 const MenuGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0 0.4rem;
+  gap: 0.25rem;
+  padding: 0 0.25rem;
+  overflow-y: auto;
+  flex: 1;
 `;
 
-const MenuTitle = styled.h3`
-  font-size: 0.85rem;
+const MenuTitle = styled.span`
+  font-size: 0.75rem;
   font-weight: 600;
   color: #8a8a8a;
   text-transform: uppercase;
   margin: 0.5rem 0;
-  letter-spacing: 0.5px;
   display: ${(props) => (props.collapsed ? 'none' : 'block')};
+
+  @media (max-width: 1280px) {
+    font-size: 0.65rem;
+    margin: 0.25rem 0;
+  }
 `;
 
 const MenuOption = styled(Link)`
@@ -79,10 +94,10 @@ const MenuOption = styled(Link)`
   align-items: center;
   gap: ${(props) => (props.collapsed ? '0' : '0.8rem')};
   justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
-  padding: 0.6rem 0.9rem;
+  padding: 0.5rem 0.75rem;
   text-decoration: none;
   color: #1e1f23;
-  border-radius: 10px;
+  border-radius: 8px;
   transition: background 0.2s, color 0.2s;
 
   &:hover {
@@ -91,11 +106,18 @@ const MenuOption = styled(Link)`
   }
 
   svg {
-    font-size: 1.1rem;
+    font-size: 1rem;
+
+    @media (max-width: 1280px) {
+      font-size: 0.85rem;
+    }
   }
 
   span {
     display: ${(props) => (props.collapsed ? 'none' : 'inline')};
+    @media (max-width: 1280px) {
+      font-size: 0.75rem;
+    }
   }
 `;
 
@@ -104,14 +126,15 @@ const LogoutButton = styled.button`
   align-items: center;
   gap: ${(props) => (props.collapsed ? '0' : '0.8rem')};
   justify-content: ${(props) => (props.collapsed ? 'center' : 'flex-start')};
-  padding: 0.7rem 0.9rem;
+  padding: 0.6rem 0.75rem;
   background: none;
   border: none;
   color: #1e1f23;
-  border-radius: 10px;
+  border-radius: 8px;
   text-align: left;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
+  width: 100%;
   transition: background 0.2s, color 0.2s;
 
   &:hover {
@@ -120,22 +143,36 @@ const LogoutButton = styled.button`
   }
 
   svg {
-    font-size: 1.1rem;
+    font-size: 1rem;
+
+    @media (max-width: 1280px) {
+      font-size: 0.85rem;
+    }
   }
 
   span {
     display: ${(props) => (props.collapsed ? 'none' : 'inline')};
+
+    @media (max-width: 1280px) {
+      font-size: 0.75rem;
+    }
   }
 `;
 
 const CollapseButton = styled(IconButton)`
   background-color: #fff !important;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  border: 1px solid rgba(0,0,0,0.1);
+  margin-right: ${(props) => (props.collapsed ? '0' : '0.5rem')};
+
   &:hover {
     background-color: #f2f2f2 !important;
   }
+
+  @media (max-width: 1280px) {
+    margin-right: ${(props) => (props.collapsed ? '0' : '0.25rem')};
+  }
 `;
+
 
 const MenuSideAd = () => {
   const navigate = useNavigate();
@@ -151,12 +188,9 @@ const MenuSideAd = () => {
 
   const getHomeRouteByRole = (role) => {
     switch (role) {
-      case 'tecnico':
-        return '/tecnico/inicio';
-      case 'administrador':
-        return '/admin/inicio';
-      default:
-        return '/';
+      case 'tecnico': return '/tecnico/inicio';
+      case 'administrador': return '/admin/inicio';
+      default: return '/';
     }
   };
 
@@ -181,41 +215,25 @@ const MenuSideAd = () => {
           <PanelLeft size={22} color="black" strokeWidth={1} />
         </CollapseButton>
 
-        <LogoContainer
-          to={getHomeRouteByRole(role)}
-          collapsed={collapsed} // <-- pasa prop para esconder
-        >
+        <LogoContainer to={getHomeRouteByRole(role)} collapsed={collapsed}>
           <Logo src={logo} size={collapsed ? '45px' : '120px'} />
         </LogoContainer>
       </ContainerMenu>
-      
-      {/* Parte superior */}
-{/* Parte superior */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)' }} />
 
-        <MenuGroup>
-          <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
-          {options.map((opt) => (
-            <Tooltip
-              key={opt.to}
-              title={collapsed ? opt.label : ''}
-              placement="right"
-              arrow
-            >
-              <MenuOption to={opt.to} collapsed={collapsed}>
-                <FontAwesomeIcon icon={opt.icon} />
-                <span>{opt.label}</span>
-              </MenuOption>
-            </Tooltip>
-          ))}
-        </MenuGroup>
-      </div>
+      <MenuGroup>
+        <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
+        {options.map((opt) => (
+          <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
+            <MenuOption to={opt.to} collapsed={collapsed}>
+              <FontAwesomeIcon icon={opt.icon} />
+              <span>{opt.label}</span>
+            </MenuOption>
+          </Tooltip>
+        ))}
+      </MenuGroup>
 
-
-      {/* Parte inferior */}
-      <div>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.8rem' }} />
+      <div style={{ marginTop: 'auto', padding: '0 0.5rem' }}>
+        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.5rem' }} />
         <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
           <LogoutButton onClick={handleLogout} collapsed={collapsed}>
             <FontAwesomeIcon icon={faArrowRightFromBracket} />
