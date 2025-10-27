@@ -7,7 +7,6 @@ import {
   Collapse,
   Alert,
   IconButton,
-  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { jwtDecode } from "jwt-decode";
@@ -33,6 +32,13 @@ const ModalContent = styled.div`
   border-radius: 16px;
   width: 400px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
+
+  /* 🔹 Para pantallas más pequeñas (≤1280px): más compacto */
+  @media (max-width: 1280px) {
+    width: 330px;
+    padding: 20px;
+    border-radius: 12px;
+  }
 `;
 
 const Title = styled.h2`
@@ -40,12 +46,68 @@ const Title = styled.h2`
   margin-bottom: 20px;
   font-weight: 600;
   color: #000;
+  font-size: 20px;
+
+  @media (max-width: 1280px) {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+`;
+
+const FormCreate = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espaciado cómodo entre inputs */
+
+  @media (max-width: 1280px) {
+    gap: 0.5rem; /* 🔹 Menos espacio en pantallas pequeñas */
+  }
+`;
+
+const StyledTextField = styled(TextField)`
+  & .MuiInputBase-input {
+    font-size: 14px;
+  }
+  & .MuiFormLabel-root {
+    font-size: 14px;
+  }
+
+  /* 🔹 Margen inferior estándar */
+  margin-bottom: 16px;
+
+  @media (max-width: 1280px) {
+    margin-bottom: 12px;
+    & .MuiInputBase-input {
+      font-size: 12px;
+    }
+    & .MuiFormLabel-root {
+      font-size: 12px;
+    }
+  }
 `;
 
 const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 25px;
+
+  @media (max-width: 1280px) {
+    margin-top: 15px;
+    gap: 6px; /* 🔹 Más espacio entre botones en pantallas pequeñas */
+  }
+`;
+
+const StyledButton = styled(Button)`
+  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+
+  @media (max-width: 1280px) {
+    font-size: 11px;
+    padding: 3px 8px; /* 🔹 Botones más bajos en pantallas pequeñas */
+  }
 `;
 
 const FormCreateInventory = ({ onClose, onSuccess }) => {
@@ -55,29 +117,20 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
     categoria: "",
     cantidad_disponible: "",
     estado: "",
-    id_administrador: ""
+    id_administrador: "",
   });
 
-  // Categorías
-  const categorias = [
-    "electricas",
-    "manuales",
-    "medicion"
-  ];
-
+  const categorias = ["electricas", "manuales", "medicion"];
   const categoriasDisplay = {
     electricas: "Eléctricas",
     manuales: "Manuales",
-    medicion: "Medición"
+    medicion: "Medición",
   };
-
-  // Estados sin modificar
   const estados = ["Nueva", "Dañada", "En mantenimiento"];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -131,33 +184,26 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
       <ModalContent>
         <Title>Agregar herramienta</Title>
 
-        <form onSubmit={handleSubmit}>
-          <TextField
+        <FormCreate onSubmit={handleSubmit}>
+          <StyledTextField
             label="Nombre"
             name="nombre"
             fullWidth
             size="small"
             value={formData.nombre}
             onChange={handleChange}
-            sx={{ mb: 2 }}
-            error={Boolean(fieldErrors.nombre)}
-            helperText={fieldErrors.nombre}
           />
 
-          <TextField
+          <StyledTextField
             label="Código"
             name="codigo"
             fullWidth
             size="small"
             value={formData.codigo}
             onChange={handleChange}
-            sx={{ mb: 2 }}
-            error={Boolean(fieldErrors.codigo)}
-            helperText={fieldErrors.codigo}
           />
 
-          {/* Categorías */}
-          <TextField
+          <StyledTextField
             select
             label="Categoría"
             name="categoria"
@@ -165,16 +211,15 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.categoria}
             onChange={handleChange}
-            sx={{ mb: 2 }}
           >
             {categorias.map((cat) => (
               <MenuItem key={cat} value={cat}>
                 {categoriasDisplay[cat]}
               </MenuItem>
             ))}
-          </TextField>
+          </StyledTextField>
 
-          <TextField
+          <StyledTextField
             label="Cantidad"
             name="cantidad_disponible"
             type="number"
@@ -182,11 +227,9 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.cantidad_disponible}
             onChange={handleChange}
-            sx={{ mb: 2 }}
           />
 
-          {/* Estados con valores exactos */}
-          <TextField
+          <StyledTextField
             select
             label="Estado"
             name="estado"
@@ -194,14 +237,13 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
             size="small"
             value={formData.estado}
             onChange={handleChange}
-            sx={{ mb: 2 }}
           >
             {estados.map((estado) => (
               <MenuItem key={estado} value={estado}>
                 {estado}
               </MenuItem>
             ))}
-          </TextField>
+          </StyledTextField>
 
           <Collapse in={!!errorMsg}>
             <Alert
@@ -242,7 +284,7 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
           </Collapse>
 
           <ButtonsContainer>
-            <Button
+            <StyledButton
               type="submit"
               variant="contained"
               disabled={isSubmitting}
@@ -252,9 +294,9 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
               }}
             >
               Guardar
-            </Button>
+            </StyledButton>
 
-            <Button
+            <StyledButton
               type="button"
               variant="contained"
               onClick={handleLimpiar}
@@ -265,18 +307,18 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
               }}
             >
               Limpiar
-            </Button>
+            </StyledButton>
 
-            <Button
+            <StyledButton
               type="button"
               variant="contained"
               color="error"
               onClick={onClose}
             >
               Cancelar
-            </Button>
+            </StyledButton>
           </ButtonsContainer>
-        </form>
+        </FormCreate>
       </ModalContent>
     </ModalOverlay>
   );
