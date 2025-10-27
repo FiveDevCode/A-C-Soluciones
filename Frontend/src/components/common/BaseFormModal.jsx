@@ -114,7 +114,6 @@ const StyledButton = styled(Button)`
   }
 `;
 
-// ======== COMPONENTE BASE REUTILIZABLE ========
 const BaseFormModal = ({
   title,
   fields,
@@ -205,12 +204,7 @@ const BaseFormModal = ({
               <Alert
                 severity="error"
                 action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => setErrorMsg("")}
-                  >
+                  <IconButton onClick={() => setErrorMsg("")} size="small">
                     <CloseIcon fontSize="inherit" />
                   </IconButton>
                 }
@@ -226,18 +220,13 @@ const BaseFormModal = ({
               <Alert
                 severity="success"
                 action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => setShowSuccess(false)}
-                  >
+                  <IconButton onClick={() => setShowSuccess(false)} size="small">
                     <CloseIcon fontSize="inherit" />
                   </IconButton>
                 }
                 sx={{ mb: 2 }}
               >
-                ¡Herramienta registrada exitosamente!
+                {successMessage}
               </Alert>
             </Collapse>
           )}
