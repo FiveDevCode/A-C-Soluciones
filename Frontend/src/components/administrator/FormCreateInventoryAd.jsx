@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 import { handleCreateInventory } from "../../controllers/accountant/createInventoryAc.controller";
 
 const ModalOverlay = styled.div`
@@ -139,8 +138,6 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
     medicion: "Medición",
   };
   const estados = ["Nueva", "Dañada", "En mantenimiento"];
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
