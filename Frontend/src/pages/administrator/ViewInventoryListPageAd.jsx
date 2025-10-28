@@ -155,6 +155,10 @@ const ViewInventoryListPageAd = () => {
       });
   };
 
+  const handleDelete = () => {
+    
+  }
+
   return (
     <Container>
       <Header>GESTIÓN DE INVENTARIO</Header>
@@ -187,7 +191,11 @@ const ViewInventoryListPageAd = () => {
             Cargando inventario...
           </p>
         ) : (
-          <ListInventoryAd inventory={inventory} />
+          <ListInventoryAd
+            inventory={inventory}
+            onDelete={handleDelete}
+            reloadData={loadInventory}
+          />
         )}
       </Card>
 

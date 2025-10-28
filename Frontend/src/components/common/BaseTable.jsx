@@ -163,8 +163,16 @@ const BaseTable = ({
 
       {/* 👇 renderiza el componente de edición si fue pasado */}
       {EditComponent && selectedRow && (
-        <EditComponent selectedTool={selectedRow} onClose={handleCloseEdit} />
+        <EditComponent
+          selectedTool={selectedRow}
+          onClose={handleCloseEdit}
+          onSuccess={() => {
+            handleCloseEdit();
+            window.location.reload(); // ⚙️ aquí recarga la lista tras actualizar
+          }}
+        />
       )}
+
     </>
   );
 };

@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { handleGetInventoryAd } from "../../controllers/administrator/getInventoryAd.controller";
 import { handleUpdateInventoryAd } from "../../controllers/administrator/updateInventoryAd.controller";
 import inventoryIcon from "../../assets/administrator/registerInventoryAd.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
-const EditInventoryAd = () => {
-  const navigate = useNavigate();
-  const id = 4;
-
+const EditInventoryAd = ({ selectedTool, onClose, onSuccess }) => {
   const [toolData, setToolData] = useState(null);
 
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const response = await handleGetInventoryAd(id);
+        const response = await handleGetInventoryAd(selectedTool.id);
         setToolData(response.data);
       } catch (error) {
         console.error("Error al cargar herramienta:", error);
       }
     };
-    fetchTool();
-  }, [id]);
+    if (selectedTool?.id) fetchTool();
+  }, [selectedTool]);
 
-  if (!toolData) return <p>Cargando datos...</p>;
+  if (!toolData) return null; // no mostrar nada mientras carga
 
   const categorias = [
     { value: "electricas", label: "Eléctricas" },
@@ -59,7 +55,7 @@ const EditInventoryAd = () => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateInventoryAd(id, data);
+    await handleUpdateInventoryAd(selectedTool.id, data);
   };
 
   return (
@@ -69,8 +65,8 @@ const EditInventoryAd = () => {
       fields={fields}
       initialData={initialData}
       onSubmit={handleSubmit}
-      onClose={() => navigate(-1)}
-      onSuccess={() => navigate(`/admin/inventario/${id}`)}
+      onClose={onClose}          // 👈 Cierra el modal sin refrescar
+      onSuccess={onSuccess}      // 👈 Refresca lista solo si actualizó
       successMessage="¡Herramienta actualizada exitosamente!"
     />
   );
