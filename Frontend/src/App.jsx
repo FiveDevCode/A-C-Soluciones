@@ -80,7 +80,6 @@ import HomeAc from './pages/accountant/HomeAc.jsx';
 import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
 import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
 import ViewInventoryPageAd from './pages/administrator/ViewInventoryPageAd.jsx';
-import { EditInventoryPageAd } from './pages/administrator/EditInventoryPageAd.jsx';
 
 
 
@@ -541,14 +540,6 @@ function AppContent() {
               </PrivateRoute>
             } />
             
-            <Route path="/admin/editar-inventario/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditInventoryPageAd/>
-              </PrivateRoute>
-            } />
-
-            
-
 
             <Route path="*" element={<ErrorPage/>} />
             

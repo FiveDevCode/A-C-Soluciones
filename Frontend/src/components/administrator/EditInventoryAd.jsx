@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { handleGetInventoryAd } from "../../controllers/administrator/getInventoryAd.controller";
 import { handleUpdateInventoryAd } from "../../controllers/administrator/updateInventoryAd.controller";
-import BaseEditModal from "../common/BaseEditModal";
 import inventoryIcon from "../../assets/administrator/registerInventoryAd.png";
+import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditInventoryAd = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const id = 4;
 
   const [toolData, setToolData] = useState(null);
 
