@@ -1,6 +1,7 @@
 import BaseTable from "../common/BaseTable";
+import EditInventoryAd from "./EditInventoryAd";
 
-const ListInventoryAd = ({ inventory }) => {
+const ListInventoryAd = ({ inventory, onDelete }) => {
   const columns = [
     { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },
@@ -14,11 +15,10 @@ const ListInventoryAd = ({ inventory }) => {
     <BaseTable
       data={inventory}
       columns={columns}
-      onEdit={onEdit}
       onDelete={onDelete}
-      editPath="/admin/editar-inventario"
       getBadgeValue={(row) => row.estado_herramienta}
       emptyMessage="No hay herramientas registradas"
+      EditComponent={EditInventoryAd}
     />
   );
 };
