@@ -5,6 +5,7 @@ import FooterHome from "../../components/common/FooterHome";
 import ServicieCatalog from "../../components/common/ServicieCatalog";
 import styled from "styled-components";
 import WorkProductCl from "../../components/client/WorkProductCl";
+import ChatBubble from "../../components/chatbot/ChatBubble";
 
 
 const ContainerHome = styled.section`
@@ -25,6 +26,7 @@ const Home = () => {
       <WorkProductCl />
       <ServicieCatalog />
       <FooterHome />
+      <ChatBubble />
     </ContainerHome>
   )
 }

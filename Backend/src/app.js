@@ -21,7 +21,7 @@ import ContabilidadRouter from './routers/contabilidad.routes.js';
 import RegistrarFacturas from './routers/registrar_factura.routes.js';
 import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
-
+import ChatbotRouter from './routers/chatbot.routes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -70,6 +70,8 @@ App.use(ContabilidadRouter);
 App.use(RegistrarFacturas);
 App.use(RegistarCuentas);
 App.use(Inventario);
+App.use(ChatbotRouter);
+
 // debes de mejorar la forma en la que defines la ruta, porque se esta saliendo del estandar que tenemos 
 App.use('/fichas', fichaClienteRouter);
 
