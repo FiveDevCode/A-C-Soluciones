@@ -110,6 +110,7 @@ const ViewInventoryListPageAd = () => {
         onFilter={() => console.log("Abrir filtros")}
         onSearchChange={setSearchTerm}
         onDeleteSelected={handleDeleteSelected}
+        selectedCount={selectedIds.length}
       />
 
       <Card>

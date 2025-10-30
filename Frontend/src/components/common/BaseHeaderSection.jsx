@@ -1,4 +1,4 @@
-import { FaPlus, FaSearch, FaFilter, FaTrash } from "react-icons/fa";
+import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -20,7 +20,22 @@ const OptionsContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
 `;
+
+const RightButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 1280px) {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+`;
+
 
 const Card = styled.div`
   background-color: white;
@@ -40,7 +55,7 @@ const Card = styled.div`
 const Menu = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: wrap; /* Por si en pantallas pequeñas los botones no caben */
+  flex-wrap: wrap;
 `;
 
 const Title = styled.h2`
@@ -82,9 +97,9 @@ const AddButton = styled.button`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  margin-top: 16px;
+  justify-content: start;
   gap: 8px;
+  flex: 1;
 
   @media (max-width: 1280px) {
     flex-wrap: wrap;
@@ -100,7 +115,7 @@ const SearchBox = styled.div`
   padding: 6px 10px;
   border-radius: 6px;
   flex: 1;
-  min-width: 280px;
+  max-width: 280px;
 
   input {
     border: none;
@@ -116,25 +131,29 @@ const SearchBox = styled.div`
   }
 
   @media (max-width: 1280px) {
-    min-width: 230px;
+    max-width: 230px;
     padding: 5px 8px;
   }
 `;
 
-const IconButton = styled.button`
-  background: transparent;
+const Button = styled.button`
+  background-color: ${({ active }) => (active ? "#ffcdd2" : "#c0c0c0")};
+  color: ${({ active }) => (active ? "#b71c1c" : "white")};
   border: none;
-  font-size: 18px;
-  color: #555;
-  cursor: pointer;
-  transition: color 0.3s;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: all 0.3s;
+  font-weight: bold;
 
   &:hover {
-    color: #1976d2;
+    background-color: ${({ active }) => (active ? "#ef9a9a" : "#a0a0a0")};
   }
 
   @media (max-width: 1280px) {
-    font-size: 16px;
+    font-size: 12px;
+    padding: 6px 10px;
   }
 `;
 
@@ -147,6 +166,8 @@ const BaseHeaderSection = ({
   onFilter,
   onSearchChange,
   onDeleteSelected,
+  onClearFilters,
+  selectedCount = 0, // 👈 cantidad seleccionada
 }) => {
   return (
     <>
@@ -160,26 +181,29 @@ const BaseHeaderSection = ({
           </AddButton>
         </Menu>
 
-        <OptionsContainer>
-          <SearchContainer>
-              <SearchBox>
-                <FaSearch color="#555" />
-                <input
-                  type="text"
-                  placeholder={placeholder}
-                  onChange={(e) => onSearchChange?.(e.target.value)}
-                  />
-              </SearchBox>
+      <OptionsContainer>
+        <SearchContainer>
+          <SearchBox>
+            <FaSearch color="#555" />
+            <input
+              type="text"
+              placeholder={placeholder}
+              onChange={(e) => onSearchChange?.(e.target.value)}
+            />
+          </SearchBox>
+        </SearchContainer>
 
-              <IconButton onClick={onFilter}>
-                <FaFilter />
-              </IconButton>
-
-            </SearchContainer>
-            <IconButton onClick={onDeleteSelected}>
-              <FaTrash color="red" />
-            </IconButton>
-        </OptionsContainer>
+        <RightButtons>
+          <Button onClick={onClearFilters}>Limpiar filtros</Button>
+          <Button
+            active={selectedCount > 0}
+            disabled={selectedCount === 0}
+            onClick={onDeleteSelected}
+          >
+            Eliminar facturas seleccionadas
+          </Button>
+        </RightButtons>
+      </OptionsContainer>
       </Card>
     </>
   );
