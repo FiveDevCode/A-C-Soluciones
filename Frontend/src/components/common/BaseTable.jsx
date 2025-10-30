@@ -36,7 +36,7 @@ const Table = styled.table`
 
   td {
     text-align: center;
-    padding: 12px;
+    padding: 4px;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
     color: #555;
@@ -267,14 +267,20 @@ const BaseTable = ({
             count={totalPages}
             page={currentPage}
             onChange={(e, page) => setCurrentPage(page)}
-            color="primary"
-            shape="rounded"
             sx={{
-              marginTop: "1.25rem",
               display: "flex",
               justifyContent: "center",
+              marginTop: "1.25rem",
+
+              "@media (max-width: 1280px)": {
+                "& .MuiPaginationItem-root": {
+                  fontSize: "0.75rem",
+                },
+              },
             }}
           />
+
+
         </>
       )}
 
