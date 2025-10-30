@@ -6,7 +6,7 @@ const useItemsPerPage = () => {
   function getItemsCount() {
     const height = window.innerHeight;
     if (height < 600) return 5; // pantallas pequeñas
-    if (height < 800) return 7; // laptops medianas
+    if (height < 800) return 6; // laptops medianas
     if (height < 1000) return 8; // monitores normales
     return 10; // pantallas grandes
   }
