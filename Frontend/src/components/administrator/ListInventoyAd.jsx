@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import EditInventoryAd from "./EditInventoryAd";
 
-const ListInventoryAd = ({ inventory, onDelete, reloadData }) => {
+const ListInventoryAd = ({ inventory, onDelete, reloadData, onSelectRows }) => {
   const columns = [
     { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },
@@ -21,6 +21,7 @@ const ListInventoryAd = ({ inventory, onDelete, reloadData }) => {
       EditComponent={(props) => (
         <EditInventoryAd {...props} onSuccess={reloadData} />
       )}
+      onSelectRows={onSelectRows}
     />
   );
 };

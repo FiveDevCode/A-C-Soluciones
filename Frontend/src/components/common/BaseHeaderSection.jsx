@@ -1,10 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
-
-/* ---------------------- 🔹 Estilos base ---------------------- */
-
-
+import { FaPlus, FaSearch, FaFilter, FaTrash } from "react-icons/fa";
 
 const Header = styled.header`
   background-color: #1976d2;
@@ -13,11 +9,6 @@ const Header = styled.header`
   text-align: center;
   font-size: 20px;
   font-weight: bold;
-
-  @media (max-width: 1280px) {
-    padding: 1rem;
-    font-size: 18px;
-  }
 `;
 
 const Card = styled.div`
@@ -26,12 +17,6 @@ const Card = styled.div`
   align-self: center;
   padding: 20px;
   width: 85%;
-
-  @media (max-width: 1280px) {
-    margin: 20px 10px 0 10px;
-    padding: 15px;
-    width: 95%;
-  }
 `;
 
 const Menu = styled.div`
@@ -43,11 +28,6 @@ const Title = styled.h2`
   font-size: 16px;
   color: #1565c0;
   margin-bottom: 10px;
-
-  @media (max-width: 1280px) {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
 `;
 
 const AddButton = styled.button`
@@ -62,22 +42,12 @@ const AddButton = styled.button`
   align-items: center;
   gap: 6px;
   margin-left: auto;
-
-  &:hover {
-    background-color: #1565c0;
-  }
-
-  @media (max-width: 1280px) {
-    padding: 6px 10px;
-    font-size: 12px;
-    gap: 4px;
-  }
 `;
 
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 16px;
   gap: 8px;
 `;
@@ -98,31 +68,16 @@ const SearchBox = styled.div`
     width: 100%;
     font-size: 14px;
     margin-left: 6px;
-
-    @media (max-width: 1280px) {
-      font-size: 12px;
-    }
-  }
-
-  @media (max-width: 1280px) {
-    max-width: 230px;
-    padding: 5px 8px;
   }
 `;
 
-const FilterButton = styled.button`
+const IconButton = styled.button`
   background: transparent;
   border: none;
   font-size: 18px;
   color: #555;
   cursor: pointer;
-
-  @media (max-width: 1280px) {
-    font-size: 16px;
-  }
 `;
-
-/* ---------------------- 🔹 Componente base ---------------------- */
 
 const BaseHeaderSection = ({
   headerTitle = "GESTIÓN GENERAL",
@@ -132,6 +87,7 @@ const BaseHeaderSection = ({
   onAdd,
   onFilter,
   onSearchChange,
+  onDeleteSelected,
 }) => {
   return (
     <>
@@ -155,9 +111,13 @@ const BaseHeaderSection = ({
             />
           </SearchBox>
 
-          <FilterButton onClick={onFilter}>
+          <IconButton onClick={onFilter}>
             <FaFilter />
-          </FilterButton>
+          </IconButton>
+
+          <IconButton onClick={onDeleteSelected}>
+            <FaTrash color="red" />
+          </IconButton>
         </SearchContainer>
       </Card>
     </>

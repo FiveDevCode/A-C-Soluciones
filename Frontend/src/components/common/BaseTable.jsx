@@ -24,12 +24,12 @@ const Table = styled.table`
   th {
     background-color: #bbdefb;
     text-align: center;
-    padding: 10px;
+    padding: 4px;
     font-size: 14px;
     color: #000;
 
     @media (max-width: 1280px) {
-      padding: 6px;
+      padding: 0;
       font-size: 12px;
     }
   }
@@ -132,6 +132,7 @@ const BaseTable = ({
   getBadgeValue,
   emptyMessage = "No hay registros disponibles",
   EditComponent,
+  onSelectRows, // <-- NUEVO PROP
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -146,18 +147,22 @@ const BaseTable = ({
   }, [data, currentPage]);
 
   const handleSelectRow = (row) => {
-    setSelectedRows((prev) =>
-      prev.includes(row)
+    setSelectedRows((prev) => {
+      const updated = prev.includes(row)
         ? prev.filter((r) => r !== row)
-        : [...prev, row]
-    );
+        : [...prev, row];
+      onSelectRows?.(updated);
+      return updated;
+    });
   };
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
       setSelectedRows(paginatedData);
+      onSelectRows?.(paginatedData);
     } else {
       setSelectedRows([]);
+      onSelectRows?.([]);
     }
   };
 

@@ -4,6 +4,7 @@ import { handleGetListInventoryAd } from "../../controllers/administrator/getLis
 import ListInventoryAd from "../../components/administrator/ListInventoyAd";
 import FormCreateInventory from "../../components/administrator/FormCreateInventoryAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
+import { handleDeleteInventory } from "../../controllers/administrator/deleteInventoryAd.controller";
 
 
 const Container = styled.div`
@@ -36,6 +37,7 @@ const ViewInventoryListPageAd = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     loadInventory();
@@ -56,9 +58,31 @@ const ViewInventoryListPageAd = () => {
       });
   };
 
-  const handleDelete = () => {
-    
-  }
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) {
+      alert("Selecciona al menos un registro para eliminar.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `¿Deseas eliminar ${selectedIds.length} elementos seleccionados?`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      for (const id of selectedIds) {
+        await handleDeleteInventory(id);
+      }
+      alert("Registros eliminados correctamente.");
+      setSelectedIds([]);
+      loadInventory();
+    } catch (error) {
+      console.error("Error eliminando registros:", error);
+      alert("Error al eliminar algunos registros.");
+    }
+  };
+
 
   const filteredInventory = inventory.filter((item) => {
     const nombre = item.nombre?.toLowerCase() || "";
@@ -68,6 +92,10 @@ const ViewInventoryListPageAd = () => {
       categoria.includes(searchTerm.toLowerCase())
     );
   });
+
+  const handleDelete = () => {
+
+  }
 
   console.log("Filter: ", filteredInventory)
 
@@ -81,6 +109,7 @@ const ViewInventoryListPageAd = () => {
         onAdd={() => setShowModal(true)}
         onFilter={() => console.log("Abrir filtros")}
         onSearchChange={setSearchTerm}
+        onDeleteSelected={handleDeleteSelected}
       />
 
       <Card>
@@ -93,6 +122,7 @@ const ViewInventoryListPageAd = () => {
             inventory={filteredInventory}
             onDelete={handleDelete}
             reloadData={loadInventory}
+            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           />
         )}
       </Card>
