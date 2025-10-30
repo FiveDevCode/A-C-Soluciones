@@ -166,30 +166,11 @@ const BaseTable = ({
     }
   };
 
-  const handleDeleteSelected = () => {
-    if (onDelete && selectedRows.length > 0) {
-      onDelete(selectedRows);
-      setSelectedRows([]);
-    }
-  };
-
   const handleCloseEdit = () => setSelectedRow(null);
 
   return (
     <>
       {/* 🔸 Barra de acciones */}
-      {selectedRows.length > 0 && (
-        <ActionsBar>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={handleDeleteSelected}
-          >
-            Eliminar seleccionados ({selectedRows.length})
-          </Button>
-        </ActionsBar>
-      )}
 
       <TableContainer>
         <Table>

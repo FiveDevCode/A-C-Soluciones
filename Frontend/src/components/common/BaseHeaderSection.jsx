@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components";
 import { FaPlus, FaSearch, FaFilter, FaTrash } from "react-icons/fa";
+import styled from "styled-components";
 
 const Header = styled.header`
   background-color: #1976d2;
@@ -9,6 +8,18 @@ const Header = styled.header`
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+
+  @media (max-width: 1280px) {
+    padding: 1rem;
+    font-size: 18px;
+  }
+`;
+
+const OptionsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
 `;
 
 const Card = styled.div`
@@ -17,17 +28,30 @@ const Card = styled.div`
   align-self: center;
   padding: 20px;
   width: 85%;
+  border-radius: 8px 8px 0 0;
+
+  @media (max-width: 1280px) {
+    margin: 20px 10px 0 10px;
+    padding: 15px;
+    width: 95%;
+  }
 `;
 
 const Menu = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* Por si en pantallas pequeñas los botones no caben */
 `;
 
 const Title = styled.h2`
   font-size: 16px;
   color: #1565c0;
   margin-bottom: 10px;
+
+  @media (max-width: 1280px) {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
 `;
 
 const AddButton = styled.button`
@@ -42,6 +66,17 @@ const AddButton = styled.button`
   align-items: center;
   gap: 6px;
   margin-left: auto;
+  transition: background 0.3s;
+
+  &:hover {
+    background-color: #1565c0;
+  }
+
+  @media (max-width: 1280px) {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 4px;
+  }
 `;
 
 const SearchContainer = styled.div`
@@ -50,6 +85,12 @@ const SearchContainer = styled.div`
   justify-content: flex-end;
   margin-top: 16px;
   gap: 8px;
+
+  @media (max-width: 1280px) {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px;
+  }
 `;
 
 const SearchBox = styled.div`
@@ -59,7 +100,7 @@ const SearchBox = styled.div`
   padding: 6px 10px;
   border-radius: 6px;
   flex: 1;
-  max-width: 280px;
+  min-width: 280px;
 
   input {
     border: none;
@@ -68,6 +109,15 @@ const SearchBox = styled.div`
     width: 100%;
     font-size: 14px;
     margin-left: 6px;
+
+    @media (max-width: 1280px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    min-width: 230px;
+    padding: 5px 8px;
   }
 `;
 
@@ -77,6 +127,15 @@ const IconButton = styled.button`
   font-size: 18px;
   color: #555;
   cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #1976d2;
+  }
+
+  @media (max-width: 1280px) {
+    font-size: 16px;
+  }
 `;
 
 const BaseHeaderSection = ({
@@ -101,24 +160,26 @@ const BaseHeaderSection = ({
           </AddButton>
         </Menu>
 
-        <SearchContainer>
-          <SearchBox>
-            <FaSearch color="#555" />
-            <input
-              type="text"
-              placeholder={placeholder}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-            />
-          </SearchBox>
+        <OptionsContainer>
+          <SearchContainer>
+              <SearchBox>
+                <FaSearch color="#555" />
+                <input
+                  type="text"
+                  placeholder={placeholder}
+                  onChange={(e) => onSearchChange?.(e.target.value)}
+                  />
+              </SearchBox>
 
-          <IconButton onClick={onFilter}>
-            <FaFilter />
-          </IconButton>
+              <IconButton onClick={onFilter}>
+                <FaFilter />
+              </IconButton>
 
-          <IconButton onClick={onDeleteSelected}>
-            <FaTrash color="red" />
-          </IconButton>
-        </SearchContainer>
+            </SearchContainer>
+            <IconButton onClick={onDeleteSelected}>
+              <FaTrash color="red" />
+            </IconButton>
+        </OptionsContainer>
       </Card>
     </>
   );
