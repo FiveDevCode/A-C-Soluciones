@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaSearch, FaFilter, FaPlus } from "react-icons/fa";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
 import ListInventoryAd from "../../components/administrator/ListInventoyAd";
 import FormCreateInventory from "../../components/administrator/FormCreateInventoryAd";
+import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 
 
 const Container = styled.div`
@@ -12,129 +12,30 @@ const Container = styled.div`
   background-color: #f5f7fa; 
   min-height: 100vh; 
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
 `;
 const Card = styled.div`
   background-color: white;
-  margin: 40px auto 0 auto;
+  margin: 0 auto 0 auto;
   align-self: center;
-  padding: 20px;
+  padding: 0 20px;
+  padding-bottom: 20px;
   width: 85%;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.1);
 
   @media (max-width: 1280px) {
-    margin: 20px 10px 0 10px;
+    margin: 0 10px 0 10px;
     padding: 15px;
     width: 95%;
   }
 `;
 
-const Menu = styled.div `
-  display: flex; 
-  align-items: center;
-`; 
-
-const SearchContainer = styled.div `
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  margin-bottom: 16px;
-`; 
-
-const Header = styled.header`
-  background-color: #1976d2;
-  color: white;
-  padding: 2rem;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-
-  @media (max-width: 1280px) {
-    padding: 1rem;
-    font-size: 18px;
-  }
-`;
-
-const Title = styled.h2`
-  font-size: 16px;
-  color: #1565c0;
-  margin-bottom: 10px;
-
-  @media (max-width: 1280px) {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-`;
-
-const AddButton = styled.button`
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: auto;
-
-  &:hover {
-    background-color: #1565c0;
-  }
-
-  @media (max-width: 1280px) {
-    padding: 6px 10px;
-    font-size: 12px;
-    gap: 4px;
-  }
-`;
-
-const SearchBox = styled.div`
-  display: flex;
-  align-items: center;
-  background: #f1f3f4;
-  padding: 6px 10px;
-  border-radius: 6px;
-  flex: 1;
-  width: 280px;
-
-  input {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: 100%;
-    font-size: 14px;
-    margin-left: 6px;
-
-    @media (max-width: 1280px) {
-      font-size: 12px;
-    }
-  }
-
-  @media (max-width: 1280px) {
-    width: 230px;
-    padding: 5px 8px;
-  }
-`;
-
-const FilterButton = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  color: #555;
-  cursor: pointer;
-
-  @media (max-width: 1280px) {
-    font-size: 16px;
-  }
-`;
-
-
 const ViewInventoryListPageAd = () => {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     loadInventory();
@@ -159,40 +60,37 @@ const ViewInventoryListPageAd = () => {
     
   }
 
+  const filteredInventory = inventory.filter((item) => {
+    const nombre = item.nombre?.toLowerCase() || "";
+    const categoria = item.categoria?.toLowerCase() || "";
+    return (
+      nombre.includes(searchTerm.toLowerCase()) ||
+      categoria.includes(searchTerm.toLowerCase())
+    );
+  });
+
+  console.log("Filter: ", filteredInventory)
+
   return (
     <Container>
-      <Header>GESTIÓN DE INVENTARIO</Header>
+      <BaseHeaderSection
+        headerTitle="GESTIÓN DE INVENTARIO"
+        sectionTitle="Inventario de herramientas"
+        addLabel="Agregar herramienta"
+        placeholder="Buscar por nombre o categoría..."
+        onAdd={() => setShowModal(true)}
+        onFilter={() => console.log("Abrir filtros")}
+        onSearchChange={setSearchTerm}
+      />
 
       <Card>
-        <Menu>
-          <Title>Inventario de herramientas</Title>
-          <AddButton onClick={() => setShowModal(true)}>
-            <FaPlus /> Agregar herramienta
-          </AddButton>
-        </Menu>
-
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <SearchContainer>
-            <SearchBox>
-              <FaSearch color="#555" />
-              <input
-                type="text"
-                placeholder="Buscar por nombre o categoría..."
-              />
-            </SearchBox>
-            <FilterButton>
-              <FaFilter />
-            </FilterButton>
-          </SearchContainer>
-        </div>
-
         {loading ? (
           <p style={{ textAlign: "center", marginTop: "20px" }}>
             Cargando inventario...
           </p>
         ) : (
           <ListInventoryAd
-            inventory={inventory}
+            inventory={filteredInventory}
             onDelete={handleDelete}
             reloadData={loadInventory}
           />
@@ -201,10 +99,10 @@ const ViewInventoryListPageAd = () => {
 
       {showModal && (
         <FormCreateInventory
-          onClose={() => setShowModal(false)} // solo cierra
+          onClose={() => setShowModal(false)}
           onSuccess={() => {
             setShowModal(false);
-            loadInventory(); // recarga solo si se guardó correctamente
+            loadInventory();
           }}
         />
       )}
