@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Checkbox, Button, Pagination } from "@mui/material";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { Checkbox, Pagination } from "@mui/material";
 import useItemsPerPage from "../../hooks/useItemPerPage";
 
 /* ---------- 🎨 Estilos base reutilizables ---------- */
@@ -105,34 +105,14 @@ const ResultMessage = styled.p`
   }
 `;
 
-const ActionsBar = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-
-  @media (max-width: 1280px) {
-    flex-direction: column;
-    gap: 5px;
-    align-items: stretch;
-
-    button {
-      width: 100%;
-      font-size: 12px;
-    }
-  }
-`;
-
 /* ---------- 🧩 Componente BaseTable ---------- */
 const BaseTable = ({
   data = [],
   columns = [],
-  onDelete,
   getBadgeValue,
   emptyMessage = "No hay registros disponibles",
   EditComponent,
-  onSelectRows, // <-- NUEVO PROP
+  onSelectRows, // <-- sigue funcionando individualmente
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -156,40 +136,15 @@ const BaseTable = ({
     });
   };
 
-  const handleSelectAll = (event) => {
-    if (event.target.checked) {
-      setSelectedRows(paginatedData);
-      onSelectRows?.(paginatedData);
-    } else {
-      setSelectedRows([]);
-      onSelectRows?.([]);
-    }
-  };
-
   const handleCloseEdit = () => setSelectedRow(null);
 
   return (
     <>
-      {/* 🔸 Barra de acciones */}
-
       <TableContainer>
         <Table>
           <thead>
             <tr>
-              <th>
-                <Checkbox
-                  color="primary"
-                  onChange={handleSelectAll}
-                  checked={
-                    selectedRows.length > 0 &&
-                    selectedRows.length === paginatedData.length
-                  }
-                  indeterminate={
-                    selectedRows.length > 0 &&
-                    selectedRows.length < paginatedData.length
-                  }
-                />
-              </th>
+              <th></th>
               {columns.map((col, index) => (
                 <th key={index}>{col.header}</th>
               ))}
@@ -257,7 +212,6 @@ const BaseTable = ({
               display: "flex",
               justifyContent: "center",
               marginTop: "1.25rem",
-
               "@media (max-width: 1280px)": {
                 "& .MuiPaginationItem-root": {
                   fontSize: "0.75rem",
@@ -265,8 +219,6 @@ const BaseTable = ({
               },
             }}
           />
-
-
         </>
       )}
 
