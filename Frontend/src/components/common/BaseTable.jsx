@@ -24,12 +24,12 @@ const Table = styled.table`
   th {
     background-color: #bbdefb;
     text-align: center;
-    padding: 4px;
+    padding: 12px;
     font-size: 14px;
     color: #000;
 
     @media (max-width: 1280px) {
-      padding: 0;
+      padding: 6px;
       font-size: 12px;
     }
   }

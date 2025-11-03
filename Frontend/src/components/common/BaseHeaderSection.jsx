@@ -1,4 +1,4 @@
-import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -10,32 +10,17 @@ const Header = styled.header`
   font-weight: bold;
 
   @media (max-width: 1280px) {
-    padding: 1rem;
+    padding: 1.2rem;
     font-size: 18px;
   }
 `;
 
-const OptionsContainer = styled.div`
+const ContainerAdd = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  flex-wrap: wrap;
-  gap: 10px;
+  margin-bottom: 20px;
 `;
-
-const RightButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  @media (max-width: 1280px) {
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 6px;
-  }
-`;
-
 
 const Card = styled.div`
   background-color: white;
@@ -44,66 +29,36 @@ const Card = styled.div`
   padding: 20px;
   width: 85%;
   border-radius: 8px 8px 0 0;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1280px) {
-    margin: 20px 10px 0 10px;
-    padding: 15px;
     width: 95%;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 6px 6px 0 0;
+    margin: 40px 0 0 0;
   }
 `;
 
-const Menu = styled.div`
+const OptionsContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-`;
-
-const Title = styled.h2`
-  font-size: 16px;
-  color: #1565c0;
-  margin-bottom: 10px;
+  gap: 10px;
 
   @media (max-width: 1280px) {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-`;
-
-const AddButton = styled.button`
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: auto;
-  transition: background 0.3s;
-
-  &:hover {
-    background-color: #1565c0;
-  }
-
-  @media (max-width: 1280px) {
-    padding: 6px 10px;
-    font-size: 12px;
-    gap: 4px;
+    gap: 8px;
   }
 `;
 
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: start;
-  gap: 8px;
-  flex: 1;
+  gap: 10px;
+  flex-wrap: wrap;
 
   @media (max-width: 1280px) {
-    flex-wrap: wrap;
-    justify-content: space-between;
     gap: 6px;
   }
 `;
@@ -124,15 +79,45 @@ const SearchBox = styled.div`
     width: 100%;
     font-size: 14px;
     margin-left: 6px;
-
-    @media (max-width: 1280px) {
-      font-size: 12px;
-    }
   }
 
   @media (max-width: 1280px) {
-    max-width: 230px;
     padding: 5px 8px;
+    max-width: 240px;
+
+    input {
+      font-size: 13px;
+    }
+  }
+`;
+
+const Select = styled.select`
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: #1976d2;
+    outline: none;
+  }
+
+  @media (max-width: 1280px) {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 1280px) {
+    gap: 6px;
   }
 `;
 
@@ -148,12 +133,31 @@ const Button = styled.button`
   font-weight: bold;
 
   &:hover {
-    background-color: ${({ active }) => (active ? "#ef9a9a" : "#a0a0a0")};
+    background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
   }
 
   @media (max-width: 1280px) {
-    font-size: 12px;
     padding: 6px 10px;
+    font-size: 13px;
+  }
+`;
+
+const AddButton = styled(Button)`
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #1565c0;
+  }
+
+  @media (max-width: 1280px) {
+    padding: 6px 10px;
+    font-size: 13px;
   }
 `;
 
@@ -163,47 +167,71 @@ const BaseHeaderSection = ({
   addLabel = "Agregar",
   placeholder = "Buscar...",
   onAdd,
-  onFilter,
   onSearchChange,
-  onDeleteSelected,
+  onFilterChange,
+  filters = [],
   onClearFilters,
-  selectedCount = 0, // 👈 cantidad seleccionada
+  onDeleteSelected,
+  selectedCount = 0,
 }) => {
   return (
     <>
       <Header>{headerTitle}</Header>
 
       <Card>
-        <Menu>
-          <Title>{sectionTitle}</Title>
+        <ContainerAdd>
+          <h2
+            style={{
+              color: "#1565c0",
+              fontSize: "18px",
+              marginBottom: "15px",
+              textAlign: "left",
+            }}
+            >
+            {sectionTitle}
+          </h2>
           <AddButton onClick={onAdd}>
             <FaPlus /> {addLabel}
           </AddButton>
-        </Menu>
+        </ContainerAdd>
 
-      <OptionsContainer>
-        <SearchContainer>
-          <SearchBox>
-            <FaSearch color="#555" />
-            <input
-              type="text"
-              placeholder={placeholder}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-            />
-          </SearchBox>
-        </SearchContainer>
+        <OptionsContainer>
+          <SearchContainer>
+            <SearchBox>
+              <FaSearch color="#555" />
+              <input
+                type="text"
+                placeholder={placeholder}
+                onChange={(e) => onSearchChange?.(e.target.value)}
+              />
+            </SearchBox>
 
-        <RightButtons>
-          <Button onClick={onClearFilters}>Limpiar filtros</Button>
-          <Button
-            active={selectedCount > 0}
-            disabled={selectedCount === 0}
-            onClick={onDeleteSelected}
-          >
-            Eliminar facturas seleccionadas
-          </Button>
-        </RightButtons>
-      </OptionsContainer>
+            {filters.map((filter) => (
+              <Select
+                key={filter.key}
+                onChange={(e) => onFilterChange(filter.key, e.target.value)}
+              >
+                <option value="">-{filter.label.toLowerCase()}-</option>
+                {filter.options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </Select>
+            ))}
+          </SearchContainer>
+
+          <ButtonsContainer>
+            <Button onClick={onClearFilters}>Limpiar filtros</Button>
+            <Button
+              active={selectedCount > 0}
+              disabled={selectedCount === 0}
+              onClick={onDeleteSelected}
+            >
+              Eliminar seleccionadas
+            </Button>
+          </ButtonsContainer>
+        </OptionsContainer>
       </Card>
     </>
   );

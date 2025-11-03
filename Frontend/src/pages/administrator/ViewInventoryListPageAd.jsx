@@ -27,7 +27,7 @@ const Card = styled.div`
 
   @media (max-width: 1280px) {
     margin: 0 10px 0 10px;
-    padding: 15px;
+    padding: 0 15px 15px 15px;
     width: 95%;
   }
 `;
@@ -81,15 +81,46 @@ const ViewInventoryListPageAd = () => {
     }
   };
 
+  const [filters, setFilters] = useState({
+    categoria: "",
+    estado: "",
+  });
+
+  const filterOptions = [
+    {
+      key: "categoria",
+      label: "Categoría",
+      options: [...new Set(inventory.map((i) => i.categoria).filter(Boolean))],
+    },
+    {
+      key: "estado",
+      label: "Estado herramienta",
+      options: ["activo", "inactivo"],
+    },
+  ];
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters({ categoria: "", estado: "" });
+    setSearchTerm("");
+  };
 
   const filteredInventory = inventory.filter((item) => {
     const nombre = item.nombre?.toLowerCase() || "";
     const categoria = item.categoria?.toLowerCase() || "";
+    const estado = item.estado_herramienta?.toLowerCase() || "";
+
     return (
-      nombre.includes(searchTerm.toLowerCase()) ||
-      categoria.includes(searchTerm.toLowerCase())
+      (filters.categoria ? categoria === filters.categoria.toLowerCase() : true) &&
+      (filters.estado ? estado === filters.estado.toLowerCase() : true) &&
+      (nombre.includes(searchTerm.toLowerCase()) ||
+        categoria.includes(searchTerm.toLowerCase()))
     );
   });
+
 
   const handleDelete = () => {
 
@@ -105,11 +136,14 @@ const ViewInventoryListPageAd = () => {
         addLabel="Agregar herramienta"
         placeholder="Buscar por nombre o categoría..."
         onAdd={() => setShowModal(true)}
-        onFilter={() => console.log("Abrir filtros")}
         onSearchChange={setSearchTerm}
+        onFilterChange={handleFilterChange}
+        filters={filterOptions}
+        onClearFilters={handleClearFilters}
         onDeleteSelected={handleDeleteSelected}
         selectedCount={selectedIds.length}
       />
+
 
       <Card>
         {loading ? (
