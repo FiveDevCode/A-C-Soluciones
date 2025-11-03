@@ -184,6 +184,7 @@ const BaseHeaderSection = ({
   onClearFilters,
   onDeleteSelected,
   selectedCount = 0,
+  filterComponent,
 }) => {
   return (
     <>
@@ -197,19 +198,11 @@ const BaseHeaderSection = ({
           <AddButton onClick={onAdd}>
             <FaPlus /> {addLabel}
           </AddButton>
+          {filterComponent && <div style={{ marginTop: "10px" }}>{filterComponent}</div>}
         </ContainerAdd>
 
         <OptionsContainer>
           <SearchContainer>
-            <SearchBox>
-              <FaSearch color="#555" />
-              <input
-                type="text"
-                placeholder={placeholder}
-                onChange={(e) => onSearchChange?.(e.target.value)}
-              />
-            </SearchBox>
-
             {filters.map((filter) => (
               <Select
                 key={filter.key}
@@ -226,7 +219,6 @@ const BaseHeaderSection = ({
           </SearchContainer>
 
           <ButtonsContainer>
-            <Button onClick={onClearFilters}>Limpiar filtros</Button>
             <Button
               active={selectedCount > 0}
               disabled={selectedCount === 0}

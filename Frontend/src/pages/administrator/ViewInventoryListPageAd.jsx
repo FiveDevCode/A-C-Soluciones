@@ -5,6 +5,7 @@ import ListInventoryAd from "../../components/administrator/ListInventoyAd";
 import FormCreateInventory from "../../components/administrator/FormCreateInventoryAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { handleDeleteInventory } from "../../controllers/administrator/deleteInventoryAd.controller";
+import FilterInventoryAd from "../../components/administrator/FilterInventoryAd";
 
 
 const Container = styled.div`
@@ -36,8 +37,8 @@ const ViewInventoryListPageAd = () => {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
+  const [filteredInventory, setFilteredInventory] = useState([]);
 
   useEffect(() => {
     loadInventory();
@@ -81,67 +82,21 @@ const ViewInventoryListPageAd = () => {
     }
   };
 
-  const [filters, setFilters] = useState({
-    categoria: "",
-    estado: "",
-  });
-
-  const filterOptions = [
-    {
-      key: "categoria",
-      label: "Categoría",
-      options: [...new Set(inventory.map((i) => i.categoria).filter(Boolean))],
-    },
-    {
-      key: "estado",
-      label: "Estado herramienta",
-      options: ["activo", "inactivo"],
-    },
-  ];
-
-  const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleClearFilters = () => {
-    setFilters({ categoria: "", estado: "" });
-    setSearchTerm("");
-  };
-
-  const filteredInventory = inventory.filter((item) => {
-    const nombre = item.nombre?.toLowerCase() || "";
-    const categoria = item.categoria?.toLowerCase() || "";
-    const estado = item.estado_herramienta?.toLowerCase() || "";
-
-    return (
-      (filters.categoria ? categoria === filters.categoria.toLowerCase() : true) &&
-      (filters.estado ? estado === filters.estado.toLowerCase() : true) &&
-      (nombre.includes(searchTerm.toLowerCase()) ||
-        categoria.includes(searchTerm.toLowerCase()))
-    );
-  });
-
-
-  const handleDelete = () => {
-
-  }
-
-  console.log("Filter: ", filteredInventory)
-
   return (
     <Container>
       <BaseHeaderSection
         headerTitle="GESTIÓN DE INVENTARIO"
         sectionTitle="Inventario de herramientas"
         addLabel="Agregar herramienta"
-        placeholder="Buscar por nombre o categoría..."
         onAdd={() => setShowModal(true)}
-        onSearchChange={setSearchTerm}
-        onFilterChange={handleFilterChange}
-        filters={filterOptions}
-        onClearFilters={handleClearFilters}
         onDeleteSelected={handleDeleteSelected}
         selectedCount={selectedIds.length}
+        filterComponent={
+          <FilterInventoryAd
+            inventory={inventory}
+            onFilteredChange={setFilteredInventory}
+          />
+        }
       />
 
 
@@ -153,7 +108,6 @@ const ViewInventoryListPageAd = () => {
         ) : (
           <ListInventoryAd
             inventory={filteredInventory}
-            onDelete={handleDelete}
             reloadData={loadInventory}
             onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           />

@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import EditInventoryAd from "./EditInventoryAd";
 
-const ListInventoryAd = ({ inventory, onDelete, reloadData, onSelectRows }) => {
+const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
   const columns = [
     { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },
@@ -15,7 +15,6 @@ const ListInventoryAd = ({ inventory, onDelete, reloadData, onSelectRows }) => {
     <BaseTable
       data={inventory}
       columns={columns}
-      onDelete={onDelete}
       getBadgeValue={(row) => row.estado_herramienta}
       emptyMessage="No hay herramientas registradas"
       EditComponent={(props) => (
