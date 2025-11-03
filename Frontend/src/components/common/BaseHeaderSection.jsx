@@ -15,6 +15,18 @@ const Header = styled.header`
   }
 `;
 
+const TitleSection = styled.h2`
+  color: #1565c0;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: left;
+
+  @media (max-width: 1280px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+`;
+
 const ContainerAdd = styled.div`
   display: flex;
   justify-content: space-between;
@@ -70,7 +82,7 @@ const SearchBox = styled.div`
   padding: 6px 10px;
   border-radius: 6px;
   flex: 1;
-  max-width: 280px;
+  width: 270px;
 
   input {
     border: none;
@@ -83,8 +95,7 @@ const SearchBox = styled.div`
 
   @media (max-width: 1280px) {
     padding: 5px 8px;
-    max-width: 240px;
-
+    width: 250px;
     input {
       font-size: 13px;
     }
@@ -180,16 +191,9 @@ const BaseHeaderSection = ({
 
       <Card>
         <ContainerAdd>
-          <h2
-            style={{
-              color: "#1565c0",
-              fontSize: "18px",
-              marginBottom: "15px",
-              textAlign: "left",
-            }}
-            >
+          <TitleSection>
             {sectionTitle}
-          </h2>
+          </TitleSection>
           <AddButton onClick={onAdd}>
             <FaPlus /> {addLabel}
           </AddButton>
