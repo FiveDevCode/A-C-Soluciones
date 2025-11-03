@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 
@@ -75,7 +76,7 @@ const ButtonGroup = styled.div`
 
 const Button = styled.button`
   background-color: ${({ type }) =>
-    type === "clear" ? "#c0c0c0" : type === "delete" ? "#b71c1c" : "#1976d2"};
+    type === "clear" ? "#c0c0c0" : "#1976d2"};
   color: white;
   border: none;
   padding: 8px 14px;
@@ -87,17 +88,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: ${({ type }) =>
-      type === "clear"
-        ? "#b0b0b0"
-        : type === "delete"
-        ? "#d32f2f"
-        : "#1565c0"};
-  }
-
-  &:disabled {
-    background-color: #ddd;
-    color: #888;
-    cursor: not-allowed;
+      type === "clear" ? "#b0b0b0" : "#1565c0"};
   }
 
   @media (max-width: 1280px) {
@@ -107,31 +98,69 @@ const Button = styled.button`
 `;
 
 const BaseFilters = ({
+  data = [],
   placeholder = "Buscar...",
-  filters = [],
-  onSearchChange,
-  onFilterChange,
-  onClearFilters,
+  filterOptions = [],
+  searchKeys = [],
+  onFilteredChange,
 }) => {
+  const [filters, setFilters] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters({});
+    setSearchTerm("");
+  };
+
+  const filteredData = data.filter((item) => {
+    const text = searchTerm.toLowerCase();
+
+    const matchesSearch =
+      searchKeys.length === 0
+        ? true
+        : searchKeys.some((key) =>
+            item[key]?.toString().toLowerCase().includes(text)
+          );
+
+    const matchesFilters = filterOptions.every((filter) => {
+      const filterKey = filter.key;
+      const filterValue = filters[filterKey];
+      if (!filterValue) return true;
+
+      const itemValue = item[filterKey]?.toString().toLowerCase();
+      return itemValue === filterValue.toLowerCase();
+    });
+
+    return matchesSearch && matchesFilters;
+  });
+
+  useEffect(() => {
+    onFilteredChange?.(filteredData);
+  }, [filters, searchTerm, data]);
+
   return (
     <FiltersContainer>
-      {/* 🔍 Campo de búsqueda */}
       <SearchBox>
         <FaSearch color="#555" />
         <input
           type="text"
           placeholder={placeholder}
-          onChange={(e) => onSearchChange?.(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </SearchBox>
 
-      {/* 🧩 Filtros dinámicos */}
-      {filters.map((filter) => (
+      {filterOptions.map((filter) => (
         <Select
           key={filter.key}
-          onChange={(e) => onFilterChange?.(filter.key, e.target.value)}
+          value={filters[filter.key] || ""}
+          onChange={(e) => handleFilterChange(filter.key, e.target.value)}
         >
-          <option value="">Todos los {filter.label.toLowerCase()}</option>
+          <option value="">-{filter.label.toLowerCase()}-</option>
           {filter.options.map((opt) => (
             <option key={opt} value={opt}>
               {opt}
@@ -140,9 +169,8 @@ const BaseFilters = ({
         </Select>
       ))}
 
-      {/* ⚙️ Botones */}
       <ButtonGroup>
-        <Button type="clear" onClick={onClearFilters}>
+        <Button type="clear" onClick={handleClearFilters}>
           Limpiar filtros
         </Button>
       </ButtonGroup>
