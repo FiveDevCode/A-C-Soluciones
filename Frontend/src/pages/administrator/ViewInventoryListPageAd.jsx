@@ -43,20 +43,18 @@ const ViewInventoryListPageAd = () => {
     loadInventory();
   }, []);
 
-  const loadInventory = () => {
+  const loadInventory = async () => {
     setLoading(true);
-    handleGetListInventoryAd()
-      .then((res) => {
-        console.log("Respuesta del backend (inventario):", res);
-        setInventory((res.data || []).slice().reverse());
-      })
-      .catch((err) => {
-        console.error("Error al obtener la lista de inventario:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      const data = await handleGetListInventoryAd();
+      setInventory(data);
+    } catch (err) {
+      console.error("Error cargando inventario:", err);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const handleDeleteSelected = async () => {
     if (selectedIds.length === 0) {
