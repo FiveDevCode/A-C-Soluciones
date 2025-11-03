@@ -124,8 +124,8 @@ const Select = styled.select`
 
 const ButtonsContainer = styled.div`
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-self: start;
 
   @media (max-width: 1280px) {
     gap: 6px;
@@ -177,8 +177,6 @@ const BaseHeaderSection = ({
   sectionTitle = "Listado de registros",
   addLabel = "Agregar",
   onAdd,
-  onFilterChange,
-  filters = [],
   onDeleteSelected,
   selectedCount = 0,
   filterComponent,
@@ -195,24 +193,11 @@ const BaseHeaderSection = ({
           <AddButton onClick={onAdd}>
             <FaPlus /> {addLabel}
           </AddButton>
-          {filterComponent && <div style={{ marginTop: "10px" }}>{filterComponent}</div>}
         </ContainerAdd>
 
         <OptionsContainer>
           <SearchContainer>
-            {filters.map((filter) => (
-              <Select
-                key={filter.key}
-                onChange={(e) => onFilterChange(filter.key, e.target.value)}
-              >
-                <option value="">-{filter.label.toLowerCase()}-</option>
-                {filter.options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </Select>
-            ))}
+            {filterComponent && <div>{filterComponent}</div>}
           </SearchContainer>
 
           <ButtonsContainer>

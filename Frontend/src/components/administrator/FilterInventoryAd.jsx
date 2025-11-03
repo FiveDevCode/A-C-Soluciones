@@ -17,9 +17,9 @@ const FilterInventoryAd = ({ inventory = [], onFilteredChange }) => {
   return (
     <BaseFilters
       data={inventory}
-      placeholder="Buscar por nombre o categoría..."
+      placeholder="Buscar por nombre o codigo..."
       filterOptions={filterOptions}
-      searchKeys={["nombre", "categoria"]}
+      searchKeys={["codigo", "nombre"]}
       onFilteredChange={onFilteredChange}
     />
   );

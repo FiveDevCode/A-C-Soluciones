@@ -8,7 +8,6 @@ const FiltersContainer = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 15px;
-  margin-bottom: 20px;
 
   @media (max-width: 1280px) {
     gap: 10px;
@@ -22,20 +21,20 @@ const SearchBox = styled.div`
   padding: 8px 12px;
   border-radius: 6px;
   flex: 1;
-  max-width: 280px;
+  width: 260px;
   transition: all 0.2s ease;
 
   input {
     border: none;
     outline: none;
     background: transparent;
-    width: 100%;
+    width: 240px;
     font-size: 14px;
     margin-left: 6px;
   }
 
   @media (max-width: 1280px) {
-    max-width: 100%;
+    max-width: 240px;
     padding: 6px 10px;
 
     input {
