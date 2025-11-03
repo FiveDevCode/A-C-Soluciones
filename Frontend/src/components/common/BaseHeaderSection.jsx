@@ -1,4 +1,4 @@
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -176,12 +176,9 @@ const BaseHeaderSection = ({
   headerTitle = "GESTIÓN GENERAL",
   sectionTitle = "Listado de registros",
   addLabel = "Agregar",
-  placeholder = "Buscar...",
   onAdd,
-  onSearchChange,
   onFilterChange,
   filters = [],
-  onClearFilters,
   onDeleteSelected,
   selectedCount = 0,
   filterComponent,
