@@ -1,8 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import { Button } from "@mui/material";
 
-// ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -120,7 +118,6 @@ const StyledButton = styled(Button)`
   }
 `;
 
-// ======== COMPONENTE BASE ========
 const BaseDetailModal = ({ title, fields, onClose }) => {
   return (
     <ModalOverlay>
