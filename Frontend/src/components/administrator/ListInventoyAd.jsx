@@ -1,13 +1,14 @@
 import BaseTable from "../common/BaseTable";
 import EditInventoryAd from "./EditInventoryAd";
 
-const categoryLabels = {
-  manuales: "Manual",
-  electricas: "Eléctrica",
-  medicion: "Medición",
-};
 
 const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
+  const categoryLabels = {
+    manuales: "Manual",
+    electricas: "Eléctrica",
+    medicion: "Medición",
+  };
+  
   const columns = [
     { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },

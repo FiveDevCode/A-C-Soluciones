@@ -24,11 +24,7 @@ const EditInventoryAd = ({ selectedTool, onClose, onSuccess }) => {
   const categorias = [
     { value: "electricas", label: "Eléctricas" },
     { value: "manuales", label: "Manuales" },
-    { value: "medicion", label: "Medición" },
-    { value: "neumaticas", label: "Neumáticas" },
-    { value: "jardineria", label: "Jardinería" },
-    { value: "seguridad", label: "Seguridad" },
-    { value: "otras", label: "Otras" },
+    { value: "medicion", label: "Medición" }
   ];
 
   const estadosHerramienta = [
@@ -65,8 +61,8 @@ const EditInventoryAd = ({ selectedTool, onClose, onSuccess }) => {
       fields={fields}
       initialData={initialData}
       onSubmit={handleSubmit}
-      onClose={onClose}          // 👈 Cierra el modal sin refrescar
-      onSuccess={onSuccess}      // 👈 Refresca lista solo si actualizó
+      onClose={onClose}   
+      onSuccess={onSuccess}  
       successMessage="¡Herramienta actualizada exitosamente!"
     />
   );

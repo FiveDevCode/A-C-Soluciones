@@ -153,6 +153,7 @@ const BaseFilters = ({
         />
       </SearchBox>
 
+
       {filterOptions.map((filter) => (
         <Select
           key={filter.key}
@@ -160,11 +161,21 @@ const BaseFilters = ({
           onChange={(e) => handleFilterChange(filter.key, e.target.value)}
         >
           <option value="">-{filter.label.toLowerCase()}-</option>
-          {filter.options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
+          {filter.options.map((opt, i) => {
+            // 👇 Compatibilidad con strings y objetos
+            if (typeof opt === "object") {
+              return (
+                <option key={opt.value || i} value={opt.value}>
+                  {opt.label || opt.value}
+                </option>
+              );
+            }
+            return (
+              <option key={opt || i} value={opt}>
+                {opt}
+              </option>
+            );
+          })}
         </Select>
       ))}
 
