@@ -6,8 +6,9 @@ import { handleDeletePaymentAccount } from "../../controllers/administrator/dele
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import ListPaymentAccountAd from "../../components/administrator/ListPaymentAccountAd";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
-import FormCreatePaymentAccount from "../../components/administrator/FormCreatePaymentAccountAd"; // <-- pendiente crear
 import ConfirmModal from "../../components/common/ConfirmModal";
+import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
+import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
 
 const Container = styled.div`
   display: flex;
@@ -49,10 +50,8 @@ const PaymentAccountPageAd = () => {
   const loadAccounts = async () => {
     setLoading(true);
     try {
-      const res = await handleGetListPaymentAccountAd();
-      const accountsData = res.data;
+      const accountsData = await handleGetListPaymentAccountAd();
 
-      // Enriquecer con datos del cliente
       const enrichedAccounts = await Promise.all(
         accountsData.map(async (account) => {
           if (account.id_cliente) {
@@ -60,7 +59,7 @@ const PaymentAccountPageAd = () => {
               const clientRes = await handleGetClient(account.id_cliente);
               return {
                 ...account,
-                cliente: clientRes.data,
+                cliente: clientRes.data, // objeto cliente con nombre y apellido
               };
             } catch (err) {
               console.error(`Error obteniendo cliente ${account.id_cliente}:`, err);
@@ -79,6 +78,7 @@ const PaymentAccountPageAd = () => {
       setLoading(false);
     }
   };
+
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
@@ -114,7 +114,7 @@ const PaymentAccountPageAd = () => {
         onDeleteSelected={handleDeleteSelected}
         selectedCount={selectedIds.length}
         filterComponent={
-          <FilterServicesAd
+          <FilterPaymentAccountAd
             accounts={accounts}
             onFilteredChange={setFilteredAccounts}
           />
@@ -136,7 +136,7 @@ const PaymentAccountPageAd = () => {
       </Card>
 
       {showModal && (
-        <FormCreatePaymentAccount
+        <FormCreatePaymentAccountAd
           onClose={() => setShowModal(false)}
           onSuccess={() => {
             setShowModal(false);

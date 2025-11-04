@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { handleCreateInventory } from "../../controllers/accountant/createInventoryAc.controller";
 import BaseFormModal from "../common/BaseFormModal";
 
-const FormCreateInventory = ({ onClose, onSuccess }) => {
+const FormCreateInventoryAd = ({ onClose, onSuccess }) => {
   const categorias = [
     { value: "electricas", label: "Eléctricas" },
     { value: "manuales", label: "Manuales" },
@@ -43,4 +43,4 @@ const FormCreateInventory = ({ onClose, onSuccess }) => {
   );
 };
 
-export default FormCreateInventory;
+export default FormCreateInventoryAd;

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
 import ListInventoryAd from "../../components/administrator/ListInventoyAd";
-import FormCreateInventory from "../../components/administrator/FormCreateInventoryAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { handleDeleteInventory } from "../../controllers/administrator/deleteInventoryAd.controller";
 import FilterInventoryAd from "../../components/administrator/FilterInventoryAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
+import FormCreateInventoryAd from "../../components/administrator/FormCreateInventoryAd";
 
 
 const Container = styled.div`
@@ -116,7 +116,7 @@ const InventoryPageAd = () => {
       </Card>
 
       {showModal && (
-        <FormCreateInventory
+        <FormCreateInventoryAd
           onClose={() => setShowModal(false)}
           onSuccess={() => {
             setShowModal(false);

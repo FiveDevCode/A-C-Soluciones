@@ -70,13 +70,10 @@ import CreateBillPageAd from './pages/administrator/CreateBillPageAd.jsx';
 import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
 import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
 import EditBillAd from './pages/administrator/EditBillAd.jsx';
-import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccountAd.jsx';
 import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
-import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx';
-import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
+import ViewPaymentAccountAd from './components/administrator/ViewPaymentAccountAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
-import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
 import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
 
 
@@ -496,12 +493,6 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/registrar-cuenta" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreatePaymentAccountAd/>
-              </PrivateRoute>
-            } />
-            
             <Route path="/admin/cuentas" element={
               <PrivateRoute roleRequired="administrador">
                 <PaymentAccountPageAd/>
@@ -511,18 +502,6 @@ function AppContent() {
             <Route path="/admin/cuenta/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewPaymentAccountAd/>
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/editar-cuenta/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditPaymentAccountAd/>
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/registrar-inventario" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateInventoryPageAd/>
               </PrivateRoute>
             } />
 
