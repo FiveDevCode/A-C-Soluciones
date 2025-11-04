@@ -6,6 +6,7 @@ import FormCreateInventory from "../../components/administrator/FormCreateInvent
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { handleDeleteInventory } from "../../controllers/administrator/deleteInventoryAd.controller";
 import FilterInventoryAd from "../../components/administrator/FilterInventoryAd";
+import ConfirmModal from "../../components/common/ConfirmModal";
 
 
 const Container = styled.div`
@@ -39,6 +40,7 @@ const ViewInventoryListPageAd = () => {
   const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     loadInventory();
@@ -57,18 +59,15 @@ const ViewInventoryListPageAd = () => {
   };
 
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
       alert("Selecciona al menos un registro para eliminar.");
       return;
     }
+    setShowConfirmModal(true);
+  };
 
-    const confirmDelete = window.confirm(
-      `¿Deseas eliminar ${selectedIds.length} elementos seleccionados?`
-    );
-
-    if (!confirmDelete) return;
-
+  const confirmDelete = async () => {
     try {
       for (const id of selectedIds) {
         await handleDeleteInventory(id);
@@ -79,6 +78,8 @@ const ViewInventoryListPageAd = () => {
     } catch (error) {
       console.error("Error eliminando registros:", error);
       alert("Error al eliminar algunos registros.");
+    } finally {
+      setShowConfirmModal(false);
     }
   };
 
@@ -121,6 +122,13 @@ const ViewInventoryListPageAd = () => {
             setShowModal(false);
             loadInventory();
           }}
+        />
+      )}
+      {showConfirmModal && (
+        <ConfirmModal
+          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setShowConfirmModal(false)}
         />
       )}
     </Container>
