@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
 import ListInventoryAd from "../../components/administrator/ListInventoyAd";
@@ -34,7 +34,7 @@ const Card = styled.div`
   }
 `;
 
-const ViewInventoryListPageAd = () => {
+const InventoryPageAd = () => {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
@@ -135,4 +135,4 @@ const ViewInventoryListPageAd = () => {
   );
 };
 
-export default ViewInventoryListPageAd;
+export default InventoryPageAd;

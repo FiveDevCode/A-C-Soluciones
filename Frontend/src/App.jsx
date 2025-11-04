@@ -3,7 +3,6 @@ import Global from "./Global";
 import LoginPage from './pages/common/LoginPage';
 import styled from 'styled-components';
 import MenuSideAd from './components/administrator/MenuSideAd';
-import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
@@ -72,13 +71,13 @@ import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
 import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
 import EditBillAd from './pages/administrator/EditBillAd.jsx';
 import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccountAd.jsx';
-import ViewPaymentAccountListAd from './pages/administrator/ViewPaymentAccountListAd.jsx';
+import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
 import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx';
 import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
 import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
-import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
+import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
 
 
 
@@ -505,7 +504,7 @@ function AppContent() {
             
             <Route path="/admin/cuentas" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewPaymentAccountListAd/>
+                <PaymentAccountPageAd/>
               </PrivateRoute>
             } />
             
@@ -529,7 +528,7 @@ function AppContent() {
 
             <Route path="/admin/inventario" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewInventoryListPageAd/>
+                <InventoryPageAd/>
               </PrivateRoute>
             } />
             
