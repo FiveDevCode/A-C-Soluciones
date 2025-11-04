@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Checkbox, Pagination } from "@mui/material";
 import useItemsPerPage from "../../hooks/useItemPerPage";
 
@@ -112,11 +112,13 @@ const BaseTable = ({
   getBadgeValue,
   emptyMessage = "No hay registros disponibles",
   EditComponent,
+  ViewComponent,
   onSelectRows, // <-- sigue funcionando individualmente
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedViewRow, setSelectedViewRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
@@ -137,10 +139,11 @@ const BaseTable = ({
   };
 
   const handleCloseEdit = () => setSelectedRow(null);
+  const handleCloseView = () => setSelectedViewRow(null);
 
   return (
     <>
-      <TableContainer>
+            <TableContainer>
         <Table>
           <thead>
             <tr>
@@ -148,16 +151,13 @@ const BaseTable = ({
               {columns.map((col, index) => (
                 <th key={index}>{col.header}</th>
               ))}
-              {EditComponent && <th>Acciones</th>}
+              {(EditComponent || ViewComponent) && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
             {paginatedData.length === 0 ? (
               <tr>
-                <td
-                  colSpan={columns.length + 2}
-                  style={{ padding: "20px", color: "#777" }}
-                >
+                <td colSpan={columns.length + 2} style={{ padding: "20px", color: "#777" }}>
                   {emptyMessage}
                 </td>
               </tr>
@@ -184,11 +184,21 @@ const BaseTable = ({
                       );
                     return <td key={i}>{value || "—"}</td>;
                   })}
-                  {EditComponent && (
+                  {(EditComponent || ViewComponent) && (
                     <td>
-                      <ActionButton onClick={() => setSelectedRow(row)}>
-                        <FontAwesomeIcon icon={faEdit} /> Editar
-                      </ActionButton>
+                      {ViewComponent && (
+                        <ActionButton
+                          view
+                          onClick={() => setSelectedViewRow(row)}
+                        >
+                          <FontAwesomeIcon icon={faEye} /> Ver
+                        </ActionButton>
+                      )}
+                      {EditComponent && (
+                        <ActionButton onClick={() => setSelectedRow(row)}>
+                          <FontAwesomeIcon icon={faEdit} /> Editar
+                        </ActionButton>
+                      )}
                     </td>
                   )}
                 </tr>
@@ -230,6 +240,12 @@ const BaseTable = ({
             handleCloseEdit();
             window.location.reload();
           }}
+        />
+      )}
+      {ViewComponent && selectedViewRow && (
+        <ViewComponent
+          selectedTool={selectedViewRow}
+          onClose={handleCloseView}
         />
       )}
     </>

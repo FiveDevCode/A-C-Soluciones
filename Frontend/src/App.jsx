@@ -79,7 +79,6 @@ import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
 import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
 import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
-import ViewInventoryPageAd from './pages/administrator/ViewInventoryPageAd.jsx';
 
 
 
@@ -531,12 +530,6 @@ function AppContent() {
             <Route path="/admin/inventario" element={
               <PrivateRoute roleRequired="administrador">
                 <ViewInventoryListPageAd/>
-              </PrivateRoute>
-            } />
-            
-            <Route path="/admin/inventario/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewInventoryPageAd/>
               </PrivateRoute>
             } />
             

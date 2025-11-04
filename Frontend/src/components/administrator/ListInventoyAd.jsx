@@ -1,5 +1,6 @@
 import BaseTable from "../common/BaseTable";
 import EditInventoryAd from "./EditInventoryAd";
+import ViewInventoryDetail from "./ViewInventoryDetailAd";
 
 
 const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
@@ -38,6 +39,9 @@ const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
       emptyMessage="No hay herramientas registradas"
       EditComponent={(props) => (
         <EditInventoryAd {...props} onSuccess={reloadData} />
+      )}
+      ViewComponent={(props) => (
+        <ViewInventoryDetail {...props} />
       )}
       onSelectRows={onSelectRows}
     />

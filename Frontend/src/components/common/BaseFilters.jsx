@@ -160,9 +160,8 @@ const BaseFilters = ({
           value={filters[filter.key] || ""}
           onChange={(e) => handleFilterChange(filter.key, e.target.value)}
         >
-          <option value="">-{filter.label.toLowerCase()}-</option>
+          <option value="">-{filter.label}-</option>
           {filter.options.map((opt, i) => {
-            // 👇 Compatibilidad con strings y objetos
             if (typeof opt === "object") {
               return (
                 <option key={opt.value || i} value={opt.value}>
