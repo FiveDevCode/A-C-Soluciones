@@ -21,8 +21,8 @@ import { handleGetService } from '../../controllers/administrator/getServiceAd.c
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 import { FaExclamationTriangle } from 'react-icons/fa'; 
 
-const API_KEY = import.meta.env.VITE_API_URL;
-
+const API_KEY = import.meta.env.VITE_API_URL ||
+'http://localhost:8000';
 
 const Container = styled.div`
   padding-top: 0.5rem;

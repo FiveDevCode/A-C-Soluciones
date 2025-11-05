@@ -3,7 +3,6 @@ import Global from "./Global";
 import LoginPage from './pages/common/LoginPage';
 import styled from 'styled-components';
 import MenuSideAd from './components/administrator/MenuSideAd';
-import HeaderBar from './components/common/HeaderBar';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
 import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
@@ -71,17 +70,10 @@ import CreateBillPageAd from './pages/administrator/CreateBillPageAd.jsx';
 import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
 import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
 import EditBillAd from './pages/administrator/EditBillAd.jsx';
-import { CreatePaymentAccountAd } from './pages/administrator/CreatePaymentAccountAd.jsx';
-import ViewPaymentAccountListAd from './pages/administrator/ViewPaymentAccountListAd.jsx';
-import ViewPaymentAccountAd from './pages/administrator/ViewPaymentAccountAd.jsx';
-import { EditPaymentAccountAd } from './pages/administrator/EditPaymentAccountAd.jsx';
+import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
-import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.jsx';
-import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
-import ViewInventoryPageAd from './pages/administrator/ViewInventoryPageAd.jsx';
-import { EditInventoryPageAd } from './pages/administrator/EditInventoryPageAd.jsx';
-import HistoryServicesPage from './pages/client/HistoryServicesPage.jsx';
+import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
 
 
 
@@ -92,6 +84,7 @@ const Container = styled.div`
   ` : `
     display: flex;
     width: 100%;
+    height: 100vh;
   `}
 `;
 
@@ -105,7 +98,6 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0rem 8rem;
     gap: 2.5rem;
     margin-bottom: 1rem;
   `}
@@ -155,7 +147,7 @@ function AppContent() {
         {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
         {!hideMenuAndHeader && role === 'Contador' && <MenuSideAc />}
         <Content hideStyles={hideMenuAndHeader}>
-          {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />}
+          {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
           {isCliente && !isPublicPage && <HeaderBarCl />}
 
           {/* 
@@ -506,56 +498,18 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/registrar-cuenta" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreatePaymentAccountAd/>
-              </PrivateRoute>
-            } />
-            
             <Route path="/admin/cuentas" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewPaymentAccountListAd/>
+                <PaymentAccountPageAd/>
               </PrivateRoute>
             } />
             
-            <Route path="/admin/cuenta/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewPaymentAccountAd/>
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/editar-cuenta/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditPaymentAccountAd/>
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/registrar-inventario" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateInventoryPageAd/>
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/inventario" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewInventoryListPageAd/>
+                <InventoryPageAd/>
               </PrivateRoute>
             } />
             
-            <Route path="/admin/inventario/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewInventoryPageAd/>
-              </PrivateRoute>
-            } />
-            
-            <Route path="/admin/editar-inventario/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditInventoryPageAd/>
-              </PrivateRoute>
-            } />
-
-            
-
 
             <Route path="*" element={<ErrorPage/>} />
             
