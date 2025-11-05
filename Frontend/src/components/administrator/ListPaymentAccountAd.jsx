@@ -1,6 +1,6 @@
 import BaseTable from "../common/BaseTable";
 import EditPaymentAccountAd from "./EditPaymentAccountAd";
-import ViewPaymentAccountDetailAd from "./ViewPaymentAccountAd";
+import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 
 const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
   const columns = [
@@ -19,7 +19,6 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
       accessor: "fecha_registro",
       render: (value) => (value ? value.substring(0, 10) : "—"),
     },
-    { header: "Estado", accessor: "estado" },
   ];
 
   return (

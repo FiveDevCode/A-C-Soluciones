@@ -119,6 +119,7 @@ const StyledButton = styled(Button)`
 `;
 
 const BaseDetailModal = ({ title, fields, onClose }) => {
+  
   return (
     <ModalOverlay>
       <ModalContent>

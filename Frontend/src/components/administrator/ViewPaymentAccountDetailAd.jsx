@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import BaseDetailModal from "../common/BaseDetailModal";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
-import accountLogo from "../../assets/administrator/registerPaymentAccount.png";
 
-const ViewPaymentAccountDetailAd = ({ selectedAccount, onClose }) => {
+const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
   const [clientData, setClientData] = useState(null);
 
   useEffect(() => {
     const fetchClient = async () => {
-      if (selectedAccount?.id_cliente) {
+      if (selected?.id_cliente) {
         try {
-          const response = await handleGetClient(selectedAccount.id_cliente);
+          console.log(selected.id_cliente);
+          const response = await handleGetClient(selected.id_cliente);
           setClientData(response.data);
         } catch (error) {
           console.error("Error al cargar cliente asociado:", error);
@@ -18,15 +18,15 @@ const ViewPaymentAccountDetailAd = ({ selectedAccount, onClose }) => {
       }
     };
     fetchClient();
-  }, [selectedAccount]);
+  }, [selected]);
 
-  if (!selectedAccount) return null;
+  if (!selected) return null;
 
   const fields = [
-    { label: "Número de cuenta", value: selectedAccount.numero_cuenta },
+    { label: "Número de cuenta", value: selected.numero_cuenta },
     {
       label: "Fecha de registro",
-      value: new Date(selectedAccount.fecha_registro).toLocaleDateString(
+      value: new Date(selected.fecha_registro).toLocaleDateString(
         "es-ES",
         {
           year: "numeric",
@@ -35,7 +35,7 @@ const ViewPaymentAccountDetailAd = ({ selectedAccount, onClose }) => {
         }
       ),
     },
-    { label: "NIT", value: selectedAccount.nit },
+    { label: "NIT", value: selected.nit },
     {
       label: "Cliente asociado",
       value: clientData
@@ -46,12 +46,9 @@ const ViewPaymentAccountDetailAd = ({ selectedAccount, onClose }) => {
 
   return (
     <BaseDetailModal
-      title={`Detalle de cuenta de pago #${selectedAccount.numero_cuenta}`}
-      image={accountLogo}
+      title={`Detalle de cuenta de pago #${selected.numero_cuenta}`}
       fields={fields}
       onClose={onClose}
-      showDelete // opcional: si tu BaseDetailModal admite acción de eliminación
-      entityType="cuenta de pago" // texto para confirmación si aplica
     />
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import BaseDetailModal from "../common/BaseDetailModal";
 
 const categoryLabels = {
@@ -7,21 +6,22 @@ const categoryLabels = {
   medicion: "Medición",
 };
 
-const ViewInventoryDetail = ({ selectedTool, onClose }) => {
-  if (!selectedTool) return null;
+const ViewInventoryDetail = ({ selected, onClose }) => {
+  console.log(selected)
+  if (!selected) return null;
 
   const fields = [
-    { label: "Código", value: selectedTool.codigo },
-    { label: "Nombre", value: selectedTool.nombre },
+    { label: "Código", value: selected.codigo },
+    { label: "Nombre", value: selected.nombre },
     {
       label: "Categoría",
-      value: categoryLabels[selectedTool.categoria] || selectedTool.categoria,
+      value: categoryLabels[selected.categoria] || selected.categoria,
     },
-    { label: "Cantidad disponible", value: selectedTool.cantidad_disponible },
-    { label: "Estado", value: selectedTool.estado, isBadge: true },
+    { label: "Cantidad disponible", value: selected.cantidad_disponible },
+    { label: "Estado", value: selected.estado, isBadge: true },
     {
       label: "Estado de la herramienta",
-      value: selectedTool.estado_herramienta,
+      value: selected.estado_herramienta,
     },
   ];
 

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -234,7 +234,7 @@ const BaseTable = ({
 
       {EditComponent && selectedRow && (
         <EditComponent
-          selectedTool={selectedRow}
+          selected={selectedRow}
           onClose={handleCloseEdit}
           onSuccess={() => {
             handleCloseEdit();
@@ -244,7 +244,7 @@ const BaseTable = ({
       )}
       {ViewComponent && selectedViewRow && (
         <ViewComponent
-          selectedTool={selectedViewRow}
+          selected={selectedViewRow}
           onClose={handleCloseView}
         />
       )}

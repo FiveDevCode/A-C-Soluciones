@@ -5,7 +5,7 @@ import { handleGetListClient } from "../../controllers/common/getListClient.cont
 import accountIcon from "../../assets/administrator/registerPaymentAccount.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
-const EditPaymentAccountAd = ({ selectedAccount, onClose, onSuccess }) => {
+const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
   const [accountData, setAccountData] = useState(null);
   const [clientList, setClientList] = useState([]);
 
@@ -13,7 +13,7 @@ const EditPaymentAccountAd = ({ selectedAccount, onClose, onSuccess }) => {
     const fetchData = async () => {
       try {
         const [accountRes, clientsRes] = await Promise.all([
-          handleGetPaymentAccountAd(selectedAccount.id),
+          handleGetPaymentAccountAd(selected.id),
           handleGetListClient(),
         ]);
         setAccountData(accountRes.data);
@@ -22,8 +22,8 @@ const EditPaymentAccountAd = ({ selectedAccount, onClose, onSuccess }) => {
         console.error("Error al cargar datos de cuenta:", error);
       }
     };
-    if (selectedAccount?.id) fetchData();
-  }, [selectedAccount]);
+    if (selected?.id) fetchData();
+  }, [selected]);
 
   if (!accountData) return null;
 
@@ -49,7 +49,7 @@ const EditPaymentAccountAd = ({ selectedAccount, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdatePaymentAccountAd(selectedAccount.id, data);
+    await handleUpdatePaymentAccountAd(selected.id, data);
   };
 
   return (

@@ -4,20 +4,20 @@ import { handleUpdateInventoryAd } from "../../controllers/administrator/updateI
 import inventoryIcon from "../../assets/administrator/registerInventoryAd.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
-const EditInventoryAd = ({ selectedTool, onClose, onSuccess }) => {
+const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
   const [toolData, setToolData] = useState(null);
 
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const response = await handleGetInventoryAd(selectedTool.id);
+        const response = await handleGetInventoryAd(selected.id);
         setToolData(response.data);
       } catch (error) {
         console.error("Error al cargar herramienta:", error);
       }
     };
-    if (selectedTool?.id) fetchTool();
-  }, [selectedTool]);
+    if (selected?.id) fetchTool();
+  }, [selected]);
 
   if (!toolData) return null; // no mostrar nada mientras carga
 
@@ -51,7 +51,7 @@ const EditInventoryAd = ({ selectedTool, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateInventoryAd(selectedTool.id, data);
+    await handleUpdateInventoryAd(selected.id, data);
   };
 
   return (

@@ -71,7 +71,6 @@ import ViewBillListPageAd from './pages/administrator/ViewBillListPageAd.jsx';
 import ViewBillPageAd from './pages/administrator/ViewBillPageAd.jsx';
 import EditBillAd from './pages/administrator/EditBillAd.jsx';
 import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
-import ViewPaymentAccountAd from './components/administrator/ViewPaymentAccountAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
 import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
@@ -499,12 +498,6 @@ function AppContent() {
               </PrivateRoute>
             } />
             
-            <Route path="/admin/cuenta/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewPaymentAccountAd/>
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/inventario" element={
               <PrivateRoute roleRequired="administrador">
                 <InventoryPageAd/>
