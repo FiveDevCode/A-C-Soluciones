@@ -7,8 +7,8 @@ import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 
-const API_KEY = import.meta.env.VITE_API_URL;
-
+const API_KEY = import.meta.env.VITE_API_URL ||
+'http://localhost:8000';
 
 const ContainerNoti = styled.div`
   display: flex;

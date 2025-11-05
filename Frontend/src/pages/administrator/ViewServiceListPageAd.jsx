@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import ListVisitAd from "../../components/administrator/ListVisitAd";
 import styled from "styled-components";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
-import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
 import ListServiceAd from "../../components/administrator/ListServiceAd";
 
