@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
-import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import { handleGetListToken } from "../../controllers/common/getListToken.controller";
-import ListReportAd from "../../components/administrator/ListReportAd";
 import { jwtDecode } from "jwt-decode";
 import { handleGetVisitAssign } from "../../controllers/technical/getVisitAssignTc.controller";
 import ListReportTc from "../../components/technical/ListReportTc";

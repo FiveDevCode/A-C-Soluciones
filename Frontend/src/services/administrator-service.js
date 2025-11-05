@@ -492,6 +492,15 @@ export const getListInventory = () => {
 };
 
 
+const deleteInventory = (id) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/inventario/${id}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -534,6 +543,7 @@ export const administratorService = {
   deleteAccount,
   getListInventory,
   getInventory,
-  updateInventory
+  updateInventory,
+  deleteInventory
   
 }
