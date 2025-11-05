@@ -22,10 +22,7 @@ export class HistorialServicesRepository {
 
       const historialFormateado = historial.map(item => ({
         ...item,
-        fecha: new Date(item.fecha).toLocaleString('es-CO', {
-          dateStyle: 'medium',
-          timeStyle: 'short'
-        })
+        fecha: item.fecha ? new Date(item.fecha).toISOString() : null
       }));
 
       return historialFormateado;

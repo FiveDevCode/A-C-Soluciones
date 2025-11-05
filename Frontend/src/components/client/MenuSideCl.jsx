@@ -1,206 +1,227 @@
 import Logo from '../common/Logo';
 import logo from '../../assets/common/logoA&C.png';
-import { Divider } from '@mui/material';
+import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faHouse, 
-  faFile, 
-  faPaperPlane, 
-  faDiagramProject, 
-  faClockRotateLeft, 
-  faGear, 
-  faArrowRightFromBracket,
-  faWrench,
-  faHistory,
-} from '@fortawesome/free-solid-svg-icons';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { faHouse, faArrowRightFromBracket, faWrench, faHistory} from '@fortawesome/free-solid-svg-icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { PanelLeft } from 'lucide-react';
+import { useMenu } from './MenuContext';
 
 const SectionMenu = styled.section`
-  display: flex;
-  flex-direction: row;
-`
-
-const ContainerMenu = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
-  width: 16%;
-  padding: 0.725rem;
-  gap: 1rem;
-  padding-bottom: 1.5rem;
-  min-width: 210px;
-  max-width: 250px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0 10px 10px 0;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  height: 100%;
-  background-color: #FFFFFF;
-  z-index: 1500;
-
-`
-
-const TitleMenu = styled.h1`
-  font-size: 1rem;
-  font-weight: 300;
-  color: #505050;
-
-`
-
-const ContainerAllOption = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.725rem;
-
-`
-const ContainerOption = styled(Link)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  padding: 0.5rem;
-  color: #000000;
-
-  & > svg {
-    min-width: 32px;
-    text-align: center;
-  }
-
-  &:hover {
-    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
-
-    h2 {
-      font-weight: bold;
-    }
-
-    svg {
-      color: #000000;
-      stroke-width: 0;
-
-    }
-  }
-  
-`
-const TitleOption = styled.h2`
-  font-size: 1rem;
-  font-weight: normal;
-  color: #505050;
-
-`
-const ContainerAllConfiguration = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-end;
-  gap: 0.725rem;
-
-`
-const IconOption = styled(FontAwesomeIcon)`
-  color: white;
-  stroke: black;
-  stroke-width: 15px;
-  font-size: 32px;
-`
-
-const ContainerOptionClose = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #FFFFFF;
-  gap: 0.5rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  padding: 0.5rem;
-  color: #000000;
-
-  & > svg {
-    min-width: 32px;
-    text-align: center;
-  }
-
-  &:hover {
-    background: linear-gradient(90deg, #e4d9ff 0%, #f5f5ff 100%);
-    cursor: pointer;
-
-    h2 {
-      font-weight: bold;
-    }
-
-    svg {
-      color: #000000;
-      stroke-width: 0;
-
-    }
-  }
-
-`
-const ScreenFaint = styled.div`
-  background-color: rgba(0,0,0,0.35);
-  width: 100vw;
+  justify-content: space-between;
+  width: ${(props) => (props.$collapsed ? '80px' : '220px')};
+  background-color: #ffffff;
+  color: #1e1f23;
   height: 100vh;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
+  padding: 0.5rem 0;
+  box-shadow: inset -1px 0px 0px rgba(0,0,0,0.1);
+  transition: width 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
 
-`
+  @media (max-width: 1280px) {
+    width: ${(props) => (props.$collapsed ? '60px' : '180px')};
+    padding: 0.25rem 0;
+  }
+`;
 
-const MenuSideCl = ({ onClose }) => {
-  
+const ContainerMenu = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: ${(props) => (props.$collapsed ? 'center' : 'space-between')};
+  flex-direction: row;
+  width: 100%;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 1280px) {
+    padding: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+`;
+
+const LogoContainer = styled(Link)`
+  display: ${(props) => (props.$collapsed ? 'none' : 'flex')};
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+  flex: 1;
+
+  @media (max-width: 1280px) {
+    padding: 0.25rem 0;
+  }
+`;
+
+const MenuGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+  overflow-y: auto;
+  flex: 1;
+`;
+
+const MenuTitle = styled.span`
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0.5rem 0;
+  display: ${(props) => (props.$collapsed ? 'none' : 'block')};
+  padding-left: 0.25rem;
+
+  @media (max-width: 1280px) {
+    font-size: 0.65rem;
+    margin: 0.25rem 0;
+  }
+`;
+
+const MenuOption = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => (props.$collapsed ? '0' : '0.8rem')};
+  justify-content: ${(props) => (props.$collapsed ? 'center' : 'flex-start')};
+  padding: 0.75rem;
+  text-decoration: none;
+  color: #1e1f23;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #f2f2f2;
+    color: #000;
+  }
+
+  svg {
+    font-size: 1.1rem;
+    min-width: 20px;
+
+    @media (max-width: 1280px) {
+      font-size: 0.95rem;
+    }
+  }
+
+  span {
+    display: ${(props) => (props.$collapsed ? 'none' : 'inline')};
+    white-space: nowrap;
+    
+    @media (max-width: 1280px) {
+      font-size: 0.8rem;
+    }
+  }
+`;
+
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => (props.$collapsed ? '0' : '0.8rem')};
+  justify-content: ${(props) => (props.$collapsed ? 'center' : 'flex-start')};
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  color: #1e1f23;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: #f2f2f2;
+    color: #000;
+  }
+
+  svg {
+    font-size: 1.1rem;
+    min-width: 20px;
+
+    @media (max-width: 1280px) {
+      font-size: 0.95rem;
+    }
+  }
+
+  span {
+    display: ${(props) => (props.$collapsed ? 'none' : 'inline')};
+    white-space: nowrap;
+
+    @media (max-width: 1280px) {
+      font-size: 0.8rem;
+    }
+  }
+`;
+
+const CollapseButton = styled(IconButton)`
+  background-color: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f2f2f2 !important;
+  }
+`;
+
+const MenuSideCl = () => {
   const navigate = useNavigate();
+  const { collapsed, setCollapsed } = useMenu();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
-    navigate("/");
+    navigate('/');
   };
 
-  return (
-    <SectionMenu>
-      <ContainerMenu>
-        <Link to="/cliente/inicio"><Logo src={logo} size="157px"/></Link>
-        <TitleMenu>Menu</TitleMenu>
-        <Divider/> 
-        <ContainerAllOption>
-          <ContainerOption to="/cliente/inicio">
-            <IconOption 
-              icon={faHouse}           
-            />
-            <TitleOption>Inicio</TitleOption>
-          </ContainerOption>
-          <ContainerOption to="/cliente/servicios">
-            <IconOption 
-              icon={faWrench} 
-            />
-            <TitleOption>Servicios</TitleOption>
-          </ContainerOption>
-          <ContainerOption to="/cliente/historial">
-            <IconOption 
-              icon={faHistory} 
-            />
-            <TitleOption>Historia</TitleOption>
-          </ContainerOption>
-        </ContainerAllOption>
-        <ContainerAllConfiguration>
-          <Divider/> 
-          <ContainerOptionClose onClick={handleLogout}>
-            <IconOption 
-              icon={faArrowRightFromBracket} 
-              
-            />
-            <TitleOption>Salir</TitleOption>
-          </ContainerOptionClose>
-        </ContainerAllConfiguration>
-      </ContainerMenu>
-      <ScreenFaint onClick={onClose}/>
+  const options = [
+    { to: '/cliente/inicio', icon: faHouse, label: 'Inicio' },
+    { to: '/cliente/servicios', icon: faWrench, label: 'Servicios' },
+    { to: '/cliente/historial', icon: faHistory, label: 'Historial' },
+  ];
 
+  return (
+    <SectionMenu $collapsed={collapsed}>
+      <div>
+        <ContainerMenu $collapsed={collapsed}>
+          <CollapseButton onClick={() => setCollapsed(!collapsed)} size="small">
+            <PanelLeft size={22} color="black" strokeWidth={1} />
+          </CollapseButton>
+
+          <LogoContainer to="/cliente/inicio" $collapsed={collapsed}>
+            <Logo src={logo} size={collapsed ? '45px' : '100px'} />
+          </LogoContainer>
+        </ContainerMenu>
+        
+        <MenuGroup>
+          <MenuTitle $collapsed={collapsed}>Principal</MenuTitle>
+          {options.map((opt) => (
+            <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
+              <MenuOption to={opt.to} $collapsed={collapsed}>
+                <FontAwesomeIcon icon={opt.icon} />
+                <span>{opt.label}</span>
+              </MenuOption>
+            </Tooltip>
+          ))}
+        </MenuGroup>
+      </div>
+
+      <div style={{ padding: '0 0.5rem' }}>
+        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.5rem' }} />
+        <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
+          <LogoutButton onClick={handleLogout} $collapsed={collapsed}>
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            <span>Salir</span>
+          </LogoutButton>
+        </Tooltip>
+      </div>
     </SectionMenu>
-  )
-}
+  );
+};
 
 export default MenuSideCl;
