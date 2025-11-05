@@ -11,7 +11,8 @@ import {
   faClockRotateLeft, 
   faGear, 
   faArrowRightFromBracket,
-  faWrench
+  faWrench,
+  faHistory,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
@@ -177,6 +178,12 @@ const MenuSideCl = ({ onClose }) => {
               icon={faWrench} 
             />
             <TitleOption>Servicios</TitleOption>
+          </ContainerOption>
+          <ContainerOption to="/cliente/historial">
+            <IconOption 
+              icon={faHistory} 
+            />
+            <TitleOption>Historia</TitleOption>
           </ContainerOption>
         </ContainerAllOption>
         <ContainerAllConfiguration>

@@ -81,6 +81,7 @@ import CreateInventoryPageAd from './pages/administrator/CreateInventoryPageAd.j
 import ViewInventoryListPageAd from './pages/administrator/ViewInventoryListPageAd.jsx';
 import ViewInventoryPageAd from './pages/administrator/ViewInventoryPageAd.jsx';
 import { EditInventoryPageAd } from './pages/administrator/EditInventoryPageAd.jsx';
+import HistoryServicesPage from './pages/client/HistoryServicesPage.jsx';
 
 
 
@@ -187,6 +188,12 @@ function AppContent() {
             <Route path="/cliente/servicios" element={
               <PrivateRoute roleRequired="cliente">
                 <ServicesAllPageCl />
+              </PrivateRoute>
+            } />
+
+            <Route path="/cliente/historial" element={
+              <PrivateRoute roleRequired="cliente">
+                <HistoryServicesPage />
               </PrivateRoute>
             } />
 
