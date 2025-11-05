@@ -3,116 +3,206 @@ import { Alert, Button, Collapse, Divider, IconButton, Skeleton, TextField } fro
 import { useEffect, useState } from 'react';
 import adminProfile from "../../assets/administrator/admin.png"
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { handleUpdateClient } from '../../controllers/administrator/updateClient.controller';
 import { handleGetClient } from '../../controllers/administrator/getClientAd.controller';
 import { jwtDecode } from 'jwt-decode';
+import MenuSideCl from "../../components/client/MenuSideCl";
+import HeaderBarCl from "../../components/client/HeaderBarCl";
+import { useMenu } from '../../components/client/MenuContext'; 
 
+const PageContainer = styled.div`
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
+  margin-top: 145px;
+  min-height: calc(100vh - 145px);
+  transition: margin-left 0.3s ease;
+  
+
+  @media screen and (max-width: 1280px) {
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
+  }
+`;
 
 const Main = styled.main`
   background: white;
-  padding: 2rem;
-  width: 80%;
-  padding: 2rem 8rem;
-  padding-bottom: 4rem;
+  padding: 3rem 4rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  
+
+  @media screen and (max-width: 1520px) {
+    padding: 2.5rem 3rem;
+    margin: 1.5rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    padding: 2rem 2rem;
+    margin: 1rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  width: 600px;
-`
+  gap: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto;
 
+  @media screen and (max-width: 768px) {
+    gap: 1.25rem;
+  }
+`;
 
 const ProfileInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
 `;
 
 const Avatar = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  border: 4px solid #91cdffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
+`;
+
+const UserName = styled.h2`
+  font-size: 1.75rem;
+  color: #1e293b;
+  font-weight: 600;
+  margin: 0;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const TitleHelp = styled.h4`
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-    
-`
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #334155;
+  font-weight: 600;
 
+  @media screen and (max-width: 768px) {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+`;
 
 const ContainerButton = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 
   & > *:first-child {
-    width: 45%;
+    flex: 2;
+    background-color: #0b91ffff;
+    
+    &:hover {
+      background-color: #60a5fa;
+    }
 
-  }
-  & > *:nth-child(2)  {
-    width: 35%;
-    background-color:#17A2B8;
+    &:disabled {
+      background-color: #e2e8f0;
+      color: #94a3b8;
+    }
   }
 
-`
+  & > *:nth-child(2) {
+    flex: 1;
+    background-color: #17A2B8;
+
+    &:hover {
+      background-color: #17A2B8;
+    }
+  }
+`;
+
 const SkeletonButton = styled(Skeleton)`
-  align-self: flex-end;
   &.MuiSkeleton-root {
-    margin-right: 4rem;
-
+    border-radius: 4px;
   }
+`;
 
-`
 const ContainerButtonSkeleton = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
 
   & > *:first-child {
-    width: 45%;
-
+    flex: 2;
   }
-  & > *:nth-child(2)  {
-    width: 35%;
+
+  & > *:nth-child(2) {
+    flex: 1;
   }
-`
+`;
 
-const SkeletonLoader = () => (
-  <Main>
-    <ProfileInfo>
-      <Skeleton variant="circular" width={120} height={120} />
-      <Skeleton variant="text" width={300} height={40} />
-    </ProfileInfo>
+const SkeletonLoader = () => {
+  const { collapsed } = useMenu();
+  
+  return (
+    <>
+      <MenuSideCl />
+      <HeaderBarCl />
+      <PageContainer $collapsed={collapsed}>
+        <Main>
+          <ProfileInfo>
+            <Skeleton variant="circular" width={120} height={120} />
+            <Skeleton variant="text" width={300} height={40} />
+          </ProfileInfo>
 
-    <Divider />
-    <TitleHelp>
-      <Skeleton variant="text" width={200} height={30} />
-    </TitleHelp>
+          <Divider />
+          <TitleHelp>
+            <Skeleton variant="text" width={200} height={30} />
+          </TitleHelp>
 
-    <Form>
-      {[...Array(6)].map((_, index) => (
-        <Skeleton
-          key={index}
-          variant="rectangular"
-          height={56}
-          sx={{ borderRadius: "4px", backgroundColor: "#e0e0e0" }}
-        />
-      ))}
+          <Form>
+            {[...Array(6)].map((_, index) => (
+              <Skeleton
+                key={index}
+                variant="rectangular"
+                height={56}
+                sx={{ borderRadius: "8px", backgroundColor: "#f1f5f9" }}
+              />
+            ))}
 
-      <ContainerButtonSkeleton>
-        <SkeletonButton variant="rectangular" height={36} />
-        <SkeletonButton variant="rectangular" height={36} />
-      </ContainerButtonSkeleton>
-    </Form>
-  </Main>
-);
+            <ContainerButtonSkeleton>
+              <SkeletonButton variant="rectangular" height={42} />
+              <SkeletonButton variant="rectangular" height={42} />
+            </ContainerButtonSkeleton>
+          </Form>
+        </Main>
+      </PageContainer>
+    </>
+  );
+};
 
 const EditProfileCl = () => {
-
   const navigate = useNavigate();
+  const { collapsed } = useMenu();
 
   const [userClient, setUserClient] = useState();
   const [IdCard, setIdCard] = useState("");
@@ -153,11 +243,10 @@ const EditProfileCl = () => {
         address
       );
 
-      setFieldErrors("");
+      setFieldErrors({});
       setErrorMsg("");
       setShowSuccess(true);
 
-      
       setTimeout(() => {
         navigate(`/cliente/perfil`);
       }, 3000);
@@ -167,7 +256,7 @@ const EditProfileCl = () => {
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
-        setErrorMsg(err.response.data.message);
+        setErrorMsg(err.response?.data?.message || "Error al actualizar el perfil");
       }
     } finally {
       setIsSubmitting(false);
@@ -178,6 +267,7 @@ const EditProfileCl = () => {
     const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token); 
     const id = decoded.id;
+    
     handleGetClient(id)
       .then((res) => {
         const data = res.data;
@@ -198,6 +288,10 @@ const EditProfileCl = () => {
           telefono: data.telefono || ""
         });
       })
+      .catch((err) => {
+        console.error("Error al cargar el cliente:", err);
+        setErrorMsg("Error al cargar los datos del perfil");
+      });
   }, []);
 
   const hasChanges = () => {
@@ -211,133 +305,169 @@ const EditProfileCl = () => {
     );
   };
 
-
   if (!userClient) {
     return <SkeletonLoader />
   }
 
   return (
-    <Main>
-      <ProfileInfo>
-        <Avatar
-          src={adminProfile}
-          alt="Avatar"
-        />
-        <h2>{`${userClient.nombre} ${userClient.apellido}`}</h2>
-      </ProfileInfo>      
+    <>
+      <MenuSideCl />
+      <HeaderBarCl />
+      <PageContainer $collapsed={collapsed}>
+        <Main>
+          <ProfileInfo>
+            <Avatar
+              src={adminProfile}
+              alt="Avatar del usuario"
+            />
+            <UserName>{`${userClient.nombre} ${userClient.apellido}`}</UserName>
+          </ProfileInfo>      
 
-      <Divider />
+          <Divider sx={{ my: 2 }} />
 
-      <TitleHelp>Informacion personal</TitleHelp>
-      <Form onSubmit={handleSubmit}>
-        <TextField 
-          label="Cedula" 
-          fullWidth 
-          size="medium" 
-          value={IdCard} 
-          onChange={handleChange(setIdCard)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.numero_de_cedula)}
-          helperText={fieldErrors.numero_de_cedula}
-        />
-        <TextField 
-          label="Nombre" 
-          fullWidth 
-          size="medium" 
-          value={nameUser} 
-          onChange={handleChange(setNameUser)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.nombre)}
-          helperText={fieldErrors.nombre}
-        />
-        <TextField 
-          label="Apellido" 
-          fullWidth 
-          size="medium" 
-          value={lastName} 
-          onChange={handleChange(setLastName)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.apellido)}
-          helperText={fieldErrors.apellido}
-        />
-        <TextField 
-          label="Correo electrónico" 
-          fullWidth 
-          size="medium" 
-          value={email} 
-          onChange={handleChange(setEmail)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.correo_electronico)}
-          helperText={fieldErrors.correo_electronico}
-        /> 
-        <TextField 
-          label="Dirrecion" 
-          fullWidth 
-          size="medium" 
-          value={address} 
-          onChange={handleChange(setAddress)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.direccion)}
-          helperText={fieldErrors.direccion}
-        /> 
-        <TextField 
-          label="Celular" 
-          fullWidth 
-          size="medium" 
-          value={phone} 
-          onChange={handleChange(setPhone)}
-          sx={{ backgroundColor: 'white' }}
-          error={Boolean(fieldErrors.telefono)}
-          helperText={fieldErrors.telefono}
-        /> 
+          <TitleHelp>Información personal</TitleHelp>
+          <Form onSubmit={handleSubmit}>
+            <TextField 
+              label="Cédula" 
+              fullWidth 
+              size="medium" 
+              value={IdCard} 
+              onChange={handleChange(setIdCard)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.numero_de_cedula)}
+              helperText={fieldErrors.numero_de_cedula}
+            />
+            <TextField 
+              label="Nombre" 
+              fullWidth 
+              size="medium" 
+              value={nameUser} 
+              onChange={handleChange(setNameUser)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.nombre)}
+              helperText={fieldErrors.nombre}
+            />
+            <TextField 
+              label="Apellido" 
+              fullWidth 
+              size="medium" 
+              value={lastName} 
+              onChange={handleChange(setLastName)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.apellido)}
+              helperText={fieldErrors.apellido}
+            />
+            <TextField 
+              label="Correo electrónico" 
+              fullWidth 
+              size="medium" 
+              value={email} 
+              onChange={handleChange(setEmail)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.correo_electronico)}
+              helperText={fieldErrors.correo_electronico}
+            /> 
+            <TextField 
+              label="Dirección" 
+              fullWidth 
+              size="medium" 
+              value={address} 
+              onChange={handleChange(setAddress)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.direccion)}
+              helperText={fieldErrors.direccion}
+            /> 
+            <TextField 
+              label="Celular" 
+              fullWidth 
+              size="medium" 
+              value={phone} 
+              onChange={handleChange(setPhone)}
+              sx={{ 
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                }
+              }}
+              error={Boolean(fieldErrors.telefono)}
+              helperText={fieldErrors.telefono}
+            /> 
 
-
-        <Collapse in={!!errorMsg}>
-          <Alert
-            severity="error"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setErrorMsg('')}
+            <Collapse in={!!errorMsg}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setErrorMsg('')}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
               >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-            sx={{ mb: 2 }}
-          >
-            {errorMsg}
-          </Alert>
-        </Collapse>
+                {errorMsg}
+              </Alert>
+            </Collapse>
 
-        <Collapse in={showSuccess}>
-          <Alert
-            severity="success"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setShowSuccess(false)}
+            <Collapse in={showSuccess}>
+              <Alert
+                severity="success"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => setShowSuccess(false)}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
               >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-            sx={{ mb: 2 }}
-          >
-            ¡La informacion fue editada con exito!
-          </Alert>
-        </Collapse>
-        <ContainerButton>
-          <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
-            {isSubmitting ? "Guardando..." : "Guardar cambios"}
-          </Button>
-          <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
-        </ContainerButton>
-
-      </Form>
-    </Main>
+                ¡La información fue editada con éxito!
+              </Alert>
+            </Collapse>
+            
+            <ContainerButton>
+              <Button type="submit" variant="contained" disabled={isSubmitting || !hasChanges()}>
+                {isSubmitting ? "Guardando..." : "Guardar cambios"}
+              </Button>
+              <Button type="button" variant="contained" onClick={() => navigate('/cliente/perfil')}>
+                Cancelar
+              </Button>
+            </ContainerButton>
+          </Form>
+        </Main>
+      </PageContainer>
+    </>
   );
 };
 

@@ -21,6 +21,7 @@ import ContabilidadRouter from './routers/contabilidad.routes.js';
 import RegistrarFacturas from './routers/registrar_factura.routes.js';
 import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
+import HistorialServicesRoter from './routers/Historial_services.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -70,6 +71,7 @@ App.use(ContabilidadRouter);
 App.use(RegistrarFacturas);
 App.use(RegistarCuentas);
 App.use(Inventario);
+App.use(HistorialServicesRoter);
 // debes de mejorar la forma en la que defines la ruta, porque se esta saliendo del estandar que tenemos 
 App.use('/fichas', fichaClienteRouter);
 
@@ -79,6 +81,7 @@ App.use('/api', fichaRouter);
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
+  // documentacion de la API
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 App.use(FaqRouter)
