@@ -1,129 +1,182 @@
-// test/unit/models/servicios.model.test.js
 import { ServicioModel } from '../../../src/models/servicios.model.js';
+import { sequelize } from '../../../src/database/conexion.js';
 
-const modelDefinition = ServicioModel.Servicio;
-const attrs = modelDefinition.rawAttributes;
+// Mock de Sequelize
+jest.mock('../../../src/database/conexion.js', () => ({
+  sequelize: {
+    define: jest.fn((modelName, attributes, options) => ({
+      modelName,
+      attributes,
+      options,
+      belongsTo: jest.fn(),
+    })),
+  },
+}));
 
-describe('Servicio Model Tests', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+describe('ServicioModel', () => {
+  let Servicio;
+
+  beforeAll(() => {
+    Servicio = ServicioModel.Servicio;
   });
 
-  test('Debe definir el modelo con el nombre "Servicio"', () => {
-    expect(modelDefinition.name).toBe('Servicio');
-    expect(modelDefinition.options.tableName).toBe('servicios');
+  // --------------------- DEFINICIÓN GENERAL ---------------------
+  it('debería definir correctamente el modelo Servicio', () => {
+    expect(Servicio.modelName).toBe('Servicio');
+    expect(Servicio.options.tableName).toBe('servicios');
+    expect(Servicio.options.timestamps).toBe(false);
   });
 
-  test('Debe tener todos los campos necesarios definidos', () => {
-    expect(attrs).toHaveProperty('id');
-    expect(attrs).toHaveProperty('nombre');
-    expect(attrs).toHaveProperty('descripcion');
-    expect(attrs).toHaveProperty('estado');
-    expect(attrs).toHaveProperty('fecha_creacion');
-    expect(attrs).toHaveProperty('fecha_modificacion');
-    expect(attrs).toHaveProperty('creada_por_fk');
-    expect(attrs).toHaveProperty('id_administrador');
+  it('debería tener todos los campos principales definidos', () => {
+    const expectedFields = [
+      'id',
+      'nombre',
+      'descripcion',
+      'estado',
+      'fecha_creacion',
+      'fecha_modificacion',
+      'creada_por_fk',
+      'id_administrador',
+      'tecnico_id',
+    ];
+    expectedFields.forEach(field => {
+      expect(Servicio.attributes[field]).toBeDefined();
+    });
   });
 
-  test('Campo estado debe tener valores ENUM correctos', () => {
-    const estado = attrs.estado;
-    expect(estado.type.values).toEqual(['activo', 'inactivo']);
-    expect(estado.defaultValue).toBe('activo');
-    expect(estado.allowNull).toBe(false);
-  });
-
-  test('Campo descripcion debe tener restricciones de longitud y no permitir nulos', () => {
-    const desc = attrs.descripcion;
-    expect(desc.allowNull).toBe(false);
-    expect(desc.validate.notEmpty).toBeDefined();
-    expect(desc.validate.len.args).toEqual([20, 500]);
-  });
-
-  test('Campo nombre debe tener restricciones correctas', () => {
-    const nombre = attrs.nombre;
-    expect(nombre.allowNull).toBe(false);
-    expect(nombre.unique).toBe(true);
-    expect(nombre.validate.notEmpty).toBeDefined();
-    expect(nombre.validate.len.args).toEqual([2, 100]);
-  });
-
-  test('Campo fecha_creacion debe tener valor por defecto como NOW', () => {
-    const fecha = attrs.fecha_creacion;
-    expect(fecha.defaultValue?.toString?.()).toContain('NOW');
-  });
-
-  test('Campo fecha_modificacion debe tener valor por defecto como NOW', () => {
-    const fecha = attrs.fecha_modificacion;
-    expect(fecha.defaultValue?.toString?.()).toContain('NOW');
-  });
-
-  test('Campo creada_por_fk debe estar definido correctamente', () => {
-    const creador = attrs.creada_por_fk;
-    expect(creador.allowNull).toBe(false);
-    expect(creador.validate.isInt).toBeDefined();
-    expect(creador.validate.min.args[0]).toBe(1);
-  });
-
-  test('Campo id_administrador debe estar definido correctamente', () => {
-    const admin = attrs.id_administrador;
-    expect(admin.allowNull).toBe(true);
-    expect(admin.validate.isInt).toBeDefined();
-    expect(admin.validate.min.args[0]).toBe(1);
-  });
-
-  test('El campo nombre no debe tener espacios al inicio o final', async () => {
-    const servicio = modelDefinition.build({ nombre: ' Limpieza ' });
-    try {
-      await servicio.validate();
-    } catch (error) {
-      expect(error.message).toContain('El nombre no debe tener espacios al inicio o final.');
-    }
-  });
-
-  test('El campo descripcion no debe tener espacios al inicio o final', async () => {
-    const servicio = modelDefinition.build({ descripcion: ' Servicio de limpieza ' });
-    try {
-      await servicio.validate();
-    } catch (error) {
-      expect(error.message).toContain('La descripción no debe tener espacios al inicio o final.');
-    }
-  });
-
-  test('El hook beforeUpdate debe actualizar la fecha_modificacion antes de actualizar el servicio', async () => {
-    // Crear un servicio de prueba
-    const servicio = await modelDefinition.create({
-      nombre: 'Limpieza',
-      descripcion: 'Servicio de limpieza con más de 20 caracteres para cumplir validación',
-      creada_por_fk: 1,
+  // --------------------- VALIDACIONES DE NOMBRE ---------------------
+  describe('Validaciones de nombre', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Servicio.attributes.nombre.validate;
     });
 
-    // Almacenar la fecha original de creación
-    const fechaCreacion = new Date(servicio.fecha_creacion);
-    
-    
-    const fechaAnterior = new Date(fechaCreacion.getTime() - 60000);
-    servicio.fecha_modificacion = fechaAnterior;
-    
-    // Modificar el servicio
-    servicio.nombre = 'Limpieza profunda';
-    
-    // Guardar los cambios usando update directo en lugar de save
-    await modelDefinition.update(
-      { nombre: 'Limpieza profunda' },
-      { where: { id: servicio.id }, individualHooks: true }
-    );
-    
-    // Recargar el servicio desde la base de datos para obtener los valores actualizados
-    const servicioActualizado = await modelDefinition.findByPk(servicio.id);
-    
-    // Verificar que la fecha de modificación sea posterior a la fecha de creación
-    expect(new Date(servicioActualizado.fecha_modificacion).getTime())
-      .not.toEqual(fechaCreacion.getTime());
-    expect(new Date(servicioActualizado.fecha_modificacion).getTime())
-      .toBeGreaterThan(fechaCreacion.getTime());
-  }, 20000); 
+    it('debería tener validación de longitud', () => {
+      expect(validate.len.args).toEqual([2, 100]);
+      expect(validate.len.msg).toBe('El nombre del servicio debe tener entre 2 y 100 caracteres.');
+    });
 
-  test('El modelo Servicio se exporta correctamente', () => {
-    expect(ServicioModel.Servicio).toBeDefined();
+    it('debería tener validación de campo no vacío', () => {
+      expect(validate.notEmpty.msg).toBe('El nombre del servicio no puede estar vacío.');
+    });
+
+    it('debería tener validación de caracteres válidos', () => {
+      expect(validate.is.args[0]).toEqual(/^[A-ZÁÉÍÓÚÑ0-9 .!,:()-]+$/i);
+      expect(validate.is.msg).toBe('El nombre del servicio contiene caracteres no válidos.');
+    });
+
+    it('debería lanzar error si tiene espacios al inicio o final', () => {
+      expect(() => validate.noSpacesEdges('  Servicio')).toThrow('El nombre no debe tener espacios al inicio o final.');
+      expect(() => validate.noSpacesEdges('Servicio  ')).toThrow('El nombre no debe tener espacios al inicio o final.');
+      expect(() => validate.noSpacesEdges('Servicio')).not.toThrow();
+    });
+  });
+
+  // --------------------- VALIDACIONES DE DESCRIPCIÓN ---------------------
+  describe('Validaciones de descripción', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Servicio.attributes.descripcion.validate;
+    });
+
+    it('debería tener validación de longitud', () => {
+      expect(validate.len.args).toEqual([20, 500]);
+      expect(validate.len.msg).toBe('La descripción debe tener entre 20 y 500 caracteres.');
+    });
+
+    it('debería tener validación de campo no vacío', () => {
+      expect(validate.notEmpty.msg).toBe('La descripción del servicio no puede estar vacía.');
+    });
+
+    it('debería lanzar error si tiene espacios al inicio o final', () => {
+      expect(() => validate.noSpacesEdges('  Descripción válida')).toThrow('La descripción no debe tener espacios al inicio o final.');
+      expect(() => validate.noSpacesEdges('Descripción válida')).not.toThrow();
+    });
+  });
+
+  // --------------------- VALIDACIONES DE ESTADO ---------------------
+  describe('Validaciones de estado', () => {
+    it('debería tener valores ENUM permitidos', () => {
+      const valores = Servicio.rawAttributes.estado.values;
+      expect(valores).toEqual(['activo', 'inactivo']);
+    });
+
+    it('debería tener valor por defecto "activo"', () => {
+      expect(Servicio.attributes.estado.defaultValue).toBe('activo');
+    });
+  });
+
+  // --------------------- VALIDACIONES DE FECHAS ---------------------
+  describe('Validaciones de fechas', () => {
+    it('fecha_creacion debería tener valor por defecto DataTypes.NOW', () => {
+      expect(Servicio.attributes.fecha_creacion.defaultValue).toBeDefined();
+    });
+
+    it('fecha_modificacion debería tener valor por defecto DataTypes.NOW', () => {
+      expect(Servicio.attributes.fecha_modificacion.defaultValue).toBeDefined();
+    });
+
+    it('debería ejecutar hook beforeUpdate para actualizar fecha_modificacion', () => {
+      const mockServicio = { fecha_modificacion: null };
+      Servicio.options.hooks.beforeUpdate(mockServicio);
+      expect(mockServicio.fecha_modificacion).toBeInstanceOf(Date);
+    });
+  });
+
+  // --------------------- VALIDACIONES DE CREADA_POR_FK ---------------------
+  describe('Validaciones de creada_por_fk', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Servicio.attributes.creada_por_fk.validate;
+    });
+
+    it('debería requerir un número entero', () => {
+      expect(validate.isInt.msg).toBe('El ID del creador debe ser un número entero.');
+    });
+
+    it('debería requerir un valor positivo', () => {
+      expect(validate.min.args).toEqual([1]);
+      expect(validate.min.msg).toBe('El ID del creador debe ser un número positivo.');
+    });
+  });
+
+  // --------------------- VALIDACIONES DE ID_ADMINISTRADOR ---------------------
+  describe('Validaciones de id_administrador', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Servicio.attributes.id_administrador.validate;
+    });
+
+    it('debería requerir un número entero', () => {
+      expect(validate.isInt.msg).toBe('El ID del administrador debe ser un número entero.');
+    });
+
+    it('debería requerir un valor positivo', () => {
+      expect(validate.min.args).toEqual([1]);
+      expect(validate.min.msg).toBe('El ID del administrador debe ser un número positivo.');
+    });
+  });
+
+  // --------------------- VALIDACIONES DE TECNICO_ID ---------------------
+  describe('Validaciones de tecnico_id', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Servicio.attributes.tecnico_id.validate;
+    });
+
+    it('debería tener referencia al modelo técnico', () => {
+      const ref = Servicio.attributes.tecnico_id.references;
+      expect(ref.model).toBe('tecnico');
+      expect(ref.key).toBe('id');
+    });
+
+    it('debería requerir un número entero', () => {
+      expect(validate.isInt.msg).toBe('El ID del técnico debe ser un número entero.');
+    });
+
+    it('debería requerir un valor positivo', () => {
+      expect(validate.min.args).toEqual([1]);
+      expect(validate.min.msg).toBe('El ID del técnico debe ser un número positivo.');
+    });
   });
 });

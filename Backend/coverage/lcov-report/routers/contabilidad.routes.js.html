@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,26 +91,30 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -122,23 +126,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
 import { ContabilidadController } from '../controllers/contabilidad.controller.js';
 import { authenticate, isAdmin } from '../middlewares/autenticacion.js';
-const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
-const contabilidadController = <span class="cstat-no" title="statement not covered" >new ContabilidadController();</span>
+const router = express.Router();
+const contabilidadController = new ContabilidadController();
 &nbsp;
 // Rutas para la entidad Contabilidad
-<span class="cstat-no" title="statement not covered" >router.post('/api/contabilidad',authenticate, isAdmin, contabilidadController.crearContabilidad);</span>
+router.post('/api/contabilidad',authenticate, isAdmin, contabilidadController.crearContabilidad);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.get('/api/contabilidad/:id', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorId);</span>
+router.get('/api/contabilidad',authenticate, isAdmin, contabilidadController.obtenerContabilidad);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.get('/api/contabilidad/cedula/:numero_cedula', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorCedula);</span>
+router.get('/api/contabilidad/:id', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorId);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.get('/api/contabilidad/correo/:correo_electronico',authenticate, isAdmin, contabilidadController.obtenerContabilidadPorCorreo);</span>
+router.get('/api/contabilidad/cedula/:numero_cedula', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorCedula);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.delete('/api/contabilidad/:id',authenticate, isAdmin, contabilidadController.eliminarContabilidad);</span>
+router.get('/api/contabilidad/correo/:correo_electronico',authenticate, isAdmin, contabilidadController.obtenerContabilidadPorCorreo);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.post('/api/admin/login', contabilidadController.autenticarContabilidad);</span>
+router.delete('/api/contabilidad/:id',authenticate, isAdmin, contabilidadController.eliminarContabilidad);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.put('/api/contabilidad/:id', authenticate, isAdmin, contabilidadController.actualizarContabilidad);</span>
+router.post('/api/admin/login', contabilidadController.autenticarContabilidad);
+&nbsp;
+router.put('/api/contabilidad/:id', authenticate, isAdmin, contabilidadController.actualizarContabilidad);
 &nbsp;
 export default router;
 &nbsp;
@@ -154,7 +160,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-14T04:39:02.090Z
+                at 2025-10-25T18:58:08.018Z
             </div>
         <script src="../prettify.js"></script>
         <script>

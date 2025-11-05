@@ -1,14 +1,14 @@
 import { ClienteService } from "../services/cliente.services.js";
-import { ValidationError } from 'sequelize'; 
+import { ValidationError } from 'sequelize';
 import { camposPermitidosCliente } from '../services/allowedFields.js';
 
 
 
 export class ClienteController {
-constructor(clienteService = new ClienteService()) {
-    this.clienteService = clienteService;
-    this.actualizarMiPerfil = this.actualizarMiPerfil.bind(this);
-}    crearCliente = async (req, res) => {
+    constructor(clienteService = new ClienteService()) {
+        this.clienteService = clienteService;
+        this.actualizarMiPerfil = this.actualizarMiPerfil.bind(this);
+    } crearCliente = async (req, res) => {
         try {
             const { numero_de_cedula } = req.body;
             const clienteExistente = await this.clienteService.obtenerClientePorCedula(numero_de_cedula);
@@ -24,11 +24,12 @@ constructor(clienteService = new ClienteService()) {
 
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({ message: 'Error al crear el cliente.' });
@@ -43,21 +44,21 @@ constructor(clienteService = new ClienteService()) {
             return res.status(200).json(cliente);
         } catch (error) {
             console.error(error);
-            
+
             return res.status(500).json({ message: 'Error al obtener el cliente.' });
         }
     };
     obtenerClientePorCedula = async (req, res) => {
         try {
             const cliente = await this.clienteService.obtenerClientePorCedula(req.params.numero_de_cedula);
-            
+
             if (!cliente) {
                 return res.status(404).json({ message: 'Cliente no encontrado' });
             }
             return res.status(200).json({ cliente });
         } catch (error) {
             console.error(error);
-            
+
             return res.status(500).json({ message: 'Error al obtener el cliente.' });
         }
     };
@@ -69,7 +70,7 @@ constructor(clienteService = new ClienteService()) {
             console.error(error);
             return res.status(500).json({ message: 'Error al obtener los clientes.' });
         }
-    };  
+    };
     obtenerClientesActivos = async (req, res) => {
         try {
             const clientes = await this.clienteService.obtenerClientesActivos();
@@ -90,11 +91,12 @@ constructor(clienteService = new ClienteService()) {
             console.error(error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({ message: 'Error al actualizar el cliente.' });
@@ -126,7 +128,7 @@ constructor(clienteService = new ClienteService()) {
     };
 
 
-    
+
 
     actualizarMiPerfil = async (req, res) => {
         try {
@@ -149,7 +151,7 @@ constructor(clienteService = new ClienteService()) {
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error al actualizar el perfil del cliente.' });
-         }
+        }
     };
 
 }

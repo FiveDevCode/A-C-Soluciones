@@ -10,36 +10,30 @@ describe('RegistroFacturaService', () => {
   let mockRegistroFacturaRepository;
 
   beforeEach(() => {
-    // Antes de cada prueba, creamos una nueva instancia del mock y del servicio
     mockRegistroFacturaRepository = new RegistroFacturaRepository();
     registroFacturaService = new RegistroFacturaService();
-    // Nos aseguramos de que el servicio use la instancia mockeada del repositorio
     registroFacturaService.registroFacturaRepository = mockRegistroFacturaRepository;
   });
 
   afterEach(() => {
-    // Limpiamos todos los mocks después de cada prueba
     jest.clearAllMocks();
   });
 
-  // Pruebas para el método crearRegistroFactura
+  // Pruebas para el metodo registro facturas
   describe('crearRegistroFactura', () => {
     it('debe llamar a crearRegistroFactura del repositorio con los datos correctos', async () => {
       const data = { numero_factura: 'F-001', monto: 100 };
       const expectedResponse = { id: 1, ...data };
-      // Configuramos el mock para que devuelva un valor esperado
       mockRegistroFacturaRepository.crearRegistroFactura.mockResolvedValue(expectedResponse);
 
       const result = await registroFacturaService.crearRegistroFactura(data);
 
-      // Verificamos que el método del repositorio fue llamado con los datos correctos
       expect(mockRegistroFacturaRepository.crearRegistroFactura).toHaveBeenCalledWith(data);
-      // Verificamos que el servicio devuelve el resultado esperado
       expect(result).toEqual(expectedResponse);
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorCliente
+  // Pruebas para el metodo obtener registro or cliente
   describe('obtenerRegistroPorCliente', () => {
     it('debe llamar a obtenerRegistroPorCliente del repositorio con el id del cliente', async () => {
       const id_cliente = 1;
@@ -53,7 +47,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorId
+  // Pruebas para el metodo registro por ID
   describe('obtenerRegistroPorId', () => {
     it('debe llamar a obtenerRegistroPorId del repositorio con el id correcto', async () => {
       const id = 1;
@@ -67,7 +61,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistros
+  // Pruebas para el metodo obtener registros
   describe('obtenerRegistros', () => {
     it('debe llamar a obtenerRegistros del repositorio', async () => {
       const expectedResponse = [{ id: 1, numero_factura: 'F-001' }];
@@ -80,7 +74,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método obtenerRegistroPorNumero
+  // Pruebas para el metodo obtener registro Por Numero
   describe('obtenerRegistroPorNumero', () => {
     it('debe llamar a obtenerRegistroPorNumero del repositorio con el número de factura', async () => {
       const numero_factura = 'F-001';
@@ -94,7 +88,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método obtenerPorSaldoPendiente
+  // Pruebas para el metodo obtener por saldo pendiente
   describe('obtenerPorSaldoPendiente', () => {
     it('debe llamar a obtenerPorSaldoPendiente del repositorio', async () => {
       const expectedResponse = [{ id: 1, saldo_pendiente: 50 }];
@@ -107,7 +101,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método obtenerPorEstado
+  // Pruebas para el metodo obtener por estado
   describe('obtenerPorEstado', () => {
     it('debe llamar a obtenerPorEstado del repositorio con el estado de la factura', async () => {
       const estado_factura = 'pendiente';
@@ -121,7 +115,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método actualizarRegistroFactura
+  // Pruebas para el metodo actualizar registro factura
   describe('actualizarRegistroFactura', () => {
     it('debe llamar a actualizarRegistroFactura del repositorio con el id y los datos correctos', async () => {
       const id = 1;
@@ -136,7 +130,7 @@ describe('RegistroFacturaService', () => {
     });
   });
 
-  // Pruebas para el método eliminarRegistroFactura
+  // Pruebas para el metodo eliminar registro factura
   describe('eliminarRegistroFactura', () => {
     it('debe llamar a eliminarRegistroFactura del repositorio con el id correcto', async () => {
       const id = 1;
