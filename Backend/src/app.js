@@ -22,6 +22,8 @@ import RegistrarFacturas from './routers/registrar_factura.routes.js';
 import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
 import ChatbotRouter from './routers/chatbot.routes.js';
+import HistorialServicesRoter from './routers/Historial_services.route.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -71,8 +73,7 @@ App.use(RegistrarFacturas);
 App.use(RegistarCuentas);
 App.use(Inventario);
 App.use(ChatbotRouter);
-
-// debes de mejorar la forma en la que defines la ruta, porque se esta saliendo del estandar que tenemos 
+App.use(HistorialServicesRoter);
 App.use('/fichas', fichaClienteRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
@@ -81,6 +82,7 @@ App.use('/api', fichaRouter);
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
   const swaggerDocument = JSON.parse(fs.readFileSync(openApiPath, 'utf-8'));
+  // documentacion de la API
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 App.use(FaqRouter)

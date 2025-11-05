@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761701502175" clover="3.2.0">
-  <project timestamp="1761701502175" name="All files">
-    <metrics statements="1843" coveredstatements="1781" conditionals="639" coveredconditionals="560" methods="396" coveredmethods="385" elements="2878" coveredelements="2726" complexity="0" loc="1843" ncloc="1843" packages="6" files="80" classes="80"/>
+<coverage generated="1762367278205" clover="3.2.0">
+  <project timestamp="1762367278205" name="All files">
+    <metrics statements="1861" coveredstatements="1781" conditionals="641" coveredconditionals="560" methods="402" coveredmethods="385" elements="2904" coveredelements="2726" complexity="0" loc="1861" ncloc="1861" packages="6" files="84" classes="84"/>
     <package name="controllers">
-      <metrics statements="947" coveredstatements="915" conditionals="316" coveredconditionals="276" methods="115" coveredmethods="112"/>
+      <metrics statements="954" coveredstatements="915" conditionals="316" coveredconditionals="276" methods="117" coveredmethods="112"/>
+      <file name="Historial_services.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\Historial_services.controller.js">
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+      </file>
       <file name="administrador.controller.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\controllers\administrador.controller.js">
         <metrics statements="84" coveredstatements="84" conditionals="22" coveredconditionals="20" methods="10" coveredmethods="10"/>
         <line num="7" count="24" type="stmt"/>
@@ -1248,7 +1258,16 @@
       </file>
     </package>
     <package name="repository">
-      <metrics statements="232" coveredstatements="228" conditionals="78" coveredconditionals="73" methods="108" coveredmethods="105"/>
+      <metrics statements="238" coveredstatements="228" conditionals="80" coveredconditionals="73" methods="110" coveredmethods="105"/>
+      <file name="Historial_services.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\Historial_services.repository.js">
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+      </file>
       <file name="administrador.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\administrador.repository.js">
         <metrics statements="16" coveredstatements="15" conditionals="6" coveredconditionals="4" methods="7" coveredmethods="7"/>
         <line num="5" count="1" type="stmt"/>
@@ -1345,19 +1364,19 @@
       </file>
       <file name="inventario.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\inventario.repository.js">
         <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="4" methods="6" coveredmethods="6"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="29" count="2" type="stmt"/>
-        <line num="30" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="32" count="1" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
-        <line num="37" count="2" type="stmt"/>
-        <line num="38" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
       </file>
       <file name="preguntas_frecuentes.repository.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\repository\preguntas_frecuentes.repository.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
@@ -1525,7 +1544,13 @@
       </file>
     </package>
     <package name="routers">
-      <metrics statements="126" coveredstatements="126" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <metrics statements="129" coveredstatements="126" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <file name="Historial_services.route.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\Historial_services.route.js">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+      </file>
       <file name="administrador.routes.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\routers\administrador.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
@@ -1696,7 +1721,12 @@
       </file>
     </package>
     <package name="services">
-      <metrics statements="351" coveredstatements="325" conditionals="145" coveredconditionals="113" methods="120" coveredmethods="115"/>
+      <metrics statements="353" coveredstatements="325" conditionals="145" coveredconditionals="113" methods="122" coveredmethods="115"/>
+      <file name="Historial_services.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\Historial_services.services.js">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
       <file name="administrador.services.js" path="C:\Users\USUARIO\Desktop\A-C-Soluciones\Backend\src\services\administrador.services.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="8"/>
         <line num="6" count="7" type="stmt"/>

@@ -19,7 +19,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
   doc.pipe(stream);
 
   // --- Paleta de Colores Formal ---
-  const headerColor = '#07119bff'; // Azul oscuro (Midnight Blue)
+  const headerColor = '#c0bfbdff'; // Azul oscuro (Midnight Blue)
   const titleColor = '#34495e';  // Gris azulado (Wet Asphalt)
   const textColor = '#000000';     // Negro
   const borderColor = '#bdc3c7'; // Gris claro (Silver)
@@ -29,7 +29,7 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
 
   // Dibuja el encabezado principal del documento
   const drawHeader = () => {
-    doc.fillColor(headerColor)
+    doc.fillColor(titleColor)
        .fontSize(20)
        .font('Helvetica-Bold')
        .text('FICHA DE MANTENIMIENTO', { align: 'center' });

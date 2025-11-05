@@ -1,7 +1,7 @@
 
 __________ Usuario administrador_________
 
-correo: jonier145@mail.com
+correo: jonier145@gmail.com
 contraseña: Jonier25@
 
 ______________ Usuario Tecnico___________
@@ -13,4 +13,6 @@ ______________ Usuario Cliente___________
 correo: jonier.urrea@correounivalle.edu.co
 Contraseña: Jonier12@
 
+correo: luis.tegue@correounivalle.edu.co
+contraseña: Luis2025@
 
