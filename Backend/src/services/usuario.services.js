@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { AdminModel } from '../models/administrador.model.js';
 import { ClienteModel } from '../models/cliente.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
+import { ContabilidadModel } from '../models/contabilidad.model.js';
 import SibApiV3Sdk from 'sib-api-v3-sdk'
 
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
         throw new Error('Correo y contraseña son requeridos');
       }
 
-      const [admin, cliente, tecnico] = await Promise.all([
+      const [admin, cliente, tecnico, contabilidad] = await Promise.all([
         AdminModel.Admin.findOne({
           where: { correo_electronico: correo.trim().toLowerCase() },
           attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol', 'estado']
@@ -25,10 +26,14 @@ export class AuthService {
         TecnicoModel.Tecnico.findOne({
           where: { correo_electronico: correo.trim().toLowerCase() },
           attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'especialidad', 'rol', 'estado']
+        }),
+        ContabilidadModel.Contabilidad.findOne({
+          where: { correo_electronico: correo.trim().toLowerCase() },
+          attributes: ['id', 'nombre', 'correo_electronico', 'contrasenia', 'rol', 'estado']
         })
       ]);
 
-      const user = admin || cliente || tecnico;
+      const user = admin || cliente || tecnico || contabilidad;
       if (!user) {
         throw new Error('Usuario no encontrado');
       }
@@ -46,6 +51,9 @@ export class AuthService {
         throw new Error('El cliente no está activo para ingresar al sistema');
       }
 
+      if (contabilidad?.correo_electronico && contabilidad.estado === 'inactivo') {
+        throw new Error('El Contador no está activa para ingresar al sistema');
+      }
 
       // Verificación de contraseña con hash
       if (!user.contrasenia?.startsWith('$2b$')) {
@@ -56,8 +64,6 @@ export class AuthService {
       if (!passwordMatch) {
         throw new Error('Contraseña incorrecta');
       }
-
-   
 
       // Generación de token con más datos útiles
       const token = jwt.sign(
@@ -187,7 +193,10 @@ async sendRecoveryCode(correo) {
 
 // Método para verificar el código de recuperación
 async verifyRecoveryCode(correo_electronico, code) {
-  const correo = correo_electronico?.trim().toLowerCase();
+  if (typeof correo_electronico !== 'string') {
+    throw new Error('El correo electrónico es inválido o no fue proporcionado');
+  }
+  const correo = correo_electronico.trim().toLowerCase();
 
   const user = await this._findUserByEmail(correo);
   if (!user) throw new Error('Usuario no encontrado');
@@ -211,12 +220,13 @@ async verifyRecoveryCode(correo_electronico, code) {
 
   // Utilidad para buscar usuario entre los tres modelos
   async _findUserByEmail(correo) {
-    const [admin, cliente, tecnico] = await Promise.all([
+    const [admin, cliente, tecnico, contabilidad] = await Promise.all([
       AdminModel.Admin.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }),
       ClienteModel.Cliente.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }),
-      TecnicoModel.Tecnico.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } })
+      TecnicoModel.Tecnico.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } }), 
+      ContabilidadModel.Contabilidad.findOne({ where: { correo_electronico: correo.trim().toLowerCase() } })
     ]);
-    return admin || cliente || tecnico || null;
+    return admin || cliente || tecnico || contabilidad || null;
   }
 
 

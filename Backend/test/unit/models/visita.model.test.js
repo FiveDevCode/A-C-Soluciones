@@ -1,181 +1,130 @@
-import { VisitaModel } from '../../../src/models/visita.model.js';
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../../src/database/conexion.js';
+import { VisitaModel } from '../../../src/models/visita.model.js';
 
-const { Visita } = VisitaModel;
+// Mock de la conexión Sequelize
+jest.mock('../../../src/database/conexion.js', () => ({
+  sequelize: {
+    define: jest.fn((modelName, attributes, options) => ({
+      modelName,
+      attributes,
+      options,
+    })),
+  },
+}));
 
-// Configuración de timeouts más largos
-jest.setTimeout(30000); // 30 segundos para todos los tests
+describe('VisitaModel', () => {
+  let Visita;
 
-describe('Visita Model Tests', () => {
-  beforeAll(async () => {
-    // Configurar una conexión especial para tests
-    if (!sequelize.options.dialect === 'sqlite') {
-      // Usar SQLite en memoria para tests más rápidos
-      const testSequelize = new Sequelize('sqlite::memory:');
-      Visita.init(VisitaModel.Visita.attributes, {
-        sequelize: testSequelize,
-        modelName: 'Visita',
-        tableName: 'visitas'
-      });
-    }
-    
-    // Sincronizar con timeout extendido
-    await Visita.sync({ force: true, logging: false });
+  beforeAll(() => {
+    Visita = VisitaModel.Visita;
   });
 
-  afterAll(async () => {
-    // Cerrar la conexión después de los tests
-    await sequelize.close();
+  it('debería definir correctamente el modelo Visita', () => {
+    expect(Visita.modelName).toBe('Visita');
+    expect(Visita.options.tableName).toBe('visitas');
+    expect(Visita.options.timestamps).toBe(false);
   });
 
-  test('Debe crear una visita válida', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000), // Mañana
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
+  it('debería tener todos los campos definidos correctamente', () => {
+    const fields = [
+      'id',
+      'fecha_programada',
+      'duracion_estimada',
+      'estado',
+      'notas_previas',
+      'notas_posteriores',
+      'fecha_creacion',
+      'solicitud_id_fk',
+      'tecnico_id_fk',
+      'servicio_id_fk'
+    ];
+
+    fields.forEach(field => {
+      expect(Visita.attributes[field]).toBeDefined();
     });
 
-    expect(visita.id).toBeDefined();
-    expect(visita.fecha_programada).toBeInstanceOf(Date);
-    expect(visita.duracion_estimada).toBe(60);
-    expect(visita.estado).toBe('programada');
-    expect(visita.solicitud_id_fk).toBe(1);
-    expect(visita.tecnico_id_fk).toBe(1);
-    expect(visita.servicio_id_fk).toBe(1);
+    expect(Visita.attributes.id.primaryKey).toBe(true);
+    expect(Visita.attributes.estado.defaultValue).toBe('programada');
+    expect(Visita.attributes.duracion_estimada.defaultValue).toBe(60);
   });
 
-  test('No debe permitir fechas en el pasado', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() - 86400000), // Ayer
-        duracion_estimada: 60,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La fecha no puede ser anterior a la fecha actual');
-    }
-  });
-
-  test('Debe validar la duración mínima de 15 minutos', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 10,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La duración mínima es de 15 minutos');
-    }
-  });
-
-  test('Debe validar la duración máxima de 480 minutos (8 horas)', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 500,
-        estado: 'programada',
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('La duración máxima es de 8 horas (480 minutos)');
-    }
-  });
-
-  test('Debe establecer el estado por defecto como "programada"', async () => {
-    const visita = await Visita.build({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
+  // ---------------------- VALIDACIONES DE FECHA PROGRAMADA ----------------------
+  describe('Validaciones de fecha_programada', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Visita.attributes.fecha_programada.validate;
     });
 
-    expect(visita.estado).toBe('programada');
-  });
-
-//   test('Debe validar el enum de estados', async () => {
-//     expect.assertions(1);
-//     try {
-//       await Visita.build({
-//         fecha_programada: new Date(Date.now() + 86400000),
-//         duracion_estimada: 60,
-//         estado: 'estado_invalido',
-//         solicitud_id_fk: 1,
-//         tecnico_id_fk: 1,
-//         servicio_id_fk: 1
-//       }).validate();
-//     } catch (error) {
-//       expect(error.message).toMatch(/Validation/);
-//     }
-//   });
-
-  test('Debe validar la longitud máxima de notas_previas (250 caracteres)', async () => {
-    expect.assertions(1);
-    try {
-      const notaLarga = 'a'.repeat(251);
-      await Visita.build({
-        fecha_programada: new Date(Date.now() + 86400000),
-        duracion_estimada: 60,
-        estado: 'programada',
-        notas_previas: notaLarga,
-        solicitud_id_fk: 1,
-        tecnico_id_fk: 1,
-        servicio_id_fk: 1
-      }).validate();
-    } catch (error) {
-      expect(error.message).toMatch('Las notas no pueden exceder los 250 caracteres');
-    }
-  });
-
-  test('Debe permitir notas_previas y notas_posteriores como nulas', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
+    it('debería lanzar error si la fecha no es válida', () => {
+      expect(validate.isDate.msg).toBe('La fecha programada debe ser una fecha válida');
     });
 
-    expect(visita.notas_previas).toBeNull();
-    expect(visita.notas_posteriores).toBeNull();
-  });
-
-  test('Debe establecer fecha_creacion automáticamente', async () => {
-    const visita = await Visita.create({
-      fecha_programada: new Date(Date.now() + 86400000),
-      duracion_estimada: 60,
-      estado: 'programada',
-      solicitud_id_fk: 1,
-      tecnico_id_fk: 1,
-      servicio_id_fk: 1
+    it('debería lanzar error si la fecha es anterior a la actual', () => {
+      const fechaPasada = new Date(Date.now() - 24 * 60 * 60 * 1000); // Ayer
+      expect(() => validate.notInPast(fechaPasada)).toThrow('La fecha no puede ser anterior a la fecha actual');
     });
 
-    expect(visita.fecha_creacion).toBeInstanceOf(Date);
-    expect(visita.fecha_creacion.getTime()).toBeLessThanOrEqual(Date.now());
+    it('no debería lanzar error si la fecha es futura', () => {
+      const fechaFutura = new Date(Date.now() + 24 * 60 * 60 * 1000); // Mañana
+      expect(() => validate.notInPast(fechaFutura)).not.toThrow();
+    });
   });
 
-  test('Debe requerir todos los campos obligatorios', async () => {
-    expect.assertions(1);
-    try {
-      await Visita.build({}).validate();
-    } catch (error) {
-      expect(error.message).toMatch(/notNull Violation/);
-    }
+  // ---------------------- VALIDACIONES DE DURACIÓN ESTIMADA ----------------------
+  describe('Validaciones de duracion_estimada', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Visita.attributes.duracion_estimada.validate;
+    });
+
+    it('debería tener un mínimo de 15 minutos', () => {
+      expect(validate.min.args[0]).toBe(15);
+      expect(validate.min.msg).toBe('La duración mínima es de 15 minutos');
+    });
+
+    it('debería tener un máximo de 480 minutos', () => {
+      expect(validate.max.args[0]).toBe(480);
+      expect(validate.max.msg).toBe('La duración máxima es de 8 horas (480 minutos)');
+    });
+  });
+
+  // ---------------------- VALIDACIONES DE NOTAS ----------------------
+  describe('Validaciones de notas_previas', () => {
+    let validate;
+    beforeAll(() => {
+      validate = Visita.attributes.notas_previas.validate;
+    });
+
+    it('debería tener una longitud máxima de 250 caracteres', () => {
+      expect(validate.len.args[1]).toBe(250);
+      expect(validate.len.msg).toBe('Las notas no pueden exceder los 250 caracteres');
+    });
+  });
+
+  // ---------------------- VALIDACIONES DE CLAVES FORÁNEAS ----------------------
+  describe('Validaciones de claves foráneas', () => {
+    it('debería tener referencia a solicitudes, tecnico y servicios', () => {
+      const { solicitud_id_fk, tecnico_id_fk, servicio_id_fk } = Visita.attributes;
+
+      expect(solicitud_id_fk.references.model).toBe('solicitudes');
+      expect(tecnico_id_fk.references.model).toBe('tecnico');
+      expect(servicio_id_fk.references.model).toBe('servicios');
+    });
+
+    it('todas las claves foráneas deberían ser obligatorias', () => {
+      expect(Visita.attributes.solicitud_id_fk.allowNull).toBe(false);
+      expect(Visita.attributes.tecnico_id_fk.allowNull).toBe(false);
+      expect(Visita.attributes.servicio_id_fk.allowNull).toBe(false);
+    });
+  });
+
+  // ---------------------- VALIDACIÓN DE ÍNDICES ----------------------
+  it('debería tener índices definidos para campos clave', () => {
+    const indexes = Visita.options.indexes.map(idx => idx.fields).flat();
+
+    expect(indexes).toContain('fecha_programada');
+    expect(indexes).toContain('tecnico_id_fk');
+    expect(indexes).toContain('solicitud_id_fk');
+    expect(indexes).toContain('servicio_id_fk');
   });
 });

@@ -254,6 +254,253 @@ const updateStateAdministrator = (id, state) => {
   });
 }
 
+const createAccounting = (
+  numero_de_cedula,
+  nombre,
+  apellido,
+  correo_electronico,
+  telefono,
+  contrasenia
+) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.post("/contabilidad", {
+    numero_de_cedula,
+    nombre,
+    apellido,
+    correo_electronico,
+    telefono,
+    contrasenia
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+const getListAccounting = () => {
+  return api.get("/contabilidad")
+};
+
+const getAccounting = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/contabilidad/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+const updateStateAccounting = (id, state) => {
+  return api.put(`/contabilidad/${id}`, {
+    estado:state
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}
+
+const deleteBill = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.delete(`/eliminar-factura/${id}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const deleteAccount = (id) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.delete(`/eliminar-cuenta/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+
+const updateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronico, telefono) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.put(`/contabilidad/${id}`,
+    {
+      numero_de_cedula: numeroDeCedula,
+      nombre,
+      apellido,
+      correo_electronico: correoElectronico,
+      telefono
+    },
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+const createBill = (billData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.post("/registrar-factura", billData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+};
+
+const getListBill = () => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get("/facturas", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const getBill = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/factura/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const updateStateBill = (id, state) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/factura/${id}`, 
+    {
+      estado_factura:state
+    },
+      {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+};
+
+const updateBill = (id, formData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/factura/${id}`, 
+    formData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+const createPaymentAccount = (paymentAccountData) => {
+  const token = localStorage.getItem("authToken");
+  console.log("Datos enviados al backend:", paymentAccountData);
+
+  return api.post("/registrar-cuenta", paymentAccountData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const getListPaymentAccount = () => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get("/cuentas", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+};
+
+const updatePaymentAccount = (id, paymentAccountData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/cuenta/${id}`, 
+    paymentAccountData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+const updateInventory = (id, inventoryData) => {
+  const token = localStorage.getItem("authToken");
+
+  return api.put(`/inventario/${id}`, 
+    inventoryData,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+  );
+};
+
+const getPaymentAccount = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/cuenta-id/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+const getInventory = (id) => {
+  const token = localStorage.getItem("authToken");
+
+
+  return api.get(`/inventario/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+}
+
+
+export const getListInventory = () => {
+  const token = localStorage.getItem("authToken");
+
+  return api.get("/inventario", {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+};
+
+
+const deleteInventory = (id) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/inventario/${id}`,{
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -278,6 +525,25 @@ export const administratorService = {
   UpdateStateService,
   updateStateRequest,
   updateStateAdministrator,
-
+  createAccounting,
+  getListAccounting,
+  getAccounting,
+  updateStateAccounting,
+  updateAccounting,
+  createBill,
+  getListBill,
+  getBill,
+  updateStateBill,
+  updateBill,
+  createPaymentAccount,
+  getListPaymentAccount,
+  getPaymentAccount,
+  updatePaymentAccount,
+  deleteBill,
+  deleteAccount,
+  getListInventory,
+  getInventory,
+  updateInventory,
+  deleteInventory
   
 }

@@ -82,6 +82,9 @@ const FormLogin = () => {
           case "administrador":
             navigate("/admin/inicio");
             break;
+          case "Contador":
+            navigate("/contador/inicio");
+            break;
           default:
             break;
         }
@@ -134,6 +137,9 @@ const FormLogin = () => {
           break;
         case "administrador":
           navigate("/admin/inicio");
+          break;
+        case "Contador":
+          navigate("/contador/inicio");
           break;
         default:
           navigate("/iniciar-sesion");
