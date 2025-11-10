@@ -170,7 +170,7 @@ const BaseFormModal = ({
       <ModalContent>
         <Title>{title}</Title>
 
-        <FormContainer onSubmit={handleFormSubmit}>
+        <FormContainer onSubmit={handleFormSubmit} autoComplete="off">
           {fields.map((field) => (
             <StyledTextField
               key={field.name}
