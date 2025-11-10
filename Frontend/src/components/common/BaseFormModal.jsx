@@ -31,7 +31,7 @@ const ModalContent = styled.div`
   width: 400px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     width: 330px;
     padding: 20px;
     border-radius: 12px;
@@ -45,7 +45,7 @@ const Title = styled.h2`
   color: #000;
   font-size: 20px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 16px;
     margin-bottom: 15px;
   }
@@ -56,7 +56,7 @@ const FormContainer = styled.form`
   flex-direction: column;
   gap: 1rem;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 0.5rem;
   }
 `;
@@ -70,7 +70,7 @@ const StyledTextField = styled(TextField)`
   }
   margin-bottom: 16px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-bottom: 12px;
     & .MuiInputBase-input {
       font-size: 12px;
@@ -86,7 +86,7 @@ const ButtonsContainer = styled.div`
   justify-content: space-between;
   margin-top: 25px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-top: 15px;
     gap: 6px;
   }
@@ -103,7 +103,7 @@ const StyledButton = styled(Button)`
     height: 2.25rem;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     && {
       font-size: 0.6875rem;
       padding: 0.125rem 1rem;

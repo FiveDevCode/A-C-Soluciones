@@ -11,7 +11,7 @@ const TableContainer = styled.div`
   margin-top: 20px;
   overflow-x: auto;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-top: 10px;
   }
 `;
@@ -28,7 +28,7 @@ const Table = styled.table`
     font-size: 14px;
     color: #000;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       padding: 6px;
       font-size: 12px;
     }
@@ -41,7 +41,7 @@ const Table = styled.table`
     font-size: 14px;
     color: #555;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       padding: 0;
       font-size: 12px;
     }
@@ -62,7 +62,7 @@ const ActionButton = styled.button`
     opacity: 0.9;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 3px 6px;
     font-size: 11px;
     margin: 0 2px;
@@ -87,7 +87,7 @@ const EstadoBadge = styled.span`
   border: none;
   letter-spacing: 0.3px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 3px 12px;
     font-size: 11px;
   }
@@ -99,7 +99,7 @@ const ResultMessage = styled.p`
   margin-top: 10px;
   font-size: 14px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 12px;
     margin-top: 8px;
   }
@@ -222,7 +222,7 @@ const BaseTable = ({
               display: "flex",
               justifyContent: "center",
               marginTop: "1.25rem",
-              "@media (max-width: 1280px)": {
+              "@media (max-width: 1350px)": {
                 "& .MuiPaginationItem-root": {
                   fontSize: "0.75rem",
                 },

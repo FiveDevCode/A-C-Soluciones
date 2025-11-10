@@ -21,7 +21,7 @@ const ModalContent = styled.div`
   width: 400px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     width: 330px;
     padding: 20px;
     border-radius: 12px;
@@ -35,7 +35,7 @@ const Title = styled.h2`
   color: #000;
   font-size: 20px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 16px;
     margin-bottom: 15px;
   }
@@ -52,7 +52,7 @@ const Label = styled.span`
   font-size: 0.9rem;
   color: #000;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 0.8rem;
   }
 `;
@@ -61,7 +61,7 @@ const Value = styled.span`
   font-size: 0.9rem;
   color: #333;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 0.8rem;
   }
 `;
@@ -82,7 +82,7 @@ const EstadoBadge = styled.span`
   font-weight: 600;
   width: fit-content;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 0.7rem;
   }
 `;
@@ -92,7 +92,7 @@ const ButtonsContainer = styled.div`
   justify-content: center;
   margin-top: 1.5rem;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-top: 1rem;
   }
 `;
@@ -108,7 +108,7 @@ const StyledButton = styled(Button)`
     height: 2.25rem;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     && {
       font-size: 0.6875rem;
       padding: 0.25rem 1rem;

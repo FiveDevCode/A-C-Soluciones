@@ -33,7 +33,7 @@ const SectionMenu = styled.section`
   transition: width 0.3s ease;
   position: relative;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     width: ${(props) => (props.collapsed ? '60px' : '180px')};
     padding: 0.25rem 0;
   }
@@ -49,7 +49,7 @@ const ContainerMenu = styled.div`
   padding: 0 0.5rem;
   margin-bottom: 0.5rem;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 0 0.25rem;
     margin-bottom: 0.25rem;
   }
@@ -61,7 +61,7 @@ const LogoContainer = styled(Link)`
   justify-content: center;
   padding: 1rem 0;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 0.5rem 0;
   }
 `;
@@ -83,7 +83,7 @@ const MenuTitle = styled.span`
   margin: 0.5rem 0;
   display: ${(props) => (props.collapsed ? 'none' : 'block')};
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 0.65rem;
     margin: 0.25rem 0;
   }
@@ -108,14 +108,14 @@ const MenuOption = styled(Link)`
   svg {
     font-size: 1rem;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       font-size: 0.85rem;
     }
   }
 
   span {
     display: ${(props) => (props.collapsed ? 'none' : 'inline')};
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       font-size: 0.75rem;
     }
   }
@@ -145,7 +145,7 @@ const LogoutButton = styled.button`
   svg {
     font-size: 1rem;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       font-size: 0.85rem;
     }
   }
@@ -153,7 +153,7 @@ const LogoutButton = styled.button`
   span {
     display: ${(props) => (props.collapsed ? 'none' : 'inline')};
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       font-size: 0.75rem;
     }
   }
@@ -168,7 +168,7 @@ const CollapseButton = styled(IconButton)`
     background-color: #f2f2f2 !important;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-right: ${(props) => (props.collapsed ? '0' : '0.25rem')};
   }
 `;

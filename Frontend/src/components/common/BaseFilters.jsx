@@ -9,7 +9,7 @@ const FiltersContainer = styled.div`
   flex-wrap: wrap;
   gap: 15px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 10px;
   }
 `;
@@ -33,7 +33,7 @@ const SearchBox = styled.div`
     margin-left: 6px;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     max-width: 240px;
     padding: 6px 10px;
 
@@ -57,7 +57,7 @@ const Select = styled.select`
     outline: none;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 13px;
     padding: 6px 8px;
   }
@@ -68,7 +68,7 @@ const ButtonGroup = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 8px;
   }
 `;
@@ -90,7 +90,7 @@ const Button = styled.button`
       type === "clear" ? "#b0b0b0" : "#1565c0"};
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 13px;
     padding: 6px 10px;
   }
