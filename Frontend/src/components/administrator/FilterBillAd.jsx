@@ -27,7 +27,7 @@ const FilterBillAd = ({ bills = [], onFilteredChange }) => {
       data={bills}
       placeholder="Buscar por número de factura o cliente..."
       filterOptions={filterOptions}
-      searchKeys={["numero_factura", "cliente_nombre"]}
+      searchKeys={["numero_factura", "nombre_cliente"]}
       onFilteredChange={onFilteredChange}
     />
   );
