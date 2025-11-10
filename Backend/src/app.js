@@ -22,6 +22,7 @@ import RegistrarFacturas from './routers/registrar_factura.routes.js';
 import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
 import HistorialServicesRoter from './routers/Historial_services.route.js';
+import ReporteMantenimientoRouter from './routers/reporte_mantenimiento.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,7 +81,9 @@ App.use(HistorialServicesRoter);
 App.use('/fichas', fichaClienteRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
+App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
 App.use('/api', fichaRouter);
+App.use('/api', ReporteMantenimientoRouter);
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
