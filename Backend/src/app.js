@@ -59,6 +59,10 @@ App.use(cors({
   credentials: true
 }));
 
+
+
+
+
 // rutas de la API
 App.use(AministradorRouter)
 App.use(TecnicoRouter);
