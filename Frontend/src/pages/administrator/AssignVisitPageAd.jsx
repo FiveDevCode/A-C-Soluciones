@@ -116,7 +116,6 @@ const AssignVisitPageAd = () => {
     } catch (err) {
       setErrorMsg("");
       setFieldErrors({});
-      console.log(err)
 
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
@@ -177,7 +176,6 @@ const AssignVisitPageAd = () => {
     const fetchData = async () => {
       try {
         const response = await handleGetListServiceAd();
-        console.log(response.data)
         setServiceList(response.data.data);
       } catch (error) {
         console.error("Error al obtener la lista de servicios:", error);

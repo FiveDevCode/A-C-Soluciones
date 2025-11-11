@@ -170,7 +170,6 @@ const EditAdministratorAd = () => {
     handleGetAdminId(id)
       .then((res) => {
         const data = res.data;
-        console.log(data)
         setUserAdmin(data);
         setIdCard(data.numero_cedula || "");
         setNameUser(data.nombre || "");

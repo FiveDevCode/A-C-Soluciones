@@ -402,7 +402,6 @@ const updateBill = (id, formData) => {
 
 const createPaymentAccount = (paymentAccountData) => {
   const token = localStorage.getItem("authToken");
-  console.log("Datos enviados al backend:", paymentAccountData);
 
   return api.post("/registrar-cuenta", paymentAccountData, {
     headers: {

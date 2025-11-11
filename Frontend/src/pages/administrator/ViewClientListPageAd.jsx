@@ -24,7 +24,6 @@ const ViewClientListPageAd = () => {
   useEffect(() => {
     handleGetListClient()
       .then((res) => {
-        console.log("respuesta:" , res.data)
         setClients(res.data);
       })
       .catch((err) => {

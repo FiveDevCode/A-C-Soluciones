@@ -71,7 +71,6 @@ const ViewRequestPageAd = () => {
       handleGetRequest(id)
         .then((res) => {
           const data = res.data;
-          console.log(data)
           setRequestData(data);
           setStateRequest(data.estado || 'pendiente');
         })
@@ -103,7 +102,6 @@ const ViewRequestPageAd = () => {
 
     try {
       await handleUpdateStateRequest(id, newState); // Llama al backend
-      console.log('Estado de la visita actualizado exitosamente');
     } catch (error) {
       console.error('Error al actualizar el estado de la visita:', error);
     }

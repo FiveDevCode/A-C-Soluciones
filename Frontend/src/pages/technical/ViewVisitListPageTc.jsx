@@ -28,7 +28,6 @@ const ViewViewVisitListPageTc = () => {
   useEffect(() => {
     handleGetVisitAssign(idTechnical)
       .then((res) => {
-        console.log("respuesta:" , res)
         setVisits(Array.isArray(res.data.data) ? res.data.data : []);
       })
       .catch((err) => {

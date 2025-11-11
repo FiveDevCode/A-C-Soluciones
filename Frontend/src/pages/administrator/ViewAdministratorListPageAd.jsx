@@ -22,7 +22,6 @@ const ViewAdministratorListPageAd = () => {
   useEffect(() => {
     handleGetListAdministrator()
       .then((res) => {
-        console.log("respuesta:" , res.data)
         setAdministrators(res.data);
       })
       .catch((err) => {

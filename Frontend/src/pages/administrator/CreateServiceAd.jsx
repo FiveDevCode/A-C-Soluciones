@@ -96,7 +96,6 @@ const CreateServiceAd = () => {
       setShowSuccess(true);
       handleLimpiar();
     } catch (err) {
-      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {

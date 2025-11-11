@@ -22,7 +22,6 @@ const ViewRequestListPageAd = () => {
   useEffect(() => {
     handleGetListRequest()
       .then((res) => {
-        console.log("respuesta:" , res)
         setRequests(res.data);
       })
       .catch((err) => {

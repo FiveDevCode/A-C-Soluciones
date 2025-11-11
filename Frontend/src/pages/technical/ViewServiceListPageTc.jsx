@@ -22,7 +22,6 @@ const ViewServiceListPageTc = () => {
   useEffect(() => {
     handleGetListServiceAd()
       .then((res) => {
-        console.log("respuesta:" , res)
         setServices(res.data.data);
       })
       .catch((err) => {

@@ -9,7 +9,6 @@ const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
     const fetchClient = async () => {
       if (selected?.id_cliente) {
         try {
-          console.log(selected.id_cliente);
           const response = await handleGetClient(selected.id_cliente);
           setClientData(response.data);
         } catch (error) {

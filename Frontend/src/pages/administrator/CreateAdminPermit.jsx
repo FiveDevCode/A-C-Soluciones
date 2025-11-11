@@ -114,7 +114,6 @@ const CreateAdminPermit = () => {
       navigate("/iniciar-sesion");
       setErrorMsg("");
     } catch (err) {
-      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {

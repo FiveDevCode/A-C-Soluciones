@@ -61,7 +61,6 @@ const ProfileUserTc = () => {
 
     handleGetTechnicalId(decoded.id)
       .then((res) => {
-        console.log(res)
         setUserTechnical(res.data);
       })
       .catch((err) => {

@@ -77,7 +77,6 @@ const FormCreateCl = () => {
       navigate("/iniciar-sesion");
       setErrorMsg("");
     } catch (err) {
-      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
@@ -87,7 +86,6 @@ const FormCreateCl = () => {
 
   }
 
-  console.log(fieldErrors)
   return (
     <Form onSubmit={handleSubmit}>
 

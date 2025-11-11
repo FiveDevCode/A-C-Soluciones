@@ -119,7 +119,6 @@ const UserProfileAd = () => {
     const fetchClient = async () => {
       try {
         const response = await handleGetTechnical(id);
-        console.log(response)
         setTechnicalData(response.data);  
       } catch (error) {
         console.log(error);

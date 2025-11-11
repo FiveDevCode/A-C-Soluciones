@@ -99,7 +99,6 @@ const CreateAdministratorAd = () => {
     } catch (err) {
       setErrorMsg("");
       setFieldErrors({});
-      console.log(err)
 
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
