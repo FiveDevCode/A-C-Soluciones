@@ -1,7 +1,7 @@
 import { administratorService } from "../../services/administrator-service"
 
 
-const handleCreateSubmitAccounting = (
+const handleCreateSubmitAccountingAd = (
   numero_de_cedula,
   nombre,
   apellido,
@@ -19,4 +19,4 @@ const handleCreateSubmitAccounting = (
   );
 }
 
-export {handleCreateSubmitAccounting};
+export {handleCreateSubmitAccountingAd};

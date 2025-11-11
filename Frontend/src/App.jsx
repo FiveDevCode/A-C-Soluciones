@@ -62,15 +62,12 @@ import ErrorPage from './errorPages/ErrorPage.jsx';
 import ClientFaqsPage from './pages/common/ClientFaqsPage';
 import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
 import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
-import CreateAccountingAd from './pages/administrator/CreateAccountingAd.jsx';
-import ViewAccountingListPageAd from './pages/administrator/ViewAccountingListPageAd.jsx';
-import { UserProfileAccountingAd } from './pages/administrator/UserProfileAccountingAd.jsx';
-import EditAccountingAd from './pages/administrator/EditAccountingAd.jsx';
 import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
 import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
 import HomeAc from './pages/accountant/HomeAc.jsx';
 import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
 import BillPageAd from './pages/administrator/BillPageAd.jsx';
+import AccountingPageAd from './pages/administrator/AccountingPageAd.jsx';
 
 
 
@@ -441,27 +438,9 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/registrar-contador" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateAccountingAd/>
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/contadores" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewAccountingListPageAd/>
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/perfil-contador/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileAccountingAd/>
-              </PrivateRoute>
-            } />
-            
-            <Route path="/admin/editar-contador/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditAccountingAd/>
+                <AccountingPageAd/>
               </PrivateRoute>
             } />
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { handleGetInventoryAd } from "../../controllers/administrator/getInventoryAd.controller";
 import { handleUpdateInventoryAd } from "../../controllers/administrator/updateInventoryAd.controller";
-import inventoryIcon from "../../assets/administrator/registerInventoryAd.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
@@ -57,7 +56,6 @@ const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
   return (
     <BaseEditModal
       title={`Editar herramienta: ${toolData.nombre}`}
-      image={inventoryIcon}
       fields={fields}
       initialData={initialData}
       onSubmit={handleSubmit}
