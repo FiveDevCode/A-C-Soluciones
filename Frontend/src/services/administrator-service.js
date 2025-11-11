@@ -327,11 +327,11 @@ const deleteAccount = (id) => {
 }
 
 
-const updateAccounting = (id, data) => {  // ← Sin desestructurar {data}
+const updateAccounting = (id, data) => { 
   const token = localStorage.getItem("authToken");
 
   return api.put(`/contabilidad/${id}`,
-    data,  // ← Enviando los datos directamente
+    data,
     {
       headers: {
         "Authorization": `Bearer ${token}`
