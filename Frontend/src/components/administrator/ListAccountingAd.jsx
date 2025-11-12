@@ -7,7 +7,6 @@ const ListAccountingAd = ({ accountings, reloadData, onSelectRows }) => {
     { header: "Cédula", accessor: "numero_de_cedula" },
     { header: "Nombre", accessor: "nombre" },
     { header: "Apellido", accessor: "apellido" },
-    { header: "Cargo", accessor: "cargo" },
     { header: "Correo Electrónico", accessor: "correo_electronico" },
     {
       header: "Estado",

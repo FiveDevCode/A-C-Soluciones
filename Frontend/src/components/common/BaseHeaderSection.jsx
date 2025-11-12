@@ -180,6 +180,7 @@ const BaseHeaderSection = ({
   onDeleteSelected,
   selectedCount = 0,
   filterComponent,
+  actionType = "Eliminar seleccionados",
 }) => {
   return (
     <>
@@ -199,16 +200,17 @@ const BaseHeaderSection = ({
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
           </SearchContainer>
-
-          <ButtonsContainer>
-            <Button
-              active={selectedCount > 0}
-              disabled={selectedCount === 0}
-              onClick={onDeleteSelected}
-            >
-              Eliminar seleccionadas
-            </Button>
-          </ButtonsContainer>
+          {onDeleteSelected && (
+            <ButtonsContainer>
+              <Button
+                active={selectedCount > 0}
+                disabled={selectedCount === 0}
+                onClick={onDeleteSelected}
+              >
+                {actionType}
+              </Button>
+            </ButtonsContainer>
+          )}
         </OptionsContainer>
       </Card>
     </>

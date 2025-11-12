@@ -98,6 +98,7 @@ const InventoryPageAd = () => {
             onFilteredChange={setFilteredInventory}
           />
         }
+        actionType="Deshabilitar seleccionados"
       />
 
 

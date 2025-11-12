@@ -7,6 +7,7 @@ import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import FilterAccountingAd from "../../components/administrator/FilterAccountingAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateAccountingAd from "../../components/administrator/FormCreateAccountingAd";
+import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ const AccountingPageAd = () => {
   const confirmDelete = async () => {
     try {
       for (const id of selectedIds) {
-        //await handleDeleteAccountingAd(id);
+        await handleDeleteAccountingAd(id);
       }
       alert("Registros eliminados correctamente.");
       setSelectedIds([]);
@@ -96,6 +97,8 @@ const AccountingPageAd = () => {
             onFilteredChange={setFilteredAccounting}
           />
         }
+        actionType="Deshabilitar seleccionados"
+
       />
 
       <Card>
