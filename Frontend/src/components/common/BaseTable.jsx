@@ -129,14 +129,18 @@ const BaseTable = ({
   }, [data, currentPage]);
 
   const handleSelectRow = (row) => {
-    setSelectedRows((prev) => {
-      const updated = prev.includes(row)
+    setSelectedRows((prev) =>
+      prev.includes(row)
         ? prev.filter((r) => r !== row)
-        : [...prev, row];
-      onSelectRows?.(updated);
-      return updated;
-    });
+        : [...prev, row]
+    );
   };
+
+  useEffect(() => {
+    if (onSelectRows) {
+      onSelectRows(selectedRows);
+    }
+  }, [selectedRows]);
 
   const handleCloseEdit = () => setSelectedRow(null);
   const handleCloseView = () => setSelectedViewRow(null);
