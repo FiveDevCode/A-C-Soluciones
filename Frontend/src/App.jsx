@@ -15,13 +15,11 @@ import Home from './pages/common/Home';
 import ViewVisitPageTc from './pages/technical/ViewVisitPageTc';
 import UserProfileAd from './pages/administrator/UserProfileAd';
 import EditClientAd from './pages/administrator/EditClientAd';
-import CreateServiceAd from './pages/administrator/CreateServiceAd';
 import CreateAdministratorAd from './pages/administrator/CreateAdministratorAd';
 import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
 import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
 import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
-import EditServicePageAd from './pages/administrator/EditServicePageAd';
 import RecoverPasswordPage from './pages/common/RecoverPasswordPage';
 import RecoverCodePage from './pages/common/RecoverCodePage';
 import RecoverChangePage from './pages/common/RecoverChangePage';
@@ -29,7 +27,6 @@ import ProfilePageAd from './pages/administrator/ProfilePageAd';
 import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
 import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
 import UserProfileClientPageAd from './pages/administrator/UserProfileClientPageAd';
-import ViewServicePageAd from './pages/administrator/ViewServicePageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
 import ViewVisitListPageAd from './pages/administrator/ViewVisitListPageAd';
 import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
@@ -40,7 +37,6 @@ import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
 import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPageAd';
 import ViewClientListPageAd from './pages/administrator/ViewClientListPageAd';
 import ViewAdministratorListPageAd from './pages/administrator/ViewAdministratorListPageAd';
-import ViewServiceListPageAd from './pages/administrator/ViewServiceListPageAd';
 import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
 import SearchResultsPage from './pages/administrator/SearchResultsPage';
 import MenuSideTc from './components/technical/MenuSideTc';
@@ -68,6 +64,7 @@ import HomeAc from './pages/accountant/HomeAc.jsx';
 import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
 import BillPageAd from './pages/administrator/BillPageAd.jsx';
 import AccountingPageAd from './pages/administrator/AccountingPageAd.jsx';
+import ServicePageAd from './pages/administrator/ServicePageAd.jsx';
 
 
 
@@ -306,12 +303,6 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/servicio/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewServicePageAd />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/editar-cliente/:id" element={
               <PrivateRoute roleRequired="administrador">
                 <EditClientAd />
@@ -324,12 +315,6 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/registrar-servicio" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateServiceAd />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/registrar-administrador" element={
               <PrivateRoute roleRequired="administrador">
                 <CreateAdministratorAd />
@@ -339,12 +324,6 @@ function AppContent() {
             <Route path="/admin/asignar-visita" element={
               <PrivateRoute roleRequired="administrador">
                 <AssignVisitPageAd />
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/editar-servicio/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditServicePageAd />
               </PrivateRoute>
             } />
 
@@ -410,7 +389,7 @@ function AppContent() {
 
             <Route path="/admin/servicios" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewServiceListPageAd/>
+                <ServicePageAd/>
               </PrivateRoute>
             } />
 

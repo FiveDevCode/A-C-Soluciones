@@ -4,7 +4,7 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleUpdateService = (id, nameService, descripcion) => {
+const handleUpdateServiceAd = (id, nameService, descripcion) => {
     
 
   return administratorService
@@ -14,4 +14,4 @@ const handleUpdateService = (id, nameService, descripcion) => {
 };
 
 
-export {handleUpdateService};
+export {handleUpdateServiceAd};

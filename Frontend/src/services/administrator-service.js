@@ -502,6 +502,15 @@ const deleteAccounting = (id) => {
   });
 }
 
+const deleteService = (serviceId) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/servicios/${serviceId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -546,6 +555,7 @@ export const administratorService = {
   getInventory,
   updateInventory,
   deleteInventory,
-  deleteAccounting
+  deleteAccounting,
+  deleteService
   
 }
