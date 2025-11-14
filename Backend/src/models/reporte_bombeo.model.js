@@ -1,92 +1,111 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../database/conexion.js';
+import { sequelize } from '../database/conexion.js'; // Asumiendo que esta es tu conexión
 
-const ReporteBombeo = sequelize.define('ReporteBombeo', {
+export const ReporteBombeo = sequelize.define('ReporteBombeo', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    },  
-    
+    },
     fecha: {
-        type: DataTypes.DATE, 
-        allowNull: false, 
+        type: DataTypes.DATEONLY, 
+        allowNull: false,
         validate: {
-            notNull: {
-                msg: 'La fecha del reporte de bombeo es requerida'
-            },
-            isDate: {
-                msg: 'Debe ser una fecha válida'
-            }
+            notNull: { msg: 'La fecha es requerida' },
+            isDate: { msg: 'Debe ser una fecha válida' }
+        }
+    },
+    cliente_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false, 
+        references: {
+            model: 'cliente', 
+            key: 'id'
         },
+        validate: { isInt: { msg: 'ID de cliente no válido' }, notNull: true }
+    },
+    tecnico_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false, 
+        references: {
+            model: 'tecnico', 
+            key: 'id'
+        },
+        validate: { isInt: { msg: 'ID de técnico no válido' }, notNull: true }
+    },
+    administrador_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'administrador', 
+            key: 'id'
+        }
     },
 
+    visita_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'visitas', 
+            key: 'id'
+        }
+    },
     direccion: {
-        type: DataTypes.STRING, 
-        allowNull: false, 
-        
-        validate: {
-            len: {
-                args: [10, 255],
-                msg: 'La dirección de servicio debe tener entre 10 y 255 caracteres.',
-            },
-            notEmpty: {
-                msg: 'La dirección del servicio no puede estar vacía.',
-            },
-            
-        },
-
+        type: DataTypes.STRING(150),
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'La dirección es requerida' },
+            len: { args: [0, 150], msg: 'La dirección debe tener entre 0 y 150 caracteres' },
+            notEmpty: { msg: 'La dirección no puede estar vacía' }
+        }
     },
-    
     ciudad: {
-        type: DataTypes.STRING, 
-        allowNull: false, 
-        
-        validate: {
-            len: {
-                args: [10, 255],
-                msg: 'La ciudad debe tener entre 10 y 255 caracteres.',
-            },
-            notEmpty: {
-                msg: 'La ciudad del servicio no puede estar vacía.',
-            },
-            
-        },
-
-    }, 
-
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'La ciudad es requerida' },
+            len: { args: [0, 100], msg: 'La ciudad debe tener entre 0 y 100 caracteres' },
+            notEmpty: { msg: 'La ciudad no puede estar vacía' }
+         }
+    },
+    telefono: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'El teléfono es requerido' },
+            len: { args: [0, 50], msg: 'El teléfono debe tener entre 0 y 50 caracteres' },
+            notEmpty: { msg: 'El teléfono no puede estar vacío' }
+         }
+    },
     encargado: {
-        type: DataTypes.STRING, 
-        allowNull: false, 
-        
-        validate: {
-            notEmpty: {
-                msg: 'El encargado del servicio no puede estar vacía.',
-            },
-            
-        },
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'El encargado es requerido' },
+            len: { args: [0, 100], msg: 'El encargado debe tener entre 0 y 100 caracteres' },
+            notEmpty: { msg: 'El encargado no puede estar vacío' }
 
-    }, 
-
+         }
+    },
     observaciones_finales: {
-        type: DataTypes.TEXT, 
+        type: DataTypes.TEXT,
         allowNull: false, 
-        
-        validate: {
-            len: {
-                args: [10, 255],
-                msg: 'Las observaciones debe tener entre 20 y 500 caracteres.',
-            },
-            notEmpty: {
-                msg: 'Las observacios del servicio no puede estar vacía.',
-            },
-            
-        },
+        validate:{
+            notNull: { msg: 'Las observaciones finales son requeridas' },
 
-    }, 
+        }
+    },
+    pdf_path: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    }
+}, {
+    tableName: 'reportebombeo',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+});
 
-    
-
-
-
-})
+export const ReporteBombeoModel = { 
+  ReporteBombeo 
+};

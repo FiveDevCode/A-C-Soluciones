@@ -11,31 +11,8 @@ export class VisitaRepository {
     this.solicitudModel = SolicitudModel.Solicitud;
     this.tecnicoModel = TecnicoModel.Tecnico;
     this.servicioModel = ServicioModel.Servicio;
-    this.setupAssociations();
   }
-  setupAssociations() {
-    if (!this.model.associations?.solicitud) {
-      this.model.belongsTo(this.solicitudModel, {
-        foreignKey: 'solicitud_id_fk',
-        as: 'solicitud'
-      });
-    }
-    if (!this.model.associations?.tecnico) {
-      this.model.belongsTo(this.tecnicoModel, {
-        foreignKey: 'tecnico_id_fk',
-        as: 'tecnico'
-      });
-    }
-
-    if (!this.model.associations?.servicio) {
-      this.model.belongsTo(this.servicioModel, {
-        foreignKey: 'servicio_id_fk',
-        as: 'servicio'
-      });
-    }
-    
-  }
-
+  
   async crearVisita(data) {
     return await this.model.create(data);
   }
@@ -44,12 +21,12 @@ export class VisitaRepository {
       include: [
          {
           model: this.solicitudModel,
-          as: 'solicitud',
+          as: 'solicitud_asociada',
           attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado']
          },
         {
           model: this.tecnicoModel,
-          as: 'tecnico',
+          as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
         }
       ]
@@ -60,12 +37,12 @@ export class VisitaRepository {
       include: [
         {
           model: this.solicitudModel,
-          as: 'solicitud',
+          as: 'solicitud_asociada',
           attributes: ['id', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
         },
         {
           model: this.tecnicoModel,
-          as: 'tecnico',
+          as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
         }
       ],

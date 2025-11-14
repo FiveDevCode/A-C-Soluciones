@@ -23,12 +23,14 @@ import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
 import ChatbotRouter from './routers/chatbot.routes.js';
 import HistorialServicesRoter from './routers/Historial_services.route.js';
+import ReporteBombeoRouter from './routers/reporte_bombeo.routes.js'
+import { setupAssociations } from './models/asociaciones.midel.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const App = express();
-
+setupAssociations();
 expressOasGenerator.init(App, {});
 
 App.use(morgan('dev'));
@@ -75,6 +77,7 @@ App.use(Inventario);
 App.use(ChatbotRouter);
 App.use(HistorialServicesRoter);
 App.use('/fichas', fichaClienteRouter);
+App.use(ReporteBombeoRouter)
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
 App.use('/api', fichaRouter);
