@@ -25,9 +25,9 @@ const FilterServicesAd = ({ services = [], onFilteredChange }) => {
   return (
     <BaseFilters
       data={services}
-      placeholder="Buscar por nombre o código..."
+      placeholder="Buscar por nombre..."
       filterOptions={filterOptions}
-      searchKeys={["codigo", "nombre"]}
+      searchKeys={["nombre"]}
       onFilteredChange={onFilteredChange}
     />
   );

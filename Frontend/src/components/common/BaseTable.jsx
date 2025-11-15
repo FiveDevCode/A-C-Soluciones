@@ -41,11 +41,17 @@ const Table = styled.table`
     font-size: 14px;
     color: #555;
 
+    max-width: 200px;        /* Ajusta a tu gusto */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* <-- añade los "..." automáticamente */
+
     @media (max-width: 1350px) {
       padding: 0;
       font-size: 12px;
     }
   }
+
 `;
 
 const ActionButton = styled.button`
@@ -147,7 +153,7 @@ const BaseTable = ({
 
   return (
     <>
-            <TableContainer>
+      <TableContainer>
         <Table>
           <thead>
             <tr>
@@ -186,7 +192,15 @@ const BaseTable = ({
                           </EstadoBadge>
                         </td>
                       );
-                    return <td key={i}>{value || "—"}</td>;
+                    return (
+                        <td key={i}>
+                          {value
+                            ? value.length > 50
+                              ? value.substring(0, 50) + "..."
+                              : value
+                            : "—"}
+                        </td>
+                      );
                   })}
                   {(EditComponent || ViewComponent) && (
                     <td>

@@ -504,7 +504,7 @@ const deleteAccounting = (id) => {
 
 const deleteService = (serviceId) => {
   const token = localStorage.getItem("authToken");
-  return api.delete(`/servicios/${serviceId}`, {
+  return api.patch(`/servicios/${serviceId}/deshabilitar`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }

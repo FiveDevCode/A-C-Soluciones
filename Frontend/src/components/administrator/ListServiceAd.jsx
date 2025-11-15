@@ -3,14 +3,8 @@ import EditServiceAd from "./EditServiceAd";
 import ViewServiceDetailAd from "./ViewServiceDetailAd";
 
 const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
-  const statusLabels = {
-    pendiente: "Pendiente",
-    en_proceso: "En proceso",
-    completado: "Completado",
-  };
 
   const columns = [
-    { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },
     { header: "Descripción", accessor: "descripcion" },
     {
