@@ -25,19 +25,14 @@ const getTechnical = (id) => {
   return api.get(`/tecnico/${id}`)
 };
 
-const updateClient = (id, IdCard, name, lastName, email, phone, address) => {
-  return api.put(`/cliente/${id}`, {
-    numero_de_cedula: IdCard,
-    nombre: name,
-    apellido: lastName,
-    correo_electronico: email,
-    telefono: phone,
-    direccion: address
-  }, {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
+const updateClient = (id, data) => {
+  return api.put(`/cliente/${id}`, 
+    data, 
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 };
 
 const getListTechnical = () => {
@@ -159,13 +154,14 @@ const getAdminId = (id) => {
   return api.get(`/admin/${id}`)
 }
 
-const updateAdmin = (id, idCard, nameUser, lastName, email) => {
+const updateAdmin = (id, idCard, nameUser, lastName, email, state) => {
   
   return api.put(`/admin/${id}`, {
     numero_cedula: idCard,
     nombre: nameUser,
     apellido: lastName,
     correo_electronico: email,
+    estado: state
   }, {
     headers: {
       "Content-Type": "application/json",
@@ -511,6 +507,15 @@ const deleteService = (serviceId) => {
   });
 }
 
+const deleteAdministrator = (administratorId) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/admin/${administratorId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -556,6 +561,7 @@ export const administratorService = {
   updateInventory,
   deleteInventory,
   deleteAccounting,
-  deleteService
+  deleteService,
+  deleteAdministrator
   
 }

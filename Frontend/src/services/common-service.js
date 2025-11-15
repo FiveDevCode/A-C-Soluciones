@@ -79,7 +79,7 @@ const getListToken = () => {
 
 
 const getListClient = () => {
-  return api.get("/cliente");
+  return api.get("/cliente/todos");
 
 }
 

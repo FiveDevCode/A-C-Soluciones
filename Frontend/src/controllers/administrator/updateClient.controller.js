@@ -3,11 +3,11 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleUpdateClient = (id, IdCard, name, lastName, email, phone, address) => {
+const handleUpdateClient = (id, data) => {
     
 
   return administratorService
-  .updateClient(id, IdCard, name, lastName, email, phone, address)
+  .updateClient(id, data)
 
 
 };
