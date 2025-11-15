@@ -516,6 +516,15 @@ const deleteAdministrator = (administratorId) => {
   });
 }
 
+const deleteClient = (clientId) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/cliente/${clientId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -562,6 +571,7 @@ export const administratorService = {
   deleteInventory,
   deleteAccounting,
   deleteService,
-  deleteAdministrator
+  deleteAdministrator,
+  deleteClient
   
 }

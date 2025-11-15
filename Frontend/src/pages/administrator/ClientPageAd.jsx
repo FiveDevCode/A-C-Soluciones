@@ -6,6 +6,7 @@ import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterClientAd from "../../components/administrator/FilterClientAd";
+import { handleDeleteClientAd } from "../../controllers/administrator/deleteClientAd.controller";
 
 const Container = styled.div`
   display: flex;
@@ -64,9 +65,19 @@ const ClientPageAd = () => {
   };
 
   const confirmDelete = async () => {
-    alert("Aquí se eliminarían los clientes seleccionados.");
-    setSelectedIds([]);
-    setShowConfirmModal(false);
+    try {
+      for (const id of selectedIds) {
+        await handleDeleteClientAd(id);
+      }
+      alert("Registros eliminados correctamente.");
+      setSelectedIds([]);
+      loadClients();
+    } catch (error) {
+      console.error("Error eliminando registros:", error);
+      alert("Error al eliminar algunos registros.");
+    } finally {
+      setShowConfirmModal(false);
+    }
   };
 
   return (
