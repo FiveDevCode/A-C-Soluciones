@@ -1,0 +1,22 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "hlcgikMvhtuWhOAPPYbPNcCuxBeKcLkf",
+    "database": "railway",
+    "host": "shortline.proxy.rlwy.net",
+    "port": 40896,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "hlcgikMvhtuWhOAPPYbPNcCuxBeKcLkf",
+    "database": "railway",
+    "host": "shortline.proxy.rlwy.net",
+    "port": 40896,
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres"
+  }
+}

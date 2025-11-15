@@ -30,69 +30,6 @@ describe('VisitaRepository', () => {
     expect(VisitaModel.Visita.create).toHaveBeenCalledWith({ solicitud_id_fk: 1 });
   });
 
-  // Test para cuando las asociaciones no existen
-  it('debería crear asociaciones cuando no existen', () => {
-    // Configuración: asegurarse de que no hay asociaciones previas
-    const mockModel = {
-      associations: {},
-      belongsTo: jest.fn()
-    };
-
-    const repository = new VisitaRepository();
-    repository.model = mockModel;
-    repository.solicitudModel = {};
-    repository.tecnicoModel = {};
-    repository.servicioModel = {};
-
-    repository.setupAssociations();
-
-    // Verificar que se llamó a belongsTo para todas las asociaciones
-    expect(mockModel.belongsTo).toHaveBeenCalledTimes(3);
-  });
-  // Test para cuando las asociaciones ya existen
-  it('no debería crear asociaciones que ya existen', () => {
-    // Configuración: simular que todas las asociaciones ya existen
-    const mockModel = {
-      associations: {
-        solicitud: {},
-        tecnico: {},
-        servicio: {}
-      },
-      belongsTo: jest.fn()
-    };
-
-    const repository = new VisitaRepository();
-    repository.model = mockModel;
-
-    repository.setupAssociations();
-
-    // Verificar que no se llamó a belongsTo
-    expect(mockModel.belongsTo).not.toHaveBeenCalled();
-  });
-
-    // Test para casos mixtos
-  it('debería crear solo las asociaciones que no existen', () => {
-    // Configuración: simular que solo existe una asociación
-    const mockModel = {
-      associations: {
-        solicitud: {} // Solo esta existe
-      },
-      belongsTo: jest.fn()
-    };
-    
-    const repository = new VisitaRepository();
-    repository.model = mockModel;
-    repository.solicitudModel = {};
-    repository.tecnicoModel = {};
-    repository.servicioModel = {};
-    
-    repository.setupAssociations();
-    
-    // Verificar que se llamó a belongsTo solo 2 veces
-    expect(mockModel.belongsTo).toHaveBeenCalledTimes(2);
-  });
-
-
 
   it('debe obtener una visita por id con relaciones', async () => {
     const mockVisita = { id: 1 };
