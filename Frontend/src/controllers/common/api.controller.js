@@ -1,7 +1,7 @@
 // src/services/api.js
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_URL
 const api = axios.create({
   baseURL: API_KEY, // puedes usar una variable de entorno
   
