@@ -12,7 +12,15 @@ const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
       accessor: "estado",
       isBadge: true,
     },
-    { header: "Fecha de creación", accessor: "fecha_creacion" },
+    {
+      header: "Fecha de creación",
+      accessor: "fecha_creacion",
+      render: (value) => {
+        if (!value) return "—";
+        const date = new Date(value);
+        return date.toLocaleDateString("es-CO");
+      }
+    }
   ];
 
   return (
