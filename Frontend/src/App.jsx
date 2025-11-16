@@ -4,7 +4,6 @@ import LoginPage from './pages/common/LoginPage';
 import styled from 'styled-components';
 import MenuSideAd from './components/administrator/MenuSideAd';
 import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
-import CreateEmployeeAd from './pages/administrator/CreateEmployeeAd';
 import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
 import ProfileUserTc from './pages/technical/ProfileUserTc';
 import HomeAd from './pages/administrator/HomeAd';
@@ -13,7 +12,6 @@ import PrivateRoute from './components/common/PrivateRoute';
 import { useEffect, useState } from 'react';
 import Home from './pages/common/Home';
 import ViewVisitPageTc from './pages/technical/ViewVisitPageTc';
-import UserProfileAd from './pages/administrator/UserProfileAd';
 import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
 import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
@@ -23,7 +21,6 @@ import RecoverCodePage from './pages/common/RecoverCodePage';
 import RecoverChangePage from './pages/common/RecoverChangePage';
 import ProfilePageAd from './pages/administrator/ProfilePageAd';
 import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
-import EditTechnicalPageAd from './pages/administrator/EditTechnicalPageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
 import ViewVisitListPageAd from './pages/administrator/ViewVisitListPageAd';
 import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
@@ -31,7 +28,6 @@ import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
 import ViewVisitListPageTc from './pages/technical/ViewVisitListPageTc';
 import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
 import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
-import ViewTechnicalListPageAd from './pages/administrator/ViewTechnicalListPageAd';
 import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
 import SearchResultsPage from './pages/administrator/SearchResultsPage';
 import MenuSideTc from './components/technical/MenuSideTc';
@@ -60,6 +56,7 @@ import AccountingPageAd from './pages/administrator/AccountingPageAd.jsx';
 import ServicePageAd from './pages/administrator/ServicePageAd.jsx';
 import AdministratorPageAd from './pages/administrator/AdministratorPageAd.jsx';
 import ClientPageAd from './pages/administrator/ClientPageAd.jsx';
+import TechnicalPageAd from './pages/administrator/TechnicalPageAd.jsx';
 
 
 
@@ -280,24 +277,6 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/registrar-empleado" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateEmployeeAd />
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/perfil-tecnico/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileAd />
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/editar-tecnico/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <EditTechnicalPageAd />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/asignar-visita" element={
               <PrivateRoute roleRequired="administrador">
                 <AssignVisitPageAd />
@@ -343,12 +322,6 @@ function AppContent() {
             <Route path="/admin/editar-perfil" element={
               <PrivateRoute roleRequired="administrador">
                 <EditAdminPageAd />
-              </PrivateRoute>
-            } />
-
-            <Route path="/admin/tecnicos" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewTechnicalListPageAd />
               </PrivateRoute>
             } />
 
@@ -403,6 +376,12 @@ function AppContent() {
             <Route path="/admin/clientes" element={
               <PrivateRoute roleRequired="administrador">
                 <ClientPageAd/>
+              </PrivateRoute>
+            } />
+            
+            <Route path="/admin/tecnicos" element={
+              <PrivateRoute roleRequired="administrador">
+                <TechnicalPageAd/>
               </PrivateRoute>
             } />
             

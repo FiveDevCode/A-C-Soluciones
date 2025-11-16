@@ -1,41 +1,45 @@
 import { jwtDecode } from "jwt-decode";
+import { handleCreateSubmitTechnical } from "../../controllers/administrator/createTc.controller";
 import BaseFormModal from "../common/BaseFormModal";
-import { handleCreateAdmin } from "../../controllers/administrator/createAdminAd.controller";
 
-const FormCreateAdministratorAd = ({ onClose, onSuccess }) => {
+const FormCreateTechnicalAd = ({ onClose, onSuccess }) => {
 
   const fields = [
-    { name: "numero_cedula", label: "Cédula", type: "text" },
+    { name: "numero_de_cedula", label: "Cédula", type: "text" },
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "apellido", label: "Apellido", type: "text" },
     { name: "correo_electronico", label: "Correo electrónico", type: "email" },
+    { name: "telefono", label: "Teléfono", type: "text" },
     { name: "contrasenia", label: "Contraseña", type: "password" },
+    { name: "especialidad", label: "Especialidad", type: "text"},
   ];
 
   const handleSubmit = async (data) => {
     const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
 
-    await handleCreateAdmin(
-      data.numero_cedula,
+    await handleCreateSubmitTechnical(
+      data.numero_de_cedula,
       data.nombre,
       data.apellido,
       data.correo_electronico,
+      data.telefono,
       data.contrasenia,
+      data.especialidad,
       parseInt(decoded.id)
     );
   };
 
   return (
     <BaseFormModal
-      title="Agregar administrador"
+      title="Agregar técnico"
       fields={fields}
       onSubmit={handleSubmit}
       onClose={onClose}
       onSuccess={onSuccess}
-      successMessage="¡Administrador registrado exitosamente!"
+      successMessage="¡Técnico registrado exitosamente!"
     />
   );
 };
 
-export default FormCreateAdministratorAd;
+export default FormCreateTechnicalAd;

@@ -169,16 +169,8 @@ const updateAdmin = (id, idCard, nameUser, lastName, email, state) => {
   });
 }
 
-const updateTechnical = (id, idCard, nameUser, lastName, email, phone, position) => {
-  return api.put(`/tecnico/${id}`, {
-    numero_de_cedula: idCard,
-    nombre: nameUser,
-    apellido: lastName,
-    telefono: phone, 
-    correo_electronico: email,
-    especialidad: position,
-
-  }, {
+const updateTechnical = (id, data) => {
+  return api.put(`/tecnico/${id}`, data, {
     headers: {
       "Content-Type": "application/json",
     }
@@ -525,6 +517,15 @@ const deleteClient = (clientId) => {
   });
 }
 
+const deleteTechnical = (technicalId) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/tecnico/${technicalId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -572,6 +573,7 @@ export const administratorService = {
   deleteAccounting,
   deleteService,
   deleteAdministrator,
-  deleteClient
+  deleteClient,
+  deleteTechnical
   
 }
