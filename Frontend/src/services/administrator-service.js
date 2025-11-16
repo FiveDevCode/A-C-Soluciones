@@ -526,6 +526,16 @@ const deleteTechnical = (technicalId) => {
   });
 }
 
+const updateVisit = (id, visitData) => {
+  const token = localStorage.getItem("authToken");
+  return api.put(`/visitas/${id}`, visitData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -574,6 +584,7 @@ export const administratorService = {
   deleteService,
   deleteAdministrator,
   deleteClient,
-  deleteTechnical
+  deleteTechnical,
+  updateVisit
   
 }

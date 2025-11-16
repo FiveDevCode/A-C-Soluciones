@@ -229,8 +229,8 @@ const BaseTable = ({
       {data.length > 0 && (
         <>
           <ResultMessage>
-            Mostrando {paginatedData.length} resultado
-            {paginatedData.length > 1 ? "s" : ""} de búsqueda
+            Mostrando {paginatedData.length} de {data.length} resultado
+            {data.length !== 1 ? "s" : ""}
           </ResultMessage>
           <Pagination
             count={totalPages}

@@ -115,23 +115,40 @@ const BaseFilters = ({
     setSearchTerm("");
   };
 
-  const filteredData = data.filter((item) => {
-    const text = searchTerm.toLowerCase();
+  // --- Permite leer claves anidadas como "tecnico.nombre"
+  const getNestedValue = (obj, key) => {
+    if (!obj || !key) return "";
+    return key.split(".").reduce((o, k) => (o ? o[k] : undefined), obj);
+  };
 
+  const filteredData = data.filter((item) => {
+    const text = (searchTerm || "").toString().toLowerCase();
+
+    // Buscar por searchKeys (soporta claves anidadas)
     const matchesSearch =
       searchKeys.length === 0
         ? true
-        : searchKeys.some((key) =>
-            item[key]?.toString().toLowerCase().includes(text)
-          );
+        : searchKeys.some((key) => {
+            const raw = getNestedValue(item, key);
+            const value = raw !== undefined && raw !== null ? raw.toString().toLowerCase() : "";
+            return value.includes(text);
+          });
 
+    // Aplicar filtros (filterOptions)
     const matchesFilters = filterOptions.every((filter) => {
       const filterKey = filter.key;
       const filterValue = filters[filterKey];
+
       if (!filterValue) return true;
 
-      const itemValue = item[filterKey]?.toString().toLowerCase();
-      return itemValue === filterValue.toLowerCase();
+      // soporta claves anidadas también para filtros si hace falta
+      const rawItemValue = getNestedValue(item, filterKey);
+      const itemValue =
+        rawItemValue !== undefined && rawItemValue !== null
+          ? rawItemValue.toString().toLowerCase()
+          : "";
+
+      return itemValue === filterValue.toString().toLowerCase();
     });
 
     return matchesSearch && matchesFilters;
@@ -139,6 +156,7 @@ const BaseFilters = ({
 
   useEffect(() => {
     onFilteredChange?.(filteredData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, searchTerm, data]);
 
   return (
@@ -152,7 +170,6 @@ const BaseFilters = ({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </SearchBox>
-
 
       {filterOptions.map((filter) => (
         <Select

@@ -75,53 +75,6 @@ const SearchContainer = styled.div`
   }
 `;
 
-const SearchBox = styled.div`
-  display: flex;
-  align-items: center;
-  background: #f1f3f4;
-  padding: 6px 10px;
-  border-radius: 6px;
-  flex: 1;
-  width: 270px;
-
-  input {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: 100%;
-    font-size: 14px;
-    margin-left: 6px;
-  }
-
-  @media (max-width: 1350px) {
-    padding: 5px 8px;
-    width: 250px;
-    input {
-      font-size: 13px;
-    }
-  }
-`;
-
-const Select = styled.select`
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  cursor: pointer;
-  background: white;
-  transition: all 0.2s;
-
-  &:focus {
-    border-color: #1976d2;
-    outline: none;
-  }
-
-  @media (max-width: 1350px) {
-    font-size: 13px;
-    padding: 5px 8px;
-  }
-`;
-
 const ButtonsContainer = styled.div`
   display: flex;
   gap: 10px;

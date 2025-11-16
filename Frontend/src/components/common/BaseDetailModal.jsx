@@ -19,6 +19,8 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 16px;
   width: 400px;
+  max-height: 80vh;         /* 👈 límite en altura */
+  overflow-y: auto;         /* 👈 scroll si se desborda */
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
 
   @media (max-width: 1350px) {
@@ -60,11 +62,13 @@ const Label = styled.span`
 const Value = styled.span`
   font-size: 0.9rem;
   color: #333;
+  word-break: break-word;    /* 👈 evita desbordamiento */
 
   @media (max-width: 1350px) {
     font-size: 0.8rem;
   }
 `;
+
 
 const EstadoBadge = styled.span`
   background: ${(props) =>

@@ -15,15 +15,12 @@ import ViewVisitPageTc from './pages/technical/ViewVisitPageTc';
 import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
 import HeaderBarCl from './components/client/HeaderBarCl';
 import FooterHomeCl from './components/client/FooterHomeCl';
-import AssignVisitPageAd from './pages/administrator/AssignVisitPageAd';
 import RecoverPasswordPage from './pages/common/RecoverPasswordPage';
 import RecoverCodePage from './pages/common/RecoverCodePage';
 import RecoverChangePage from './pages/common/RecoverChangePage';
 import ProfilePageAd from './pages/administrator/ProfilePageAd';
 import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
-import ViewVisitListPageAd from './pages/administrator/ViewVisitListPageAd';
-import ViewVisitPageAd from './pages/administrator/ViewVisitPageAd';
 import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
 import ViewVisitListPageTc from './pages/technical/ViewVisitListPageTc';
 import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
@@ -57,6 +54,7 @@ import ServicePageAd from './pages/administrator/ServicePageAd.jsx';
 import AdministratorPageAd from './pages/administrator/AdministratorPageAd.jsx';
 import ClientPageAd from './pages/administrator/ClientPageAd.jsx';
 import TechnicalPageAd from './pages/administrator/TechnicalPageAd.jsx';
+import VisitPageAd from './pages/administrator/VisitPageAd.jsx';
 
 
 
@@ -277,29 +275,13 @@ function AppContent() {
               </PrivateRoute>
             } />
 
-            <Route path="/admin/asignar-visita" element={
-              <PrivateRoute roleRequired="administrador">
-                <AssignVisitPageAd />
-              </PrivateRoute>
-            } />
-
             <Route path="/admin/perfil/" element={
               <PrivateRoute roleRequired="administrador">
                 <ProfilePageAd />
               </PrivateRoute>
             } />
 
-            <Route path="/admin/visitas" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewVisitListPageAd />
-              </PrivateRoute>
-            } />
 
-            <Route path="/admin/visita/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewVisitPageAd />
-              </PrivateRoute>
-            } />
 
             <Route path="/admin/reporte/:id" element={
               <PrivateRoute roleRequired="administrador">
@@ -382,6 +364,12 @@ function AppContent() {
             <Route path="/admin/tecnicos" element={
               <PrivateRoute roleRequired="administrador">
                 <TechnicalPageAd/>
+              </PrivateRoute>
+            } />
+ 
+            <Route path="/admin/visitas" element={
+              <PrivateRoute roleRequired="administrador">
+                <VisitPageAd/>
               </PrivateRoute>
             } />
             

@@ -173,7 +173,17 @@ const BaseEditModal = ({
             <StyledTextField
               key={field.name}
               select={field.type === "select"}
-              type={field.type === "number" ? "number" : "text"}
+              type={
+                field.type === "number"
+                  ? "number"
+                  : field.type === "date"
+                  ? "date"
+                  : field.type === "datetime-local"
+                  ? "datetime-local"
+                  : field.type === "textarea"
+                  ? ""
+                  : "text"
+              }
               label={field.label}
               name={field.name}
               fullWidth
@@ -182,6 +192,9 @@ const BaseEditModal = ({
               onChange={handleChange}
               error={Boolean(fieldErrors[field.name])}
               helperText={fieldErrors[field.name]}
+              InputLabelProps={{
+                shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
+              }}
               SelectProps={{
                 onClose: () => document.activeElement.blur(),
                 MenuProps: { disableScrollLock: true },
