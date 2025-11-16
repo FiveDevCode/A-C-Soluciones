@@ -8,11 +8,6 @@ const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
     { header: "Nombre", accessor: "nombre" },
     { header: "Descripción", accessor: "descripcion" },
     {
-      header: "Estado",
-      accessor: "estado",
-      isBadge: true,
-    },
-    {
       header: "Fecha de creación",
       accessor: "fecha_creacion",
       render: (value) => {
@@ -20,6 +15,11 @@ const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
         const date = new Date(value);
         return date.toLocaleDateString("es-CO");
       }
+    },
+    {
+      header: "Estado",
+      accessor: "estado",
+      isBadge: true,
     }
   ];
 

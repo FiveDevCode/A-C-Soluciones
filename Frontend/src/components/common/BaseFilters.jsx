@@ -20,26 +20,38 @@ const SearchBox = styled.div`
   background: #f1f3f4;
   padding: 8px 12px;
   border-radius: 6px;
-  flex: 1;
-  width: 260px;
+  flex: 2;
+  min-width: 320px;
   transition: all 0.2s ease;
 
   input {
     border: none;
     outline: none;
     background: transparent;
-    width: 240px;
+    width: 100%;
+    min-width: 0;
     font-size: 14px;
     margin-left: 6px;
+
+    &::placeholder {
+      overflow: visible;
+      white-space: nowrap;
+    }
   }
 
   @media (max-width: 1350px) {
-    max-width: 240px;
+    min-width: 240px;
+    flex: 1.5;
     padding: 6px 10px;
 
     input {
       font-size: 13px;
     }
+  }
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    flex-basis: 100%;
   }
 `;
 

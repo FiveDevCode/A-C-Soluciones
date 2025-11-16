@@ -20,7 +20,8 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
+  border-spacing: 50px 0;
+  
   th {
     background-color: #bbdefb;
     text-align: center;
@@ -40,6 +41,7 @@ const Table = styled.table`
     border-bottom: 1px solid #ddd;
     font-size: 14px;
     color: #555;
+    height: 51px;
 
     max-width: 200px;        /* Ajusta a tu gusto */
     white-space: nowrap;
@@ -47,6 +49,7 @@ const Table = styled.table`
     text-overflow: ellipsis; /* <-- añade los "..." automáticamente */
 
     @media (max-width: 1350px) {
+      height: 42.5px;
       padding: 0;
       font-size: 12px;
     }
@@ -135,6 +138,7 @@ const BaseTable = ({
   }, [data, currentPage]);
 
   const handleSelectRow = (row) => {
+    if (!onSelectRows) return; 
     setSelectedRows((prev) =>
       prev.includes(row)
         ? prev.filter((r) => r !== row)
@@ -157,7 +161,9 @@ const BaseTable = ({
         <Table>
           <thead>
             <tr>
-              <th></th>
+              <th>
+                {onSelectRows ? "" : null}
+              </th>
               {columns.map((col, index) => (
                 <th key={index}>{col.header}</th>
               ))}
@@ -175,12 +181,17 @@ const BaseTable = ({
               paginatedData.map((row, index) => (
                 <tr key={index}>
                   <td>
-                    <Checkbox
-                      color="primary"
-                      checked={selectedRows.includes(row)}
-                      onChange={() => handleSelectRow(row)}
-                    />
+                    {onSelectRows ? (
+                      <Checkbox
+                        color="primary"
+                        checked={selectedRows.includes(row)}
+                        onChange={() => handleSelectRow(row)}
+                      />
+                    ) : (
+                      null
+                    )}
                   </td>
+
                   {columns.map((col, i) => {
                     const value = row[col.accessor];
                     if (col.render) return <td key={i}>{col.render(value, row)}</td>;

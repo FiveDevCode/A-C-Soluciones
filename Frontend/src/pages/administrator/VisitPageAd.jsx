@@ -81,7 +81,6 @@ const VisitPageAd = () => {
           <ListVisitAd
             visits={filteredVisits}
             reloadData={loadVisits}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           />
         )}
       </Card>
