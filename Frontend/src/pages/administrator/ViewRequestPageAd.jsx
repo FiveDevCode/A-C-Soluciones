@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import { Accordion, AccordionSummary, AccordionDetails, Button, MenuItem, Select, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
 import { handleGetRequest } from '../../controllers/common/getRequest.controller';
-import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
 import { handleUpdateStateRequest } from '../../controllers/administrator/UpdateStateRequestAd.controller';
 
 

@@ -144,9 +144,11 @@ const BaseHeaderSection = ({
           <TitleSection>
             {sectionTitle}
           </TitleSection>
-          <AddButton onClick={onAdd}>
-            <FaPlus /> {addLabel}
-          </AddButton>
+          {onAdd && (
+            <AddButton onClick={onAdd}>
+              <FaPlus /> {addLabel}
+            </AddButton>
+          )}
         </ContainerAdd>
 
         <OptionsContainer>

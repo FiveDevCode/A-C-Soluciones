@@ -23,8 +23,6 @@ import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
 import CreateReportPageTc from './pages/technical/CreateReportPageTc';
 import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
 import ViewVisitListPageTc from './pages/technical/ViewVisitListPageTc';
-import ViewRequestListPageAd from './pages/administrator/ViewRequestListPageAd';
-import ViewRequestPageAd from './pages/administrator/ViewRequestPageAd';
 import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
 import SearchResultsPage from './pages/administrator/SearchResultsPage';
 import MenuSideTc from './components/technical/MenuSideTc';
@@ -55,6 +53,7 @@ import AdministratorPageAd from './pages/administrator/AdministratorPageAd.jsx';
 import ClientPageAd from './pages/administrator/ClientPageAd.jsx';
 import TechnicalPageAd from './pages/administrator/TechnicalPageAd.jsx';
 import VisitPageAd from './pages/administrator/VisitPageAd.jsx';
+import RequestPageAd from './pages/administrator/RequestPageAd.jsx';
 
 
 
@@ -291,15 +290,10 @@ function AppContent() {
             
             <Route path="/admin/solicitudes" element={
               <PrivateRoute roleRequired="administrador">
-                <ViewRequestListPageAd />
+                <RequestPageAd />
               </PrivateRoute>
             } />
 
-            <Route path="/admin/solicitud/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewRequestPageAd />
-              </PrivateRoute>
-            } />
             
             <Route path="/admin/editar-perfil" element={
               <PrivateRoute roleRequired="administrador">

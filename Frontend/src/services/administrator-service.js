@@ -536,6 +536,15 @@ const updateVisit = (id, visitData) => {
   });
 }
 
+const deleteRequest = (id) => {
+  const token = localStorage.getItem("authToken");
+  return api.delete(`/solicitud/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -585,6 +594,7 @@ export const administratorService = {
   deleteAdministrator,
   deleteClient,
   deleteTechnical,
-  updateVisit
+  updateVisit,
+  deleteRequest
   
 }
