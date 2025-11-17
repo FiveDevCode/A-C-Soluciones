@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import ViewRequestDetailAd from "./ViewRequestDetailAd";
 
-const ListRequestAd = ({ requests, reloadData, onSelectRows }) => {
+const ListRequestAd = ({ requests, onSelectRows }) => {
   const columns = [
     {
       header: "Comentarios",

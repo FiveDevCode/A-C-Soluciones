@@ -108,8 +108,6 @@ const RequestPageAd = () => {
         ) : (
           <ListRequestAd
             requests={filteredRequests}
-            reloadData={loadRequests}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           />
         )}
       </Card>
