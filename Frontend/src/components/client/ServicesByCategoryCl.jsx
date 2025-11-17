@@ -9,11 +9,12 @@ import "slick-carousel/slick/slick-theme.css";
 import ServiceOpenCl from "./ServiceOpenCl";
 
 const categories = {
-  "Bombas e Hidráulica": ["bomba", "pozo", "hidráulico", "presión", "agua", "sumergible"],
-  "Eléctrico y Plantas": ["eléctrico", "motor", "generador", "planta"],
-  "Piscinas e Impermeabilización": ["piscina", "impermeabilización", "fragua"],
-  "Control y Automatización": ["tablero", "plc", "automatización", "variador"],
-  "Limpieza y Desinfección": ["lavado", "tanques", "desinfección"],
+  "Bombas e Hidráulica": ["bomba", "pozo", "hidráulico", "presión", "agua", "sumergible", "excavacion", "excavación"],
+  "Eléctrico y Plantas": ["eléctrico", "motor", "generador", "planta", "emergencia"],
+  "Piscinas e Impermeabilización": ["piscina", "impermeabilización", "fragua", "terrazas"],
+  "Control y Automatización": ["tablero", "plc", "automatización", "variador", "arrancador", "transferencia"],
+  "Instalaciones Eléctricas e Iluminación": ["iluminación", "iluminacion", "instalacion", "instalación"],
+  "Limpieza y Desinfección": ["lavado", "tanques", "desinfección", "desinfeccion", "cañerias", "cañerías"],
   "Otros": [] // Servicios que no encajan en las anteriores
 };
 
@@ -58,6 +59,8 @@ const NextArrow = ({ onClick }) => (
 
 const SliderWrapper = styled.div`
   position: relative;
+  padding: 0 3rem;
+  margin: 0 auto;
 
   .slick-prev,
   .slick-next {
@@ -70,6 +73,7 @@ const SliderWrapper = styled.div`
     justify-content: center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     transition: background-color 0.3s;
+    z-index: 1;
   }
 
   .slick-prev:hover,
@@ -85,11 +89,35 @@ const SliderWrapper = styled.div`
   }
 
   .slick-prev {
-    left: -45px;
+    left: -50px;
   }
 
   .slick-next {
-    right: -45px;
+    right: -50px;
+  }
+
+  @media screen and (max-width: 1280px) {
+    padding: 0 2rem;
+    
+    .slick-prev {
+      left: -35px;
+    }
+
+    .slick-next {
+      right: -35px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 0 1rem;
+    
+    .slick-prev {
+      left: -25px;
+    }
+
+    .slick-next {
+      right: -25px;
+    }
   }
 `;
 
@@ -97,6 +125,15 @@ const SliderWrapper = styled.div`
 const Container = styled.section`
   padding: 2rem 6rem;
   margin-bottom: 4rem;
+  max-width: 100%;
+  
+  @media screen and (max-width: 1280px) {
+    padding: 2rem 4rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
 `;
 
 const ArrowButtonBase = styled.button`
@@ -132,40 +169,57 @@ const ArrowButtonRight = styled(ArrowButtonBase)`
   right: -50px;
 `;
 
+const CategorySection = styled.div`
+  margin-bottom: 3.5rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 const CategoryTitle = styled.h2`
-  margin: 2rem 0 1rem;
+  margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 800;
   color: #1a237e;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
 `;
 
 const Card = styled.div`
-  padding: 1rem;
+  padding: 1.25rem;
   margin-right: 1rem;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 6px;
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.08);
   background: #fff;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  min-height: 200px; /* 👈 Asegura altura igual para todos */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 220px;
+  max-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0px 6px 12px rgba(0,0,0,0.15);
   }
 `;
 
 const Description = styled.p`
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 0.875rem;
+  color: #64748b;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 1em; /* 👈 evita que se extienda demasiado (aprox. 2 líneas) */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  margin-top: 0.5rem;
+  text-align: center;
 `;
 
 const IconWrapper = styled.div`
@@ -181,48 +235,23 @@ const IconWrapper = styled.div`
 `;
 
 const ServiceName = styled.h3`
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
+  color: #1e293b;
+  margin: 0.5rem 0;
+  line-height: 1.3;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 
-const sliderSettings = (currentSlide, setCurrentSlide) => ({
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 4,
-  initialSlide: 0,
-  centerMode: false,
-  arrows: true,
-  prevArrow: <PrevArrow visible={currentSlide > 0} />,
-  nextArrow: <NextArrow />,
-  afterChange: (index) => setCurrentSlide(index),
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        initialSlide: 0,
-        centerMode: false
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        initialSlide: 0,
-        centerMode: false
-      }
-    }
-  ]
-});
 
 const ServicesByCategoryCl = () => {
   const [groupedServices, setGroupedServices] = useState({});
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlides, setCurrentSlides] = useState({});
   const [selectedService, setSelectedService] = useState(null);
 
   useEffect(() => {
@@ -230,40 +259,107 @@ const ServicesByCategoryCl = () => {
       .then(res => {
         const grouped = groupServicesByCategory(res.data.data);
         setGroupedServices(grouped);
+        // Inicializar el estado de slides para cada categoría
+        const initialSlides = {};
+        Object.keys(grouped).forEach(cat => {
+          initialSlides[cat] = 0;
+        });
+        setCurrentSlides(initialSlides);
       })
       .catch(err => console.error("Error loading services", err));
   }, []);
 
+  const handleSlideChange = (category, index) => {
+    setCurrentSlides(prev => ({
+      ...prev,
+      [category]: index
+    }));
+  };
+
+  const getSliderSettingsForCategory = (category, servicesLength) => {
+    const currentSlide = currentSlides[category] || 0;
+    const slidesToShow = Math.min(4, servicesLength);
+    
+    return {
+      dots: false,
+      infinite: false,
+      speed: 500,
+      slidesToShow: slidesToShow,
+      slidesToScroll: slidesToShow,
+      initialSlide: 0,
+      centerMode: false,
+      arrows: true,
+      prevArrow: <PrevArrow visible={currentSlide > 0} />,
+      nextArrow: <NextArrow />,
+      afterChange: (index) => handleSlideChange(category, index),
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: Math.min(2, servicesLength),
+            slidesToScroll: Math.min(2, servicesLength),
+            initialSlide: 0,
+            centerMode: false
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            initialSlide: 0,
+            centerMode: false
+          }
+        }
+      ]
+    };
+  };
+
+  // Orden de categorías para mostrar
+  const categoryOrder = [
+    "Bombas e Hidráulica",
+    "Eléctrico y Plantas",
+    "Piscinas e Impermeabilización",
+    "Control y Automatización",
+    "Instalaciones Eléctricas e Iluminación",
+    "Limpieza y Desinfección",
+    "Otros"
+  ];
+
   return (
     <Container>
-      <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#1a237e" }}>
+      <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#1a237e", marginBottom: "2rem" }}>
         Servicios por categoría
       </h1>
 
-      {Object.entries(groupedServices).map(([category, services]) => (
-        services.length > 0 && (
-          <div key={category}>
+      {categoryOrder.map(category => {
+        const services = groupedServices[category] || [];
+        if (services.length === 0) return null;
+
+        return (
+          <CategorySection key={category}>
             <CategoryTitle>{category}</CategoryTitle>
             <SliderWrapper>
-              <Slider {...sliderSettings(currentSlide, setCurrentSlide)}>
+              <Slider {...getSliderSettingsForCategory(category, services.length)}>
                 {services.map(service => (
                   <div key={service.id}>
                     <Card onClick={() => setSelectedService(service)}>
                       <IconWrapper>{getIconByService(service.nombre)}</IconWrapper>
                       <ServiceName>{service.nombre}</ServiceName>
                       <Description>
-                        {service.descripcion.length > 60
+                        {service.descripcion && service.descripcion.length > 60
                           ? service.descripcion.slice(0, 120) + "..."
-                          : service.descripcion}
+                          : service.descripcion || ""}
                       </Description>
                     </Card>
                   </div>
                 ))}
               </Slider>
             </SliderWrapper>
-          </div>
-        )
-      ))}
+          </CategorySection>
+        );
+      })}
+      
       {selectedService && (
         <ServiceOpenCl
           servicio={selectedService}
@@ -271,7 +367,6 @@ const ServicesByCategoryCl = () => {
         />
       )}
     </Container>
-
   );
 };
 

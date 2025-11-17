@@ -6,14 +6,27 @@ import { jwtDecode } from "jwt-decode";
 import { handleGetVisitAssign } from "../../controllers/technical/getVisitAssignTc.controller";
 import ListReportTc from "../../components/technical/ListReportTc";
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
 
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
 
 const ContainerServices = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
-`
+`;
 
 
 
@@ -68,18 +81,18 @@ const ViewReportListPageTc = () => {
 
 
   return (
-    <ContainerServices>
-
-      <FilterServicesAd count={visits.length} />
-      {visits.length === 0 ? (
-        <p style={{textAlign: "center"}}>No hay ninguna reporte generado por el momento.</p>
-      ) : (
-        <ListReportTc visits={visits} />
-      )}
-
-    </ContainerServices>
-  )
-}
+    <PageContainer>
+      <ContainerServices>
+        <FilterServicesAd count={visits.length} />
+        {visits.length === 0 ? (
+          <p style={{textAlign: "center"}}>No hay ninguna reporte generado por el momento.</p>
+        ) : (
+          <ListReportTc visits={visits} />
+        )}
+      </ContainerServices>
+    </PageContainer>
+  );
+};
 
 
 

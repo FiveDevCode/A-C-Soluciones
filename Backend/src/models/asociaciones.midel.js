@@ -7,6 +7,7 @@ import { ServicioModel } from './servicios.model.js';
 import { ReporteBombeoModel } from './reporte_bombeo.model.js';
 import { EquipoBombeoModel } from './equipoBombeo.model.js';
 import { ParametroBombeoModel } from './parametroBombeo.model.js';
+import { ReporteMantenimientoModel } from './reporte_mantenimiento.model.js';
 
 export const setupAssociations = () => {
   // Extraer los modelos de sus contenedores
@@ -82,6 +83,37 @@ export const setupAssociations = () => {
   ReporteBombeo.belongsTo(Admin, { foreignKey: 'administrador_id', as: 'administrador_reporte' });
   ReporteBombeo.belongsTo(Visita, { foreignKey: 'visita_id', as: 'visita_reporte' });
 
+
+  // Asociaciones de Reporte de Mantenimiento
+  ClienteModel.Cliente.hasMany(ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas, {
+    foreignKey: 'id_cliente',
+    as: 'reportes_mantenimiento'
+  });
+
+  ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas.belongsTo(ClienteModel.Cliente, {
+    foreignKey: 'id_cliente',
+    as: 'cliente'
+  });
+
+  TecnicoModel.Tecnico.hasMany(ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas, {
+    foreignKey: 'id_tecnico',
+    as: 'reportes_mantenimiento'
+  });
+
+  ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas.belongsTo(TecnicoModel.Tecnico, {
+    foreignKey: 'id_tecnico',
+    as: 'tecnico'
+  });
+
+  AdminModel.Admin.hasMany(ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas, {
+    foreignKey: 'id_administrador',
+    as: 'reportes_mantenimiento'
+  });
+
+  ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas.belongsTo(AdminModel.Admin, {
+    foreignKey: 'id_administrador',
+    as: 'administrador'
+  });
 
   console.log('🔗 Asociaciones establecidas correctamente');
 };

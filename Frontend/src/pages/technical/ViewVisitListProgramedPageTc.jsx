@@ -5,13 +5,27 @@ import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import { jwtDecode } from "jwt-decode";
 import ListVisitTc from "../../components/technical/ListVisitTc";
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const ContainerService = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
-`
-
+`;
 
 const ViewViewVisitListProgramedPageTc = () => {
   const [visits, setVisits] = useState([]);
@@ -40,16 +54,16 @@ const ViewViewVisitListProgramedPageTc = () => {
 
 
   return (
-    <ContainerService>
-
-      <FilterServicesAd count={visits.length} />
-      {visits.length === 0 ? (
-        <p style={{textAlign: "center"}}>No tienes ninguna visita en estado "Programada" por el momento.</p>
-      ) : (
-        <ListVisitTc visits={visits} />
-      )}
-
-    </ContainerService>
+    <PageContainer>
+      <ContainerService>
+        <FilterServicesAd count={visits.length} />
+        {visits.length === 0 ? (
+          <p style={{textAlign: "center"}}>No tienes ninguna visita en estado "Programada" por el momento.</p>
+        ) : (
+          <ListVisitTc visits={visits} />
+        )}
+      </ContainerService>
+    </PageContainer>
   )
 }
 
