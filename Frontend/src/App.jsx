@@ -221,6 +221,15 @@ function AppContent() {
             }
           />
 
+          <Route
+            path="/contador/facturas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <BillPageAd />
+              </PrivateRoute>
+            }
+          />
+
           {/* ********************************* Rutas Técnico ********************************** */}
           <Route
             path="/tecnico/inicio"

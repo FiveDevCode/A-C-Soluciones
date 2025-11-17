@@ -201,7 +201,6 @@ const BaseFormModal = ({
                 onClose: () => document.activeElement.blur(),
                 MenuProps: { disableScrollLock: true },
               }}
-              onBlur={(e) => e.target.blur()}
             >
               {field.type === "select" &&
                 field.options?.map((opt) => (

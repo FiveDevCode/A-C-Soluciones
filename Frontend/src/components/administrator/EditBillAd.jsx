@@ -16,7 +16,7 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
           handleGetListClient(),
         ]);
         setBillData(billRes.data);
-        setClientList(clientsRes.data || []);
+        setClientList(clientsRes || []);
       } catch (error) {
         console.error("Error al cargar datos de factura:", error);
       }
