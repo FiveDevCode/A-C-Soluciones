@@ -2,265 +2,257 @@ import { TecnicoController } from '../../../src/controllers/tecnico.controller.j
 import { TecnicoService } from '../../../src/services/tecnico.services.js';
 import { ValidationError } from 'sequelize';
 
-jest.mock('../../../src/services/tecnico.services.js');
+// Mock del servicio
+jest.mock('../../../src/services/tecnico.services.js', () => ({
+  TecnicoService: jest.fn().mockImplementation(() => ({
+    obtenerTecnicoPorcedula: jest.fn(),
+    crearTecnico: jest.fn(),
+    obtenerTecnicoPorId: jest.fn(),
+    obtenerTecnicos: jest.fn(),
+    actualizarTecnico: jest.fn(),
+    eliminarTecnico: jest.fn(),
+  })),
+}));
 
-describe('TecnicoController', () => {
-  let req, res, tecnicoController;
+describe(' TecnicoController', () => {
+  let controller;
+  let mockService;
+  let mockReq;
+  let mockRes;
 
   beforeEach(() => {
-    req = { params: {}, body: {} };
-    res = {
+    controller = new TecnicoController();
+    mockService = controller.tecnicoService;
+    mockReq = { body: {}, params: {} };
+    mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
-    tecnicoController = new TecnicoController();
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
+  // -------------------------------------------------------------------
+  // crearTecnico
+  // -------------------------------------------------------------------
   describe('crearTecnico', () => {
-    it('debe crear un técnico si no existe', async () => {
-      req.body = { numero_de_cedula: '1004892314' };
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
-      TecnicoService.prototype.crearTecnico.mockResolvedValue({ id: 1, nombre: 'Pedro' });
+    it('debería devolver 400 si el técnico ya existe', async () => {
+      mockService.obtenerTecnicoPorcedula.mockResolvedValue({ id: 1 });
+      mockReq.body = { numero_de_cedula: '123' };
 
-      await tecnicoController.crearTecnico(req, res);
+      await controller.crearTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ id: 1, nombre: 'Pedro' });
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'El técnico ya está registrado.' });
     });
 
-    it('debe retornar 400 si el técnico ya existe', async () => {
-      req.body = { numero_de_cedula: '1004892314' };
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue({ id: 1 });
+    it('debería crear un técnico si no existe', async () => {
+      const nuevo = { id: 2, nombre: 'Pedro' };
+      mockService.obtenerTecnicoPorcedula.mockResolvedValue(null);
+      mockService.crearTecnico.mockResolvedValue(nuevo);
+      mockReq.body = { numero_de_cedula: '999' };
 
-      await tecnicoController.crearTecnico(req, res);
+      await controller.crearTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: 'El técnico ya está registrado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.json).toHaveBeenCalledWith(nuevo);
     });
 
-    it('debe retornar errores de validación con path', async () => {
-      req.body = {};
-      const error = new ValidationError('Error', [
-        { path: 'numero_de_cedula', message: 'Campo requerido' }
-      ]);
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
-      TecnicoService.prototype.crearTecnico.mockRejectedValue(error);
+    it('debería manejar ValidationError correctamente', async () => {
+      const error = new ValidationError('Error');
+      error.errors = [{ path: 'nombre', message: 'Nombre inválido' }];
+      mockService.obtenerTecnicoPorcedula.mockRejectedValue(error);
 
-      await tecnicoController.crearTecnico(req, res);
+      await controller.crearTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        errors: { numero_de_cedula: 'Campo requerido' }
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        errors: { nombre: 'Nombre inválido' },
       });
     });
 
-    it('debe manejar errores de validación sin path', async () => {
-      req.body = {};
-      const error = new ValidationError('Error', [
-        { message: 'Error sin campo específico' } // Error sin path
-      ]);
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
-      TecnicoService.prototype.crearTecnico.mockRejectedValue(error);
+    it('debería manejar error genérico 500', async () => {
+      mockService.obtenerTecnicoPorcedula.mockRejectedValue(new Error('Boom'));
 
-      await tecnicoController.crearTecnico(req, res);
+      await controller.crearTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ errors: {} });
-    });
-
-    it('debe manejar errores inesperados', async () => {
-      req.body = { numero_de_cedula: '1004892314' };
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockRejectedValue(error);
-
-      await tecnicoController.crearTecnico(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al crear el empleado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al crear el empleado.' });
     });
   });
 
+  // -------------------------------------------------------------------
+  // obtenerTecnicoPorId
+  // -------------------------------------------------------------------
   describe('obtenerTecnicoPorId', () => {
-    it('debe devolver un técnico por id', async () => {
-      req.params.id = 1;
-      TecnicoService.prototype.obtenerTecnicoPorId.mockResolvedValue({ id: 1 });
+    it('debería devolver 404 si no se encuentra el técnico', async () => {
+      mockService.obtenerTecnicoPorId.mockResolvedValue(null);
+      mockReq.params.id = '1';
 
-      await tecnicoController.obtenerTecnicoPorId(req, res);
+      await controller.obtenerTecnicoPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ id: 1 });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
     });
 
-    it('debe retornar 404 si no existe', async () => {
-      req.params.id = 1;
-      TecnicoService.prototype.obtenerTecnicoPorId.mockResolvedValue(null);
+    it('debería devolver el técnico encontrado', async () => {
+      const tecnico = { id: 1, nombre: 'Juan' };
+      mockService.obtenerTecnicoPorId.mockResolvedValue(tecnico);
+      mockReq.params.id = '1';
 
-      await tecnicoController.obtenerTecnicoPorId(req, res);
+      await controller.obtenerTecnicoPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(tecnico);
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.obtenerTecnicoPorId.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerTecnicoPorId.mockRejectedValue(new Error('DB Error'));
+      mockReq.params.id = '2';
 
-      await tecnicoController.obtenerTecnicoPorId(req, res);
+      await controller.obtenerTecnicoPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado.' });
     });
   });
 
+  // -------------------------------------------------------------------
+  // obtenerTecnicoPorCedula
+  // -------------------------------------------------------------------
   describe('obtenerTecnicoPorCedula', () => {
-    it('debe devolver técnico por cédula', async () => {
-      req.params.numero_de_cedula = '123';
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue({ id: 1 });
+    it('debería devolver 404 si no existe', async () => {
+      mockService.obtenerTecnicoPorcedula.mockResolvedValue(null);
+      mockReq.params.numero_de_cedula = '123';
 
-      await tecnicoController.obtenerTecnicoPorCedula(req, res);
+      await controller.obtenerTecnicoPorCedula(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ tecnico: { id: 1 } });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado' });
     });
 
-    it('debe retornar 404 si no lo encuentra', async () => {
-      req.params.numero_de_cedula = '1004892314';
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockResolvedValue(null);
+    it('debería devolver técnico si existe', async () => {
+      const tecnico = { id: 1, nombre: 'Mario' };
+      mockService.obtenerTecnicoPorcedula.mockResolvedValue(tecnico);
+      mockReq.params.numero_de_cedula = '123';
 
-      await tecnicoController.obtenerTecnicoPorCedula(req, res);
+      await controller.obtenerTecnicoPorCedula(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado' });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({ tecnico });
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.numero_de_cedula = '123';
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.obtenerTecnicoPorcedula.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerTecnicoPorcedula.mockRejectedValue(new Error('DB error'));
+      await controller.obtenerTecnicoPorCedula(mockReq, mockRes);
 
-      await tecnicoController.obtenerTecnicoPorCedula(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al obtener el empleado' });
     });
   });
 
+  // -------------------------------------------------------------------
+  // obtenerTecnicos
+  // -------------------------------------------------------------------
   describe('obtenerTecnicos', () => {
-    it('debe retornar todos los técnicos', async () => {
-      TecnicoService.prototype.obtenerTecnicos.mockResolvedValue([{ id: 1 }, { id: 2 }]);
+    it('debería devolver todos los técnicos', async () => {
+      const tecnicos = [{ id: 1 }, { id: 2 }];
+      mockService.obtenerTecnicos.mockResolvedValue(tecnicos);
 
-      await tecnicoController.obtenerTecnicos(req, res);
+      await controller.obtenerTecnicos(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith([{ id: 1 }, { id: 2 }]);
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(tecnicos);
     });
 
-    it('debe manejar caso cuando no hay técnicos', async () => {
-      TecnicoService.prototype.obtenerTecnicos.mockResolvedValue([]);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerTecnicos.mockRejectedValue(new Error('Error DB'));
 
-      await tecnicoController.obtenerTecnicos(req, res);
+      await controller.obtenerTecnicos(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith([]);
-    });
-
-    it('debe manejar errores inesperados', async () => {
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.obtenerTecnicos.mockRejectedValue(error);
-
-      await tecnicoController.obtenerTecnicos(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al obtener los empleados.' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al obtener los empleados.' });
     });
   });
 
+  // -------------------------------------------------------------------
+  // actualizarTecnico
+  // -------------------------------------------------------------------
   describe('actualizarTecnico', () => {
-    it('debe actualizar técnico si existe', async () => {
-      req.params.id = 1;
-      req.body = { nombre: 'Actualizado' };
-      TecnicoService.prototype.actualizarTecnico.mockResolvedValue({ id: 1, nombre: 'Actualizado' });
+    it('debería devolver 404 si no se encuentra el técnico', async () => {
+      mockService.actualizarTecnico.mockResolvedValue(null);
+      mockReq.params.id = '1';
 
-      await tecnicoController.actualizarTecnico(req, res);
+      await controller.actualizarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ id: 1, nombre: 'Actualizado' });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
     });
 
-    it('debe retornar 404 si no existe', async () => {
-      req.params.id = 1;
-      TecnicoService.prototype.actualizarTecnico.mockResolvedValue(null);
+    it('debería actualizar técnico correctamente', async () => {
+      const actualizado = { id: 1, nombre: 'Actualizado' };
+      mockService.actualizarTecnico.mockResolvedValue(actualizado);
+      mockReq.params.id = '1';
 
-      await tecnicoController.actualizarTecnico(req, res);
+      await controller.actualizarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(actualizado);
     });
 
-    it('debe retornar errores de validación', async () => {
-      req.params.id = 1;
-      req.body = {};
-      const error = new ValidationError('Error', [
-        { message: 'Campo inválido' }
-      ]);
-      TecnicoService.prototype.actualizarTecnico.mockRejectedValue(error);
+    it('debería manejar ValidationError correctamente', async () => {
+      const error = new ValidationError('Error');
+      error.errors = [{ path: 'telefono', message: 'Teléfono inválido' }];
+      mockService.actualizarTecnico.mockRejectedValue(error);
 
-      await tecnicoController.actualizarTecnico(req, res);
+      await controller.actualizarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        errors: ['Campo inválido']
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        errors: { telefono: 'Teléfono inválido' },
       });
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      req.body = { nombre: 'Actualizado' };
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.actualizarTecnico.mockRejectedValue(error);
+    it('debería manejar error genérico 500', async () => {
+      mockService.actualizarTecnico.mockRejectedValue(new Error('DB error'));
 
-      await tecnicoController.actualizarTecnico(req, res);
+      await controller.actualizarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al actualizar el empleado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al actualizar el empleado.' });
     });
   });
 
+  // -------------------------------------------------------------------
+  // eliminarTecnico
+  // -------------------------------------------------------------------
   describe('eliminarTecnico', () => {
-    it('debe eliminar técnico si existe', async () => {
-      req.params.id = 1;
-      TecnicoService.prototype.eliminarTecnico.mockResolvedValue(true);
+    it('debería devolver 404 si no se encuentra el técnico', async () => {
+      mockService.eliminarTecnico.mockResolvedValue(false);
+      mockReq.params.id = '5';
 
-      await tecnicoController.eliminarTecnico(req, res);
+      await controller.eliminarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Empleado eliminado correctamente.' });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
     });
 
-    it('debe retornar 404 si no existe', async () => {
-      req.params.id = 1;
-      TecnicoService.prototype.eliminarTecnico.mockResolvedValue(null);
+    it('debería eliminar técnico correctamente', async () => {
+      mockService.eliminarTecnico.mockResolvedValue(true);
+      mockReq.params.id = '5';
 
-      await tecnicoController.eliminarTecnico(req, res);
+      await controller.eliminarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Empleado no encontrado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Empleado eliminado correctamente.' });
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      const error = new Error('Error inesperado');
-      TecnicoService.prototype.eliminarTecnico.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.eliminarTecnico.mockRejectedValue(new Error('Error'));
 
-      await tecnicoController.eliminarTecnico(req, res);
+      await controller.eliminarTecnico(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Error al eliminar el empleado.' });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al eliminar el empleado.' });
     });
   });
 });

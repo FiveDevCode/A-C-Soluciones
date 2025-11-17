@@ -6,7 +6,7 @@ const FilterVisitsAd = ({ visits = [], onFilteredChange }) => {
   const mappedVisits = useMemo(() => {
     return visits.map(v => ({
       ...v,
-      tecnicoNombreCompleto: `${v.tecnico.nombre} ${v.tecnico.apellido}`.toLowerCase(),
+      tecnicoNombreCompleto: `${v.tecnico_asociado.nombre} ${v.tecnico_asociado.apellido}`.toLowerCase(),
     }));
   }, [visits]);
 
@@ -24,10 +24,10 @@ const FilterVisitsAd = ({ visits = [], onFilteredChange }) => {
       placeholder="Buscar por técnico, descripción o notas..."
       filterOptions={filterOptions}
       searchKeys={[
-        "tecnico.nombre",
-        "tecnico.apellido",
+        "tecnico_asociado.nombre",
+        "tecnico_asociado.apellido",
         "tecnicoNombreCompleto",
-        "solicitud.descripcion",
+        "solicitud_asociada.descripcion",
         "notas_previas",
         "notas_posteriores",
       ]}

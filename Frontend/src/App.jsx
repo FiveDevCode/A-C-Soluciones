@@ -1,67 +1,74 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Global from "./Global";
-import LoginPage from './pages/common/LoginPage';
-import styled from 'styled-components';
-import MenuSideAd from './components/administrator/MenuSideAd';
-import CreateAccountPageCl from './pages/client/CreateAccountPageCl';
-import HomeSessionPageCl from './pages/client/HomeSessionPageCl';
-import ProfileUserTc from './pages/technical/ProfileUserTc';
-import HomeAd from './pages/administrator/HomeAd';
-import HomeTc from './pages/technical/HomeTc';
-import PrivateRoute from './components/common/PrivateRoute';
-import { useEffect, useState } from 'react';
-import Home from './pages/common/Home';
-import ViewVisitPageTc from './pages/technical/ViewVisitPageTc';
-import ServicesAllPageCl from './pages/client/ServicesAllPageCl';
-import HeaderBarCl from './components/client/HeaderBarCl';
-import FooterHomeCl from './components/client/FooterHomeCl';
-import RecoverPasswordPage from './pages/common/RecoverPasswordPage';
-import RecoverCodePage from './pages/common/RecoverCodePage';
-import RecoverChangePage from './pages/common/RecoverChangePage';
-import ProfilePageAd from './pages/administrator/ProfilePageAd';
-import EditAdminPageAd from './pages/administrator/EditAdminPageAd';
-import CreateReportPageTc from './pages/technical/CreateReportPageTc';
-import CreateReportPageAd from './pages/administrator/CreateReportPageAd';
-import ViewVisitListPageTc from './pages/technical/ViewVisitListPageTc';
-import ViewReportListPageAd from './pages/administrator/ViewReportListPageAd';
-import SearchResultsPage from './pages/administrator/SearchResultsPage';
-import MenuSideTc from './components/technical/MenuSideTc';
-import ViewReportListPageTc from './pages/technical/ViewReportListPageTc';
-import ViewServicePageTc from './pages/technical/ViewServicePageTc';
-import ViewViewVisitListCompletePageTc from './pages/technical/ViewVisitListCompletePageTc';
-import ViewViewVisitListCanceledPageTc from './pages/technical/ViewVisitListCanceledPageTc';
-import ViewViewVisitListWayPageTc from './pages/technical/ViewVisitListWayPageTc';
-import ViewViewVisitListProgramedPageTc from './pages/technical/ViewVisitListProgramedPageTc';
-import ViewViewVisitListStartPageTc from './pages/technical/ViewVisitListStartPageTc';
-import EditProfileTc from './pages/technical/EditProfileTcPageTc';
-import ProfileClientPageCl from './pages/client/ProfileClientPageCl';
-import EditProfileCl from './pages/client/EditProfileCl';
-import ViewServiceListPageTc from './pages/technical/ViewServiceListPageTc';
-import AboutUsPage from './pages/common/AboutUsPage';
-import ErrorPage from './errorPages/ErrorPage.jsx'; 
-import ClientFaqsPage from './pages/common/ClientFaqsPage';
-import TermsAndConditionsPage from './pages/common/TermsAndConditionsPage';
-import PrivacyPolicyPage from './pages/common/PrivacyPolicyPage';
-import PaymentAccountPageAd from './pages/administrator/PaymentAccountPageAd.jsx';
-import { MenuSideAc } from './components/accountant/MenuSideAc.jsx';
-import HomeAc from './pages/accountant/HomeAc.jsx';
-import InventoryPageAd from './pages/administrator/InventoryPageAd.jsx';
-import BillPageAd from './pages/administrator/BillPageAd.jsx';
-import AccountingPageAd from './pages/administrator/AccountingPageAd.jsx';
-import ServicePageAd from './pages/administrator/ServicePageAd.jsx';
-import AdministratorPageAd from './pages/administrator/AdministratorPageAd.jsx';
-import ClientPageAd from './pages/administrator/ClientPageAd.jsx';
-import TechnicalPageAd from './pages/administrator/TechnicalPageAd.jsx';
-import VisitPageAd from './pages/administrator/VisitPageAd.jsx';
-import RequestPageAd from './pages/administrator/RequestPageAd.jsx';
-
-
+import LoginPage from "./pages/common/LoginPage";
+import styled from "styled-components";
+import MenuSideAd from "./components/administrator/MenuSideAd";
+import CreateAccountPageCl from "./pages/client/CreateAccountPageCl";
+import HomeSessionPageCl from "./pages/client/HomeSessionPageCl";
+import ProfileUserTc from "./pages/technical/ProfileUserTc";
+import HomeAd from "./pages/administrator/HomeAd";
+import HomeTc from "./pages/technical/HomeTc";
+import PrivateRoute from "./components/common/PrivateRoute";
+import { useEffect, useState } from "react";
+import Home from "./pages/common/Home";
+import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
+import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
+import HeaderBarCl from "./components/client/HeaderBarCl";
+import FooterHomeCl from "./components/client/FooterHomeCl";
+import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
+import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
+import RecoverCodePage from "./pages/common/RecoverCodePage";
+import RecoverChangePage from "./pages/common/RecoverChangePage";
+import ProfilePageAd from "./pages/administrator/ProfilePageAd";
+import CreateReportPageTc from "./pages/technical/CreateReportPageTc";
+import ViewVisitListPageTc from "./pages/technical/ViewVisitListPageTc";
+import MenuSideTc from "./components/technical/MenuSideTc";
+import ViewReportListPageTc from "./pages/technical/ViewReportListPageTc";
+import ViewServicePageTc from "./pages/technical/ViewServicePageTc";
+import ViewViewVisitListCompletePageTc from "./pages/technical/ViewVisitListCompletePageTc";
+import ViewViewVisitListCanceledPageTc from "./pages/technical/ViewVisitListCanceledPageTc";
+import ViewViewVisitListWayPageTc from "./pages/technical/ViewVisitListWayPageTc";
+import ViewViewVisitListProgramedPageTc from "./pages/technical/ViewVisitListProgramedPageTc";
+import ViewViewVisitListStartPageTc from "./pages/technical/ViewVisitListStartPageTc";
+import EditProfileTc from "./pages/technical/EditProfileTcPageTc";
+import ProfileClientPageCl from "./pages/client/ProfileClientPageCl";
+import EditProfileCl from "./pages/client/EditProfileCl";
+import ViewServiceListPageTc from "./pages/technical/ViewServiceListPageTc";
+import AboutUsPage from "./pages/common/AboutUsPage";
+import ErrorPage from "./errorPages/ErrorPage.jsx";
+import ClientFaqsPage from "./pages/common/ClientFaqsPage";
+import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
+import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
+import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
+import { MenuSideAc } from "./components/accountant/MenuSideAc.jsx";
+import HomeAc from "./pages/accountant/HomeAc.jsx";
+import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
+import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
+import { MenuProvider } from "./components/client/MenuContext.jsx";
+import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
+import ServicePageAd from "./pages/administrator/ServicePageAd.jsx";
+import BillPageAd from "./pages/administrator/BillPageAd.jsx";
+import AccountingPageAd from "./pages/administrator/AccountingPageAd.jsx";
+import ViewReportListPageAd from "./pages/administrator/ViewReportListPageAd.jsx";
+import AdministratorPageAd from "./pages/administrator/AdministratorPageAd.jsx";
+import ClientPageAd from "./pages/administrator/ClientPageAd.jsx";
+import TechnicalPageAd from "./pages/administrator/TechnicalPageAd.jsx";
+import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
+import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 
 const Container = styled.div`
-  ${({ hideStyles }) => hideStyles ? `
+  ${({ hideStyles }) =>
+    hideStyles
+      ? `
     display: block;
     width: auto;
-  ` : `
+  `
+      : `
     display: flex;
     width: 100%;
     height: 100vh;
@@ -69,12 +76,15 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  ${({ hideStyles }) => hideStyles ? `
+  ${({ hideStyles }) =>
+    hideStyles
+      ? `
     display: block;
     width: auto;
     padding: 0;
     gap: 0;
-  ` : `
+  `
+      : `
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -87,292 +97,397 @@ function AppContent() {
   const location = useLocation();
   const [role, setRole] = useState(null);
 
-
-
   const publicRoutes = [
-    '/',
-    '/iniciar-sesion',
-    '/registrarse',
-    '/recuperar-contrasena',
-    '/codigo-recuperacion',
-    '/cambiar-contrasena',
-
+    "/",
+    "/iniciar-sesion",
+    "/registrarse",
+    "/recuperar-contrasena",
+    "/codigo-recuperacion",
+    "/cambiar-contrasena",
   ];
 
   const isPublicPage = publicRoutes.includes(location.pathname);
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('userRole');
+    const storedRole = localStorage.getItem("userRole");
     setRole(storedRole);
   }, [location.pathname]);
 
-
-  const isCliente = role === 'cliente';
+  const isCliente = role === "cliente";
   const hideMenuAndHeader =
-    location.pathname === '/iniciar-sesion' ||
-    location.pathname === '/registrarse' ||
-    location.pathname === '/recuperar-contrasena' ||
-    location.pathname === '/codigo-recuperacion' ||
-    location.pathname === '/cambiar-contrasena' ||
-    location.pathname === '/acerca-de-nosotros' ||
-    location.pathname === '/preguntas-frecuentes' ||
-    location.pathname === '/terminos-y-condiciones' ||
-    location.pathname === '/politicas-de-privacidad' ||
-    location.pathname === '/' ||
-    role === 'cliente';
+    location.pathname === "/iniciar-sesion" ||
+    location.pathname === "/registrarse" ||
+    location.pathname === "/recuperar-contrasena" ||
+    location.pathname === "/codigo-recuperacion" ||
+    location.pathname === "/cambiar-contrasena" ||
+    location.pathname === "/acerca-de-nosotros" ||
+    location.pathname === "/preguntas-frecuentes" ||
+    location.pathname === "/terminos-y-condiciones" ||
+    location.pathname === "/politicas-de-privacidad" ||
+    location.pathname === "/" ||
+    role === "cliente";
 
-    return (
-      <Container hideStyles={hideMenuAndHeader}>
-        {!hideMenuAndHeader && role === 'administrador' && <MenuSideAd />}
-        {!hideMenuAndHeader && role === 'tecnico' && <MenuSideTc />}
-        {!hideMenuAndHeader && role === 'Contador' && <MenuSideAc />}
-        <Content hideStyles={hideMenuAndHeader}>
-          {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
-          {isCliente && !isPublicPage && <HeaderBarCl />}
+  return (
+    <Container hideStyles={hideMenuAndHeader}>
+      {!hideMenuAndHeader && role === "administrador" && <MenuSideAd />}
+      {!hideMenuAndHeader && role === "tecnico" && <MenuSideTc />}
+      {!hideMenuAndHeader && role === "Contador" && <MenuSideAc />}
+      <Content hideStyles={hideMenuAndHeader}>
+        {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
+        {isCliente && !isPublicPage && <HeaderBarCl />}
 
-          {/* 
-            * Estructura de rutas:
-            * - /public/* -> Acceso abierto
-            * - /cliente/* -> Requiere rol cliente
-            * - /tecnico/* -> Requiere rol tecnico
-            * - /admin/* -> Requiere rol administrador
-          */}
-          <Routes>
-            {/* Rutas públicas */}
-            <Route path="/" element={<Home />} />
-            <Route path="/iniciar-sesion" element={<LoginPage />} />
-            <Route path="/registrarse" element={<CreateAccountPageCl />} />
-            <Route path="/recuperar-contrasena" element={<RecoverPasswordPage />} />
-            <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
-            <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
-            <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
-            <Route path="/preguntas-frecuentes" element={<ClientFaqsPage />} />
-            <Route path="/terminos-y-condiciones" element={<TermsAndConditionsPage />} />
-            <Route path="/politicas-de-privacidad" element={<PrivacyPolicyPage />} />
+        {/*
+         * Estructura de rutas:
+         * - /public/* -> Acceso abierto
+         * - /cliente/* -> Requiere rol cliente
+         * - /tecnico/* -> Requiere rol tecnico
+         * - /admin/* -> Requiere rol administrador
+         */}
+        <Routes>
+          {/* Rutas públicas */}
+          <Route path="/" element={<Home />} />
+          <Route path="/iniciar-sesion" element={<LoginPage />} />
+          <Route path="/registrarse" element={<CreateAccountPageCl />} />
+          <Route
+            path="/recuperar-contrasena"
+            element={<RecoverPasswordPage />}
+          />
+          <Route path="/codigo-recuperacion" element={<RecoverCodePage />} />
+          <Route path="/cambiar-contrasena" element={<RecoverChangePage />} />
+          <Route path="/acerca-de-nosotros" element={<AboutUsPage />} />
+          <Route path="/preguntas-frecuentes" element={<ClientFaqsPage />} />
+          <Route
+            path="/terminos-y-condiciones"
+            element={<TermsAndConditionsPage />}
+          />
+          <Route
+            path="/politicas-de-privacidad"
+            element={<PrivacyPolicyPage />}
+          />
 
-            {/* ********************************* Rutas Cliente ********************************** */}
-            <Route path="/cliente/inicio" element={
+          {/* ********************************* Rutas Cliente ********************************** */}
+          <Route
+            path="/cliente/inicio"
+            element={
               <PrivateRoute roleRequired="cliente">
                 <HomeSessionPageCl />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/cliente/servicios" element={
+          <Route
+            path="/cliente/servicios"
+            element={
               <PrivateRoute roleRequired="cliente">
                 <ServicesAllPageCl />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/cliente/perfil" element={
+          <Route
+            path="/cliente/historial"
+            element={
+              <PrivateRoute roleRequired="cliente">
+                <HistoryServicesPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/cliente/perfil"
+            element={
               <PrivateRoute roleRequired="cliente">
                 <ProfileClientPageCl />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/cliente/editar-perfil" element={
+          <Route
+            path="/cliente/editar-perfil"
+            element={
               <PrivateRoute roleRequired="cliente">
                 <EditProfileCl />
               </PrivateRoute>
-            } />
-            {/* ********************************* Rutas Contador ********************************** */}
-            
-            <Route path="/contador/inicio" element={
+            }
+          />
+          {/* ********************************* Rutas Contador ********************************** */}
+
+          <Route
+            path="/contador/inicio"
+            element={
               <PrivateRoute roleRequired="Contador">
                 <HomeAc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            {/* ********************************* Rutas Técnico ********************************** */}
-            <Route path="/tecnico/inicio" element={
+          {/* ********************************* Rutas Técnico ********************************** */}
+          <Route
+            path="/tecnico/inicio"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <HomeTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/servicios" element={
+          <Route
+            path="/tecnico/servicios"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewServiceListPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas" element={
+          <Route
+            path="/tecnico/visitas"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewVisitListPageTc />
               </PrivateRoute>
-            } />
-            
-            <Route path="/tecnico/reportes" element={
+            }
+          />
+
+          <Route
+            path="/tecnico/reportes"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewReportListPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visita/:id" element={
+          <Route
+            path="/tecnico/visita/:id"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewVisitPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas-completadas" element={
+          <Route
+            path="/tecnico/visitas-completadas"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewViewVisitListCompletePageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas-canceladas" element={
+          <Route
+            path="/tecnico/visitas-canceladas"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewViewVisitListCanceledPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas-en-camino" element={
+          <Route
+            path="/tecnico/visitas-en-camino"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewViewVisitListWayPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas-programadas" element={
+          <Route
+            path="/tecnico/visitas-programadas"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewViewVisitListProgramedPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/visitas-iniciadas" element={
+          <Route
+            path="/tecnico/visitas-iniciadas"
+            element={
               <PrivateRoute roleRequired="tecnico">
-                <ViewViewVisitListStartPageTc/>
+                <ViewViewVisitListStartPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/perfil" element={
+          <Route
+            path="/tecnico/perfil"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ProfileUserTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/reporte/:id" element={
+          <Route
+            path="/tecnico/reporte/:id"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <CreateReportPageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/servicio/:id" element={
+          <Route
+            path="/tecnico/servicio/:id"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <ViewServicePageTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/tecnico/editar-perfil" element={
+          <Route
+            path="/tecnico/editar-perfil"
+            element={
               <PrivateRoute roleRequired="tecnico">
                 <EditProfileTc />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            {/* ********************************* Rutas Administrador ********************************** */}
-            <Route path="/admin/inicio" element={
+          {/* ********************************* Rutas Administrador ********************************** */}
+          <Route
+            path="/admin/inicio"
+            element={
               <PrivateRoute roleRequired="administrador">
                 <HomeAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/perfil/" element={
+          <Route
+            path="/admin/asignar-visita"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <AssignVisitPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/perfil/"
+            element={
               <PrivateRoute roleRequired="administrador">
                 <ProfilePageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-
-
-            <Route path="/admin/reporte/:id" element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateReportPageAd />
-              </PrivateRoute>
-            } />
-            
-            <Route path="/admin/solicitudes" element={
+          <Route
+            path="/admin/solicitudes"
+            element={
               <PrivateRoute roleRequired="administrador">
                 <RequestPageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            
-            <Route path="/admin/editar-perfil" element={
+          <Route
+            path="/admin/editar-perfil"
+            element={
               <PrivateRoute roleRequired="administrador">
                 <EditAdminPageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/servicios" element={
+          <Route
+            path="/admin/tecnicos"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <ServicePageAd/>
+                <TechnicalPageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/reportes" element={
+          <Route
+            path="/admin/clientes"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <ViewReportListPageAd/>
+                <ClientPageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/resultado" element={
+          <Route
+            path="/admin/administradores"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <SearchResultsPage/>
+                <AdministratorPageAd />
               </PrivateRoute>
-            } />
- 
-            <Route path="/admin/contadores" element={
-              <PrivateRoute roleRequired="administrador">
-                <AccountingPageAd/>
-              </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/facturas" element={
+          <Route
+            path="/admin/servicios"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <BillPageAd/>
+                <ServicePageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/cuentas" element={
+          <Route
+            path="/admin/reportes"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <PaymentAccountPageAd/>
+                <ViewReportListPageAd />
               </PrivateRoute>
-            } />
-            
-            <Route path="/admin/inventario" element={
-              <PrivateRoute roleRequired="administrador">
-                <InventoryPageAd/>
-              </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/administradores" element={
+          <Route
+            path="/admin/contadores"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <AdministratorPageAd/>
+                <AccountingPageAd />
               </PrivateRoute>
-            } />
+            }
+          />
 
-            <Route path="/admin/clientes" element={
+          <Route
+            path="/admin/facturas"
+            element={
               <PrivateRoute roleRequired="administrador">
-                <ClientPageAd/>
+                <BillPageAd />
               </PrivateRoute>
-            } />
-            
-            <Route path="/admin/tecnicos" element={
-              <PrivateRoute roleRequired="administrador">
-                <TechnicalPageAd/>
-              </PrivateRoute>
-            } />
- 
-            <Route path="/admin/visitas" element={
-              <PrivateRoute roleRequired="administrador">
-                <VisitPageAd/>
-              </PrivateRoute>
-            } />
-            
+            }
+          />
 
-            <Route path="*" element={<ErrorPage/>} />
-            
-          </Routes>
+          <Route
+            path="/admin/cuentas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <PaymentAccountPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/inventario"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <InventoryPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/visitas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <VisitPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
         {isCliente && !isPublicPage && <FooterHomeCl />}
-        </Content>
+      </Content>
     </Container>
   );
 }
@@ -381,9 +496,11 @@ function App() {
   return (
     <>
       <Global />
-      <Router>
-        <AppContent />
-      </Router>
+      <MenuProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </MenuProvider>
     </>
   );
 }

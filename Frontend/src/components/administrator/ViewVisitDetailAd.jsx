@@ -53,8 +53,8 @@ const ViewVisitDetailAd = ({ selected, onClose }) => {
           })()
         : "No hay fecha programada"
     },
-    { label: "Solicitud", value: selected.solicitud ? `${selected.solicitud.descripcion}` : "No asignada" },
-    { label: "Técnico", value: selected.tecnico ? `${selected.tecnico.nombre} ${selected.tecnico.apellido}` : "No asignado" },
+    { label: "Solicitud", value: selected.solicitud_asociada ? `${selected.solicitud_asociada.descripcion}` : "No asignada" },
+    { label: "Técnico", value: selected.tecnico_asociado ? `${selected.tecnico_asociado.nombre} ${selected.tecnico_asociado.apellido}` : "No asignado" },
     { label: "Servicio", value: service ? service.nombre : "No asignado" },
     { label: "Estado", value: stateLabels[selected.estado] || selected.estado, isBadge: true },
   ];

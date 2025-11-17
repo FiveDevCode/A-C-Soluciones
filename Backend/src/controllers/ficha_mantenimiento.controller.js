@@ -10,7 +10,6 @@ export const crearFichaMantenimiento = async (req, res) => {
   
 
   try {
-    // Log completo del body recibido
     console.log('req.body:', req.body);
 
     // Extraer campos del cuerpo
@@ -168,5 +167,56 @@ export const listarFichas = async (req, res) => {
   } catch (error) {
     console.error('Error al listar fichas:', error);
     res.status(500).json({ error: 'Error interno al obtener fichas' });
+  }
+};
+
+
+export const obtenerFichasPorCliente = async (req, res) => {
+  try {
+    const { idCliente } = req.params;
+
+    if (!idCliente) {
+      return res.status(400).json({ error: 'El idCliente es requerido' });
+    }
+
+    const fichas = await fichaRepo.obtenerFichasPorCliente(idCliente);
+
+    if (!fichas || fichas.length === 0) {
+      return res.status(404).json({ mensaje: 'No hay fichas para este cliente' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Fichas obtenidas correctamente',
+      fichas
+    });
+
+  } catch (error) {
+    console.error('Error al obtener fichas por cliente:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+export const obtenerFichasPorTecnico = async (req, res) => {
+  try {
+    const { id_tecnico } = req.params;
+
+    if (!id_tecnico) {
+      return res.status(400).json({ error: 'El id tecnico es requerido' });
+    }
+
+    const fichas = await fichaRepo.obtenerFichasPorTecnico(id_tecnico);
+
+    if (!fichas || fichas.length === 0) {
+      return res.status(404).json({ mensaje: 'No hay fichas para este técnico' });
+    }
+
+    return res.status(200).json({
+      mensaje: 'Fichas obtenidas correctamente',
+      fichas
+    });
+
+  } catch (error) {
+    console.error('Error al obtener fichas por técnico:', error);
+    return res.status(500).json({ error: 'Error del servidor' });
   }
 };

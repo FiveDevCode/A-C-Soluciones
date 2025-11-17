@@ -8,7 +8,7 @@ export class VisitaController {
 
   crearVisita = async (req, res) => {
     try {
-      if (req.user.rol !== 'administrador' ) {
+      if (req.user.rol !== 'administrador') {
         return res.status(403).json({
           success: false,
           message: 'Solo los administradores pueden programar visitas'
@@ -22,18 +22,19 @@ export class VisitaController {
     } catch (error) {
       console.error('Error al crear visita:', error);
       if (error instanceof ValidationError) {
-          const fieldErrors = {};
-          error.errors.forEach((err) => {
-              if (err.path) {
-                  fieldErrors[err.path] = err.message;
-              }
-          });
-          return res.status(400).json({ errors: fieldErrors });
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        }
+
+        return res.status(400).json({ errors: fieldErrors });
       }
       //extraer el mensaje error o usar el predeterminado de forma explicita
       let mensajeDeError = 'Error al agendar la visita. Intente nuevamente.'
-      if  (error.message && error.message.trim() !== ''){
-        mensajeDeError= error.message;
+      if (error.message && error.message.trim() !== '') {
+        mensajeDeError = error.message;
       }
 
       return res.status(500).json({
@@ -155,7 +156,7 @@ export class VisitaController {
       });
     } catch (error) {
       console.error('Error al cancelar visita:', error);
-        // Extraer mensaje de error de forma explícita
+      // Extraer mensaje de error de forma explícita
       let errorMessage = 'Error al cancelar la visita';
       if (error.message && error.message.trim() !== '') {
         errorMessage = error.message;
@@ -186,8 +187,8 @@ export class VisitaController {
       console.error('Error al obtener técnicos disponibles:', error);
 
       let errorMessageTecnicosDisponibles = 'Error al obtener ténicos disponibles'
-      if (error.message && error.message.trim() !== ''){
-        errorMessageTecnicosDisponibles=error.message
+      if (error.message && error.message.trim() !== '') {
+        errorMessageTecnicosDisponibles = error.message
       }
       return res.status(500).json({
         success: false,
@@ -220,7 +221,7 @@ export class VisitaController {
       console.error('Error al obtener servicios asignados:', error);
 
       let errorMessage = 'Error al obtener servicios asignados';
-      if (error.message && error.message.trim() !== ''){
+      if (error.message && error.message.trim() !== '') {
         errorMessage = error.message
       }
       return res.status(500).json({
@@ -261,7 +262,7 @@ export class VisitaController {
     } catch (error) {
       console.error('Error al obtener servicio asignado por ID:', error);
       let errorMessageServicioAsignadoID = 'Error al obtener servicio asignado por ID:';
-      if (error.message && error.message.trim() !== ''){
+      if (error.message && error.message.trim() !== '') {
         errorMessageServicioAsignadoID = error.message
       }
       return res.status(500).json({

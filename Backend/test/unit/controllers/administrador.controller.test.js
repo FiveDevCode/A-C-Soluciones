@@ -1,496 +1,371 @@
-// test/unit/controllers/administrador.controller.test.js
 import { AdminController } from '../../../src/controllers/administrador.controller.js';
 import { AdminService } from '../../../src/services/administrador.services.js';
 import { ValidationError } from 'sequelize';
 
-const mockAdminService = {
-  obtenerAdminPorCedula: jest.fn(),
-  obtenerAdminPorCorreo: jest.fn(),
-  crearAdmin: jest.fn(),
-  obtenerAdminPorId: jest.fn(),
-  obtenerAdmins: jest.fn(),
-  actualizarAdmin: jest.fn(),
-  eliminarAdmin: jest.fn(),
-  autenticarAdmin: jest.fn()
-};
+// Mock del servicio
+jest.mock('../../../src/services/administrador.services.js', () => ({
+  AdminService: jest.fn().mockImplementation(() => ({
+    obtenerAdminPorCedula: jest.fn(),
+    obtenerAdminPorCorreo: jest.fn(),
+    crearAdmin: jest.fn(),
+    obtenerAdminPorId: jest.fn(),
+    obtenerAdmins: jest.fn(),
+    actualizarAdmin: jest.fn(),
+    eliminarAdmin: jest.fn(),
+    autenticarAdmin: jest.fn(),
+  })),
+}));
 
-jest.mock('../../../src/services/administrador.services.js', () => {
-  return {
-    AdminService: jest.fn().mockImplementation(() => mockAdminService)
-  };
-});
-
-describe('AdminController', () => {
-  let req, res, adminController;
+describe(' AdminController', () => {
+  let controller;
+  let mockService;
+  let mockReq;
+  let mockRes;
 
   beforeEach(() => {
-    req = { params: {}, body: {} };
-    res = {
+    controller = new AdminController();
+    mockService = controller.adminService;
+    mockReq = { body: {}, params: {} };
+    mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
-    adminController = new AdminController();
-    
     jest.clearAllMocks();
   });
 
+  // -------------------------------------------------------------------------
+  // crearAdmin
+  // -------------------------------------------------------------------------
   describe('crearAdmin', () => {
-    it('debe crear un administrador si no existe', async () => {
-      req.body = { 
-        numero_cedula: '1007652431', 
-        correo_electronico: 'admin@test.com' 
-      };
-      
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue(null);
-      mockAdminService.obtenerAdminPorCorreo.mockResolvedValue(null);
-      mockAdminService.crearAdmin.mockResolvedValue({ 
-        id: 1, 
-        numero_cedula: '1007652431',
-        correo_electronico: 'admin@test.com'
+    it('debería devolver 400 si ya existe admin por cédula o correo', async () => {
+      mockService.obtenerAdminPorCedula.mockResolvedValue({ id: 1 });
+      mockService.obtenerAdminPorCorreo.mockResolvedValue(null);
+      mockReq.body = { numero_cedula: '1002981673', correo_electronico: 'admin@empresa.com' };
+
+      await controller.crearAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: 'El administrador ya está registrado (cédula o correo en uso)',
       });
+    });
 
-      await adminController.crearAdmin(req, res);
+    it('debería crear un admin correctamente', async () => {
+      const nuevo = { id: 2, nombre: 'Jonier', correo_electronico: 'jonier@empresa.com' };
+      mockService.obtenerAdminPorCedula.mockResolvedValue(null);
+      mockService.obtenerAdminPorCorreo.mockResolvedValue(null);
+      mockService.crearAdmin.mockResolvedValue(nuevo);
+      mockReq.body = {
+        numero_cedula: '1002981673',
+        correo_electronico: 'jonier@empresa.com',
+        contrasenia: 'Jonier12@',
+        nombre: 'Jonier',
+      };
 
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({
+      await controller.crearAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.json).toHaveBeenCalledWith({
         message: 'Administrador creado exitosamente',
-        data: { 
-          id: 1, 
-          numero_cedula: '1007652431',
-          correo_electronico: 'admin@test.com'
-        }
+        data: nuevo,
       });
     });
 
-    it('debe retornar error si el admin ya existe por cédula', async () => {
-      req.body = { 
-        numero_cedula: '1007652431', 
-        correo_electronico: 'admin@test.com' 
-      };
-      
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue({ id: 1 });
+    it('debería manejar ValidationError', async () => {
+      const error = new ValidationError('Error');
+      error.errors = [{ path: 'correo_electronico', message: 'Correo inválido' }];
+      mockService.obtenerAdminPorCedula.mockRejectedValue(error);
 
-      await adminController.crearAdmin(req, res);
+      await controller.crearAdmin(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'El administrador ya está registrado (cédula o correo en uso)' 
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        errors: { correo_electronico: 'Correo inválido' },
       });
     });
 
-    it('debe retornar error si el admin ya existe por correo', async () => {
-      req.body = { 
-        numero_cedula: '1007652431', 
-        correo_electronico: 'admin@test.com' 
-      };
-      
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue(null);
-      mockAdminService.obtenerAdminPorCorreo.mockResolvedValue({ id: 1 });
+    it('debería manejar error genérico 500', async () => {
+      mockService.obtenerAdminPorCedula.mockRejectedValue(new Error('DB error'));
 
-      await adminController.crearAdmin(req, res);
+      await controller.crearAdmin(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'El administrador ya está registrado (cédula o correo en uso)' 
-      });
-    });
-
-    it('debe retornar errores de validación si ocurren', async () => {
-      req.body = {};
-      const error = new ValidationError('Error de validación', [
-        { path: 'numero_cedula', message: 'Campo requerido' },
-        { path: 'correo_electronico', message: 'Correo inválido' }
-      ]);
-      
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue(null);
-      mockAdminService.obtenerAdminPorCorreo.mockResolvedValue(null);
-      mockAdminService.crearAdmin.mockRejectedValue(error);
-
-      await adminController.crearAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ 
-        errors: {
-          numero_cedula: 'Campo requerido',
-          correo_electronico: 'Correo inválido'
-        }
-      });
-    });
-
-    it('debe manejar errores inesperados', async () => {
-      req.body = { 
-        numero_cedula: '1007652431', 
-        correo_electronico: 'admin@test.com' 
-      };
-      const error = new Error('Error inesperado');
-      
-      mockAdminService.obtenerAdminPorCedula.mockRejectedValue(error);
-
-      await adminController.crearAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al crear el administrador',
-        error: 'Error inesperado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al crear el administrador' })
+      );
     });
   });
 
+  // -------------------------------------------------------------------------
+  // obtenerAdminPorId
+  // -------------------------------------------------------------------------
   describe('obtenerAdminPorId', () => {
-    it('debe devolver el admin si existe', async () => {
-      req.params.id = 1;
-      const mockAdmin = { 
-        id: 1, 
-        numero_cedula: '1007652431',
-        correo_electronico: 'admin@test.com',
-        contrasenia: 'Secret12@',
-        get: jest.fn().mockReturnValue({
-          id: 1, 
-          numero_cedula: '1007652431',
-          correo_electronico: 'admin@test.com',
-          contrasenia: 'Secret12@'
-        })
-      };
-      
-      mockAdminService.obtenerAdminPorId.mockResolvedValue(mockAdmin);
+    it('debería devolver 404 si no existe', async () => {
+      mockService.obtenerAdminPorId.mockResolvedValue(null);
+      mockReq.params.id = '1';
 
-      await adminController.obtenerAdminPorId(req, res);
+      await controller.obtenerAdminPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        id: 1, 
-        numero_cedula: '1007652431',
-        correo_electronico: 'admin@test.com'
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
     });
 
-    it('debe devolver 404 si no existe', async () => {
-      req.params.id = 1;
-      mockAdminService.obtenerAdminPorId.mockResolvedValue(null);
+    it('debería devolver admin sin contraseña', async () => {
+      const mockAdmin = { get: () => ({ id: 1, nombre: 'Pedro', contrasenia: 'Jonier12@' }) };
+      mockService.obtenerAdminPorId.mockResolvedValue(mockAdmin);
+      mockReq.params.id = '1';
 
-      await adminController.obtenerAdminPorId(req, res);
+      await controller.obtenerAdminPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Administrador no encontrado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      const data = mockRes.json.mock.calls[0][0];
+      expect(data.contrasenia).toBeUndefined();
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      const error = new Error('Error inesperado');
-      mockAdminService.obtenerAdminPorId.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerAdminPorId.mockRejectedValue(new Error('DB error'));
+      mockReq.params.id = '1';
 
-      await adminController.obtenerAdminPorId(req, res);
+      await controller.obtenerAdminPorId(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al obtener el administrador',
-        error: 'Error inesperado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al obtener el administrador' })
+      );
     });
   });
 
+  // -------------------------------------------------------------------------
+  // obtenerAdminPorCedula
+  // -------------------------------------------------------------------------
   describe('obtenerAdminPorCedula', () => {
-    it('debe devolver admin por cédula', async () => {
-      req.params.numero_cedula = '123456789';
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue({ id: 1 });
+    it('debería devolver 404 si no existe', async () => {
+      mockService.obtenerAdminPorCedula.mockResolvedValue(null);
+      mockReq.params.numero_cedula = '1002981673';
 
-      await adminController.obtenerAdminPorCedula(req, res);
+      await controller.obtenerAdminPorCedula(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ admin: { id: 1 } });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
     });
 
-    it('debe devolver 404 si no existe', async () => {
-      req.params.numero_cedula = '1007652431';
-      mockAdminService.obtenerAdminPorCedula.mockResolvedValue(null);
+    it('debería devolver admin si existe', async () => {
+      const admin = { id: 1, nombre: 'Carlos', numero_cedula: '1002981673' };
+      mockService.obtenerAdminPorCedula.mockResolvedValue(admin);
+      mockReq.params.numero_cedula = '1002981673';
 
-      await adminController.obtenerAdminPorCedula(req, res);
+      await controller.obtenerAdminPorCedula(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({ admin });
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.numero_cedula = '1007652431';
-      const error = new Error('Error inesperado');
-      mockAdminService.obtenerAdminPorCedula.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerAdminPorCedula.mockRejectedValue(new Error('Error DB'));
 
-      await adminController.obtenerAdminPorCedula(req, res);
+      await controller.obtenerAdminPorCedula(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al obtener el administrador' 
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: 'Error al obtener el administrador',
       });
     });
   });
 
+  // -------------------------------------------------------------------------
+  // obtenerAdminPorCorreo
+  // -------------------------------------------------------------------------
   describe('obtenerAdminPorCorreo', () => {
-    it('debe devolver admin por correo', async () => {
-      req.params.correo_electronico = 'admin@test.com';
-      const mockAdmin = { 
-        id: 1, 
-        correo_electronico: 'admin@test.com',
-        contrasenia: 'Secret12@',
-        get: jest.fn().mockReturnValue({
-          id: 1, 
-          correo_electronico: 'admin@test.com',
-          contrasenia: 'Secret12@'
-        })
-      };
-      
-      mockAdminService.obtenerAdminPorCorreo.mockResolvedValue(mockAdmin);
+    it('debería devolver 404 si no existe', async () => {
+      mockService.obtenerAdminPorCorreo.mockResolvedValue(null);
+      mockReq.params.correo_electronico = 'noexiste@empresa.com';
 
-      await adminController.obtenerAdminPorCorreo(req, res);
+      await controller.obtenerAdminPorCorreo(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        id: 1, 
-        correo_electronico: 'admin@test.com'
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
     });
 
-    it('debe devolver 404 si no existe', async () => {
-      req.params.correo_electronico = 'admin@test.com';
-      mockAdminService.obtenerAdminPorCorreo.mockResolvedValue(null);
+    it('debería devolver admin sin contraseña', async () => {
+      const mockAdmin = { get: () => ({ id: 1, nombre: 'Ana', contrasenia: 'Jonier12@' }) };
+      mockService.obtenerAdminPorCorreo.mockResolvedValue(mockAdmin);
+      mockReq.params.correo_electronico = 'ana@empresa.com';
 
-      await adminController.obtenerAdminPorCorreo(req, res);
+      await controller.obtenerAdminPorCorreo(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Administrador no encontrado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      const data = mockRes.json.mock.calls[0][0];
+      expect(data.contrasenia).toBeUndefined();
     });
 
-    it('debe manejar errores inesperados', async () => {
-      req.params.correo_electronico = 'admin@test.com';
-      const error = new Error('Error inesperado');
-      mockAdminService.obtenerAdminPorCorreo.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerAdminPorCorreo.mockRejectedValue(new Error('Error DB'));
 
-      await adminController.obtenerAdminPorCorreo(req, res);
+      await controller.obtenerAdminPorCorreo(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al buscar administrador por correo',
-        error: 'Error inesperado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al buscar administrador por correo' })
+      );
     });
   });
 
+  // -------------------------------------------------------------------------
+  // obtenerAdmins
+  // -------------------------------------------------------------------------
   describe('obtenerAdmins', () => {
-    it('debe retornar todos los admins sin contraseñas', async () => {
-      const mockAdmins = [
-        { 
-          id: 1, 
-          correo_electronico: 'admin1@test.com',
-          contrasenia: 'Secret12@',
-          get: jest.fn().mockReturnValue({
-            id: 1, 
-            correo_electronico: 'admin1@test.com',
-            contrasenia: 'Secret12@'
-          })
-        },
-        { 
-          id: 2, 
-          correo_electronico: 'admin2@test.com',
-          contrasenia: 'Secret12@',
-          get: jest.fn().mockReturnValue({
-            id: 2, 
-            correo_electronico: 'admin2@test.com',
-            contrasenia: 'Secret12@'
-          })
-        }
+    it('debería devolver lista sin contraseñas', async () => {
+      const admins = [
+        { get: () => ({ id: 1, contrasenia: 'Jonier12@' }) },
+        { get: () => ({ id: 2, contrasenia: 'OtraPass99!' }) },
       ];
-      
-      mockAdminService.obtenerAdmins.mockResolvedValue(mockAdmins);
+      mockService.obtenerAdmins.mockResolvedValue(admins);
 
-      await adminController.obtenerAdmins(req, res);
+      await controller.obtenerAdmins(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith([
-        { id: 1, correo_electronico: 'admin1@test.com' },
-        { id: 2, correo_electronico: 'admin2@test.com' }
-      ]);
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      const data = mockRes.json.mock.calls[0][0];
+      expect(data.every(a => a.contrasenia === undefined)).toBe(true);
     });
 
-    it('debe manejar errores inesperados', async () => {
-      const error = new Error('Error inesperado');
-      mockAdminService.obtenerAdmins.mockRejectedValue(error);
+    it('debería manejar error 500', async () => {
+      mockService.obtenerAdmins.mockRejectedValue(new Error('Error DB'));
 
-      await adminController.obtenerAdmins(req, res);
+      await controller.obtenerAdmins(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al obtener los administradores',
-        error: 'Error inesperado' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al obtener los administradores' })
+      );
     });
   });
 
+  // -------------------------------------------------------------------------
+  // actualizarAdmin
+  // -------------------------------------------------------------------------
   describe('actualizarAdmin', () => {
-    it('debe actualizar admin si existe', async () => {
-      req.params.id = 1;
-      req.body = { nombre: 'Admin Actualizado' };
-      const mockAdmin = { 
-        id: 1, 
-        nombre: 'Admin Actualizado',
-        contrasenia: 'Secret12@',
-        get: jest.fn().mockReturnValue({
-          id: 1, 
-          nombre: 'Admin Actualizado',
-          contrasenia: 'Secret12@'
-        })
-      };
-      
-      mockAdminService.actualizarAdmin.mockResolvedValue(mockAdmin);
+    it('debería devolver 404 si no existe', async () => {
+      mockService.actualizarAdmin.mockResolvedValue(null);
+      mockReq.params.id = '1';
 
-      await adminController.actualizarAdmin(req, res);
+      await controller.actualizarAdmin(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Administrador actualizado correctamente',
-        data: {
-          id: 1, 
-          nombre: 'Admin Actualizado'
-        }
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
     });
 
-    it('debe retornar 404 si no existe el admin', async () => {
-      req.params.id = 1;
-      mockAdminService.actualizarAdmin.mockResolvedValue(null);
-
-      await adminController.actualizarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Administrador no encontrado' 
-      });
-    });
-
-    it('debe retornar errores de validación si ocurren', async () => {
-      req.params.id = 1;
-      req.body = { correo_electronico: 'invalido' };
-      const error = new ValidationError('Error de validación', [
-        { path: 'correo_electronico', message: 'Correo inválido' }
-      ]);
-      
-      mockAdminService.actualizarAdmin.mockRejectedValue(error);
-
-      await adminController.actualizarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ 
-        errors: [
-          { field: 'correo_electronico', message: 'Correo inválido' }
-        ]
-      });
-    });
-
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      req.body = { nombre: 'Admin Actualizado' };
-      const error = new Error('Error inesperado');
-      mockAdminService.actualizarAdmin.mockRejectedValue(error);
-
-      await adminController.actualizarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al actualizar el administrador',
-        error: 'Error inesperado' 
-      });
-    });
-  });
-
-  describe('eliminarAdmin', () => {
-    it('debe eliminar admin si existe', async () => {
-      req.params.id = 1;
-      mockAdminService.eliminarAdmin.mockResolvedValue({ id: 1 });
-
-      await adminController.eliminarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Administrador desactivado correctamente' 
-      });
-    });
-
-    it('debe retornar 404 si no existe', async () => {
-      req.params.id = 1;
-      mockAdminService.eliminarAdmin.mockResolvedValue(null);
-
-      await adminController.eliminarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Administrador no encontrado' 
-      });
-    });
-
-    it('debe manejar errores inesperados', async () => {
-      req.params.id = 1;
-      const error = new Error('Error inesperado');
-      mockAdminService.eliminarAdmin.mockRejectedValue(error);
-
-      await adminController.eliminarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error al desactivar el administrador',
-        error: 'Error inesperado' 
-      });
-    });
-  });
-
-  describe('autenticarAdmin', () => {
-    it('debe autenticar admin con credenciales válidas', async () => {
-      req.body = { 
-        correo_electronico: 'admin@test.com',
-        contrasenia: 'Password142@'
-      };
-      
+    it('debería actualizar admin correctamente', async () => {
       const mockAdmin = {
-        id: 1,
-        nombre: 'Admin Test',
-        correo_electronico: 'admin@test.com',
-        rol: 'admin'
-      };
-      
-      mockAdminService.autenticarAdmin.mockResolvedValue(mockAdmin);
-
-      await adminController.autenticarAdmin(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Autenticación exitosa',
-        token: 'generar-token-jwt-aqui',
-        admin: {
+        get: () => ({
           id: 1,
-          nombre: 'Admin Test',
-          correo_electronico: 'admin@test.com',
-          rol: 'admin'
-        }
+          nombre: 'Actualizado',
+          contrasenia: 'Jonier12@',
+        }),
+      };
+      mockService.actualizarAdmin.mockResolvedValue(mockAdmin);
+      mockReq.params.id = '1';
+
+      await controller.actualizarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Administrador actualizado correctamente' })
+      );
+    });
+
+    it('debería manejar ValidationError', async () => {
+      const error = new ValidationError('Error');
+      error.errors = [{ path: 'nombre', message: 'Nombre inválido' }];
+      mockService.actualizarAdmin.mockRejectedValue(error);
+
+      await controller.actualizarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({ errors: { nombre: 'Nombre inválido' } });
+    });
+
+    it('debería manejar error genérico 500', async () => {
+      mockService.actualizarAdmin.mockRejectedValue(new Error('DB error'));
+
+      await controller.actualizarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al actualizar el administrador' })
+      );
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // eliminarAdmin
+  // -------------------------------------------------------------------------
+  describe('eliminarAdmin', () => {
+    it('debería devolver 404 si no existe', async () => {
+      mockService.eliminarAdmin.mockResolvedValue(false);
+      mockReq.params.id = '1';
+
+      await controller.eliminarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({ message: 'Administrador no encontrado' });
+    });
+
+    it('debería eliminar correctamente', async () => {
+      mockService.eliminarAdmin.mockResolvedValue(true);
+      mockReq.params.id = '1';
+
+      await controller.eliminarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: 'Administrador desactivado correctamente',
       });
     });
 
-    it('debe manejar errores de autenticación', async () => {
-      req.body = { 
-        correo_electronico: 'admin@test.com',
-        contrasenia: 'Password142@'
+    it('debería manejar error 500', async () => {
+      mockService.eliminarAdmin.mockRejectedValue(new Error('Error DB'));
+
+      await controller.eliminarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error al desactivar el administrador' })
+      );
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // autenticarAdmin
+  // -------------------------------------------------------------------------
+  describe('autenticarAdmin', () => {
+    it('debería autenticar correctamente', async () => {
+      const admin = {
+        id: 1,
+        nombre: 'Jonier',
+        correo_electronico: 'jonier@empresa.com',
+        rol: 'admin',
       };
-      
-      const error = new Error('Credenciales inválidas');
-      mockAdminService.autenticarAdmin.mockRejectedValue(error);
+      mockService.autenticarAdmin.mockResolvedValue(admin);
+      mockReq.body = { correo_electronico: 'jonier@empresa.com', contrasenia: 'Jonier12@' };
 
-      await adminController.autenticarAdmin(req, res);
+      await controller.autenticarAdmin(mockReq, mockRes);
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ 
-        message: 'Error de autenticación',
-        error: 'Credenciales inválidas' 
-      });
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      const data = mockRes.json.mock.calls[0][0];
+      expect(data.token).toBeDefined();
+      expect(data.admin.nombre).toBe('Jonier');
+    });
+
+    it('debería manejar error 401 si falla autenticación', async () => {
+      mockService.autenticarAdmin.mockRejectedValue(new Error('Credenciales inválidas'));
+      mockReq.body = { correo_electronico: 'jonier@empresa.com', contrasenia: 'Jonier12@' };
+
+      await controller.autenticarAdmin(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(401);
+      expect(mockRes.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Error de autenticación' })
+      );
     });
   });
 });

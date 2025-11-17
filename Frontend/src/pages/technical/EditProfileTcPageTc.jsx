@@ -8,10 +8,29 @@ import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalId
 import { handleUpdateProfileTechnical } from '../../controllers/technical/updateProfileTechnicalTc.controller';
 
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const Main = styled.main`
   background: white;
   padding: 2rem;
-  width: 80%;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 `;
 
 const Form = styled.form`
@@ -78,33 +97,35 @@ const ContainerButtonSkeleton = styled.div`
 `
 
 const SkeletonLoader = () => (
-  <Main>
-    <ProfileInfo>
-      <Skeleton variant="circular" width={120} height={120} />
-      <Skeleton variant="text" width={300} height={40} />
-    </ProfileInfo>
+  <PageContainer>
+    <Main>
+      <ProfileInfo>
+        <Skeleton variant="circular" width={120} height={120} />
+        <Skeleton variant="text" width={300} height={40} />
+      </ProfileInfo>
 
-    <Divider />
-    <TitleHelp>
-      <Skeleton variant="text" width={200} height={30} />
-    </TitleHelp>
+      <Divider />
+      <TitleHelp>
+        <Skeleton variant="text" width={200} height={30} />
+      </TitleHelp>
 
-    <Form>
-      {[...Array(6)].map((_, index) => (
-        <Skeleton
-          key={index}
-          variant="rectangular"
-          height={56}
-          sx={{ borderRadius: "4px", backgroundColor: "#e0e0e0" }}
-        />
-      ))}
+      <Form>
+        {[...Array(6)].map((_, index) => (
+          <Skeleton
+            key={index}
+            variant="rectangular"
+            height={56}
+            sx={{ borderRadius: "4px", backgroundColor: "#e0e0e0" }}
+          />
+        ))}
 
-      <ContainerButtonSkeleton>
-        <SkeletonButton variant="rectangular" height={36} />
-        <SkeletonButton variant="rectangular" height={36} />
-      </ContainerButtonSkeleton>
-    </Form>
-  </Main>
+        <ContainerButtonSkeleton>
+          <SkeletonButton variant="rectangular" height={36} />
+          <SkeletonButton variant="rectangular" height={36} />
+        </ContainerButtonSkeleton>
+      </Form>
+    </Main>
+  </PageContainer>
 );
 
 const EditProfileTc = () => {
@@ -203,19 +224,20 @@ const EditProfileTc = () => {
   }
 
   return (
-    <Main>
-      <ProfileInfo>
-        <Avatar
-          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
-          alt="Avatar"
-        />
-        <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
-      </ProfileInfo>      
+    <PageContainer>
+      <Main>
+        <ProfileInfo>
+          <Avatar
+            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
+            alt="Avatar"
+          />
+          <h2>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h2>
+        </ProfileInfo>      
 
-      <Divider />
+        <Divider />
 
-      <TitleHelp>Informacion personal</TitleHelp>
-      <Form onSubmit={handleSubmit}>
+        <TitleHelp>Informacion personal</TitleHelp>
+        <Form onSubmit={handleSubmit}>
         <TextField 
           label="Nombre" 
           fullWidth 
@@ -301,8 +323,9 @@ const EditProfileTc = () => {
           <Button type="button" variant="contained" onClick={() => navigate(-1)}>Cancelar</Button>
         </ContainerButton>
 
-      </Form>
-    </Main>
+        </Form>
+      </Main>
+    </PageContainer>
   );
 };
 

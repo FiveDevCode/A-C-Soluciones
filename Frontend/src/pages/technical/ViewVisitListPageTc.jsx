@@ -5,17 +5,31 @@ import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import { jwtDecode } from "jwt-decode";
 import ListVisitTc from "../../components/technical/ListVisitTc";
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const ContainerService = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
 
-`
-
-
-const ViewViewVisitListPageTc = () => {
+const ViewVisitListPageTc = () => {
   const [visits, setVisits] = useState([]);
-  const [idTechnical, setIdTechnical] = useState("")
+  const [idTechnical, setIdTechnical] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -35,19 +49,18 @@ const ViewViewVisitListPageTc = () => {
       });
   }, [idTechnical]);
 
-
   return (
-    <ContainerService>
+    <PageContainer>
+      <ContainerService>
+        <FilterServicesAd count={visits.length} />
+        {visits.length === 0 ? (
+          <p style={{textAlign: "center"}}>No tienes ninguna visita asignada por el momento.</p>
+        ) : (
+          <ListVisitTc visits={visits} />
+        )}
+      </ContainerService>
+    </PageContainer>
+  );
+};
 
-      <FilterServicesAd count={visits.length} />
-      {visits.length === 0 ? (
-        <p style={{textAlign: "center"}}>No tienes ninguna visita asignada por el momento.</p>
-      ) : (
-        <ListVisitTc visits={visits} />
-      )}
-
-    </ContainerService>
-  )
-}
-
-export default ViewViewVisitListPageTc;
+export default ViewVisitListPageTc;

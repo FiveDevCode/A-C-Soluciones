@@ -1,27 +1,30 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import styled from "styled-components"
-
+import styled from "styled-components";
 
 const ContainerInfo = styled.section`
   display: flex;
-  gap: 0.425rem;
-`
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+`;
 
 const TitleSearch = styled.h1`
-  font-size: 1rem;
-  font-weight: bold;
-`
-
-
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin: 0;
+  letter-spacing: -0.01em;
+`;
 
 const FilterServicesAd = ({ count }) => {
   return (
     <ContainerInfo>
-      <TitleSearch>Se encontraron {count} resultados </TitleSearch>
+      <TitleSearch>
+        Se encontraron {count} {count === 1 ? 'resultado' : 'resultados'}
+      </TitleSearch>
     </ContainerInfo>
-  )
-}
+  );
+};
 
 
 export default FilterServicesAd;

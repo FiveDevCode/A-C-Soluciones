@@ -24,6 +24,22 @@ import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisi
 const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const Container = styled.div`
   padding-top: 0.5rem;
   padding-left: 2rem;
@@ -31,7 +47,6 @@ const Container = styled.div`
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  
 `;
 
 const Header = styled.div`
@@ -159,8 +174,9 @@ const ViewVisitPageTc = () => {
 
 
   return (
-    <Container>
-      <Header>
+    <PageContainer>
+      <Container>
+        <Header>
         <Imagen src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="icono" />
         <Titulo>{servicio?.nombre || 'Sin nombre'}</Titulo>
       </Header>
@@ -304,7 +320,8 @@ const ViewVisitPageTc = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+      </Container>
+    </PageContainer>
   );
 };
 

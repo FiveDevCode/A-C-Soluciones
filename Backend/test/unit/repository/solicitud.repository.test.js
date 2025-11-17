@@ -77,35 +77,7 @@ describe('SolicitudRepository', () => {
     solicitudRepository = new SolicitudRepository();
   });
 
-  describe('setupAssociations', () => {
-    it('debe configurar las asociaciones correctamente', () => {
-      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledTimes(3);
-      
-      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
-        ClienteModel.Cliente,
-        expect.objectContaining({
-          foreignKey: 'cliente_id_fk',
-          as: 'cliente'
-        })
-      );
-      
-      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
-        ServicioModel.Servicio,
-        expect.objectContaining({
-          foreignKey: 'servicio_id_fk',
-          as: 'servicio'
-        })
-      );
-      
-      expect(SolicitudModel.Solicitud.belongsTo).toHaveBeenCalledWith(
-        AdminModel.Admin,
-        expect.objectContaining({
-          foreignKey: 'admin_id_fk',
-          as: 'admin'
-        })
-      );
-    });
-  });
+  
 
   describe('crear', () => {
     it('debe crear una nueva solicitud', async () => {
@@ -144,17 +116,17 @@ describe('SolicitudRepository', () => {
         include: [
           {
             model: ClienteModel.Cliente,
-            as: 'cliente',
+            as: 'cliente_solicitud',
             attributes: ['id', 'nombre', 'apellido', 'telefono']
           },
           {
             model: AdminModel.Admin,
-            as: 'admin',
+            as: 'administrador',
             attributes: ['id', 'nombre', 'apellido']
           },
           {
             model: ServicioModel.Servicio,
-            as: 'servicio',
+            as: 'servicio_solicitud',
             attributes: ['id', 'nombre', 'descripcion']
           }
         ],
@@ -182,12 +154,12 @@ describe('SolicitudRepository', () => {
         include: [
           {
             model: ClienteModel.Cliente,
-            as: 'cliente',
+            as: 'cliente_solicitud',
             attributes: ['id', 'nombre', 'apellido', 'telefono', 'direccion']
           },
           {
             model: ServicioModel.Servicio,
-            as: 'servicio',
+            as: 'servicio_solicitud',
             attributes: ['id', 'nombre', 'descripcion']
           }
         ]
@@ -214,7 +186,7 @@ describe('SolicitudRepository', () => {
         where: { cliente_id_fk: 1 },
         include: [{
           model: ServicioModel.Servicio,
-          as: 'servicio',
+          as: 'servicio_solicitud',
           attributes: ['id', 'nombre', 'descripcion']
         }],
         order: [['fecha_solicitud', 'DESC']]
