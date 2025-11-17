@@ -189,24 +189,36 @@ const MenuSideAd = () => {
   const getHomeRouteByRole = (role) => {
     switch (role) {
       case 'tecnico': return '/tecnico/inicio';
+      case 'Contador': return '/contador/inicio';
       case 'administrador': return '/admin/inicio';
       default: return '/';
     }
   };
 
-  const options = [
-    { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
-    { to: '/admin/solicitudes', icon: faClipboardList, label: 'Solicitudes' },
-    { to: '/admin/visitas', icon: faCompass, label: 'Visitas' },
-    { to: '/admin/tecnicos', icon: faTools, label: 'Técnicos' },
-    { to: '/admin/clientes', icon: faUsers, label: 'Clientes' },
-    { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
-    { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
-    { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
-    { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
-    { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
-    { to: '/admin/inventario', icon: faTools, label: 'Inventario' },
-  ];
+  const menuByRole = {
+    administrador: [
+      { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
+      { to: '/admin/solicitudes', icon: faClipboardList, label: 'Solicitudes' },
+      { to: '/admin/visitas', icon: faCompass, label: 'Visitas' },
+      { to: '/admin/tecnicos', icon: faTools, label: 'Técnicos' },
+      { to: '/admin/clientes', icon: faUsers, label: 'Clientes' },
+      { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
+      { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
+      { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
+      { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
+      { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
+      { to: '/admin/inventario', icon: faTools, label: 'Inventario' },
+    ],
+
+    Contador: [
+      { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
+      { to: '/contador/facturas', icon: faMoneyBill, label: 'Facturas' },
+      { to: '/contador/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
+      { to: '/contador/reportes', icon: faClipboardList, label: 'Reportes' },
+    ]
+  };
+  
+  const options = menuByRole[role] || [];
 
   return (
     <SectionMenu collapsed={collapsed}>

@@ -131,7 +131,7 @@ function AppContent() {
     <Container hideStyles={hideMenuAndHeader}>
       {!hideMenuAndHeader && role === "administrador" && <MenuSideAd />}
       {!hideMenuAndHeader && role === "tecnico" && <MenuSideTc />}
-      {!hideMenuAndHeader && role === "Contador" && <MenuSideAc />}
+      {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
         {isCliente && !isPublicPage && <HeaderBarCl />}
@@ -226,6 +226,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <BillPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/cuentas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <PaymentAccountPageAd />
               </PrivateRoute>
             }
           />
