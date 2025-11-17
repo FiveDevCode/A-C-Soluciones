@@ -545,6 +545,25 @@ const deleteRequest = (id) => {
   });
 }
 
+const getListMaintenanceReport = () => {
+  const token = localStorage.getItem("authToken");  
+  return api.get("/reportes-mantenimiento", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+const createMaintenanceReport = (reportData) => {
+  const token = localStorage.getItem("authToken"); 
+  return api.post("/reportes-mantenimiento", reportData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -595,6 +614,7 @@ export const administratorService = {
   deleteClient,
   deleteTechnical,
   updateVisit,
-  deleteRequest
-  
+  deleteRequest,
+  getListMaintenanceReport,
+  createMaintenanceReport
 }

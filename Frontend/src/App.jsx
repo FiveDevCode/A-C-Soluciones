@@ -60,6 +60,7 @@ import ClientPageAd from "./pages/administrator/ClientPageAd.jsx";
 import TechnicalPageAd from "./pages/administrator/TechnicalPageAd.jsx";
 import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
 import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
+import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 
 const Container = styled.div`
   ${({ hideStyles }) =>
@@ -498,6 +499,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <VisitPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte-mantenimiento"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <MaintenanceReportPageAd />
               </PrivateRoute>
             }
           />
