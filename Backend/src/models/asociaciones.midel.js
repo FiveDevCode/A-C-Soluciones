@@ -7,7 +7,6 @@ import { ServicioModel } from './servicios.model.js';
 import { ReporteBombeoModel } from './reporte_bombeo.model.js';
 import { EquipoBombeoModel } from './equipoBombeo.model.js';
 import { ParametroBombeoModel } from './parametroBombeo.model.js';
-import { ServicioModel } from './servicios.model.js';
 import { ReporteMantenimientoModel } from './reporte_mantenimiento.model.js';
 
 export const setupAssociations = () => {
@@ -106,12 +105,12 @@ export const setupAssociations = () => {
     as: 'tecnico'
   });
 
-  AdminModel.Administrador.hasMany(ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas, {
+  AdminModel.Admin.hasMany(ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas, {
     foreignKey: 'id_administrador',
     as: 'reportes_mantenimiento'
   });
 
-  ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas.belongsTo(AdminModel.Administrador, {
+  ReporteMantenimientoModel.ReporteMantenimientoPlantasElectricas.belongsTo(AdminModel.Admin, {
     foreignKey: 'id_administrador',
     as: 'administrador'
   });
