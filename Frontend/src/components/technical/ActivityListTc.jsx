@@ -95,7 +95,7 @@ const Description = styled.h2`
   overflow: hidden;
 `;
 
-const Date = styled.p`
+const DateText = styled.p`
   font-size: 0.875rem;
   font-weight: 400;
   color: #94a3b8;
@@ -195,7 +195,7 @@ const ActivityListTc = ({visits}) => {
                       ? `${visit.notas_previas.slice(0, 50)}...`
                       : visit.notas_previas || "No hay notas previas"}
                   </Description>
-                  <Date>
+                  <DateText>
                     {visit.fecha_programada 
                       ? new Date(visit.fecha_programada).toLocaleDateString('es-ES', {
                           year: 'numeric',
@@ -203,7 +203,7 @@ const ActivityListTc = ({visits}) => {
                           day: 'numeric'
                         })
                       : 'Fecha no disponible'}
-                  </Date>
+                  </DateText>
                 </NotificationInfo>
               </NotificationDescription>
               <ContainerOption>

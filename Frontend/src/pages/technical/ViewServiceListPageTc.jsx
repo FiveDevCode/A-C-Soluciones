@@ -32,7 +32,7 @@ const ViewServiceListPageTc = () => {
   useEffect(() => {
     handleGetListServiceAd()
       .then((res) => {
-        setServices(res.data.data);
+        setServices(res);
       })
       .catch((err) => {
         console.error("Error fetching service list:", err);

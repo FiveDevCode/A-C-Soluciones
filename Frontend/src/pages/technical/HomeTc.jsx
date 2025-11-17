@@ -44,7 +44,9 @@ const HomeTc = () => {
   useEffect(() => {
     handleGetVisitAssign(technicalId)
       .then((res) => {
+        console.log(res);
         setVisits(res.data.data); 
+        console.log(res.data.data);
       })
       .catch((err) => {
         console.error("Error fetching service list:", err);
