@@ -20,7 +20,7 @@ const Card = styled.div`
   background: white;
 `;
 
-const PumpingLineParams = ({ parametros, setParametros }) => {
+const PumpingLineParams = ({ parametrosLinea, setParametros }) => {
   const update = (field, value) => {
     setParametros(prev => ({ ...prev, [field]: value }));
   };
@@ -34,7 +34,7 @@ const PumpingLineParams = ({ parametros, setParametros }) => {
       <Card>
         <TextField
           label="Voltaje línea"
-          value={parametros.voltaje_linea}
+          value={parametrosLinea.voltaje_linea}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
@@ -43,7 +43,7 @@ const PumpingLineParams = ({ parametros, setParametros }) => {
 
         <TextField
           label="Corriente línea"
-          value={parametros.corriente_linea}
+          value={parametrosLinea.corriente_linea}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
@@ -52,7 +52,7 @@ const PumpingLineParams = ({ parametros, setParametros }) => {
 
         <TextField
           label="Presión succión"
-          value={parametros.presion_succion}
+          value={parametrosLinea.presion_succion}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
@@ -61,7 +61,7 @@ const PumpingLineParams = ({ parametros, setParametros }) => {
 
         <TextField
           label="Presión descarga"
-          value={parametros.presion_descarga}
+          value={parametrosLinea.presion_descarga}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
@@ -70,7 +70,7 @@ const PumpingLineParams = ({ parametros, setParametros }) => {
 
         <TextField
           label="Observaciones"
-          value={parametros.observaciones}
+          value={parametrosLinea.observaciones}
           fullWidth
           size="small"
           multiline
