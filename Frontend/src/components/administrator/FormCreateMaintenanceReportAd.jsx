@@ -5,28 +5,12 @@ import BaseFormModal from "../common/BaseFormModal";
 import { handleCreateMaintenanceReportAd } from "../../controllers/administrator/createMaintenanceReportAd.controller";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
+import VerificationList from "./VerificationList";
 
 const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
   const [clients, setClients] = useState([]);
   const [technicals, setTechnicals] = useState([]);
   const [verificaciones, setVerificaciones] = useState([]);
-
-  const addVerificacion = () => {
-    setVerificaciones([
-      ...verificaciones,
-      { item: "", visto: false, observacion: "" }
-    ]);
-  };
-
-  const updateVerificacion = (index, field, value) => {
-    const copy = [...verificaciones];
-    copy[index][field] = value;
-    setVerificaciones(copy);
-  };
-
-  const removeVerificacion = (index) => {
-    setVerificaciones(verificaciones.filter((_, i) => i !== index));
-  };
 
   // Cargar selects
   useEffect(() => {
@@ -96,102 +80,10 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
       onSuccess={onSuccess}
       successMessage="¡Reporte registrado exitosamente!"
       extraContent={
-        <div
-          style={{
-            marginTop: "70px",
-            alignItems: "start",
-            alignSelf: "flex-start",
-          }}
-        >
-          {/* Columna izquierda: vacío para ocupar el espacio del formulario */}
-          <div></div>
-
-          {/* Columna derecha: las verificaciones */}
-          <div
-            style={{
-              background: "#f9f9f9",
-              padding: "15px",
-              borderRadius: "10px",
-              border: "1px solid #ddd",
-            }}
-          >
-            <h3 style={{ marginBottom: "8px", fontWeight: "600" }}>Verificaciones</h3>
-
-            {verificaciones.map((v, i) => (
-              <div
-                key={i}
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "10px",
-                  borderRadius: "6px",
-                  marginBottom: "10px",
-                  background: "white",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Item"
-                  value={v.item}
-                  style={{ width: "100%", marginBottom: "6px" }}
-                  onChange={(e) => updateVerificacion(i, "item", e.target.value)}
-                />
-
-                <textarea
-                  placeholder="Observación"
-                  value={v.observacion}
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    updateVerificacion(i, "observacion", e.target.value)
-                  }
-                />
-
-                <label
-                  style={{ display: "flex", alignItems: "center", marginTop: "6px" }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={v.visto}
-                    onChange={(e) =>
-                      updateVerificacion(i, "visto", e.target.checked)
-                    }
-                  />
-                  <span style={{ marginLeft: "6px" }}>Visto</span>
-                </label>
-
-                <button
-                  style={{
-                    marginTop: "8px",
-                    background: "#e63946",
-                    color: "white",
-                    border: "none",
-                    padding: "6px 10px",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => removeVerificacion(i)}
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
-
-            <button
-              onClick={addVerificacion}
-              style={{
-                background: "#007bff",
-                color: "white",
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: "4px",
-                cursor: "pointer",
-                width: "100%",
-                marginTop: "10px",
-              }}
-            >
-              Agregar verificación
-            </button>
-          </div>
-        </div>
+        <VerificationList
+          verificaciones={verificaciones}
+          setVerificaciones={setVerificaciones}
+        />
       }
     />
   );
