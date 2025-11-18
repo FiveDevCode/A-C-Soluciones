@@ -564,6 +564,27 @@ const createMaintenanceReport = (reportData) => {
   });
 }
 
+
+const getListPumpingReports = () => {
+  const token = localStorage.getItem("authToken");  
+  return api.get("/reportes-bombeo", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+
+const createPumpingReport = (reportData) => {
+  const token = localStorage.getItem("authToken"); 
+  return api.post("/reportes-bombeo", reportData, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -616,5 +637,7 @@ export const administratorService = {
   updateVisit,
   deleteRequest,
   getListMaintenanceReport,
-  createMaintenanceReport
+  createMaintenanceReport,
+  getListPumpingReports,
+  createPumpingReport
 }

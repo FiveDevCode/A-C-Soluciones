@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
-import ConfirmModal from "../../components/common/ConfirmModal";
-import ListMaintenanceReportAd from "../../components/administrator/ListMaintenanceReportAd";
-import FilterMaintenanceReportAd from "../../components/administrator/FilterMaintenanceReportAd";
-import FormCreateMaintenanceReportAd from "../../components/administrator/FormCreateMaintenanceReportAd";
-import { handleGetListMaintenanceReportAd } from "../../controllers/administrator/getListMaintenanceReportAd.controller";
+import ListPumpingReportAd from "../../components/administrator/ListPumpingReportAd";
+import FilterPumpingReportAd from "../../components/administrator/FilterPumpingReportAd";
+import FormCreatePumpingReportAd from "../../components/administrator/FormCreatePumpingReportAd";
+import { handleGetListPumpingReportAd } from "../../controllers/administrator/getListPumpingReportAd.controller";
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +31,7 @@ const Card = styled.div`
   }
 `;
 
-const MaintenanceReportPageAd = () => {
+const PumpingReportPageAd = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -46,25 +45,27 @@ const MaintenanceReportPageAd = () => {
   const loadReports = async () => {
     setLoading(true);
     try {
-      const data = await handleGetListMaintenanceReportAd();
+      const data = await handleGetListPumpingReportAd();
+      console.log(data);
       setReports(data);
     } catch (err) {
-      console.error("Error cargando reportes de mantenimiento:", err);
+      console.error("Error cargando reportes de bombeo:", err);
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES DE MANTENIMIENTO"
+        headerTitle="GESTIÓN DE REPORTES DE BOMBEO"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
         onAdd={() => setShowModal(true)}
         selectedCount={selectedIds.length}
         filterComponent={
-          <FilterMaintenanceReportAd
+          <FilterPumpingReportAd
             reports={reports}
             onFilteredChange={setFilteredReports}
           />
@@ -78,7 +79,7 @@ const MaintenanceReportPageAd = () => {
             Cargando reportes...
           </p>
         ) : (
-          <ListMaintenanceReportAd
+          <ListPumpingReportAd
             reports={filteredReports}
             reloadData={loadReports}
           />
@@ -86,7 +87,7 @@ const MaintenanceReportPageAd = () => {
       </Card>
 
       {showModal && (
-        <FormCreateMaintenanceReportAd
+        <FormCreatePumpingReportAd
           onClose={() => setShowModal(false)}
           onSuccess={() => {
             setShowModal(false);
@@ -94,9 +95,8 @@ const MaintenanceReportPageAd = () => {
           }}
         />
       )}
-
     </Container>
   );
 };
 
-export default MaintenanceReportPageAd;
+export default PumpingReportPageAd;

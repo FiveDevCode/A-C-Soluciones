@@ -61,6 +61,7 @@ import TechnicalPageAd from "./pages/administrator/TechnicalPageAd.jsx";
 import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
 import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
+import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 
 const Container = styled.div`
   ${({ hideStyles }) =>
@@ -508,6 +509,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <MaintenanceReportPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <PumpingReportPageAd />
               </PrivateRoute>
             }
           />
