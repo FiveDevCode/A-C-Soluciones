@@ -121,6 +121,7 @@ const BaseFormModal = ({
   onClose,
   onSuccess,
   successMessage = "Guardado exitosamente",
+  extraContent
 }) => {
   const [formData, setFormData] = useState(
     Object.fromEntries(fields.map((f) => [f.name, ""]))
@@ -281,6 +282,11 @@ const BaseFormModal = ({
           </ButtonsContainer>
         </FormContainer>
       </ModalContent>
+      {extraContent && (
+        <>
+          {extraContent}
+        </>
+      )}
     </ModalOverlay>
   );
 };
