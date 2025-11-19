@@ -53,13 +53,10 @@ const createService = (nameService, descripcion) => {
   });
 };
 
-const updateService = (id, nameService, descripcion) => {
+const updateService = (id, data) => {
   const token = localStorage.getItem("authToken");
 
-  return api.put(`/servicios/${id}`, {
-    nombre: nameService,
-    descripcion: descripcion
-  }, {
+  return api.put(`/servicios/${id}`, data , {
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`

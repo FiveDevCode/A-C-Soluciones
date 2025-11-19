@@ -10,7 +10,7 @@ const EditServiceAd = ({ selected, onClose, onSuccess }) => {
     const fetchService = async () => {
       try {
         const response = await handleGetService(selected.id);
-        setServiceData(response.data);
+        setServiceData(response.data.data);
       } catch (error) {
         console.error("Error al cargar servicio:", error);
       }
@@ -21,9 +21,8 @@ const EditServiceAd = ({ selected, onClose, onSuccess }) => {
   if (!serviceData) return null; // no mostrar nada mientras carga
 
   const estados = [
-    { value: "pendiente", label: "Pendiente" },
-    { value: "en_proceso", label: "En proceso" },
-    { value: "completado", label: "Completado" },
+    { value: "activo", label: "Activo" },
+    { value: "inactivo", label: "Inactivo" }
   ];
 
   const fields = [
