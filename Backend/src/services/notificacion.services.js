@@ -178,3 +178,47 @@ export const notificarCambioEstadoSolicitud = async (id_cliente, id_solicitud, n
     tipo_referencia: 'solicitud'
   });
 };
+
+/**
+ * Notificar al administrador cuando un técnico finaliza una visita
+ */
+export const notificarAdminVisitaCompletada = async (id_administrador, id_visita, nombreTecnico, nombreCliente) => {
+  return await crearNotificacion({
+    id_destinatario: id_administrador,
+    tipo_destinatario: 'administrador',
+    tipo_notificacion: 'VISITA_COMPLETADA',
+    mensaje: `El técnico ${nombreTecnico} ha finalizado la visita con el cliente ${nombreCliente}.`,
+    id_referencia: id_visita,
+    tipo_referencia: 'visita'
+  });
+};
+
+/**
+ * Notificar al técnico cuando se le asigna una nueva visita
+ */
+export const notificarTecnicoNuevaVisita = async (id_tecnico, id_visita, nombreCliente, fechaProgramada) => {
+  return await crearNotificacion({
+    id_destinatario: id_tecnico,
+    tipo_destinatario: 'tecnico',
+    tipo_notificacion: 'VISITA_ASIGNADA',
+    mensaje: `Se te ha asignado una nueva visita con el cliente ${nombreCliente} programada para el ${fechaProgramada}.`,
+    id_referencia: id_visita,
+    tipo_referencia: 'visita'
+  });
+};
+
+/**
+ * Notificar al administrador y contabilidad sobre nueva factura registrada
+ */
+export const notificarNuevaFactura = async (id_usuario, tipo_usuario, numeroFactura, nombreCliente, monto) => {
+  return await crearNotificacion({
+    id_destinatario: id_usuario,
+    tipo_destinatario: tipo_usuario,
+    tipo_notificacion: 'NUEVA_FACTURA',
+    mensaje: `Se ha registrado una nueva factura #${numeroFactura} para el cliente ${nombreCliente} por un monto de $${monto}.`,
+    id_referencia: null,
+    tipo_referencia: 'factura'
+  });
+};
+
+

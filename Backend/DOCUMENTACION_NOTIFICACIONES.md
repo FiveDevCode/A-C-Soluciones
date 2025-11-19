@@ -238,6 +238,9 @@ function NotificacionesComponent({ user }) {
 | `FICHA_CREADA` | Se crea una ficha de mantenimiento | Cliente |
 | `FICHA_ASIGNADA` | Se crea una ficha de mantenimiento | Técnico |
 | `NUEVA_SOLICITUD` | Cliente solicita un servicio | Administrador |
+| `VISITA_COMPLETADA` | Técnico finaliza una visita | Administrador(es) |
+| `VISITA_ASIGNADA` | Admin asigna una visita a un técnico | Técnico |
+| `NUEVA_FACTURA` | Se registra una nueva factura | Administrador(es) y Contador(es) |
 
 ---
 
