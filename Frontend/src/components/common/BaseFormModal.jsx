@@ -31,7 +31,13 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 16px;
   width: 400px;
+  max-height: 90vh;         /* 🔥 LIMITE DE ALTO */
+  overflow-y: auto;         /* 🔥 SCROLL INTERNO */
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
+
+  /* evita que el scroll tape contenido */
+  scrollbar-width: thin;
+  scrollbar-color: #bdbdbd transparent;
 
   @media (max-width: 1350px) {
     width: 330px;
@@ -39,6 +45,7 @@ const ModalContent = styled.div`
     border-radius: 12px;
   }
 `;
+
 
 const Title = styled.h2`
   text-align: center;
