@@ -45,7 +45,6 @@ import ClientFaqsPage from "./pages/common/ClientFaqsPage";
 import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
 import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
-import { MenuSideAc } from "./components/accountant/MenuSideAc.jsx";
 import HomeAc from "./pages/accountant/HomeAc.jsx";
 import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
@@ -54,7 +53,6 @@ import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
 import ServicePageAd from "./pages/administrator/ServicePageAd.jsx";
 import BillPageAd from "./pages/administrator/BillPageAd.jsx";
 import AccountingPageAd from "./pages/administrator/AccountingPageAd.jsx";
-import ViewReportListPageAd from "./pages/administrator/ViewReportListPageAd.jsx";
 import AdministratorPageAd from "./pages/administrator/AdministratorPageAd.jsx";
 import ClientPageAd from "./pages/administrator/ClientPageAd.jsx";
 import TechnicalPageAd from "./pages/administrator/TechnicalPageAd.jsx";
@@ -62,6 +60,7 @@ import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
 import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
+import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 
 const Container = styled.div`
   ${({ hideStyles }) =>
@@ -454,7 +453,7 @@ function AppContent() {
             path="/admin/reportes"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewReportListPageAd />
+                <ReportPageAd />
               </PrivateRoute>
             }
           />
@@ -518,6 +517,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <PumpingReportPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <ReportPageAd />
               </PrivateRoute>
             }
           />

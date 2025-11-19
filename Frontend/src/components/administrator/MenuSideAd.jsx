@@ -15,6 +15,11 @@ import {
   faMoneyBill,
   faCreditCard,
   faArrowRightFromBracket,
+  faClipboardCheck,
+  faWater,
+  faFireExtinguisher,
+  faFaucet,
+  faBolt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -208,6 +213,9 @@ const MenuSideAd = () => {
       { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
       { to: '/admin/inventario', icon: faTools, label: 'Inventario' },
+      { to: '/admin/reporte-mantenimiento', icon: faBolt, label: 'Reporte mantenimiento' },
+      { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reporte bombeo' },
+      { to: '/admin/reporte', icon: faClipboardCheck, label: 'Reporte' },
     ],
 
     Contador: [
