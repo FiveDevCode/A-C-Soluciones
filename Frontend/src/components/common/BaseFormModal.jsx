@@ -7,6 +7,7 @@ import {
   Collapse,
   Alert,
   IconButton,
+  LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -149,20 +150,39 @@ const FileItem = styled.div`
 
 const BaseFormModal = ({
   title,
+  steps,
   fields,
   onSubmit,
   onClose,
   onSuccess,
-  successMessage = "Guardado exitosamente"
+  successMessage = "Guardado exitosamente",
 }) => {
+
+  // ========= DETECCIÓN DE MULTIPASOS =========
+  const isMultiStep = Array.isArray(steps) && steps.length > 0;
+
+  // Si NO es multipaso, usamos fields como siempre
+  const normalizedSteps = isMultiStep
+    ? steps
+    : [{ title: "Formulario", fields: fields || [] }];
+
+  const totalSteps = normalizedSteps.length;
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const allFields = normalizedSteps.flatMap((s) => s.fields);
+
+  // ========= ESTADOS PRINCIPALES =========
   const [formData, setFormData] = useState(
-    Object.fromEntries(fields.map((f) => [f.name, ""]))
+    Object.fromEntries(
+      allFields
+        .filter((f) => f.type !== "file")
+        .map((f) => [f.name, ""])
+    )
   );
 
-  // Nuevo estado para archivos
   const [files, setFiles] = useState(
     Object.fromEntries(
-      fields
+      allFields
         .filter((f) => f.type === "file")
         .map((f) => [f.name, null])
     )
@@ -173,10 +193,10 @@ const BaseFormModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  // ========= HANDLE CHANGE =========
   const handleChange = (e) => {
     const { name, value, files: fileInput } = e.target;
 
-    // Si es archivo
     if (fileInput) {
       setFiles((prev) => ({
         ...prev,
@@ -185,18 +205,24 @@ const BaseFormModal = ({
       return;
     }
 
-    // Si es texto normal
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (showSuccess) setShowSuccess(false);
   };
 
+  // ========= RESET =========
   const handleReset = () => {
-    setFormData(Object.fromEntries(fields.map((f) => [f.name, ""])));
+    setFormData(
+      Object.fromEntries(
+        allFields
+          .filter((f) => f.type !== "file")
+          .map((f) => [f.name, ""])
+      )
+    );
 
     setFiles(
       Object.fromEntries(
-        fields
+        allFields
           .filter((f) => f.type === "file")
           .map((f) => [f.name, null])
       )
@@ -206,15 +232,12 @@ const BaseFormModal = ({
     setFieldErrors({});
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  // ========= SUBMIT FINAL =========
+  const handleSubmitFinal = async () => {
     setIsSubmitting(true);
 
     try {
-      await onSubmit({
-        ...formData,
-        ...files,
-      });
+      await onSubmit({ ...formData, ...files });
 
       handleReset();
       setShowSuccess(true);
@@ -222,7 +245,7 @@ const BaseFormModal = ({
       setTimeout(() => {
         setShowSuccess(false);
         onSuccess?.();
-      }, 2000);
+      }, 1800);
     } catch (err) {
       setShowSuccess(false);
 
@@ -236,148 +259,162 @@ const BaseFormModal = ({
     }
   };
 
+  const progress = Math.round(((currentStep + 1) / totalSteps) * 100);
+
   return (
     <ModalOverlay>
       <ModalContent>
         <Title>{title}</Title>
 
-        <FormContainer onSubmit={handleFormSubmit} autoComplete="off">
-          {fields.map((field) => (
-            <div key={field.name} style={{ marginBottom: "1rem" }}>
+        {/* Barra multipasos */}
+        {isMultiStep && (
+          <>
+            <LinearProgress variant="determinate" value={progress} />
+            <p style={{ textAlign: "center", marginTop: 8 }}>
+              Paso {currentStep + 1} de {totalSteps}
+            </p>
+          </>
+        )}
 
-              {field.type === "file" ? (
-                <>
-                  <UploadButton>
-                    {`Subir imagen "${field.label}"`}{" "}
-                    <FontAwesomeIcon icon={faUpload} style={{ marginLeft: "8px" }} />
-                    <input
-                      type="file"
-                      name={field.name}
-                      hidden
-                      onChange={handleChange}
+        {/* Campos */}
+        {normalizedSteps[currentStep].fields.map((field) => (
+          <div key={field.name} style={{ marginBottom: "1rem" }}>
+            {field.type === "file" ? (
+              <>
+                <UploadButton>
+                  {`Subir imagen "${field.label}"`}{" "}
+                  <FontAwesomeIcon icon={faUpload} style={{ marginLeft: "8px" }} />
+                  <input
+                    type="file"
+                    name={field.name}
+                    hidden
+                    onChange={handleChange}
+                  />
+                </UploadButton>
+
+                {files[field.name] && (
+                  <FileItem>
+                    {files[field.name].name}
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      style={{ cursor: "pointer" }}
+                      onClick={() =>
+                        setFiles((prev) => ({
+                          ...prev,
+                          [field.name]: null,
+                        }))
+                      }
                     />
-                  </UploadButton>
+                  </FileItem>
+                )}
 
-                  {files[field.name] && (
-                    <FileList>
-                      <FileItem>
-                        {files[field.name].name}
-                        <FontAwesomeIcon
-                          icon={faTimes}
-                          style={{ cursor: "pointer" }}
-                          onClick={() =>
-                            setFiles((prev) => ({
-                              ...prev,
-                              [field.name]: null,
-                            }))
-                          }
-                        />
-                      </FileItem>
-                    </FileList>
-                  )}
-
-                  {fieldErrors[field.name] && (
-                    <div style={{ color: "red", fontSize: "0.8rem" }}>
-                      {fieldErrors[field.name]}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <StyledTextField
-                  select={field.type === "select"}
-                  type={
-                    field.type === "number"
-                      ? "number"
-                      : field.type === "date"
-                      ? "date"
-                      : field.type === "datetime-local"
-                      ? "datetime-local"
-                      : field.type === "textarea"
-                      ? ""
-                      : "text"
-                  }
-                  label={field.label}
-                  name={field.name}
-                  fullWidth
-                  size="small"
-                  multiline={field.type === "textarea"}
-                  rows={field.type === "textarea" ? 3 : undefined}
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  error={Boolean(fieldErrors[field.name])}
-                  helperText={fieldErrors[field.name]}
-                  InputLabelProps={{
-                    shrink:
-                      field.type === "date" ||
-                      field.type === "datetime-local"
-                        ? true
-                        : undefined,
-                  }}
-                >
-                  {field.type === "select" &&
-                    field.options?.map((opt) => (
-                      <MenuItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </MenuItem>
-                    ))}
-                </StyledTextField>
-              )}
-            </div>
-          ))}
-
-          {/* Errores generales / Éxito */}
-          {errorMsg && (
-            <Collapse in={!!errorMsg}>
-              <Alert
-                severity="error"
-                action={
-                  <IconButton onClick={() => setErrorMsg("")} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
+                {fieldErrors[field.name] && (
+                  <div style={{ color: "red", fontSize: "0.8rem" }}>
+                    {fieldErrors[field.name]}
+                  </div>
+                )}
+              </>
+            ) : (
+              <TextField
+                select={field.type === "select"}
+                type={
+                  field.type === "number"
+                    ? "number"
+                    : field.type === "date"
+                    ? "date"
+                    : field.type === "datetime-local"
+                    ? "datetime-local"
+                    : "text"
                 }
-                sx={{ mb: 2 }}
+                label={field.label}
+                name={field.name}
+                fullWidth
+                size="small"
+                multiline={field.type === "textarea"}
+                rows={field.type === "textarea" ? 3 : undefined}
+                value={formData[field.name]}
+                onChange={handleChange}
+                error={Boolean(fieldErrors[field.name])}
+                helperText={fieldErrors[field.name]}
+                InputLabelProps={{
+                  shrink:
+                    field.type === "date" ||
+                    field.type === "datetime-local"
+                      ? true
+                      : undefined,
+                }}
               >
-                {errorMsg}
-              </Alert>
-            </Collapse>
+                {field.type === "select" &&
+                  field.options?.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+              </TextField>
+            )}
+          </div>
+        ))}
+
+        {/* Errores */}
+        {errorMsg && (
+          <Collapse in={!!errorMsg}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton onClick={() => setErrorMsg("")} size="small">
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              {errorMsg}
+            </Alert>
+          </Collapse>
+        )}
+
+        {showSuccess && (
+          <Collapse in={showSuccess}>
+            <Alert severity="success" sx={{ mb: 2 }}>
+              {successMessage}
+            </Alert>
+          </Collapse>
+        )}
+
+        {/* BOTONES */}
+        <ButtonsContainer>
+          {isMultiStep && currentStep > 0 && (
+            <Button variant="contained" onClick={() => setCurrentStep((s) => s - 1)}>
+              Anterior
+            </Button>
           )}
 
-          {showSuccess && (
-            <Collapse in={showSuccess}>
-              <Alert
-                severity="success"
-                action={
-                  <IconButton onClick={() => setShowSuccess(false)} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                {successMessage}
-              </Alert>
-            </Collapse>
-          )}
-
-          <ButtonsContainer>
-            <StyledButton
-              type="submit"
+          {isMultiStep && currentStep < totalSteps - 1 ? (
+            <Button variant="contained" onClick={() => setCurrentStep((s) => s + 1)}>
+              Siguiente
+            </Button>
+          ) : (
+            <Button
               variant="contained"
               disabled={isSubmitting}
+              onClick={handleSubmitFinal}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}
-            </StyledButton>
+            </Button>
+          )}
 
-            <StyledButton type="button" variant="contained" onClick={handleReset}>
+          {!isMultiStep && (
+            <Button variant="contained" onClick={handleReset}>
               Limpiar
-            </StyledButton>
+            </Button>
+          )}
 
-            <StyledButton type="button" variant="contained" color="error" onClick={onClose}>
-              Cancelar
-            </StyledButton>
-          </ButtonsContainer>
-        </FormContainer>
+          <Button variant="contained" color="error" onClick={onClose}>
+            Cancelar
+          </Button>
+        </ButtonsContainer>
       </ModalContent>
     </ModalOverlay>
   );
 };
+
 export default BaseFormModal;

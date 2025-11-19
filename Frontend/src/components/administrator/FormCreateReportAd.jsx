@@ -9,26 +9,45 @@ import { handleGetTechnicalVisit } from "../../controllers/common/getTechnicalVi
 const FormCreateReportAd = ({ onClose, onSuccess }) => {
   const { id } = useParams();
 
-  const fields = [
-    { name: "introduccion", label: "Introducción", type: "textarea" },
-    { name: "fecha_de_mantenimiento", label: "Fecha del mantenimiento", type: "date" },
-    { name: "detalles_servicio", label: "Detalles del servicio", type: "textarea" },
-    { name: "observaciones", label: "Observaciones", type: "textarea" },
-    { name: "estado_antes", label: "Estado antes", type: "textarea" },
-
-    { name: "foto_estado_antes", label: "Estado antes", type: "file" },
-
-    { name: "descripcion_trabajo", label: "Descripción del trabajo", type: "textarea" },
-
-    { name: "foto_descripcion_trabajo", label: "Descripción del trabajo", type: "file" },
-
-    { name: "materiales_utilizados", label: "Materiales utilizados", type: "text" },
-    { name: "estado_final", label: "Estado final", type: "text" },
-
-    { name: "foto_estado_final", label: "Estado final", type: "file" },
-
-    { name: "tiempo_de_trabajo", label: "Tiempo de trabajo", type: "text" },
-    { name: "recomendaciones", label: "Recomendaciones", type: "textarea" },
+  const steps = [
+    {
+      title: "Información inicial",
+      fields: [
+        { name: "introduccion", label: "Introducción", type: "textarea" },
+        { name: "fecha_de_mantenimiento", label: "Fecha del mantenimiento", type: "date" },
+      ]
+    },
+    {
+      title: "Detalles del servicio",
+      fields: [
+        { name: "detalles_servicio", label: "Detalles del servicio", type: "textarea" },
+        { name: "observaciones", label: "Observaciones", type: "textarea" },
+      ]
+    },
+    {
+      title: "Estado antes",
+      fields: [
+        { name: "estado_antes", label: "Estado antes", type: "textarea" },
+        { name: "foto_estado_antes", label: "Estado antes", type: "file" },
+      ]
+    },
+    {
+      title: "Descripción del trabajo",
+      fields: [
+        { name: "descripcion_trabajo", label: "Descripción del trabajo", type: "textarea" },
+        { name: "foto_descripcion_trabajo", label: "Foto del trabajo", type: "file" },
+      ]
+    },
+    {
+      title: "Finalización",
+      fields: [
+        { name: "materiales_utilizados", label: "Materiales utilizados", type: "text" },
+        { name: "estado_final", label: "Estado final", type: "text" },
+        { name: "foto_estado_final", label: "Foto estado final", type: "file" },
+        { name: "tiempo_de_trabajo", label: "Tiempo de trabajo", type: "text" },
+        { name: "recomendaciones", label: "Recomendaciones", type: "textarea" },
+      ]
+    }
   ];
 
   const handleSubmit = async (data) => {
@@ -46,7 +65,7 @@ const FormCreateReportAd = ({ onClose, onSuccess }) => {
   return (
     <BaseFormModal
       title="Crear reporte"
-      fields={fields}
+      steps={steps}
       onSubmit={handleSubmit}
       onClose={onClose}
       onSuccess={onSuccess}
