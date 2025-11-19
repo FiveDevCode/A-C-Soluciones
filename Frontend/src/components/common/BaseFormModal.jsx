@@ -9,6 +9,8 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -114,31 +116,85 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const UploadButton = styled.label`
+  background-color: #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  cursor: pointer;
+`;
+
+const FileList = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const FileItem = styled.div`
+  background-color: #90caf9;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const BaseFormModal = ({
   title,
   fields,
   onSubmit,
   onClose,
   onSuccess,
-  successMessage = "Guardado exitosamente",
-  extraContent
+  successMessage = "Guardado exitosamente"
 }) => {
   const [formData, setFormData] = useState(
     Object.fromEntries(fields.map((f) => [f.name, ""]))
   );
+
+  // Nuevo estado para archivos
+  const [files, setFiles] = useState(
+    Object.fromEntries(
+      fields
+        .filter((f) => f.type === "file")
+        .map((f) => [f.name, null])
+    )
+  );
+
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files: fileInput } = e.target;
+
+    // Si es archivo
+    if (fileInput) {
+      setFiles((prev) => ({
+        ...prev,
+        [name]: fileInput[0],
+      }));
+      return;
+    }
+
+    // Si es texto normal
     setFormData((prev) => ({ ...prev, [name]: value }));
+
     if (showSuccess) setShowSuccess(false);
   };
 
   const handleReset = () => {
     setFormData(Object.fromEntries(fields.map((f) => [f.name, ""])));
+
+    setFiles(
+      Object.fromEntries(
+        fields
+          .filter((f) => f.type === "file")
+          .map((f) => [f.name, null])
+      )
+    );
+
     setErrorMsg("");
     setFieldErrors({});
   };
@@ -146,16 +202,23 @@ const BaseFormModal = ({
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        ...files,
+      });
+
       handleReset();
       setShowSuccess(true);
+
       setTimeout(() => {
         setShowSuccess(false);
         onSuccess?.();
       }, 2000);
     } catch (err) {
       setShowSuccess(false);
+
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
@@ -173,45 +236,89 @@ const BaseFormModal = ({
 
         <FormContainer onSubmit={handleFormSubmit} autoComplete="off">
           {fields.map((field) => (
-            <StyledTextField
-              key={field.name}
-              select={field.type === "select"}
-              type={
-                field.type === "number"
-                  ? "number"
-                  : field.type === "date"
-                  ? "date"
-                  : field.type === "datetime-local"
-                  ? "datetime-local"
-                  : field.type === "textarea"
-                  ? ""
-                  : "text"
-              }
-              label={field.label}
-              name={field.name}
-              fullWidth
-              size="small"
-              value={formData[field.name]}
-              onChange={handleChange}
-              error={Boolean(fieldErrors[field.name])}
-              helperText={fieldErrors[field.name]}
-              InputLabelProps={{
-                shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
-              }}
-              SelectProps={{
-                onClose: () => document.activeElement.blur(),
-                MenuProps: { disableScrollLock: true },
-              }}
-            >
-              {field.type === "select" &&
-                field.options?.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-            </StyledTextField>
+            <div key={field.name} style={{ marginBottom: "1rem" }}>
+
+              {field.type === "file" ? (
+                <>
+                  <UploadButton>
+                    {`Subir imagen "${field.label}"`}{" "}
+                    <FontAwesomeIcon icon={faUpload} style={{ marginLeft: "8px" }} />
+                    <input
+                      type="file"
+                      name={field.name}
+                      hidden
+                      onChange={handleChange}
+                    />
+                  </UploadButton>
+
+                  {files[field.name] && (
+                    <FileList>
+                      <FileItem>
+                        {files[field.name].name}
+                        <FontAwesomeIcon
+                          icon={faTimes}
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            setFiles((prev) => ({
+                              ...prev,
+                              [field.name]: null,
+                            }))
+                          }
+                        />
+                      </FileItem>
+                    </FileList>
+                  )}
+
+                  {fieldErrors[field.name] && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {fieldErrors[field.name]}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <StyledTextField
+                  select={field.type === "select"}
+                  type={
+                    field.type === "number"
+                      ? "number"
+                      : field.type === "date"
+                      ? "date"
+                      : field.type === "datetime-local"
+                      ? "datetime-local"
+                      : field.type === "textarea"
+                      ? ""
+                      : "text"
+                  }
+                  label={field.label}
+                  name={field.name}
+                  fullWidth
+                  size="small"
+                  multiline={field.type === "textarea"}
+                  rows={field.type === "textarea" ? 3 : undefined}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  error={Boolean(fieldErrors[field.name])}
+                  helperText={fieldErrors[field.name]}
+                  InputLabelProps={{
+                    shrink:
+                      field.type === "date" ||
+                      field.type === "datetime-local"
+                        ? true
+                        : undefined,
+                  }}
+                >
+                  {field.type === "select" &&
+                    field.options?.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </MenuItem>
+                    ))}
+                </StyledTextField>
+              )}
+            </div>
           ))}
 
+          {/* Errores generales / Éxito */}
           {errorMsg && (
             <Collapse in={!!errorMsg}>
               <Alert
@@ -244,51 +351,26 @@ const BaseFormModal = ({
             </Collapse>
           )}
 
-
           <ButtonsContainer>
             <StyledButton
               type="submit"
               variant="contained"
               disabled={isSubmitting}
-              sx={{
-                backgroundColor: "#007bff",
-                "&:hover": { backgroundColor: "#0056b3" },
-              }}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}
             </StyledButton>
 
-            <StyledButton
-              type="button"
-              variant="contained"
-              onClick={handleReset}
-              sx={{
-                backgroundColor: "#ffea00",
-                color: "#000",
-                "&:hover": { backgroundColor: "#ffda00" },
-              }}
-            >
+            <StyledButton type="button" variant="contained" onClick={handleReset}>
               Limpiar
             </StyledButton>
 
-            <StyledButton
-              type="button"
-              variant="contained"
-              color="error"
-              onClick={onClose}
-            >
+            <StyledButton type="button" variant="contained" color="error" onClick={onClose}>
               Cancelar
             </StyledButton>
           </ButtonsContainer>
         </FormContainer>
       </ModalContent>
-      {extraContent && (
-        <>
-          {extraContent}
-        </>
-      )}
     </ModalOverlay>
   );
 };
-
 export default BaseFormModal;
