@@ -50,7 +50,6 @@ const ServicePageAd = () => {
     setLoading(true);
     try {
       const data = await handleGetListServiceAd();
-      console.log(data);
       setServices(data);
     } catch (err) {
       console.error("Error cargando lista de servicios:", err);
