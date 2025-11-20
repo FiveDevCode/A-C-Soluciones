@@ -1,14 +1,11 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 import BaseFormModal from "../common/BaseFormModal";
 
 import { handleCreateMaintenanceSheet } from "../../controllers/common/createMaintenanceSheet.controller";
 import { handleGetClientVisit } from "../../controllers/common/getClientVisit.controller";
 import { handleGetTechnicalVisit } from "../../controllers/common/getTechnicalVisit.controller";
 
-const FormCreateReportAd = ({ onClose, onSuccess }) => {
-  const { id } = useParams();
-
+const FormCreateReportAd = ({ id, onClose, onSuccess }) => {
+  console.log("ID:", id);
   const steps = [
     {
       title: "Información inicial",
@@ -61,6 +58,7 @@ const FormCreateReportAd = ({ onClose, onSuccess }) => {
       id_visitas: parseInt(id),
     });
   };
+
 
   return (
     <BaseFormModal
