@@ -36,8 +36,6 @@ const ReportPageAd = () => {
   const [visits, setVisits] = useState([]);
   const [filteredVisits, setFilteredVisits] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     loadReports();
@@ -83,8 +81,6 @@ const ReportPageAd = () => {
         headerTitle="GESTIÓN DE REPORTES"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
-        onAdd={() => setShowModal(true)}
-        selectedCount={selectedIds.length}
         filterComponent={
           <FilterReportAd
             visits={visits}
@@ -106,17 +102,6 @@ const ReportPageAd = () => {
           />
         )}
       </Card>
-
-      {showModal && (
-        <FormCreateReportAd
-          onClose={() => setShowModal(false)}
-          onSuccess={() => {
-            setShowModal(false);
-            loadReports();
-          }}
-        />
-      )}
-
     </Container>
   );
 };

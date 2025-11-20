@@ -9,36 +9,12 @@ const FilterReportAd = ({ visits = [], onFilteredChange }) => {
     })
   );
 
-  const notasPreviasOptions = [...new Set(visits.map((v) => v.notas_previas).filter(Boolean))].map(
-    (np) => ({
-      value: np,
-      label: np.length > 30 ? np.slice(0, 30) + "..." : np,
-    })
-  );
-
-  const notasPosterioresOptions = [...new Set(visits.map((v) => v.notas_posteriores).filter(Boolean))].map(
-    (ns) => ({
-      value: ns,
-      label: ns.length > 30 ? ns.slice(0, 30) + "..." : ns,
-    })
-  );
-
   const filterOptions = [
     {
       key: "fecha_programada",
       label: "Fecha programada",
       options: fechaOptions,
-    },
-    {
-      key: "notas_previas",
-      label: "Notas previas",
-      options: notasPreviasOptions,
-    },
-    {
-      key: "notas_posteriores",
-      label: "Notas posteriores",
-      options: notasPosterioresOptions,
-    },
+    }
   ];
 
   return (
