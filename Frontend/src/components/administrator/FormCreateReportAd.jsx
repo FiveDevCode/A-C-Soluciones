@@ -5,7 +5,6 @@ import { handleGetClientVisit } from "../../controllers/common/getClientVisit.co
 import { handleGetTechnicalVisit } from "../../controllers/common/getTechnicalVisit.controller";
 
 const FormCreateReportAd = ({ id, onClose, onSuccess }) => {
-  console.log("ID:", id);
   const steps = [
     {
       title: "Información inicial",
