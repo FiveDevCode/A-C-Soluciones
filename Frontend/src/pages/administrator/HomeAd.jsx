@@ -22,7 +22,7 @@ const Container = styled.div`
   background-color: #f5f7fa;
   min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  gap: 2rem;
+  gap: 1rem;
   padding: 2rem;
 
   @media (max-width: 1350px) {
