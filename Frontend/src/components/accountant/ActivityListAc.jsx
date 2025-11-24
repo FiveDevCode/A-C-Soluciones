@@ -1,135 +1,297 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FormControl, TextField } from "@mui/material";
-import Logo from "../../components/common/Logo";
-import requestLogo from "../../assets/common/requestLogo.png";
+import { faArrowRight, faCalendarAlt, faFileInvoice, faHourglassHalf, faCheckCircle, faTimesCircle, faFileAlt, faReceipt } from "@fortawesome/free-solid-svg-icons";
 
 const ContainerNoti = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 `;
 
-const Notification = styled.div`
+const Notification = styled(Link)`
   display: flex;
   align-items: center;
-  border: 1px solid rgba(0,0,0,0.25);
-  padding-left: 1rem;
-  padding-right: 5rem;
-  justify-content: space-between;
-  
-  &:first-child{
-    border-radius: 5px 5px 0 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #00b894;
+    background: #f9fffd;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
 const NotificationDescription = styled.div`
   display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  flex: 1;
+  min-width: 0;
+`;
+
+const IconCircle = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: ${props => {
+    switch(props.status?.toLowerCase()) {
+      case 'pendiente':
+      case 'sin pagar':
+        return 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)';
+      case 'pagado':
+      case 'pagada':
+        return 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)';
+      case 'cancelado':
+      case 'cancelada':
+        return 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)';
+      case 'vencida':
+        return 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)';
+      default:
+        return 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)';
+    }
+  }};
+  color: ${props => {
+    switch(props.status?.toLowerCase()) {
+      case 'pendiente':
+      case 'sin pagar':
+        return '#f57c00';
+      case 'pagado':
+      case 'pagada':
+        return '#388e3c';
+      case 'cancelado':
+      case 'cancelada':
+        return '#d32f2f';
+      case 'vencida':
+        return '#c2185b';
+      default:
+        return '#1976d2';
+    }
+  }};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 768px) {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
 `;
 
 const NotificationInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+  padding-top: 0.2rem;
 `;
 
-const ContainerOption = styled.div`
-  display: flex;
-  gap: 4rem;
-  width: 50%;
-  justify-content: end;
-`;
-
-const TitleNoti = styled.h2`
-  font-size: 1rem;
-  font-weight: lighter;
-`;
-
-const Description = styled.h2`
-  font-size: 1rem;
-  font-weight: bold;
-`;
-
-const Date = styled.h2`
-  font-size: 1rem;
-  font-weight: normal;
-`;
-
-const SeeMore = styled.div`
+const RequestTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+
+  svg {
+    color: #00b894;
+    font-size: 0.85rem;
+  }
+`;
+
+const Description = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+`;
+
+const RequestMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+const DateBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #666;
+  font-size: 0.9rem;
+
+  svg {
+    color: #00b894;
+  }
+`;
+
+const StatusBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  background: ${props => {
+    switch(props.status?.toLowerCase()) {
+      case 'pendiente':
+      case 'sin pagar':
+        return '#fff3e0';
+      case 'pagado':
+      case 'pagada':
+        return '#e8f5e9';
+      case 'cancelado':
+      case 'cancelada':
+        return '#ffebee';
+      case 'vencida':
+        return '#fce4ec';
+      default:
+        return '#f5f5f5';
+    }
+  }};
+  color: ${props => {
+    switch(props.status?.toLowerCase()) {
+      case 'pendiente':
+      case 'sin pagar':
+        return '#f57c00';
+      case 'pagado':
+      case 'pagada':
+        return '#388e3c';
+      case 'cancelado':
+      case 'cancelada':
+        return '#d32f2f';
+      case 'vencida':
+        return '#c2185b';
+      default:
+        return '#666';
+    }
+  }};
 `;
 
 const MoreButton = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  background-color: #f0f1ff;
-  border: 1px solid #343875;
-  color: #343875;
-  border-radius: 25px;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
-  padding: 0.5rem 1.5rem;
-  margin-top: 1.5rem;
+  padding: 0.9rem 2rem;
+  margin-top: 0.5rem;
   align-self: center;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
 
   &:hover {
-    background-color: #343875;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 184, 148, 0.4);
+  }
+
+  svg {
+    font-size: 1rem;
   }
 `;
 
+const EmptyMessage = styled.div`
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #999;
+  font-size: 1.05rem;
+`;
+
 export const ActivityListAc = ({bills}) => {
+  const getStatusIcon = (status) => {
+    switch(status?.toLowerCase()) {
+      case 'pendiente':
+      case 'sin pagar':
+        return faHourglassHalf;
+      case 'pagado':
+      case 'pagada':
+        return faCheckCircle;
+      case 'cancelado':
+      case 'cancelada':
+        return faTimesCircle;
+      case 'vencida':
+        return faFileInvoice;
+      default:
+        return faReceipt;
+    }
+  };
 
   return (
     <ContainerNoti>
-      {Array.isArray(bills) && bills.slice(0, 4).map((bill) => (
-        <Notification key={bill.id}>
-          <NotificationDescription>
-            <Logo src={requestLogo} size="100px"/>
-            <NotificationInfo>
-              <TitleNoti>
-                {bill.numero_factura || "Sin número"}
-              </TitleNoti>
-              <Description>
-                {bill.concepto && bill.concepto.length > 50
-                  ? `${bill.concepto.slice(0, 50)}...`
-                  : bill.concepto || "Sin concepto"}
-              </Description>
-              <Date>{bill.fecha_factura}</Date>
-            </NotificationInfo>
-          </NotificationDescription>
-          <ContainerOption>
-            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
-              <TextField
-                value={bill.estado_factura}
-                label="Estado"
-                disabled
-              />
-            </FormControl>
-            <Link to={`/contador/factura/${bill.id}`} style={{ textDecoration: 'none', alignSelf: "center"}}>
-              <SeeMore style={{ cursor: 'pointer', color: '#343875' }}>
-                <FontAwesomeIcon icon={faArrowRight} />
-                <span>Ver</span>
-              </SeeMore>
-            </Link>
-          </ContainerOption>
-        </Notification>
-      ))}
-      <MoreButton to="/contador/facturas">
-        Ver más facturas <FontAwesomeIcon icon={faArrowRight} />
-      </MoreButton>
+      {Array.isArray(bills) && bills.length > 0 ? (
+        bills.slice(0, 3).map((bill) => (
+          <Notification key={bill.id} to={`/contador/factura/${bill.id}`}>
+            <NotificationDescription>
+              <IconCircle status={bill.estado_factura}>
+                <FontAwesomeIcon icon={getStatusIcon(bill.estado_factura)} />
+              </IconCircle>
+              <NotificationInfo>
+                <Description>
+                  {bill.concepto || "Sin concepto"}
+                </Description>
+                <RequestTitle>
+                  <FontAwesomeIcon icon={faReceipt} />
+                  {bill.numero_factura || "Sin número de factura"}
+                </RequestTitle>
+                <RequestMeta>
+                  <DateBadge>
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    {new Date(bill.fecha_factura).toLocaleDateString('es-ES', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </DateBadge>
+                  <StatusBadge status={bill.estado_factura}>
+                    {bill.estado_factura?.replace('_', ' ')}
+                  </StatusBadge>
+                </RequestMeta>
+              </NotificationInfo>
+            </NotificationDescription>
+          </Notification>
+        ))
+      ) : (
+        <EmptyMessage>No hay facturas recientes</EmptyMessage>
+      )}
+      {Array.isArray(bills) && bills.length > 3 && (
+        <MoreButton to="/contador/facturas">
+          Ver todas las facturas
+          <FontAwesomeIcon icon={faArrowRight} />
+        </MoreButton>
+      )}
     </ContainerNoti>
   );
 };
