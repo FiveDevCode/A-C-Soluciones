@@ -5,6 +5,7 @@ import * as emailService from '../../../src/services/email.services.js';
 import { ClienteModel } from '../../../src/models/cliente.model.js';
 import { TecnicoModel } from '../../../src/models/tecnico.model.js';
 import { ValidationError } from 'sequelize';
+import { obtenerFichasPorCliente, obtenerFichasPorTecnico } from '../../../src/controllers/ficha_mantenimiento.controller.js';
 
 jest.mock('../../../src/services/ficha_mantenimiento.services.js');
 jest.mock('../../../src/services/email.services.js');
@@ -214,3 +215,110 @@ describe('listarFichas', () => {
     expect(mockRes.json).toHaveBeenCalledWith({ error: 'Error interno al obtener fichas' });
   });
 });
+
+
+describe('obtenerFichasPorCliente', () => {
+  const mockRes = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn()
+  };
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('retorna 400 si falta idCliente', async () => {
+    const mockReq = { params: {} };
+
+    await obtenerFichasPorCliente(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'El idCliente es requerido' });
+  });
+
+  it('retorna 404 si no hay fichas', async () => {
+    const mockReq = { params: { idCliente: 7 } };
+    fichaRepo.obtenerFichasPorCliente = jest.fn().mockResolvedValue([]);
+
+    await obtenerFichasPorCliente(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ mensaje: 'No hay fichas para este cliente' });
+  });
+
+  it('retorna 200 si hay fichas', async () => {
+    const mockReq = { params: { idCliente: 7 } };
+    const data = [{ id: 1 }];
+    fichaRepo.obtenerFichasPorCliente = jest.fn().mockResolvedValue(data);
+
+    await obtenerFichasPorCliente(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      mensaje: 'Fichas obtenidas correctamente',
+      fichas: data
+    });
+  });
+
+  it('retorna 500 en error interno', async () => {
+    const mockReq = { params: { idCliente: 7 } };
+    fichaRepo.obtenerFichasPorCliente = jest.fn().mockRejectedValue(new Error('X'));
+
+    await obtenerFichasPorCliente(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Error del servidor' });
+  });
+});
+
+
+describe('obtenerFichasPorTecnico', () => {
+  const mockRes = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn()
+  };
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('retorna 400 si falta id_tecnico', async () => {
+    const mockReq = { params: {} };
+
+    await obtenerFichasPorTecnico(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'El id tecnico es requerido' });
+  });
+
+  it('retorna 404 si no hay fichas del técnico', async () => {
+    const mockReq = { params: { id_tecnico: 3 } };
+    fichaRepo.obtenerFichasPorTecnico = jest.fn().mockResolvedValue([]);
+
+    await obtenerFichasPorTecnico(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.json).toHaveBeenCalledWith({ mensaje: 'No hay fichas para este técnico' });
+  });
+
+  it('retorna 200 si hay fichas', async () => {
+    const mockReq = { params: { id_tecnico: 3 } };
+    const data = [{ id: 10 }];
+    fichaRepo.obtenerFichasPorTecnico = jest.fn().mockResolvedValue(data);
+
+    await obtenerFichasPorTecnico(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      mensaje: 'Fichas obtenidas correctamente',
+      fichas: data
+    });
+  });
+
+  it('retorna 500 si ocurre error interno', async () => {
+    const mockReq = { params: { id_tecnico: 3 } };
+    fichaRepo.obtenerFichasPorTecnico = jest.fn().mockRejectedValue(new Error('ERROR'));
+
+    await obtenerFichasPorTecnico(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Error del servidor' });
+  });
+});
+

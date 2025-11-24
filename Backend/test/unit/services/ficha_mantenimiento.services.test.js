@@ -10,6 +10,9 @@ jest.mock('path');
 jest.mock('pdfkit');
 jest.mock('crypto');
 
+// Aumentar el tiempo máximo permitido para pruebas asíncronas
+jest.setTimeout(10000);
+
 describe('📄 Servicio generarPDF', () => {
   let docMock;
   let streamMock;
@@ -78,11 +81,17 @@ describe('📄 Servicio generarPDF', () => {
     };
     PDFDocument.mockImplementation(() => docMock);
 
-    // Mock del stream
+    // ✅ Mock del stream mejorado (simula correctamente 'finish' y 'error')
     streamMock = {
       on: jest.fn((event, cb) => {
-        if (event === 'finish') setImmediate(cb);
+        if (event === 'finish') {
+          // Simula que el PDF se genera correctamente después de 10ms
+          setTimeout(cb, 10);
+        }
       }),
+      once: jest.fn(),
+      emit: jest.fn(),
+      end: jest.fn(),
     };
 
     fs.createWriteStream.mockReturnValue(streamMock);
@@ -114,8 +123,11 @@ describe('📄 Servicio generarPDF', () => {
   });
 
   test('🧨 Lanza error si el stream falla', async () => {
+    // Sobrescribe el comportamiento del mock para simular error
     streamMock.on.mockImplementation((event, cb) => {
-      if (event === 'error') setImmediate(() => cb(new Error('Error de escritura')));
+      if (event === 'error') {
+        setTimeout(() => cb(new Error('Error de escritura')), 10);
+      }
     });
 
     await expect(

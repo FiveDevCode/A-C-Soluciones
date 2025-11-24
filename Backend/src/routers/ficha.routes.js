@@ -4,6 +4,8 @@ import express from 'express';
 import { crearFichaMantenimiento, listarFichas} from '../controllers/ficha_mantenimiento.controller.js';
 import { isAdminOrTecnico, isCliente, authenticate} from '../middlewares/autenticacion.js';
 import upload from '../middlewares/uploadImages.js';
+import { obtenerFichasPorCliente, obtenerFichasPorTecnico} from '../controllers/ficha_mantenimiento.controller.js';
+
 
 const router = express.Router();
 
@@ -24,14 +26,15 @@ router.get('/descargar/:nombreArchivo', authenticate, isCliente, (req, res) => {
   const { nombreArchivo } = req.params;
   const filePath = path.resolve(`uploads/fichas/${nombreArchivo}`);
 
-  res.sendFile(filePath, (err) => {
+  res.sendFile(filePath, (err) => { 
     if (err) {
       console.error('Error enviando archivo:', err);
       return res.status(404).json({ error: 'Archivo no encontrado' });
     }
   });
 });
+router.get('/obtener-por-cliente/:idCliente', authenticate, isAdminOrTecnico, obtenerFichasPorCliente);
 
-
+router.get('/obtener-por-tecnico/:id_tecnico', authenticate, isAdminOrTecnico, obtenerFichasPorTecnico);
 
 export default router;

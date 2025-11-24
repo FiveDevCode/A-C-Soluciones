@@ -1,101 +1,157 @@
-// test/unit/repositories/ficha_mantenimiento.repository.test.js
-import * as fichaRepository from '../../../src/repository/ficha_mantenimiento.repository.js';
+import {
+  crearFicha,
+  actualizarPDFPath,
+  obtenerFichaPorId,
+  obtenerFichasPorCliente,
+  obtenerFichasPorTecnico,
+  obtenerTodasFichas
+} from '../../../src/repository/ficha_mantenimiento.repository.js';
+
 import { FichaModel } from '../../../src/models/ficha_mantenimiento.model.js';
 
+// ✅ Mock total del modelo
 jest.mock('../../../src/models/ficha_mantenimiento.model.js', () => ({
   FichaModel: {
     FichaMantenimiento: {
       create: jest.fn(),
       update: jest.fn(),
-      findAll: jest.fn(),
-      findByPk: jest.fn()
+      findByPk: jest.fn(),
+      findAll: jest.fn()
     }
   }
 }));
 
-describe('ficha_mantenimiento.repository', () => {
-  const mockFicha = { id: 1, id_cliente: 10, id_tecnico: 20, fecha_de_mantenimiento: new Date() };
+describe('Ficha Repository', () => {
 
-  it('crearFicha debe crear una ficha', async () => {
-    FichaModel.FichaMantenimiento.create.mockResolvedValue(mockFicha);
-    const result = await fichaRepository.crearFicha(mockFicha);
-    expect(FichaModel.FichaMantenimiento.create).toHaveBeenCalledWith(mockFicha);
-    expect(result).toBe(mockFicha);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('actualizarPDFPath debe actualizar el path del PDF', async () => {
-    const updateMock = [1]; // Sequelize update returns [affectedCount]
-    FichaModel.FichaMantenimiento.update.mockResolvedValue(updateMock);
-    const result = await fichaRepository.actualizarPDFPath(1, 'path/to/file.pdf');
+  const mockFicha = {
+    id: 1,
+    id_cliente: 5,
+    id_tecnico: 2,
+    pdf_path: 'archivo.pdf'
+  };
+
+  // ✅ crearFicha
+  it('crearFicha - debe crear una ficha correctamente', async () => {
+    FichaModel.FichaMantenimiento.create.mockResolvedValue(mockFicha);
+
+    const result = await crearFicha(mockFicha);
+
+    expect(result).toEqual(mockFicha);
+    expect(FichaModel.FichaMantenimiento.create).toHaveBeenCalledWith(mockFicha);
+  });
+
+  it('crearFicha - debe lanzar error y capturarlo', async () => {
+    FichaModel.FichaMantenimiento.create.mockRejectedValue(new Error('Error DB'));
+
+    await expect(crearFicha(mockFicha)).rejects.toThrow('Error DB');
+  });
+
+  // ✅ actualizarPDFPath
+  it('actualizarPDFPath - debe actualizar el PDF de una ficha', async () => {
+    FichaModel.FichaMantenimiento.update.mockResolvedValue([1]);
+
+    const result = await actualizarPDFPath(1, 'nuevo.pdf');
+
+    expect(result).toEqual([1]);
     expect(FichaModel.FichaMantenimiento.update).toHaveBeenCalledWith(
-      { pdf_path: 'path/to/file.pdf' },
+      { pdf_path: 'nuevo.pdf' },
       { where: { id: 1 } }
     );
-    expect(result).toBe(updateMock);
   });
 
-  it('obtenerFichasPorCliente sin visitas', async () => {
-    FichaModel.FichaMantenimiento.findAll.mockResolvedValue([mockFicha]);
-    const result = await fichaRepository.obtenerFichasPorCliente(10);
-    expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_cliente: 10 },
-      order: [['fecha_de_mantenimiento', 'DESC']]
-    });
-    expect(result).toEqual([mockFicha]);
+  it('actualizarPDFPath - error en actualización', async () => {
+    FichaModel.FichaMantenimiento.update.mockRejectedValue(new Error('Error DB'));
+
+    await expect(actualizarPDFPath(1, 'nuevo.pdf')).rejects.toThrow('Error DB');
   });
 
-  it('obtenerFichasPorCliente con visitas', async () => {
-    await fichaRepository.obtenerFichasPorCliente(10, 5);
-    expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_cliente: 10, id_visitas: 5 },
-      order: [['fecha_de_mantenimiento', 'DESC']]
-    });
-  });
-
-  it('obtenerFichaPorId debe retornar ficha por ID', async () => {
+  // ✅ obtenerFichaPorId
+  it('obtenerFichaPorId - debe obtener ficha por ID', async () => {
     FichaModel.FichaMantenimiento.findByPk.mockResolvedValue(mockFicha);
-    const result = await fichaRepository.obtenerFichaPorId(1);
+
+    const result = await obtenerFichaPorId(1);
+
+    expect(result).toEqual(mockFicha);
     expect(FichaModel.FichaMantenimiento.findByPk).toHaveBeenCalledWith(1);
-    expect(result).toBe(mockFicha);
   });
 
-  it('buscarPorCliente debe buscar por id_cliente', async () => {
-    await fichaRepository.buscarPorCliente(10);
+  it('obtenerFichaPorId - error al consultar', async () => {
+    FichaModel.FichaMantenimiento.findByPk.mockRejectedValue(new Error('Error DB'));
+
+    await expect(obtenerFichaPorId(1)).rejects.toThrow('Error DB');
+  });
+
+  // ✅ obtenerFichasPorCliente
+  it('obtenerFichasPorCliente - consulta por cliente', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockResolvedValue([mockFicha]);
+
+    const result = await obtenerFichasPorCliente(5);
+
+    expect(result).toEqual([mockFicha]);
     expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_cliente: 10 },
+      where: { id_cliente: 5 },
       order: [['fecha_de_mantenimiento', 'DESC']]
     });
   });
 
-  it('obtenerFichasPorTecnico sin visitas', async () => {
-    await fichaRepository.obtenerFichasPorTecnico(20);
+  it('obtenerFichasPorCliente - error al consultar', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockRejectedValue(new Error('Error DB'));
+
+    await expect(obtenerFichasPorCliente(5)).rejects.toThrow('Error DB');
+  });
+
+  // ✅ obtenerFichasPorTecnico
+  it('obtenerFichasPorTecnico - consulta por técnico', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockResolvedValue([mockFicha]);
+
+    const result = await obtenerFichasPorTecnico(2);
+
+    expect(result).toEqual([mockFicha]);
     expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_tecnico: 20 },
+      where: { id_tecnico: 2 },
       order: [['fecha_de_mantenimiento', 'DESC']]
     });
   });
 
-  it('obtenerFichasPorTecnico con visitas', async () => {
-    await fichaRepository.obtenerFichasPorTecnico(20, 5);
-    expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_tecnico: 20, id_visitas: 5 },
-      order: [['fecha_de_mantenimiento', 'DESC']]
-    });
+  it('obtenerFichasPorTecnico - error en consulta', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockRejectedValue(new Error('Error DB'));
+
+    await expect(obtenerFichasPorTecnico(2)).rejects.toThrow('Error DB');
   });
 
-  it('obtenerTodasFichas sin visitas', async () => {
-    await fichaRepository.obtenerTodasFichas();
+  // ✅ obtenerTodasFichas
+  it('obtenerTodasFichas - sin filtro', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockResolvedValue([mockFicha]);
+
+    const result = await obtenerTodasFichas();
+
+    expect(result).toEqual([mockFicha]);
     expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
       where: {},
       order: [['fecha_de_mantenimiento', 'DESC']]
     });
   });
 
-  it('obtenerTodasFichas con visitas', async () => {
-    await fichaRepository.obtenerTodasFichas(8);
+  it('obtenerTodasFichas - con filtro id_visitas', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockResolvedValue([mockFicha]);
+
+    const result = await obtenerTodasFichas(3);
+
+    expect(result).toEqual([mockFicha]);
     expect(FichaModel.FichaMantenimiento.findAll).toHaveBeenCalledWith({
-      where: { id_visitas: 8 },
+      where: { id_visitas: 3 },
       order: [['fecha_de_mantenimiento', 'DESC']]
     });
   });
+
+  it('obtenerTodasFichas - error al consultar', async () => {
+    FichaModel.FichaMantenimiento.findAll.mockRejectedValue(new Error('Error DB'));
+
+    await expect(obtenerTodasFichas()).rejects.toThrow('Error DB');
+  });
+
 });
