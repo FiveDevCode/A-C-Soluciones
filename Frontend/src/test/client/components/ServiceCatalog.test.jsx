@@ -10,7 +10,7 @@ describe('ServicieCatalogCl Component', () => {
   it('should render the main title correctly', () => {
     renderWithRouter(<ServicieCatalogCl />);
     const title = screen.getByText(/SERVICIOS/i);
-    expect(title).toBeInTheDocument(); // Check if "SERVICIOS" is in the document
+    expect(title).toBeInTheDocument();
   });
 
   it('should render the catalog services and their items', () => {
@@ -34,7 +34,6 @@ describe('ServicieCatalogCl Component', () => {
   it('should render all service links correctly', () => {
     renderWithRouter(<ServicieCatalogCl />);
 
-    // Check if the service links are rendered
     const services = [
       'Bombas centrifugas',
       'Bombas sumergibles tipo lapicero',

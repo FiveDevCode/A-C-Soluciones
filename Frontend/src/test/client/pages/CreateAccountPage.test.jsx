@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom'; // Importa el Router
+import { BrowserRouter as Router } from 'react-router-dom';
 import CreateAccountPageCl from '../../../pages/client/CreateAccountPageCl';
 import '@testing-library/jest-dom';
 

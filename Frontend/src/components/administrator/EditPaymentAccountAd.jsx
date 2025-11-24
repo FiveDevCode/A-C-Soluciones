@@ -17,7 +17,7 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
           handleGetListClient(),
         ]);
         setAccountData(accountRes.data);
-        setClientList(clientsRes.data || []);
+        setClientList(clientsRes || []);
       } catch (error) {
         console.error("Error al cargar datos de cuenta:", error);
       }

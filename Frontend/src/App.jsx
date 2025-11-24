@@ -9,7 +9,6 @@ import LoginPage from "./pages/common/LoginPage";
 import styled from "styled-components";
 import MenuSideAd from "./components/administrator/MenuSideAd";
 import CreateAccountPageCl from "./pages/client/CreateAccountPageCl";
-import CreateEmployeeAd from "./pages/administrator/CreateEmployeeAd";
 import HomeSessionPageCl from "./pages/client/HomeSessionPageCl";
 import ProfileUserTc from "./pages/technical/ProfileUserTc";
 import HomeAd from "./pages/administrator/HomeAd";
@@ -18,40 +17,16 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import { useEffect, useState } from "react";
 import Home from "./pages/common/Home";
 import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
-import UserProfileAd from "./pages/administrator/UserProfileAd";
-import EditClientAd from "./pages/administrator/EditClientAd";
-import CreateServiceAd from "./pages/administrator/CreateServiceAd";
-import CreateAdministratorAd from "./pages/administrator/CreateAdministratorAd";
 import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
-import HeaderBarCl from "./components/client/HeaderBarCl";
-import FooterHomeCl from "./components/client/FooterHomeCl";
 import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
-import EditServicePageAd from "./pages/administrator/EditServicePageAd";
 import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
 import RecoverCodePage from "./pages/common/RecoverCodePage";
 import RecoverChangePage from "./pages/common/RecoverChangePage";
 import ProfilePageAd from "./pages/administrator/ProfilePageAd";
-import EditAdminPageAd from "./pages/administrator/EditAdminPageAd";
-import EditTechnicalPageAd from "./pages/administrator/EditTechnicalPageAd";
-import UserProfileClientPageAd from "./pages/administrator/UserProfileClientPageAd";
-import ViewServicePageAd from "./pages/administrator/ViewServicePageAd";
 import CreateReportPageTc from "./pages/technical/CreateReportPageTc";
-import ViewVisitListPageAd from "./pages/administrator/ViewVisitListPageAd";
-import ViewVisitPageAd from "./pages/administrator/ViewVisitPageAd";
-import CreateReportPageAd from "./pages/administrator/CreateReportPageAd";
 import ViewVisitListPageTc from "./pages/technical/ViewVisitListPageTc";
-import ViewRequestListPageAd from "./pages/administrator/ViewRequestListPageAd";
-import ViewRequestPageAd from "./pages/administrator/ViewRequestPageAd";
-import ViewTechnicalListPageAd from "./pages/administrator/ViewTechnicalListPageAd";
-import ViewClientListPageAd from "./pages/administrator/ViewClientListPageAd";
-import ViewAdministratorListPageAd from "./pages/administrator/ViewAdministratorListPageAd";
-import ViewServiceListPageAd from "./pages/administrator/ViewServiceListPageAd";
-import ViewReportListPageAd from "./pages/administrator/ViewReportListPageAd";
-import SearchResultsPage from "./pages/administrator/SearchResultsPage";
 import MenuSideTc from "./components/technical/MenuSideTc";
 import ViewReportListPageTc from "./pages/technical/ViewReportListPageTc";
-import UserProfileAdministratorPageAd from "./pages/administrator/UserProfileAdministratorPageAd";
-import EditAdministratorAd from "./pages/administrator/EditAdministratorPageAd";
 import ViewServicePageTc from "./pages/technical/ViewServicePageTc";
 import ViewViewVisitListCompletePageTc from "./pages/technical/ViewVisitListCompletePageTc";
 import ViewViewVisitListCanceledPageTc from "./pages/technical/ViewVisitListCanceledPageTc";
@@ -67,20 +42,23 @@ import ErrorPage from "./errorPages/ErrorPage.jsx";
 import ClientFaqsPage from "./pages/common/ClientFaqsPage";
 import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
-import CreateAccountingAd from "./pages/administrator/CreateAccountingAd.jsx";
-import ViewAccountingListPageAd from "./pages/administrator/ViewAccountingListPageAd.jsx";
-import { UserProfileAccountingAd } from "./pages/administrator/UserProfileAccountingAd.jsx";
-import EditAccountingAd from "./pages/administrator/EditAccountingAd.jsx";
-import CreateBillPageAd from "./pages/administrator/CreateBillPageAd.jsx";
-import ViewBillListPageAd from "./pages/administrator/ViewBillListPageAd.jsx";
-import ViewBillPageAd from "./pages/administrator/ViewBillPageAd.jsx";
-import EditBillAd from "./pages/administrator/EditBillAd.jsx";
 import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
-import { MenuSideAc } from "./components/accountant/MenuSideAc.jsx";
 import HomeAc from "./pages/accountant/HomeAc.jsx";
 import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
+import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
+import ServicePageAd from "./pages/administrator/ServicePageAd.jsx";
+import BillPageAd from "./pages/administrator/BillPageAd.jsx";
+import AccountingPageAd from "./pages/administrator/AccountingPageAd.jsx";
+import AdministratorPageAd from "./pages/administrator/AdministratorPageAd.jsx";
+import ClientPageAd from "./pages/administrator/ClientPageAd.jsx";
+import TechnicalPageAd from "./pages/administrator/TechnicalPageAd.jsx";
+import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
+import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
+import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
+import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
+import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 
 const Container = styled.div`
   ${({ hideStyles }) =>
@@ -152,10 +130,10 @@ function AppContent() {
     <Container hideStyles={hideMenuAndHeader}>
       {!hideMenuAndHeader && role === "administrador" && <MenuSideAd />}
       {!hideMenuAndHeader && role === "tecnico" && <MenuSideTc />}
-      {!hideMenuAndHeader && role === "Contador" && <MenuSideAc />}
+      {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
-        {isCliente && !isPublicPage && <HeaderBarCl />}
+        {/* HeaderBarCl removido - el perfil ahora está en el menú vertical */}
 
         {/*
          * Estructura de rutas:
@@ -238,6 +216,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <HomeAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/facturas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <BillPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/cuentas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <PaymentAccountPageAd />
               </PrivateRoute>
             }
           />
@@ -380,91 +376,10 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/registrar-empleado"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateEmployeeAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/perfil-tecnico/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/perfil-cliente/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileClientPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/servicio/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewServicePageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-cliente/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditClientAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-tecnico/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditTechnicalPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/registrar-servicio"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateServiceAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/registrar-administrador"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateAdministratorAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
             path="/admin/asignar-visita"
             element={
               <PrivateRoute roleRequired="administrador">
                 <AssignVisitPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-servicio/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditServicePageAd />
               </PrivateRoute>
             }
           />
@@ -479,46 +394,10 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/visitas"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewVisitListPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/visita/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewVisitPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/reporte/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateReportPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
             path="/admin/solicitudes"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewRequestListPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/solicitud/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewRequestPageAd />
+                <RequestPageAd />
               </PrivateRoute>
             }
           />
@@ -536,7 +415,7 @@ function AppContent() {
             path="/admin/tecnicos"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewTechnicalListPageAd />
+                <TechnicalPageAd />
               </PrivateRoute>
             }
           />
@@ -545,7 +424,7 @@ function AppContent() {
             path="/admin/clientes"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewClientListPageAd />
+                <ClientPageAd />
               </PrivateRoute>
             }
           />
@@ -554,7 +433,7 @@ function AppContent() {
             path="/admin/administradores"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewAdministratorListPageAd />
+                <AdministratorPageAd />
               </PrivateRoute>
             }
           />
@@ -563,7 +442,7 @@ function AppContent() {
             path="/admin/servicios"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewServiceListPageAd />
+                <ServicePageAd />
               </PrivateRoute>
             }
           />
@@ -572,43 +451,7 @@ function AppContent() {
             path="/admin/reportes"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewReportListPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/resultado"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <SearchResultsPage />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/perfil-administrador/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileAdministratorPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-administrador/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditAdministratorAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/registrar-contador"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateAccountingAd />
+                <ReportPageAd />
               </PrivateRoute>
             }
           />
@@ -617,34 +460,7 @@ function AppContent() {
             path="/admin/contadores"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewAccountingListPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/perfil-contador/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <UserProfileAccountingAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-contador/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditAccountingAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/registrar-factura"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <CreateBillPageAd />
+                <AccountingPageAd />
               </PrivateRoute>
             }
           />
@@ -653,25 +469,7 @@ function AppContent() {
             path="/admin/facturas"
             element={
               <PrivateRoute roleRequired="administrador">
-                <ViewBillListPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/factura/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <ViewBillPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/editar-factura/:id"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <EditBillAd />
+                <BillPageAd />
               </PrivateRoute>
             }
           />
@@ -694,9 +492,44 @@ function AppContent() {
             }
           />
 
+          <Route
+            path="/admin/visitas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <VisitPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte-mantenimiento"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <MaintenanceReportPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <PumpingReportPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reporte"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <ReportPageAd />
+              </PrivateRoute>
+            }
+          />
+
           <Route path="*" element={<ErrorPage />} />
         </Routes>
-        {isCliente && !isPublicPage && <FooterHomeCl />}
       </Content>
     </Container>
   );

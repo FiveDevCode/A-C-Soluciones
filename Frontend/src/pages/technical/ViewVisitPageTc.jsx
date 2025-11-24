@@ -24,6 +24,22 @@ import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisi
 const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const Container = styled.div`
   padding-top: 0.5rem;
   padding-left: 2rem;
@@ -31,7 +47,6 @@ const Container = styled.div`
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  
 `;
 
 const Header = styled.div`
@@ -104,7 +119,6 @@ const ViewVisitPageTc = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -146,9 +160,7 @@ const ViewVisitPageTc = () => {
     setStateVisit(newState);
 
     try {
-      console.log(id, newState)
       await handleUpdateStateVisit(id, newState);
-      console.log('Estado actualizado con éxito');
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
       alert('No se pudo actualizar el estado. Verifica si la visita ya fue completada o cancelada.');
@@ -162,8 +174,9 @@ const ViewVisitPageTc = () => {
 
 
   return (
-    <Container>
-      <Header>
+    <PageContainer>
+      <Container>
+        <Header>
         <Imagen src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="icono" />
         <Titulo>{servicio?.nombre || 'Sin nombre'}</Titulo>
       </Header>
@@ -247,7 +260,6 @@ const ViewVisitPageTc = () => {
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
                 const publicUrl = `${API_KEY}/${relativePath}`;
-                console.log(publicUrl);
                 const response = await fetch(publicUrl, {
                   method: 'GET',
                   headers: {
@@ -308,7 +320,8 @@ const ViewVisitPageTc = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+      </Container>
+    </PageContainer>
   );
 };
 

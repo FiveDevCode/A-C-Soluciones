@@ -31,7 +31,6 @@ const createMaintenanceSheet = ({
 
   const formData = new FormData();
 
-  console.log(foto_estado_antes)
   formData.append("id_cliente", id_cliente);
   formData.append("id_tecnico", id_tecnico);
   formData.append("introduccion", introduccion);
@@ -80,7 +79,7 @@ const getListToken = () => {
 
 
 const getListClient = () => {
-  return api.get("/cliente");
+  return api.get("/cliente/todos");
 
 }
 

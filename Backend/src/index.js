@@ -11,7 +11,6 @@ async function main(){
         // Crear servidor HTTP
         const httpServer = createServer(App);
         
-        // Configurar Socket.io
         const io = new Server(httpServer, {
             cors: {
                 origin: [

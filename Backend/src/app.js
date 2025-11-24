@@ -23,6 +23,7 @@ import RegistarCuentas from './routers/registrar_cuentas.routes.js';
 import Inventario from './routers/inventario.routes.js';
 import ChatbotRouter from './routers/chatbot.routes.js';
 import HistorialServicesRoter from './routers/Historial_services.route.js';
+import ReporteMantenimientoRouter from './routers/reporte_mantenimiento.routes.js';
 import ReporteBombeoRouter from './routers/reporte_bombeo.routes.js'
 import NotificacionRouter from './routers/notificacion.routes.js';
 import { setupAssociations } from './models/asociaciones.midel.js';
@@ -64,6 +65,10 @@ App.use(cors({
   credentials: true
 }));
 
+
+
+
+
 // rutas de la API
 App.use(AministradorRouter)
 App.use(TecnicoRouter);
@@ -83,7 +88,9 @@ App.use(ReporteBombeoRouter);
 App.use(NotificacionRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
+App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
 App.use('/api', fichaRouter);
+App.use('/api', ReporteMantenimientoRouter);
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {

@@ -7,6 +7,22 @@ import { jwtDecode } from 'jwt-decode';
 
 
 
+const PageContainer = styled.div`
+  margin-left: 220px;
+  padding: 2rem 4rem;
+  min-height: calc(100vh);
+  transition: margin-left 0.3s ease;
+
+  @media screen and (max-width: 1520px) {
+    padding: 2rem 2rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 180px;
+    padding: 1.5rem 1rem;
+  }
+`;
+
 const Main = styled.main`
   background: white;
   padding: 2rem;
@@ -61,7 +77,6 @@ const ProfileUserTc = () => {
 
     handleGetTechnicalId(decoded.id)
       .then((res) => {
-        console.log(res)
         setUserTechnical(res.data);
       })
       .catch((err) => {
@@ -74,8 +89,9 @@ const ProfileUserTc = () => {
   }
 
   return (
-    <Main>
-      <ProfileSection>
+    <PageContainer>
+      <Main>
+        <ProfileSection>
         <ProfileInfo>
           <Avatar
             src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
@@ -104,7 +120,8 @@ const ProfileUserTc = () => {
       >
         Editar informacion personal
       </Button>
-    </Main>
+      </Main>
+    </PageContainer>
   );
 };
 

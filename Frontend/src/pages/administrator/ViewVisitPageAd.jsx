@@ -94,7 +94,6 @@ const ViewVisitPageAd = () => {
       handleGetVisit(id)
         .then((res) => {
           const data = res.data.data;
-          console.log(data)
           setVisitData(data);
           setStateVisit(data.estado || 'programada');
         })
@@ -108,7 +107,6 @@ const ViewVisitPageAd = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -133,7 +131,6 @@ const ViewVisitPageAd = () => {
     const handleService = async () => {
       if (servicio_id_fk) {
         const service = await handleGetService(servicio_id_fk);
-        console.log(service)
         setServicio(service.data.data);
       }
     };
@@ -162,7 +159,6 @@ const ViewVisitPageAd = () => {
 
     try {
       await handleUpdateStateVisit(id, newState);
-      console.log('Estado actualizado con éxito');
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
       alert('No se pudo actualizar el estado. Verifica si la visita ya fue completada o cancelada.');

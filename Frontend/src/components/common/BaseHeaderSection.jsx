@@ -9,7 +9,7 @@ const Header = styled.header`
   font-size: 20px;
   font-weight: bold;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 1.2rem;
     font-size: 18px;
   }
@@ -21,7 +21,7 @@ const TitleSection = styled.h2`
   margin-bottom: 15px;
   text-align: left;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 16px;
     margin-bottom: 12px;
   }
@@ -43,7 +43,7 @@ const Card = styled.div`
   border-radius: 8px 8px 0 0;
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     width: 95%;
     padding: 15px;
     margin-top: 25px;
@@ -59,7 +59,7 @@ const OptionsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 8px;
   }
 `;
@@ -70,55 +70,8 @@ const SearchContainer = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 6px;
-  }
-`;
-
-const SearchBox = styled.div`
-  display: flex;
-  align-items: center;
-  background: #f1f3f4;
-  padding: 6px 10px;
-  border-radius: 6px;
-  flex: 1;
-  width: 270px;
-
-  input {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: 100%;
-    font-size: 14px;
-    margin-left: 6px;
-  }
-
-  @media (max-width: 1280px) {
-    padding: 5px 8px;
-    width: 250px;
-    input {
-      font-size: 13px;
-    }
-  }
-`;
-
-const Select = styled.select`
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  cursor: pointer;
-  background: white;
-  transition: all 0.2s;
-
-  &:focus {
-    border-color: #1976d2;
-    outline: none;
-  }
-
-  @media (max-width: 1280px) {
-    font-size: 13px;
-    padding: 5px 8px;
   }
 `;
 
@@ -127,7 +80,7 @@ const ButtonsContainer = styled.div`
   gap: 10px;
   align-self: start;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     gap: 6px;
   }
 `;
@@ -147,7 +100,7 @@ const Button = styled.button`
     background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 6px 10px;
     font-size: 13px;
   }
@@ -166,7 +119,7 @@ const AddButton = styled(Button)`
     background-color: #1565c0;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 6px 10px;
     font-size: 13px;
   }
@@ -180,6 +133,7 @@ const BaseHeaderSection = ({
   onDeleteSelected,
   selectedCount = 0,
   filterComponent,
+  actionType = "Eliminar seleccionados",
 }) => {
   return (
     <>
@@ -190,25 +144,28 @@ const BaseHeaderSection = ({
           <TitleSection>
             {sectionTitle}
           </TitleSection>
-          <AddButton onClick={onAdd}>
-            <FaPlus /> {addLabel}
-          </AddButton>
+          {onAdd && (
+            <AddButton onClick={onAdd}>
+              <FaPlus /> {addLabel}
+            </AddButton>
+          )}
         </ContainerAdd>
 
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
           </SearchContainer>
-
-          <ButtonsContainer>
-            <Button
-              active={selectedCount > 0}
-              disabled={selectedCount === 0}
-              onClick={onDeleteSelected}
-            >
-              Eliminar seleccionadas
-            </Button>
-          </ButtonsContainer>
+          {onDeleteSelected && (
+            <ButtonsContainer>
+              <Button
+                active={selectedCount > 0}
+                disabled={selectedCount === 0}
+                onClick={onDeleteSelected}
+              >
+                {actionType}
+              </Button>
+            </ButtonsContainer>
+          )}
         </OptionsContainer>
       </Card>
     </>
