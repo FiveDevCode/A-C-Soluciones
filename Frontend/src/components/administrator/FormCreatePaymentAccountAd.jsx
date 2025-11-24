@@ -12,7 +12,7 @@ const FormCreatePaymentAccountAd = ({ onClose, onSuccess }) => {
     const fetchClients = async () => {
       try {
         const response = await handleGetListClient();
-        setClients(response.data || []);
+        setClients(response || []);
       } catch (error) {
         console.error("Error al obtener clientes:", error);
       }

@@ -9,7 +9,7 @@ const ContainerCatalog = styled.section`
   @media screen and (max-width: 1520px) {
     padding: 0 4rem;
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding: 0 2rem;
   }
 `;

@@ -60,7 +60,6 @@ const FormRecoverChange = () => {
         navigate("/iniciar-sesion");
       }, 3000);
     } catch (err) {
-      console.log(err);
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else if (err.response?.data?.message) {

@@ -177,7 +177,6 @@ const EditProfileTc = () => {
       
     } catch (err) {
       setErrorMsg("");
-      console.log(err)
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
       } else {
@@ -195,7 +194,6 @@ const EditProfileTc = () => {
     handleGetTechnicalId(decoded.id)
       .then((res) => {
         const data = res.data;
-        console.log(data)
         setUserAdmin(data);
         setNameUser(data.nombre || "");
         setLastName(data.apellido || "");

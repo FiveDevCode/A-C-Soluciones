@@ -19,7 +19,6 @@ const HomeAd = () => {
 
   useEffect(() => {
       handleGetListRequest().then((res) => {
-        console.log(res.data)
         setRequests(res.data)
       }).catch((err) => {
         console.log("No se pudo obtener el listado de solicitudes", err)

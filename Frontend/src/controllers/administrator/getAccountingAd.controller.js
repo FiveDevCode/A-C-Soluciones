@@ -4,10 +4,10 @@ import { administratorService } from "../../services/administrator-service";
 
 
 
-const handleGetAccounting = (id) => {
+const handleGetAccountingAd = (id) => {
   return administratorService.getAccounting(id);
 
 }
 
 
-export {handleGetAccounting};
+export {handleGetAccountingAd};

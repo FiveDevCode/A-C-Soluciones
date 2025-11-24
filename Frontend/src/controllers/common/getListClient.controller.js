@@ -1,10 +1,14 @@
 import { commonService } from "../../services/common-service"
 
 
-const handleGetListClient = () => {
+const handleGetListClient = async () => {
 
-  return commonService
-  .getListClient();
+    try {
+      const res = await commonService.getListClient();
+      return (res.data || []).slice().reverse();
+    } catch (err) {
+      throw err;
+    }
 
 }
 

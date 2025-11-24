@@ -13,7 +13,7 @@ const ContainerHome = styled.section`
     padding: 0 4rem;
     
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding: 0 2rem;
     
   }
@@ -27,7 +27,7 @@ const ContainerWho = styled.div`
     gap: 1rem;
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding-top: 0;
   }
 
@@ -46,7 +46,7 @@ const ContainerWhoInfo = styled.div`
     width: 50%;
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding-top: 0;
   }
 
@@ -86,7 +86,7 @@ const ContainerService = styled.div`
     
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     gap: 1.5rem;
     padding-top: 0;
   }
@@ -109,7 +109,7 @@ const ContainerServiceInfo = styled.div`
 
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding-top: 0;
     width: 50%;
   }

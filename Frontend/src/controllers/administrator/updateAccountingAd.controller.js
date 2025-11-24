@@ -1,14 +1,11 @@
 import { administratorService } from "../../services/administrator-service";
 
-const handleUpdateAccounting = (id, numeroDeCedula, nombre, apellido, correoElectronico, telefono) => {
-  return administratorService.updateAccounting(
-    id,
-    numeroDeCedula,
-    nombre,
-    apellido,
-    correoElectronico,
-    telefono
-  );
+const handleUpdateAccountingAd = async (id, data) => {
+  try {
+    return await administratorService.updateAccounting(id, data);
+  } catch (error) {
+    throw error;
+  }
 };
 
-export { handleUpdateAccounting };
+export { handleUpdateAccountingAd };
