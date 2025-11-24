@@ -10,15 +10,18 @@ import {
   faBoxes,
   faCreditCard,
   faExclamationTriangle,
-  faCheckCircle
+  faCheckCircle,
+  faUserCircle,
+  faBell
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #f5f7fa;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   gap: 1.5rem;
   padding: 1.5rem;
@@ -36,7 +39,19 @@ const Header = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: white;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  @media (max-width: 768px) {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+`;
+
+const HeaderLeft = styled.div`
   h1 {
     font-size: 1.7rem;
     margin: 0;
@@ -50,8 +65,6 @@ const Header = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 1rem;
-    
     h1 {
       font-size: 1.3rem;
     }
@@ -60,6 +73,49 @@ const Header = styled.div`
       font-size: 0.9rem;
     }
   }
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const IconButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 1.2rem;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+`;
+
+const NotificationBadge = styled.span`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
 `;
 
 const StatsGrid = styled.div`
@@ -176,6 +232,7 @@ const SectionTitle = styled.h2`
 `;
 
 const HomeAc = () => {
+  const navigate = useNavigate();
   const [bills, setBills] = useState([]);
   const [stats, setStats] = useState({
     totalBills: 0,
@@ -184,6 +241,22 @@ const HomeAc = () => {
     totalInventory: 0,
     totalAccounts: 0
   });
+
+  const handleProfileClick = () => {
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    if (token) {
+      const decoded = jwtDecode(token);
+      const role = decoded.role || decoded.tipo;
+      
+      if (role === 'administrador') {
+        navigate('/admin/perfil');
+      } else if (role === 'tecnico') {
+        navigate('/tecnico/perfil');
+      } else if (role === 'Contador') {
+        navigate('/contador/perfil');
+      }
+    }
+  };
 
   useEffect(() => {
     // Cargar facturas
@@ -236,8 +309,19 @@ const HomeAc = () => {
   return (
     <Container>
       <Header>
-        <h1>Panel de Contabilidad</h1>
-        <p>Gestiona facturas, pagos y registros contables</p>
+        <HeaderLeft>
+          <h1>Panel de Contabilidad</h1>
+          <p>Gestiona facturas, pagos y registros contables</p>
+        </HeaderLeft>
+        <HeaderRight>
+          <IconButton onClick={() => navigate('/contador/notificaciones')} title="Notificaciones">
+            <FontAwesomeIcon icon={faBell} />
+            <NotificationBadge>2</NotificationBadge>
+          </IconButton>
+          <IconButton onClick={handleProfileClick} title="Mi Perfil">
+            <FontAwesomeIcon icon={faUserCircle} />
+          </IconButton>
+        </HeaderRight>
       </Header>
 
       <StatsGrid>

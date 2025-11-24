@@ -46,6 +46,8 @@ import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
 import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
 import HomeAc from "./pages/accountant/HomeAc.jsx";
+import ProfilePageAc from "./pages/accountant/ProfilePageAc.jsx";
+import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
@@ -236,6 +238,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <PaymentAccountPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <ProfilePageAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/editar-perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <EditProfilePageAc />
               </PrivateRoute>
             }
           />

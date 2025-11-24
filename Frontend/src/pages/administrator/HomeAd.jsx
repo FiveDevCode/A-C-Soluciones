@@ -12,9 +12,12 @@ import {
   faTools, 
   faUserTie, 
   faCalendarAlt,
-  faBoxOpen
+  faBoxOpen,
+  faUserCircle,
+  faBell
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +39,19 @@ const Header = styled.div`
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+`;
+
+const HeaderLeft = styled.div`
   h1 {
     font-size: 2rem;
     margin: 0 0 0.5rem 0;
@@ -50,8 +65,6 @@ const Header = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
-    
     h1 {
       font-size: 1.5rem;
     }
@@ -60,6 +73,49 @@ const Header = styled.div`
       font-size: 1rem;
     }
   }
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const IconButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 1.2rem;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+`;
+
+const NotificationBadge = styled.span`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
 `;
 
 const StatsGrid = styled.div`
@@ -181,6 +237,7 @@ const SectionTitle = styled.h2`
 `;
 
 const HomeAd = () => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [stats, setStats] = useState({
     pendingRequests: 0,
@@ -189,6 +246,22 @@ const HomeAd = () => {
     totalVisits: 0,
     totalInventory: 0
   });
+
+  const handleProfileClick = () => {
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    if (token) {
+      const decoded = jwtDecode(token);
+      const role = decoded.role || decoded.tipo;
+      
+      if (role === 'administrador') {
+        navigate('/admin/perfil');
+      } else if (role === 'tecnico') {
+        navigate('/tecnico/perfil');
+      } else if (role === 'Contador') {
+        navigate('/contador/perfil');
+      }
+    }
+  };
 
   useEffect(() => {
     // Cargar solicitudes
@@ -261,8 +334,19 @@ const HomeAd = () => {
   return (
     <Container>
       <Header>
-        <h1>Bienvenido al Panel de Administración</h1>
-        <p>Gestiona y supervisa todas las operaciones de tu empresa</p>
+        <HeaderLeft>
+          <h1>Bienvenido al Panel de Administración</h1>
+          <p>Gestiona y supervisa todas las operaciones de tu empresa</p>
+        </HeaderLeft>
+        <HeaderRight>
+          <IconButton onClick={() => navigate('/admin/notificaciones')} title="Notificaciones">
+            <FontAwesomeIcon icon={faBell} />
+            <NotificationBadge>3</NotificationBadge>
+          </IconButton>
+          <IconButton onClick={handleProfileClick} title="Mi Perfil">
+            <FontAwesomeIcon icon={faUserCircle} />
+          </IconButton>
+        </HeaderRight>
       </Header>
 
       <StatsGrid>

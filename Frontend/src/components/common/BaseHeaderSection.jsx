@@ -1,18 +1,77 @@
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaUserCircle, FaBell } from "react-icons/fa";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Header = styled.header`
   background-color: #1976d2;
   color: white;
-  padding: 2rem;
-  text-align: center;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 20px;
   font-weight: bold;
 
   @media (max-width: 1350px) {
-    padding: 1.2rem;
+    padding: 1.2rem 1.5rem;
     font-size: 18px;
   }
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const IconButton = styled.button`
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 1350px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+`;
+
+const NotificationBadge = styled.span`
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #f44336;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 `;
 
 const TitleSection = styled.h2`
@@ -134,10 +193,59 @@ const BaseHeaderSection = ({
   selectedCount = 0,
   filterComponent,
   actionType = "Eliminar seleccionados",
+  notificationCount = 0,
 }) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+      
+      const decoded = jwtDecode(token);
+      const role = decoded.rol?.toLowerCase();
+      
+      switch(role) {
+        case 'administrador':
+          navigate('/admin/perfil');
+          break;
+        case 'tecnico':
+          navigate('/tecnico/perfil');
+          break;
+        case 'contador':
+          navigate('/contador/perfil');
+          break;
+        default:
+          console.log('Rol no reconocido');
+      }
+    } catch (error) {
+      console.error('Error al decodificar token:', error);
+    }
+  };
+
+  const handleNotificationsClick = () => {
+    // Por ahora solo un log, se puede expandir después
+    console.log('Notificaciones clicked');
+  };
+
   return (
     <>
-      <Header>{headerTitle}</Header>
+      <Header>
+        <HeaderLeft>
+          <span>{headerTitle}</span>
+        </HeaderLeft>
+        <HeaderRight>
+          <IconButton onClick={handleNotificationsClick} title="Notificaciones">
+            <FaBell />
+            {notificationCount > 0 && (
+              <NotificationBadge>{notificationCount > 9 ? '9+' : notificationCount}</NotificationBadge>
+            )}
+          </IconButton>
+          <IconButton onClick={handleProfileClick} title="Ver Perfil">
+            <FaUserCircle />
+          </IconButton>
+        </HeaderRight>
+      </Header>
 
       <Card>
         <ContainerAdd>
