@@ -4,14 +4,14 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleUpdateService = (id, nameService, descripcion) => {
+const handleUpdateServiceAd = (id, data) => {
     
 
   return administratorService
-  .updateService(id, nameService, descripcion)
+  .updateService(id, data)
 
 
 };
 
 
-export {handleUpdateService};
+export {handleUpdateServiceAd};

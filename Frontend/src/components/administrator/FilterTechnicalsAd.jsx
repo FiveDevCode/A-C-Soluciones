@@ -1,27 +1,24 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import styled from "styled-components"
+import BaseFilters from "../common/BaseFilters";
 
+const FilterTechnicalsAd = ({ technicals = [], onFilteredChange }) => {
 
-const ContainerInfo = styled.section`
-  display: flex;
-  gap: 0.425rem;
-`
+  const filterOptions = [
+    {
+      key: "estado",
+      label: "Estado",
+      options: ["Activo", "Inactivo"],
+    },
+  ];
 
-const TitleSearch = styled.h1`
-  font-size: 1rem;
-  font-weight: bold;
-`
-
-
-
-const FilterTechnicalsAd = ({ count }) => {
   return (
-    <ContainerInfo>
-      <TitleSearch>Se encontraron {count} resultados </TitleSearch>
-    </ContainerInfo>
-  )
-}
-
+    <BaseFilters
+      data={technicals}
+      placeholder="Buscar por nombre o cédula..."
+      filterOptions={filterOptions}
+      searchKeys={["nombre", "apellido", "numero_de_cedula"]}
+      onFilteredChange={onFilteredChange}
+    />
+  );
+};
 
 export default FilterTechnicalsAd;

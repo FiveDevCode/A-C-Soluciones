@@ -1,4 +1,4 @@
-import { Op } from 'sequelize'; 
+import { Sequelize, Op } from 'sequelize'; 
 import { VisitaModel } from '../models/visita.model.js';
 import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
@@ -76,41 +76,40 @@ export class VisitaRepository {
     if (!fechaProgramada || isNaN(new Date(fechaProgramada).getTime())) {
       throw new Error("Fecha programada inválida");
     }
+
     const duracionMin = Number(duracionEstimada);
     if (isNaN(duracionMin)) {
       throw new Error("Duración estimada inválida");
     }
+
     const inicio = new Date(fechaProgramada);
-    const fin = new Date(inicio.getTime() + duracionMin * 60000); 
+    const fin = new Date(inicio.getTime() + duracionMin * 60000);
+
     const visitas = await this.model.findAll({
       where: {
         tecnico_id_fk: tecnicoId,
-        [Op.or]: [
+        [Op.and]: [
+          // inicio_bd < fin_nueva
           {
-            fecha_programada: {
-              [Op.between]: [inicio, fin]
-            }
+            fecha_programada: { [Op.lt]: fin }
           },
-          {
-            [Op.and]: [
-              {
-                fecha_programada: {
-                  [Op.lte]: inicio
-                }
-              },
-              {
-                duracion_estimada: {
-                  [Op.gte]: duracionMin
-                }
-              }
-            ]
-          }
+
+          // fin_bd > inicio_nueva
+          Sequelize.where(
+            Sequelize.literal(
+              `fecha_programada + (duracion_estimada || ' minutes')::interval`
+            ),
+            ">",
+            inicio
+          )
         ]
       }
     });
-  
+
     return visitas.length === 0;
   }
+
+
 
   async obtenerServiciosPorTecnico(tecnico_id) {
     return await VisitaModel.Visita.findAll({

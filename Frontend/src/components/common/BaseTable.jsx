@@ -11,7 +11,7 @@ const TableContainer = styled.div`
   margin-top: 20px;
   overflow-x: auto;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     margin-top: 10px;
   }
 `;
@@ -20,7 +20,8 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
+  border-spacing: 50px 0;
+  
   th {
     background-color: #bbdefb;
     text-align: center;
@@ -28,7 +29,7 @@ const Table = styled.table`
     font-size: 14px;
     color: #000;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1350px) {
       padding: 6px;
       font-size: 12px;
     }
@@ -40,12 +41,20 @@ const Table = styled.table`
     border-bottom: 1px solid #ddd;
     font-size: 14px;
     color: #555;
+    height: 51px;
 
-    @media (max-width: 1280px) {
+    max-width: 200px;        /* Ajusta a tu gusto */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* <-- añade los "..." automáticamente */
+
+    @media (max-width: 1350px) {
+      height: 42.5px;
       padding: 0;
       font-size: 12px;
     }
   }
+
 `;
 
 const ActionButton = styled.button`
@@ -62,7 +71,7 @@ const ActionButton = styled.button`
     opacity: 0.9;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 3px 6px;
     font-size: 11px;
     margin: 0 2px;
@@ -87,7 +96,7 @@ const EstadoBadge = styled.span`
   border: none;
   letter-spacing: 0.3px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     padding: 3px 12px;
     font-size: 11px;
   }
@@ -99,7 +108,7 @@ const ResultMessage = styled.p`
   margin-top: 10px;
   font-size: 14px;
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1350px) {
     font-size: 12px;
     margin-top: 8px;
   }
@@ -129,25 +138,32 @@ const BaseTable = ({
   }, [data, currentPage]);
 
   const handleSelectRow = (row) => {
-    setSelectedRows((prev) => {
-      const updated = prev.includes(row)
+    if (!onSelectRows) return; 
+    setSelectedRows((prev) =>
+      prev.includes(row)
         ? prev.filter((r) => r !== row)
-        : [...prev, row];
-      onSelectRows?.(updated);
-      return updated;
-    });
+        : [...prev, row]
+    );
   };
+
+  useEffect(() => {
+    if (onSelectRows) {
+      onSelectRows(selectedRows);
+    }
+  }, [selectedRows]);
 
   const handleCloseEdit = () => setSelectedRow(null);
   const handleCloseView = () => setSelectedViewRow(null);
 
   return (
     <>
-            <TableContainer>
+      <TableContainer>
         <Table>
           <thead>
             <tr>
-              <th></th>
+              <th>
+                {onSelectRows ? "" : null}
+              </th>
               {columns.map((col, index) => (
                 <th key={index}>{col.header}</th>
               ))}
@@ -165,12 +181,17 @@ const BaseTable = ({
               paginatedData.map((row, index) => (
                 <tr key={index}>
                   <td>
-                    <Checkbox
-                      color="primary"
-                      checked={selectedRows.includes(row)}
-                      onChange={() => handleSelectRow(row)}
-                    />
+                    {onSelectRows ? (
+                      <Checkbox
+                        color="primary"
+                        checked={selectedRows.includes(row)}
+                        onChange={() => handleSelectRow(row)}
+                      />
+                    ) : (
+                      null
+                    )}
                   </td>
+
                   {columns.map((col, i) => {
                     const value = row[col.accessor];
                     if (col.render) return <td key={i}>{col.render(value, row)}</td>;
@@ -182,7 +203,15 @@ const BaseTable = ({
                           </EstadoBadge>
                         </td>
                       );
-                    return <td key={i}>{value || "—"}</td>;
+                    return (
+                        <td key={i}>
+                          {value
+                            ? value.length > 50
+                              ? value.substring(0, 50) + "..."
+                              : value
+                            : "—"}
+                        </td>
+                      );
                   })}
                   {(EditComponent || ViewComponent) && (
                     <td>
@@ -211,8 +240,8 @@ const BaseTable = ({
       {data.length > 0 && (
         <>
           <ResultMessage>
-            Mostrando {paginatedData.length} resultado
-            {paginatedData.length > 1 ? "s" : ""} de búsqueda
+            Mostrando {paginatedData.length} de {data.length} resultado
+            {data.length !== 1 ? "s" : ""}
           </ResultMessage>
           <Pagination
             count={totalPages}
@@ -222,7 +251,7 @@ const BaseTable = ({
               display: "flex",
               justifyContent: "center",
               marginTop: "1.25rem",
-              "@media (max-width: 1280px)": {
+              "@media (max-width: 1350px)": {
                 "& .MuiPaginationItem-root": {
                   fontSize: "0.75rem",
                 },

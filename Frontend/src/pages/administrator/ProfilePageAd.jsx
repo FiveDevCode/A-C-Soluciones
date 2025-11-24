@@ -118,7 +118,6 @@ const ProfilePageAd = () => {
 
     handleGetAdminId(decoded.id)
       .then((res) => {
-        console.log(res.data)
         setUserAdmin(res.data);
       })
       .catch((err) => {

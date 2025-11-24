@@ -33,8 +33,14 @@ const MenuBar = styled.div`
   @media screen and (max-width: 1520px) {
     padding: 0 2rem;
   }
+<<<<<<< HEAD
+  @media screen and (max-width: 1350px) {
+    padding: 0 2rem;
+    
+=======
   @media screen and (max-width: 1280px) {
     padding: 0 1rem;
+>>>>>>> 259c9ee8971679b162830f885ac1b52f53222390
   }
 `;
 
@@ -50,8 +56,14 @@ const Menu = styled.div`
   @media screen and (max-width: 1520px) {
     padding: 0 2rem;
   }
+<<<<<<< HEAD
+  @media screen and (max-width: 1350px) {
+    padding: 0 2rem;
+    
+=======
   @media screen and (max-width: 1280px) {
     padding: 0 1rem;
+>>>>>>> 259c9ee8971679b162830f885ac1b52f53222390
   }
 `;
 

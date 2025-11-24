@@ -23,7 +23,6 @@ const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
       ),
     },
     { header: "Cantidad", accessor: "cantidad_disponible" },
-    { header: "Estado", accessor: "estado" },
     {
       header: "Estado de la herramienta",
       accessor: "estado_herramienta",

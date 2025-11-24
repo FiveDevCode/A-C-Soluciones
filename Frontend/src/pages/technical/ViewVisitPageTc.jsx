@@ -119,7 +119,6 @@ const ViewVisitPageTc = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        console.log(response.data)
         setPathName(response.data[0].pdf_path);
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
@@ -161,9 +160,7 @@ const ViewVisitPageTc = () => {
     setStateVisit(newState);
 
     try {
-      console.log(id, newState)
       await handleUpdateStateVisit(id, newState);
-      console.log('Estado actualizado con éxito');
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
       alert('No se pudo actualizar el estado. Verifica si la visita ya fue completada o cancelada.');
@@ -263,7 +260,6 @@ const ViewVisitPageTc = () => {
 
                 const relativePath = pathName.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
                 const publicUrl = `${API_KEY}/${relativePath}`;
-                console.log(publicUrl);
                 const response = await fetch(publicUrl, {
                   method: 'GET',
                   headers: {

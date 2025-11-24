@@ -77,7 +77,6 @@ const FormRecoverCode = () => {
     setIsSubmitting(true);
 
     try {
-      console.log(code)
       await handleCreateVerificCode(email, code);
       setSuccessMsg("El codigo ingresado es correcto, redirigiendo...");
       setIsVerified(true);
@@ -88,7 +87,6 @@ const FormRecoverCode = () => {
     } catch (err) {
       setErrorMsg("");
       setFieldErrors({});
-      console.log(err)
       setIsSubmitting(false);
 
       if (err.response?.data?.errors) {
@@ -117,7 +115,6 @@ const FormRecoverCode = () => {
       setSuccessMsg("Se ha reenviado el código a tu correo.");
       setResendCooldown(30);
     } catch (err) {
-      console.log(err);
       setErrorMsg("No se pudo reenviar el código.");
     }
   };

@@ -45,7 +45,6 @@ const FormRecoverPassword = () => {
     setIsSubmitting(true);
 
     try {
-      console.log(email)
       await handleCreateForgotPassword(email);
       setSuccessMsg("Se ha enviado un correo para recuperar tu contraseña.");
 
@@ -55,7 +54,6 @@ const FormRecoverPassword = () => {
     } catch (err) {
       setErrorMsg("");
       setFieldErrors({});
-      console.log(err)
       setIsSubmitting(false);
 
       if (err.response?.data?.errors) {

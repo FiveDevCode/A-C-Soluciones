@@ -102,7 +102,6 @@ const ReportFormTc = () => {
     const id_cliente = await handleGetClientVisit(id);
     const id_tecnico = await handleGetTechnicalVisit(id);
 
-    console.log(id_cliente, " - ", id_tecnico)
     try {
       await handleCreateMaintenanceSheet({
         id_cliente: id_cliente,
@@ -131,7 +130,6 @@ const ReportFormTc = () => {
         navigate(`/tecnico/visita/${id}`)      
       }, 3000);
     } catch (err) {
-      console.log(err)
       setErrorMsg("");
       if (err.response?.data?.errors) {
         const formattedErrors = {};
