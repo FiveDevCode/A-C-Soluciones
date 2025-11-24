@@ -203,7 +203,7 @@ function ProfilePageAc() {
             <Skeleton variant="rectangular" width={140} height={45} sx={{ borderRadius: '8px' }} />
           </ProfileInfo>
           <CardsGrid>
-            {[1, 2, 3, 4].map((i) => (
+            {[1, 2, 3, 4, 5].map((i) => (
               <Skeleton key={i} variant="rectangular" height={120} sx={{ borderRadius: '12px' }} />
             ))}
           </CardsGrid>
@@ -252,9 +252,19 @@ function ProfilePageAc() {
               <IconWrapper>
                 <FontAwesomeIcon icon={faUser} />
               </IconWrapper>
-              <CardTitle>Nombre Completo</CardTitle>
+              <CardTitle>Nombre</CardTitle>
             </CardHeader>
-            <CardValue>{contabilidad?.nombre} {contabilidad?.apellido}</CardValue>
+            <CardValue>{contabilidad?.nombre}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faUser} />
+              </IconWrapper>
+              <CardTitle>Apellido</CardTitle>
+            </CardHeader>
+            <CardValue>{contabilidad?.apellido}</CardValue>
           </InfoCard>
 
           <InfoCard>

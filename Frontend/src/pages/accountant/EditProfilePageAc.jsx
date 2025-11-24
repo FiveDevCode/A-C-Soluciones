@@ -19,7 +19,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-  padding: 2rem;
+  padding: 1.5rem;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
@@ -30,13 +30,13 @@ const HeaderContent = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 1.6rem;
+  margin: 0 0 0.3rem 0;
   font-weight: 600;
 `;
 
 const Subtitle = styled.p`
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin: 0;
   opacity: 0.9;
 `;
@@ -44,29 +44,29 @@ const Subtitle = styled.p`
 const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem;
 `;
 
 const ProfileInfo = styled.div`
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 `;
 
 const Avatar = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: white;
   flex-shrink: 0;
 `;
@@ -76,7 +76,7 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 0 0 0.3rem 0;
   color: #2d3436;
 `;
@@ -94,13 +94,13 @@ const UserRole = styled.span`
 const FormCard = styled.div`
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const FormTitle = styled.h3`
-  font-size: 1.2rem;
-  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
   color: #2d3436;
   font-weight: 600;
   display: flex;
@@ -110,7 +110,7 @@ const FormTitle = styled.h3`
   &::before {
     content: '';
     width: 4px;
-    height: 24px;
+    height: 20px;
     background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
     border-radius: 2px;
   }
@@ -119,7 +119,7 @@ const FormTitle = styled.h3`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -132,10 +132,10 @@ const SubmitButton = styled(Button)`
   &.MuiButton-root {
     background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
     color: white;
-    padding: 0.7rem 2rem;
+    padding: 0.6rem 1.5rem;
     font-weight: 600;
     text-transform: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
     border-radius: 8px;
     flex: 1;
     
@@ -156,10 +156,10 @@ const CancelButton = styled(Button)`
   &.MuiButton-root {
     background: #636e72;
     color: white;
-    padding: 0.7rem 2rem;
+    padding: 0.6rem 1.5rem;
     font-weight: 600;
     text-transform: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
     border-radius: 8px;
     flex: 1;
     

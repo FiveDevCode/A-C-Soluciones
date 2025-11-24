@@ -9,176 +9,192 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faPhone, faIdCard, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f7fa;
+  width: 100%;
   min-height: 100vh;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 2rem;
-
-  @media (max-width: 1350px) {
-    padding: 1rem;
-  }
+  background: #f5f5f5;
 `;
 
 const Header = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
   color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
 
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-  }
+const HeaderContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  font-size: 1.6rem;
+  margin: 0 0 0.3rem 0;
+  font-weight: 600;
+`;
+
+const Subtitle = styled.p`
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+`;
+
+const Content = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
 `;
 
 const ProfileInfo = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: 1.5rem;
-
-  @media (max-width: 768px) {
-    gap: 1rem;
-  }
+  margin-bottom: 1.5rem;
 `;
 
-const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
+const Avatar = styled.div`
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  @media (max-width: 768px) {
-    width: 80px;
-    height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  flex-shrink: 0;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
 const UserInfo = styled.div`
-  h1 {
-    font-size: 2rem;
-    margin: 0 0 0.3rem 0;
-    font-weight: 600;
-  }
+  flex: 1;
+`;
 
-  p {
-    margin: 0;
-    font-size: 1rem;
-    opacity: 0.9;
-  }
+const UserName = styled.h2`
+  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
+  color: #2d3436;
+`;
 
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-    }
-  }
+const UserRole = styled.span`
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
 `;
 
 const EditButton = styled(Link)`
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.7rem 1.5rem;
+  border: none;
   border-radius: 8px;
   text-decoration: none;
-  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
   transition: all 0.3s ease;
-
+  
   &:hover {
-    background: white;
-    color: #667eea;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
   }
 `;
 
 const CardsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-top: 2rem;
 `;
 
 const InfoCard = styled.div`
   background: white;
-  padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-
+  
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
   }
 `;
 
 const CardHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
   margin-bottom: 1rem;
-  color: #667eea;
-
-  svg {
-    font-size: 1.5rem;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-  }
 `;
 
-const CardContent = styled.div`
-  p {
-    margin: 0.5rem 0 0 0;
-    font-size: 1.1rem;
-    color: #555;
-    word-break: break-word;
-  }
-
-  a {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+const IconWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
 `;
 
-const SkeletonContainer = styled(Container)``;
+const CardTitle = styled.h3`
+  font-size: 0.95rem;
+  color: #636e72;
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const CardValue = styled.p`
+  font-size: 1.3rem;
+  color: #2d3436;
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
+`;
 
 const SkeletonLoader = () => (
-  <SkeletonContainer>
-    <Skeleton variant="rectangular" width="100%" height={150} style={{ borderRadius: '12px' }} />
-    <CardsGrid>
-      <Skeleton variant="rectangular" width="100%" height={120} style={{ borderRadius: '12px' }} />
-      <Skeleton variant="rectangular" width="100%" height={120} style={{ borderRadius: '12px' }} />
-      <Skeleton variant="rectangular" width="100%" height={120} style={{ borderRadius: '12px' }} />
-      <Skeleton variant="rectangular" width="100%" height={120} style={{ borderRadius: '12px' }} />
-    </CardsGrid>
-  </SkeletonContainer>
+  <Container>
+    <Header>
+      <HeaderContent>
+        <Skeleton variant="text" width={200} height={40} sx={{ bgcolor: 'rgba(255,255,255,0.2)' }} />
+        <Skeleton variant="text" width={150} height={24} sx={{ bgcolor: 'rgba(255,255,255,0.2)' }} />
+      </HeaderContent>
+    </Header>
+    <Content>
+      <ProfileInfo>
+        <Skeleton variant="circular" width={70} height={70} />
+        <div style={{ flex: 1 }}>
+          <Skeleton variant="text" width={250} height={30} />
+          <Skeleton variant="text" width={100} height={25} />
+        </div>
+        <Skeleton variant="rectangular" width={140} height={40} sx={{ borderRadius: '8px' }} />
+      </ProfileInfo>
+      <CardsGrid>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Skeleton key={i} variant="rectangular" height={120} sx={{ borderRadius: '12px' }} />
+        ))}
+      </CardsGrid>
+    </Content>
+  </Container>
 );
 
 
@@ -206,64 +222,69 @@ const ProfilePageAd = () => {
   return (
     <Container>
       <Header>
-        <ProfileInfo>
-          <Avatar src={adminProfile} alt="Avatar" />
-          <UserInfo>
-            <h1>{`${userAdmin.nombre} ${userAdmin.apellido}`}</h1>
-            <p>Administrador</p>
-          </UserInfo>
-        </ProfileInfo>
-        <EditButton to="/admin/editar-perfil">
-          <FontAwesomeIcon icon={faEdit} />
-          Editar información
-        </EditButton>
+        <HeaderContent>
+          <Title>Mi Perfil</Title>
+          <Subtitle>Información de tu cuenta de administrador</Subtitle>
+        </HeaderContent>
       </Header>
 
-      <CardsGrid>
-        <InfoCard>
-          <CardHeader>
-            <FontAwesomeIcon icon={faIdCard} />
-            <h3>Cédula</h3>
-          </CardHeader>
-          <CardContent>
-            <p>{userAdmin.numero_cedula.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
-          </CardContent>
-        </InfoCard>
+      <Content>
+        <ProfileInfo>
+          <Avatar>
+            <img src={adminProfile} alt="Avatar" />
+          </Avatar>
+          <UserInfo>
+            <UserName>{userAdmin?.nombre} {userAdmin?.apellido}</UserName>
+            <UserRole>Administrador</UserRole>
+          </UserInfo>
+          <EditButton to="/admin/editar-perfil">
+            <FontAwesomeIcon icon={faEdit} />
+            Editar Perfil
+          </EditButton>
+        </ProfileInfo>
 
-        <InfoCard>
-          <CardHeader>
-            <FontAwesomeIcon icon={faUser} />
-            <h3>Nombre Completo</h3>
-          </CardHeader>
-          <CardContent>
-            <p>{`${userAdmin.nombre} ${userAdmin.apellido}`}</p>
-          </CardContent>
-        </InfoCard>
+        <CardsGrid>
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faIdCard} />
+              </IconWrapper>
+              <CardTitle>Cédula</CardTitle>
+            </CardHeader>
+            <CardValue>{userAdmin?.numero_cedula?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</CardValue>
+          </InfoCard>
 
-        <InfoCard>
-          <CardHeader>
-            <FontAwesomeIcon icon={faPhone} />
-            <h3>Teléfono</h3>
-          </CardHeader>
-          <CardContent>
-            <p>{userAdmin.telefono}</p>
-          </CardContent>
-        </InfoCard>
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faUser} />
+              </IconWrapper>
+              <CardTitle>Nombre</CardTitle>
+            </CardHeader>
+            <CardValue>{userAdmin?.nombre}</CardValue>
+          </InfoCard>
 
-        <InfoCard>
-          <CardHeader>
-            <FontAwesomeIcon icon={faEnvelope} />
-            <h3>Correo Electrónico</h3>
-          </CardHeader>
-          <CardContent>
-            <p>
-              <a href={`mailto:${userAdmin.correo_electronico}`}>
-                {userAdmin.correo_electronico}
-              </a>
-            </p>
-          </CardContent>
-        </InfoCard>
-      </CardsGrid>
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faUser} />
+              </IconWrapper>
+              <CardTitle>Apellido</CardTitle>
+            </CardHeader>
+            <CardValue>{userAdmin?.apellido}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faEnvelope} />
+              </IconWrapper>
+              <CardTitle>Correo Electrónico</CardTitle>
+            </CardHeader>
+            <CardValue>{userAdmin?.correo_electronico}</CardValue>
+          </InfoCard>
+        </CardsGrid>
+      </Content>
     </Container>
   );
 };
