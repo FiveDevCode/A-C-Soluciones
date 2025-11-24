@@ -249,7 +249,7 @@ const HomeAd = () => {
     handleGetListInventoryAd()
       .then((inventory) => {
         if (Array.isArray(inventory)) {
-          const availableItems = inventory.filter(i => i.estado === 'disponible').length;
+          const availableItems = inventory.filter(i => i.estado_herramienta === 'activo').length;
           setStats(prev => ({ ...prev, totalInventory: availableItems }));
         }
       })
