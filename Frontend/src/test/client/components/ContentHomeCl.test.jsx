@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-// Mock de las imágenes para evitar errores de importación
 jest.mock('../../../assets/client/whoHome.png', () => 'whoHome.png');
 jest.mock('../../../assets/client/serviceHome.png', () => 'serviceHome.png');
 
@@ -24,7 +23,7 @@ describe('ContentHomeCl Component', () => {
   test('renders the "Seguir leyendo" buttons', () => {
     render(<ContentHomeCl />);
     const buttons = screen.getAllByRole('button', { name: /Seguir leyendo/i });
-    expect(buttons).toHaveLength(2); // Hay dos botones en total
+    expect(buttons).toHaveLength(2);
     expect(buttons[0]).toBeInTheDocument();
     expect(buttons[1]).toBeInTheDocument();
   });
