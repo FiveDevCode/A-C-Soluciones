@@ -18,8 +18,6 @@ import { useEffect, useState } from "react";
 import Home from "./pages/common/Home";
 import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
 import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
-import HeaderBarCl from "./components/client/HeaderBarCl";
-import FooterHomeCl from "./components/client/FooterHomeCl";
 import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
 import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
 import RecoverCodePage from "./pages/common/RecoverCodePage";
@@ -135,7 +133,7 @@ function AppContent() {
       {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
-        {isCliente && !isPublicPage && <HeaderBarCl />}
+        {/* HeaderBarCl removido - el perfil ahora está en el menú vertical */}
 
         {/*
          * Estructura de rutas:
@@ -532,7 +530,6 @@ function AppContent() {
 
           <Route path="*" element={<ErrorPage />} />
         </Routes>
-        {isCliente && !isPublicPage && <FooterHomeCl />}
       </Content>
     </Container>
   );
