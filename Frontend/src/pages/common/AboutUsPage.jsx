@@ -3,7 +3,6 @@ import aboutImage from "../../assets/common/aboutUs.png";
 import HeaderBarHome from "../../components/common/HeaderBarHome";
 import FooterHome from "../../components/common/FooterHome";
 import MenuSideCl from "../../components/client/MenuSideCl";
-import HeaderBarCl from "../../components/client/HeaderBarCl";
 import { useEffect, useState } from "react";
 import { useMenu } from "../../components/client/MenuContext";
 
@@ -16,8 +15,8 @@ const ContainerPageAll = styled.section`
 
 const PageContainer = styled.div`
   margin-left: ${(props) => (props.$isClient ? (props.$collapsed ? '80px' : '220px') : '0')};
-  margin-top: ${(props) => (props.$isClient ? '145px' : '0')};
-  min-height: ${(props) => (props.$isClient ? 'calc(100vh - 145px)' : 'auto')};
+  margin-top: ${(props) => (props.$isClient ? '20px' : '0')};
+  min-height: ${(props) => (props.$isClient ? 'calc(100vh - 20px)' : 'auto')};
   transition: margin-left 0.3s ease;
 
   @media screen and (max-width: 1280px) {
@@ -168,10 +167,7 @@ const AboutUsPage = () => {
   return (
     <ContainerPageAll>
       {isClient ? (
-        <>
-          <MenuSideCl />
-          <HeaderBarCl />
-        </>
+        <MenuSideCl />
       ) : (
         <HeaderBarHome />
       )}

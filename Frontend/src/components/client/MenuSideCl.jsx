@@ -3,8 +3,8 @@ import logo from '../../assets/common/logoA&C.png';
 import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faArrowRightFromBracket, faWrench, faHistory} from '@fortawesome/free-solid-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { faHouse, faArrowRightFromBracket, faWrench, faHistory, faCircleUser} from '@fortawesome/free-solid-svg-icons';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { PanelLeft } from 'lucide-react';
 import { useMenu } from './MenuContext';
 
@@ -91,19 +91,24 @@ const MenuOption = styled(Link)`
   justify-content: ${(props) => (props.$collapsed ? 'center' : 'flex-start')};
   padding: 0.75rem;
   text-decoration: none;
-  color: #1e1f23;
+  color: ${(props) => (props.$active ? '#007BFF' : '#1e1f23')};
+  background-color: ${(props) => (props.$active ? '#e3f2fd' : 'transparent')};
   border-radius: 8px;
   transition: background 0.2s, color 0.2s;
   font-size: 0.9rem;
+  font-weight: ${(props) => (props.$active ? '600' : '400')};
+  border-left: ${(props) => (props.$active ? '3px solid #007BFF' : '3px solid transparent')};
+  padding-left: ${(props) => (props.$active ? 'calc(0.75rem - 3px)' : '0.75rem')};
 
   &:hover {
-    background-color: #f2f2f2;
-    color: #000;
+    background-color: ${(props) => (props.$active ? '#e3f2fd' : '#f2f2f2')};
+    color: ${(props) => (props.$active ? '#007BFF' : '#000')};
   }
 
   svg {
     font-size: 1.1rem;
     min-width: 20px;
+    color: ${(props) => (props.$active ? '#007BFF' : 'inherit')};
 
     @media (max-width: 1280px) {
       font-size: 0.95rem;
@@ -171,6 +176,7 @@ const CollapseButton = styled(IconButton)`
 
 const MenuSideCl = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { collapsed, setCollapsed } = useMenu();
 
   const handleLogout = () => {
@@ -180,6 +186,7 @@ const MenuSideCl = () => {
   };
 
   const options = [
+    { to: '/cliente/perfil', icon: faCircleUser, label: 'Perfil' },
     { to: '/cliente/inicio', icon: faHouse, label: 'Inicio' },
     { to: '/cliente/servicios', icon: faWrench, label: 'Servicios' },
     { to: '/cliente/historial', icon: faHistory, label: 'Historial' },
@@ -200,14 +207,22 @@ const MenuSideCl = () => {
         
         <MenuGroup>
           <MenuTitle $collapsed={collapsed}>Principal</MenuTitle>
-          {options.map((opt) => (
-            <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
-              <MenuOption to={opt.to} $collapsed={collapsed}>
-                <FontAwesomeIcon icon={opt.icon} />
-                <span>{opt.label}</span>
-              </MenuOption>
-            </Tooltip>
-          ))}
+          {options.map((opt) => {
+            const isActive = location.pathname === opt.to || 
+              (opt.to === '/cliente/inicio' && location.pathname === '/cliente/inicio') ||
+              (opt.to === '/cliente/perfil' && (location.pathname === '/cliente/perfil' || location.pathname === '/cliente/editar-perfil')) ||
+              (opt.to === '/cliente/servicios' && location.pathname.startsWith('/cliente/servicios')) ||
+              (opt.to === '/cliente/historial' && location.pathname.startsWith('/cliente/historial'));
+            
+            return (
+              <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
+                <MenuOption to={opt.to} $collapsed={collapsed} $active={isActive}>
+                  <FontAwesomeIcon icon={opt.icon} />
+                  <span>{opt.label}</span>
+                </MenuOption>
+              </Tooltip>
+            );
+          })}
         </MenuGroup>
       </div>
 
