@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BrowserRouter } from 'react-router-dom'; // Importa el BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
 import FormCreateCl from '../../../components/client/FormCreateCl';
 
 describe('FormCreateCl Component', () => {
@@ -11,7 +11,6 @@ describe('FormCreateCl Component', () => {
       </BrowserRouter>
     );
     
-    // Verifica que los campos de entrada estén presentes
     const nameField = screen.getByLabelText(/nombre/i);
     const lastNameField = screen.getByLabelText(/apellidos/i);
     const phoneField = screen.getByLabelText(/celular/i);
@@ -83,7 +82,6 @@ describe('FormCreateCl Component', () => {
     const termsCheckbox = screen.getByLabelText(/aceptas los términos y condiciones/i);
     const offersCheckbox = screen.getByLabelText(/quiero recibir ofertas personalizadas/i);
     
-    // Simula el cambio de estado de los checkboxes
     fireEvent.click(termsCheckbox);
     expect(termsCheckbox.checked).toBe(true);
     

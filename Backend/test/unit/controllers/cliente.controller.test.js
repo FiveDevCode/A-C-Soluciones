@@ -1,4 +1,3 @@
-// test/cliente.controller.test.js
 import { ClienteController } from '../../../src/controllers/cliente.controller.js';
 import { ClienteService } from '../../../src/services/cliente.services.js';
 import { ValidationError } from 'sequelize';

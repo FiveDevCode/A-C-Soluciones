@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import FooterHomeCl from '../../../components/client/FooterHomeCl';
 
-jest.mock('../../../assets/common/logoA&C.png', () => 'logoA&C.png');  // Mock de la imagen, si es necesario
+jest.mock('../../../assets/common/logoA&C.png', () => 'logoA&C.png');
 
 describe('FooterHomeCl Component', () => {
   test('renders the copyright text', () => {
