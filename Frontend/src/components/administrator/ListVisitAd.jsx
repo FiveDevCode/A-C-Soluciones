@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
 import FormCreateReportAd from "../administrator/FormCreateReportAd";
-import { handleGetPDFIdVisit } from "../../controllers/common/getPDFIdVisit.controller";
+import { commonService } from "../../services/common-service";
 const API_KEY = "http://localhost:8000";
 
 const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
@@ -20,25 +20,31 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
         return;
       }
 
-      const updatedVisits = await Promise.all(
-        visits.map(async (v) => {
-          try {
-            const response = await handleGetPDFIdVisit(v.id);
+      try {
+        // 🚀 UNA SOLA PETICIÓN para obtener TODAS las fichas
+        const response = await commonService.getListToken();
+        const allFichas = response.data || [];
 
-            return {
-              ...v,
-              pdf_path: response.data?.[0]?.pdf_path || null,
-            };
-          } catch (err) {
-            return {
-              ...v,
-              pdf_path: null,
-            };
+        // Crear un mapa de id_visitas -> pdf_path para búsqueda O(1)
+        const fichasMap = new Map();
+        allFichas.forEach((ficha) => {
+          if (ficha.id_visitas && ficha.pdf_path) {
+            fichasMap.set(ficha.id_visitas, ficha.pdf_path);
           }
-        })
-      );
+        });
 
-      setVisitsWithPDF(updatedVisits);
+        // Mapear las visitas con sus PDFs correspondientes
+        const updatedVisits = visits.map((visit) => ({
+          ...visit,
+          pdf_path: fichasMap.get(visit.id) || null,
+        }));
+
+        setVisitsWithPDF(updatedVisits);
+      } catch (err) {
+        console.error("Error al obtener fichas:", err);
+        // En caso de error, mostrar visitas sin PDF
+        setVisitsWithPDF(visits.map((v) => ({ ...v, pdf_path: null })));
+      }
     };
 
     fetchPDFs();
