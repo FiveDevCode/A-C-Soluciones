@@ -174,6 +174,7 @@ const BaseTable = ({
   const [selectedViewRow, setSelectedViewRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
 
@@ -200,27 +201,41 @@ const BaseTable = ({
   const handleCloseEdit = () => {
     setSelectedRow(null);
     setIsLoading(false);
+    setShowModal(false);
   };
 
   const handleCloseView = () => {
     setSelectedViewRow(null);
     setIsLoading(false);
+    setShowModal(false);
   };
 
-  const handleOpenEdit = (row) => {
+  const handleOpenEdit = async (row) => {
     setIsLoading(true);
+    setShowModal(false);
+    setSelectedRow(row);
+    
+    // Mostrar pantalla de carga por 1.5 segundos, luego mostrar el modal
     setTimeout(() => {
-      setSelectedRow(row);
       setIsLoading(false);
-    }, 500);
+      setShowModal(true);
+    }, 1500);
   };
 
-  const handleOpenView = (row) => {
+  const handleOpenView = async (row) => {
     setIsLoading(true);
+    setShowModal(false);
+    setSelectedViewRow(row);
+    
+    // Mostrar pantalla de carga por 1.5 segundos, luego mostrar el modal
     setTimeout(() => {
-      setSelectedViewRow(row);
       setIsLoading(false);
-    }, 500);
+      setShowModal(true);
+    }, 1500);
+  };
+
+  const handleModalReady = () => {
+    // Ya no hace nada porque ahora el tiempo mínimo se controla en handleOpenEdit/View
   };
 
   return (
@@ -338,7 +353,7 @@ const BaseTable = ({
         </LoadingOverlay>
       )}
 
-      {EditComponent && selectedRow && (
+      {EditComponent && selectedRow && showModal && (
         <EditComponent
           selected={selectedRow}
           onClose={handleCloseEdit}
@@ -346,12 +361,14 @@ const BaseTable = ({
             handleCloseEdit();
             window.location.reload();
           }}
+          onReady={handleModalReady}
         />
       )}
-      {ViewComponent && selectedViewRow && (
+      {ViewComponent && selectedViewRow && showModal && (
         <ViewComponent
           selected={selectedViewRow}
           onClose={handleCloseView}
+          onReady={handleModalReady}
         />
       )}
     </>
