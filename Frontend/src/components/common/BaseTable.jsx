@@ -158,6 +158,56 @@ const Spinner = styled.div`
   }
 `;
 
+const SkeletonRow = styled.tr`
+  td {
+    padding: 12px 4px !important;
+  }
+`;
+
+const SkeletonCell = styled.div`
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin: 0 auto;
+  width: ${props => props.width || '80%'};
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+`;
+
+const TableLoadingIndicator = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
+  color: #667eea;
+`;
+
+const SmallSpinner = styled.div`
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #667eea;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 /* ---------- 🧩 Componente BaseTable ---------- */
 const BaseTable = ({
   data = [],
@@ -175,8 +225,18 @@ const BaseTable = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isLoadingTable, setIsLoadingTable] = useState(true);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+
+  // Carga inicial de la tabla
+  useEffect(() => {
+    setIsLoadingTable(true);
+    const timer = setTimeout(() => {
+      setIsLoadingTable(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [data]);
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -240,7 +300,7 @@ const BaseTable = ({
 
   return (
     <>
-      <TableContainer>
+      <TableContainer style={{ position: 'relative' }}>
         <Table>
           <thead>
             <tr>
@@ -254,7 +314,20 @@ const BaseTable = ({
             </tr>
           </thead>
           <tbody>
-            {paginatedData.length === 0 ? (
+            {isLoadingTable ? (
+              // Mostrar skeleton loader mientras carga
+              [...Array(5)].map((_, index) => (
+                <SkeletonRow key={index}>
+                  <td><SkeletonCell width="60%" /></td>
+                  {columns.map((_, i) => (
+                    <td key={i}><SkeletonCell /></td>
+                  ))}
+                  {(EditComponent || ViewComponent) && (
+                    <td><SkeletonCell width="70%" /></td>
+                  )}
+                </SkeletonRow>
+              ))
+            ) : paginatedData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length + 2} style={{ padding: "20px", color: "#777" }}>
                   {emptyMessage}
