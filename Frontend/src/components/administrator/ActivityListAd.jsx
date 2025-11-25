@@ -9,7 +9,7 @@ const ContainerNoti = styled.div`
   gap: 1rem;
 `;
 
-const Notification = styled(Link)`
+const Notification = styled.div`
   display: flex;
   align-items: center;
   background: white;
@@ -17,18 +17,8 @@ const Notification = styled(Link)`
   border-radius: 12px;
   padding: 1.5rem;
   gap: 1.5rem;
-  transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
   color: inherit;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #667eea;
-    background: #fafbff;
-  }
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -245,7 +235,7 @@ const ActivityListAd = ({requests}) => {
           };
 
           return (
-            <Notification key={index} to={`/admin/solicitud/${request.id}`}>
+            <Notification key={index}>
               <NotificationDescription>
                 <IconCircle status={request.estado}>
                   <FontAwesomeIcon icon={getStatusIcon(request.estado)} />

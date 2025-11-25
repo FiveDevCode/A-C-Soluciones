@@ -10,7 +10,7 @@ const ContainerNoti = styled.div`
   gap: 1rem;
 `;
 
-const Notification = styled(Link)`
+const Notification = styled.div`
   display: flex;
   align-items: center;
   background: white;
@@ -18,18 +18,8 @@ const Notification = styled(Link)`
   border-radius: 12px;
   padding: 1.5rem;
   gap: 1.5rem;
-  transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
   color: inherit;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #00b894;
-    background: #f9fffd;
-  }
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -253,7 +243,7 @@ export const ActivityListAc = ({bills}) => {
     <ContainerNoti>
       {Array.isArray(bills) && bills.length > 0 ? (
         bills.slice(0, 3).map((bill) => (
-          <Notification key={bill.id} to={`/contador/factura/${bill.id}`}>
+          <Notification key={bill.id}>
             <NotificationDescription>
               <IconCircle status={bill.estado_factura}>
                 <FontAwesomeIcon icon={getStatusIcon(bill.estado_factura)} />
