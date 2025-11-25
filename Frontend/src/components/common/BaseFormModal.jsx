@@ -113,9 +113,10 @@ const UploadButton = styled.label`
   background-color: #e0e0e0;
   padding: 8px 16px;
   border-radius: 4px;
-  display: inline-block;
+  display: block;
   margin-bottom: 1rem;
   cursor: pointer;
+  text-align: center;
 `;
 
 const FileItem = styled.div`
@@ -123,7 +124,8 @@ const FileItem = styled.div`
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
-  margin-bottom: 4px;
+  margin-top: 8px;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -250,7 +252,7 @@ const BaseFormModal = ({
   };
 
   const renderField = (field) => {
-    const isFullWidth = field.fullWidth || field.type === "textarea";
+    const isFullWidth = field.fullWidth || field.type === "textarea" || field.type === "file";
     const FieldWrapper = isFullWidth ? FullWidth : "div";
 
     return (
@@ -263,6 +265,7 @@ const BaseFormModal = ({
               <input
                 type="file"
                 name={field.name}
+                accept="image/*"
                 hidden
                 onChange={handleChange}
               />
