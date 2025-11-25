@@ -34,6 +34,8 @@ const Modal = styled.div`
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10000;
 `;
 
 const Header = styled.div`
@@ -76,6 +78,8 @@ const Step = styled.div`
 
 const Content = styled.div`
   padding: 1.5rem;
+  position: relative;
+  z-index: 1;
 `;
 
 const FormGrid = styled.div`
@@ -321,6 +325,15 @@ const BaseFormModal = ({
                   ? true
                   : undefined,
             }}
+            SelectProps={
+              field.type === "select"
+                ? {
+                    MenuProps: {
+                      style: { zIndex: 10001 }
+                    }
+                  }
+                : undefined
+            }
           >
             {field.type === "select" &&
               field.options?.map((opt) => (
