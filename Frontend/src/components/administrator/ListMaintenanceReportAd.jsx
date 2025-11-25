@@ -10,8 +10,8 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   const handleDownloadPDF = async (report) => {
     try {
       const token = localStorage.getItem('authToken');
-      const relativePath = report.pdf_generado.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-      const publicUrl = `${API_KEY}/${relativePath}`;
+      // Usar el endpoint del backend para descargar el PDF por ID
+      const publicUrl = `${API_KEY}/api/reportes-mantenimiento/${report.id}/pdf`;
 
       const response = await fetch(publicUrl, {
         method: 'GET',
@@ -40,8 +40,8 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   const handleViewPDF = async (report) => {
     try {
       const token = localStorage.getItem('authToken');
-      const relativePath = report.pdf_generado.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-      const publicUrl = `${API_KEY}/${relativePath}`;
+      // Usar el endpoint del backend para ver el PDF por ID
+      const publicUrl = `${API_KEY}/api/reportes-mantenimiento/${report.id}/pdf`;
 
       const response = await fetch(publicUrl, {
         method: 'GET',
@@ -71,11 +71,8 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
     { header: "KVA", accessor: "kva" },
     {
       header: "PDF",
-      accessor: "pdf_generado",
       render: (_, row) => {
-        if (!row.pdf_generado) {
-          return <span style={{ color: "#94a3b8" }}>Sin PDF</span>;
-        }
+        // Todos los reportes tienen PDF generado automáticamente
         return (
           <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
             <button
