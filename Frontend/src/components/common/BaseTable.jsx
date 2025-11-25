@@ -114,6 +114,50 @@ const ResultMessage = styled.p`
   }
 `;
 
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+`;
+
+const LoadingContent = styled.div`
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+`;
+
+const LoadingText = styled.p`
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 /* ---------- 🧩 Componente BaseTable ---------- */
 const BaseTable = ({
   data = [],
@@ -129,6 +173,7 @@ const BaseTable = ({
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedViewRow, setSelectedViewRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
 
@@ -152,8 +197,31 @@ const BaseTable = ({
     }
   }, [selectedRows]);
 
-  const handleCloseEdit = () => setSelectedRow(null);
-  const handleCloseView = () => setSelectedViewRow(null);
+  const handleCloseEdit = () => {
+    setSelectedRow(null);
+    setIsLoading(false);
+  };
+
+  const handleCloseView = () => {
+    setSelectedViewRow(null);
+    setIsLoading(false);
+  };
+
+  const handleOpenEdit = (row) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setSelectedRow(row);
+      setIsLoading(false);
+    }, 500);
+  };
+
+  const handleOpenView = (row) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setSelectedViewRow(row);
+      setIsLoading(false);
+    }, 500);
+  };
 
   return (
     <>
@@ -218,13 +286,13 @@ const BaseTable = ({
                       {ViewComponent && (
                         <ActionButton
                           view
-                          onClick={() => setSelectedViewRow(row)}
+                          onClick={() => handleOpenView(row)}
                         >
                           <FontAwesomeIcon icon={faEye} /> Ver
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton onClick={() => setSelectedRow(row)}>
+                        <ActionButton onClick={() => handleOpenEdit(row)}>
                           <FontAwesomeIcon icon={faEdit} /> Editar
                         </ActionButton>
                       )}
@@ -259,6 +327,15 @@ const BaseTable = ({
             }}
           />
         </>
+      )}
+
+      {isLoading && (
+        <LoadingOverlay>
+          <LoadingContent>
+            <Spinner />
+            <LoadingText>Cargando datos...</LoadingText>
+          </LoadingContent>
+        </LoadingOverlay>
       )}
 
       {EditComponent && selectedRow && (
