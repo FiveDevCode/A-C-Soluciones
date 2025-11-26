@@ -20,7 +20,6 @@ import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
 import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
 import HeaderBarCl from "./components/client/HeaderBarCl";
 import FooterHomeCl from "./components/client/FooterHomeCl";
-import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
 import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
 import RecoverCodePage from "./pages/common/RecoverCodePage";
 import RecoverChangePage from "./pages/common/RecoverChangePage";
@@ -393,15 +392,6 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <HomeAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/asignar-visita"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <AssignVisitPageAd />
               </PrivateRoute>
             }
           />

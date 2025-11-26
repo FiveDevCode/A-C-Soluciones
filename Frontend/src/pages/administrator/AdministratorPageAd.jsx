@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ListAdministratorAd from "../../components/administrator/ListAdministratorAd";
@@ -7,6 +7,7 @@ import FormCreateAdministratorAd from "../../components/administrator/FormCreate
 import { handleGetListAdministrator } from "../../controllers/administrator/getAdministratorListAd.controller";
 import { handleDeleteAdministratorAd } from "../../controllers/administrator/deleteAdministratorAd.controller";
 import FilterAdministratorAd from "../../components/administrator/FilterAdministratorAd";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -34,28 +35,17 @@ const Card = styled.div`
 `;
 
 const AdministratorPageAd = () => {
-  const [administrators, setAdministrators] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: administrators, isLoading: loading, reload: loadAdministrators } = useDataCache(
+    'administrators_cache',
+    async () => {
+      const res = await handleGetListAdministrator();
+      return res.data;
+    }
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAdministrators, setFilteredAdministrators] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadAdministrators();
-  }, []);
-
-  const loadAdministrators = async () => {
-    setLoading(true);
-    try {
-      const res = await handleGetListAdministrator();
-      setAdministrators(res.data);
-    } catch (err) {
-      console.error("Error cargando lista de administradores:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {

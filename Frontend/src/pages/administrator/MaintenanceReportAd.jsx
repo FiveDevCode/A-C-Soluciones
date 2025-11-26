@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ConfirmModal from "../../components/common/ConfirmModal";
@@ -6,6 +6,7 @@ import ListMaintenanceReportAd from "../../components/administrator/ListMaintena
 import FilterMaintenanceReportAd from "../../components/administrator/FilterMaintenanceReportAd";
 import FormCreateMaintenanceReportAd from "../../components/administrator/FormCreateMaintenanceReportAd";
 import { handleGetListMaintenanceReportAd } from "../../controllers/administrator/getListMaintenanceReportAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -33,27 +34,13 @@ const Card = styled.div`
 `;
 
 const MaintenanceReportPageAd = () => {
-  const [reports, setReports] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: reports, isLoading: loading, reload: loadReports } = useDataCache(
+    'maintenance_reports_cache',
+    handleGetListMaintenanceReportAd
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
-
-  useEffect(() => {
-    loadReports();
-  }, []);
-
-  const loadReports = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListMaintenanceReportAd();
-      setReports(data);
-    } catch (err) {
-      console.error("Error cargando reportes de mantenimiento:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Container>

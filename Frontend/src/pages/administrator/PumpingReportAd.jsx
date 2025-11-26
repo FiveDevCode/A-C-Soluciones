@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ListPumpingReportAd from "../../components/administrator/ListPumpingReportAd";
 import FilterPumpingReportAd from "../../components/administrator/FilterPumpingReportAd";
 import FormCreatePumpingReportAd from "../../components/administrator/FormCreatePumpingReportAd";
 import { handleGetListPumpingReportAd } from "../../controllers/administrator/getListPumpingReportAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -32,28 +33,13 @@ const Card = styled.div`
 `;
 
 const PumpingReportPageAd = () => {
-  const [reports, setReports] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: reports, isLoading: loading, reload: loadReports } = useDataCache(
+    'pumping_reports_cache',
+    handleGetListPumpingReportAd
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
-
-  useEffect(() => {
-    loadReports();
-  }, []);
-
-  const loadReports = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListPumpingReportAd();
-      console.log(data);
-      setReports(data);
-    } catch (err) {
-      console.error("Error cargando reportes de bombeo:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   return (

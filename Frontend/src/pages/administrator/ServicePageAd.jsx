@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
 import ListServiceAd from "../../components/administrator/ListServiceAd";
@@ -7,6 +7,7 @@ import { handleDeleteServiceAd } from "../../controllers/administrator/deleteSer
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateServiceAd from "../../components/administrator/FormCreateServiceAd";
 import FilterServicesAd from "../../components/administrator/FilterServiceAd";
+import useDataCache from "../../hooks/useDataCache";
 
 
 const Container = styled.div`
@@ -35,28 +36,14 @@ const Card = styled.div`
 `;
 
 const ServicePageAd = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: services, isLoading: loading, reload: loadServices } = useDataCache(
+    'services_cache',
+    handleGetListServiceAd
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadServices();
-  }, []);
-
-  const loadServices = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListServiceAd();
-      setServices(data);
-    } catch (err) {
-      console.error("Error cargando lista de servicios:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
 import ListTechicalAd from "../../components/administrator/ListTechnicalAd";
@@ -7,6 +7,7 @@ import FilterTechnicalsAd from "../../components/administrator/FilterTechnicalsA
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateTechnicalAd from "../../components/administrator/FormCreateTechnicalAd";
 import { handleDeleteTechnicalAd } from "../../controllers/administrator/deleteTechnicalAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -34,28 +35,17 @@ const Card = styled.div`
 `;
 
 const TechnicalPageAd = () => {
-  const [technicals, setTechnicals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: technicals, isLoading: loading, reload: loadTechnicals } = useDataCache(
+    'technicals_cache',
+    async () => {
+      const data = await handleGetListTechnical();
+      return data?.data.slice().reverse() || [];
+    }
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredTechnicals, setFilteredTechnicals] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadTechnicals();
-  }, []);
-
-  const loadTechnicals = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListTechnical();
-      setTechnicals(data?.data.slice().reverse() || []);
-    } catch (err) {
-      console.error("Error cargando lista de técnicos:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {

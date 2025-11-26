@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import ListClientAd from "../../components/administrator/ListClientAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
-import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterClientAd from "../../components/administrator/FilterClientAd";
 import { handleDeleteClientAd } from "../../controllers/administrator/deleteClientAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -34,27 +34,13 @@ const Card = styled.div`
 `;
 
 const ClientPageAd = () => {
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: clients, isLoading: loading, reload: loadClients } = useDataCache(
+    'clients_cache',
+    handleGetListClient
+  );
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadClients();
-  }, []);
-
-  const loadClients = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListClient();
-      setClients(data);
-    } catch (err) {
-      console.error("Error cargando lista de clientes:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {

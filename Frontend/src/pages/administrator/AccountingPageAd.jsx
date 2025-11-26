@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListAccountingAd } from "../../controllers/administrator/getListAccountingAd.controller";
 import ListAccountingAd from "../../components/administrator/ListAccountingAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
-//import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
 import FilterAccountingAd from "../../components/administrator/FilterAccountingAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateAccountingAd from "../../components/administrator/FormCreateAccountingAd";
 import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -35,28 +35,14 @@ const Card = styled.div`
 `;
 
 const AccountingPageAd = () => {
-  const [accountings, setAccountings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: accountings, isLoading: loading, reload: loadAccounting } = useDataCache(
+    'accounting_cache',
+    handleGetListAccountingAd
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAccounting, setFilteredAccounting] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadAccounting();
-  }, []);
-
-  const loadAccounting = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListAccountingAd();
-      setAccountings(data);
-    } catch (err) {
-      console.error("Error cargando lista contable:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
