@@ -260,7 +260,6 @@ const BaseTable = ({
 
   const handleCloseView = () => {
     setSelectedViewRow(null);
-    setIsLoading(false);
     setShowModal(false);
   };
 
@@ -277,19 +276,13 @@ const BaseTable = ({
   };
 
   const handleOpenView = async (row) => {
-    setIsLoading(true);
-    setShowModal(false);
+    // Ver detalle se abre inmediatamente sin pantalla de carga
     setSelectedViewRow(row);
-    
-    // Mostrar pantalla de carga por 1.5 segundos, luego mostrar el modal
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowModal(true);
-    }, 1500);
+    setShowModal(true);
   };
 
   const handleModalReady = () => {
-    // Ya no hace nada porque ahora el tiempo mínimo se controla en handleOpenEdit/View
+    // Ya no hace nada porque ahora el tiempo mínimo se controla en handleOpenEdit
   };
 
   return (
