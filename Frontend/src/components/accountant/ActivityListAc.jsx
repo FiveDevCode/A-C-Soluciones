@@ -17,7 +17,7 @@ const Notification = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 1.5rem;
-  gap: 1.5rem;
+  gap: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   color: inherit;
 
