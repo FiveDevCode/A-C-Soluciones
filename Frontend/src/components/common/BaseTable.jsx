@@ -329,7 +329,13 @@ const BaseTable = ({
               </tr>
             ) : (
               paginatedData.map((row, index) => (
-                <tr key={index}>
+                <tr 
+                  key={index}
+                  style={{
+                    backgroundColor: selectedRows.includes(row) ? '#e0e0e0' : 'transparent',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                >
                   <td>
                     {onSelectRows ? (
                       <Checkbox
