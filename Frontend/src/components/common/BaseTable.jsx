@@ -217,6 +217,7 @@ const BaseTable = ({
   EditComponent,
   ViewComponent,
   onSelectRows, // <-- sigue funcionando individualmente
+  isLoadingData = false, // <-- prop para saber si está cargando
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -225,22 +226,11 @@ const BaseTable = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isLoadingTable, setIsLoadingTable] = useState(false);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-
-  // Carga inicial de la tabla - solo cuando no hay datos todavía
-  useEffect(() => {
-    // Solo mostrar skeleton si no hay datos y es la primera carga
-    if (data.length === 0 && !isLoadingTable) {
-      setIsLoadingTable(true);
-      const timer = setTimeout(() => {
-        setIsLoadingTable(false);
-      }, 800);
-      return () => clearTimeout(timer);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  
+  // Mostrar skeleton solo si realmente estamos cargando Y no hay datos
+  const isLoadingTable = isLoadingData && data.length === 0;
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
