@@ -225,18 +225,22 @@ const BaseTable = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isLoadingTable, setIsLoadingTable] = useState(true);
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
 
-  // Carga inicial de la tabla
+  // Carga inicial de la tabla - solo cuando no hay datos todavía
   useEffect(() => {
-    setIsLoadingTable(true);
-    const timer = setTimeout(() => {
-      setIsLoadingTable(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [data]);
+    // Solo mostrar skeleton si no hay datos y es la primera carga
+    if (data.length === 0 && !isLoadingTable) {
+      setIsLoadingTable(true);
+      const timer = setTimeout(() => {
+        setIsLoadingTable(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
