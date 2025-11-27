@@ -102,6 +102,7 @@ const BillPageAd = () => {
         addLabel="Agregar factura"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadBills}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterBillAd bills={bills} onFilteredChange={setFilteredBills} />

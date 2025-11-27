@@ -72,6 +72,7 @@ const ClientPageAd = () => {
         headerTitle="GESTIÓN DE CLIENTES"
         sectionTitle="Lista de clientes"
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadClients}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterClientAd

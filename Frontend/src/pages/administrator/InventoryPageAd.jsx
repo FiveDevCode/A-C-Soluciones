@@ -78,6 +78,7 @@ const InventoryPageAd = () => {
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadInventory}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterInventoryAd

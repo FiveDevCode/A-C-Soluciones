@@ -49,6 +49,7 @@ const MaintenanceReportPageAd = () => {
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
         onAdd={() => setShowModal(true)}
+        onRefresh={loadReports}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterMaintenanceReportAd

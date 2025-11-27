@@ -101,6 +101,7 @@ const PaymentAccountPageAd = () => {
         addLabel="Agregar cuenta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadAccounts}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterPaymentAccountAd

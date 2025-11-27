@@ -73,11 +73,12 @@ const RequestPageAd = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="GESTIÓN DE SOLICITUDES"
-        sectionTitle="Lista de solicitudes registradas"
+        sectionTitle="Listado de solicitudes de servicio"
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadRequests}
         selectedCount={selectedIds.length}
         filterComponent={
-          <FilterRequestsAd
+          <FilterRequestAd
             requests={requests}
             onFilteredChange={setFilteredRequests}
           />

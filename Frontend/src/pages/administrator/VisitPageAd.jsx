@@ -48,6 +48,7 @@ const VisitPageAd = () => {
         sectionTitle="Lista de visitas asignadas"
         addLabel="Agregar visita"
         onAdd={() => setShowModal(true)}
+        onRefresh={loadVisits}
         filterComponent={
           <FilterVisitsAd
             visits={visits}

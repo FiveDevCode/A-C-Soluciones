@@ -77,6 +77,7 @@ const ServicePageAd = () => {
         addLabel="Agregar servicio"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadServices}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterServicesAd

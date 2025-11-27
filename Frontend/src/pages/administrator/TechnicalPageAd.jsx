@@ -74,11 +74,12 @@ const TechnicalPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN TÉCNICA"
-        sectionTitle="Lista de técnicos"
+        headerTitle="GESTIÓN DE TÉCNICOS"
+        sectionTitle="Listado de técnicos registrados"
         addLabel="Agregar técnico"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadTechnicals}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterTechnicalsAd
@@ -86,7 +87,7 @@ const TechnicalPageAd = () => {
             onFilteredChange={setFilteredTechnicals}
           />
         }
-        actionType="Deshabilitar seleccionados"
+        actionType="Eliminar seleccionados"
       />
 
       <Card>

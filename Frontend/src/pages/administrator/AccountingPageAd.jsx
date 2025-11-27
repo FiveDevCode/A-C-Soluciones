@@ -76,6 +76,7 @@ const AccountingPageAd = () => {
         addLabel="Agregar empleado contable"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadAccounting}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterAccountingAd

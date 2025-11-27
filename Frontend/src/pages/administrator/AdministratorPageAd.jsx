@@ -75,10 +75,11 @@ const AdministratorPageAd = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="GESTIÓN DE ADMINISTRADORES"
-        sectionTitle="Lista de administradores"
+        sectionTitle="Listado de administradores del sistema"
         addLabel="Agregar administrador"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadAdministrators}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterAdministratorAd
@@ -86,7 +87,7 @@ const AdministratorPageAd = () => {
             onFilteredChange={setFilteredAdministrators}
           />
         }
-        actionType="Deshabilitar seleccionados"
+        actionType="Eliminar seleccionados"
       />
 
       <Card>

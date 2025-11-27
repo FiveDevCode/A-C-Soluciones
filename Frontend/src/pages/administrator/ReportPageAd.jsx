@@ -71,6 +71,7 @@ const ReportPageAd = () => {
         headerTitle="GESTIÓN DE REPORTES"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
+        onRefresh={loadReports}
         filterComponent={
           <FilterReportAd
             visits={visits}

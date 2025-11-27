@@ -1,4 +1,4 @@
-import { FaPlus, FaUserCircle, FaBell } from "react-icons/fa";
+import { FaPlus, FaUserCircle, FaBell, FaSyncAlt } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -184,12 +184,39 @@ const AddButton = styled(Button)`
   }
 `;
 
+const RefreshButton = styled(Button)`
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+  min-width: 40px;
+  padding: 8px;
+
+  &:hover {
+    background-color: #45a049;
+  }
+
+  &:active {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+
+  @media (max-width: 1350px) {
+    padding: 6px;
+    font-size: 13px;
+  }
+`;
+
 const BaseHeaderSection = ({
   headerTitle = "GESTIÓN GENERAL",
   sectionTitle = "Listado de registros",
   addLabel = "Agregar",
   onAdd,
   onDeleteSelected,
+  onRefresh,
   selectedCount = 0,
   filterComponent,
   actionType = "Eliminar seleccionados",
@@ -262,6 +289,11 @@ const BaseHeaderSection = ({
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
+            {onRefresh && (
+              <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                <FaSyncAlt />
+              </RefreshButton>
+            )}
           </SearchContainer>
           {onDeleteSelected && (
             <ButtonsContainer>
