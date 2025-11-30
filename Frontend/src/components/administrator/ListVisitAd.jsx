@@ -181,7 +181,82 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
         onSelectRows={onSelectRows}
         mobileConfig={{
           title: "fecha_programada",
-          subtitle: "notas_previas"
+          subtitle: "notas_previas",
+          renderExtra: (row) => {
+            if (!row.pdf_path) {
+              // Mostrar botón de generar reporte
+              return (
+                <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                  <button
+                    style={{
+                      padding: "5px 8px",
+                      background: "#2563eb",
+                      color: "white",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      border: "none",
+                      fontSize: "11px",
+                      fontWeight: 600
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenReport(row);
+                    }}
+                  >
+                    Generar reporte
+                  </button>
+                </div>
+              );
+            }
+            
+            // Mostrar botón de ver reporte
+            return (
+              <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                <button
+                  style={{
+                    padding: "5px 8px",
+                    background: "#16a34a",
+                    color: "white",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    border: "none",
+                    fontSize: "11px",
+                    fontWeight: 600
+                  }}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    try {
+                      const token = localStorage.getItem("authToken");
+                      const relativePath = row.pdf_path
+                        .replace(/^uploads[\\/]/, "")
+                        .replace(/\\/g, "/");
+                      const publicUrl = `${API_KEY}/${relativePath}`;
+
+                      const response = await fetch(publicUrl, {
+                        method: "GET",
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      });
+
+                      if (!response.ok) {
+                        throw new Error("No se pudo obtener el PDF");
+                      }
+
+                      const blob = await response.blob();
+                      const fileURL = URL.createObjectURL(blob);
+                      window.open(fileURL, "_blank");
+                    } catch (err) {
+                      console.error("Error al abrir PDF:", err);
+                      alert("No se pudo abrir el reporte.");
+                    }
+                  }}
+                >
+                  Ver reporte
+                </button>
+              </div>
+            );
+          }
         }}
       />
 
