@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Checkbox, Pagination } from "@mui/material";
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import useItemsPerPage from "../../hooks/useItemPerPage";
 
 /* ---------- 🎨 Estilos base reutilizables ---------- */
@@ -25,12 +26,11 @@ const Table = styled.table`
   th {
     background-color: #bbdefb;
     text-align: center;
-    padding: 12px;
+    height: 42px;
     font-size: 14px;
     color: #000;
 
     @media (max-width: 1350px) {
-      padding: 6px;
       font-size: 12px;
     }
   }
@@ -77,6 +77,8 @@ const ActionButton = styled.button`
     margin: 0 2px;
   }
 `;
+
+
 
 const getBadgeStyles = (estado) => {
   const estadoLower = estado?.toLowerCase() || '';
@@ -334,6 +336,10 @@ const BaseTable = ({
     // Ya no hace nada porque ahora el tiempo mínimo se controla en handleOpenEdit
   };
 
+  const handleClearSelection = () => {
+    setSelectedRows([]);
+  };
+
   return (
     <>
       <TableContainer style={{ position: 'relative' }}>
@@ -341,7 +347,15 @@ const BaseTable = ({
           <thead>
             <tr>
               <th>
-                {onSelectRows ? "" : null}
+                {onSelectRows && selectedRows.length > 0 ? (
+                  <Checkbox
+                    icon={<IndeterminateCheckBoxIcon />}
+                    checkedIcon={<IndeterminateCheckBoxIcon />}
+                    color="error"
+                    onChange={handleClearSelection}
+                    title={`Desmarcar todo (${selectedRows.length} seleccionados)`}
+                  />
+                ) : null}
               </th>
               {columns.map((col, index) => (
                 <th key={index}>{col.header}</th>

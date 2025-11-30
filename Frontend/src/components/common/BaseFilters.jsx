@@ -86,8 +86,10 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${({ type }) =>
-    type === "clear" ? "#c0c0c0" : "#1976d2"};
+  background-color: ${({ type, hasActiveFilters }) =>
+    type === "clear" 
+      ? hasActiveFilters ? "#FF9800" : "#c0c0c0"
+      : "#1976d2"};
   color: white;
   border: none;
   padding: 8px 14px;
@@ -96,10 +98,17 @@ const Button = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  box-shadow: ${({ hasActiveFilters }) =>
+    hasActiveFilters ? "0 2px 8px rgba(255, 152, 0, 0.4)" : "none"};
+  transform: ${({ hasActiveFilters }) =>
+    hasActiveFilters ? "scale(1.02)" : "scale(1)"};
 
   &:hover {
-    background-color: ${({ type }) =>
-      type === "clear" ? "#b0b0b0" : "#1565c0"};
+    background-color: ${({ type, hasActiveFilters }) =>
+      type === "clear" 
+        ? hasActiveFilters ? "#FB8C00" : "#b0b0b0"
+        : "#1565c0"};
+    transform: scale(1.05);
   }
 
   @media (max-width: 1350px) {
@@ -171,6 +180,9 @@ const BaseFilters = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, searchTerm, data]);
 
+  // Detectar si hay filtros activos
+  const hasActiveFilters = searchTerm !== "" || Object.values(filters).some(val => val !== "" && val !== undefined);
+
   return (
     <FiltersContainer>
       <SearchBox>
@@ -208,7 +220,7 @@ const BaseFilters = ({
       ))}
 
       <ButtonGroup>
-        <Button type="clear" onClick={handleClearFilters}>
+        <Button type="clear" onClick={handleClearFilters} hasActiveFilters={hasActiveFilters}>
           Limpiar filtros
         </Button>
       </ButtonGroup>
