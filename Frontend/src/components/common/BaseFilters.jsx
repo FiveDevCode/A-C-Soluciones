@@ -78,6 +78,10 @@ const Select = styled.select`
     font-size: 15px;
     padding: 10px 12px;
   }
+
+  @media (max-width: 768px) {
+    min-width: 150px;
+  }
 `;
 
 const ButtonGroup = styled.div`
