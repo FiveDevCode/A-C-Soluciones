@@ -117,6 +117,50 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
         <ViewMaintenanceReportDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "fecha",
+        subtitle: "ciudad",
+        renderExtra: (row) => (
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+            <button
+              style={{
+                padding: "5px 8px",
+                background: "#2563eb",
+                color: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                border: "none",
+                fontSize: "11px",
+                fontWeight: 600
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDownloadPDF(row);
+              }}
+            >
+              <FontAwesomeIcon icon={faDownload} /> Descargar
+            </button>
+            <button
+              style={{
+                padding: "5px 8px",
+                background: "#0f172a",
+                color: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                border: "none",
+                fontSize: "11px",
+                fontWeight: 600
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewPDF(row);
+              }}
+            >
+              Ver <FontAwesomeIcon icon={faArrowRight} />
+            </button>
+          </div>
+        )
+      }}
     />
   );
 };

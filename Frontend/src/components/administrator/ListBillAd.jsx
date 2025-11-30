@@ -62,6 +62,10 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
         <ViewBillDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "numero_factura",
+        subtitle: "cliente"
+      }}
     />
   );
 };

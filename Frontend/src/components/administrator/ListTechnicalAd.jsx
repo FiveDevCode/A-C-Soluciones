@@ -28,6 +28,10 @@ const ListTechnicalAd = ({ technicals, reloadData, onSelectRows }) => {
         <ViewTechnicalDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "nombre",
+        subtitle: "especialidad"
+      }}
     />
   );
 };

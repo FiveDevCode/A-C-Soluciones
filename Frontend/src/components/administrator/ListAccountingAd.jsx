@@ -28,6 +28,10 @@ const ListAccountingAd = ({ accountings, reloadData, onSelectRows }) => {
         <ViewAccountingDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "nombre",
+        subtitle: "numero_de_cedula"
+      }}
     />
   );
 };

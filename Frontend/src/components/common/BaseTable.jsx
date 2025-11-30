@@ -15,6 +15,10 @@ const TableContainer = styled.div`
   @media (max-width: 1350px) {
     margin-top: 10px;
   }
+
+  @media (max-width: 768px) {
+    overflow-x: visible;
+  }
 `;
 
 const Table = styled.table`
@@ -55,6 +59,83 @@ const Table = styled.table`
     }
   }
 
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileCardContainer = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 4px;
+  }
+`;
+
+const MobileCard = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: ${props => props.isSelected ? '#e3f2fd' : 'white'};
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const MobileCardLeft = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+`;
+
+const MobileCardTitle = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: #212121;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const MobileCardSubtitle = styled.div`
+  font-size: 13px;
+  color: #757575;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const MobileCardRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+`;
+
+const MobileActions = styled.div`
+  display: flex;
+  gap: 6px;
+`;
+
+const MobilePDFButtons = styled.div`
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 `;
 
 const ActionButton = styled.button`
@@ -269,6 +350,7 @@ const BaseTable = ({
   ViewComponent,
   onSelectRows, // <-- sigue funcionando individualmente
   isLoadingData = false, // <-- prop para saber si está cargando
+  mobileConfig = {}, // <-- configuración para vista móvil: { title, subtitle, renderExtra }
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -343,6 +425,7 @@ const BaseTable = ({
   return (
     <>
       <TableContainer style={{ position: 'relative' }}>
+        {/* Vista Desktop/Tablet - Tabla Normal */}
         <Table>
           <thead>
             <tr>
@@ -447,6 +530,106 @@ const BaseTable = ({
             )}
           </tbody>
         </Table>
+
+        {/* Vista Móvil - Tarjetas */}
+        <MobileCardContainer>
+          {isLoadingTable ? (
+            [...Array(3)].map((_, index) => (
+              <MobileCard key={index}>
+                <MobileCardLeft>
+                  <SkeletonCell width="80%" />
+                  <SkeletonCell width="60%" />
+                </MobileCardLeft>
+                <MobileCardRight>
+                  <SkeletonCell width="60px" />
+                </MobileCardRight>
+              </MobileCard>
+            ))
+          ) : paginatedData.length === 0 ? (
+            <div style={{ padding: "20px", textAlign: "center", color: "#777" }}>
+              {emptyMessage}
+            </div>
+          ) : (
+            paginatedData.map((row, index) => {
+              // Función para formatear valores
+              const formatValue = (value) => {
+                if (!value) return "—";
+                
+                // Si es un objeto (como cliente)
+                if (typeof value === 'object' && value !== null) {
+                  const fullName = `${value.nombre || ""} ${value.apellido || ""}`.trim();
+                  return fullName || "Sin nombre";
+                }
+                
+                // Si parece una fecha ISO
+                if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value)) {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("es-CO");
+                }
+                
+                // Si es un string muy largo, truncar
+                if (typeof value === 'string' && value.length > 40) {
+                  return value.slice(0, 40) + "...";
+                }
+                
+                return value;
+              };
+
+              const titleValue = mobileConfig.title ? row[mobileConfig.title] : row[columns[0]?.accessor];
+              const subtitleValue = mobileConfig.subtitle ? row[mobileConfig.subtitle] : row[columns[1]?.accessor];
+              
+              const title = formatValue(titleValue);
+              const subtitle = formatValue(subtitleValue);
+              const badgeValue = getBadgeValue ? getBadgeValue(row) : row.estado;
+
+              return (
+                <MobileCard 
+                  key={index}
+                  isSelected={selectedRows.includes(row)}
+                  onClick={() => onSelectRows && handleSelectRow(row)}
+                >
+                  <MobileCardLeft>
+                    <MobileCardTitle>{title}</MobileCardTitle>
+                    <MobileCardSubtitle>{subtitle}</MobileCardSubtitle>
+                  </MobileCardLeft>
+                  <MobileCardRight>
+                    {badgeValue && (
+                      <EstadoBadge estado={badgeValue}>
+                        {badgeValue}
+                      </EstadoBadge>
+                    )}
+                    {/* Renderizado personalizado extra (para botones PDF, etc.) */}
+                    {mobileConfig.renderExtra && mobileConfig.renderExtra(row)}
+                    
+                    <MobileActions>
+                      {ViewComponent && (
+                        <ActionButton
+                          view
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenView(row);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faEye} /> Ver
+                        </ActionButton>
+                      )}
+                      {EditComponent && (
+                        <ActionButton 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenEdit(row);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faEdit} /> Editar
+                        </ActionButton>
+                      )}
+                    </MobileActions>
+                  </MobileCardRight>
+                </MobileCard>
+              );
+            })
+          )}
+        </MobileCardContainer>
       </TableContainer>
 
       {data.length > 0 && (

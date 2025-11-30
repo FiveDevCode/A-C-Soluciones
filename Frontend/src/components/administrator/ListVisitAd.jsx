@@ -179,6 +179,10 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
         )}
         ViewComponent={(props) => <ViewVisitDetailAd {...props} />}
         onSelectRows={onSelectRows}
+        mobileConfig={{
+          title: "fecha_programada",
+          subtitle: "notas_previas"
+        }}
       />
 
       {openReportModal && (

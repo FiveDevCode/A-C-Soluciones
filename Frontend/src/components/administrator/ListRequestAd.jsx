@@ -45,6 +45,10 @@ const ListRequestAd = ({ requests, onSelectRows }) => {
         <ViewRequestDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "descripcion",
+        subtitle: "fecha_solicitud"
+      }}
     />
   );
 };
