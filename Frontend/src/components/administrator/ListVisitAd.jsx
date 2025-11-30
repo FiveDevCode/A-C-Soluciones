@@ -66,23 +66,32 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
     {
       header: "Notas Previas",
       accessor: "notas_previas",
-      render: (value) => (value ? value : "Sin notas previas"),
+      render: (value) => {
+        if (!value) return "—";
+        return value.length > 50 ? value.slice(0, 50) + "..." : value;
+      }
     },
     {
       header: "Notas Posteriores",
       accessor: "notas_posteriores",
-      render: (value) => (value ? value : "Sin notas posteriores"),
+      render: (value) => {
+        if (!value) return "—";
+        return value.length > 50 ? value.slice(0, 50) + "..." : value;
+      }
     },
     {
       header: "Fecha Programada",
       accessor: "fecha_programada",
-      render: (value) => (value ? value.substring(0, 10) : "Sin fecha"),
+      render: (value) => {
+        if (!value) return "—";
+        const date = new Date(value);
+        return date.toLocaleDateString("es-CO");
+      }
     },
     {
       header: "Estado",
       accessor: "estado",
       isBadge: true,
-      render: (value) => (value === "en_camino" ? "En camino" : value),
     },
     {
       header: "Reporte",

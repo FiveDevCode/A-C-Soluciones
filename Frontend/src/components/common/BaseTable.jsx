@@ -78,6 +78,54 @@ const ActionButton = styled.button`
   }
 `;
 
+const getBadgeStyles = (estado) => {
+  const estadoLower = estado?.toLowerCase() || '';
+  
+  // Estados de solicitudes
+  if (estadoLower === 'pendiente') {
+    return { bg: '#FFA726', shadow: 'rgba(255, 167, 38, 0.4)' };
+  }
+  if (estadoLower === 'aprobada') {
+    return { bg: '#4CAF50', shadow: 'rgba(76, 175, 80, 0.4)' };
+  }
+  if (estadoLower === 'rechazada') {
+    return { bg: '#F44336', shadow: 'rgba(244, 67, 54, 0.4)' };
+  }
+  
+  // Estados de visitas
+  if (estadoLower === 'programada') {
+    return { bg: '#2196F3', shadow: 'rgba(33, 150, 243, 0.4)' };
+  }
+  if (estadoLower === 'iniciada' || estadoLower === 'en_camino' || estadoLower === 'en camino') {
+    return { bg: '#FF9800', shadow: 'rgba(255, 152, 0, 0.4)' };
+  }
+  if (estadoLower === 'completada') {
+    return { bg: '#4CAF50', shadow: 'rgba(76, 175, 80, 0.4)' };
+  }
+  if (estadoLower === 'cancelada') {
+    return { bg: '#9E9E9E', shadow: 'rgba(158, 158, 158, 0.4)' };
+  }
+  
+  // Estados de facturas
+  if (estadoLower === 'pagada') {
+    return { bg: '#4CAF50', shadow: 'rgba(76, 175, 80, 0.4)' };
+  }
+  if (estadoLower === 'vencida') {
+    return { bg: '#F44336', shadow: 'rgba(244, 67, 54, 0.4)' };
+  }
+  
+  // Estados generales (activo/inactivo)
+  if (estadoLower === 'activo') {
+    return { bg: '#4CAF50', shadow: 'rgba(76, 175, 80, 0.4)' };
+  }
+  if (estadoLower === 'inactivo') {
+    return { bg: '#F44336', shadow: 'rgba(244, 67, 54, 0.4)' };
+  }
+  
+  // Default
+  return { bg: '#9E9E9E', shadow: 'rgba(158, 158, 158, 0.4)' };
+};
+
 const EstadoBadge = styled.span`
   display: inline-block;
   padding: 6px 18px;
@@ -86,15 +134,16 @@ const EstadoBadge = styled.span`
   font-size: 13px;
   text-transform: capitalize;
   color: white;
-  background-color: ${(props) =>
-    props.estado === "activo" ? "#4CAF50" : "#F44336"};
-  box-shadow: 0 3px 6px
-    ${(props) =>
-      props.estado === "activo"
-        ? "rgba(76, 175, 80, 0.4)"
-        : "rgba(244, 67, 54, 0.4)"};
+  background-color: ${(props) => getBadgeStyles(props.estado).bg};
+  box-shadow: 0 3px 6px ${(props) => getBadgeStyles(props.estado).shadow};
   border: none;
   letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px ${(props) => getBadgeStyles(props.estado).shadow};
+  }
 
   @media (max-width: 1350px) {
     padding: 3px 12px;
