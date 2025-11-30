@@ -22,7 +22,7 @@ import {
   faBolt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Logo from '../common/Logo';
 
 const SectionMenu = styled.section`
@@ -38,9 +38,20 @@ const SectionMenu = styled.section`
   transition: width 0.3s ease;
   position: relative;
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
     width: ${(props) => (props.collapsed ? '60px' : '180px')};
     padding: 0.25rem 0;
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: ${(props) => (props.mobileOpen ? '0' : '-280px')};
+    width: 260px;
+    height: 100vh;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    transition: left 0.3s ease;
   }
 `;
 
@@ -176,12 +187,79 @@ const CollapseButton = styled(IconButton)`
   @media (max-width: 1350px) {
     margin-right: ${(props) => (props.collapsed ? '0' : '0.25rem')};
   }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
+const MobileMenuButton = styled.button`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    width: 42px;
+    height: 42px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f5f5f5;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+`;
+
+const MenuOverlay = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: ${(props) => (props.show ? 'block' : 'none')};
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    transition: opacity 0.3s ease;
+  }
+`;
 
 const MenuSideAd = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setMobileOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -229,39 +307,57 @@ const MenuSideAd = () => {
   const options = menuByRole[role] || [];
 
   return (
-    <SectionMenu collapsed={collapsed}>
-      <ContainerMenu collapsed={collapsed}>
-        <CollapseButton onClick={() => setCollapsed(!collapsed)}>
-          <PanelLeft size={22} color="black" strokeWidth={1} />
-        </CollapseButton>
+    <>
+      <MobileMenuButton onClick={() => setMobileOpen(!mobileOpen)}>
+        <PanelLeft size={22} color="black" strokeWidth={1} />
+      </MobileMenuButton>
 
-        <LogoContainer to={getHomeRouteByRole(role)} collapsed={collapsed}>
-          <Logo src={logo} size={collapsed ? '45px' : '120px'} />
-        </LogoContainer>
-      </ContainerMenu>
+      <MenuOverlay show={mobileOpen} onClick={() => setMobileOpen(false)} />
 
-      <MenuGroup>
-        <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
-        {options.map((opt) => (
-          <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
-            <MenuOption to={opt.to} collapsed={collapsed}>
-              <FontAwesomeIcon icon={opt.icon} />
-              <span>{opt.label}</span>
-            </MenuOption>
+      <SectionMenu collapsed={collapsed} mobileOpen={mobileOpen}>
+        <ContainerMenu collapsed={collapsed}>
+          <CollapseButton onClick={() => setCollapsed(!collapsed)}>
+            <PanelLeft size={22} color="black" strokeWidth={1} />
+          </CollapseButton>
+
+          <LogoContainer to={getHomeRouteByRole(role)} collapsed={collapsed}>
+            <Logo src={logo} size={collapsed ? '45px' : '120px'} />
+          </LogoContainer>
+        </ContainerMenu>
+
+        <MenuGroup>
+          <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
+          {options.map((opt) => (
+            <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
+              <MenuOption 
+                to={opt.to} 
+                collapsed={collapsed}
+                onClick={() => setMobileOpen(false)}
+              >
+                <FontAwesomeIcon icon={opt.icon} />
+                <span>{opt.label}</span>
+              </MenuOption>
+            </Tooltip>
+          ))}
+        </MenuGroup>
+
+        <div style={{ marginTop: 'auto', padding: '0 0.5rem' }}>
+          <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.5rem' }} />
+          <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
+            <LogoutButton 
+              onClick={() => {
+                setMobileOpen(false);
+                handleLogout();
+              }} 
+              collapsed={collapsed}
+            >
+              <FontAwesomeIcon icon={faArrowRightFromBracket} />
+              <span>Salir</span>
+            </LogoutButton>
           </Tooltip>
-        ))}
-      </MenuGroup>
-
-      <div style={{ marginTop: 'auto', padding: '0 0.5rem' }}>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.5rem' }} />
-        <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
-          <LogoutButton onClick={handleLogout} collapsed={collapsed}>
-            <FontAwesomeIcon icon={faArrowRightFromBracket} />
-            <span>Salir</span>
-          </LogoutButton>
-        </Tooltip>
-      </div>
-    </SectionMenu>
+        </div>
+      </SectionMenu>
+    </>
   );
 };
 
