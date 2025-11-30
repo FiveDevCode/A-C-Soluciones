@@ -143,6 +143,10 @@ const SearchContainer = styled.div`
   @media (max-width: 1350px) {
     width: 100%;
     gap: 10px;
+
+    > button {
+      display: none;
+    }
   }
 `;
 
@@ -161,9 +165,17 @@ const ActionsRow = styled.div`
   align-items: center;
   gap: 10px;
 
+  > button:first-child {
+    display: none;
+  }
+
   @media (max-width: 1350px) {
     width: 100%;
     justify-content: space-between;
+
+    > button:first-child {
+      display: flex;
+    }
   }
 `;
 
@@ -316,6 +328,11 @@ const BaseHeaderSection = ({
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
+            {onRefresh && (
+              <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                <FaSyncAlt />
+              </RefreshButton>
+            )}
           </SearchContainer>
           <ActionsRow>
             {onRefresh && (
