@@ -34,6 +34,10 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
         <ViewPaymentAccountDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "numero_cuenta",
+        subtitle: "cliente"
+      }}
     />
   );
 };

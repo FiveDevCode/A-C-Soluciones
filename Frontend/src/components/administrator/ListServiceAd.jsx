@@ -36,6 +36,10 @@ const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
         <ViewServiceDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "nombre",
+        subtitle: "descripcion"
+      }}
     />
   );
 };

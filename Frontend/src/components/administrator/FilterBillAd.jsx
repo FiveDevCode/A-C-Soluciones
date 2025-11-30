@@ -4,7 +4,7 @@ const FilterBillAd = ({ bills = [], onFilteredChange }) => {
   const paymentStatusLabels = {
     pagada: "Pagada",
     pendiente: "Pendiente",
-    vencido: "Vencido",
+    vencida: "Vencida",
   };
 
   const paymentStatusOptions = [...new Set(bills.map((b) => b.estado_factura).filter(Boolean))].map(

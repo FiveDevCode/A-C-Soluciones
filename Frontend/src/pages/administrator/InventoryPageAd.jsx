@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
 import ListInventoryAd from "../../components/administrator/ListInventoyAd";
@@ -7,6 +7,7 @@ import { handleDeleteInventory } from "../../controllers/administrator/deleteInv
 import FilterInventoryAd from "../../components/administrator/FilterInventoryAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateInventoryAd from "../../components/administrator/FormCreateInventoryAd";
+import useDataCache from "../../hooks/useDataCache";
 
 
 const Container = styled.div`
@@ -35,28 +36,14 @@ const Card = styled.div`
 `;
 
 const InventoryPageAd = () => {
-  const [inventory, setInventory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false); // <-- Nuevo estado para el modal
+  const { data: inventory, isLoading: loading, reload: loadInventory } = useDataCache(
+    'inventory_cache',
+    handleGetListInventoryAd
+  );
+  const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadInventory();
-  }, []);
-
-  const loadInventory = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListInventoryAd();
-      setInventory(data);
-    } catch (err) {
-      console.error("Error cargando inventario:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   const handleDeleteSelected = () => {
@@ -91,6 +78,7 @@ const InventoryPageAd = () => {
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadInventory}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterInventoryAd

@@ -4,14 +4,22 @@ import ViewBillDetailAd from "./ViewBillDetailAd";
 
 const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
   const columns = [
-    { header: "Número de factura", accessor: "numero_factura" },
+    {
+      header: "Número de factura",
+      accessor: "numero_factura",
+      render: (value) => {
+        if (!value) return "—";
+        return value.length > 50 ? value.slice(0, 50) + "..." : value;
+      }
+    },
     {
       header: "Cliente",
       accessor: "cliente",
-      render: (value) =>
-        value
-          ? `${value.nombre || ""} ${value.apellido || ""}`.trim()
-          : "Sin cliente vinculado",
+      render: (value) => {
+        if (!value) return "Sin cliente vinculado";
+        const fullName = `${value.nombre || ""} ${value.apellido || ""}`.trim();
+        return fullName || "Sin nombre";
+      }
     },
     {
       header: "Fecha de factura",
@@ -19,7 +27,7 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
       render: (value) => {
         if (!value) return "—";
         const date = new Date(value);
-        return date.toLocaleDateString("es-CO"); // 🇨🇴 → DD/MM/YYYY
+        return date.toLocaleDateString("es-CO");
       }
     },   
     {
@@ -34,13 +42,18 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
         }).format(value);
       }
     },
-    { header: "Estado", accessor: "estado_factura" },
+    {
+      header: "Estado",
+      accessor: "estado_factura",
+      isBadge: true,
+    },
   ];
 
   return (
     <BaseTable
       data={bills}
       columns={columns}
+      getBadgeValue={(row) => row.estado_factura}
       emptyMessage="No hay facturas registradas"
       EditComponent={(props) => (
         <EditBillAd {...props} onSuccess={reloadData} />
@@ -49,6 +62,10 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
         <ViewBillDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "numero_factura",
+        subtitle: "cliente"
+      }}
     />
   );
 };

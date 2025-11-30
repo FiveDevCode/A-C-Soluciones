@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { handleGetListPaymentAccountAd } from "../../controllers/administrator/getListPaymentAccountAd.controller";
@@ -9,6 +9,7 @@ import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
 import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -36,20 +37,9 @@ const Card = styled.div`
 `;
 
 const PaymentAccountPageAd = () => {
-  const [accounts, setAccounts] = useState([]);
-  const [filteredAccounts, setFilteredAccounts] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadAccounts();
-  }, []);
-
-  const loadAccounts = async () => {
-    setLoading(true);
-    try {
+  const { data: accounts, isLoading: loading, reload: loadAccounts } = useDataCache(
+    'payment_accounts_cache',
+    async () => {
       const accountsData = await handleGetListPaymentAccountAd();
 
       const enrichedAccounts = await Promise.all(
@@ -59,7 +49,7 @@ const PaymentAccountPageAd = () => {
               const clientRes = await handleGetClient(account.id_cliente);
               return {
                 ...account,
-                cliente: clientRes.data, // objeto cliente con nombre y apellido
+                cliente: clientRes.data,
               };
             } catch (err) {
               console.error(`Error obteniendo cliente ${account.id_cliente}:`, err);
@@ -70,14 +60,13 @@ const PaymentAccountPageAd = () => {
         })
       );
 
-      setAccounts(enrichedAccounts);
-      setFilteredAccounts(enrichedAccounts);
-    } catch (err) {
-      console.error("Error cargando cuentas de pago:", err);
-    } finally {
-      setLoading(false);
+      return enrichedAccounts;
     }
-  };
+  );
+  const [filteredAccounts, setFilteredAccounts] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
 
   const handleDeleteSelected = () => {
@@ -112,6 +101,7 @@ const PaymentAccountPageAd = () => {
         addLabel="Agregar cuenta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadAccounts}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterPaymentAccountAd
