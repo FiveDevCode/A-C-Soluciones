@@ -78,7 +78,7 @@ const RequestPageAd = () => {
         onRefresh={loadRequests}
         selectedCount={selectedIds.length}
         filterComponent={
-          <FilterRequestAd
+          <FilterRequestsAd
             requests={requests}
             onFilteredChange={setFilteredRequests}
           />

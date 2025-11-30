@@ -235,12 +235,12 @@ const CollapseButton = styled(IconButton)`
     background-color: #f2f2f2 !important;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
     margin-right: ${(props) => (props.collapsed ? '0' : '0.25rem')};
   }
 
   @media (max-width: 768px) {
-    display: none;
+    display: none !important;
   }
 `;
 
