@@ -78,12 +78,12 @@ const MobileCardContainer = styled.div`
 const MobileCard = styled.div`
   background: white;
   border-radius: 8px;
-  padding: 16px;
+  padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   position: relative;
   transition: all 0.2s ease;
   background-color: ${props => props.isSelected ? '#e3f2fd' : 'white'};
@@ -97,7 +97,7 @@ const MobileCardLeft = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 `;
 
@@ -108,7 +108,7 @@ const MobileCardRow = styled.div`
 `;
 
 const MobileCardLabel = styled.span`
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #9e9e9e;
   text-transform: uppercase;
@@ -116,7 +116,7 @@ const MobileCardLabel = styled.span`
 `;
 
 const MobileCardTitle = styled.div`
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: #212121;
   white-space: nowrap;
@@ -125,7 +125,7 @@ const MobileCardTitle = styled.div`
 `;
 
 const MobileCardSubtitle = styled.div`
-  font-size: 13px;
+  font-size: 14px;
   color: #757575;
   white-space: nowrap;
   overflow: hidden;
@@ -136,12 +136,12 @@ const MobileCardRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: 10px;
 `;
 
 const MobileActions = styled.div`
   display: flex;
-  gap: 6px;
+  gap: 8px;
 `;
 
 const MobilePDFButtons = styled.div`
@@ -170,6 +170,13 @@ const ActionButton = styled.button`
     padding: 3px 6px;
     font-size: 11px;
     margin: 0 2px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 7px 12px;
+    font-size: 13px;
+    margin: 0;
+    border-radius: 6px;
   }
 `;
 
@@ -245,6 +252,11 @@ const EstadoBadge = styled.span`
   @media (max-width: 1350px) {
     padding: 3px 12px;
     font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 16px;
+    font-size: 13px;
   }
 `;
 
