@@ -127,7 +127,7 @@ const OptionsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 
-  @media (max-width: 1350px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -140,7 +140,7 @@ const SearchContainer = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 
-  @media (max-width: 1350px) {
+  @media (max-width: 768px) {
     width: 100%;
     gap: 10px;
 
@@ -169,7 +169,7 @@ const ActionsRow = styled.div`
     display: none;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 768px) {
     width: 100%;
     justify-content: space-between;
 
@@ -194,7 +194,13 @@ const Button = styled.button`
     background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
     height: 48px;
@@ -214,7 +220,13 @@ const AddButton = styled(Button)`
     background-color: #1565c0;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
     height: 48px;
@@ -241,7 +253,14 @@ const RefreshButton = styled(Button)`
     transition: transform 0.3s ease;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px;
+    font-size: 14px;
+    min-width: auto;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
     padding: 10px;
     font-size: 16px;
     min-width: 48px;

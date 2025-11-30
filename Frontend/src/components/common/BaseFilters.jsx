@@ -39,9 +39,24 @@ const SearchBox = styled.div`
     }
   }
 
-  @media (max-width: 1350px) {
-    min-width: 240px;
+  @media (max-width: 1350px) and (min-width: 769px) {
+    min-width: 200px;
     flex: 1.5;
+    padding: 6px 10px;
+
+    input {
+      font-size: 12px;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    flex-basis: 100%;
     padding: 10px 14px;
 
     input {
@@ -52,11 +67,6 @@ const SearchBox = styled.div`
       width: 18px;
       height: 18px;
     }
-  }
-
-  @media (max-width: 768px) {
-    min-width: 100%;
-    flex-basis: 100%;
   }
 `;
 
@@ -74,13 +84,15 @@ const Select = styled.select`
     outline: none;
   }
 
-  @media (max-width: 1350px) {
-    font-size: 15px;
-    padding: 10px 12px;
+  @media (max-width: 1350px) and (min-width: 769px) {
+    font-size: 12px;
+    padding: 6px 8px;
   }
 
   @media (max-width: 768px) {
     min-width: 150px;
+    font-size: 15px;
+    padding: 10px 12px;
   }
 `;
 
@@ -120,7 +132,12 @@ const Button = styled.button`
     transform: scale(1.05);
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  @media (max-width: 768px) {
     font-size: 15px;
     padding: 10px 14px;
   }
