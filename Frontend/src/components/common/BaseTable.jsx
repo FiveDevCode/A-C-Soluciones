@@ -97,8 +97,22 @@ const MobileCardLeft = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
+`;
+
+const MobileCardRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const MobileCardLabel = styled.span`
+  font-size: 11px;
+  font-weight: 600;
+  color: #9e9e9e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 `;
 
 const MobileCardTitle = styled.div`
@@ -582,6 +596,13 @@ const BaseTable = ({
               const subtitle = formatValue(subtitleValue);
               const badgeValue = getBadgeValue ? getBadgeValue(row) : row.estado;
 
+              // Obtener labels de las columnas
+              const titleColumn = columns.find(col => col.accessor === mobileConfig.title) || columns[0];
+              const subtitleColumn = columns.find(col => col.accessor === mobileConfig.subtitle) || columns[1];
+              
+              const titleLabel = mobileConfig.titleLabel || titleColumn?.header || "Información";
+              const subtitleLabel = mobileConfig.subtitleLabel || subtitleColumn?.header || "Detalle";
+
               return (
                 <MobileCard 
                   key={index}
@@ -589,8 +610,14 @@ const BaseTable = ({
                   onClick={() => onSelectRows && handleSelectRow(row)}
                 >
                   <MobileCardLeft>
-                    <MobileCardTitle>{title}</MobileCardTitle>
-                    <MobileCardSubtitle>{subtitle}</MobileCardSubtitle>
+                    <MobileCardRow>
+                      <MobileCardLabel>{titleLabel}</MobileCardLabel>
+                      <MobileCardTitle>{title}</MobileCardTitle>
+                    </MobileCardRow>
+                    <MobileCardRow>
+                      <MobileCardLabel>{subtitleLabel}</MobileCardLabel>
+                      <MobileCardSubtitle>{subtitle}</MobileCardSubtitle>
+                    </MobileCardRow>
                   </MobileCardLeft>
                   <MobileCardRight>
                     {badgeValue && (
