@@ -5,7 +5,6 @@ import { handleGetListPaymentAccountAd } from "../../controllers/administrator/g
 import { handleDeletePaymentAccount } from "../../controllers/administrator/deletePaymentAccountAd.controller";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import ListPaymentAccountAd from "../../components/administrator/ListPaymentAccountAd";
-import FilterServicesAd from "../../components/administrator/FilterServicesAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
 import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
@@ -36,7 +35,7 @@ const Card = styled.div`
   }
 `;
 
-const PaymentAccountPageAd = () => {
+const PaymentAccountPage = () => {
   const { data: accounts, isLoading: loading, reload: loadAccounts } = useDataCache(
     'payment_accounts_cache',
     async () => {
@@ -146,4 +145,4 @@ const PaymentAccountPageAd = () => {
   );
 };
 
-export default PaymentAccountPageAd;
+export default PaymentAccountPage;
