@@ -128,7 +128,7 @@ const OptionsContainer = styled.div`
   gap: 10px;
 
   @media (max-width: 1350px) {
-    gap: 8px;
+    gap: 12px;
   }
 `;
 
@@ -149,7 +149,7 @@ const ButtonsContainer = styled.div`
   align-self: start;
 
   @media (max-width: 1350px) {
-    gap: 6px;
+    gap: 10px;
   }
 `;
 
@@ -169,8 +169,9 @@ const Button = styled.button`
   }
 
   @media (max-width: 1350px) {
-    padding: 6px 10px;
-    font-size: 13px;
+    padding: 10px 14px;
+    font-size: 15px;
+    height: 48px;
   }
 `;
 
@@ -188,8 +189,9 @@ const AddButton = styled(Button)`
   }
 
   @media (max-width: 1350px) {
-    padding: 6px 10px;
-    font-size: 13px;
+    padding: 10px 14px;
+    font-size: 15px;
+    height: 48px;
   }
 `;
 
@@ -214,8 +216,10 @@ const RefreshButton = styled(Button)`
   }
 
   @media (max-width: 1350px) {
-    padding: 6px;
-    font-size: 13px;
+    padding: 10px;
+    font-size: 16px;
+    min-width: 48px;
+    height: 48px;
   }
 `;
 
