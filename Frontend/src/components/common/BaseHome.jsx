@@ -19,6 +19,11 @@ const Container = styled.div`
     padding: 1rem;
     gap: 1rem;
   }
+
+  @media (max-width: 768px) {
+    padding: 0;
+    gap: 0;
+  }
 `;
 
 const Header = styled.div`
@@ -32,9 +37,9 @@ const Header = styled.div`
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 1.5rem 1rem 1.5rem 70px;
+    border-radius: 0;
+    flex-direction: row;
     gap: 1rem;
   }
 `;
@@ -53,12 +58,15 @@ const HeaderLeft = styled.div`
   }
 
   @media (max-width: 768px) {
+    flex: 1;
+    
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
+      margin: 0 0 0.3rem 0;
     }
     
     p {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
   }
 `;
@@ -67,6 +75,10 @@ const HeaderRight = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `;
 
 const IconButton = styled.button`
@@ -111,6 +123,12 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
   margin-bottom: 0;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
 `;
 
 const StatCard = styled.div`
@@ -126,6 +144,10 @@ const StatCard = styled.div`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
   }
 `;
 
@@ -170,6 +192,11 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 0;
+
+  @media (max-width: 768px) {
+    margin: 1rem;
+    padding: 1rem;
+  }
 `;
 
 const ScrollableContent = styled.div`

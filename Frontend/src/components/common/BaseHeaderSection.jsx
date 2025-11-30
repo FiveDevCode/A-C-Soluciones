@@ -17,12 +17,21 @@ const Header = styled.header`
     padding: 1.2rem 1.5rem;
     font-size: 18px;
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem 1rem 1rem 70px;
+    font-size: 16px;
+  }
 `;
 
 const HeaderLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
 `;
 
 const HeaderRight = styled.div`
