@@ -52,6 +52,7 @@ const SectionMenu = styled.section`
     z-index: 1000;
     box-shadow: 2px 0 10px rgba(0,0,0,0.2);
     transition: left 0.3s ease;
+    padding: 1rem 0;
   }
 `;
 
@@ -69,6 +70,12 @@ const ContainerMenu = styled.div`
     padding: 0 0.25rem;
     margin-bottom: 0.25rem;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
 `;
 
 const LogoContainer = styled(Link)`
@@ -80,6 +87,11 @@ const LogoContainer = styled(Link)`
   @media (max-width: 1350px) {
     padding: 0.5rem 0;
   }
+
+  @media (max-width: 768px) {
+    display: flex;
+    padding: 1.5rem 0 1rem 0;
+  }
 `;
 
 const MenuGroup = styled.div`
@@ -89,6 +101,11 @@ const MenuGroup = styled.div`
   padding: 0 0.25rem;
   overflow-y: auto;
   flex: 1;
+
+  @media (max-width: 768px) {
+    padding: 0 0.75rem;
+    gap: 0.35rem;
+  }
 `;
 
 const MenuTitle = styled.span`
@@ -102,6 +119,12 @@ const MenuTitle = styled.span`
   @media (max-width: 1350px) {
     font-size: 0.65rem;
     margin: 0.25rem 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    margin: 0.5rem 0 0.75rem 0;
+    display: block;
   }
 `;
 
@@ -133,6 +156,20 @@ const MenuOption = styled(Link)`
     display: ${(props) => (props.collapsed ? 'none' : 'inline')};
     @media (max-width: 1350px) {
       font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.7rem 0.75rem;
+    gap: 1rem;
+
+    svg {
+      font-size: 1.1rem;
+    }
+
+    span {
+      display: inline;
+      font-size: 0.9rem;
     }
   }
 `;
@@ -171,6 +208,20 @@ const LogoutButton = styled.button`
 
     @media (max-width: 1350px) {
       font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.7rem 0.75rem;
+    gap: 1rem;
+
+    svg {
+      font-size: 1.1rem;
+    }
+
+    span {
+      display: inline;
+      font-size: 0.9rem;
     }
   }
 `;
@@ -321,14 +372,14 @@ const MenuSideAd = () => {
           </CollapseButton>
 
           <LogoContainer to={getHomeRouteByRole(role)} collapsed={collapsed}>
-            <Logo src={logo} size={collapsed ? '45px' : '120px'} />
+            <Logo src={logo} size="130px" />
           </LogoContainer>
         </ContainerMenu>
 
         <MenuGroup>
           <MenuTitle collapsed={collapsed}>Principal</MenuTitle>
           {options.map((opt) => (
-            <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
+            <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow disableInteractive>
               <MenuOption 
                 to={opt.to} 
                 collapsed={collapsed}
@@ -341,9 +392,9 @@ const MenuSideAd = () => {
           ))}
         </MenuGroup>
 
-        <div style={{ marginTop: 'auto', padding: '0 0.5rem' }}>
-          <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.5rem' }} />
-          <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow>
+        <div style={{ marginTop: 'auto', padding: '0 0.75rem' }}>
+          <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', marginBottom: '0.75rem' }} />
+          <Tooltip title={collapsed ? 'Salir' : ''} placement="right" arrow disableInteractive>
             <LogoutButton 
               onClick={() => {
                 setMobileOpen(false);
