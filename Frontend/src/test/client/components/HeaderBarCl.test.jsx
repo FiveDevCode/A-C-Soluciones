@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { BrowserRouter } from 'react-router-dom'; // Importa el BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
 import HeaderBarCl from '../../../components/client/HeaderBarCl';
 
 jest.mock('../../../assets/common/logoA&C.png', () => 'mockedLogo.png');

@@ -136,7 +136,7 @@ function AppContent() {
       {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
-        {isCliente && !isPublicPage && <HeaderBarCl />}
+        {/* HeaderBarCl removido - el perfil ahora está en el menú vertical */}
 
         {/*
          * Estructura de rutas:
@@ -542,7 +542,6 @@ function AppContent() {
 
           <Route path="*" element={<ErrorPage />} />
         </Routes>
-        {isCliente && !isPublicPage && <FooterHomeCl />}
       </Content>
     </Container>
   );

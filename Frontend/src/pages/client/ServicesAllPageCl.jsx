@@ -8,66 +8,131 @@ import Stack from "@mui/material/Stack";
 import { TextField, Box, FormGroup, FormControlLabel, Checkbox, Typography, InputAdornment, Divider } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import MenuSideCl from "../../components/client/MenuSideCl";
-import HeaderBarCl from "../../components/client/HeaderBarCl";
+import { useMenu } from "../../components/client/MenuContext";
 
 const PageContainer = styled.div`
-  margin-left: 220px;
-  margin-top: 145px;
-  min-height: calc(100vh - 145px);
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
+  margin-top: 0;
+  min-height: 100vh;
   transition: margin-left 0.3s ease;
+  display: flex;
+  flex-direction: column;
 
   @media screen and (max-width: 1280px) {
-    margin-left: 180px;
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
+  }
+`;
+
+const WelcomeSection = styled.header`
+  background-color: #007BFF;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 1350px) {
+    padding: 1.2rem;
+    font-size: 18px;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 1rem;
+    font-size: 16px;
   }
 `;
 
 const ContainerServices = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 2rem 4rem;
+  padding: 1.5rem 2.5rem;
+  padding-top: 1.75rem;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
 
   @media screen and (max-width: 1520px) {
-    padding: 2rem 2rem;
+    padding: 1.25rem 2rem;
+    padding-top: 1.5rem;
   }
 
   @media screen and (max-width: 1280px) {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1.5rem;
+    padding-top: 1.25rem;
+    max-height: none;
   }
 `;
 
 const TitleSection = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 `;
 
 const SearchSection = styled(Box)`
   display: flex;
   justify-content: start;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 `;
 
 const Layout = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
 
   @media screen and (max-width: 1024px) {
     flex-direction: column;
+    gap: 1rem;
   }
 `;
 
 const Sidebar = styled.div`
-  width: 250px;
+  width: 220px;
   flex-shrink: 0;
   background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   height: fit-content;
   position: sticky;
-  top: 165px; /* 145px del header + 20px de margen */
+  top: 20px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+  }
 
   @media screen and (max-width: 1024px) {
     width: 100%;
     position: static;
+    max-height: none;
   }
 `;
 
@@ -78,17 +143,18 @@ const MainContent = styled.div`
 
 const ContentServices = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
 
   @media screen and (max-width: 1520px) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
   }
 
   @media screen and (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
   }
 
   @media screen and (max-width: 768px) {
@@ -99,73 +165,77 @@ const ContentServices = styled.div`
 const Service = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem 1rem;
+  gap: 0.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 1.25rem 0.875rem;
   cursor: pointer;
-  min-height: 220px;
+  min-height: 180px;
   background-color: #fff;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
-    border-color: #91cdffff;
+    transform: translateY(-4px);
+    box-shadow: 0px 6px 16px rgba(0, 123, 255, 0.15);
+    border-color: #007BFF;
   }
 
   & > :first-child {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 `;
 
 const TitleService = styled.h2`
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #1e293b;
   text-align: center;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   line-height: 1.3;
 `;
 
 const Description = styled.p`
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 400;
   color: #64748b;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #91cdffff 0%, #60a5fa 100%);
+  background: linear-gradient(135deg, #007BFF 0%, #0056b3 100%);
   color: #fff;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin: 0 auto;
-  box-shadow: 0 4px 12px rgba(145, 205, 255, 0.4);
+  box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
 
   svg {
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
   }
 `;
 
 const FilterSection = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 `;
 
 const FilterTitle = styled(Typography)`
   && {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 0.95rem;
     color: #1e293b;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 `;
 
@@ -173,17 +243,19 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   && {
     margin-left: 0;
     margin-right: 0;
+    margin-bottom: 0.25rem;
     
     .MuiFormControlLabel-label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #475569;
     }
 
     .MuiCheckbox-root {
       color: #94a3b8;
+      padding: 0.4rem;
       
       &.Mui-checked {
-        color: #91cdffff;
+        color: #007BFF;
       }
     }
   }
@@ -207,6 +279,7 @@ const EmptyState = styled.div`
 `;
 
 const ServicesAllPageCl = () => {
+  const { collapsed } = useMenu();
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -234,7 +307,7 @@ const ServicesAllPageCl = () => {
     setCurrentPage(1);
   };
 
-  const servicesPerPage = 6;
+  const servicesPerPage = 9;
   const indexOfLast = currentPage * servicesPerPage;
   const indexOfFirst = indexOfLast - servicesPerPage;
 
@@ -272,24 +345,26 @@ const ServicesAllPageCl = () => {
   return (
     <>
       <MenuSideCl />
-      <HeaderBarCl />
-      <PageContainer>
+      <PageContainer $collapsed={collapsed}>
+        <WelcomeSection>
+          SERVICIOS
+        </WelcomeSection>
         <ContainerServices>
           <TitleSection>
             <Typography
               component="h1"
               sx={{
                 fontWeight: 700,
-                fontSize: { xs: "1.5rem", md: "1.925rem" },
-                color: "#1a237e",
-                marginBottom: "0.5rem",
+                fontSize: { xs: "1.35rem", md: "1.65rem" },
+                color: "#1e293b",
+                marginBottom: "0.4rem",
               }}
             >
               Elige el servicio que necesitas
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.95rem",
+                fontSize: "0.875rem",
                 color: "#64748b",
               }}
             >
@@ -334,7 +409,7 @@ const ServicesAllPageCl = () => {
             <Sidebar>
               <FilterSection>
                 <FilterTitle variant="h6">Filtrar por categoría</FilterTitle>
-                <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 1.5, mt: 0.5 }} />
                 <FormGroup>
                   {availableTags.map((tag) => (
                     <StyledFormControlLabel
@@ -343,6 +418,7 @@ const ServicesAllPageCl = () => {
                         <Checkbox
                           checked={selectedTags.includes(tag)}
                           onChange={() => handleTagToggle(tag)}
+                          size="small"
                         />
                       }
                       label={tag.charAt(0).toUpperCase() + tag.slice(1)}
@@ -352,13 +428,14 @@ const ServicesAllPageCl = () => {
               </FilterSection>
               
               {selectedTags.length > 0 && (
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 1.5 }}>
                   <Typography
                     variant="caption"
                     sx={{
                       display: 'block',
                       color: '#64748b',
-                      mb: 0.5
+                      mb: 0.4,
+                      fontSize: '0.8rem'
                     }}
                   >
                     Filtros activos: {selectedTags.length}
@@ -367,10 +444,10 @@ const ServicesAllPageCl = () => {
                     component="span"
                     onClick={() => setSelectedTags([])}
                     sx={{
-                      fontSize: '0.85rem',
-                      color: '#91cdffff',
+                      fontSize: '0.8rem',
+                      color: '#007BFF',
                       cursor: 'pointer',
-                      fontWeight: 500,
+                      fontWeight: 600,
                       '&:hover': {
                         textDecoration: 'underline'
                       }
@@ -409,20 +486,20 @@ const ServicesAllPageCl = () => {
                   </ContentServices>
 
                   {totalPages > 1 && (
-                    <Stack spacing={2} sx={{ mt: 4, mb: 3, alignItems: "center" }}>
+                    <Stack spacing={1} sx={{ mt: 2, mb: 1.5, alignItems: "center" }}>
                       <Pagination
                         count={totalPages}
                         page={currentPage}
                         onChange={(event, value) => setCurrentPage(value)}
                         color="primary"
                         shape="rounded"
-                        size="large"
+                        size="medium"
                         sx={{
                           '& .MuiPaginationItem-root': {
                             '&.Mui-selected': {
-                              backgroundColor: '#91cdffff',
+                              backgroundColor: '#007BFF',
                               '&:hover': {
-                                backgroundColor: '#60a5fa',
+                                backgroundColor: '#0056b3',
                               },
                             },
                           },
