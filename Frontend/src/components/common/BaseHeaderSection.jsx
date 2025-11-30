@@ -128,6 +128,8 @@ const OptionsContainer = styled.div`
   gap: 10px;
 
   @media (max-width: 1350px) {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
   }
 `;
@@ -139,7 +141,8 @@ const SearchContainer = styled.div`
   flex-wrap: wrap;
 
   @media (max-width: 1350px) {
-    gap: 6px;
+    width: 100%;
+    gap: 10px;
   }
 `;
 
@@ -150,6 +153,17 @@ const ButtonsContainer = styled.div`
 
   @media (max-width: 1350px) {
     gap: 10px;
+  }
+`;
+
+const ActionsRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 1350px) {
+    width: 100%;
+    justify-content: space-between;
   }
 `;
 
@@ -302,14 +316,14 @@ const BaseHeaderSection = ({
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
+          </SearchContainer>
+          <ActionsRow>
             {onRefresh && (
               <RefreshButton onClick={onRefresh} title="Refrescar lista">
                 <FaSyncAlt />
               </RefreshButton>
             )}
-          </SearchContainer>
-          {onDeleteSelected && (
-            <ButtonsContainer>
+            {onDeleteSelected && (
               <Button
                 active={selectedCount > 0}
                 disabled={selectedCount === 0}
@@ -317,8 +331,8 @@ const BaseHeaderSection = ({
               >
                 {actionType}
               </Button>
-            </ButtonsContainer>
-          )}
+            )}
+          </ActionsRow>
         </OptionsContainer>
       </Card>
     </>
