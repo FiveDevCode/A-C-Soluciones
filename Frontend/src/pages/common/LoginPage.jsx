@@ -1,6 +1,7 @@
 import FormLogin from "../../components/common/FormLogin";
 import Logo from "../../components/common/Logo";
 import logo from '../../assets/common/logoA&C.png';
+import fondoLogin from '../../assets/common/fondoLogin.png';
 import styled from "styled-components";
 
 
@@ -8,7 +9,10 @@ const SectionPage = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #F2F5F7;
+  background-image: url(${fondoLogin});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   min-height: 100vh;
   padding: 2rem 1rem;
 
