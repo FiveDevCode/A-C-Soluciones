@@ -2,6 +2,7 @@ import { FaPlus, FaUserCircle, FaBell, FaSyncAlt } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import NotificationBell from './NotificationBell';
 
 const Header = styled.header`
   background-color: #1976d2;
@@ -316,12 +317,7 @@ const BaseHeaderSection = ({
           <span>{headerTitle}</span>
         </HeaderLeft>
         <HeaderRight>
-          <IconButton onClick={handleNotificationsClick} title="Notificaciones">
-            <FaBell />
-            {notificationCount > 0 && (
-              <NotificationBadge>{notificationCount > 9 ? '9+' : notificationCount}</NotificationBadge>
-            )}
-          </IconButton>
+          <NotificationBell />
           <IconButton onClick={handleProfileClick} title="Ver Perfil">
             <FaUserCircle />
           </IconButton>

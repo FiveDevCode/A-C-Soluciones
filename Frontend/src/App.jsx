@@ -57,6 +57,7 @@ import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 // Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
+import { NotificacionProvider } from "./hooks/useNotificaciones.jsx";
 
 // Páginas de Administrador
 import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
@@ -587,9 +588,11 @@ function App() {
     <>
       <Global />
       <MenuProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <NotificacionProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </NotificacionProvider>
       </MenuProvider>
     </>
   );

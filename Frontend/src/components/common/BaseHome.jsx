@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import NotificationBell from './NotificationBell';
 
 /* ---------- 🎨 Estilos base reutilizables ---------- */
 const Container = styled.div`
@@ -463,12 +464,7 @@ const BaseHome = ({
           <p>{subtitle}</p>
         </HeaderLeft>
         <HeaderRight>
-          {notificationPath && (
-            <IconButton onClick={() => navigate(notificationPath)} title="Notificaciones">
-              <FontAwesomeIcon icon={faBell} />
-              {notificationCount > 0 && <NotificationBadge>{notificationCount}</NotificationBadge>}
-            </IconButton>
-          )}
+          <NotificationBell />
           <IconButton onClick={handleProfileClick} title="Mi Perfil">
             <FontAwesomeIcon icon={faUserCircle} />
           </IconButton>
