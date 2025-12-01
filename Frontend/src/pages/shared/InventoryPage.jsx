@@ -35,7 +35,7 @@ const Card = styled.div`
   }
 `;
 
-const InventoryPageAd = () => {
+const InventoryPage = () => {
   const { data: inventory, isLoading: loading, reload: loadInventory } = useDataCache(
     'inventory_cache',
     handleGetListInventoryAd
@@ -124,4 +124,4 @@ const InventoryPageAd = () => {
   );
 };
 
-export default InventoryPageAd;
+export default InventoryPage;

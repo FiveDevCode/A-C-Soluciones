@@ -118,6 +118,10 @@ const Card = styled.div`
     border-radius: 6px 6px 0 0;
     margin: 40px 0 0 0;
   }
+  
+  @media (max-width: 768px) {
+    margin-top: 0.5rem;
+  }
 `;
 
 const OptionsContainer = styled.div`
@@ -127,7 +131,7 @@ const OptionsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 
-  @media (max-width: 1350px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -140,9 +144,13 @@ const SearchContainer = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 
-  @media (max-width: 1350px) {
+  @media (max-width: 768px) {
     width: 100%;
     gap: 10px;
+
+    > button {
+      display: none;
+    }
   }
 `;
 
@@ -161,9 +169,17 @@ const ActionsRow = styled.div`
   align-items: center;
   gap: 10px;
 
-  @media (max-width: 1350px) {
+  > button:first-child {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
     width: 100%;
     justify-content: space-between;
+
+    > button:first-child {
+      display: flex;
+    }
   }
 `;
 
@@ -176,16 +192,20 @@ const Button = styled.button`
   font-size: 14px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: all 0.3s;
-  font-weight: bold;
+  font-weight: 600;
 
   &:hover {
     background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
-    height: 48px;
   }
 `;
 
@@ -202,10 +222,14 @@ const AddButton = styled(Button)`
     background-color: #1565c0;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
-    height: 48px;
   }
 `;
 
@@ -218,7 +242,7 @@ const RefreshButton = styled(Button)`
   gap: 6px;
   font-weight: 600;
   min-width: 40px;
-  padding: 8px;
+  padding: 8px 14px;
 
   &:hover {
     background-color: #45a049;
@@ -229,11 +253,14 @@ const RefreshButton = styled(Button)`
     transition: transform 0.3s ease;
   }
 
-  @media (max-width: 1350px) {
-    padding: 10px;
-    font-size: 16px;
-    min-width: 48px;
-    height: 48px;
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 15px;
   }
 `;
 
@@ -316,6 +343,11 @@ const BaseHeaderSection = ({
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
+            {onRefresh && (
+              <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                <FaSyncAlt />
+              </RefreshButton>
+            )}
           </SearchContainer>
           <ActionsRow>
             {onRefresh && (

@@ -8,6 +8,14 @@ const ContainerNoti = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 1350px) {
+    gap: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.6rem;
+  }
 `;
 
 const Notification = styled.div`
@@ -21,9 +29,21 @@ const Notification = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   color: inherit;
 
+  @media (max-width: 1350px) {
+    padding: 0.8rem;
+    gap: 1rem;
+    border-radius: 10px;
+  }
+
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.65rem;
+    gap: 0.75rem;
+    border-radius: 8px;
   }
 `;
 
@@ -33,6 +53,14 @@ const NotificationDescription = styled.div`
   gap: 1.2rem;
   flex: 1;
   min-width: 0;
+
+  @media (max-width: 1350px) {
+    gap: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.65rem;
+  }
 `;
 
 const IconCircle = styled.div`
@@ -80,10 +108,16 @@ const IconCircle = styled.div`
   }};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-  @media (max-width: 768px) {
-    width: 45px;
-    height: 45px;
+  @media (max-width: 1350px) {
+    width: 42px;
+    height: 42px;
     font-size: 1.1rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
   }
 `;
 
@@ -94,6 +128,16 @@ const NotificationInfo = styled.div`
   flex: 1;
   min-width: 0;
   padding-top: 0.2rem;
+
+  @media (max-width: 1350px) {
+    gap: 0.5rem;
+    padding-top: 0.1rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.4rem;
+    padding-top: 0;
+  }
 `;
 
 const RequestTitle = styled.div`
@@ -106,6 +150,24 @@ const RequestTitle = styled.div`
   svg {
     color: #00b894;
     font-size: 0.85rem;
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 0.8rem;
+    gap: 0.4rem;
+
+    svg {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    gap: 0.35rem;
+
+    svg {
+      font-size: 0.7rem;
+    }
   }
 `;
 
@@ -120,6 +182,17 @@ const Description = styled.h3`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   line-height: 1.4;
+
+  @media (max-width: 1350px) {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    -webkit-line-clamp: 1;
+  }
 `;
 
 const RequestMeta = styled.div`
@@ -127,6 +200,14 @@ const RequestMeta = styled.div`
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+
+  @media (max-width: 1350px) {
+    gap: 0.7rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `;
 
 const DateBadge = styled.div`
@@ -138,6 +219,24 @@ const DateBadge = styled.div`
 
   svg {
     color: #00b894;
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 0.8rem;
+    gap: 0.35rem;
+
+    svg {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    gap: 0.3rem;
+
+    svg {
+      font-size: 0.7rem;
+    }
   }
 `;
 
@@ -183,6 +282,18 @@ const StatusBadge = styled.div`
         return '#666';
     }
   }};
+
+  @media (max-width: 1350px) {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+    border-radius: 12px;
+  }
 `;
 
 const MoreButton = styled(Link)`
@@ -211,6 +322,27 @@ const MoreButton = styled(Link)`
   svg {
     font-size: 1rem;
   }
+
+  @media (max-width: 1350px) {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.95rem;
+    gap: 0.5rem;
+
+    svg {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+
+    svg {
+      font-size: 0.85rem;
+    }
+  }
 `;
 
 const EmptyMessage = styled.div`
@@ -218,6 +350,16 @@ const EmptyMessage = styled.div`
   padding: 3rem 1rem;
   color: #999;
   font-size: 1.05rem;
+
+  @media (max-width: 1350px) {
+    padding: 2.5rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 0.75rem;
+    font-size: 0.9rem;
+  }
 `;
 
 export const ActivityListAc = ({bills}) => {

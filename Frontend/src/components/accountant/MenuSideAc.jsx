@@ -8,6 +8,8 @@ import {
   faCreditCard,
   faChartLine,
   faClipboardList,
+  faBoxes,
+  faBell,
   faArrowRightFromBracket
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
@@ -152,9 +154,14 @@ export const MenuSideAc = () => {
           <TitleOption>Cuentas de pago</TitleOption>
         </ContainerOption>
 
-        <ContainerOption to="/contador/reportes">
-          <IconOption icon={faChartLine} />
-          <TitleOption>Reportes</TitleOption>
+        <ContainerOption to="/contador/inventario">
+          <IconOption icon={faBoxes} />
+          <TitleOption>Inventario</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/contador/notificaciones">
+          <IconOption icon={faBell} />
+          <TitleOption>Notificaciones</TitleOption>
         </ContainerOption>
       </ContainerAllOption>
 
