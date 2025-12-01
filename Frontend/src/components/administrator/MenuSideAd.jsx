@@ -16,10 +16,10 @@ import {
   faCreditCard,
   faArrowRightFromBracket,
   faClipboardCheck,
-  faWater,
-  faFireExtinguisher,
   faFaucet,
   faBolt,
+  faBoxes,
+  faBell,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -341,7 +341,8 @@ const MenuSideAd = () => {
       { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
       { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
-      { to: '/admin/inventario', icon: faTools, label: 'Inventario' },
+      { to: '/admin/inventario', icon: faBoxes, label: 'Inventario' },
+      { to: '/admin/notificaciones', icon: faBell, label: 'Notificaciones' },
       { to: '/admin/reporte-mantenimiento', icon: faBolt, label: 'Reporte mantenimiento' },
       { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reporte bombeo' },
       { to: '/admin/reporte', icon: faClipboardCheck, label: 'Reporte' },
@@ -351,7 +352,7 @@ const MenuSideAd = () => {
       { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
       { to: '/contador/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/contador/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
-      { to: '/contador/reportes', icon: faClipboardList, label: 'Reportes' },
+      { to: '/contador/inventario', icon: faBoxes, label: 'Inventario' }
     ]
   };
   

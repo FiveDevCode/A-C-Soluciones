@@ -35,7 +35,7 @@ const Card = styled.div`
   }
 `;
 
-const BillPageAd = () => {
+const BillPage = () => {
   const { data: bills, isLoading: loading, reload: loadBills } = useDataCache(
     'bills_cache',
     async () => {
@@ -144,4 +144,4 @@ const BillPageAd = () => {
   );
 };
 
-export default BillPageAd;
+export default BillPage;

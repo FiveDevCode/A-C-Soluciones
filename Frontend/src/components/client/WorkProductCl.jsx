@@ -13,16 +13,62 @@ const ContainerWork = styled.div`
   align-items: center;
   padding: 2rem 8rem;
   gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
 `
 const TitleWork = styled.h1`
   font-size: 1.75rem;
   color: #5B5BDE;
+  text-align: center;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
 `
 
 const ContainerLogo = styled.div`
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  img {
+    max-width: 150px;
+    height: auto;
+  }
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+
+    img {
+      max-width: 130px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+
+    img {
+      width: 100%;
+      max-width: 120px;
+      margin: 0 auto;
+    }
+  }
 `
 
 
