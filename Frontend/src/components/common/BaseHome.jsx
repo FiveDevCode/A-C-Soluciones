@@ -435,21 +435,15 @@ const BaseHome = ({
     } else {
       const token = localStorage.getItem('token') || localStorage.getItem('authToken');
       if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          const role = decoded.rol || decoded.role || decoded.tipo;
-          
-          if (role === 'administrador') {
-            navigate('/admin/perfil');
-          } else if (role === 'tecnico') {
-            navigate('/tecnico/perfil');
-          } else if (role === 'Contador') {
-            navigate('/contador/perfil');
-          } else if (role === 'cliente') {
-            navigate('/cliente/perfil');
-          }
-        } catch (error) {
-          console.error('Error al decodificar token:', error);
+        const decoded = jwtDecode(token);
+        const role = decoded.role || decoded.tipo;
+        
+        if (role === 'administrador') {
+          navigate('/admin/perfil');
+        } else if (role === 'tecnico') {
+          navigate('/tecnico/perfil');
+        } else if (role === 'Contador') {
+          navigate('/contador/perfil');
         }
       }
     }

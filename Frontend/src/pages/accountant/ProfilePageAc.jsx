@@ -18,6 +18,10 @@ const Header = styled.div`
   padding: 2rem;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding-left: 70px;
+  }
 `;
 
 const HeaderContent = styled.div`
