@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
 import { jwtDecode } from 'jwt-decode';
+import { handleGetAccountingAc } from '../../controllers/accountant/getAccountingAc.controller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle, faIdCard, faUser, faPhone, faEnvelope, faEdit, faBriefcase } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faIdCard, faUser, faPhone, faEnvelope, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Skeleton } from '@mui/material';
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f5f5;
-  overflow-y: auto;
 `;
 
 const Header = styled.div`
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   padding: 2rem;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -59,7 +58,7 @@ const Avatar = styled.div`
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +79,7 @@ const UserName = styled.h2`
 
 const UserRole = styled.span`
   display: inline-block;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   color: white;
   padding: 0.4rem 1rem;
   border-radius: 20px;
@@ -90,7 +89,7 @@ const UserRole = styled.span`
 
 const EditButton = styled(Link)`
   padding: 0.7rem 1.5rem;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -105,7 +104,7 @@ const EditButton = styled(Link)`
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
   }
 `;
 
@@ -124,7 +123,7 @@ const InfoCard = styled.div`
   
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(9, 132, 227, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 184, 148, 0.2);
   }
 `;
 
@@ -139,7 +138,7 @@ const IconWrapper = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,19 +163,19 @@ const CardValue = styled.p`
   word-break: break-word;
 `;
 
-const ProfileUserTc = () => {
-  const [userTechnical, setUserTechnical] = useState(null);
+function ProfilePageAc() {
+  const [contabilidad, setContabilidad] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem('token') || localStorage.getItem('authToken');
         const decoded = jwtDecode(token);
-        const response = await handleGetTechnicalId(decoded.id);
-        setUserTechnical(response.data);
+        const response = await handleGetAccountingAc(decoded.id);
+        setContabilidad(response.data);
       } catch (error) {
-        console.error("Error fetching technical:", error);
+        console.error('Error al cargar perfil:', error);
       } finally {
         setLoading(false);
       }
@@ -218,7 +217,7 @@ const ProfileUserTc = () => {
       <Header>
         <HeaderContent>
           <Title>Mi Perfil</Title>
-          <Subtitle>Información de tu cuenta de técnico</Subtitle>
+          <Subtitle>Información de tu cuenta de contador</Subtitle>
         </HeaderContent>
       </Header>
 
@@ -228,10 +227,10 @@ const ProfileUserTc = () => {
             <FontAwesomeIcon icon={faUserCircle} />
           </Avatar>
           <UserInfo>
-            <UserName>{userTechnical?.nombre} {userTechnical?.apellido}</UserName>
-            <UserRole>Técnico</UserRole>
+            <UserName>{contabilidad?.nombre} {contabilidad?.apellido}</UserName>
+            <UserRole>Contador</UserRole>
           </UserInfo>
-          <EditButton to="/tecnico/editar-perfil">
+          <EditButton to="/contador/editar-perfil">
             <FontAwesomeIcon icon={faEdit} />
             Editar Perfil
           </EditButton>
@@ -245,7 +244,7 @@ const ProfileUserTc = () => {
               </IconWrapper>
               <CardTitle>Cédula</CardTitle>
             </CardHeader>
-            <CardValue>{userTechnical?.numero_de_cedula?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</CardValue>
+            <CardValue>{contabilidad?.numero_de_cedula}</CardValue>
           </InfoCard>
 
           <InfoCard>
@@ -253,9 +252,19 @@ const ProfileUserTc = () => {
               <IconWrapper>
                 <FontAwesomeIcon icon={faUser} />
               </IconWrapper>
-              <CardTitle>Nombre Completo</CardTitle>
+              <CardTitle>Nombre</CardTitle>
             </CardHeader>
-            <CardValue>{userTechnical?.nombre} {userTechnical?.apellido}</CardValue>
+            <CardValue>{contabilidad?.nombre}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faUser} />
+              </IconWrapper>
+              <CardTitle>Apellido</CardTitle>
+            </CardHeader>
+            <CardValue>{contabilidad?.apellido}</CardValue>
           </InfoCard>
 
           <InfoCard>
@@ -265,7 +274,7 @@ const ProfileUserTc = () => {
               </IconWrapper>
               <CardTitle>Teléfono</CardTitle>
             </CardHeader>
-            <CardValue>{userTechnical?.telefono}</CardValue>
+            <CardValue>{contabilidad?.telefono}</CardValue>
           </InfoCard>
 
           <InfoCard>
@@ -275,22 +284,12 @@ const ProfileUserTc = () => {
               </IconWrapper>
               <CardTitle>Correo Electrónico</CardTitle>
             </CardHeader>
-            <CardValue>{userTechnical?.correo_electronico}</CardValue>
-          </InfoCard>
-
-          <InfoCard>
-            <CardHeader>
-              <IconWrapper>
-                <FontAwesomeIcon icon={faBriefcase} />
-              </IconWrapper>
-              <CardTitle>Especialidad</CardTitle>
-            </CardHeader>
-            <CardValue>{userTechnical?.especialidad}</CardValue>
+            <CardValue>{contabilidad?.correo_electronico}</CardValue>
           </InfoCard>
         </CardsGrid>
       </Content>
     </Container>
   );
-};
+}
 
-export default ProfileUserTc;
+export default ProfilePageAc;

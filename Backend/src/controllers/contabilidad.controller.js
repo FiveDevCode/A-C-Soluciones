@@ -108,6 +108,17 @@ export class ContabilidadController {
       });
     } catch (error) {
       console.error('Error en actualizar el Contador:', error);
+      
+      if (error instanceof ValidationError) {
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        }
+        return res.status(400).json({ errors: fieldErrors });
+      }
+      
       return res.status(500).json({ message: 'Error al actualizar el Contador' });
     }
   };

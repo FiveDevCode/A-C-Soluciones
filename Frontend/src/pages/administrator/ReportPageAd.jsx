@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ListReportAd from "../../components/administrator/ListReportAd";
@@ -6,6 +6,7 @@ import { handleGetListVisitAd } from "../../controllers/administrator/getListVis
 import { handleGetListToken } from "../../controllers/common/getListToken.controller";
 import FilterReportAd from "../../components/administrator/FilterReportAd";
 import FormCreateReportAd from "../../components/administrator/FormCreateReportAd";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -33,17 +34,9 @@ const Card = styled.div`
 `;
 
 const ReportPageAd = () => {
-  const [visits, setVisits] = useState([]);
-  const [filteredVisits, setFilteredVisits] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadReports();
-  }, []);
-
-  const loadReports = async () => {
-    setLoading(true);
-    try {
+  const { data: visits, isLoading: loading, reload: loadReports } = useDataCache(
+    'reports_cache',
+    async () => {
       // Obtener los reportes (fichas con pdf)
       const reportRes = await handleGetListToken();
       const reportList = reportRes.data;
@@ -66,13 +59,10 @@ const ReportPageAd = () => {
           pdf_path: reportMap[visit.id]
         }));
 
-      setVisits(visitsWithReport);
-    } catch (err) {
-      console.error("Error cargando visitas con reporte:", err);
-    } finally {
-      setLoading(false);
+      return visitsWithReport;
     }
-  };
+  );
+  const [filteredVisits, setFilteredVisits] = useState([]);
 
   return (
     <Container>
@@ -81,6 +71,7 @@ const ReportPageAd = () => {
         headerTitle="GESTIÓN DE REPORTES"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
+        onRefresh={loadReports}
         filterComponent={
           <FilterReportAd
             visits={visits}

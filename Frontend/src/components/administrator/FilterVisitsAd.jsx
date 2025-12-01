@@ -10,11 +10,26 @@ const FilterVisitsAd = ({ visits = [], onFilteredChange }) => {
     }));
   }, [visits]);
 
+  const statusLabels = {
+    programada: "Programada",
+    iniciada: "Iniciada",
+    en_camino: "En Camino",
+    completada: "Completada",
+    cancelada: "Cancelada",
+  };
+
+  const statusOptions = [...new Set(visits.map((v) => v.estado).filter(Boolean))].map(
+    (st) => ({
+      value: st,
+      label: statusLabels[st] || st,
+    })
+  );
+
   const filterOptions = [
     {
       key: "estado",
-      label: "Estado",
-      options: ["programada", "iniciada", "completada", "cancelada"],
+      label: "Estado de la visita",
+      options: statusOptions,
     },
   ];
 

@@ -9,13 +9,6 @@ const FilterMaintenanceReportAd = ({ reports = [], onFilteredChange }) => {
     })
   );
 
-  const encargadoOptions = [...new Set(reports.map((r) => r.encargado).filter(Boolean))].map(
-    (enc) => ({
-      value: enc,
-      label: enc,
-    })
-  );
-
   const marcaOptions = [...new Set(reports.map((r) => r.marca_generador).filter(Boolean))].map(
     (marca) => ({
       value: marca,
@@ -28,11 +21,6 @@ const FilterMaintenanceReportAd = ({ reports = [], onFilteredChange }) => {
       key: "ciudad",
       label: "Ciudad",
       options: cityOptions,
-    },
-    {
-      key: "encargado",
-      label: "Encargado",
-      options: encargadoOptions,
     },
     {
       key: "marca_generador",

@@ -43,6 +43,10 @@ const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
         <ViewInventoryDetail {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "nombre",
+        subtitle: "cantidad_disponible"
+      }}
     />
   );
 };

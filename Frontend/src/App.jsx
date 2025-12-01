@@ -18,7 +18,8 @@ import { useEffect, useState } from "react";
 import Home from "./pages/common/Home";
 import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
 import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
-import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
+import HeaderBarCl from "./components/client/HeaderBarCl";
+import FooterHomeCl from "./components/client/FooterHomeCl";
 import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
 import RecoverCodePage from "./pages/common/RecoverCodePage";
 import RecoverChangePage from "./pages/common/RecoverChangePage";
@@ -44,6 +45,8 @@ import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
 import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
 import HomeAc from "./pages/accountant/HomeAc.jsx";
+import ProfilePageAc from "./pages/accountant/ProfilePageAc.jsx";
+import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
@@ -238,6 +241,24 @@ function AppContent() {
             }
           />
 
+          <Route
+            path="/contador/perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <ProfilePageAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/editar-perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <EditProfilePageAc />
+              </PrivateRoute>
+            }
+          />
+
           {/* ********************************* Rutas Técnico ********************************** */}
           <Route
             path="/tecnico/inicio"
@@ -371,15 +392,6 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <HomeAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin/asignar-visita"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <AssignVisitPageAd />
               </PrivateRoute>
             }
           />

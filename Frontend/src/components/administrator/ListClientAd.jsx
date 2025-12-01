@@ -28,6 +28,10 @@ const ListClientAd = ({ clients, reloadData, onSelectRows }) => {
         <ViewClientDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "nombre",
+        subtitle: "numero_de_cedula"
+      }}
     />
   );
 };
