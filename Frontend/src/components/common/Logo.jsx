@@ -6,9 +6,8 @@ const ImagenLogo = styled.img`
     min-width: ${props => props.min || 'auto'};
 
     @media (max-width: 768px) {
-      width: 70%;
+      width: 48%;
       max-width: 250px;
-      margin-bottom: 1rem;
     }
 `;
 

@@ -33,6 +33,12 @@ const LoginButton = styled(Link)`
   &:active {
     transform: scale(0.98);
   }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    gap: 0.3rem;
+  }
 `;
 
 const ContainerHeader = styled.div`
@@ -56,6 +62,11 @@ const MenuBar = styled.div`
   @media screen and (max-width: 1350px) {
     padding: 0 2rem;
     
+  }
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    height: 45px;
+    gap: 1rem;
   }
   
 `
@@ -90,6 +101,11 @@ const Menu = styled.div`
     padding: 0 2rem;
     
   }
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    height: 60px;
+    gap: 0.5rem;
+  }
 
 `
 
@@ -98,10 +114,28 @@ const MenuOption = styled.div`
   display: flex;
   flex-direction: row;
   gap: 3rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    font-size: 0.8rem;
+  }
 `
 
 const LinkOption = styled(Link)`
+  text-decoration: none;
+  color: #000000;
+  font-weight: 500;
+  transition: color 0.3s ease;
 
+  &:hover {
+    color: #007BFF;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
 `
 
 const ButtonProfile = styled(Link)`
@@ -125,7 +159,9 @@ const HeaderBarHome = () => {
       </LoginButton>
       </MenuBar>
       <Menu>
-        <Link to="/"><Logo src={logo} size="100%" max="150px"/></Link> 
+        <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <Logo src={logo} size="100%" max="150px"/>
+        </Link> 
         <MenuOption>
           <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
           <LinkOption to="/iniciar-sesion">Servicios</LinkOption>

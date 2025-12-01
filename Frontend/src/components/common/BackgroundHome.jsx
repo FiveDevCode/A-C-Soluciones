@@ -16,6 +16,10 @@ const BackgroundWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    height: 350px;
+  }
 `
 
 const ImageSlide = styled.div`
@@ -50,15 +54,30 @@ const Content = styled.div`
   gap: 1.875rem;
   color: white;
   text-align: center;
+
+  @media (max-width: 768px) {
+    gap: 1rem;
+    padding: 0 1rem;
+  }
 `
 
 const CompanyName = styled.h2`
   font-size: 1.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 `
 
 const CompanyPhrase = styled.h1`
   font-size: 2rem;
   width: 800px;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    width: 100%;
+    line-height: 1.4;
+  }
 `
 
 const ButtonService = styled(Button)`
@@ -68,6 +87,11 @@ const ButtonService = styled(Button)`
     background-color: #FFFFFF;
     color: #000000;
     font-weight: bold;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
   }
 `
 

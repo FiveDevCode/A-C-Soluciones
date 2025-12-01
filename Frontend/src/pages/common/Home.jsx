@@ -13,6 +13,9 @@ const ContainerHome = styled.section`
   flex-direction: column;
   gap: 3.125rem;
 
+  @media (max-width: 768px) {
+    gap: 2rem;
+  }
 `;
 
 const Home = () => {

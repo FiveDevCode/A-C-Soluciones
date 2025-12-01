@@ -11,16 +11,31 @@ const ContainerFooter = styled.section`
   background-color: #213569;
   padding: 0.5rem 12rem 2rem 2rem;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem 1rem 1.5rem 1rem;
+    gap: 0.75rem;
+  }
 `
 const ContainerFooterInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
 `
 const TitleCopyright = styled.h1`
   color: #FFFFFF;
   font-size: 1rem;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
 `
 
 const DividerFooter = styled(Divider)`
@@ -30,10 +45,21 @@ const ContainerFooterOption = styled.div`
   display: flex;
   gap: 2rem;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    text-align: center;
+  }
+
 `
 const OptionFooter = styled(Link)`
   font-size: 1rem;
   color: #FFFFFF;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
 `
 
 const FooterHome = () => {
