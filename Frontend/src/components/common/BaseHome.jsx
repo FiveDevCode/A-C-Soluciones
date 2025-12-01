@@ -16,8 +16,8 @@ const Container = styled.div`
   padding: 2rem;
 
   @media (max-width: 1350px) {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 1.2rem;
+    gap: 1.2rem;
   }
 
   @media (max-width: 768px) {
@@ -35,6 +35,11 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 1350px) {
+    padding: 1.5rem;
+    border-radius: 10px;
+  }
 
   @media (max-width: 768px) {
     padding: 1rem 0.75rem 1rem 70px;
@@ -57,6 +62,17 @@ const HeaderLeft = styled.div`
     opacity: 0.9;
   }
 
+  @media (max-width: 1350px) {
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 0.4rem 0;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+
   @media (max-width: 768px) {
     flex: 1;
     
@@ -77,6 +93,10 @@ const HeaderRight = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media (max-width: 1350px) {
+    gap: 0.8rem;
+  }
 
   @media (max-width: 768px) {
     gap: 0.5rem;
@@ -101,6 +121,12 @@ const IconButton = styled.button`
   &:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
+  }
+
+  @media (max-width: 1350px) {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
   }
 
   @media (max-width: 768px) {
@@ -140,6 +166,11 @@ const StatsGrid = styled.div`
   gap: 1.5rem;
   margin-bottom: 0;
 
+  @media (max-width: 1350px) {
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
   @media (max-width: 768px) {
     padding: 0.75rem;
     gap: 0.5rem;
@@ -162,6 +193,11 @@ const StatCard = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   }
 
+  @media (max-width: 1350px) {
+    padding: 1.2rem;
+    gap: 0.8rem;
+  }
+
   @media (max-width: 768px) {
     padding: 0.65rem;
     gap: 0.6rem;
@@ -182,6 +218,12 @@ const StatIcon = styled.div`
   background: ${props => props.bgColor || '#e3f2fd'};
   color: ${props => props.color || '#1976d2'};
   flex-shrink: 0;
+
+  @media (max-width: 1350px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
 
   @media (max-width: 768px) {
     width: 40px;
@@ -208,6 +250,16 @@ const StatInfo = styled.div`
     color: #333;
   }
 
+  @media (max-width: 1350px) {
+    h3 {
+      font-size: 0.85rem;
+    }
+
+    p {
+      font-size: 1.6rem;
+    }
+  }
+
   @media (max-width: 768px) {
     h3 {
       font-size: 0.7rem;
@@ -232,6 +284,10 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 0;
+
+  @media (max-width: 1350px) {
+    padding: 1.2rem;
+  }
 
   @media (max-width: 768px) {
     margin: 0.75rem;
@@ -280,6 +336,16 @@ const SectionTitle = styled.h2`
     height: 24px;
     background: ${props => props.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
     border-radius: 2px;
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 1.15rem;
+    margin: 0 0 1.2rem 0;
+
+    &::before {
+      width: 3.5px;
+      height: 21px;
+    }
   }
 
   @media (max-width: 768px) {
