@@ -7,9 +7,10 @@ import { ScreenConfirmation } from "../../components/administrator/ScreenConfirm
 import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
 import logoService from "../../assets/administrator/service-view.png"
 import { handleChangeStateService } from "../../controllers/administrator/updateStateServiceAd.controller";
+import { useMenu } from "../../components/technical/MenuContext";
 
 const PageContainer = styled.div`
-  margin-left: 220px;
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   padding: 2rem 4rem;
   min-height: calc(100vh);
   transition: margin-left 0.3s ease;
@@ -19,8 +20,13 @@ const PageContainer = styled.div`
   }
 
   @media screen and (max-width: 1280px) {
-    margin-left: 180px;
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
     padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 1rem;
   }
 `;
 
@@ -148,8 +154,8 @@ const DetailsSkeleton = styled.div`
 
 
 
-const SkeletonLoader = () => (
-  <PageContainer>
+const SkeletonLoader = ({ collapsed }) => (
+  <PageContainer $collapsed={collapsed}>
     <Container>
       <Header>
         <UsuarioInfo>
@@ -171,7 +177,7 @@ const SkeletonLoader = () => (
 );
 
 const ViewServicePageTc = () => {
-
+  const { collapsed } = useMenu();
   const { id } = useParams(); 
   const [serviceData, setServiceData] = useState(null);
 
@@ -190,11 +196,11 @@ const ViewServicePageTc = () => {
   }, [id]); 
 
   if (!serviceData) {
-    return <SkeletonLoader />
+    return <SkeletonLoader collapsed={collapsed} />
   }
 
   return (
-    <PageContainer>
+    <PageContainer $collapsed={collapsed}>
       <Container>
         <Header>
           <UsuarioInfo>
