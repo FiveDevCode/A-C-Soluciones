@@ -1,117 +1,177 @@
 import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
-import { FormControl, Pagination, TextField, Stack, Typography } from '@mui/material';
+import { Pagination, Stack, Typography } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faArrowRight, 
+  faCalendarAlt, 
+  faClipboardList, 
+  faClock, 
+  faCheckCircle, 
+  faTimesCircle,
+  faTools,
+  faMapMarkerAlt
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 
 const ContainerNoti = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
   margin-bottom: 2rem;
 
   @media screen and (max-width: 1520px) {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
   }
 
   @media screen and (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8rem;
   }
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 0.7rem;
   }
 `;
 
 const Notification = styled.div`
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: white;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-  min-height: 220px;
   position: relative;
   overflow: hidden;
+  min-height: 150px;
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
     left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #91cdffff 0%, #60a5fa 100%);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: ${props => props.$statusColor || '#667eea'};
+    transition: width 0.3s ease;
   }
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: #91cdffff;
-    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: ${props => props.$statusColor || '#667eea'};
 
     &::before {
-      transform: scaleX(1);
+      width: 4px;
     }
+  }
+
+  @media (max-width: 1350px) {
+    padding: 0.9rem;
+    border-radius: 10px;
+    min-height: 140px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+    border-radius: 10px;
+    min-height: 130px;
   }
 `;
 
 const NotificationDescription = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
   flex: 1;
+
+  @media (max-width: 1350px) {
+    gap: 0.7rem;
+    margin-bottom: 0.7rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
 `;
 
-const ImageWrapper = styled.div`
+const IconCircle = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.1rem;
+  background: ${props => props.$bgGradient || 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)'};
+  color: ${props => props.$iconColor || '#1976d2'};
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  @media (max-width: 1350px) {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
   }
 `;
 
 const NotificationInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex: 1;
   min-width: 0;
+  padding-top: 0.1rem;
+
+  @media (max-width: 1350px) {
+    gap: 0.35rem;
+    padding-top: 0;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.3rem;
+  }
 `;
 
-const TitleNoti = styled.h3`
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #64748b;
-  margin: 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+const ServiceTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #667eea;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+
+  svg {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 0.8rem;
+    gap: 0.35rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
-const Description = styled.h2`
-  font-size: 1.125rem;
-  font-weight: 700;
+const Description = styled.h3`
+  font-size: 0.9rem;
+  font-weight: 600;
   color: #1e293b;
   margin: 0;
   line-height: 1.4;
@@ -119,66 +179,200 @@ const Description = styled.h2`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  @media (max-width: 1350px) {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+  }
 `;
 
-const Date = styled.p`
-  font-size: 0.875rem;
+const NotesText = styled.p`
+  font-size: 0.8rem;
   font-weight: 400;
-  color: #94a3b8;
+  color: #64748b;
   margin: 0;
-  margin-top: auto;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  @media (max-width: 1350px) {
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
+`;
+
+const DateContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+
+  svg {
+    font-size: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 0.7rem;
+    gap: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.65rem;
+  }
 `;
 
 const ContainerOption = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
-  padding-top: 1rem;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
   border-top: 1px solid #e2e8f0;
-  gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+  }
+`;
+
+const StatusBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 18px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: ${props => props.$bgColor || '#f5f5f5'};
+  color: ${props => props.$textColor || '#666'};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 1350px) {
+    padding: 0.28rem 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.65rem;
+    border-radius: 14px;
+  }
 `;
 
 const SeeMore = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #91cdffff;
+  gap: 0.4rem;
+  color: #667eea;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
   transition: all 0.2s ease;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 
   &:hover {
-    background-color: #e3f2fd;
-    color: #60a5fa;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateX(3px);
+  }
+
+  svg {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 1350px) {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.65rem;
   }
 `;
 
 const ITEMS_PER_PAGE = 6;
 
-const getEstadoLabel = (estado) => {
-  const estados = {
-    'programada': 'Programada',
-    'en_camino': 'En camino',
-    'iniciada': 'Iniciada',
-    'completada': 'Completada',
-    'cancelada': 'Cancelada'
+const getEstadoConfig = (estado) => {
+  const configs = {
+    'programada': {
+      label: 'Programada',
+      icon: faCalendarAlt,
+      bgGradient: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
+      iconColor: '#f57c00',
+      statusColor: '#f57c00',
+      badgeBg: '#fff3e0',
+      badgeText: '#f57c00'
+    },
+    'en_camino': {
+      label: 'En Camino',
+      icon: faMapMarkerAlt,
+      bgGradient: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
+      iconColor: '#a72063',
+      statusColor: '#a72063',
+      badgeBg: '#f3e5f5',
+      badgeText: '#a72063'
+    },
+    'iniciada': {
+      label: 'Iniciada',
+      icon: faClock,
+      bgGradient: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+      iconColor: '#1976d2',
+      statusColor: '#1976d2',
+      badgeBg: '#e3f2fd',
+      badgeText: '#1976d2'
+    },
+    'completada': {
+      label: 'Completada',
+      icon: faCheckCircle,
+      bgGradient: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+      iconColor: '#388e3c',
+      statusColor: '#388e3c',
+      badgeBg: '#e8f5e9',
+      badgeText: '#388e3c'
+    },
+    'cancelada': {
+      label: 'Cancelada',
+      icon: faTimesCircle,
+      bgGradient: 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)',
+      iconColor: '#d32f2f',
+      statusColor: '#d32f2f',
+      badgeBg: '#ffebee',
+      badgeText: '#d32f2f'
+    }
   };
-  return estados[estado] || estado;
-};
-
-const getEstadoColor = (estado) => {
-  const colores = {
-    'programada': '#4a8838',
-    'en_camino': '#a72063',
-    'iniciada': '#3151aa',
-    'completada': '#21da21',
-    'cancelada': '#b8103a'
+  return configs[estado?.toLowerCase()] || {
+    label: estado || 'Desconocido',
+    icon: faClipboardList,
+    bgGradient: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)',
+    iconColor: '#757575',
+    statusColor: '#757575',
+    badgeBg: '#f5f5f5',
+    badgeText: '#666'
   };
-  return colores[estado] || '#64748b';
 };
 
 const ListVisitTc = ({visits}) => {
@@ -206,48 +400,62 @@ const ListVisitTc = ({visits}) => {
   return (
     <>
       <ContainerNoti>
-        {paginatedVisit.map((visit, index) => (
-          <Notification key={visit.id || index}>
-            <NotificationDescription>
-              <ImageWrapper>
-                <img src={serviceTehc} alt="Visita" />
-              </ImageWrapper>
-              <NotificationInfo>
-                <TitleNoti>
-                  {visit.notas_posteriores && visit.notas_posteriores.length > 50
-                    ? `${visit.notas_posteriores.slice(0, 50)}...`
-                    : visit.notas_posteriores || "Sin notas posteriores"}
-                </TitleNoti>
-                <Description>
-                  {visit.notas_previas && visit.notas_previas.length > 50
-                    ? `${visit.notas_previas.slice(0, 50)}...`
-                    : visit.notas_previas || "Sin notas previas"}
-                </Description>
-                <Date>{formatDate(visit.fecha_programada)}</Date>
-              </NotificationInfo>
-            </NotificationDescription>
-            <ContainerOption>
-              <FormControl sx={{ minWidth: "120px", flex: 1 }}>
-                <TextField
-                  value={getEstadoLabel(visit.estado)}
-                  label="Estado"
-                  disabled
-                  size="small"
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      color: getEstadoColor(visit.estado),
-                      fontWeight: 600,
-                    }
-                  }}
-                />
-              </FormControl>
-              <SeeMore to={`/tecnico/visita/${visit.id}`}>
-                <span>Ver</span>
-                <FontAwesomeIcon icon={faArrowRight} />
-              </SeeMore>
-            </ContainerOption>
-          </Notification>
-        ))}
+        {paginatedVisit.map((visit, index) => {
+          const estadoConfig = getEstadoConfig(visit.estado);
+          const servicioNombre = visit.servicio?.nombre || 'Servicio no especificado';
+          const notasPrevias = visit.notas_previas || 'Sin notas previas';
+          const notasPosteriores = visit.notas_posteriores || 'Sin notas posteriores';
+
+          return (
+            <Notification 
+              key={visit.id || index}
+              $statusColor={estadoConfig.statusColor}
+            >
+              <NotificationDescription>
+                <IconCircle 
+                  $bgGradient={estadoConfig.bgGradient}
+                  $iconColor={estadoConfig.iconColor}
+                >
+                  <FontAwesomeIcon icon={estadoConfig.icon} />
+                </IconCircle>
+                <NotificationInfo>
+                  <ServiceTitle>
+                    <FontAwesomeIcon icon={faTools} />
+                    <span>{servicioNombre}</span>
+                  </ServiceTitle>
+                  <Description>
+                    {notasPrevias.length > 60 
+                      ? `${notasPrevias.slice(0, 60)}...`
+                      : notasPrevias}
+                  </Description>
+                  {notasPosteriores !== 'Sin notas posteriores' && (
+                    <NotesText>
+                      {notasPosteriores.length > 50 
+                        ? `${notasPosteriores.slice(0, 50)}...`
+                        : notasPosteriores}
+                    </NotesText>
+                  )}
+                  <DateContainer>
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    <span>{formatDate(visit.fecha_programada)}</span>
+                  </DateContainer>
+                </NotificationInfo>
+              </NotificationDescription>
+              <ContainerOption>
+                <StatusBadge 
+                  $bgColor={estadoConfig.badgeBg}
+                  $textColor={estadoConfig.badgeText}
+                >
+                  {estadoConfig.label}
+                </StatusBadge>
+                <SeeMore to={`/tecnico/visita/${visit.id}`}>
+                  <span>Ver más</span>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </SeeMore>
+              </ContainerOption>
+            </Notification>
+          );
+        })}
       </ContainerNoti>
       {totalPages > 1 && (
         <Stack spacing={2} sx={{ mt: 4, alignItems: "center" }}>

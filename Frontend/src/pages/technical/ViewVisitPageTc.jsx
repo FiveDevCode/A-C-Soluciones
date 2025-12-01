@@ -19,13 +19,14 @@ import { useEffect, useState } from 'react';
 import { handleGetVisitAssign } from '../../controllers/technical/getVisitAssignTc.controller';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { handleUpdateStateVisit } from '../../controllers/common/updateStateVisit.controller';
+import { useMenu } from '../../components/technical/MenuContext';
 
 
 const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 
 const PageContainer = styled.div`
-  margin-left: 220px;
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   padding: 2rem 4rem;
   min-height: calc(100vh);
   transition: margin-left 0.3s ease;
@@ -35,8 +36,13 @@ const PageContainer = styled.div`
   }
 
   @media screen and (max-width: 1280px) {
-    margin-left: 180px;
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
     padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 1rem;
   }
 `;
 
@@ -93,6 +99,7 @@ const Botones = styled.div`
 
 
 const ViewVisitPageTc = () => {
+  const { collapsed } = useMenu();
   const { id } = useParams();
   const [visitData, setVisitData] = useState(null);
   const [stateVisit, setStateVisit] = useState('');
@@ -174,7 +181,7 @@ const ViewVisitPageTc = () => {
 
 
   return (
-    <PageContainer>
+    <PageContainer $collapsed={collapsed}>
       <Container>
         <Header>
         <Imagen src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="icono" />

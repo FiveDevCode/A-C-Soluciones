@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import createReport from "../../assets/common/ficha_mantenimiento.png"
 import ReportFormTc from "../../components/technical/ReportFormTc"
+import { useMenu } from "../../components/technical/MenuContext"
 
 const PageContainer = styled.div`
-  margin-left: 220px;
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   padding: 2rem 4rem;
   min-height: calc(100vh);
   transition: margin-left 0.3s ease;
@@ -13,8 +14,13 @@ const PageContainer = styled.div`
   }
 
   @media screen and (max-width: 1280px) {
-    margin-left: 180px;
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
     padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 1rem;
   }
 `;
 
@@ -60,8 +66,10 @@ const ImgCreate = styled.img`
 `;
 
 const CreateReportPageTc = () => {
+  const { collapsed } = useMenu();
+  
   return (
-    <PageContainer>
+    <PageContainer $collapsed={collapsed}>
       <ContainerRegisterAll>
         <ContainerRegister>
           <DescriptionReport>

@@ -351,7 +351,7 @@ const HistoryServicesPage = () => {
       <MenuSideCl />
       <PageContainer $collapsed={collapsed}>
         <WelcomeSection>
-          HISTORIAL DE SERVICIOS
+          HISTORIAL
         </WelcomeSection>
         <ContainerHistoryServices>
          <Container>

@@ -57,6 +57,7 @@ import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 // Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
+import { MenuProvider as MenuProviderTc } from "./components/technical/MenuContext.jsx";
 
 // Páginas de Administrador
 import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
@@ -587,9 +588,11 @@ function App() {
     <>
       <Global />
       <MenuProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <MenuProviderTc>
+          <Router>
+            <AppContent />
+          </Router>
+        </MenuProviderTc>
       </MenuProvider>
     </>
   );
