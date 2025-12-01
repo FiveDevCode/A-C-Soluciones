@@ -37,10 +37,10 @@ const Header = styled.div`
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 1rem 1.5rem 70px;
+    padding: 1rem 0.75rem 1rem 70px;
     border-radius: 0;
     flex-direction: row;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 `;
 
@@ -61,12 +61,14 @@ const HeaderLeft = styled.div`
     flex: 1;
     
     h1 {
-      font-size: 1.3rem;
-      margin: 0 0 0.3rem 0;
+      font-size: 1.1rem;
+      margin: 0 0 0.2rem 0;
+      line-height: 1.2;
     }
     
     p {
-      font-size: 0.9rem;
+      font-size: 0.75rem;
+      line-height: 1.3;
     }
   }
 `;
@@ -100,6 +102,12 @@ const IconButton = styled.button`
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
   }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
 `;
 
 const NotificationBadge = styled.span`
@@ -116,6 +124,14 @@ const NotificationBadge = styled.span`
   justify-content: center;
   font-size: 0.7rem;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+    top: 3px;
+    right: 3px;
+  }
 `;
 
 const StatsGrid = styled.div`
@@ -125,9 +141,9 @@ const StatsGrid = styled.div`
   margin-bottom: 0;
 
   @media (max-width: 768px) {
-    padding: 1rem;
-    gap: 1rem;
-    grid-template-columns: 1fr;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -147,7 +163,11 @@ const StatCard = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0.65rem;
+    gap: 0.6rem;
+    border-radius: 8px;
+    flex-direction: column;
+    text-align: center;
   }
 `;
 
@@ -162,6 +182,13 @@ const StatIcon = styled.div`
   background: ${props => props.bgColor || '#e3f2fd'};
   color: ${props => props.color || '#1976d2'};
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+  }
 `;
 
 const StatInfo = styled.div`
@@ -180,6 +207,19 @@ const StatInfo = styled.div`
     font-weight: 700;
     color: #333;
   }
+
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 0.7rem;
+      margin: 0 0 0.2rem 0;
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+  }
 `;
 
 const Card = styled.div`
@@ -194,8 +234,11 @@ const Card = styled.div`
   min-height: 0;
 
   @media (max-width: 768px) {
-    margin: 1rem;
-    padding: 1rem;
+    margin: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    flex: 1;
+    min-height: 400px;
   }
 `;
 
@@ -237,6 +280,16 @@ const SectionTitle = styled.h2`
     height: 24px;
     background: ${props => props.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
     border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 0 0 0.75rem 0;
+
+    &::before {
+      width: 3px;
+      height: 18px;
+    }
   }
 `;
 
