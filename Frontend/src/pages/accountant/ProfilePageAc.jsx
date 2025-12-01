@@ -20,7 +20,7 @@ const Header = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    padding-left: 70px;
+    padding: 1rem 0.75rem 1rem 70px;
   }
 `;
 
@@ -33,18 +33,31 @@ const Title = styled.h1`
   font-size: 1.6rem;
   margin: 0 0 0.3rem 0;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    margin: 0 0 0.2rem 0;
+  }
 `;
 
 const Subtitle = styled.p`
   font-size: 0.9rem;
   margin: 0;
   opacity: 0.9;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
 `;
 
 const ProfileInfo = styled.div`
@@ -56,6 +69,13 @@ const ProfileInfo = styled.div`
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Avatar = styled.div`
@@ -69,16 +89,32 @@ const Avatar = styled.div`
   font-size: 2rem;
   color: white;
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
 `;
 
 const UserInfo = styled.div`
   flex: 1;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    width: 100%;
+  }
 `;
 
 const UserName = styled.h2`
   font-size: 1.2rem;
   margin: 0 0 0.3rem 0;
   color: #2d3436;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 0 0 0.4rem 0;
+  }
 `;
 
 const UserRole = styled.span`
@@ -89,6 +125,11 @@ const UserRole = styled.span`
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.65rem;
+  }
 `;
 
 const EditButton = styled(Link)`
@@ -110,12 +151,24 @@ const EditButton = styled(Link)`
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
 `;
 
 const CardsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 `;
 
 const InfoCard = styled.div`
@@ -129,6 +182,11 @@ const InfoCard = styled.div`
     transform: translateY(-4px);
     box-shadow: 0 4px 16px rgba(0, 184, 148, 0.2);
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    border-radius: 8px;
+  }
 `;
 
 const CardHeader = styled.div`
@@ -136,6 +194,11 @@ const CardHeader = styled.div`
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -148,6 +211,13 @@ const IconWrapper = styled.div`
   justify-content: center;
   color: white;
   font-size: 1.2rem;
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -157,6 +227,11 @@ const CardTitle = styled.h3`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+  }
 `;
 
 const CardValue = styled.p`
@@ -165,6 +240,10 @@ const CardValue = styled.p`
   margin: 0;
   font-weight: 600;
   word-break: break-word;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 function ProfilePageAc() {
