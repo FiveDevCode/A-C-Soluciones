@@ -40,7 +40,11 @@ const FiltroContainer = styled.div`
   @media screen and (max-width: 768px) {
     width: 100%;
     margin-right: 0;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
   }
 `;
 
@@ -52,8 +56,9 @@ const TituloFiltro = styled.div`
   color: black;
 
   @media screen and (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-bottom: 0.75rem;
+    color: #7b2cbf;
   }
 `;
 
@@ -62,7 +67,7 @@ const Seccion = styled.div`
   color: black;
 
   @media screen and (max-width: 768px) {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
   }
 `;
 
@@ -81,12 +86,18 @@ const CheckboxLabel = styled.label`
   margin: 0.3rem 0;
 
   @media screen and (max-width: 768px) {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    margin: 0.1rem 0;
+    padding: 0.1rem 0;
   }
 `;
 
 const Contenido = styled.div`
   flex: 1;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Pregunta = styled.div`
@@ -97,9 +108,10 @@ const Pregunta = styled.div`
   font-weight: bold;
 
   @media screen and (max-width: 768px) {
-    padding: 0.7rem 0.85rem;
-    font-size: 0.9rem;
+    padding: 0.75rem;
+    font-size: 0.85rem;
     border-radius: 6px;
+    line-height: 1.4;
   }
 `;
 
@@ -109,9 +121,11 @@ const Respuesta = styled.p`
   color: black;
 
   @media screen and (max-width: 768px) {
-    font-size: 0.85rem;
-    margin: 0.5rem 0 1rem 0;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    margin: 0.6rem 0 1.2rem 0;
+    line-height: 1.6;
+    color: #333;
+    padding: 0 0.25rem;
   }
 `;
 
@@ -188,6 +202,11 @@ const ClientFaqsPage = () => {
                   size="small"
                   checked={selectedCategories.includes(cat)}
                   onChange={() => handleCheckboxChange(cat)}
+                  sx={{
+                    '@media (max-width: 768px)': {
+                      '& .MuiSvgIcon-root': { fontSize: 24 }
+                    }
+                  }}
                 />
                 {cat}
               </CheckboxLabel>
@@ -196,7 +215,17 @@ const ClientFaqsPage = () => {
         </FiltroContainer>
 
         <Contenido>
-          <Typography variant="h6" align="center" gutterBottom style={{ color: "black" }}>
+          <Typography 
+            variant="h6" 
+            align="center" 
+            gutterBottom 
+            style={{ 
+              color: "black",
+              fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.25rem',
+              fontWeight: 'bold',
+              marginBottom: window.innerWidth <= 768 ? '1rem' : '1.5rem'
+            }}
+          >
             Preguntas frecuentes
           </Typography>
 
