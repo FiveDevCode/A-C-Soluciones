@@ -18,7 +18,8 @@ import { useEffect, useState } from "react";
 import Home from "./pages/common/Home";
 import ViewVisitPageTc from "./pages/technical/ViewVisitPageTc";
 import ServicesAllPageCl from "./pages/client/ServicesAllPageCl";
-import AssignVisitPageAd from "./pages/administrator/AssignVisitPageAd";
+import HeaderBarCl from "./components/client/HeaderBarCl";
+import FooterHomeCl from "./components/client/FooterHomeCl";
 import RecoverPasswordPage from "./pages/common/RecoverPasswordPage";
 import RecoverCodePage from "./pages/common/RecoverCodePage";
 import RecoverChangePage from "./pages/common/RecoverChangePage";
@@ -42,14 +43,24 @@ import ErrorPage from "./errorPages/ErrorPage.jsx";
 import ClientFaqsPage from "./pages/common/ClientFaqsPage";
 import TermsAndConditionsPage from "./pages/common/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
-import PaymentAccountPageAd from "./pages/administrator/PaymentAccountPageAd.jsx";
+// Páginas compartidas (shared)
+import BillPage from "./pages/shared/BillPage.jsx";
+import PaymentAccountPage from "./pages/shared/PaymentAccountPage.jsx";
+import InventoryPage from "./pages/shared/InventoryPage.jsx";
+import NotificationPage from "./pages/shared/NotificationPage.jsx";
+
+// Páginas de Contador
 import HomeAc from "./pages/accountant/HomeAc.jsx";
-import InventoryPageAd from "./pages/administrator/InventoryPageAd.jsx";
+import ProfilePageAc from "./pages/accountant/ProfilePageAc.jsx";
+import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
+
+// Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
+
+// Páginas de Administrador
 import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
 import ServicePageAd from "./pages/administrator/ServicePageAd.jsx";
-import BillPageAd from "./pages/administrator/BillPageAd.jsx";
 import AccountingPageAd from "./pages/administrator/AccountingPageAd.jsx";
 import AdministratorPageAd from "./pages/administrator/AdministratorPageAd.jsx";
 import ClientPageAd from "./pages/administrator/ClientPageAd.jsx";
@@ -224,7 +235,7 @@ function AppContent() {
             path="/contador/facturas"
             element={
               <PrivateRoute roleRequired="Contador">
-                <BillPageAd />
+                <BillPage />
               </PrivateRoute>
             }
           />
@@ -233,7 +244,43 @@ function AppContent() {
             path="/contador/cuentas"
             element={
               <PrivateRoute roleRequired="Contador">
-                <PaymentAccountPageAd />
+                <PaymentAccountPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/inventario"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <InventoryPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/notificaciones"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <NotificationPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <ProfilePageAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/editar-perfil"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <EditProfilePageAc />
               </PrivateRoute>
             }
           />
@@ -376,15 +423,6 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/asignar-visita"
-            element={
-              <PrivateRoute roleRequired="administrador">
-                <AssignVisitPageAd />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
             path="/admin/perfil/"
             element={
               <PrivateRoute roleRequired="administrador">
@@ -469,7 +507,7 @@ function AppContent() {
             path="/admin/facturas"
             element={
               <PrivateRoute roleRequired="administrador">
-                <BillPageAd />
+                <BillPage />
               </PrivateRoute>
             }
           />
@@ -478,7 +516,7 @@ function AppContent() {
             path="/admin/cuentas"
             element={
               <PrivateRoute roleRequired="administrador">
-                <PaymentAccountPageAd />
+                <PaymentAccountPage />
               </PrivateRoute>
             }
           />
@@ -487,7 +525,16 @@ function AppContent() {
             path="/admin/inventario"
             element={
               <PrivateRoute roleRequired="administrador">
-                <InventoryPageAd />
+                <InventoryPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/notificaciones"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <NotificationPage />
               </PrivateRoute>
             }
           />

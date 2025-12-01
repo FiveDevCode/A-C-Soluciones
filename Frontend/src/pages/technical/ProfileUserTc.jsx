@@ -1,127 +1,295 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Divider } from '@mui/material';
 import { handleGetTechnicalId } from '../../controllers/technical/getTechnicalIdTc.controller';
 import { jwtDecode } from 'jwt-decode';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle, faIdCard, faUser, faPhone, faEnvelope, faEdit, faBriefcase } from '@fortawesome/free-solid-svg-icons';
+import { Skeleton } from '@mui/material';
 
-
-
-const PageContainer = styled.div`
-  margin-left: 220px;
-  padding: 2rem 4rem;
-  min-height: calc(100vh);
-  transition: margin-left 0.3s ease;
-
-  @media screen and (max-width: 1520px) {
-    padding: 2rem 2rem;
-  }
-
-  @media screen and (max-width: 1280px) {
-    margin-left: 180px;
-    padding: 1.5rem 1rem;
-  }
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  background: #f5f5f5;
+  overflow-y: auto;
 `;
 
-const Main = styled.main`
-  background: white;
+const Header = styled.div`
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  padding: 2rem;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const HeaderContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+`;
+
+const Subtitle = styled.p`
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.9;
+`;
+
+const Content = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 2rem;
 `;
 
-const ProfileSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-`;
-
 const ProfileInfo = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
 `;
 
-const Avatar = styled.img`
+const Avatar = styled.div`
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  flex-shrink: 0;
 `;
 
-const Details = styled.div`
-  margin-top: 1.5rem;
-  color: #424242;
-  font-size: 1rem;
+const UserInfo = styled.div`
+  flex: 1;
+`;
 
-  p {
-    margin-bottom: 1rem;
-  }
+const UserName = styled.h2`
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  color: #2d3436;
+`;
 
-  strong {
-    font-weight: 700;
-  }
+const UserRole = styled.span`
+  display: inline-block;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+`;
 
-  a {
-    color: #1976d2;
-    text-decoration: none;
+const EditButton = styled(Link)`
+  padding: 0.7rem 1.5rem;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
   }
+`;
+
+const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+`;
+
+const InfoCard = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(9, 132, 227, 0.2);
+  }
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const IconWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+`;
+
+const CardTitle = styled.h3`
+  font-size: 0.95rem;
+  color: #636e72;
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const CardValue = styled.p`
+  font-size: 1.3rem;
+  color: #2d3436;
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
 `;
 
 const ProfileUserTc = () => {
-
-  const [userTechnical, setUserTechnical] = useState();
+  const [userTechnical, setUserTechnical] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        const decoded = jwtDecode(token);
+        const response = await handleGetTechnicalId(decoded.id);
+        setUserTechnical(response.data);
+      } catch (error) {
+        console.error("Error fetching technical:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const token = localStorage.getItem("authToken");
-    const decoded = jwtDecode(token);
-
-    handleGetTechnicalId(decoded.id)
-      .then((res) => {
-        setUserTechnical(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching technical:", err);
-      });
+    fetchProfile();
   }, []);
-  
-  if (!userTechnical) {
-    return <p>Cargando datos del perfil...</p>;
+
+  if (loading) {
+    return (
+      <Container>
+        <Header>
+          <HeaderContent>
+            <Skeleton variant="text" width={200} height={40} sx={{ bgcolor: 'rgba(255,255,255,0.2)' }} />
+            <Skeleton variant="text" width={150} height={24} sx={{ bgcolor: 'rgba(255,255,255,0.2)' }} />
+          </HeaderContent>
+        </Header>
+        <Content>
+          <ProfileInfo>
+            <Skeleton variant="circular" width={120} height={120} />
+            <div style={{ flex: 1 }}>
+              <Skeleton variant="text" width={250} height={40} />
+              <Skeleton variant="text" width={100} height={30} />
+            </div>
+            <Skeleton variant="rectangular" width={140} height={45} sx={{ borderRadius: '8px' }} />
+          </ProfileInfo>
+          <CardsGrid>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Skeleton key={i} variant="rectangular" height={120} sx={{ borderRadius: '12px' }} />
+            ))}
+          </CardsGrid>
+        </Content>
+      </Container>
+    );
   }
 
   return (
-    <PageContainer>
-      <Main>
-        <ProfileSection>
+    <Container>
+      <Header>
+        <HeaderContent>
+          <Title>Mi Perfil</Title>
+          <Subtitle>Información de tu cuenta de técnico</Subtitle>
+        </HeaderContent>
+      </Header>
+
+      <Content>
         <ProfileInfo>
-          <Avatar
-            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
-            alt="Avatar"
-          />
-          <h2>{`${userTechnical.nombre} ${userTechnical.apellido}`}</h2>
+          <Avatar>
+            <FontAwesomeIcon icon={faUserCircle} />
+          </Avatar>
+          <UserInfo>
+            <UserName>{userTechnical?.nombre} {userTechnical?.apellido}</UserName>
+            <UserRole>Técnico</UserRole>
+          </UserInfo>
+          <EditButton to="/tecnico/editar-perfil">
+            <FontAwesomeIcon icon={faEdit} />
+            Editar Perfil
+          </EditButton>
         </ProfileInfo>
-      
-      </ProfileSection>
 
-      <Divider />
+        <CardsGrid>
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faIdCard} />
+              </IconWrapper>
+              <CardTitle>Cédula</CardTitle>
+            </CardHeader>
+            <CardValue>{userTechnical?.numero_de_cedula?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</CardValue>
+          </InfoCard>
 
-      <Details>
-        <p><strong>Cédula:</strong><br/>{`${userTechnical.numero_de_cedula.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</p>
-        <p><strong>Nombre:</strong><br/>{`${userTechnical.nombre}`}</p>
-        <p><strong>Apellido:</strong><br/>{`${userTechnical.apellido}`}</p>
-        <p><strong>Teléfono:</strong> <br/>{userTechnical.telefono}</p>
-        <p><strong>Correo electrónico:</strong> <br/><a href={`mailto:${userTechnical.correo_electronico}`}>{userTechnical.correo_electronico}</a></p>
-        <p><strong>Cargo:</strong> <br/>{userTechnical.especialidad}</p>
-      </Details>
-      <Button 
-        variant='contained' 
-        sx={{textTransform: "none", fontSize: "1rem", fontWeight: "700", mt: "2rem"}}
-        LinkComponent={Link}
-        to="/tecnico/editar-perfil"
-      >
-        Editar informacion personal
-      </Button>
-      </Main>
-    </PageContainer>
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faUser} />
+              </IconWrapper>
+              <CardTitle>Nombre Completo</CardTitle>
+            </CardHeader>
+            <CardValue>{userTechnical?.nombre} {userTechnical?.apellido}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faPhone} />
+              </IconWrapper>
+              <CardTitle>Teléfono</CardTitle>
+            </CardHeader>
+            <CardValue>{userTechnical?.telefono}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faEnvelope} />
+              </IconWrapper>
+              <CardTitle>Correo Electrónico</CardTitle>
+            </CardHeader>
+            <CardValue>{userTechnical?.correo_electronico}</CardValue>
+          </InfoCard>
+
+          <InfoCard>
+            <CardHeader>
+              <IconWrapper>
+                <FontAwesomeIcon icon={faBriefcase} />
+              </IconWrapper>
+              <CardTitle>Especialidad</CardTitle>
+            </CardHeader>
+            <CardValue>{userTechnical?.especialidad}</CardValue>
+          </InfoCard>
+        </CardsGrid>
+      </Content>
+    </Container>
   );
 };
 

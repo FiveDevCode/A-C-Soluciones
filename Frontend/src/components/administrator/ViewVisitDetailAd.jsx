@@ -10,25 +10,35 @@ const stateLabels = {
   cancelada: "Cancelada",
 };
 
-const ViewVisitDetailAd = ({ selected, onClose }) => {
+const ViewVisitDetailAd = ({ selected, onClose, onReady }) => {
   const [service, setService] = useState("");
+  const [isLoadingService, setIsLoadingService] = useState(true);
   
   if (!selected) return null;
   
   useEffect(() => {
     const fetchService = async () => {
+      setIsLoadingService(true);
       try {
         const response = await handleGetService(selected.servicio_id_fk);
         const serviceData = response.data.data;
         setService(serviceData);
       } catch (error) {
         console.error("Error fetching service:", error);
+      } finally {
+        setIsLoadingService(false);
+        // Notificar que los datos están listos
+        if (onReady) onReady();
       }
     };
     
     fetchService();
-  }, [selected.servicio_id_fk]);
+  }, [selected.servicio_id_fk, onReady]);
   
+  // No mostrar nada hasta que el servicio esté cargado
+  if (isLoadingService) {
+    return null;
+  }
 
   const fields = [
     { label: "Notas previas", value: selected.notas_previas || "Sin notas previas" },

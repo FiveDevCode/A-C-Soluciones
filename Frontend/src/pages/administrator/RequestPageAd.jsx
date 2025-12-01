@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
@@ -6,6 +6,7 @@ import ListRequestAd from "../../components/administrator/ListRequestAd";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterRequestsAd from "../../components/administrator/FilterRequestsAd";
 import { handleDeleteRequestAd } from "../../controllers/administrator/deleteRequestAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -33,28 +34,16 @@ const Card = styled.div`
 `;
 
 const RequestPageAd = () => {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: requests, isLoading: loading, reload: loadRequests } = useDataCache(
+    'requests_cache',
+    async () => {
+      const res = await handleGetListRequest();
+      return res.data;
+    }
+  );
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadRequests();
-  }, []);
-
-  const loadRequests = async () => {
-    setLoading(true);
-    try {
-      const res = await handleGetListRequest();
-      console.log(res)
-      setRequests(res.data);
-    } catch (err) {
-      console.error("Error cargando lista de solicitudes:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
@@ -84,8 +73,9 @@ const RequestPageAd = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="GESTIÓN DE SOLICITUDES"
-        sectionTitle="Lista de solicitudes registradas"
+        sectionTitle="Listado de solicitudes de servicio"
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadRequests}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterRequestsAd

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { handleGetListBillAd } from "../../controllers/administrator/getListBillAd.controller";
 import ListBillAd from "../../components/administrator/ListBillAd";
@@ -8,6 +8,7 @@ import FormCreateBillAd from "../../components/administrator/FormCreateBillAd";
 import { handleDeleteBill } from "../../controllers/administrator/deleteBillAd.controller";
 import FilterBillAd from "../../components/administrator/FilterBillAd";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -34,21 +35,10 @@ const Card = styled.div`
   }
 `;
 
-const BillPageAd = () => {
-  const [bills, setBills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [filteredBills, setFilteredBills] = useState([]);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    loadBills();
-  }, []);
-
-  const loadBills = async () => {
-    setLoading(true);
-    try {
+const BillPage = () => {
+  const { data: bills, isLoading: loading, reload: loadBills } = useDataCache(
+    'bills_cache',
+    async () => {
       const billsData = await handleGetListBillAd();
 
       // Enriquecer cada factura con información del cliente
@@ -72,13 +62,13 @@ const BillPageAd = () => {
         })
       );
 
-      setBills(enrichedBills);
-    } catch (err) {
-      console.error("Error cargando facturas:", err);
-    } finally {
-      setLoading(false);
+      return enrichedBills;
     }
-  };
+  );
+  const [showModal, setShowModal] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [filteredBills, setFilteredBills] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
@@ -112,6 +102,7 @@ const BillPageAd = () => {
         addLabel="Agregar factura"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
+        onRefresh={loadBills}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterBillAd bills={bills} onFilteredChange={setFilteredBills} />
@@ -153,4 +144,4 @@ const BillPageAd = () => {
   );
 };
 
-export default BillPageAd;
+export default BillPage;

@@ -1,6 +1,6 @@
 import express from 'express';
 import { ContabilidadController } from '../controllers/contabilidad.controller.js';
-import { authenticate, isAdmin } from '../middlewares/autenticacion.js';
+import { authenticate, isAdmin, isAdminOrContador } from '../middlewares/autenticacion.js';
 const router = express.Router();
 const contabilidadController = new ContabilidadController();
 
@@ -9,7 +9,7 @@ router.post('/api/contabilidad',authenticate, isAdmin, contabilidadController.cr
 
 router.get('/api/contabilidad',authenticate, isAdmin, contabilidadController.obtenerContabilidad);
 
-router.get('/api/contabilidad/:id', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorId);
+router.get('/api/contabilidad/:id', authenticate, isAdminOrContador ,contabilidadController.obtenerContabilidadPorId);
 
 router.get('/api/contabilidad/cedula/:numero_cedula', authenticate, isAdmin,contabilidadController.obtenerContabilidadPorCedula);
 
@@ -19,7 +19,7 @@ router.delete('/api/contabilidad/:id',authenticate, isAdmin, contabilidadControl
 
 router.post('/api/admin/login', contabilidadController.autenticarContabilidad);
 
-router.put('/api/contabilidad/:id', authenticate, isAdmin, contabilidadController.actualizarContabilidad);
+router.put('/api/contabilidad/:id', authenticate, contabilidadController.actualizarContabilidad);
 
 export default router;
 

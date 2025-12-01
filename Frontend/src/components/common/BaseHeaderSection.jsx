@@ -1,18 +1,86 @@
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaUserCircle, FaBell, FaSyncAlt } from "react-icons/fa";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Header = styled.header`
   background-color: #1976d2;
   color: white;
-  padding: 2rem;
-  text-align: center;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 20px;
   font-weight: bold;
 
   @media (max-width: 1350px) {
-    padding: 1.2rem;
+    padding: 1.2rem 1.5rem;
     font-size: 18px;
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem 1rem 1rem 70px;
+    font-size: 16px;
+  }
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const IconButton = styled.button`
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 1350px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+`;
+
+const NotificationBadge = styled.span`
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #f44336;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 `;
 
 const TitleSection = styled.h2`
@@ -50,6 +118,10 @@ const Card = styled.div`
     border-radius: 6px 6px 0 0;
     margin: 40px 0 0 0;
   }
+  
+  @media (max-width: 768px) {
+    margin-top: 0.5rem;
+  }
 `;
 
 const OptionsContainer = styled.div`
@@ -59,8 +131,10 @@ const OptionsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 
-  @media (max-width: 1350px) {
-    gap: 8px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 `;
 
@@ -70,8 +144,13 @@ const SearchContainer = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 
-  @media (max-width: 1350px) {
-    gap: 6px;
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 10px;
+
+    > button {
+      display: none;
+    }
   }
 `;
 
@@ -81,7 +160,26 @@ const ButtonsContainer = styled.div`
   align-self: start;
 
   @media (max-width: 1350px) {
-    gap: 6px;
+    gap: 10px;
+  }
+`;
+
+const ActionsRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  > button:first-child {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+
+    > button:first-child {
+      display: flex;
+    }
   }
 `;
 
@@ -94,15 +192,20 @@ const Button = styled.button`
   font-size: 14px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: all 0.3s;
-  font-weight: bold;
+  font-weight: 600;
 
   &:hover {
     background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
     padding: 6px 10px;
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 15px;
   }
 `;
 
@@ -119,9 +222,45 @@ const AddButton = styled(Button)`
     background-color: #1565c0;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) and (min-width: 769px) {
     padding: 6px 10px;
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+`;
+
+const RefreshButton = styled(Button)`
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+  min-width: 40px;
+  padding: 8px 14px;
+
+  &:hover {
+    background-color: #45a049;
+  }
+
+  &:active {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 15px;
   }
 `;
 
@@ -131,13 +270,63 @@ const BaseHeaderSection = ({
   addLabel = "Agregar",
   onAdd,
   onDeleteSelected,
+  onRefresh,
   selectedCount = 0,
   filterComponent,
   actionType = "Eliminar seleccionados",
+  notificationCount = 0,
 }) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+      
+      const decoded = jwtDecode(token);
+      const role = decoded.rol?.toLowerCase();
+      
+      switch(role) {
+        case 'administrador':
+          navigate('/admin/perfil');
+          break;
+        case 'tecnico':
+          navigate('/tecnico/perfil');
+          break;
+        case 'contador':
+          navigate('/contador/perfil');
+          break;
+        default:
+          console.log('Rol no reconocido');
+      }
+    } catch (error) {
+      console.error('Error al decodificar token:', error);
+    }
+  };
+
+  const handleNotificationsClick = () => {
+    // Por ahora solo un log, se puede expandir después
+    console.log('Notificaciones clicked');
+  };
+
   return (
     <>
-      <Header>{headerTitle}</Header>
+      <Header>
+        <HeaderLeft>
+          <span>{headerTitle}</span>
+        </HeaderLeft>
+        <HeaderRight>
+          <IconButton onClick={handleNotificationsClick} title="Notificaciones">
+            <FaBell />
+            {notificationCount > 0 && (
+              <NotificationBadge>{notificationCount > 9 ? '9+' : notificationCount}</NotificationBadge>
+            )}
+          </IconButton>
+          <IconButton onClick={handleProfileClick} title="Ver Perfil">
+            <FaUserCircle />
+          </IconButton>
+        </HeaderRight>
+      </Header>
 
       <Card>
         <ContainerAdd>
@@ -154,9 +343,19 @@ const BaseHeaderSection = ({
         <OptionsContainer>
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
+            {onRefresh && (
+              <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                <FaSyncAlt />
+              </RefreshButton>
+            )}
           </SearchContainer>
-          {onDeleteSelected && (
-            <ButtonsContainer>
+          <ActionsRow>
+            {onRefresh && (
+              <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                <FaSyncAlt />
+              </RefreshButton>
+            )}
+            {onDeleteSelected && (
               <Button
                 active={selectedCount > 0}
                 disabled={selectedCount === 0}
@@ -164,8 +363,8 @@ const BaseHeaderSection = ({
               >
                 {actionType}
               </Button>
-            </ButtonsContainer>
-          )}
+            )}
+          </ActionsRow>
         </OptionsContainer>
       </Card>
     </>

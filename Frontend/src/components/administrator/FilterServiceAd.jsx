@@ -1,24 +1,12 @@
 import BaseFilters from "../common/BaseFilters";
 
 const FilterServicesAd = ({ services = [], onFilteredChange }) => {
-  const statusLabels = {
-    pendiente: "Pendiente",
-    en_proceso: "En proceso",
-    completado: "Completado",
-  };
-
-  const statusOptions = [...new Set(services.map((s) => s.estado).filter(Boolean))].map(
-    (st) => ({
-      value: st,
-      label: statusLabels[st] || st,
-    })
-  );
 
   const filterOptions = [
     {
       key: "estado",
-      label: "Estado del servicio",
-      options: statusOptions,
+      label: "Estado",
+      options: ["Activo", "Inactivo"],
     },
   ];
 

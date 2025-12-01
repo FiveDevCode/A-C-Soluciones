@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import ListVisitAd from "../../components/administrator/ListVisitAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import FormCreateVisitAd from "../../components/administrator/FormCreateVisitAd";
 import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import FilterVisitsAd from "../../components/administrator/FilterVisitsAd";
+import useDataCache from "../../hooks/useDataCache";
 
 const Container = styled.div`
   display: flex;
@@ -32,29 +33,13 @@ const Card = styled.div`
 `;
 
 const VisitPageAd = () => {
-  const [visits, setVisits] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: visits, isLoading: loading, reload: loadVisits } = useDataCache(
+    'visits_cache',
+    handleGetListVisitAd
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredVisits, setFilteredVisits] = useState([]);
-
-  useEffect(() => {
-    loadVisits();
-  }, []);
-
-  const loadVisits = async () => {
-    setLoading(true);
-    try {
-      const data = await handleGetListVisitAd();
-      console.log(data.data.data)
-      setVisits(data.data.data);
-      setFilteredVisits(data.data.data); 
-    } catch (err) {
-      console.error("Error cargando lista de visitas:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Container>
@@ -63,6 +48,7 @@ const VisitPageAd = () => {
         sectionTitle="Lista de visitas asignadas"
         addLabel="Agregar visita"
         onAdd={() => setShowModal(true)}
+        onRefresh={loadVisits}
         filterComponent={
           <FilterVisitsAd
             visits={visits}

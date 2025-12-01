@@ -7,7 +7,6 @@ import {
   Collapse,
   Alert,
   IconButton,
-  LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,121 +19,108 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1200;
+  z-index: 9999;
 `;
 
-const ModalContent = styled.div`
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  width: 400px;
-  max-height: 90vh;         /* 🔥 LIMITE DE ALTO */
-  overflow-y: auto;         /* 🔥 SCROLL INTERNO */
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
-
-  /* evita que el scroll tape contenido */
-  scrollbar-width: thin;
-  scrollbar-color: #bdbdbd transparent;
-
-  @media (max-width: 1350px) {
-    width: 330px;
-    padding: 20px;
-    border-radius: 12px;
-  }
+const Modal = styled.div`
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10000;
 `;
 
-
-const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: #000;
-  font-size: 20px;
-
-  @media (max-width: 1350px) {
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  @media (max-width: 1350px) {
-    gap: 0.5rem;
-  }
-`;
-
-const StyledTextField = styled(TextField)`
-  & .MuiInputBase-input {
-    font-size: 14px;
-  }
-  & .MuiFormLabel-root {
-    font-size: 14px;
-  }
-  margin-bottom: 16px;
-
-  @media (max-width: 1350px) {
-    margin-bottom: 12px;
-    & .MuiInputBase-input {
-      font-size: 12px;
-    }
-    & .MuiFormLabel-root {
-      font-size: 12px;
-    }
-  }
-`;
-
-const ButtonsContainer = styled.div`
+const Header = styled.div`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px 12px 0 0;
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
+  align-items: center;
+`;
 
-  @media (max-width: 1350px) {
-    margin-top: 15px;
-    gap: 6px;
+const Title = styled.h2`
+  margin: 0;
+  font-size: 1.5rem;
+`;
+
+const StepIndicator = styled.div`
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+`;
+
+const Step = styled.div`
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: ${props => props.$active ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "#f5f5f5"};
+  color: ${props => props.$active ? "white" : "#666"};
+  font-weight: ${props => props.$active ? "600" : "400"};
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${props => props.$active ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "#e0e0e0"};
   }
 `;
 
-const StyledButton = styled(Button)`
-  && {
-    font-size: 0.875rem;
-    padding: 0.375rem 1rem;
-    border-radius: 0.375rem;
-    text-transform: none;
-    font-weight: 600;
-    min-width: 5.625rem;
-    height: 2.25rem;
-  }
+const Content = styled.div`
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+`;
 
-  @media (max-width: 1350px) {
-    && {
-      font-size: 0.6875rem;
-      padding: 0.125rem 1rem;
-      min-width: 4.375rem;
-      height: 1.75rem;
-      border-radius: 0.3125rem;
-    }
+const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
+`;
+
+const FullWidth = styled.div`
+  grid-column: 1 / -1;
+`;
+
+const EquipmentCard = styled.div`
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: #f9f9f9;
+`;
+
+const Footer = styled.div`
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 `;
 
 const UploadButton = styled.label`
   background-color: #e0e0e0;
   padding: 8px 16px;
   border-radius: 4px;
-  display: inline-block;
+  display: block;
   margin-bottom: 1rem;
   cursor: pointer;
-`;
-
-const FileList = styled.div`
-  margin-bottom: 1rem;
+  text-align: center;
 `;
 
 const FileItem = styled.div`
@@ -142,11 +128,15 @@ const FileItem = styled.div`
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
-  margin-bottom: 4px;
+  margin-top: 8px;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
+
+// Exportar componentes styled para uso externo
+export { FormGrid, FullWidth, EquipmentCard };
 
 const BaseFormModal = ({
   title,
@@ -156,6 +146,10 @@ const BaseFormModal = ({
   onClose,
   onSuccess,
   successMessage = "Guardado exitosamente",
+  customFormData,
+  onFormDataChange,
+  extraContent,
+  renderStepContent,
 }) => {
 
   // ========= DETECCIÓN DE MULTIPASOS =========
@@ -173,7 +167,7 @@ const BaseFormModal = ({
 
   // ========= ESTADOS PRINCIPALES =========
   const [formData, setFormData] = useState(
-    Object.fromEntries(
+    customFormData || Object.fromEntries(
       allFields
         .filter((f) => f.type !== "file")
         .map((f) => [f.name, ""])
@@ -205,7 +199,9 @@ const BaseFormModal = ({
       return;
     }
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const newFormData = { ...formData, [name]: value };
+    setFormData(newFormData);
+    onFormDataChange?.(newFormData);
 
     if (showSuccess) setShowSuccess(false);
   };
@@ -259,104 +255,146 @@ const BaseFormModal = ({
     }
   };
 
-  const progress = Math.round(((currentStep + 1) / totalSteps) * 100);
+  const renderField = (field) => {
+    const isFullWidth = field.fullWidth || field.type === "textarea" || field.type === "file";
+    const FieldWrapper = isFullWidth ? FullWidth : "div";
+
+    return (
+      <FieldWrapper key={field.name}>
+        {field.type === "file" ? (
+          <>
+            <UploadButton>
+              {`Subir imagen "${field.label}"`}{" "}
+              <FontAwesomeIcon icon={faUpload} style={{ marginLeft: "8px" }} />
+              <input
+                type="file"
+                name={field.name}
+                accept="image/*"
+                hidden
+                onChange={handleChange}
+              />
+            </UploadButton>
+
+            {files[field.name] && (
+              <FileItem>
+                {files[field.name].name}
+                <CloseIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    setFiles((prev) => ({
+                      ...prev,
+                      [field.name]: null,
+                    }))
+                  }
+                />
+              </FileItem>
+            )}
+
+            {fieldErrors[field.name] && (
+              <div style={{ color: "red", fontSize: "0.8rem" }}>
+                {fieldErrors[field.name]}
+              </div>
+            )}
+          </>
+        ) : (
+          <TextField
+            select={field.type === "select"}
+            type={
+              field.type === "number"
+                ? "number"
+                : field.type === "date"
+                ? "date"
+                : field.type === "datetime-local"
+                ? "datetime-local"
+                : "text"
+            }
+            label={field.label}
+            name={field.name}
+            fullWidth
+            size="small"
+            multiline={field.type === "textarea"}
+            rows={field.type === "textarea" ? 3 : undefined}
+            value={formData[field.name]}
+            onChange={handleChange}
+            error={Boolean(fieldErrors[field.name])}
+            helperText={fieldErrors[field.name]}
+            InputLabelProps={{
+              shrink:
+                field.type === "date" ||
+                field.type === "datetime-local"
+                  ? true
+                  : undefined,
+            }}
+            SelectProps={
+              field.type === "select"
+                ? {
+                    MenuProps: {
+                      style: { zIndex: 10001 }
+                    }
+                  }
+                : undefined
+            }
+          >
+            {field.type === "select" &&
+              field.options?.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </MenuItem>
+              ))}
+          </TextField>
+        )}
+      </FieldWrapper>
+    );
+  };
 
   return (
-    <ModalOverlay>
-      <ModalContent>
-        <Title>{title}</Title>
+    <ModalOverlay onClick={onClose}>
+      <Modal onClick={(e) => e.stopPropagation()}>
+        <Header>
+          <Title>{title}</Title>
+          <IconButton onClick={onClose} sx={{ color: "white" }}>
+            <CloseIcon />
+          </IconButton>
+        </Header>
 
-        {/* Barra multipasos */}
+        {/* Indicador de pasos */}
         {isMultiStep && (
-          <>
-            <LinearProgress variant="determinate" value={progress} />
-            <p style={{ textAlign: "center", marginTop: 8 }}>
-              Paso {currentStep + 1} de {totalSteps}
-            </p>
-          </>
+          <StepIndicator>
+            {normalizedSteps.map((step, index) => (
+              <Step 
+                key={index} 
+                $active={currentStep === index}
+                onClick={() => setCurrentStep(index)}
+              >
+                {step.title}
+              </Step>
+            ))}
+          </StepIndicator>
         )}
 
-        {/* Campos */}
-        {normalizedSteps[currentStep].fields.map((field) => (
-          <div key={field.name} style={{ marginBottom: "1rem" }}>
-            {field.type === "file" ? (
-              <>
-                <UploadButton>
-                  {`Subir imagen "${field.label}"`}{" "}
-                  <FontAwesomeIcon icon={faUpload} style={{ marginLeft: "8px" }} />
-                  <input
-                    type="file"
-                    name={field.name}
-                    hidden
-                    onChange={handleChange}
-                  />
-                </UploadButton>
+        <Content>
+          {/* Renderizar campos del paso actual */}
+          {isMultiStep ? (
+            <>
+              {normalizedSteps[currentStep].fields.length > 0 && (
+                <FormGrid>
+                  {normalizedSteps[currentStep].fields.map(renderField)}
+                </FormGrid>
+              )}
+              {/* Renderizar contenido personalizado por paso */}
+              {renderStepContent?.(currentStep)}
+            </>
+          ) : (
+            <>
+              <FormGrid>
+                {fields?.map(renderField)}
+              </FormGrid>
+              {/* Contenido extra para formularios simples */}
+              {extraContent}
+            </>
+          )}
 
-                {files[field.name] && (
-                  <FileItem>
-                    {files[field.name].name}
-                    <FontAwesomeIcon
-                      icon={faTimes}
-                      style={{ cursor: "pointer" }}
-                      onClick={() =>
-                        setFiles((prev) => ({
-                          ...prev,
-                          [field.name]: null,
-                        }))
-                      }
-                    />
-                  </FileItem>
-                )}
-
-                {fieldErrors[field.name] && (
-                  <div style={{ color: "red", fontSize: "0.8rem" }}>
-                    {fieldErrors[field.name]}
-                  </div>
-                )}
-              </>
-            ) : (
-              <TextField
-                select={field.type === "select"}
-                type={
-                  field.type === "number"
-                    ? "number"
-                    : field.type === "date"
-                    ? "date"
-                    : field.type === "datetime-local"
-                    ? "datetime-local"
-                    : "text"
-                }
-                label={field.label}
-                name={field.name}
-                fullWidth
-                size="small"
-                multiline={field.type === "textarea"}
-                rows={field.type === "textarea" ? 3 : undefined}
-                value={formData[field.name]}
-                onChange={handleChange}
-                error={Boolean(fieldErrors[field.name])}
-                helperText={fieldErrors[field.name]}
-                InputLabelProps={{
-                  shrink:
-                    field.type === "date" ||
-                    field.type === "datetime-local"
-                      ? true
-                      : undefined,
-                }}
-              >
-                {field.type === "select" &&
-                  field.options?.map((opt) => (
-                    <MenuItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            )}
-          </div>
-        ))}
-
-        {/* Errores */}
-        {errorMsg && (
+          {/* Errores */}
           <Collapse in={!!errorMsg}>
             <Alert
               severity="error"
@@ -365,31 +403,37 @@ const BaseFormModal = ({
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
-              sx={{ mb: 2 }}
+              sx={{ mt: 2 }}
             >
               {errorMsg}
             </Alert>
           </Collapse>
-        )}
 
-        {showSuccess && (
-          <Collapse in={showSuccess}>
-            <Alert severity="success" sx={{ mb: 2 }}>
-              {successMessage}
-            </Alert>
-          </Collapse>
-        )}
+          {showSuccess && (
+            <Collapse in={showSuccess}>
+              <Alert severity="success" sx={{ mt: 2 }}>
+                {successMessage}
+              </Alert>
+            </Collapse>
+          )}
+        </Content>
 
         {/* BOTONES */}
-        <ButtonsContainer>
+        <Footer>
           {isMultiStep && currentStep > 0 && (
-            <Button variant="contained" onClick={() => setCurrentStep((s) => s - 1)}>
+            <Button 
+              variant="outlined" 
+              onClick={() => setCurrentStep((s) => s - 1)}
+            >
               Anterior
             </Button>
           )}
 
           {isMultiStep && currentStep < totalSteps - 1 ? (
-            <Button variant="contained" onClick={() => setCurrentStep((s) => s + 1)}>
+            <Button 
+              variant="contained" 
+              onClick={() => setCurrentStep((s) => s + 1)}
+            >
               Siguiente
             </Button>
           ) : (
@@ -403,16 +447,12 @@ const BaseFormModal = ({
           )}
 
           {!isMultiStep && (
-            <Button variant="contained" onClick={handleReset}>
+            <Button variant="outlined" onClick={handleReset}>
               Limpiar
             </Button>
           )}
-
-          <Button variant="contained" color="error" onClick={onClose}>
-            Cancelar
-          </Button>
-        </ButtonsContainer>
-      </ModalContent>
+        </Footer>
+      </Modal>
     </ModalOverlay>
   );
 };

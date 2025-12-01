@@ -3,8 +3,8 @@ import BaseFilters from "../common/BaseFilters";
 const FilterRequestsAd = ({ requests = [], onFilteredChange }) => {
   const statusLabels = {
     pendiente: "Pendiente",
-    en_proceso: "En proceso",
-    completado: "Completado",
+    aceptada: "Aceptada",
+    completada: "Completada",
   };
 
   const statusOptions = [...new Set(requests.map((r) => r.estado).filter(Boolean))].map(
