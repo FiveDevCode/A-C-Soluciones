@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-  padding: 2rem;
+  padding: 1.5rem;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -30,13 +30,13 @@ const HeaderContent = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 1.6rem;
+  margin: 0 0 0.3rem 0;
   font-weight: 600;
 `;
 
 const Subtitle = styled.p`
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin: 0;
   opacity: 0.9;
 `;
@@ -44,29 +44,29 @@ const Subtitle = styled.p`
 const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem;
 `;
 
 const ProfileInfo = styled.div`
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 `;
 
 const Avatar = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2rem;
   color: white;
   flex-shrink: 0;
 `;
@@ -76,8 +76,8 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.h2`
-  font-size: 1.8rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
   color: #2d3436;
 `;
 
@@ -85,14 +85,14 @@ const UserRole = styled.span`
   display: inline-block;
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   color: white;
-  padding: 0.4rem 1rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
 `;
 
 const EditButton = styled(Link)`
-  padding: 0.7rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
   color: white;
   border: none;
@@ -199,12 +199,12 @@ function ProfilePageAc() {
         </Header>
         <Content>
           <ProfileInfo>
-            <Skeleton variant="circular" width={120} height={120} />
+            <Skeleton variant="circular" width={70} height={70} />
             <div style={{ flex: 1 }}>
-              <Skeleton variant="text" width={250} height={40} />
-              <Skeleton variant="text" width={100} height={30} />
+              <Skeleton variant="text" width={250} height={30} />
+              <Skeleton variant="text" width={100} height={25} />
             </div>
-            <Skeleton variant="rectangular" width={140} height={45} sx={{ borderRadius: '8px' }} />
+            <Skeleton variant="rectangular" width={140} height={40} sx={{ borderRadius: '8px' }} />
           </ProfileInfo>
           <CardsGrid>
             {[1, 2, 3, 4, 5].map((i) => (
