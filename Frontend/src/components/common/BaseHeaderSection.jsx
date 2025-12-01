@@ -118,6 +118,10 @@ const Card = styled.div`
     border-radius: 6px 6px 0 0;
     margin: 40px 0 0 0;
   }
+  
+  @media (max-width: 768px) {
+    margin-top: 0.5rem;
+  }
 `;
 
 const OptionsContainer = styled.div`
