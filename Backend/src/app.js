@@ -25,7 +25,9 @@ import ChatbotRouter from './routers/chatbot.routes.js';
 import HistorialServicesRoter from './routers/Historial_services.route.js';
 import ReporteMantenimientoRouter from './routers/reporte_mantenimiento.routes.js';
 import ReporteBombeoRouter from './routers/reporte_bombeo.routes.js'
+import NotificacionRouter from './routers/notificacion.routes.js';
 import { setupAssociations } from './models/asociaciones.midel.js';
+import * as notificacionService from './services/notificacion.services.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -82,7 +84,8 @@ App.use(Inventario);
 App.use(ChatbotRouter);
 App.use(HistorialServicesRoter);
 App.use('/fichas', fichaClienteRouter);
-App.use(ReporteBombeoRouter)
+App.use(ReporteBombeoRouter);
+App.use(NotificacionRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
 App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
@@ -98,6 +101,9 @@ if (fs.existsSync(openApiPath)) {
 }
 App.use(FaqRouter)
 
-
+// Función para inicializar Socket.io
+export const setupSocket = (io) => {
+  notificacionService.inicializarSocket(io);
+};
 
 export default App;

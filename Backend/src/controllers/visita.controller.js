@@ -1,5 +1,9 @@
 import { VisitaService } from '../services/visita.services.js';
 import { ValidationError } from 'sequelize';
+import * as notificacionService from '../services/notificacion.services.js';
+import { TecnicoModel } from '../models/tecnico.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
+import { SolicitudModel } from '../models/solicitud.model.js';
 
 export class VisitaController {
   constructor() {
@@ -15,6 +19,39 @@ export class VisitaController {
         });
       }
       const visita = await this.visitaService.crearVisita(req.body);
+      
+      // Notificar al técnico sobre la nueva visita asignada
+      try {
+        // Obtener información completa de la visita con cliente
+        const visitaCompleta = await this.visitaService.obtenerVisitaPorId(visita.id);
+        
+        let nombreCliente = 'un cliente';
+        if (visitaCompleta.solicitud_asociada?.cliente_solicitud) {
+          const cliente = visitaCompleta.solicitud_asociada.cliente_solicitud;
+          nombreCliente = `${cliente.nombre} ${cliente.apellido || ''}`.trim();
+        }
+        
+        // Formatear fecha
+        const fechaProgramada = new Date(visita.fecha_programada).toLocaleDateString('es-CO', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        await notificacionService.notificarTecnicoNuevaVisita(
+          req.body.tecnico_id_fk,
+          visita.id,
+          nombreCliente,
+          fechaProgramada
+        ).catch(err => console.error('Error al enviar notificación al técnico:', err));
+        
+      } catch (notifError) {
+        console.error('Error al procesar notificación de nueva visita:', notifError);
+        // No fallar la creación si falla la notificación
+      }
+      
       return res.status(201).json({
         success: true,
         data: visita
@@ -119,6 +156,46 @@ export class VisitaController {
       }
 
       const visitaActualizada = await this.visitaService.actualizarVisita(req.params.id, req.body);
+      
+      // Si un técnico marca la visita como completada, notificar a los administradores
+      if (req.body.estado === 'completada' && req.user.rol === 'tecnico') {
+        try {
+          // Obtener información del técnico
+          const tecnico = await TecnicoModel.Tecnico.findByPk(req.user.id);
+          
+          // Obtener información de la visita con la solicitud y cliente
+          const visitaCompleta = await this.visitaService.obtenerVisitaPorId(req.params.id);
+          
+          let nombreCliente = 'Cliente';
+          if (visitaCompleta.solicitud_asociada?.cliente_solicitud) {
+            const cliente = visitaCompleta.solicitud_asociada.cliente_solicitud;
+            nombreCliente = `${cliente.nombre} ${cliente.apellido || ''}`.trim();
+          }
+          
+          const nombreTecnico = tecnico ? `${tecnico.nombre} ${tecnico.apellido || ''}`.trim() : 'Técnico';
+          
+          // Obtener todos los administradores y notificarlos
+          const { AdminModel: AdminModelImport } = await import('../models/administrador.model.js');
+          const administradores = await AdminModelImport.Admin.findAll({
+            attributes: ['id']
+          });
+          
+          // Notificar a cada administrador
+          for (const admin of administradores) {
+            await notificacionService.notificarAdminVisitaCompletada(
+              admin.id,
+              visitaActualizada.id,
+              nombreTecnico,
+              nombreCliente
+            ).catch(err => console.error(`Error al enviar notificación al admin ${admin.id}:`, err));
+          }
+          
+        } catch (notifError) {
+          console.error('Error al procesar notificación de visita completada:', notifError);
+          // No fallar la actualización si falla la notificación
+        }
+      }
+      
       return res.status(200).json({
         success: true,
         data: visitaActualizada
