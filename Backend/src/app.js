@@ -39,12 +39,7 @@ expressOasGenerator.init(App, {});
 App.use(morgan('dev'));
 App.use(express.json());
 
-// configuracion de CORS
-//App.use(cors({
-  //origin: ['https://a-c-soluciones.vercel.app', 'http://localhost:5173', 'http://localhost:8001'],
-  //methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  //credentials: true
-//}));
+
 App.use(cors({
  origin: function (origin, callback) {
     const allowedOrigins = [
