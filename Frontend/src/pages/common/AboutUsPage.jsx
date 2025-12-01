@@ -35,7 +35,7 @@ const ContainerContent = styled.main`
   }
 
   @media screen and (max-width: 768px) {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 `;
 
@@ -51,7 +51,7 @@ const ContainerPage = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    gap: 2rem;
+    gap: 1.5rem;
   }
 `;
 
@@ -63,8 +63,9 @@ const Section = styled.section`
   flex-wrap: wrap;
 
   @media screen and (max-width: 768px) {
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: column-reverse;
+    gap: 1rem;
+    align-items: stretch;
   }
 `;
 
@@ -72,7 +73,8 @@ const TextContainer = styled.div`
   flex: 1 1 600px;
 
   @media screen and (max-width: 768px) {
-    flex: 1 1 100%;
+    flex: 1;
+    width: 100%;
   }
 `;
 
@@ -89,8 +91,11 @@ const Image = styled.img`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 8px;
+    display: block;
   }
 `;
 
@@ -102,7 +107,10 @@ const Title = styled.h2`
   padding-left: 0.75rem;
 
   @media screen and (max-width: 768px) {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    border-left-width: 4px;
+    padding-left: 0.6rem;
   }
 `;
 
@@ -112,7 +120,7 @@ const Paragraph = styled.p`
   line-height: 1.8;
 
   @media screen and (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.6;
   }
 `;
@@ -129,8 +137,13 @@ const ValuesList = styled.ul`
   }
 
   @media screen and (max-width: 768px) {
-    font-size: 1rem;
-    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+
+    li {
+      margin-bottom: 0.4rem;
+    }
   }
 `;
 
@@ -148,8 +161,12 @@ const MapContainer = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    height: 300px;
-    margin-top: 1.5rem;
+    height: 250px;
+    margin-top: 1rem;
+
+    iframe {
+      border-radius: 8px;
+    }
   }
 `;
 
