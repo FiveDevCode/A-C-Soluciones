@@ -5,6 +5,15 @@ import { faUserCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+// Intentar importar el contexto del menú técnico
+let useMenuTc = null;
+try {
+  const menuContext = require("../technical/MenuContext");
+  useMenuTc = menuContext.useMenu;
+} catch (e) {
+  // Si no existe, no hay problema
+}
+
 /* ---------- 🎨 Estilos base reutilizables ---------- */
 const Container = styled.div`
   display: flex;
@@ -14,15 +23,22 @@ const Container = styled.div`
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   gap: 1.5rem;
   padding: 2rem;
+  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
+  transition: margin-left 0.3s ease;
 
   @media (max-width: 1350px) {
     padding: 1.2rem;
     gap: 1.2rem;
   }
 
+  @media (max-width: 1280px) {
+    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
+  }
+
   @media (max-width: 768px) {
     padding: 0;
     gap: 0;
+    margin-left: 0;
   }
 `;
 
@@ -420,6 +436,18 @@ const BaseHome = ({
 }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  let collapsed = false;
+  
+  // Intentar obtener el estado del menú si es técnico
+  if (useMenuTc) {
+    try {
+      const menuContext = useMenuTc();
+      collapsed = menuContext.collapsed;
+    } catch (error) {
+      // Si no hay contexto disponible, usar false por defecto
+      collapsed = false;
+    }
+  }
 
   useEffect(() => {
     // Simular carga inicial
@@ -456,7 +484,7 @@ const BaseHome = ({
   };
 
   return (
-    <Container>
+    <Container $collapsed={collapsed}>
       <Header gradient={headerGradient}>
         <HeaderLeft>
           <h1>{title}</h1>

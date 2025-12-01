@@ -3,6 +3,7 @@ import { VisitaModel } from '../models/visita.model.js';
 import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ServicioModel } from '../models/servicios.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
 
 
 export class VisitaRepository {
@@ -11,6 +12,7 @@ export class VisitaRepository {
     this.solicitudModel = SolicitudModel.Solicitud;
     this.tecnicoModel = TecnicoModel.Tecnico;
     this.servicioModel = ServicioModel.Servicio;
+    this.clienteModel = ClienteModel.Cliente;
   }
   
   async crearVisita(data) {
@@ -22,7 +24,14 @@ export class VisitaRepository {
          {
           model: this.solicitudModel,
           as: 'solicitud_asociada',
-          attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado']
+          attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado'],
+          include: [
+            {
+              model: this.clienteModel,
+              as: 'cliente_solicitud',
+              attributes: ['id', 'nombre', 'apellido']
+            }
+          ]
          },
         {
           model: this.tecnicoModel,

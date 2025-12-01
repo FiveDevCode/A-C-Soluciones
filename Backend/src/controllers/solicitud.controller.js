@@ -1,5 +1,7 @@
 import { SolicitudService } from '../services/solicitud.services.js';
 import { ValidationError } from 'sequelize';
+import * as notificacionService from '../services/notificacion.services.js';
+import { ServicioModel } from '../models/servicios.model.js';
 
 export class SolicitudController {
     constructor(servicio = new SolicitudService()) {
@@ -22,6 +24,19 @@ export class SolicitudController {
             }
 
             const nuevaSolicitud = await this.solicitudService.crear(req.body);
+            
+            // Obtener información del servicio para la notificación
+            const servicio = await ServicioModel.Servicio.findByPk(servicio_id_fk);
+            
+            // Notificar al cliente sobre la solicitud creada
+            if (servicio) {
+                await notificacionService.notificarServicioSolicitado(
+                    cliente_id_fk,
+                    nuevaSolicitud.id,
+                    servicio.nombre
+                ).catch(err => console.error('Error al enviar notificación:', err));
+            }
+            
             return res.status(201).json(nuevaSolicitud);
 
         } catch (error) {
@@ -92,6 +107,15 @@ export class SolicitudController {
 
             if (!solicitudActualizada) {
                 return res.status(404).json({ message: 'Solicitud no encontrada' });
+            }
+            
+            // Notificar al cliente sobre el cambio de estado
+            if (solicitudActualizada.cliente_id_fk) {
+                await notificacionService.notificarCambioEstadoSolicitud(
+                    solicitudActualizada.cliente_id_fk,
+                    solicitudActualizada.id,
+                    estado
+                ).catch(err => console.error('Error al enviar notificación:', err));
             }
 
             return res.status(200).json(solicitudActualizada);

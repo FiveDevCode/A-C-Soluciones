@@ -5,6 +5,7 @@ import { sendEmail } from '../services/email.services.js';
 import * as fichaRepo from '../repository/ficha_mantenimiento.repository.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ValidationError } from 'sequelize';
+import * as notificacionService from '../services/notificacion.services.js';
 
 export const crearFichaMantenimiento = async (req, res) => {
   
@@ -115,6 +116,20 @@ export const crearFichaMantenimiento = async (req, res) => {
 
     // Enviar email con PDF
     await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
+    
+    // Notificar al cliente sobre la ficha creada
+    await notificacionService.notificarFichaCreada(
+      id_cliente,
+      nuevaFicha.id,
+      `${tecnicoInfo.nombre} ${tecnicoInfo.apellido}`
+    ).catch(err => console.error('Error al enviar notificación al cliente:', err));
+    
+    // Notificar al técnico sobre la ficha asignada
+    await notificacionService.notificarTecnicoFichaAsignada(
+      id_tecnico,
+      nuevaFicha.id,
+      clienteInfo.nombre
+    ).catch(err => console.error('Error al enviar notificación al técnico:', err));
 
     res.status(201).json({
       mensaje: 'Ficha creada correctamente y enviada al cliente.',

@@ -7,8 +7,8 @@ import { ServicioModel } from './servicios.model.js';
 import { ReporteBombeoModel } from './reporte_bombeo.model.js';
 import { EquipoBombeoModel } from './equipoBombeo.model.js';
 import { ParametroBombeoModel } from './parametroBombeo.model.js';
+import { Notificacion } from './notificacion.model.js';
 import { ReporteMantenimientoModel } from './reporte_mantenimiento.model.js';
-
 export const setupAssociations = () => {
   // Extraer los modelos de sus contenedores
   const { Solicitud } = SolicitudModel;
