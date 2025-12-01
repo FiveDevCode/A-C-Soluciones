@@ -188,7 +188,7 @@ const Button = styled.button`
   font-size: 14px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: all 0.3s;
-  font-weight: bold;
+  font-weight: 600;
 
   &:hover {
     background-color: ${({ active }) => (active ? "#ef9a9a" : "#b0b0b0")};
@@ -197,13 +197,11 @@ const Button = styled.button`
   @media (max-width: 1350px) and (min-width: 769px) {
     padding: 6px 10px;
     font-size: 12px;
-    height: auto;
   }
 
   @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
-    height: 48px;
   }
 `;
 
@@ -223,13 +221,11 @@ const AddButton = styled(Button)`
   @media (max-width: 1350px) and (min-width: 769px) {
     padding: 6px 10px;
     font-size: 12px;
-    height: auto;
   }
 
   @media (max-width: 768px) {
     padding: 10px 14px;
     font-size: 15px;
-    height: 48px;
   }
 `;
 
@@ -242,7 +238,7 @@ const RefreshButton = styled(Button)`
   gap: 6px;
   font-weight: 600;
   min-width: 40px;
-  padding: 8px;
+  padding: 8px 14px;
 
   &:hover {
     background-color: #45a049;
@@ -254,17 +250,13 @@ const RefreshButton = styled(Button)`
   }
 
   @media (max-width: 1350px) and (min-width: 769px) {
-    padding: 6px;
-    font-size: 14px;
-    min-width: auto;
-    height: auto;
+    padding: 6px 10px;
+    font-size: 12px;
   }
 
   @media (max-width: 768px) {
-    padding: 10px;
-    font-size: 16px;
-    min-width: 48px;
-    height: 48px;
+    padding: 10px 14px;
+    font-size: 15px;
   }
 `;
 
