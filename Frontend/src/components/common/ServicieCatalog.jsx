@@ -25,6 +25,10 @@ const TitleService = styled.h1`
   color: #5B5BDE;
   margin-bottom: 1rem;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.2rem;
     margin-bottom: 0.75rem;
@@ -59,6 +63,13 @@ const CatalogService = styled.div`
     border-right: none;
   }
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    gap: 1rem;
+    padding-bottom: 3rem;
+  }
+
   @media (max-width: 768px) {
     width: 100%;
     padding: 1rem;
@@ -76,6 +87,10 @@ const TitleCatalog = styled.h2`
   font-size: 1rem;
   font-weight: bold;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 0.9rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 0.95rem;
     color: #5B5BDE;
@@ -88,6 +103,11 @@ const Service = styled(Link)`
   font-size: 1rem;
   font-weight: normal;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 0.85rem;
+    line-height: 1.4rem;
+  }
 
   @media (max-width: 768px) {
     font-size: 0.85rem;

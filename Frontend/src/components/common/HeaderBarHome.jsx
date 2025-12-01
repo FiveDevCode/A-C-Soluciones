@@ -34,6 +34,11 @@ const LoginButton = styled(Link)`
     transform: scale(0.98);
   }
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    padding: 0.45rem 1rem;
+    font-size: 0.9rem;
+  }
+
   @media (max-width: 768px) {
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
@@ -99,7 +104,7 @@ const Menu = styled.div`
   }
   @media screen and (max-width: 1350px) {
     padding: 0 2rem;
-    
+    height: 80px;
   }
   @media (max-width: 768px) {
     padding: 0 1rem;
@@ -116,6 +121,10 @@ const MenuOption = styled.div`
   gap: 3rem;
   align-items: center;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    gap: 1.5rem;
+  }
+
   @media (max-width: 768px) {
     gap: 0.75rem;
     font-size: 0.8rem;
@@ -130,6 +139,10 @@ const LinkOption = styled(Link)`
 
   &:hover {
     color: #007BFF;
+  }
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 0.9rem;
   }
 
   @media (max-width: 768px) {
@@ -160,7 +173,7 @@ const HeaderBarHome = () => {
       </MenuBar>
       <Menu>
         <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-          <Logo src={logo} size="100%" max="150px"/>
+          <Logo src={logo} size="100%" max="150px" className="header-logo"/>
         </Link> 
         <MenuOption>
           <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>

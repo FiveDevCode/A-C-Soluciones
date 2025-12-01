@@ -17,6 +17,10 @@ const BackgroundWrapper = styled.div`
   align-items: center;
   justify-content: center;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    height: 380px;
+  }
+
   @media (max-width: 768px) {
     height: 350px;
   }
@@ -55,6 +59,11 @@ const Content = styled.div`
   color: white;
   text-align: center;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    gap: 1.5rem;
+    padding: 0 2rem;
+  }
+
   @media (max-width: 768px) {
     gap: 1rem;
     padding: 0 1rem;
@@ -64,6 +73,10 @@ const Content = styled.div`
 const CompanyName = styled.h2`
   font-size: 1.5rem;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.3rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.1rem;
   }
@@ -72,6 +85,12 @@ const CompanyName = styled.h2`
 const CompanyPhrase = styled.h1`
   font-size: 2rem;
   width: 800px;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.6rem;
+    width: 600px;
+    line-height: 1.5;
+  }
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
@@ -87,6 +106,11 @@ const ButtonService = styled(Button)`
     background-color: #FFFFFF;
     color: #000000;
     font-weight: bold;
+
+    @media (min-width: 769px) and (max-width: 1350px) {
+      font-size: 0.9rem;
+      padding: 0.5rem 1.2rem;
+    }
 
     @media (max-width: 768px) {
       font-size: 0.85rem;

@@ -24,6 +24,10 @@ const TitleWork = styled.h1`
   color: #5B5BDE;
   text-align: center;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.2rem;
     line-height: 1.4;
@@ -40,6 +44,17 @@ const ContainerLogo = styled.div`
   img {
     max-width: 150px;
     height: auto;
+  }
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+
+    img {
+      max-width: 130px;
+      margin: 0 auto;
+    }
   }
 
   @media (max-width: 768px) {

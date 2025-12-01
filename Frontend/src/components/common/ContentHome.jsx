@@ -90,6 +90,10 @@ const WhoTitle = styled.h1`
   color: #5B5BDE;
   font-weight: bold;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.2rem;
   }
@@ -99,6 +103,11 @@ const WhoDescription = styled.h2`
   font-weight: normal;
   line-height: 2.5rem;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.1rem;
+    line-height: 1.9rem;
+  }
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -161,6 +170,10 @@ const ServiceTitle = styled.h1`
   color: #5B5BDE;
   font-weight: bold;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.2rem;
   }
@@ -171,6 +184,11 @@ const ServiceDescription = styled.h2`
   line-height: 2.5rem;
   width: 100%;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.1rem;
+    line-height: 1.9rem;
+  }
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -185,6 +203,11 @@ const CustomButton = styled(Button)`
     text-transform: none;
     font-size: 1rem;
     font-weight: bold;
+
+    @media (min-width: 769px) and (max-width: 1350px) {
+      font-size: 0.9rem;
+      padding: 0.5rem 1.2rem;
+    }
 
     @media (max-width: 768px) {
       font-size: 0.85rem;

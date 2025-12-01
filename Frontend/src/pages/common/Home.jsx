@@ -20,6 +20,11 @@ const ContentWrapper = styled.div`
   margin-top: 2rem;
   margin-bottom: 1rem;
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
   @media (max-width: 768px) {
     gap: 2rem;
   }
