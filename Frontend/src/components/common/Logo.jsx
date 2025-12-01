@@ -7,7 +7,7 @@ const ImagenLogo = styled.img`
 
     @media (max-width: 768px) {
       width: 48%;
-      max-width: 250px;
+      max-width: 200px;
     }
 `;
 

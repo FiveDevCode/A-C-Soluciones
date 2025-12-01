@@ -11,7 +11,14 @@ import ChatBubble from "../../components/chatbot/ChatBubble";
 const ContainerHome = styled.section`
   display: flex;
   flex-direction: column;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: 3.125rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 
   @media (max-width: 768px) {
     gap: 2rem;
@@ -25,9 +32,11 @@ const Home = () => {
         <HeaderBarHome />
         <BackgroundHome />
       </div>
-      <ContentHome />
-      <WorkProductCl />
-      <ServicieCatalog />
+      <ContentWrapper>
+        <ContentHome />
+        <WorkProductCl />
+        <ServicieCatalog />
+      </ContentWrapper>
       <FooterHome />
       <ChatBubble />
     </ContainerHome>
