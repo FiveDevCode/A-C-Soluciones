@@ -24,7 +24,7 @@ const Header = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    padding-left: 70px;
+    padding: 1rem 0.75rem 1rem 70px;
   }
 `;
 
@@ -37,18 +37,31 @@ const Title = styled.h1`
   font-size: 1.6rem;
   margin: 0 0 0.3rem 0;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    margin: 0 0 0.2rem 0;
+  }
 `;
 
 const Subtitle = styled.p`
   font-size: 0.9rem;
   margin: 0;
   opacity: 0.9;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
 `;
 
 const ProfileInfo = styled.div`
@@ -60,6 +73,13 @@ const ProfileInfo = styled.div`
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Avatar = styled.div`
@@ -73,16 +93,32 @@ const Avatar = styled.div`
   font-size: 2rem;
   color: white;
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
 `;
 
 const UserInfo = styled.div`
   flex: 1;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    width: 100%;
+  }
 `;
 
 const UserName = styled.h2`
   font-size: 1.2rem;
   margin: 0 0 0.3rem 0;
   color: #2d3436;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 0 0 0.4rem 0;
+  }
 `;
 
 const UserRole = styled.span`
@@ -93,6 +129,11 @@ const UserRole = styled.span`
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.65rem;
+  }
 `;
 
 const FormCard = styled.div`
@@ -100,6 +141,11 @@ const FormCard = styled.div`
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    border-radius: 8px;
+  }
 `;
 
 const FormTitle = styled.h3`
@@ -118,18 +164,37 @@ const FormTitle = styled.h3`
     background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
     border-radius: 2px;
   }
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    margin: 0 0 0.75rem 0;
+    
+    &::before {
+      height: 16px;
+      width: 3px;
+    }
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
   margin-top: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 `;
 
 const SubmitButton = styled(Button)`
