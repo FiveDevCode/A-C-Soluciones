@@ -30,6 +30,7 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
       localStorage.removeItem('sessionId');
+      window.dispatchEvent(new Event('authChange'));
 
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith('tab_')) localStorage.removeItem(key);

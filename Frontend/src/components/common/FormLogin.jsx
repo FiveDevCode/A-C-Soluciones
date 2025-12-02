@@ -139,6 +139,9 @@ const FormLogin = () => {
       const role = decoded.rol;
       localStorage.setItem('userRole', role);
 
+      // Notificar cambio de autenticación para notificaciones
+      window.dispatchEvent(new Event('authChange'));
+
       // Gestión de sesión/tab para múltiples pestañas
       const sessionId = localStorage.getItem('sessionId') || `${Date.now()}_${Math.random()}`;
       localStorage.setItem('sessionId', sessionId);

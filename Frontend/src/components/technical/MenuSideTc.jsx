@@ -182,6 +182,7 @@ const MenuSideTc = () => {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
+    window.dispatchEvent(new Event('authChange'));
     navigate('/');
   };
 

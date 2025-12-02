@@ -125,9 +125,10 @@ export const NotificacionProvider = ({ children }) => {
 
     // Cleanup
     return () => {
+      console.log('🧹 Limpiando conexión Socket.io');
       socketInstance.disconnect();
     };
-  }, []);
+  }, []); // Solo se ejecuta una vez al montar
 
   // Cargar notificaciones iniciales
   const cargarNotificaciones = useCallback(async (limite = 50) => {
@@ -184,6 +185,20 @@ export const NotificacionProvider = ({ children }) => {
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
+  }, []);
+
+  // Detectar cambios de autenticación (logout/login)
+  useEffect(() => {
+    const handleAuthChange = () => {
+      console.log('🔄 Cambio de autenticación detectado - recargando página');
+      window.location.reload();
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
 
   const value = {
