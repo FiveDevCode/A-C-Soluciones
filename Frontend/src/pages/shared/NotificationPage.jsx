@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
+import { useNotificaciones } from "../../hooks/useNotificaciones";
 
 const Container = styled.div`
   display: flex;
@@ -126,35 +127,26 @@ const Button = styled.button`
 `;
 
 const NotificationPage = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Nueva factura registrada",
-      description: "Se ha registrado exitosamente la factura #FAC-2025-001 para el cliente Juan Pérez.",
-      date: "2025-11-30 10:30 AM",
-      isRead: false
-    },
-    {
-      id: 2,
-      title: "Actualización de inventario",
-      description: "El inventario ha sido actualizado. Se agregaron 5 nuevas herramientas eléctricas.",
-      date: "2025-11-29 03:15 PM",
-      isRead: false
-    },
-    {
-      id: 3,
-      title: "Mensaje del Administrador",
-      description: "Recordatorio: Revisar las facturas pendientes antes del cierre de mes.",
-      date: "2025-11-28 09:00 AM",
-      isRead: true
-    }
-  ]);
+  const { 
+    notificaciones, 
+    cantidadNoLeidas, 
+    marcarComoLeida, 
+    marcarTodasComoLeidas,
+    cargarNotificaciones
+  } = useNotificaciones();
 
   const [selectedIds, setSelectedIds] = useState([]);
 
-  const handleMarkAllRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
-    alert("Todas las notificaciones marcadas como leídas");
+  // Cargar notificaciones al montar el componente
+  useEffect(() => {
+    cargarNotificaciones();
+  }, [cargarNotificaciones]);
+
+  const handleMarkAllRead = async () => {
+    const result = await marcarTodasComoLeidas();
+    if (result.success) {
+      alert("Todas las notificaciones marcadas como leídas");
+    }
   };
 
   const handleDeleteSelected = () => {
@@ -163,19 +155,13 @@ const NotificationPage = () => {
       return;
     }
     
-    if (window.confirm(`¿Está seguro de que desea eliminar ${selectedIds.length} notificación(es)?`)) {
-      setNotifications(prev => prev.filter(notif => !selectedIds.includes(notif.id)));
-      setSelectedIds([]);
-      alert("Notificaciones eliminadas correctamente");
-    }
+    alert("Funcionalidad de eliminación por implementar");
+    setSelectedIds([]);
   };
 
-  const handleNotificationClick = (id) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, isRead: true } : notif
-      )
-    );
+  const handleNotificationClick = async (id) => {
+    // Marcar como leída
+    await marcarComoLeida(id);
 
     // Toggle selection
     setSelectedIds(prev => 
@@ -185,13 +171,22 @@ const NotificationPage = () => {
     );
   };
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('es-ES', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
     <Container>
       <BaseHeaderSection
         headerTitle="NOTIFICACIONES"
-        sectionTitle={`Notificaciones (${unreadCount} sin leer)`}
+        sectionTitle={`Notificaciones (${cantidadNoLeidas} sin leer)`}
         showAdd={false}
       />
 
@@ -209,24 +204,24 @@ const NotificationPage = () => {
           </Button>
         </ButtonGroup>
 
-        {notifications.length === 0 ? (
+        {notificaciones.length === 0 ? (
           <EmptyState>
             No tienes notificaciones en este momento
           </EmptyState>
         ) : (
           <NotificationList>
-            {notifications.map(notification => (
+            {notificaciones.map(notification => (
               <NotificationItem
-                key={notification.id}
-                $isRead={notification.isRead}
-                onClick={() => handleNotificationClick(notification.id)}
+                key={notification.id_notificacion}
+                $isRead={notification.leida}
+                onClick={() => handleNotificationClick(notification.id_notificacion)}
                 style={{
-                  border: selectedIds.includes(notification.id) ? '2px solid #2196f3' : 'none'
+                  border: selectedIds.includes(notification.id_notificacion) ? '2px solid #2196f3' : 'none'
                 }}
               >
-                <NotificationTitle>{notification.title}</NotificationTitle>
-                <NotificationDescription>{notification.description}</NotificationDescription>
-                <NotificationDate>{notification.date}</NotificationDate>
+                <NotificationTitle>{notification.titulo}</NotificationTitle>
+                <NotificationDescription>{notification.mensaje}</NotificationDescription>
+                <NotificationDate>{formatDate(notification.fecha_creacion)}</NotificationDate>
               </NotificationItem>
             ))}
           </NotificationList>
