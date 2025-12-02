@@ -51,31 +51,88 @@ const NotificationItem = styled.div`
   }
 `;
 
-const NotificationTitle = styled.h3`
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 16px;
+const NotificationHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const NotificationType = styled.span`
+  font-size: 0.75rem;
+  color: white;
   font-weight: 600;
+  text-transform: uppercase;
+  background: ${props => {
+    const type = props.$type?.toLowerCase();
+    if (type?.includes('factura')) return '#4caf50';
+    if (type?.includes('inventario')) return '#ff9800';
+    if (type?.includes('servicio')) return '#2196f3';
+    if (type?.includes('cliente')) return '#9c27b0';
+    if (type?.includes('mantenimiento')) return '#f44336';
+    return '#607d8b';
+  }};
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
 
   @media (max-width: 768px) {
-    font-size: 15px;
+    font-size: 0.7rem;
   }
 `;
 
 const NotificationDescription = styled.p`
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   color: #555;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 
   @media (max-width: 768px) {
     font-size: 13px;
   }
 `;
 
+const NotificationMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
 const NotificationDate = styled.span`
   color: #757575;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+const ReferenceTag = styled.span`
+  font-size: 0.75rem;
+  color: #666;
+  background: #e0e0e0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
+`;
+
+const StatusBadge = styled.span`
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 600;
+  background: ${props => props.$read ? '#e0e0e0' : '#4caf50'};
+  color: ${props => props.$read ? '#666' : 'white'};
 `;
 
 const EmptyState = styled.div`
@@ -219,9 +276,26 @@ const NotificationPage = () => {
                   border: selectedIds.includes(notification.id_notificacion) ? '2px solid #2196f3' : 'none'
                 }}
               >
-                <NotificationTitle>{notification.titulo}</NotificationTitle>
+                <NotificationHeader>
+                  <NotificationType $type={notification.tipo_notificacion}>
+                    {notification.tipo_notificacion?.replace(/_/g, ' ') || 'NOTIFICACIÓN'}
+                  </NotificationType>
+                  <StatusBadge $read={notification.leida}>
+                    {notification.leida ? '✓ Leída' : '● Nueva'}
+                  </StatusBadge>
+                </NotificationHeader>
                 <NotificationDescription>{notification.mensaje}</NotificationDescription>
-                <NotificationDate>{formatDate(notification.fecha_creacion)}</NotificationDate>
+                <NotificationMeta>
+                  <NotificationDate>
+                    🕒 {formatDate(notification.fecha_creacion)}
+                  </NotificationDate>
+                  {notification.tipo_referencia && (
+                    <ReferenceTag>
+                      📎 {notification.tipo_referencia}
+                      {notification.id_referencia && ` #${notification.id_referencia}`}
+                    </ReferenceTag>
+                  )}
+                </NotificationMeta>
               </NotificationItem>
             ))}
           </NotificationList>

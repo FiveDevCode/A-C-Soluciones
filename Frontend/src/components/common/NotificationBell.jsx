@@ -144,16 +144,30 @@ const NotificationHeader = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 0.5rem;
+  gap: 0.5rem;
 `;
 
 const NotificationType = styled.span`
-  font-size: 0.75rem;
-  color: #666;
+  font-size: 0.7rem;
+  color: white;
   font-weight: 600;
   text-transform: uppercase;
+  background: ${props => {
+    const type = props.$type?.toLowerCase();
+    if (type?.includes('factura')) return '#4caf50';
+    if (type?.includes('inventario')) return '#ff9800';
+    if (type?.includes('servicio')) return '#2196f3';
+    if (type?.includes('cliente')) return '#9c27b0';
+    if (type?.includes('mantenimiento')) return '#f44336';
+    return '#607d8b';
+  }};
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
 
   @media (max-width: 768px) {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
   }
 `;
 
@@ -177,7 +191,7 @@ const ActionButton = styled.button`
 `;
 
 const NotificationMessage = styled.p`
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
   color: #333;
   line-height: 1.5;
@@ -187,14 +201,33 @@ const NotificationMessage = styled.p`
   }
 `;
 
+const NotificationMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+`;
+
 const NotificationTime = styled.span`
   font-size: 0.75rem;
   color: #999;
-  margin-top: 0.5rem;
-  display: block;
 
   @media (max-width: 768px) {
     font-size: 0.7rem;
+  }
+`;
+
+const ReferenceTag = styled.span`
+  font-size: 0.7rem;
+  color: #666;
+  background: #f0f0f0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+
+  @media (max-width: 768px) {
+    font-size: 0.65rem;
   }
 `;
 
@@ -384,7 +417,7 @@ const NotificationBell = () => {
                 onClick={() => handleNotificationClick(notif)}
               >
                 <NotificationHeader>
-                  <NotificationType>
+                  <NotificationType $type={notif.tipo_notificacion}>
                     {notif.tipo_notificacion?.replace(/_/g, ' ')}
                   </NotificationType>
                   <NotificationActions>
@@ -406,9 +439,16 @@ const NotificationBell = () => {
                   </NotificationActions>
                 </NotificationHeader>
                 <NotificationMessage>{notif.mensaje}</NotificationMessage>
-                <NotificationTime>
-                  {formatearFecha(notif.fecha_creacion)}
-                </NotificationTime>
+                <NotificationMeta>
+                  <NotificationTime>
+                    {formatearFecha(notif.fecha_creacion)}
+                  </NotificationTime>
+                  {notif.tipo_referencia && (
+                    <ReferenceTag>
+                      📎 {notif.tipo_referencia}
+                    </ReferenceTag>
+                  )}
+                </NotificationMeta>
               </NotificationItem>
             ))
           )}
