@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { useNotificaciones } from "../../hooks/useNotificaciones";
+import { handleEliminarNotificacion } from "../../controllers/common/notificacion.controller";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
   display: flex;
@@ -135,6 +138,33 @@ const StatusBadge = styled.span`
   color: ${props => props.$read ? '#666' : 'white'};
 `;
 
+const NotificationActions = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const ActionButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  color: #666;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  border-radius: 4px;
+
+  &:hover {
+    background: ${props => props.$delete ? '#ffebee' : '#e3f2fd'};
+    color: ${props => props.$delete ? '#f44336' : '#2196f3'};
+  }
+
+  @media (max-width: 768px) {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
+`;
+
 const EmptyState = styled.div`
   text-align: center;
   padding: 40px;
@@ -206,14 +236,43 @@ const NotificationPage = () => {
     }
   };
 
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
     if (selectedIds.length === 0) {
       alert("Selecciona al menos una notificación para eliminar");
       return;
     }
     
-    alert("Funcionalidad de eliminación por implementar");
-    setSelectedIds([]);
+    if (window.confirm(`¿Estás seguro de eliminar ${selectedIds.length} notificación(es)?`)) {
+      let deletedCount = 0;
+      for (const id of selectedIds) {
+        const result = await handleEliminarNotificacion(id);
+        if (result.success) {
+          deletedCount++;
+        }
+      }
+      
+      if (deletedCount > 0) {
+        alert(`${deletedCount} notificación(es) eliminada(s) correctamente`);
+        await cargarNotificaciones();
+        setSelectedIds([]);
+      }
+    }
+  };
+
+  const handleDeleteOne = async (e, id) => {
+    e.stopPropagation();
+    if (window.confirm('¿Estás seguro de eliminar esta notificación?')) {
+      const result = await handleEliminarNotificacion(id);
+      if (result.success) {
+        await cargarNotificaciones();
+        setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
+      }
+    }
+  };
+
+  const handleMarkAsRead = async (e, id) => {
+    e.stopPropagation();
+    await marcarComoLeida(id);
   };
 
   const handleNotificationClick = async (id) => {
@@ -277,12 +336,31 @@ const NotificationPage = () => {
                 }}
               >
                 <NotificationHeader>
-                  <NotificationType $type={notification.tipo_notificacion}>
-                    {notification.tipo_notificacion?.replace(/_/g, ' ') || 'NOTIFICACIÓN'}
-                  </NotificationType>
-                  <StatusBadge $read={notification.leida}>
-                    {notification.leida ? '✓ Leída' : '● Nueva'}
-                  </StatusBadge>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <NotificationType $type={notification.tipo_notificacion}>
+                      {notification.tipo_notificacion?.replace(/_/g, ' ') || 'NOTIFICACIÓN'}
+                    </NotificationType>
+                    <StatusBadge $read={notification.leida}>
+                      {notification.leida ? '✓ Leída' : '● Nueva'}
+                    </StatusBadge>
+                  </div>
+                  <NotificationActions>
+                    {!notification.leida && (
+                      <ActionButton
+                        onClick={(e) => handleMarkAsRead(e, notification.id_notificacion)}
+                        title="Marcar como leída"
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                      </ActionButton>
+                    )}
+                    <ActionButton
+                      $delete
+                      onClick={(e) => handleDeleteOne(e, notification.id_notificacion)}
+                      title="Eliminar notificación"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ActionButton>
+                  </NotificationActions>
                 </NotificationHeader>
                 <NotificationDescription>{notification.mensaje}</NotificationDescription>
                 <NotificationMeta>
