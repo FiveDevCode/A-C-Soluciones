@@ -18,14 +18,14 @@ const Card = styled.div`
   background-color: white;
   margin: 0 auto 0 auto;
   align-self: center;
-  padding: 20px;
+  padding: 12px 20px;
   width: 85%;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1350px) {
     margin: 0 10px 0 10px;
-    padding: 15px;
+    padding: 8px 15px;
     width: 95%;
   }
 `;
@@ -33,7 +33,7 @@ const Card = styled.div`
 const NotificationList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 `;
 
 const NotificationItem = styled.div`
@@ -106,11 +106,21 @@ const NotificationMeta = styled.div`
 `;
 
 const NotificationDate = styled.span`
-  color: #757575;
-  font-size: 12px;
+  color: #616161;
+  font-size: 12.5px;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #9e9e9e;
+  }
 `;
 
 const ReferenceTag = styled.span`
@@ -180,7 +190,7 @@ const EmptyState = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
@@ -243,13 +253,11 @@ const NotificationPage = () => {
     }
     
     if (window.confirm(`¿Estás seguro de eliminar ${selectedIds.length} notificación(es)?`)) {
-      let deletedCount = 0;
-      for (const id of selectedIds) {
-        const result = await handleEliminarNotificacion(id);
-        if (result.success) {
-          deletedCount++;
-        }
-      }
+      // Eliminar todas en paralelo
+      const deletePromises = selectedIds.map(id => handleEliminarNotificacion(id));
+      const results = await Promise.all(deletePromises);
+      
+      const deletedCount = results.filter(r => r.success).length;
       
       if (deletedCount > 0) {
         alert(`${deletedCount} notificación(es) eliminada(s) correctamente`);
@@ -365,11 +373,11 @@ const NotificationPage = () => {
                 <NotificationDescription>{notification.mensaje}</NotificationDescription>
                 <NotificationMeta>
                   <NotificationDate>
-                    🕒 {formatDate(notification.fecha_creacion)}
+                    {formatDate(notification.fecha_creacion)}
                   </NotificationDate>
                   {notification.tipo_referencia && (
                     <ReferenceTag>
-                      📎 {notification.tipo_referencia}
+                      {notification.tipo_referencia}
                       {notification.id_referencia && ` #${notification.id_referencia}`}
                     </ReferenceTag>
                   )}
