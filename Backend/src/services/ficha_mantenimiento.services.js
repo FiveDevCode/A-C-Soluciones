@@ -5,18 +5,28 @@ import crypto from 'crypto';
 
 // Cambio de diseño para un estilo más formal y profesional.
 export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {}) => {
-  const doc = new PDFDocument({ margin: 50 });
-  const randomString = crypto.randomBytes(8).toString('hex');
-  const filename = `ficha_${randomString}.pdf`;
-  const folderPath = path.join('uploads', 'fichas');
-  const filePath = path.join(folderPath, filename);
+  try {
+    console.log('=== INICIANDO GENERACIÓN DE PDF ===');
+    console.log('Ficha recibida:', JSON.stringify(ficha, null, 2));
+    console.log('Cliente info:', clienteInfo);
+    console.log('Técnico info:', tecnicoInfo);
+    console.log('Imágenes:', imagenes);
 
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-  }
+    const doc = new PDFDocument({ margin: 50 });
+    const randomString = crypto.randomBytes(8).toString('hex');
+    const filename = `ficha_${randomString}.pdf`;
+    const folderPath = path.join('uploads', 'fichas');
+    const filePath = path.join(folderPath, filename);
 
-  const stream = fs.createWriteStream(filePath);
-  doc.pipe(stream);
+    console.log('Creando PDF en:', filePath);
+
+    if (!fs.existsSync(folderPath)) {
+      console.log('Carpeta no existe, creándola...');
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+
+    const stream = fs.createWriteStream(filePath);
+    doc.pipe(stream);
 
   // --- Paleta de Colores Formal ---
   const headerColor = '#c0bfbdff'; // Azul oscuro (Midnight Blue)
@@ -211,8 +221,24 @@ export const generarPDF = async (ficha, clienteInfo, tecnicoInfo, imagenes = {})
   doc.end();
 
   return new Promise((resolve, reject) => {
-    stream.on('finish', () => resolve(filePath));
-    stream.on('error', reject);
+    stream.on('finish', () => {
+      console.log('PDF generado exitosamente en:', filePath);
+      resolve(filePath);
+    });
+    stream.on('error', (err) => {
+      console.error('Error al escribir el PDF:', err);
+      reject(err);
+    });
   });
+
+  } catch (error) {
+    console.error('========================================');
+    console.error('ERROR EN GENERACIÓN DE PDF:');
+    console.error('========================================');
+    console.error('Mensaje:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('========================================');
+    throw error;
+  }
 };
 

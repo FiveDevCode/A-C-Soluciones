@@ -280,7 +280,9 @@ const MobileMenuButton = styled.button`
   }
 `;
 
-const MenuOverlay = styled.div`
+const MenuOverlay = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'show',
+})`
   display: none;
   
   @media (max-width: 768px) {

@@ -48,6 +48,9 @@ const createMaintenanceSheet = ({
   if (foto_estado_antes) formData.append("foto_estado_antes", foto_estado_antes, );
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
   if (foto_descripcion_trabajo) formData.append("foto_descripcion_trabajo", foto_descripcion_trabajo);
+  
+  
+
   return api.post("/fichas", formData, {
     headers: {
       Authorization: `Bearer ${token}`,

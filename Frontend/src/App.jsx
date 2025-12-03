@@ -71,7 +71,9 @@ import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.j
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 
-const Container = styled.div`
+const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `
@@ -85,7 +87,9 @@ const Container = styled.div`
   `}
 `;
 
-const Content = styled.div`
+const Content = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `

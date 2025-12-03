@@ -106,7 +106,9 @@ const ButtonGroup = styled.div`
   }
 `;
 
-const Button = styled.button`
+const Button = styled.button.withConfig({
+  shouldForwardProp: (prop) => !['hasActiveFilters', 'type'].includes(prop),
+})`
   background-color: ${({ type, hasActiveFilters }) =>
     type === "clear" 
       ? hasActiveFilters ? "#FF9800" : "#c0c0c0"

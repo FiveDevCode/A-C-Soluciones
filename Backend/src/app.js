@@ -39,7 +39,6 @@ expressOasGenerator.init(App, {});
 App.use(morgan('dev'));
 App.use(express.json());
 
-
 App.use(cors({
  origin: function (origin, callback) {
     const allowedOrigins = [
@@ -95,6 +94,18 @@ if (fs.existsSync(openApiPath)) {
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 App.use(FaqRouter)
+
+// Manejador de errores global - DEBE IR AL FINAL
+App.use((err, req, res, next) => {
+  console.error('Error en la aplicación:', err.message);
+  console.error(err.stack);
+
+  res.status(err.status || 500).json({
+    error: true,
+    message: err.message || 'Error interno del servidor',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
 
 // Función para inicializar Socket.io
 export const setupSocket = (io) => {

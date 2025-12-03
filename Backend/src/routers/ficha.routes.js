@@ -9,6 +9,19 @@ import { obtenerFichasPorCliente, obtenerFichasPorTecnico} from '../controllers/
 
 const router = express.Router();
 
+// Middleware para capturar errores async
+const asyncHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch((error) => {
+    console.error('╔════════════════════════════════════════════════════════╗');
+    console.error('║        ERROR CAPTURADO EN ROUTER DE FICHAS            ║');
+    console.error('╚════════════════════════════════════════════════════════╝');
+    console.error('🔴 Ruta:', req.method, req.url);
+    console.error('🔴 Error:', error);
+    console.error('════════════════════════════════════════════════════════\n');
+    next(error);
+  });
+};
+
 router.post(
   '/fichas', authenticate,
   isAdminOrTecnico,
@@ -17,7 +30,7 @@ router.post(
     { name: 'foto_estado_final', maxCount: 1 },
     { name: 'foto_descripcion_trabajo', maxCount: 1 },
   ]),
-  crearFichaMantenimiento
+  asyncHandler(crearFichaMantenimiento)
 );
 
 router.get('/fichas', authenticate, isAdminOrTecnico, listarFichas);
