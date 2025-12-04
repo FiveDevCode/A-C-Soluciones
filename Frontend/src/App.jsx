@@ -76,6 +76,7 @@ import FixedClientReportsAd from "./pages/administrator/FixedClientReportsAd.jsx
 import FixedClientMaintenancePage from "./pages/administrator/FixedClientMaintenancePage.jsx";
 import FixedClientPumpingPage from "./pages/administrator/FixedClientPumpingPage.jsx";
 import FixedClientPlantPage from "./pages/administrator/FixedClientPlantPage.jsx";
+import ClientMaintenanceHistoryAd from "./pages/administrator/ClientMaintenanceHistoryAd.jsx";
 
 const Container = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== 'hideStyles',
@@ -529,6 +530,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <FixedClientPlantPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/clientes/:clientId/historial-fichas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <ClientMaintenanceHistoryAd />
               </PrivateRoute>
             }
           />
