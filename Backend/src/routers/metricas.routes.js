@@ -1,7 +1,7 @@
 import express from 'express';
 import { MetricasController } from '../controllers/metricas.controller.js';
 import { authenticate } from '../middlewares/autenticacion.js';
-import { isAdmin } from '../middlewares/autenticacion.js';
+import { isAdminOrContador } from '../middlewares/autenticacion.js';
 
 const router = express.Router();
 const metricasController = new MetricasController();
@@ -14,7 +14,7 @@ const metricasController = new MetricasController();
 router.get(
   '/api/metricas/servicios-mas-solicitados',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerServiciosMasSolicitados
 );
 
@@ -26,7 +26,7 @@ router.get(
 router.get(
   '/api/metricas/solicitudes-por-estado',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerSolicitudesPorEstado
 );
 
@@ -39,7 +39,7 @@ router.get(
 router.get(
   '/api/metricas/clientes-mas-activos',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerClientesMasActivos
 );
 
@@ -52,7 +52,7 @@ router.get(
 router.get(
   '/api/metricas/tecnicos-mas-activos',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerTecnicosMasActivos
 );
 
@@ -64,7 +64,7 @@ router.get(
 router.get(
   '/api/metricas/estadisticas-generales',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerEstadisticasGenerales
 );
 
@@ -76,7 +76,7 @@ router.get(
 router.get(
   '/api/metricas/visitas-por-estado',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerVisitasPorEstado
 );
 
@@ -88,7 +88,7 @@ router.get(
 router.get(
   '/api/metricas/dashboard',
   authenticate,
-  isAdmin,
+  isAdminOrContador,
   metricasController.obtenerDashboardCompleto
 );
 

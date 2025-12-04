@@ -10,7 +10,8 @@ import {
   faClipboardList,
   faBoxes,
   faBell,
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faChartBar
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
@@ -142,6 +143,11 @@ export const MenuSideAc = () => {
         <ContainerOption to="/contador/inicio">
           <IconOption icon={faHouse} />
           <TitleOption>Inicio</TitleOption>
+        </ContainerOption>
+
+        <ContainerOption to="/contador/metricas">
+          <IconOption icon={faChartBar} />
+          <TitleOption>Métricas y Estadisticas</TitleOption>
         </ContainerOption>
 
         <ContainerOption to="/contador/facturas">

@@ -70,6 +70,7 @@ import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
+import MetricasPage from "./pages/administrator/MetricasPage.jsx";
 
 const Container = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== 'hideStyles',
@@ -104,6 +105,8 @@ const Content = styled.div.withConfig({
     width: 100%;
     gap: 2.5rem;
     margin-bottom: 1rem;
+    overflow-y: auto;
+    height: 100vh;
   `}
 `;
 
@@ -231,6 +234,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <HomeAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/metricas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <MetricasPage />
               </PrivateRoute>
             }
           />
@@ -485,6 +497,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <ServicePageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/metricas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <MetricasPage />
               </PrivateRoute>
             }
           />
