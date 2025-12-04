@@ -233,6 +233,37 @@ const AddButton = styled(Button)`
   }
 `;
 
+const SecondaryButton = styled(Button)`
+  background-color: #43a047;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #388e3c;
+  }
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+`;
+
+const ButtonsGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
 const RefreshButton = styled(Button)`
   background-color: #4caf50;
   color: white;
@@ -269,6 +300,9 @@ const BaseHeaderSection = ({
   sectionTitle = "Listado de registros",
   addLabel = "Agregar",
   onAdd,
+  secondaryLabel,
+  secondaryIcon,
+  onSecondaryAction,
   onDeleteSelected,
   onRefresh,
   selectedCount = 0,
@@ -333,10 +367,19 @@ const BaseHeaderSection = ({
           <TitleSection>
             {sectionTitle}
           </TitleSection>
-          {onAdd && (
-            <AddButton onClick={onAdd}>
-              <FaPlus /> {addLabel}
-            </AddButton>
+          {(onAdd || onSecondaryAction) && (
+            <ButtonsGroup>
+              {onAdd && (
+                <AddButton onClick={onAdd}>
+                  <FaPlus /> {addLabel}
+                </AddButton>
+              )}
+              {onSecondaryAction && (
+                <SecondaryButton onClick={onSecondaryAction}>
+                  {secondaryIcon} {secondaryLabel}
+                </SecondaryButton>
+              )}
+            </ButtonsGroup>
           )}
         </ContainerAdd>
 

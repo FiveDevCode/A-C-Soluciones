@@ -21,6 +21,7 @@ import {
   faBoxes,
   faBell,
   faChartBar,
+  faFileCirclePlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -339,6 +340,7 @@ const MenuSideAd = () => {
       { to: '/admin/visitas', icon: faCompass, label: 'Visitas' },
       { to: '/admin/tecnicos', icon: faTools, label: 'Técnicos' },
       { to: '/admin/clientes', icon: faUsers, label: 'Clientes' },
+      { to: '/admin/reportes-clientes-fijos', icon: faFileCirclePlus, label: 'Reportes Clientes Fijos' },
       { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
       { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/admin/metricas', icon: faChartBar, label: 'Métricas y Estadísticas' },

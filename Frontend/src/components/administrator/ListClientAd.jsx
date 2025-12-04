@@ -9,6 +9,11 @@ const ListClientAd = ({ clients, reloadData, onSelectRows }) => {
     { header: "Apellido", accessor: "apellido" },
     { header: "Correo Electrónico", accessor: "correo_electronico" },
     {
+      header: "Tipo",
+      accessor: "tipo_cliente",
+      isBadge: true,
+    },
+    {
       header: "Estado",
       accessor: "estado",
       isBadge: true,
@@ -19,7 +24,7 @@ const ListClientAd = ({ clients, reloadData, onSelectRows }) => {
     <BaseTable
       data={clients}
       columns={columns}
-      getBadgeValue={(row) => row.estado}
+      getBadgeValue={(row, accessor) => row[accessor]}
       emptyMessage="No hay clientes registrados"
       EditComponent={(props) => (
         <EditClientAd {...props} onSuccess={reloadData} />

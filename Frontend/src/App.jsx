@@ -71,6 +71,11 @@ import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.j
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 import MetricasPage from "./pages/administrator/MetricasPage.jsx";
+import CreateFixedClientAd from "./pages/administrator/CreateFixedClientAd.jsx";
+import FixedClientReportsAd from "./pages/administrator/FixedClientReportsAd.jsx";
+import FixedClientMaintenancePage from "./pages/administrator/FixedClientMaintenancePage.jsx";
+import FixedClientPumpingPage from "./pages/administrator/FixedClientPumpingPage.jsx";
+import FixedClientPlantPage from "./pages/administrator/FixedClientPlantPage.jsx";
 
 const Container = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== 'hideStyles',
@@ -479,6 +484,51 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <ClientPageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/clientes/crear-fijo"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateFixedClientAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientReportsAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/ficha-mantenimiento/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientMaintenancePage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-bombeo/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPumpingPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-planta/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPlantPage />
               </PrivateRoute>
             }
           />
