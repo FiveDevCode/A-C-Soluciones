@@ -47,6 +47,30 @@ export const crearFichaMantenimiento = async (req, res) => {
       id_visitas
     });
 
+    // Validar tipo de cliente y requisito de visita
+    if (id_cliente) {
+      const cliente = await ClienteModel.Cliente.findByPk(id_cliente);
+      if (!cliente) {
+        return res.status(404).json({ 
+          error: 'Cliente no encontrado' 
+        });
+      }
+
+      // Si es cliente regular, requiere id_visitas
+      if (cliente.tipo_cliente === 'regular' && !id_visitas) {
+        return res.status(400).json({ 
+          error: 'Los clientes regulares requieren una visita asociada. Por favor seleccione una visita.' 
+        });
+      }
+
+      // Si es cliente fijo, NO debe tener id_visitas
+      if (cliente.tipo_cliente === 'fijo' && id_visitas) {
+        return res.status(400).json({ 
+          error: 'Los clientes fijos no requieren visitas. Este campo debe estar vacío.' 
+        });
+      }
+    }
+
     // Extraer archivos si están presentes
     const fotoAntes = req.files?.foto_estado_antes?.[0];
     const fotoFinal = req.files?.foto_estado_final?.[0];

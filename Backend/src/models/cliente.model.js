@@ -174,6 +174,17 @@ const Cliente= sequelize.define('Cliente',{
         allowNull: false,
         defaultValue: 'activo'
     },
+    tipo_cliente: {
+        type: DataTypes.ENUM('regular', 'fijo'),
+        allowNull: false,
+        defaultValue: 'regular',
+        validate: {
+            isIn: {
+                args: [['regular', 'fijo']],
+                msg: 'El tipo de cliente debe ser "regular" o "fijo".'
+            }
+        }
+    },
 
 }, {
     tableName: 'cliente',
