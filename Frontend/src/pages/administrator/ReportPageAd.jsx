@@ -68,7 +68,7 @@ const ReportPageAd = () => {
     <Container>
 
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES"
+        headerTitle="REPORTES"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
         onRefresh={loadReports}

@@ -69,7 +69,7 @@ const ClientPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE CLIENTES"
+        headerTitle="CLIENTES"
         sectionTitle="Lista de clientes"
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadClients}

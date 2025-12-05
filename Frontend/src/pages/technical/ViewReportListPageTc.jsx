@@ -135,7 +135,7 @@ const ViewReportListPageTc = () => {
   return (
     <Container $collapsed={collapsed}>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES"
+        headerTitle="REPORTES"
         sectionTitle="Listado de reportes generados"
         onRefresh={handleRefresh}
         filterComponent={

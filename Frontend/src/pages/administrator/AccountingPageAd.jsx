@@ -71,7 +71,7 @@ const AccountingPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN CONTABLE"
+        headerTitle="CONTABILIDAD"
         sectionTitle="Lista de empleados contables"
         addLabel="Agregar empleado contable"
         onAdd={() => setShowModal(true)}

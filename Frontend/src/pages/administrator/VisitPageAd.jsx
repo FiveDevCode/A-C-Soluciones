@@ -44,7 +44,7 @@ const VisitPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE VISITAS"
+        headerTitle="VISITAS"
         sectionTitle="Lista de visitas asignadas"
         addLabel="Agregar visita"
         onAdd={() => setShowModal(true)}

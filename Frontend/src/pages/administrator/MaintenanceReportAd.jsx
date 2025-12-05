@@ -45,7 +45,7 @@ const MaintenanceReportPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES DE MANTENIMIENTO"
+        headerTitle="REPORTES DE MANTENIMIENTO"
         sectionTitle="Reportes generados"
         addLabel="Agregar reporte"
         onAdd={() => setShowModal(true)}
