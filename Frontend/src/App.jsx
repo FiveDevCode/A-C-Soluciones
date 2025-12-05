@@ -7,7 +7,7 @@ import {
 import Global from "./Global";
 import LoginPage from "./pages/common/LoginPage";
 import styled from "styled-components";
-import MenuSideAd from "./components/administrator/MenuSideAd";
+import MenuSide from "./components/common/MenuSide";
 import CreateAccountPageCl from "./pages/client/CreateAccountPageCl";
 import HomeSessionPageCl from "./pages/client/HomeSessionPageCl";
 import ProfileUserTc from "./pages/technical/ProfileUserTc";
@@ -26,7 +26,6 @@ import RecoverChangePage from "./pages/common/RecoverChangePage";
 import ProfilePageAd from "./pages/administrator/ProfilePageAd";
 import CreateReportPageTc from "./pages/technical/CreateReportPageTc";
 import ViewVisitListPageTc from "./pages/technical/ViewVisitListPageTc";
-import MenuSideTc from "./components/technical/MenuSideTc";
 import ViewReportListPageTc from "./pages/technical/ViewReportListPageTc";
 import ViewServicePageTc from "./pages/technical/ViewServicePageTc";
 import ViewViewVisitListCompletePageTc from "./pages/technical/ViewVisitListCompletePageTc";
@@ -141,9 +140,7 @@ function AppContent() {
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
-      {!hideMenuAndHeader && role === "administrador" && <MenuSideAd />}
-      {!hideMenuAndHeader && role === "tecnico" && <MenuSideTc />}
-      {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
+      {!hideMenuAndHeader && (role === "administrador" || role === "tecnico" || role === "Contador") && <MenuSide />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
         {/* HeaderBarCl removido - el perfil ahora está en el menú vertical */}
