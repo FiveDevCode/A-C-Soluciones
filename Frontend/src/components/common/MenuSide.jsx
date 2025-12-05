@@ -360,7 +360,7 @@ const MenuSide = () => {
       { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
       { to: '/tecnico/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/tecnico/visitas', icon: faCompass, label: 'Visitas' },
-      { to: '/tecnico/reporte', icon: faFileAlt, label: 'Fichas de mantenimiento' },
+      { to: '/tecnico/reportes', icon: faFileAlt, label: 'Fichas de mantenimiento' },
     ],
 
     Contador: [
