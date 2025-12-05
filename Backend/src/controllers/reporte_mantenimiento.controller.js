@@ -42,6 +42,13 @@ export const crearReporteMantenimiento = async (req, res) => {
       modelo_generador
     });
 
+    // Validar cliente
+    if (!id_cliente) {
+      return res.status(400).json({ 
+        error: 'El ID del cliente es requerido' 
+      });
+    }
+
     // Crear el reporte principal
     const nuevoReporte = await reporteRepo.crearReporte({
       fecha,

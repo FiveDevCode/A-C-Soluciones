@@ -130,6 +130,7 @@ const ReportFormAd = () => {
         navigate(`/admin/visita/${id}`)      
       }, 3000);
     } catch (err) {
+
       setErrorMsg("");
       if (err.response?.data?.errors) {
         const formattedErrors = {};
@@ -139,8 +140,19 @@ const ReportFormAd = () => {
           }
         });
         setFieldErrors(formattedErrors);
+      } else if (err.response?.data?.errores) {
+        const formattedErrors = {};
+        err.response.data.errores.forEach(error => {
+          if (!formattedErrors[error.campo]) {
+            formattedErrors[error.campo] = error.mensaje;
+          }
+        });
+        setFieldErrors(formattedErrors);
+        setErrorMsg('Por favor revisa los campos marcados en rojo');
       } else {
-        setErrorMsg(err.response.data.message);
+        const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || 'Error desconocido al crear la ficha';
+        setErrorMsg(errorMessage);
+        console.error('Mensaje de error mostrado al usuario:', errorMessage);
       }
     } finally {
       setIsSubmitting(false);

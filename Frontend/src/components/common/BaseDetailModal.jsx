@@ -122,7 +122,7 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const BaseDetailModal = ({ title, fields, onClose }) => {
+const BaseDetailModal = ({ title, fields, onClose, additionalContent }) => {
   
   return (
     <ModalOverlay>
@@ -139,6 +139,8 @@ const BaseDetailModal = ({ title, fields, onClose }) => {
             )}
           </FieldGroup>
         ))}
+
+        {additionalContent}
 
         <ButtonsContainer>
           <StyledButton

@@ -519,8 +519,8 @@ const BaseTable = ({
                     if (getBadgeValue && col.isBadge)
                       return (
                         <td key={i}>
-                          <EstadoBadge estado={getBadgeValue(row)}>
-                            {getBadgeValue(row)}
+                          <EstadoBadge estado={getBadgeValue(row, col.accessor)}>
+                            {getBadgeValue(row, col.accessor)}
                           </EstadoBadge>
                         </td>
                       );
@@ -606,7 +606,7 @@ const BaseTable = ({
               
               const title = formatValue(titleValue);
               const subtitle = formatValue(subtitleValue);
-              const badgeValue = getBadgeValue ? getBadgeValue(row) : row.estado;
+              const badgeValue = getBadgeValue ? getBadgeValue(row, 'estado') : row.estado;
 
               // Obtener labels de las columnas
               const titleColumn = columns.find(col => col.accessor === mobileConfig.title) || columns[0];

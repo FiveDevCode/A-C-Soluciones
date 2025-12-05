@@ -26,6 +26,7 @@ import HistorialServicesRoter from './routers/Historial_services.route.js';
 import ReporteMantenimientoRouter from './routers/reporte_mantenimiento.routes.js';
 import ReporteBombeoRouter from './routers/reporte_bombeo.routes.js'
 import NotificacionRouter from './routers/notificacion.routes.js';
+import MetricasRouter from './routers/metricas.routes.js';
 import { setupAssociations } from './models/asociaciones.midel.js';
 import * as notificacionService from './services/notificacion.services.js';
 
@@ -39,12 +40,6 @@ expressOasGenerator.init(App, {});
 App.use(morgan('dev'));
 App.use(express.json());
 
-// configuracion de CORS
-//App.use(cors({
-  //origin: ['https://a-c-soluciones.vercel.app', 'http://localhost:5173', 'http://localhost:8001'],
-  //methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  //credentials: true
-//}));
 App.use(cors({
  origin: function (origin, callback) {
     const allowedOrigins = [
@@ -86,6 +81,7 @@ App.use(HistorialServicesRoter);
 App.use('/fichas', fichaClienteRouter);
 App.use(ReporteBombeoRouter);
 App.use(NotificacionRouter);
+App.use(MetricasRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
 App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
@@ -100,6 +96,18 @@ if (fs.existsSync(openApiPath)) {
   App.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 App.use(FaqRouter)
+
+// Manejador de errores global - DEBE IR AL FINAL
+App.use((err, req, res, next) => {
+  console.error('Error en la aplicación:', err.message);
+  console.error(err.stack);
+
+  res.status(err.status || 500).json({
+    error: true,
+    message: err.message || 'Error interno del servidor',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
 
 // Función para inicializar Socket.io
 export const setupSocket = (io) => {
