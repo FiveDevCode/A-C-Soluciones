@@ -142,9 +142,6 @@ const Cliente= sequelize.define('Cliente',{
               args: [10, 255],
               msg: 'La dirección debe tener entre 10 y 255 caracteres.',
             },
-            notEmpty: {
-              msg: 'La dirección no puede estar vacía.',
-            },
             sinEspaciosSolamente
           }
     },
