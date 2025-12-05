@@ -71,8 +71,17 @@ import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
+import MetricasPage from "./pages/administrator/MetricasPage.jsx";
+import CreateFixedClientAd from "./pages/administrator/CreateFixedClientAd.jsx";
+import FixedClientReportsAd from "./pages/administrator/FixedClientReportsAd.jsx";
+import FixedClientMaintenancePage from "./pages/administrator/FixedClientMaintenancePage.jsx";
+import FixedClientPumpingPage from "./pages/administrator/FixedClientPumpingPage.jsx";
+import FixedClientPlantPage from "./pages/administrator/FixedClientPlantPage.jsx";
+import ClientMaintenanceHistoryAd from "./pages/administrator/ClientMaintenanceHistoryAd.jsx";
 
-const Container = styled.div`
+const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `
@@ -86,7 +95,9 @@ const Container = styled.div`
   `}
 `;
 
-const Content = styled.div`
+const Content = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `
@@ -101,6 +112,8 @@ const Content = styled.div`
     width: 100%;
     gap: 2.5rem;
     margin-bottom: 1rem;
+    overflow-y: auto;
+    height: 100vh;
   `}
 `;
 
@@ -226,6 +239,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <HomeAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/metricas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <MetricasPage />
               </PrivateRoute>
             }
           />
@@ -476,6 +498,60 @@ function AppContent() {
           />
 
           <Route
+            path="/admin/clientes/crear-fijo"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateFixedClientAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientReportsAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/ficha-mantenimiento/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientMaintenancePage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-bombeo/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPumpingPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-planta/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPlantPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/clientes/:clientId/historial-fichas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <ClientMaintenanceHistoryAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
             path="/admin/administradores"
             element={
               <PrivateRoute roleRequired="administrador">
@@ -494,7 +570,16 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/ficha-mantenimiento"
+            path="/admin/metricas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <MetricasPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes"
             element={
               <PrivateRoute roleRequired="administrador">
                 <ReportPageAd />

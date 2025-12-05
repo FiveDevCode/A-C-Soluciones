@@ -29,6 +29,28 @@ export const crearReporteBombeo = async (req, res) => {
             return res.status(400).json({ error: 'Faltan datos requeridos (fecha, cliente_id, tecnico_id, equipos, parametrosLinea).' });
         }
 
+        // Validar tipo de cliente y requisito de visita
+        const cliente = await ClienteModel.Cliente.findByPk(cliente_id);
+        if (!cliente) {
+            return res.status(404).json({ 
+                error: 'Cliente no encontrado' 
+            });
+        }
+
+        // Si es cliente regular, requiere visita_id
+        if (cliente.tipo_cliente === 'regular' && !visita_id) {
+            return res.status(400).json({ 
+                error: 'Los clientes regulares requieren una visita asociada. Por favor seleccione una visita.' 
+            });
+        }
+
+        // Si es cliente fijo, NO debe tener visita_id
+        if (cliente.tipo_cliente === 'fijo' && visita_id) {
+            return res.status(400).json({ 
+                error: 'Los clientes fijos no requieren visitas. Este campo debe estar vacío.' 
+            });
+        }
+
         const reporteData = {
             fecha, cliente_id, tecnico_id, administrador_id, visita_id, direccion, ciudad, telefono, encargado, observaciones_finales
         };
@@ -36,14 +58,13 @@ export const crearReporteBombeo = async (req, res) => {
         // 2. Crear el reporte completo en DB (Reporte, Equipos, Parámetros)
         const nuevoReporte = await reporteRepo.crearReporteCompleto(reporteData, equipos, parametrosLinea);
 
-        // 3. Obtener información completa de Cliente y Técnico para el PDF y el Email
-        const cliente = await ClienteModel.Cliente.findByPk(cliente_id);
+        // 3. Obtener información completa de Técnico para el PDF y el Email
         const tecnico = await TecnicoModel.Tecnico.findByPk(tecnico_id);
 
-        if (!cliente || !tecnico) {
+        if (!tecnico) {
              // Es buena práctica eliminar el reporte si falla la obtención de info clave
              // O simplemente devolver un error
-             return res.status(404).json({ error: 'Cliente o Técnico no encontrado para generar el PDF.' });
+             return res.status(404).json({ error: 'Técnico no encontrado para generar el PDF.' });
         }
         
         const clienteInfo = { 

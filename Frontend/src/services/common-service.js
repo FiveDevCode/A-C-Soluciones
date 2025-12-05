@@ -43,11 +43,18 @@ const createMaintenanceSheet = ({
   formData.append("tiempo_de_trabajo", tiempo_de_trabajo);
   formData.append("recomendaciones", recomendaciones);
   formData.append("fecha_de_mantenimiento", fecha_de_mantenimiento);
-  formData.append("id_visitas", id_visitas);
+  
+  // Solo agregar id_visitas si no es null (para clientes fijos)
+  if (id_visitas !== null && id_visitas !== undefined) {
+    formData.append("id_visitas", id_visitas);
+  }
 
   if (foto_estado_antes) formData.append("foto_estado_antes", foto_estado_antes, );
   if (foto_estado_final) formData.append("foto_estado_final", foto_estado_final);
   if (foto_descripcion_trabajo) formData.append("foto_descripcion_trabajo", foto_descripcion_trabajo);
+  
+  
+
   return api.post("/fichas", formData, {
     headers: {
       Authorization: `Bearer ${token}`,

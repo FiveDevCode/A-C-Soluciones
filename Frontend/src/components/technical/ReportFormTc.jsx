@@ -97,12 +97,23 @@ const ReportFormTc = () => {
   
 
   const handleSubmit = async(event) => {
+    alert('HANDLE SUBMIT EJECUTADO');
+    console.log('=== SUBMIT INICIADO ===');
     event.preventDefault(); 
+    console.log('=== FORM DATA ===', formData);
+    
     setIsSubmitting(true);
-    const id_cliente = await handleGetClientVisit(id);
-    const id_tecnico = await handleGetTechnicalVisit(id);
-
+    
     try {
+      console.log('=== OBTENIENDO CLIENTE ===');
+      const id_cliente = await handleGetClientVisit(id);
+      console.log('Cliente ID:', id_cliente);
+      
+      console.log('=== OBTENIENDO TECNICO ===');
+      const id_tecnico = await handleGetTechnicalVisit(id);
+      console.log('Tecnico ID:', id_tecnico);
+
+      console.log('=== ENVIANDO FICHA ===');
       await handleCreateMaintenanceSheet({
         id_cliente: id_cliente,
         id_tecnico: id_tecnico,
@@ -130,17 +141,25 @@ const ReportFormTc = () => {
         navigate(`/tecnico/visita/${id}`)      
       }, 3000);
     } catch (err) {
+      console.error('ERROR AL CREAR FICHA:', err);
+      console.error('Response data:', err.response?.data);
+
       setErrorMsg("");
-      if (err.response?.data?.errors) {
+      if (err.response?.data?.errores) {
+        const formattedErrors = {};
+        err.response.data.errores.forEach(error => {
+          formattedErrors[error.campo] = error.mensaje;
+        });
+        setFieldErrors(formattedErrors);
+        setErrorMsg('Por favor revisa los campos marcados en rojo');
+      } else if (err.response?.data?.errors) {
         const formattedErrors = {};
         err.response.data.errors.forEach(error => {
-          if (!formattedErrors[error.path]) {
-            formattedErrors[error.path] = error.message;
-          }
+          formattedErrors[error.path] = error.message;
         });
         setFieldErrors(formattedErrors);
       } else {
-        setErrorMsg(err.response.data.message);
+        setErrorMsg(err.response?.data?.message || err.response?.data?.error || err.message || 'Error al crear la ficha');
       }
     } finally {
       setIsSubmitting(false);
@@ -381,6 +400,12 @@ const ReportFormTc = () => {
           color="primary"
           style={{ marginTop: '1rem' }}
           disabled={isSubmitting}
+          onClick={(e) => {
+            alert('CLICK DETECTADO');
+            console.log('CLICK EN BOTON');
+            console.log('isSubmitting:', isSubmitting);
+            console.log('Event:', e);
+          }}
           >
           {isSubmitting ? "Generando reporte..." : "Generar reporte"}
         </Button>

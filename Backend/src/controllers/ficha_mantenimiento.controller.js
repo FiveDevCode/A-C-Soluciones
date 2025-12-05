@@ -4,7 +4,7 @@ import { generarPDF } from '../services/ficha_mantenimiento.services.js';
 import { sendEmail } from '../services/email.services.js';
 import * as fichaRepo from '../repository/ficha_mantenimiento.repository.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
-import { ValidationError } from 'sequelize';
+import { ValidationError, DatabaseError } from 'sequelize';
 import * as notificacionService from '../services/notificacion.services.js';
 
 export const crearFichaMantenimiento = async (req, res) => {
@@ -47,6 +47,30 @@ export const crearFichaMantenimiento = async (req, res) => {
       id_visitas
     });
 
+    // Validar tipo de cliente y requisito de visita
+    if (id_cliente) {
+      const cliente = await ClienteModel.Cliente.findByPk(id_cliente);
+      if (!cliente) {
+        return res.status(404).json({ 
+          error: 'Cliente no encontrado' 
+        });
+      }
+
+      // Si es cliente regular, requiere id_visitas
+      if (cliente.tipo_cliente === 'regular' && !id_visitas) {
+        return res.status(400).json({ 
+          error: 'Los clientes regulares requieren una visita asociada. Por favor seleccione una visita.' 
+        });
+      }
+
+      // Si es cliente fijo, NO debe tener id_visitas
+      if (cliente.tipo_cliente === 'fijo' && id_visitas) {
+        return res.status(400).json({ 
+          error: 'Los clientes fijos no requieren visitas. Este campo debe estar vacío.' 
+        });
+      }
+    }
+
     // Extraer archivos si están presentes
     const fotoAntes = req.files?.foto_estado_antes?.[0];
     const fotoFinal = req.files?.foto_estado_final?.[0];
@@ -60,6 +84,7 @@ export const crearFichaMantenimiento = async (req, res) => {
     });
 
     // Crear objeto para guardar
+    console.log('=== INTENTANDO CREAR FICHA EN BD ===');
     const nuevaFicha = await fichaRepo.crearFicha({
       id_cliente,
       id_tecnico,
@@ -78,10 +103,16 @@ export const crearFichaMantenimiento = async (req, res) => {
       foto_estado_final: fotoFinal?.filename || null,
       foto_descripcion_trabajo: fotoDescripcion?.filename || null,
     });
+    console.log('✓ Ficha creada en BD:', nuevaFicha.id);
 
     // Buscar cliente
+    console.log('=== BUSCANDO CLIENTE ===');
     const cliente = await ClienteModel.Cliente.findByPk(id_cliente);
-    if (!cliente) return res.status(404).json({ error: 'Cliente no encontrado' });
+    if (!cliente) {
+      console.error('Cliente no encontrado con ID:', id_cliente);
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+    console.log('✓ Cliente encontrado:', cliente.nombre);
 
     const clienteInfo = {
       nombre: cliente.nombre,
@@ -90,8 +121,13 @@ export const crearFichaMantenimiento = async (req, res) => {
     };
 
     // Buscar técnico
+    console.log('=== BUSCANDO TÉCNICO ===');
     const tecnico = await TecnicoModel.Tecnico.findByPk(id_tecnico);
-    if (!tecnico) return res.status(404).json({ error: 'Técnico no encontrado' });
+    if (!tecnico) {
+      console.error('Técnico no encontrado con ID:', id_tecnico);
+      return res.status(404).json({ error: 'Técnico no encontrado' });
+    }
+    console.log('✓ Técnico encontrado:', tecnico.nombre, tecnico.apellido);
 
     const tecnicoInfo = {
       nombre: tecnico.nombre,
@@ -101,23 +137,31 @@ export const crearFichaMantenimiento = async (req, res) => {
     };
 
     // Ruta de imágenes para pasar al PDF
+    console.log('=== PREPARANDO RUTAS DE IMÁGENES ===');
     const imagenes = {
       estadoAntes: fotoAntes ? path.resolve('uploads', 'fotos_fichas', fotoAntes.filename) : null,
       estadoFinal: fotoFinal ? path.resolve('uploads', 'fotos_fichas', fotoFinal.filename) : null,
       descripcion: fotoDescripcion ? path.resolve('uploads', 'fotos_fichas', fotoDescripcion.filename) : null,
     };
+    console.log('Rutas de imágenes:', imagenes);
 
     // Generar PDF
-
+    console.log('=== GENERANDO PDF ===');
     const pdfPath = await generarPDF(nuevaFicha, clienteInfo, tecnicoInfo, imagenes);
+    console.log('✓ PDF generado en:', pdfPath);
 
     // Guardar path PDF en BD
+    console.log('=== ACTUALIZANDO PATH DEL PDF EN BD ===');
     await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfPath);
+    console.log('✓ Path actualizado en BD');
 
     // Enviar email con PDF
+    console.log('=== ENVIANDO EMAIL ===');
     await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
+    console.log('✓ Email enviado a:', clienteInfo.correo);
     
     // Notificar al cliente sobre la ficha creada
+    console.log('=== ENVIANDO NOTIFICACIONES ===');
     await notificacionService.notificarFichaCreada(
       id_cliente,
       nuevaFicha.id,
@@ -130,7 +174,9 @@ export const crearFichaMantenimiento = async (req, res) => {
       nuevaFicha.id,
       clienteInfo.nombre
     ).catch(err => console.error('Error al enviar notificación al técnico:', err));
+    console.log('✓ Notificaciones enviadas');
 
+    console.log('=== FICHA CREADA EXITOSAMENTE ===');
     res.status(201).json({
       mensaje: 'Ficha creada correctamente y enviada al cliente.',
       ficha: {
@@ -140,17 +186,53 @@ export const crearFichaMantenimiento = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error en crearFichaMantenimiento:', error);
-
+    console.error('╔════════════════════════════════════════════════════════╗');
+    console.error('║     ERROR COMPLETO en crearFichaMantenimiento         ║');
+    console.error('╚════════════════════════════════════════════════════════╝');
+    console.error('🔴 Tipo de Error:', error.constructor.name);
+    console.error('🔴 Mensaje:', error.message);
+    console.error('🔴 Stack:', error.stack);
+    
+    // Errores de Sequelize
     if (error instanceof ValidationError) {
+      console.error('⚠️  ERRORES DE VALIDACIÓN:');
       const errors = error.errors.map(err => ({
-        path: err.path,
-        message: err.message
+        campo: err.path,
+        tipo: err.type,
+        mensaje: err.message,
+        valor: err.value
       }));
-      return res.status(400).json({ errors }); 
+      console.error(JSON.stringify(errors, null, 2));
+      console.error('════════════════════════════════════════════════════════\n');
+      
+      return res.status(400).json({ 
+        error: 'Error de validación',
+        errores: errors
+      });
     }
 
-    res.status(500).json({ message: 'Error al crear la ficha' });
+    if (error instanceof DatabaseError) {
+      console.error('⚠️  ERROR DE BASE DE DATOS:');
+      console.error('SQL:', error.sql);
+      console.error('Parameters:', error.parameters);
+      console.error('════════════════════════════════════════════════════════\n');
+      
+      return res.status(500).json({
+        error: 'Error de base de datos',
+        message: error.message
+      });
+    }
+
+    // Otros errores
+    console.error('🔴 Error completo (JSON):', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    console.error('════════════════════════════════════════════════════════\n');
+
+    res.status(500).json({ 
+      error: 'Error al crear la ficha',
+      message: error.message,
+      tipo: error.constructor.name,
+      ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    });
   }
 };
 

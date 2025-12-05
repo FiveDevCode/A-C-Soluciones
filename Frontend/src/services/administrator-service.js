@@ -582,6 +582,22 @@ const createPumpingReport = (reportData) => {
   });
 }
 
+/**
+ * Crea un cliente fijo (sin necesidad de solicitudes/visitas)
+ */
+const createFixedClient = (clientData) => {
+  return api.post("/cliente", {
+    ...clientData,
+    tipo_cliente: 'fijo',
+    rol: 'cliente'
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('authToken')}`
+    }
+  });
+};
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -636,5 +652,6 @@ export const administratorService = {
   getListMaintenanceReport,
   createMaintenanceReport,
   getListPumpingReports,
-  createPumpingReport
+  createPumpingReport,
+  createFixedClient
 }
