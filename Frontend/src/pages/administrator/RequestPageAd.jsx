@@ -72,7 +72,7 @@ const RequestPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE SOLICITUDES"
+        headerTitle="SOLICITUDES"
         sectionTitle="Listado de solicitudes de servicio"
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadRequests}

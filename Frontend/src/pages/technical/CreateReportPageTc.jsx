@@ -4,18 +4,12 @@ import ReportFormTc from "../../components/technical/ReportFormTc"
 import { useMenu } from "../../components/technical/MenuContext"
 
 const PageContainer = styled.div`
-  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   padding: 2rem 4rem;
   min-height: calc(100vh);
   transition: margin-left 0.3s ease;
 
   @media screen and (max-width: 1520px) {
     padding: 2rem 2rem;
-  }
-
-  @media screen and (max-width: 1280px) {
-    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
-    padding: 1.5rem 1rem;
   }
 
   @media (max-width: 768px) {

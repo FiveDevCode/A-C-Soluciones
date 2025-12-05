@@ -76,7 +76,7 @@ const ClientPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE CLIENTES"
+        headerTitle="CLIENTES"
         sectionTitle="Lista de clientes"
         secondaryLabel="Crear Cliente Fijo"
         secondaryIcon={<FaUserPlus />}

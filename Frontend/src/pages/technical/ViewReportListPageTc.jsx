@@ -14,12 +14,8 @@ const Container = styled.div`
   background-color: #f5f7fa;
   min-height: 100vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   transition: margin-left 0.3s ease;
 
-  @media screen and (max-width: 1280px) {
-    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
-  }
 `;
 
 const Card = styled.div`
@@ -139,7 +135,7 @@ const ViewReportListPageTc = () => {
   return (
     <Container $collapsed={collapsed}>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES"
+        headerTitle="REPORTES"
         sectionTitle="Listado de reportes generados"
         onRefresh={handleRefresh}
         filterComponent={

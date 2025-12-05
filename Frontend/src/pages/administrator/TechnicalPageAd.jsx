@@ -74,7 +74,7 @@ const TechnicalPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE TÉCNICOS"
+        headerTitle="TÉCNICOS"
         sectionTitle="Listado de técnicos registrados"
         addLabel="Agregar técnico"
         onAdd={() => setShowModal(true)}

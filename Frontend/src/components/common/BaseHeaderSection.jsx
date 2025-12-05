@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useMenu } from "../technical/MenuContext";
+import NotificationBell from './NotificationBell';
 
 const Header = styled.header`
   background-color: #1976d2;
@@ -377,12 +378,7 @@ const BaseHeaderSection = ({
           <span style={{ textAlign: 'center', width: '100%' }}>{headerTitle}</span>
         </HeaderLeft>
         <HeaderRight>
-          <IconButton onClick={handleNotificationsClick} title="Notificaciones">
-            <FaBell />
-            {notificationCount > 0 && (
-              <NotificationBadge>{notificationCount > 9 ? '9+' : notificationCount}</NotificationBadge>
-            )}
-          </IconButton>
+          <NotificationBell />
           <IconButton onClick={handleProfileClick} title="Ver Perfil">
             <FaUserCircle />
           </IconButton>

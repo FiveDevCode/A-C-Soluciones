@@ -26,7 +26,6 @@ const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 
 const PageContainer = styled.div`
-  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   padding: 2rem 4rem;
   min-height: calc(100vh);
   transition: margin-left 0.3s ease;
@@ -35,10 +34,6 @@ const PageContainer = styled.div`
     padding: 2rem 2rem;
   }
 
-  @media screen and (max-width: 1280px) {
-    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
-    padding: 1.5rem 1rem;
-  }
 
   @media (max-width: 768px) {
     margin-left: 0;
