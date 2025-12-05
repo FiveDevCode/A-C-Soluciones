@@ -13,12 +13,7 @@ const Container = styled.div`
   height: 100vh;
   background: #f5f5f5;
   overflow-y: auto;
-  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   transition: margin-left 0.3s ease;
-
-  @media screen and (max-width: 1280px) {
-    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
-  }
 
   @media (max-width: 768px) {
     margin-left: 0;
