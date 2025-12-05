@@ -410,6 +410,15 @@ function AppContent() {
               </PrivateRoute>
             }
           />
+          
+          <Route
+            path="/tecnico/notificaciones"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <NotificationPage/>
+              </PrivateRoute>
+            }
+          />
 
           {/* ********************************* Rutas Administrador ********************************** */}
           <Route

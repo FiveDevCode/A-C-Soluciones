@@ -352,7 +352,7 @@ const MenuSide = () => {
 
     tecnico: [
       { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
-      { to: '/tecnico/servicio', icon: faWrench, label: 'Servicios' },
+      { to: '/tecnico/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/tecnico/visitas', icon: faCompass, label: 'Visitas' },
       { to: '/tecnico/reportes', icon: faFileAlt, label: 'Reportes' },
     ],
