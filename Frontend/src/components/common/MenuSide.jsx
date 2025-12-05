@@ -345,16 +345,16 @@ const MenuSide = () => {
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
       { to: '/admin/inventario', icon: faBoxes, label: 'Inventario' },
       { to: '/admin/notificaciones', icon: faBell, label: 'Notificaciones' },
-      { to: '/admin/reporte-mantenimiento', icon: faBolt, label: 'Reporte mantenimiento' },
-      { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reporte bombeo' },
-      { to: '/admin/reporte', icon: faClipboardCheck, label: 'Reporte' },
+      { to: '/admin/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
+      { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
+      { to: '/admin/ficha-mantenimiento', icon: faClipboardCheck, label: 'Fichas de mantenimiento' },
     ],
 
     tecnico: [
       { to: getHomeRouteByRole(role), icon: faHouse, label: 'Inicio' },
       { to: '/tecnico/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/tecnico/visitas', icon: faCompass, label: 'Visitas' },
-      { to: '/tecnico/reportes', icon: faFileAlt, label: 'Reportes' },
+      { to: '/tecnico/reporte', icon: faFileAlt, label: 'Fichas de mantenimiento' },
     ],
 
     Contador: [

@@ -494,7 +494,7 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/reportes"
+            path="/admin/ficha-mantenimiento"
             element={
               <PrivateRoute roleRequired="administrador">
                 <ReportPageAd />
@@ -557,7 +557,7 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/reporte-mantenimiento"
+            path="/admin/reporte-electrico"
             element={
               <PrivateRoute roleRequired="administrador">
                 <MaintenanceReportPageAd />

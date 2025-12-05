@@ -46,8 +46,8 @@ const PumpingReportPageAd = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="REPORTES DE BOMBEO"
-        sectionTitle="Reportes generados"
-        addLabel="Agregar reporte"
+        sectionTitle="Reportes de bombeo generados"
+        addLabel="Agregar reporte de bombeo"
         onAdd={() => setShowModal(true)}
         onRefresh={loadReports}
         selectedCount={selectedIds.length}
