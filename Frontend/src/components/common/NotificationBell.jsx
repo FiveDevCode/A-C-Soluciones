@@ -12,29 +12,42 @@ const NotificationContainer = styled.div`
 
 const NotificationButton = styled.button`
   position: relative;
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1.3rem;
-  color: ${props => props.$hasUnread ? '#007BFF' : '#666'};
-  transition: color 0.3s;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
 
   &:hover {
-    color: #007BFF;
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 1350px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
-    padding: 0.4rem;
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
   }
 `;
 
 const Badge = styled.span`
   position: absolute;
-  top: 0;
-  right: 0;
-  background: #ff4444;
+  top: -2px;
+  right: -2px;
+  background: #f44336;
   color: white;
   border-radius: 50%;
   width: 18px;
