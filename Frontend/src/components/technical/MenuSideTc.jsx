@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { PanelLeft } from 'lucide-react';
-import { useState } from 'react';
+import { useMenu } from './MenuContext';
 
 const SectionMenu = styled.section`
   position: fixed;
@@ -177,7 +177,7 @@ const CollapseButton = styled(IconButton)`
 
 const MenuSideTc = () => {
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed } = useMenu();
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');

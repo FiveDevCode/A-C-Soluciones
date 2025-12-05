@@ -48,6 +48,7 @@ import BillPage from "./pages/shared/BillPage.jsx";
 import PaymentAccountPage from "./pages/shared/PaymentAccountPage.jsx";
 import InventoryPage from "./pages/shared/InventoryPage.jsx";
 import NotificationPage from "./pages/shared/NotificationPage.jsx";
+import { NotificacionProvider } from "./hooks/useNotificaciones.jsx";
 
 // Páginas de Contador
 import HomeAc from "./pages/accountant/HomeAc.jsx";
@@ -57,7 +58,7 @@ import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 // Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
-import { NotificacionProvider } from "./hooks/useNotificaciones.jsx";
+import { MenuProvider as MenuProviderTc } from "./components/technical/MenuContext.jsx";
 
 // Páginas de Administrador
 import VisitPageAd from "./pages/administrator/VisitPageAd.jsx";
@@ -587,13 +588,15 @@ function App() {
   return (
     <>
       <Global />
-      <MenuProvider>
-        <NotificacionProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </NotificacionProvider>
-      </MenuProvider>
+      <NotificacionProvider>
+        <MenuProvider>
+          <MenuProviderTc>
+            <Router>
+              <AppContent />
+            </Router>
+          </MenuProviderTc>
+        </MenuProvider>
+      </NotificacionProvider>
     </>
   );
 }

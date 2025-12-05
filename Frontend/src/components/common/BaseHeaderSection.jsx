@@ -2,6 +2,7 @@ import { FaPlus, FaUserCircle, FaBell, FaSyncAlt } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useMenu } from "../technical/MenuContext";
 import NotificationBell from './NotificationBell';
 
 const Header = styled.header`
@@ -13,10 +14,18 @@ const Header = styled.header`
   align-items: center;
   font-size: 20px;
   font-weight: bold;
+  position: relative;
+  padding-left: ${(props) => (props.$collapsed ? '100px' : '240px')};
+  transition: padding-left 0.3s ease;
 
   @media (max-width: 1350px) {
     padding: 1.2rem 1.5rem;
+    padding-left: ${(props) => (props.$collapsed ? '80px' : '200px')};
     font-size: 18px;
+  }
+
+  @media (max-width: 1280px) {
+    padding-left: ${(props) => (props.$collapsed ? '80px' : '200px')};
   }
 
   @media (max-width: 768px) {
@@ -26,11 +35,19 @@ const Header = styled.header`
 `;
 
 const HeaderLeft = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
+  text-align: center;
+  width: auto;
 
   @media (max-width: 768px) {
+    position: static;
+    transform: none;
     flex: 1;
   }
 `;
@@ -39,6 +56,8 @@ const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-left: auto;
+  z-index: 1;
 `;
 
 const IconButton = styled.button`
@@ -278,6 +297,14 @@ const BaseHeaderSection = ({
   notificationCount = 0,
 }) => {
   const navigate = useNavigate();
+  let collapsed = false;
+  try {
+    const menuContext = useMenu();
+    collapsed = menuContext.collapsed;
+  } catch (error) {
+    // Si no hay contexto de menú, usar false por defecto
+    collapsed = false;
+  }
 
   const handleProfileClick = () => {
     try {
@@ -312,9 +339,9 @@ const BaseHeaderSection = ({
 
   return (
     <>
-      <Header>
+      <Header $collapsed={collapsed}>
         <HeaderLeft>
-          <span>{headerTitle}</span>
+          <span style={{ textAlign: 'center', width: '100%' }}>{headerTitle}</span>
         </HeaderLeft>
         <HeaderRight>
           <NotificationBell />
