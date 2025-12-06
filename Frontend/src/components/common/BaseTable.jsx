@@ -410,9 +410,8 @@ const BaseTable = ({
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
   
-  // Mostrar skeleton solo en primera carga (sin datos en caché)
-  // Si hay datos, mostrarlos directamente aunque isLoadingData sea true
-  const isLoadingTable = isLoadingData && data.length === 0;
+  // Mostrar skeleton siempre que esté cargando
+  const isLoadingTable = isLoadingData;
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
