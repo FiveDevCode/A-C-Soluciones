@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "./ToastNotification";
+import { useToastContext } from "../../contexts/ToastContext";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -166,7 +166,7 @@ const BaseFormModal = ({
   const allFields = normalizedSteps.flatMap((s) => s.fields);
 
   // ========= ESTADOS PRINCIPALES =========
-  const { showToast, ToastRenderer } = useToast();
+  const { showToast } = useToastContext();
 
   const [formData, setFormData] = useState(
     customFormData || Object.fromEntries(
@@ -481,7 +481,6 @@ const BaseFormModal = ({
         </Footer>
       </Modal>
     </ModalOverlay>
-    <ToastRenderer />
     </>
   );
 };

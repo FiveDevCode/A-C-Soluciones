@@ -6,7 +6,7 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import { useToast } from "./ToastNotification";
+import { useToastContext } from "../../contexts/ToastContext";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -122,7 +122,7 @@ const BaseEditModal = ({
   onSuccess,
   successMessage = "Actualizado correctamente",
 }) => {
-  const { showToast, ToastRenderer } = useToast();
+  const { showToast } = useToastContext();
 
   const [formData, setFormData] = useState(initialData);
   const [fieldErrors, setFieldErrors] = useState({});
@@ -306,7 +306,6 @@ const BaseEditModal = ({
         </FormContainer>
       </ModalContent>
     </ModalOverlay>
-    <ToastRenderer />
     </>
   );
 };
