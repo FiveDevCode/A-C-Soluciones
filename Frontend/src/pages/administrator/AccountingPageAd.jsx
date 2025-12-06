@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateAccountingAd from "../../components/administrator/FormCreateAccountingAd";
 import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -43,29 +44,38 @@ const AccountingPageAd = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAccounting, setFilteredAccounting] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteAccountingAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      showToast(`${selectedIds.length} empleado(s) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadAccounting();
     } catch (error) {
       console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar los empleados", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -78,14 +88,15 @@ const AccountingPageAd = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadAccounting}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando empleados..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterAccountingAd
             accountings={accountings}
             onFilteredChange={setFilteredAccounting}
           />
         }
-        actionType="Deshabilitar seleccionados"
-
       />
 
       <Card>
@@ -114,9 +125,9 @@ const AccountingPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de que desea deshabilitar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

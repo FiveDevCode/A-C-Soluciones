@@ -9,6 +9,7 @@ import { handleDeleteBill } from "../../controllers/administrator/deleteBillAd.c
 import FilterBillAd from "../../components/administrator/FilterBillAd";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -69,32 +70,39 @@ const BillPage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredBills, setFilteredBills] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteBill(id);
       }
-      alert("Registros eliminados correctamente.");
+      showToast(`${selectedIds.length} factura(s) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadBills();
     } catch (error) {
       console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al eliminar las facturas", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
   };
-
-  return (
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
+  };  return (
     <Container>
       <BaseHeaderSection
         headerTitle="FACTURAS"
@@ -104,6 +112,8 @@ const BillPage = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadBills}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando facturas..."
         filterComponent={
           <FilterBillAd bills={bills} onFilteredChange={setFilteredBills} />
         }
@@ -137,7 +147,7 @@ const BillPage = () => {
         <ConfirmModal
           message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

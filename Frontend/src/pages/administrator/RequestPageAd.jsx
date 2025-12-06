@@ -7,6 +7,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterRequestsAd from "../../components/administrator/FilterRequestsAd";
 import { handleDeleteRequestAd } from "../../controllers/administrator/deleteRequestAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +45,8 @@ const RequestPageAd = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleSelectRows = (rows) => {
     // Extraer solo los IDs de los objetos seleccionados
@@ -53,26 +56,33 @@ const RequestPageAd = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteRequestAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      showToast(`${selectedIds.length} solicitud(es) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadRequests();
     } catch (error) {
       console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al eliminar las solicitudes", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -83,13 +93,15 @@ const RequestPageAd = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadRequests}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando solicitudes..."
+        actionType="Eliminar seleccionados"
         filterComponent={
           <FilterRequestsAd
             requests={requests}
             onFilteredChange={setFilteredRequests}
           />
         }
-        actionType="Eliminar seleccionados"
       />
 
       <Card>
@@ -113,7 +125,7 @@ const RequestPageAd = () => {
         <ConfirmModal
           message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

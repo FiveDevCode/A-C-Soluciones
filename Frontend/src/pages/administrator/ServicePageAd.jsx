@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateServiceAd from "../../components/administrator/FormCreateServiceAd";
 import FilterServicesAd from "../../components/administrator/FilterServiceAd";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 
 const Container = styled.div`
@@ -44,29 +45,38 @@ const ServicePageAd = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteServiceAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      showToast(`${selectedIds.length} servicio(s) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadServices();
     } catch (error) {
       console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar los servicios", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -79,13 +89,15 @@ const ServicePageAd = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadServices}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando servicios..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterServicesAd
             services={services}
             onFilteredChange={setFilteredServices}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
       <Card>
@@ -117,9 +129,9 @@ const ServicePageAd = () => {
       )}
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de que desea deshabilitar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

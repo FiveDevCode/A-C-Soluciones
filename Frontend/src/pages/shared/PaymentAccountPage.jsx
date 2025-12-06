@@ -66,30 +66,38 @@ const PaymentAccountPage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeletePaymentAccount(id);
       }
-      alert("Cuentas eliminadas correctamente.");
+      showToast(`${selectedIds.length} cuenta(s) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadAccounts();
     } catch (error) {
       console.error("Error al eliminar registros:", error);
-      alert("Error al eliminar algunas cuentas.");
+      showToast("Error al eliminar las cuentas", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -102,6 +110,8 @@ const PaymentAccountPage = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadAccounts}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando cuentas..."
         filterComponent={
           <FilterPaymentAccountAd
             accounts={accounts}
@@ -136,9 +146,9 @@ const PaymentAccountPage = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} cuenta(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

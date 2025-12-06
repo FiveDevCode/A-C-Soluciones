@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateTechnicalAd from "../../components/administrator/FormCreateTechnicalAd";
 import { handleDeleteTechnicalAd } from "../../controllers/administrator/deleteTechnicalAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -46,29 +47,38 @@ const TechnicalPageAd = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredTechnicals, setFilteredTechnicals] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un técnico para eliminar.");
+      showToast("Selecciona al menos un técnico para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteTechnicalAd(id);
       }
-      alert("Técnicos eliminados correctamente.");
+      showToast(`${selectedIds.length} técnico(s) eliminado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadTechnicals();
     } catch (error) {
       console.error("Error eliminando técnicos:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al eliminar los técnicos", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -81,13 +91,15 @@ const TechnicalPageAd = () => {
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadTechnicals}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando técnicos..."
+        actionType="Eliminar seleccionados"
         filterComponent={
           <FilterTechnicalsAd
             technicals={technicals}
             onFilteredChange={setFilteredTechnicals}
           />
         }
-        actionType="Eliminar seleccionados"
       />
 
       <Card>
@@ -116,9 +128,9 @@ const TechnicalPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} técnico(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>
