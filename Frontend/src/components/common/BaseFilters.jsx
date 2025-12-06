@@ -181,7 +181,19 @@ const BaseFilters = ({
             const raw = getNestedValue(item, key);
             const value = raw !== undefined && raw !== null ? raw.toString().toLowerCase() : "";
             return value.includes(text);
-          });
+          }) ||
+          // Búsqueda por nombre completo (nombre + apellido)
+          (() => {
+            const hasNombre = searchKeys.includes("nombre");
+            const hasApellido = searchKeys.includes("apellido");
+            if (hasNombre && hasApellido) {
+              const nombre = getNestedValue(item, "nombre") || "";
+              const apellido = getNestedValue(item, "apellido") || "";
+              const nombreCompleto = `${nombre} ${apellido}`.toLowerCase().trim();
+              return nombreCompleto.includes(text);
+            }
+            return false;
+          })();
 
     // Aplicar filtros (filterOptions)
     const matchesFilters = filterOptions.every((filter) => {
