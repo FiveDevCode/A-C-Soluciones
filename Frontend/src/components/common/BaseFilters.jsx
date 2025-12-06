@@ -170,30 +170,69 @@ const BaseFilters = ({
     return key.split(".").reduce((o, k) => (o ? o[k] : undefined), obj);
   };
 
-  const filteredData = data.filter((item) => {
-    const text = (searchTerm || "").toString().toLowerCase();
+  // Normalizar texto: quitar tildes, convertir a minúsculas y quitar espacios extra
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return text
+      .toString()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
 
-    // Buscar por searchKeys (soporta claves anidadas)
-    const matchesSearch =
-      searchKeys.length === 0
-        ? true
-        : searchKeys.some((key) => {
-            const raw = getNestedValue(item, key);
-            const value = raw !== undefined && raw !== null ? raw.toString().toLowerCase() : "";
-            return value.includes(text);
-          }) ||
-          // Búsqueda por nombre completo (nombre + apellido)
-          (() => {
-            const hasNombre = searchKeys.includes("nombre");
-            const hasApellido = searchKeys.includes("apellido");
-            if (hasNombre && hasApellido) {
-              const nombre = getNestedValue(item, "nombre") || "";
-              const apellido = getNestedValue(item, "apellido") || "";
-              const nombreCompleto = `${nombre} ${apellido}`.toLowerCase().trim();
-              return nombreCompleto.includes(text);
-            }
-            return false;
-          })();
+  const filteredData = data.filter((item) => {
+    const searchText = normalizeText(searchTerm);
+    
+    // Si no hay término de búsqueda, no filtrar por búsqueda
+    if (!searchText) {
+      const matchesFilters = filterOptions.every((filter) => {
+        const filterKey = filter.key;
+        const filterValue = filters[filterKey];
+        if (!filterValue) return true;
+        const rawItemValue = getNestedValue(item, filterKey);
+        const itemValue =
+          rawItemValue !== undefined && rawItemValue !== null
+            ? rawItemValue.toString().toLowerCase()
+            : "";
+        return itemValue === filterValue.toString().toLowerCase();
+      });
+      return matchesFilters;
+    }
+
+    // Dividir el término de búsqueda en palabras individuales
+    const searchWords = searchText.split(/\s+/).filter(word => word.length > 0);
+
+    // Construir un array con todos los valores de búsqueda
+    const searchableValues = [];
+    
+    // Agregar valores individuales de cada searchKey
+    searchKeys.forEach((key) => {
+      const raw = getNestedValue(item, key);
+      if (raw !== undefined && raw !== null) {
+        searchableValues.push(normalizeText(raw));
+      }
+    });
+
+    // Si hay campos nombre y apellido, agregar el nombre completo
+    const hasNombre = searchKeys.includes("nombre");
+    const hasApellido = searchKeys.includes("apellido");
+    if (hasNombre && hasApellido) {
+      const nombre = getNestedValue(item, "nombre") || "";
+      const apellido = getNestedValue(item, "apellido") || "";
+      const nombreCompleto = normalizeText(`${nombre} ${apellido}`);
+      if (nombreCompleto) {
+        searchableValues.push(nombreCompleto);
+      }
+    }
+
+    // Unir todos los valores en un solo texto para búsqueda
+    const combinedText = searchableValues.join(" ");
+
+    // Buscar: TODAS las palabras deben aparecer en algún lugar del texto combinado
+    const matchesSearch = searchKeys.length === 0 
+      ? true 
+      : searchWords.every(word => combinedText.includes(word));
 
     // Aplicar filtros (filterOptions)
     const matchesFilters = filterOptions.every((filter) => {
