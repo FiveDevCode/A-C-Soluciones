@@ -191,7 +191,8 @@ const ActionsRow = styled.div`
   align-items: center;
   gap: 10px;
 
-  > button:first-child {
+  /* Ocultar RefreshContainer en desktop para evitar duplicado */
+  > div:first-child {
     display: none;
   }
 
@@ -199,7 +200,8 @@ const ActionsRow = styled.div`
     width: 100%;
     justify-content: space-between;
 
-    > button:first-child {
+    /* Mostrar RefreshContainer en móvil */
+    > div:first-child {
       display: flex;
     }
   }
@@ -360,6 +362,33 @@ const RefreshButton = styled(Button)`
   }
 `;
 
+const RefreshContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+`;
+
+const LastUpdateText = styled.span`
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+  white-space: nowrap;
+
+  @media (max-width: 1350px) {
+    font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+`;
+
 const BaseHeaderSection = ({
   headerTitle = "GESTIÓN GENERAL",
   sectionTitle = "Listado de registros",
@@ -376,6 +405,7 @@ const BaseHeaderSection = ({
   notificationCount = 0,
   isLoading = false,
   loadingMessage = "Procesando...",
+  lastUpdateTime = null,
 }) => {
   const navigate = useNavigate();
   
@@ -458,16 +488,22 @@ const BaseHeaderSection = ({
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
             {onRefresh && (
-              <RefreshButton onClick={onRefresh} title="Refrescar lista">
-                <FaSyncAlt />
-              </RefreshButton>
+              <RefreshContainer>
+                <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                  <FaSyncAlt />
+                </RefreshButton>
+                {lastUpdateTime && <LastUpdateText>{lastUpdateTime}</LastUpdateText>}
+              </RefreshContainer>
             )}
           </SearchContainer>
           <ActionsRow>
             {onRefresh && (
-              <RefreshButton onClick={onRefresh} title="Refrescar lista">
-                <FaSyncAlt />
-              </RefreshButton>
+              <RefreshContainer>
+                <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                  <FaSyncAlt />
+                </RefreshButton>
+                {lastUpdateTime && <LastUpdateText>{lastUpdateTime}</LastUpdateText>}
+              </RefreshContainer>
             )}
             {onDeleteSelected && (
               <Button

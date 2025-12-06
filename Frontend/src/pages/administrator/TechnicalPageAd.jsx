@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateTechnicalAd from "../../components/administrator/FormCreateTechnicalAd";
 import { handleDeleteTechnicalAd } from "../../controllers/administrator/deleteTechnicalAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -43,6 +44,7 @@ const TechnicalPageAd = () => {
       return data?.data || [];
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadTechnicals, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredTechnicals, setFilteredTechnicals] = useState([]);
@@ -89,7 +91,8 @@ const TechnicalPageAd = () => {
         addLabel="Agregar técnico"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadTechnicals}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Eliminando técnicos..."

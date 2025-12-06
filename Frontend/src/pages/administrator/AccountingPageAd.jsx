@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateAccountingAd from "../../components/administrator/FormCreateAccountingAd";
 import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -40,6 +41,7 @@ const AccountingPageAd = () => {
     'accounting_cache',
     handleGetListAccountingAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounting, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAccounting, setFilteredAccounting] = useState([]);
@@ -86,7 +88,8 @@ const AccountingPageAd = () => {
         addLabel="Agregar empleado contable"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAccounting}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Deshabilitando empleados..."

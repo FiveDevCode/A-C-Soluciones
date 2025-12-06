@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateServiceAd from "../../components/administrator/FormCreateServiceAd";
 import FilterServicesAd from "../../components/administrator/FilterServiceAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 
@@ -41,6 +42,7 @@ const ServicePageAd = () => {
     'services_cache',
     handleGetListServiceAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadServices, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
@@ -87,7 +89,8 @@ const ServicePageAd = () => {
         addLabel="Agregar servicio"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadServices}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Deshabilitando servicios..."

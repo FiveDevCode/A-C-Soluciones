@@ -9,6 +9,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterClientAd from "../../components/administrator/FilterClientAd";
 import { handleDeleteClientAd } from "../../controllers/administrator/deleteClientAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -42,6 +43,7 @@ const ClientPageAd = () => {
     'clients_cache',
     handleGetListClient
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadClients, 3);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -92,11 +94,12 @@ const ClientPageAd = () => {
         secondaryIcon={<FaUserPlus />}
         onSecondaryAction={handleCreateFixedClient}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadClients}
+        onRefresh={manualRefresh}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Deshabilitando clientes..."
         actionType="Deshabilitar seleccionados"
+        lastUpdateTime={timeAgo}
         filterComponent={
           <FilterClientAd
             clients={clients}

@@ -7,6 +7,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterRequestsAd from "../../components/administrator/FilterRequestsAd";
 import { handleDeleteRequestAd } from "../../controllers/administrator/deleteRequestAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -42,6 +43,7 @@ const RequestPageAd = () => {
       return res.data;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadRequests, 3);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -91,7 +93,8 @@ const RequestPageAd = () => {
         headerTitle="SOLICITUDES"
         sectionTitle="Listado de solicitudes de servicio"
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadRequests}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Eliminando solicitudes..."

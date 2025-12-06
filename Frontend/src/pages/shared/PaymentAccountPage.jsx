@@ -9,6 +9,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
 import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -63,6 +64,7 @@ const PaymentAccountPage = () => {
       return enrichedAccounts;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounts, 3);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -109,7 +111,8 @@ const PaymentAccountPage = () => {
         addLabel="Agregar cuenta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAccounts}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Eliminando cuentas..."

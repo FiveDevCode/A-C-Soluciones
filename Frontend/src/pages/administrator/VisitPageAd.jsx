@@ -6,6 +6,7 @@ import FormCreateVisitAd from "../../components/administrator/FormCreateVisitAd"
 import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import FilterVisitsAd from "../../components/administrator/FilterVisitsAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const VisitPageAd = () => {
     'visits_cache',
     handleGetListVisitAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadVisits, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredVisits, setFilteredVisits] = useState([]);
@@ -48,7 +50,8 @@ const VisitPageAd = () => {
         sectionTitle="Lista de visitas asignadas"
         addLabel="Agregar visita"
         onAdd={() => setShowModal(true)}
-        onRefresh={loadVisits}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         filterComponent={
           <FilterVisitsAd
             visits={visits}

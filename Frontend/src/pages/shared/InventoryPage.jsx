@@ -8,6 +8,7 @@ import FilterInventoryAd from "../../components/administrator/FilterInventoryAd"
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateInventoryAd from "../../components/administrator/FormCreateInventoryAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 
@@ -41,6 +42,7 @@ const InventoryPage = () => {
     'inventory_cache',
     handleGetListInventoryAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadInventory, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
@@ -87,7 +89,8 @@ const InventoryPage = () => {
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadInventory}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Deshabilitando herramientas..."

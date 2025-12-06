@@ -8,6 +8,7 @@ import { handleGetListAdministrator } from "../../controllers/administrator/getA
 import { handleDeleteAdministratorAd } from "../../controllers/administrator/deleteAdministratorAd.controller";
 import FilterAdministratorAd from "../../components/administrator/FilterAdministratorAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -43,6 +44,7 @@ const AdministratorPageAd = () => {
       return res.data;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAdministrators, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAdministrators, setFilteredAdministrators] = useState([]);
@@ -89,7 +91,8 @@ const AdministratorPageAd = () => {
         addLabel="Agregar administrador"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAdministrators}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Eliminando administradores..."

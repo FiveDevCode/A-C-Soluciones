@@ -9,6 +9,7 @@ import { handleDeleteBill } from "../../controllers/administrator/deleteBillAd.c
 import FilterBillAd from "../../components/administrator/FilterBillAd";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
@@ -66,6 +67,7 @@ const BillPage = () => {
       return enrichedBills;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadBills, 3);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredBills, setFilteredBills] = useState([]);
@@ -110,7 +112,8 @@ const BillPage = () => {
         addLabel="Agregar factura"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadBills}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
         loadingMessage="Eliminando facturas..."
