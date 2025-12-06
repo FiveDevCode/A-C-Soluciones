@@ -45,6 +45,12 @@ const RequestPageAd = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  const handleSelectRows = (rows) => {
+    // Extraer solo los IDs de los objetos seleccionados
+    const ids = rows.map(row => row.id);
+    setSelectedIds(ids);
+  };
+
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
       alert("Selecciona al menos un registro para eliminar.");
@@ -98,6 +104,7 @@ const RequestPageAd = () => {
         ) : (
           <ListRequestAd
             requests={filteredRequests}
+            onSelectRows={handleSelectRows}
           />
         )}
       </Card>
