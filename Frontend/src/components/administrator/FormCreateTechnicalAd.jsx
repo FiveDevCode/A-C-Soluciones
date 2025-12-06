@@ -109,12 +109,12 @@ const ESPECIALIDADES_HIDROELECTRICAS = [
 const FormCreateTechnicalAd = ({ onClose, onSuccess }) => {
 
   const fields = [
-    { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 } },
-    { name: "nombre", label: "Nombre", type: "text" },
-    { name: "apellido", label: "Apellido", type: "text" },
-    { name: "correo_electronico", label: "Correo electrónico", type: "email" },
-    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
-    { name: "contrasenia", label: "Contraseña", type: "password" },
+    { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
+    { name: "nombre", label: "Nombre", type: "text", required: true },
+    { name: "apellido", label: "Apellido", type: "text", required: true },
+    { name: "correo_electronico", label: "Correo electrónico", type: "email", required: true },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 }, required: true },
+    { name: "contrasenia", label: "Contraseña", type: "password", required: true },
     { 
       name: "especialidad", 
       label: "Especialidad", 
