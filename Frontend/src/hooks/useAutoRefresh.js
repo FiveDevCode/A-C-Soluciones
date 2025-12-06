@@ -62,15 +62,24 @@ const useAutoRefresh = (onRefresh, intervalMinutes = 3, storageKey = 'default') 
       setLastUpdate(newTimestamp);
     };
 
+    // Verificar si necesitamos refrescar inmediatamente
+    const timeSinceLastUpdate = Date.now() - lastUpdate;
+    const intervalMs = intervalMinutes * 60 * 1000;
+
+    if (timeSinceLastUpdate >= intervalMs) {
+      // Si han pasado más de 3 minutos, refrescar inmediatamente
+      doRefresh();
+    }
+
     // Configurar intervalo de auto-refresh
-    intervalRef.current = setInterval(doRefresh, intervalMinutes * 60 * 1000);
+    intervalRef.current = setInterval(doRefresh, intervalMs);
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [onRefresh, intervalMinutes, storageKey]);
+  }, [onRefresh, intervalMinutes, storageKey, lastUpdate]);
 
   // Función para refresh manual
   const manualRefresh = async () => {
