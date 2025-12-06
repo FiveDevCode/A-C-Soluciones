@@ -38,7 +38,7 @@ const VisitPageAd = () => {
     'visits_cache',
     handleGetListVisitAd
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadVisits, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadVisits, 3, 'visits');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredVisits, setFilteredVisits] = useState([]);

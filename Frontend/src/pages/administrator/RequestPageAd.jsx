@@ -43,7 +43,7 @@ const RequestPageAd = () => {
       return res.data;
     }
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadRequests, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadRequests, 3, 'requests');
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);

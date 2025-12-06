@@ -64,7 +64,7 @@ const PaymentAccountPage = () => {
       return enrichedAccounts;
     }
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounts, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounts, 3, 'accounts');
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [showModal, setShowModal] = useState(false);

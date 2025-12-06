@@ -44,7 +44,7 @@ const TechnicalPageAd = () => {
       return data?.data || [];
     }
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadTechnicals, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadTechnicals, 3, 'technicals');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredTechnicals, setFilteredTechnicals] = useState([]);

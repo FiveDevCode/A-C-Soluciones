@@ -43,7 +43,7 @@ const ClientPageAd = () => {
     'clients_cache',
     handleGetListClient
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadClients, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadClients, 3, 'clients');
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);

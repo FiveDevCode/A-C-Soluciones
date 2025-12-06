@@ -42,7 +42,7 @@ const ServicePageAd = () => {
     'services_cache',
     handleGetListServiceAd
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadServices, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadServices, 3, 'services');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);

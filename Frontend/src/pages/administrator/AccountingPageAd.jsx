@@ -41,7 +41,7 @@ const AccountingPageAd = () => {
     'accounting_cache',
     handleGetListAccountingAd
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounting, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounting, 3, 'accounting');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAccounting, setFilteredAccounting] = useState([]);

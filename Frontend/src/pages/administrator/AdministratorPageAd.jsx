@@ -44,7 +44,7 @@ const AdministratorPageAd = () => {
       return res.data;
     }
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadAdministrators, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAdministrators, 3, 'administrators');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAdministrators, setFilteredAdministrators] = useState([]);

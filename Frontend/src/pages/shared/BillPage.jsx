@@ -67,7 +67,7 @@ const BillPage = () => {
       return enrichedBills;
     }
   );
-  const { timeAgo, manualRefresh } = useAutoRefresh(loadBills, 3);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadBills, 3, 'bills');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredBills, setFilteredBills] = useState([]);
