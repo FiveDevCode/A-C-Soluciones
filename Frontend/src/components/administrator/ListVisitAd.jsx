@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
@@ -6,73 +6,116 @@ import FormCreateReportAd from "../administrator/FormCreateReportAd";
 import { commonService } from "../../services/common-service";
 const API_KEY = "http://localhost:8000";
 
+const FICHAS_CACHE_KEY = 'fichas_pdfs_cache';
+const FICHAS_CACHE_TIMESTAMP = 'fichas_pdfs_timestamp';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+
 const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }) => {
   const [openReportModal, setOpenReportModal] = useState(false);
   const [selectedVisitId, setSelectedVisitId] = useState(null);
 
   // Estado donde guardaremos visits + pdf_path
   const [visitsWithPDF, setVisitsWithPDF] = useState([]);
+  const [pdfMap, setPdfMap] = useState(new Map());
   const lastVisitsJsonRef = useRef("");
   const isLoadingRef = useRef(false);
+  const hasFetchedPDFsRef = useRef(false);
 
-  useEffect(() => {
-    const fetchPDFs = async () => {
-      if (!visits || visits.length === 0) {
-        if (visitsWithPDF.length > 0) {
-          setVisitsWithPDF([]);
-        }
-        lastVisitsJsonRef.current = "[]";
-        return;
-      }
-
-      // Crear identificador único basado en los datos reales de las visitas
-      const currentVisitsJson = JSON.stringify(visits.map(v => ({ id: v.id, estado: v.estado })));
+  // Función para obtener fichas del caché
+  const getCachedFichas = () => {
+    try {
+      const cached = sessionStorage.getItem(FICHAS_CACHE_KEY);
+      const timestamp = sessionStorage.getItem(FICHAS_CACHE_TIMESTAMP);
       
-      // Si es exactamente el mismo JSON que antes, no hacer nada
-      if (currentVisitsJson === lastVisitsJsonRef.current) {
-        return;
+      if (cached && timestamp) {
+        const age = Date.now() - parseInt(timestamp);
+        if (age < CACHE_DURATION) {
+          return JSON.parse(cached);
+        }
       }
+    } catch (err) {
+      console.error('Error al leer caché de fichas:', err);
+    }
+    return null;
+  };
 
-      // Evitar múltiples llamadas simultáneas
-      if (isLoadingRef.current) {
-        return;
-      }
+  // Función para guardar fichas en el caché
+  const setCachedFichas = (fichas) => {
+    try {
+      sessionStorage.setItem(FICHAS_CACHE_KEY, JSON.stringify(fichas));
+      sessionStorage.setItem(FICHAS_CACHE_TIMESTAMP, Date.now().toString());
+    } catch (err) {
+      console.error('Error al guardar caché de fichas:', err);
+    }
+  };
+
+  // Cargar fichas solo una vez (con caché)
+  useEffect(() => {
+    const loadFichas = async () => {
+      // Si ya cargamos, no volver a cargar
+      if (hasFetchedPDFsRef.current) return;
+      if (isLoadingRef.current) return;
 
       isLoadingRef.current = true;
-      lastVisitsJsonRef.current = currentVisitsJson;
 
       try {
-        // 🚀 UNA SOLA PETICIÓN para obtener TODAS las fichas
+        // Intentar obtener del caché primero
+        const cachedFichas = getCachedFichas();
+        if (cachedFichas) {
+          const fichasMap = new Map();
+          cachedFichas.forEach((ficha) => {
+            if (ficha.id_visitas && ficha.pdf_path) {
+              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+            }
+          });
+          setPdfMap(fichasMap);
+          hasFetchedPDFsRef.current = true;
+          isLoadingRef.current = false;
+          return;
+        }
+
+        // Si no hay caché, hacer la petición
         const response = await commonService.getListToken();
         const allFichas = response.data || [];
+        
+        // Guardar en caché
+        setCachedFichas(allFichas);
 
-        // Crear un mapa de id_visitas -> pdf_path para búsqueda O(1)
+        // Crear el mapa
         const fichasMap = new Map();
         allFichas.forEach((ficha) => {
           if (ficha.id_visitas && ficha.pdf_path) {
             fichasMap.set(ficha.id_visitas, ficha.pdf_path);
           }
         });
-
-        // Mapear las visitas con sus PDFs correspondientes
-        const updatedVisits = visits.map((visit) => ({
-          ...visit,
-          pdf_path: fichasMap.get(visit.id) || null,
-        }));
-
-        setVisitsWithPDF(updatedVisits);
+        
+        setPdfMap(fichasMap);
+        hasFetchedPDFsRef.current = true;
       } catch (err) {
         console.error("Error al obtener fichas:", err);
-        // En caso de error, mostrar visitas sin PDF
-        setVisitsWithPDF(visits.map((v) => ({ ...v, pdf_path: null })));
       } finally {
         isLoadingRef.current = false;
       }
     };
 
-    fetchPDFs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visits]);
+    loadFichas();
+  }, []); // Solo se ejecuta una vez al montar
+
+  // Combinar visits con pdf_path usando useMemo
+  useEffect(() => {
+    if (!visits || visits.length === 0) {
+      setVisitsWithPDF([]);
+      return;
+    }
+
+    // Mapear las visitas con sus PDFs correspondientes
+    const updatedVisits = visits.map((visit) => ({
+      ...visit,
+      pdf_path: pdfMap.get(visit.id) || null,
+    }));
+
+    setVisitsWithPDF(updatedVisits);
+  }, [visits, pdfMap]);
 
   // Abrir modal de crear reporte
   const handleOpenReport = (row) => {
