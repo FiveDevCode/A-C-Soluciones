@@ -43,8 +43,12 @@ export class SolicitudController {
             console.error(error);
 
             if (error instanceof ValidationError) {
-                const mensajes = error.errors.map(err => err.message);
-                return res.status(400).json({ errors: mensajes });
+                // Mapear errores por campo para facilitar el manejo en el frontend
+                const fieldErrors = {};
+                error.errors.forEach(err => {
+                    fieldErrors[err.path] = err.message;
+                });
+                return res.status(400).json({ errors: fieldErrors });
             }
 
             return res.status(500).json({ message: 'Error al crear la solicitud' });
