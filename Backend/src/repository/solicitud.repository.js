@@ -86,8 +86,21 @@ export class SolicitudRepository {
     return solicitud;
   }
   async eliminar(id) {
-    const solicitud = await this.model.findByPk(id);
+    const solicitud = await this.model.findByPk(id, {
+      include: [{ 
+        association: 'visitas',
+        required: false 
+      }]
+    });
     if (!solicitud) return null;
+
+    // Eliminar visitas asociadas primero
+    if (solicitud.visitas && solicitud.visitas.length > 0) {
+      await Promise.all(
+        solicitud.visitas.map(visita => visita.destroy())
+      );
+    }
+
     await solicitud.destroy();
     return solicitud;
   }
