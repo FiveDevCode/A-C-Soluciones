@@ -39,7 +39,7 @@ const TechnicalPageAd = () => {
     'technicals_cache',
     async () => {
       const data = await handleGetListTechnical();
-      return data?.data.slice().reverse() || [];
+      return data?.data || [];
     }
   );
   const [showModal, setShowModal] = useState(false);
