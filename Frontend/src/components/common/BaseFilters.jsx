@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 
@@ -154,6 +154,7 @@ const BaseFilters = ({
 }) => {
   const [filters, setFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const lastFilteredJsonRef = useRef("");
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -181,7 +182,7 @@ const BaseFilters = ({
       .trim();
   };
 
-  const filteredData = data.filter((item) => {
+  const filteredData = useMemo(() => data.filter((item) => {
     const searchText = normalizeText(searchTerm);
     
     // Si no hay término de búsqueda, no filtrar por búsqueda
@@ -252,12 +253,19 @@ const BaseFilters = ({
     });
 
     return matchesSearch && matchesFilters;
-  });
+  }), [data, filters, searchTerm, searchKeys, filterOptions]);
 
   useEffect(() => {
-    onFilteredChange?.(filteredData);
+    // Crear un JSON de los IDs para comparar si realmente cambió
+    const currentJson = JSON.stringify(filteredData.map(item => item.id || item));
+    
+    // Solo actualizar si realmente cambió el contenido
+    if (currentJson !== lastFilteredJsonRef.current) {
+      lastFilteredJsonRef.current = currentJson;
+      onFilteredChange?.(filteredData);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, searchTerm, data]);
+  }, [filteredData]);
 
   // Detectar si hay filtros activos
   const hasActiveFilters = searchTerm !== "" || Object.values(filters).some(val => val !== "" && val !== undefined);

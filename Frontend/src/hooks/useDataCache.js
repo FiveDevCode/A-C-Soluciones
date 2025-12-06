@@ -123,10 +123,11 @@ const useDataCache = (cacheKey, fetchFunction, options = {}) => {
     }
   };
 
-  const reload = () => {
+  const reload = async () => {
     invalidateCache();
     hasFetchedRef.current = false;
-    loadData(true);
+    setIsLoading(true);
+    await loadData(true);
   };
 
   // Cargar datos automáticamente solo si no es lazy Y no hay datos en caché
