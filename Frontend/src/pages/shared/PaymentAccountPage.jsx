@@ -9,6 +9,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
 import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
 import useDataCache from "../../hooks/useDataCache";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -121,17 +122,12 @@ const PaymentAccountPage = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando cuentas...
-          </p>
-        ) : (
-          <ListPaymentAccountAd
-            accounts={filteredAccounts}
-            reloadData={loadAccounts}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListPaymentAccountAd
+          accounts={filteredAccounts}
+          reloadData={loadAccounts}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

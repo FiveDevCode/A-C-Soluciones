@@ -103,17 +103,12 @@ const AdministratorPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando administradores...
-          </p>
-        ) : (
-          <ListAdministratorAd
-            administrators={filteredAdministrators}
-            reloadData={loadAdministrators}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListAdministratorAd
+          administrators={filteredAdministrators}
+          reloadData={loadAdministrators}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

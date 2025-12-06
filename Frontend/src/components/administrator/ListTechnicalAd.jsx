@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditTechnicalAd from "./EditTechnicalAd";
 import ViewTechnicalDetailAd from "./ViewTechnicalDetailAd";
 
-const ListTechnicalAd = ({ technicals, reloadData, onSelectRows }) => {
+const ListTechnicalAd = ({ technicals, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     { header: "Nombre", accessor: "nombre" },
     { header: "Apellido", accessor: "apellido" },
@@ -28,6 +28,7 @@ const ListTechnicalAd = ({ technicals, reloadData, onSelectRows }) => {
         <ViewTechnicalDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "especialidad"

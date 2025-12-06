@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditBillAd from "./EditBillAd";
 import ViewBillDetailAd from "./ViewBillDetailAd";
 
-const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
+const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     {
       header: "Número de factura",
@@ -62,6 +62,7 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
         <ViewBillDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "numero_factura",
         subtitle: "cliente"

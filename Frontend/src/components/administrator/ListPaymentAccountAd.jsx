@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditPaymentAccountAd from "./EditPaymentAccountAd";
 import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 
-const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
+const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     { header: "N° Cuenta", accessor: "numero_cuenta" },
     { header: "NIT", accessor: "nit" },
@@ -34,6 +34,7 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
         <ViewPaymentAccountDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "numero_cuenta",
         subtitle: "cliente"

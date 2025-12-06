@@ -101,21 +101,12 @@ const ServicePageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando servicios...
-          </p>
-        ) : filteredServices.length === 0 ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            No hay ningún servicio asignado por el momento.
-          </p>
-        ) : (
-          <ListServiceAd
-            services={filteredServices}
-            reloadData={loadServices}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListServiceAd
+          services={filteredServices}
+          reloadData={loadServices}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

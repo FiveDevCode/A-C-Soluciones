@@ -106,17 +106,12 @@ const ClientPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista de clientes...
-          </p>
-        ) : (
-          <ListClientAd
-            clients={filteredClients}
-            reloadData={loadClients}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListClientAd
+          clients={filteredClients}
+          reloadData={loadClients}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showConfirmModal && (

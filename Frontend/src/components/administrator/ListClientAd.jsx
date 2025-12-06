@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditClientAd from "./EditClientAd";
 import ViewClientDetailAd from "./ViewClientDetailAd";
 
-const ListClientAd = ({ clients, reloadData, onSelectRows }) => {
+const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     { header: "Cédula", accessor: "numero_de_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -33,6 +33,7 @@ const ListClientAd = ({ clients, reloadData, onSelectRows }) => {
         <ViewClientDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "numero_de_cedula"

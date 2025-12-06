@@ -100,17 +100,12 @@ const AccountingPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista contable...
-          </p>
-        ) : (
-          <ListAccountingAd
-            accountings={filteredAccounting}
-            reloadData={loadAccounting}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListAccountingAd
+          accountings={filteredAccounting}
+          reloadData={loadAccounting}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

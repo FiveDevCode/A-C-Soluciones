@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditServiceAd from "./EditServiceAd";
 import ViewServiceDetailAd from "./ViewServiceDetailAd";
 
-const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
+const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = false }) => {
 
   const columns = [
     { header: "Nombre", accessor: "nombre" },
@@ -36,6 +36,7 @@ const ListServiceAd = ({ services, reloadData, onSelectRows }) => {
         <ViewServiceDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "descripcion"

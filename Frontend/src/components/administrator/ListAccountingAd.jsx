@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditAccountingAd from "./EditAccountingAd";
 import ViewAccountingDetailAd from "./ViewAccountingDetailAd";
 
-const ListAccountingAd = ({ accountings, reloadData, onSelectRows }) => {
+const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     { header: "Cédula", accessor: "numero_de_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -28,6 +28,7 @@ const ListAccountingAd = ({ accountings, reloadData, onSelectRows }) => {
         <ViewAccountingDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "numero_de_cedula"

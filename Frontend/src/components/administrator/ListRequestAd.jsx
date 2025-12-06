@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import ViewRequestDetailAd from "./ViewRequestDetailAd";
 
-const ListRequestAd = ({ requests, onSelectRows }) => {
+const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false }) => {
   const columns = [
     {
       header: "Comentarios",
@@ -45,6 +45,7 @@ const ListRequestAd = ({ requests, onSelectRows }) => {
         <ViewRequestDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "descripcion",
         subtitle: "fecha_solicitud"

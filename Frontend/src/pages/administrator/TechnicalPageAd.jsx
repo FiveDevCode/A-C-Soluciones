@@ -103,17 +103,12 @@ const TechnicalPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista de técnicos...
-          </p>
-        ) : (
-          <ListTechicalAd
-            technicals={filteredTechnicals}
-            reloadData={loadTechnicals}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListTechicalAd
+          technicals={filteredTechnicals}
+          reloadData={loadTechnicals}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

@@ -102,17 +102,12 @@ const InventoryPage = () => {
 
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando inventario...
-          </p>
-        ) : (
-          <ListInventoryAd
-            inventory={filteredInventory}
-            reloadData={loadInventory}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListInventoryAd
+          inventory={filteredInventory}
+          reloadData={loadInventory}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

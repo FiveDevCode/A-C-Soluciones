@@ -2,7 +2,7 @@ import BaseTable from "../common/BaseTable";
 import EditAdministratorAd from "./EditAdministratorAd";
 import ViewAdministratorDetailAd from "./ViewAdministratorDetailAd";
 
-const ListAdministratorAd = ({ administrators, reloadData, onSelectRows }) => {
+const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadingData = false }) => {
   const columns = [
     { header: "Cédula", accessor: "numero_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -28,6 +28,7 @@ const ListAdministratorAd = ({ administrators, reloadData, onSelectRows }) => {
         <ViewAdministratorDetailAd {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "numero_cedula"

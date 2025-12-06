@@ -120,17 +120,12 @@ const BillPage = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando facturas...
-          </p>
-        ) : (
-          <ListBillAd
-            bills={filteredBills}
-            reloadData={loadBills}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListBillAd
+          bills={filteredBills}
+          reloadData={loadBills}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showModal && (

@@ -3,7 +3,7 @@ import EditInventoryAd from "./EditInventoryAd";
 import ViewInventoryDetail from "./ViewInventoryDetailAd";
 
 
-const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
+const ListInventoryAd = ({ inventory, reloadData, onSelectRows, isLoadingData = false }) => {
   const categoryLabels = {
     manuales: "Manual",
     electricas: "Eléctrica",
@@ -43,6 +43,7 @@ const ListInventoryAd = ({ inventory, reloadData, onSelectRows }) => {
         <ViewInventoryDetail {...props} />
       )}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
         title: "nombre",
         subtitle: "cantidad_disponible"

@@ -105,20 +105,11 @@ const RequestPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando solicitudes...
-          </p>
-        ) : filteredRequests.length === 0 ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            No hay ninguna solicitud por el momento.
-          </p>
-        ) : (
-          <ListRequestAd
-            requests={filteredRequests}
-            onSelectRows={handleSelectRows}
-          />
-        )}
+        <ListRequestAd
+          requests={filteredRequests}
+          onSelectRows={handleSelectRows}
+          isLoadingData={loading}
+        />
       </Card>
 
       {showConfirmModal && (
