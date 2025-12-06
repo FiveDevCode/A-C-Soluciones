@@ -252,8 +252,8 @@ export const listarFichas = async (req, res) => {
     if (rol === 'admin' || rol === 'administrador') {
       fichas = await fichaRepo.obtenerTodasFichas(id_visitas);
     } else if (rol === 'tecnico') {
-      // El técnico solo ve sus propias fichas
-      fichas = await fichaRepo.obtenerFichasPorTecnico(id);
+      // El técnico solo ve sus propias fichas, opcionalmente filtradas por visita
+      fichas = await fichaRepo.obtenerFichasPorTecnico(id, id_visitas);
     } else if (rol === 'cliente') {
       fichas = await fichaRepo.obtenerFichasPorCliente(id, id_visitas);
     } else {

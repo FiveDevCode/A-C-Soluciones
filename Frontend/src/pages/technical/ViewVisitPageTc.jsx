@@ -272,9 +272,15 @@ const ViewVisitPageTc = () => {
     const fetchPDF = async () => {
       try {
         const response = await handleGetPDFIdVisit(id);
-        setPathName(response.data[0].pdf_path);
+        // Verificar que haya fichas y que la primera tenga pdf_path
+        if (response.data && response.data.length > 0 && response.data[0].pdf_path) {
+          setPathName(response.data[0].pdf_path);
+        } else {
+          setPathName(null);
+        }
       } catch (err) {
         console.log('Error al obtener el PDF:', err);
+        setPathName(null);
       }
     };
 
