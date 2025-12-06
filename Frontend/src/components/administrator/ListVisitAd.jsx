@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
@@ -6,19 +6,40 @@ import FormCreateReportAd from "../administrator/FormCreateReportAd";
 import { commonService } from "../../services/common-service";
 const API_KEY = "http://localhost:8000";
 
-const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
+const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }) => {
   const [openReportModal, setOpenReportModal] = useState(false);
   const [selectedVisitId, setSelectedVisitId] = useState(null);
 
   // Estado donde guardaremos visits + pdf_path
   const [visitsWithPDF, setVisitsWithPDF] = useState([]);
+  const lastVisitsJsonRef = useRef("");
+  const isLoadingRef = useRef(false);
 
   useEffect(() => {
     const fetchPDFs = async () => {
       if (!visits || visits.length === 0) {
-        setVisitsWithPDF([]);
+        if (visitsWithPDF.length > 0) {
+          setVisitsWithPDF([]);
+        }
+        lastVisitsJsonRef.current = "[]";
         return;
       }
+
+      // Crear identificador único basado en los datos reales de las visitas
+      const currentVisitsJson = JSON.stringify(visits.map(v => ({ id: v.id, estado: v.estado })));
+      
+      // Si es exactamente el mismo JSON que antes, no hacer nada
+      if (currentVisitsJson === lastVisitsJsonRef.current) {
+        return;
+      }
+
+      // Evitar múltiples llamadas simultáneas
+      if (isLoadingRef.current) {
+        return;
+      }
+
+      isLoadingRef.current = true;
+      lastVisitsJsonRef.current = currentVisitsJson;
 
       try {
         // 🚀 UNA SOLA PETICIÓN para obtener TODAS las fichas
@@ -44,10 +65,13 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
         console.error("Error al obtener fichas:", err);
         // En caso de error, mostrar visitas sin PDF
         setVisitsWithPDF(visits.map((v) => ({ ...v, pdf_path: null })));
+      } finally {
+        isLoadingRef.current = false;
       }
     };
 
     fetchPDFs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visits]);
 
   // Abrir modal de crear reporte
@@ -179,6 +203,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
         )}
         ViewComponent={(props) => <ViewVisitDetailAd {...props} />}
         onSelectRows={onSelectRows}
+        isLoadingData={isLoadingData}
         mobileConfig={{
           title: "fecha_programada",
           subtitle: "notas_previas",
