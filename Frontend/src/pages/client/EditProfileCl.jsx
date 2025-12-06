@@ -311,12 +311,14 @@ const EditProfileCl = () => {
     try {
       await handleUpdateClient(
         id,
-        IdCard,
-        nameUser,
-        lastName,
-        email,
-        phone,
-        address
+        {
+          numero_de_cedula: IdCard,
+          nombre: nameUser,
+          apellido: lastName,
+          correo_electronico: email,
+          telefono: phone,
+          direccion: address
+        }
       );
 
       setFieldErrors({});
@@ -414,6 +416,10 @@ const EditProfileCl = () => {
                 onChange={handleChange(setIdCard)}
                 error={Boolean(fieldErrors.numero_de_cedula)}
                 helperText={fieldErrors.numero_de_cedula}
+                disabled={true}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
               <StyledTextField 
                 label="Nombre" 

@@ -72,7 +72,7 @@ const ServicePageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE SERVICIOS"
+        headerTitle="SERVICIOS"
         sectionTitle="Lista de servicios asignados"
         addLabel="Agregar servicio"
         onAdd={() => setShowModal(true)}

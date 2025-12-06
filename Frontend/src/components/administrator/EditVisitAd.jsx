@@ -22,15 +22,30 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   };
 
   useEffect(() => {
-    if (selected?.id) {
-      handleGetVisit(selected.id)
-        .then(res => setVisitData(res.data.data))
-        .catch(err => console.error("Error al cargar visita:", err));
-    }
+    const cargarDatos = async () => {
+      try {
+        // Cargar todas las listas primero
+        const [technicalRes, requestRes, serviceRes] = await Promise.all([
+          handleGetListTechnical(),
+          handleGetListRequest(),
+          handleGetListServiceAd()
+        ]);
 
-    handleGetListTechnical().then(res => setTechnicalList(res.data)).catch(console.error);
-    handleGetListRequest().then(res => setRequestList(res.data)).catch(console.error);
-    handleGetListServiceAd().then(res => setServiceList(res)).catch(console.error);
+        setTechnicalList(technicalRes.data);
+        setRequestList(requestRes.data);
+        setServiceList(serviceRes);
+
+        // Luego cargar la visita
+        if (selected?.id) {
+          const visitRes = await handleGetVisit(selected.id);
+          setVisitData(visitRes.data.data);
+        }
+      } catch (err) {
+        console.error("Error al cargar datos:", err);
+      }
+    };
+
+    cargarDatos();
   }, [selected]);
   
   if (!visitData) return null; // No mostrar nada mientras carga
@@ -66,7 +81,9 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
     duracion_estimada: visitData.duracion_estimada || "",
     solicitud_id_fk: visitData.solicitud?.id || "",
     tecnico_id_fk: visitData.tecnico?.id || "",
-    servicio_id_fk: visitData.servicio_id_fk || "",
+    servicio_id_fk: visitData.servicio_id_fk && serviceList.some(s => s.id === visitData.servicio_id_fk) 
+      ? visitData.servicio_id_fk 
+      : "",
     fecha_programada: formatDateTimeLocal(visitData.fecha_programada),
   };
 

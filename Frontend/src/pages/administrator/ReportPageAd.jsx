@@ -68,9 +68,8 @@ const ReportPageAd = () => {
     <Container>
 
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE REPORTES"
-        sectionTitle="Reportes generados"
-        addLabel="Agregar reporte"
+        headerTitle="FICHAS DE MANTENIMIENTO"
+        sectionTitle="Fichas de mantenimiento generadas"
         onRefresh={loadReports}
         filterComponent={
           <FilterReportAd
@@ -78,7 +77,6 @@ const ReportPageAd = () => {
             onFilteredChange={setFilteredVisits}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
       <Card>

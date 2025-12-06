@@ -74,7 +74,7 @@ const AdministratorPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE ADMINISTRADORES"
+        headerTitle="ADMINISTRADORES"
         sectionTitle="Listado de administradores del sistema"
         addLabel="Agregar administrador"
         onAdd={() => setShowModal(true)}

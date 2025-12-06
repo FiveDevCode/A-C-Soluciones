@@ -97,7 +97,7 @@ const BillPage = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE FACTURAS"
+        headerTitle="FACTURAS"
         sectionTitle="Listado de facturas"
         addLabel="Agregar factura"
         onAdd={() => setShowModal(true)}

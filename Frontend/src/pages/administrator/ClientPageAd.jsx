@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { FaUserPlus } from "react-icons/fa";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import ListClientAd from "../../components/administrator/ListClientAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
@@ -34,6 +36,7 @@ const Card = styled.div`
 `;
 
 const ClientPageAd = () => {
+  const navigate = useNavigate();
   const { data: clients, isLoading: loading, reload: loadClients } = useDataCache(
     'clients_cache',
     handleGetListClient
@@ -66,11 +69,18 @@ const ClientPageAd = () => {
     }
   };
 
+  const handleCreateFixedClient = () => {
+    navigate('/admin/clientes/crear-fijo');
+  };
+
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE CLIENTES"
+        headerTitle="CLIENTES"
         sectionTitle="Lista de clientes"
+        secondaryLabel="Crear Cliente Fijo"
+        secondaryIcon={<FaUserPlus />}
+        onSecondaryAction={handleCreateFixedClient}
         onDeleteSelected={handleDeleteSelected}
         onRefresh={loadClients}
         selectedCount={selectedIds.length}

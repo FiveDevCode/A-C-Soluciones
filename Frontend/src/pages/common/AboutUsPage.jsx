@@ -14,14 +14,10 @@ const ContainerPageAll = styled.section`
 `;
 
 const PageContainer = styled.div`
-  margin-left: ${(props) => (props.$isClient ? (props.$collapsed ? '80px' : '220px') : '0')};
   margin-top: ${(props) => (props.$isClient ? '20px' : '0')};
   min-height: ${(props) => (props.$isClient ? 'calc(100vh - 20px)' : 'auto')};
   transition: margin-left 0.3s ease;
 
-  @media screen and (max-width: 1280px) {
-    margin-left: ${(props) => (props.$isClient ? (props.$collapsed ? '60px' : '180px') : '0')};
-  }
 `;
 
 const ContainerContent = styled.main`

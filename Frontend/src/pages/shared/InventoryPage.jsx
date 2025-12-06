@@ -73,7 +73,7 @@ const InventoryPage = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="GESTIÓN DE INVENTARIO"
+        headerTitle="INVENTARIO"
         sectionTitle="Inventario de herramientas"
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faBell } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import NotificationBell from './NotificationBell';
 
 // Intentar importar el contexto del menú técnico
 let useMenuTc = null;
@@ -23,18 +24,13 @@ const Container = styled.div`
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   gap: 1.5rem;
   padding: 2rem;
-  margin-left: ${(props) => (props.$collapsed ? '80px' : '220px')};
   transition: margin-left 0.3s ease;
 
   @media (max-width: 1350px) {
     padding: 1.2rem;
     gap: 1.2rem;
   }
-
-  @media (max-width: 1280px) {
-    margin-left: ${(props) => (props.$collapsed ? '60px' : '180px')};
-  }
-
+  
   @media (max-width: 768px) {
     padding: 0;
     gap: 0;
@@ -491,12 +487,7 @@ const BaseHome = ({
           <p>{subtitle}</p>
         </HeaderLeft>
         <HeaderRight>
-          {notificationPath && (
-            <IconButton onClick={() => navigate(notificationPath)} title="Notificaciones">
-              <FontAwesomeIcon icon={faBell} />
-              {notificationCount > 0 && <NotificationBadge>{notificationCount}</NotificationBadge>}
-            </IconButton>
-          )}
+          <NotificationBell />
           <IconButton onClick={handleProfileClick} title="Mi Perfil">
             <FontAwesomeIcon icon={faUserCircle} />
           </IconButton>

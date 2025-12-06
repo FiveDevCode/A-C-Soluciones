@@ -7,7 +7,7 @@ import {
 import Global from "./Global";
 import LoginPage from "./pages/common/LoginPage";
 import styled from "styled-components";
-import MenuSideAd from "./components/administrator/MenuSideAd";
+import MenuSide from "./components/common/MenuSide";
 import CreateAccountPageCl from "./pages/client/CreateAccountPageCl";
 import HomeSessionPageCl from "./pages/client/HomeSessionPageCl";
 import ProfileUserTc from "./pages/technical/ProfileUserTc";
@@ -26,7 +26,6 @@ import RecoverChangePage from "./pages/common/RecoverChangePage";
 import ProfilePageAd from "./pages/administrator/ProfilePageAd";
 import CreateReportPageTc from "./pages/technical/CreateReportPageTc";
 import ViewVisitListPageTc from "./pages/technical/ViewVisitListPageTc";
-import MenuSideTc from "./components/technical/MenuSideTc";
 import ViewReportListPageTc from "./pages/technical/ViewReportListPageTc";
 import ViewServicePageTc from "./pages/technical/ViewServicePageTc";
 import ViewViewVisitListCompletePageTc from "./pages/technical/ViewVisitListCompletePageTc";
@@ -48,6 +47,7 @@ import BillPage from "./pages/shared/BillPage.jsx";
 import PaymentAccountPage from "./pages/shared/PaymentAccountPage.jsx";
 import InventoryPage from "./pages/shared/InventoryPage.jsx";
 import NotificationPage from "./pages/shared/NotificationPage.jsx";
+import { NotificacionProvider } from "./hooks/useNotificaciones.jsx";
 
 // Páginas de Contador
 import HomeAc from "./pages/accountant/HomeAc.jsx";
@@ -71,8 +71,17 @@ import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
+import MetricasPage from "./pages/administrator/MetricasPage.jsx";
+import CreateFixedClientAd from "./pages/administrator/CreateFixedClientAd.jsx";
+import FixedClientReportsAd from "./pages/administrator/FixedClientReportsAd.jsx";
+import FixedClientMaintenancePage from "./pages/administrator/FixedClientMaintenancePage.jsx";
+import FixedClientPumpingPage from "./pages/administrator/FixedClientPumpingPage.jsx";
+import FixedClientPlantPage from "./pages/administrator/FixedClientPlantPage.jsx";
+import ClientMaintenanceHistoryAd from "./pages/administrator/ClientMaintenanceHistoryAd.jsx";
 
-const Container = styled.div`
+const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `
@@ -86,7 +95,9 @@ const Container = styled.div`
   `}
 `;
 
-const Content = styled.div`
+const Content = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hideStyles',
+})`
   ${({ hideStyles }) =>
     hideStyles
       ? `
@@ -101,6 +112,8 @@ const Content = styled.div`
     width: 100%;
     gap: 2.5rem;
     margin-bottom: 1rem;
+    overflow-y: auto;
+    height: 100vh;
   `}
 `;
 
@@ -140,9 +153,7 @@ function AppContent() {
 
   return (
     <Container hideStyles={hideMenuAndHeader}>
-      {!hideMenuAndHeader && role === "administrador" && <MenuSideAd />}
-      {!hideMenuAndHeader && role === "tecnico" && <MenuSideTc />}
-      {!hideMenuAndHeader && role === "Contador" && <MenuSideAd />}
+      {!hideMenuAndHeader && (role === "administrador" || role === "tecnico" || role === "Contador") && <MenuSide />}
       <Content hideStyles={hideMenuAndHeader}>
         {/* {!hideMenuAndHeader && (role === 'administrador' || role === 'tecnico' || role === 'Contador') && <HeaderBar />} */}
         {/* HeaderBarCl removido - el perfil ahora está en el menú vertical */}
@@ -228,6 +239,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="Contador">
                 <HomeAc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/contador/metricas"
+            element={
+              <PrivateRoute roleRequired="Contador">
+                <MetricasPage />
               </PrivateRoute>
             }
           />
@@ -412,6 +432,15 @@ function AppContent() {
               </PrivateRoute>
             }
           />
+          
+          <Route
+            path="/tecnico/notificaciones"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <NotificationPage/>
+              </PrivateRoute>
+            }
+          />
 
           {/* ********************************* Rutas Administrador ********************************** */}
           <Route
@@ -469,6 +498,60 @@ function AppContent() {
           />
 
           <Route
+            path="/admin/clientes/crear-fijo"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <CreateFixedClientAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientReportsAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/ficha-mantenimiento/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientMaintenancePage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-bombeo/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPumpingPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reportes-clientes-fijos/reporte-planta/:clientId"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <FixedClientPlantPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/clientes/:clientId/historial-fichas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <ClientMaintenanceHistoryAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
             path="/admin/administradores"
             element={
               <PrivateRoute roleRequired="administrador">
@@ -482,6 +565,15 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="administrador">
                 <ServicePageAd />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/metricas"
+            element={
+              <PrivateRoute roleRequired="administrador">
+                <MetricasPage />
               </PrivateRoute>
             }
           />
@@ -550,7 +642,7 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/reporte-mantenimiento"
+            path="/admin/reporte-electrico"
             element={
               <PrivateRoute roleRequired="administrador">
                 <MaintenanceReportPageAd />
@@ -587,13 +679,15 @@ function App() {
   return (
     <>
       <Global />
-      <MenuProvider>
-        <MenuProviderTc>
-          <Router>
-            <AppContent />
-          </Router>
-        </MenuProviderTc>
-      </MenuProvider>
+      <NotificacionProvider>
+        <MenuProvider>
+          <MenuProviderTc>
+            <Router>
+              <AppContent />
+            </Router>
+          </MenuProviderTc>
+        </MenuProvider>
+      </NotificacionProvider>
     </>
   );
 }

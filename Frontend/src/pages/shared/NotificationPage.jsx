@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
+import { useNotificaciones } from "../../hooks/useNotificaciones";
+import { handleEliminarNotificacion } from "../../controllers/common/notificacion.controller";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
   display: flex;
@@ -14,14 +18,14 @@ const Card = styled.div`
   background-color: white;
   margin: 0 auto 0 auto;
   align-self: center;
-  padding: 20px;
+  padding: 12px 20px;
   width: 85%;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1350px) {
     margin: 0 10px 0 10px;
-    padding: 15px;
+    padding: 8px 15px;
     width: 95%;
   }
 `;
@@ -29,7 +33,7 @@ const Card = styled.div`
 const NotificationList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 `;
 
 const NotificationItem = styled.div`
@@ -50,31 +54,125 @@ const NotificationItem = styled.div`
   }
 `;
 
-const NotificationTitle = styled.h3`
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 16px;
+const NotificationHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const NotificationType = styled.span`
+  font-size: 0.75rem;
+  color: white;
   font-weight: 600;
+  text-transform: uppercase;
+  background: ${props => {
+    const type = props.$type?.toLowerCase();
+    if (type?.includes('factura')) return '#4caf50';
+    if (type?.includes('inventario')) return '#ff9800';
+    if (type?.includes('servicio')) return '#2196f3';
+    if (type?.includes('cliente')) return '#9c27b0';
+    if (type?.includes('mantenimiento')) return '#f44336';
+    return '#607d8b';
+  }};
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
 
   @media (max-width: 768px) {
-    font-size: 15px;
+    font-size: 0.7rem;
   }
 `;
 
 const NotificationDescription = styled.p`
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   color: #555;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 
   @media (max-width: 768px) {
     font-size: 13px;
   }
 `;
 
+const NotificationMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
 const NotificationDate = styled.span`
-  color: #757575;
-  font-size: 12px;
+  color: #616161;
+  font-size: 12.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #9e9e9e;
+  }
+`;
+
+const ReferenceTag = styled.span`
+  font-size: 0.75rem;
+  color: #666;
+  background: #e0e0e0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
+`;
+
+const StatusBadge = styled.span`
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 600;
+  background: ${props => props.$read ? '#e0e0e0' : '#4caf50'};
+  color: ${props => props.$read ? '#666' : 'white'};
+`;
+
+const NotificationActions = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const ActionButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  color: #666;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  border-radius: 4px;
+
+  &:hover {
+    background: ${props => props.$delete ? '#ffebee' : '#e3f2fd'};
+    color: ${props => props.$delete ? '#f44336' : '#2196f3'};
+  }
+
+  @media (max-width: 768px) {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
 `;
 
 const EmptyState = styled.div`
@@ -92,7 +190,7 @@ const EmptyState = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
@@ -126,56 +224,68 @@ const Button = styled.button`
 `;
 
 const NotificationPage = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Nueva factura registrada",
-      description: "Se ha registrado exitosamente la factura #FAC-2025-001 para el cliente Juan Pérez.",
-      date: "2025-11-30 10:30 AM",
-      isRead: false
-    },
-    {
-      id: 2,
-      title: "Actualización de inventario",
-      description: "El inventario ha sido actualizado. Se agregaron 5 nuevas herramientas eléctricas.",
-      date: "2025-11-29 03:15 PM",
-      isRead: false
-    },
-    {
-      id: 3,
-      title: "Mensaje del Administrador",
-      description: "Recordatorio: Revisar las facturas pendientes antes del cierre de mes.",
-      date: "2025-11-28 09:00 AM",
-      isRead: true
-    }
-  ]);
+  const { 
+    notificaciones, 
+    cantidadNoLeidas, 
+    marcarComoLeida, 
+    marcarTodasComoLeidas,
+    cargarNotificaciones
+  } = useNotificaciones();
 
   const [selectedIds, setSelectedIds] = useState([]);
 
-  const handleMarkAllRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
-    alert("Todas las notificaciones marcadas como leídas");
+  // Cargar notificaciones al montar el componente
+  useEffect(() => {
+    cargarNotificaciones();
+  }, [cargarNotificaciones]);
+
+  const handleMarkAllRead = async () => {
+    const result = await marcarTodasComoLeidas();
+    if (result.success) {
+      alert("Todas las notificaciones marcadas como leídas");
+    }
   };
 
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
     if (selectedIds.length === 0) {
       alert("Selecciona al menos una notificación para eliminar");
       return;
     }
     
-    if (window.confirm(`¿Está seguro de que desea eliminar ${selectedIds.length} notificación(es)?`)) {
-      setNotifications(prev => prev.filter(notif => !selectedIds.includes(notif.id)));
-      setSelectedIds([]);
-      alert("Notificaciones eliminadas correctamente");
+    if (window.confirm(`¿Estás seguro de eliminar ${selectedIds.length} notificación(es)?`)) {
+      // Eliminar todas en paralelo
+      const deletePromises = selectedIds.map(id => handleEliminarNotificacion(id));
+      const results = await Promise.all(deletePromises);
+      
+      const deletedCount = results.filter(r => r.success).length;
+      
+      if (deletedCount > 0) {
+        alert(`${deletedCount} notificación(es) eliminada(s) correctamente`);
+        await cargarNotificaciones();
+        setSelectedIds([]);
+      }
     }
   };
 
-  const handleNotificationClick = (id) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, isRead: true } : notif
-      )
-    );
+  const handleDeleteOne = async (e, id) => {
+    e.stopPropagation();
+    if (window.confirm('¿Estás seguro de eliminar esta notificación?')) {
+      const result = await handleEliminarNotificacion(id);
+      if (result.success) {
+        await cargarNotificaciones();
+        setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
+      }
+    }
+  };
+
+  const handleMarkAsRead = async (e, id) => {
+    e.stopPropagation();
+    await marcarComoLeida(id);
+  };
+
+  const handleNotificationClick = async (id) => {
+    // Marcar como leída
+    await marcarComoLeida(id);
 
     // Toggle selection
     setSelectedIds(prev => 
@@ -185,13 +295,22 @@ const NotificationPage = () => {
     );
   };
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('es-ES', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
     <Container>
       <BaseHeaderSection
         headerTitle="NOTIFICACIONES"
-        sectionTitle={`Notificaciones (${unreadCount} sin leer)`}
+        sectionTitle={`Notificaciones (${cantidadNoLeidas} sin leer)`}
         showAdd={false}
       />
 
@@ -209,24 +328,60 @@ const NotificationPage = () => {
           </Button>
         </ButtonGroup>
 
-        {notifications.length === 0 ? (
+        {notificaciones.length === 0 ? (
           <EmptyState>
             No tienes notificaciones en este momento
           </EmptyState>
         ) : (
           <NotificationList>
-            {notifications.map(notification => (
+            {notificaciones.map(notification => (
               <NotificationItem
-                key={notification.id}
-                $isRead={notification.isRead}
-                onClick={() => handleNotificationClick(notification.id)}
+                key={notification.id_notificacion}
+                $isRead={notification.leida}
+                onClick={() => handleNotificationClick(notification.id_notificacion)}
                 style={{
-                  border: selectedIds.includes(notification.id) ? '2px solid #2196f3' : 'none'
+                  border: selectedIds.includes(notification.id_notificacion) ? '2px solid #2196f3' : 'none'
                 }}
               >
-                <NotificationTitle>{notification.title}</NotificationTitle>
-                <NotificationDescription>{notification.description}</NotificationDescription>
-                <NotificationDate>{notification.date}</NotificationDate>
+                <NotificationHeader>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <NotificationType $type={notification.tipo_notificacion}>
+                      {notification.tipo_notificacion?.replace(/_/g, ' ') || 'NOTIFICACIÓN'}
+                    </NotificationType>
+                    <StatusBadge $read={notification.leida}>
+                      {notification.leida ? '✓ Leída' : '● Nueva'}
+                    </StatusBadge>
+                  </div>
+                  <NotificationActions>
+                    {!notification.leida && (
+                      <ActionButton
+                        onClick={(e) => handleMarkAsRead(e, notification.id_notificacion)}
+                        title="Marcar como leída"
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                      </ActionButton>
+                    )}
+                    <ActionButton
+                      $delete
+                      onClick={(e) => handleDeleteOne(e, notification.id_notificacion)}
+                      title="Eliminar notificación"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ActionButton>
+                  </NotificationActions>
+                </NotificationHeader>
+                <NotificationDescription>{notification.mensaje}</NotificationDescription>
+                <NotificationMeta>
+                  <NotificationDate>
+                    {formatDate(notification.fecha_creacion)}
+                  </NotificationDate>
+                  {notification.tipo_referencia && (
+                    <ReferenceTag>
+                      {notification.tipo_referencia}
+                      {notification.id_referencia && ` #${notification.id_referencia}`}
+                    </ReferenceTag>
+                  )}
+                </NotificationMeta>
               </NotificationItem>
             ))}
           </NotificationList>

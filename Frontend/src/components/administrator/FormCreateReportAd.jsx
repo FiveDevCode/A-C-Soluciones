@@ -42,15 +42,23 @@ const FormCreateReportAd = ({ id, onClose, onSuccess }) => {
   ];
 
   const handleSubmit = async (data) => {
-    const id_cliente = await handleGetClientVisit(id);
-    const id_tecnico = await handleGetTechnicalVisit(id);
+    
+    try {
+      const id_cliente = await handleGetClientVisit(id);
 
-    await handleCreateMaintenanceSheet({
-      ...data,
-      id_cliente: id_cliente,
-      id_tecnico: id_tecnico,
-      id_visitas: parseInt(id),
-    });
+      const id_tecnico = await handleGetTechnicalVisit(id);
+
+      await handleCreateMaintenanceSheet({
+        ...data,
+        id_cliente: id_cliente,
+        id_tecnico: id_tecnico,
+        id_visitas: parseInt(id),
+      });
+      
+    } catch (error) {
+      
+      throw error; 
+    }
   };
 
 

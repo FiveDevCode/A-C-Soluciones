@@ -317,16 +317,17 @@ const HistoryServicesPage = () => {
       return;
     }
 
-    // Abrir el PDF
+    // Abrir el PDF usando el mismo método que el admin
     try {
       const token = localStorage.getItem("authToken");
-      const relativePath = finalPdfPath
-        .replace(/^uploads[\\/]/, "")
-        .replace(/\\/g, "/");
-
-      const publicUrl = `${API_KEY}/${relativePath}`;
-
-      const response = await fetch(publicUrl, {
+      
+      // Extraer solo el nombre del archivo del path
+      const fileName = finalPdfPath.split(/[/\\]/).pop();
+      
+      // Usar la ruta de descarga del backend (igual que el admin)
+      const pdfUrl = `${API_KEY}/api/descargar/${fileName}`;
+      
+      const response = await fetch(pdfUrl, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -337,12 +338,13 @@ const HistoryServicesPage = () => {
         throw new Error("No se pudo obtener el PDF");
       }
 
+      // Convertir la respuesta a blob y abrir en nueva pestaña
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
       window.open(fileURL, "_blank");
     } catch (err) {
       console.error("Error al abrir PDF:", err);
-      showToast('No se pudo abrir el reporte. Por favor, intente más tarde.', 'error');
+      showToast('No se pudo abrir la ficha. Por favor, intente más tarde.', 'error');
     }
   };
 
