@@ -4,13 +4,9 @@ import {
   TextField,
   MenuItem,
   Button,
-  Collapse,
-  Alert,
-  IconButton,
   Autocomplete,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useToast } from "./ToastNotification";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -126,11 +122,11 @@ const BaseEditModal = ({
   onSuccess,
   successMessage = "Actualizado correctamente",
 }) => {
+  const { showToast, ToastRenderer } = useToast();
+
   const [formData, setFormData] = useState(initialData);
-  const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     // Actualiza los valores cuando cambian los datos iniciales
@@ -140,7 +136,6 @@ const BaseEditModal = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (showSuccess) setShowSuccess(false);
   };
 
   const handleFormSubmit = async (e) => {
@@ -156,24 +151,25 @@ const BaseEditModal = ({
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      setErrorMsg("Por favor, complete todos los campos obligatorios");
+      showToast("Por favor, complete todos los campos obligatorios", "error", 5000);
       return;
     }
 
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
-      setShowSuccess(true);
+      onClose();
+      
       setTimeout(() => {
-        setShowSuccess(false);
+        showToast(successMessage, "success", 4000);
         onSuccess?.();
-      }, 2000);
+      }, 500);
     } catch (err) {
-      setShowSuccess(false);
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+        showToast("Error en los campos del formulario", "error", 5000);
       } else {
-        setErrorMsg(err.response?.data?.message || "Error al actualizar");
+        showToast(err.response?.data?.message || "Error al actualizar", "error", 5000);
       }
     } finally {
       setIsSubmitting(false);
@@ -181,6 +177,7 @@ const BaseEditModal = ({
   };
 
   return (
+    <>
     <ModalOverlay>
       <ModalContent>
         <Title>{title}</Title>
@@ -283,25 +280,11 @@ const BaseEditModal = ({
             </Collapse>
           )}
 
-          {showSuccess && (
-            <Collapse in={showSuccess}>
-              <Alert
-                severity="success"
-                sx={{ mb: 2 }}
-                iconMapping={{
-                  success: <CheckCircleIcon fontSize="inherit" />,
-                }}
-              >
-                {successMessage}
-              </Alert>
-            </Collapse>
-          )}
-
           <ButtonsContainer>
             <StyledButton
               type="submit"
               variant="contained"
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               sx={{
                 backgroundColor: "#007bff",
                 "&:hover": { backgroundColor: "#0056b3" },
@@ -314,7 +297,7 @@ const BaseEditModal = ({
               type="button"
               variant="contained"
               color="error"
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               onClick={onClose}
             >
               Cerrar
@@ -323,6 +306,8 @@ const BaseEditModal = ({
         </FormContainer>
       </ModalContent>
     </ModalOverlay>
+    <ToastRenderer />
+    </>
   );
 };
 

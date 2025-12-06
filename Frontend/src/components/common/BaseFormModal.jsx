@@ -4,15 +4,13 @@ import {
   TextField,
   MenuItem,
   Button,
-  Collapse,
-  Alert,
   IconButton,
   Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "./ToastNotification";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -168,6 +166,8 @@ const BaseFormModal = ({
   const allFields = normalizedSteps.flatMap((s) => s.fields);
 
   // ========= ESTADOS PRINCIPALES =========
+  const { showToast, ToastRenderer } = useToast();
+
   const [formData, setFormData] = useState(
     customFormData || Object.fromEntries(
       allFields
@@ -184,10 +184,8 @@ const BaseFormModal = ({
     )
   );
 
-  const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   // ========= HANDLE CHANGE =========
   const handleChange = (e) => {
@@ -204,8 +202,6 @@ const BaseFormModal = ({
     const newFormData = { ...formData, [name]: value };
     setFormData(newFormData);
     onFormDataChange?.(newFormData);
-
-    if (showSuccess) setShowSuccess(false);
   };
 
   // ========= RESET =========
@@ -226,7 +222,6 @@ const BaseFormModal = ({
       )
     );
 
-    setErrorMsg("");
     setFieldErrors({});
   };
 
@@ -242,7 +237,7 @@ const BaseFormModal = ({
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      setErrorMsg("Por favor, complete todos los campos obligatorios");
+      showToast("Por favor, complete todos los campos obligatorios", "error", 5000);
       return;
     }
 
@@ -252,19 +247,18 @@ const BaseFormModal = ({
       await onSubmit({ ...formData, ...files });
 
       handleReset();
-      setShowSuccess(true);
-
+      onClose();
+      
       setTimeout(() => {
-        setShowSuccess(false);
+        showToast(successMessage, "success", 4000);
         onSuccess?.();
-      }, 1800);
+      }, 500);
     } catch (err) {
-      setShowSuccess(false);
-
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+        showToast("Error en los campos del formulario", "error", 5000);
       } else {
-        setErrorMsg(err.response?.data?.message || "Error al guardar");
+        showToast(err.response?.data?.message || "Error al guardar", "error", 5000);
       }
     } finally {
       setIsSubmitting(false);
@@ -397,6 +391,7 @@ const BaseFormModal = ({
   };
 
   return (
+    <>
     <ModalOverlay onClick={onClose}>
       <Modal onClick={(e) => e.stopPropagation()}>
         <Header>
@@ -442,35 +437,6 @@ const BaseFormModal = ({
               {extraContent}
             </>
           )}
-
-          {/* Errores */}
-          <Collapse in={!!errorMsg}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton onClick={() => setErrorMsg("")} size="small">
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mt: 2 }}
-            >
-              {errorMsg}
-            </Alert>
-          </Collapse>
-
-          {showSuccess && (
-            <Collapse in={showSuccess}>
-              <Alert 
-                severity="success" 
-                sx={{ mt: 2 }}
-                iconMapping={{
-                  success: <CheckCircleIcon fontSize="inherit" />,
-                }}
-              >
-                {successMessage}
-              </Alert>
-            </Collapse>
-          )}
         </Content>
 
         {/* BOTONES */}
@@ -478,7 +444,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep > 0 && (
             <Button 
               variant="outlined" 
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               onClick={() => setCurrentStep((s) => s - 1)}
             >
               Anterior
@@ -488,7 +454,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep < totalSteps - 1 ? (
             <Button 
               variant="contained" 
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               onClick={() => setCurrentStep((s) => s + 1)}
             >
               Siguiente
@@ -496,7 +462,7 @@ const BaseFormModal = ({
           ) : (
             <Button
               variant="contained"
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               onClick={handleSubmitFinal}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}
@@ -506,7 +472,7 @@ const BaseFormModal = ({
           {!isMultiStep && (
             <Button 
               variant="outlined" 
-              disabled={showSuccess || isSubmitting}
+              disabled={isSubmitting}
               onClick={handleReset}
             >
               Limpiar
@@ -515,6 +481,8 @@ const BaseFormModal = ({
         </Footer>
       </Modal>
     </ModalOverlay>
+    <ToastRenderer />
+    </>
   );
 };
 
