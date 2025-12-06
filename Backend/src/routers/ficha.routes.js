@@ -2,7 +2,7 @@ import path from 'path';
 
 import express from 'express';
 import { crearFichaMantenimiento, listarFichas} from '../controllers/ficha_mantenimiento.controller.js';
-import { isAdminOrTecnico, isCliente, authenticate, isAdminOrCliente} from '../middlewares/autenticacion.js';
+import { isAdminOrTecnico, isCliente, authenticate, isAdminOrCliente, isAdminOrTecnicoOrCliente} from '../middlewares/autenticacion.js';
 import upload from '../middlewares/uploadImages.js';
 import { obtenerFichasPorCliente, obtenerFichasPorTecnico} from '../controllers/ficha_mantenimiento.controller.js';
 
@@ -35,7 +35,7 @@ router.post(
 
 router.get('/fichas', authenticate, isAdminOrTecnico, listarFichas);
 
-router.get('/descargar/:nombreArchivo', authenticate, isAdminOrCliente, (req, res) => {
+router.get('/descargar/:nombreArchivo', authenticate, isAdminOrTecnicoOrCliente, (req, res) => {
   const { nombreArchivo } = req.params;
   const filePath = path.resolve(`uploads/fichas/${nombreArchivo}`);
 
