@@ -10,6 +10,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
@@ -459,7 +460,13 @@ const BaseFormModal = ({
 
           {showSuccess && (
             <Collapse in={showSuccess}>
-              <Alert severity="success" sx={{ mt: 2 }}>
+              <Alert 
+                severity="success" 
+                sx={{ mt: 2 }}
+                iconMapping={{
+                  success: <CheckCircleIcon fontSize="inherit" />,
+                }}
+              >
                 {successMessage}
               </Alert>
             </Collapse>
@@ -471,6 +478,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep > 0 && (
             <Button 
               variant="outlined" 
+              disabled={showSuccess || isSubmitting}
               onClick={() => setCurrentStep((s) => s - 1)}
             >
               Anterior
@@ -480,6 +488,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep < totalSteps - 1 ? (
             <Button 
               variant="contained" 
+              disabled={showSuccess || isSubmitting}
               onClick={() => setCurrentStep((s) => s + 1)}
             >
               Siguiente
@@ -487,7 +496,7 @@ const BaseFormModal = ({
           ) : (
             <Button
               variant="contained"
-              disabled={isSubmitting}
+              disabled={showSuccess || isSubmitting}
               onClick={handleSubmitFinal}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}
@@ -495,7 +504,11 @@ const BaseFormModal = ({
           )}
 
           {!isMultiStep && (
-            <Button variant="outlined" onClick={handleReset}>
+            <Button 
+              variant="outlined" 
+              disabled={showSuccess || isSubmitting}
+              onClick={handleReset}
+            >
               Limpiar
             </Button>
           )}

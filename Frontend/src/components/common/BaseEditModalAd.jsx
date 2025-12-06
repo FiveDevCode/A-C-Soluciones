@@ -10,6 +10,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -286,12 +287,10 @@ const BaseEditModal = ({
             <Collapse in={showSuccess}>
               <Alert
                 severity="success"
-                action={
-                  <IconButton onClick={() => setShowSuccess(false)} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
                 sx={{ mb: 2 }}
+                iconMapping={{
+                  success: <CheckCircleIcon fontSize="inherit" />,
+                }}
               >
                 {successMessage}
               </Alert>
@@ -302,7 +301,7 @@ const BaseEditModal = ({
             <StyledButton
               type="submit"
               variant="contained"
-              disabled={isSubmitting}
+              disabled={showSuccess || isSubmitting}
               sx={{
                 backgroundColor: "#007bff",
                 "&:hover": { backgroundColor: "#0056b3" },
@@ -315,6 +314,7 @@ const BaseEditModal = ({
               type="button"
               variant="contained"
               color="error"
+              disabled={showSuccess || isSubmitting}
               onClick={onClose}
             >
               Cerrar
