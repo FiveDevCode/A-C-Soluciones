@@ -7,6 +7,7 @@ import {
   Collapse,
   Alert,
   IconButton,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -143,6 +144,21 @@ const BaseEditModal = ({
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar campos requeridos
+    const errors = {};
+    fields.forEach((field) => {
+      if (field.required && (!formData[field.name] || formData[field.name] === "")) {
+        errors[field.name] = `${field.label} es obligatorio`;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setErrorMsg("Por favor, complete todos los campos obligatorios");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
@@ -169,45 +185,86 @@ const BaseEditModal = ({
         <Title>{title}</Title>
 
         <FormContainer onSubmit={handleFormSubmit}>
-          {fields.map((field) => (
-            <StyledTextField
-              key={field.name}
-              select={field.type === "select"}
-              type={
-                field.type === "number"
-                  ? "number"
-                  : field.type === "date"
-                  ? "date"
-                  : field.type === "datetime-local"
-                  ? "datetime-local"
-                  : field.type === "textarea"
-                  ? ""
-                  : "text"
-              }
-              label={field.label}
-              name={field.name}
-              fullWidth
-              size="small"
-              value={formData[field.name] ?? ""}
-              onChange={handleChange}
-              error={Boolean(fieldErrors[field.name])}
-              helperText={fieldErrors[field.name]}
-              InputLabelProps={{
-                shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
-              }}
-              SelectProps={{
-                onClose: () => document.activeElement.blur(),
-                MenuProps: { disableScrollLock: true },
-              }}
-            >
-              {field.type === "select" &&
-                field.options?.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-            </StyledTextField>
-          ))}
+          {fields.map((field) => {
+            if (field.type === "autocomplete") {
+              return (
+                <Autocomplete
+                  key={field.name}
+                  freeSolo={false}
+                  options={field.options || []}
+                  value={formData[field.name] || null}
+                  onChange={(event, newValue) => {
+                    const syntheticEvent = {
+                      target: {
+                        name: field.name,
+                        value: newValue || "",
+                      },
+                    };
+                    handleChange(syntheticEvent);
+                  }}
+                  renderInput={(params) => (
+                    <StyledTextField
+                      {...params}
+                      label={field.label}
+                      size="small"
+                      error={Boolean(fieldErrors[field.name])}
+                      helperText={fieldErrors[field.name]}
+                    />
+                  )}
+                  ListboxProps={{
+                    style: { zIndex: 99999 }
+                  }}
+                  componentsProps={{
+                    popper: {
+                      style: { zIndex: 99999 }
+                    }
+                  }}
+                  sx={{ marginBottom: '16px' }}
+                />
+              );
+            }
+
+            return (
+              <StyledTextField
+                key={field.name}
+                select={field.type === "select"}
+                type={
+                  field.type === "number"
+                    ? "number"
+                    : field.type === "date"
+                    ? "date"
+                    : field.type === "datetime-local"
+                    ? "datetime-local"
+                    : field.type === "textarea"
+                    ? ""
+                    : "text"
+                }
+                label={field.label}
+                name={field.name}
+                fullWidth
+                size="small"
+                value={formData[field.name] ?? ""}
+                onChange={handleChange}
+                error={Boolean(fieldErrors[field.name])}
+                helperText={fieldErrors[field.name]}
+                inputProps={field.inputProps}
+                InputLabelProps={{
+                  shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
+                }}
+                SelectProps={{
+                  onClose: () => document.activeElement.blur(),
+                  MenuProps: { disableScrollLock: true },
+                }}
+              >
+                {field.type === "select" &&
+                  field.options?.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+              </StyledTextField>
+            );
+          })}
 
           {errorMsg && (
             <Collapse in={!!errorMsg}>

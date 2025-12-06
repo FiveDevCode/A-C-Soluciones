@@ -7,6 +7,7 @@ import {
   Collapse,
   Alert,
   IconButton,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -230,6 +231,20 @@ const BaseFormModal = ({
 
   // ========= SUBMIT FINAL =========
   const handleSubmitFinal = async () => {
+    // Validar campos requeridos
+    const errors = {};
+    allFields.forEach((field) => {
+      if (field.required && (!formData[field.name] || formData[field.name] === "")) {
+        errors[field.name] = `${field.label} es obligatorio`;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setErrorMsg("Por favor, complete todos los campos obligatorios");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -296,6 +311,38 @@ const BaseFormModal = ({
               </div>
             )}
           </>
+        ) : field.type === "autocomplete" ? (
+          <Autocomplete
+            freeSolo={false}
+            options={field.options || []}
+            value={formData[field.name] || null}
+            onChange={(event, newValue) => {
+              const syntheticEvent = {
+                target: {
+                  name: field.name,
+                  value: newValue || "",
+                },
+              };
+              handleChange(syntheticEvent);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={field.label}
+                size="small"
+                error={Boolean(fieldErrors[field.name])}
+                helperText={fieldErrors[field.name]}
+              />
+            )}
+            ListboxProps={{
+              style: { zIndex: 99999 }
+            }}
+            componentsProps={{
+              popper: {
+                style: { zIndex: 99999 }
+              }
+            }}
+          />
         ) : (
           <TextField
             select={field.type === "select"}
@@ -318,6 +365,7 @@ const BaseFormModal = ({
             onChange={handleChange}
             error={Boolean(fieldErrors[field.name])}
             helperText={fieldErrors[field.name]}
+            inputProps={field.inputProps}
             InputLabelProps={{
               shrink:
                 field.type === "date" ||
