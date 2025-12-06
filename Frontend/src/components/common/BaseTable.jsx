@@ -283,6 +283,16 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9998;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const LoadingContent = styled.div`
@@ -294,6 +304,18 @@ const LoadingContent = styled.div`
   align-items: center;
   gap: 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.2s ease-out;
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;
 
 const LoadingText = styled.p`
@@ -427,11 +449,13 @@ const BaseTable = ({
     setShowModal(false);
     setSelectedRow(row);
     
-    // Mostrar pantalla de carga por 1.5 segundos, luego mostrar el modal
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowModal(true);
-    }, 1500);
+    // Delay mínimo para transición suave (200ms)
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+        setShowModal(true);
+      }, 200);
+    });
   };
 
   const handleOpenView = async (row) => {

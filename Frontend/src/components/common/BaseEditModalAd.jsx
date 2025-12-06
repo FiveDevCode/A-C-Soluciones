@@ -20,6 +20,16 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1200;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const ModalContent = styled.div`
@@ -28,6 +38,18 @@ const ModalContent = styled.div`
   border-radius: 16px;
   width: 400px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease-out;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
   @media (max-width: 1350px) {
     width: 330px;
@@ -263,22 +285,6 @@ const BaseEditModal = ({
               </StyledTextField>
             );
           })}
-
-          {errorMsg && (
-            <Collapse in={!!errorMsg}>
-              <Alert
-                severity="error"
-                action={
-                  <IconButton onClick={() => setErrorMsg("")} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                {errorMsg}
-              </Alert>
-            </Collapse>
-          )}
 
           <ButtonsContainer>
             <StyledButton
