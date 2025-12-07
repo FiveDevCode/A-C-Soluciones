@@ -350,7 +350,6 @@ const MenuSide = () => {
       { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
       { to: '/admin/inventario', icon: faBoxes, label: 'Inventario' },
-      { to: '/admin/notificaciones', icon: faBell, label: 'Notificaciones' },
       { to: '/admin/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
       { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
       { to: '/admin/ficha-mantenimiento', icon: faClipboardCheck, label: 'Fichas de mantenimiento' },
