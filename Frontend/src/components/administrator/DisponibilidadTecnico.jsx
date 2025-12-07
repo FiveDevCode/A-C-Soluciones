@@ -151,8 +151,9 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
       <Title>
         📅 Disponibilidad de {tecnico.nombre}
       </Title>
-      <InfoText style={{ marginBottom: '10px' }}>
-        💡 Horario laboral: 8:00 AM - 6:00 PM
+      <InfoText style={{ marginBottom: '10px', background: '#e3f2fd', padding: '8px', borderRadius: '4px', border: '1px solid #2196f3' }}>
+        💡 Horario laboral: 8:00 AM - 6:00 PM<br/>
+        ℹ️ Los bloques libres muestran períodos de tiempo donde puede programar su visita
       </InfoText>
       
       {intervalosOcupados.length > 0 && (
@@ -191,10 +192,15 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
                     {formatTime(horario.inicio)} - {formatTime(horario.fin)}
                   </HorarioTime>
                   <HorarioDuration>
-                    Duración disponible: {horario.duracionDisponible} minutos
+                    ⏱️ Bloque libre de {horario.duracionDisponible} minutos
+                    {duracionEstimada && suficiente && (
+                      <span style={{ color: '#2e7d32', marginLeft: '8px', fontWeight: 600 }}>
+                        ✓ Puede programar su visita de {duracionEstimada} min aquí
+                      </span>
+                    )}
                     {duracionEstimada && !suficiente && (
                       <span style={{ color: '#e65100', marginLeft: '8px' }}>
-                        (Insuficiente para {duracionEstimada} min)
+                        ✗ Insuficiente para {duracionEstimada} min
                       </span>
                     )}
                   </HorarioDuration>
