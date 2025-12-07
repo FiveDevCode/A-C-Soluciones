@@ -8,6 +8,7 @@ const API_KEY = "http://localhost:8000";
 
 const FICHAS_CACHE_KEY = 'fichas_pdfs_cache';
 const FICHAS_CACHE_TIMESTAMP = 'fichas_pdfs_timestamp';
+const FICHAS_VISITS_KEY = 'fichas_visits_snapshot';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }) => {
@@ -17,7 +18,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   // Estado donde guardaremos visits + pdf_path
   const [visitsWithPDF, setVisitsWithPDF] = useState([]);
   const [pdfMap, setPdfMap] = useState(new Map());
-  const lastVisitsJsonRef = useRef("");
+  const lastVisitsJsonRef = useRef(sessionStorage.getItem(FICHAS_VISITS_KEY) || "");
   const isLoadingRef = useRef(false);
   const hasFetchedPDFsRef = useRef(false);
 
@@ -40,10 +41,11 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   };
 
   // Función para guardar fichas en el caché
-  const setCachedFichas = (fichas) => {
+  const setCachedFichas = (fichas, visitsSnapshot) => {
     try {
       sessionStorage.setItem(FICHAS_CACHE_KEY, JSON.stringify(fichas));
       sessionStorage.setItem(FICHAS_CACHE_TIMESTAMP, Date.now().toString());
+      sessionStorage.setItem(FICHAS_VISITS_KEY, visitsSnapshot);
     } catch (err) {
       console.error('Error al guardar caché de fichas:', err);
     }
@@ -57,36 +59,43 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
 
       // Verificar si las visitas han cambiado (por ID o cantidad)
       const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
-      const hasVisitsChanged = currentVisitsJson !== lastVisitsJsonRef.current;
+      
+      // Intentar obtener del caché primero siempre
+      const cachedFichas = getCachedFichas();
+      
+      console.log('🔍 [FICHAS] Verificando caché:', {
+        hayCacheValido: !!cachedFichas,
+        visitasActuales: currentVisitsJson.slice(0, 50),
+        visitasPrevias: lastVisitsJsonRef.current.slice(0, 50),
+        sonIguales: currentVisitsJson === lastVisitsJsonRef.current
+      });
+      
+      // Si hay caché válido Y las visitas no han cambiado, usar el caché
+      if (cachedFichas && currentVisitsJson === lastVisitsJsonRef.current) {
+        console.log('✅ [FICHAS] Usando caché, NO hace petición');
+        const fichasMap = new Map();
+        cachedFichas.forEach((ficha) => {
+          if (ficha.id_visitas && ficha.pdf_path) {
+            fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+          }
+        });
+        setPdfMap(fichasMap);
+        return;
+      }
 
-      // Si no han cambiado y ya tenemos PDFs cargados, no hacer nada
-      if (!hasVisitsChanged && hasFetchedPDFsRef.current) return;
-
+      // Si llegamos aquí, necesitamos hacer la petición
+      console.log('🌐 [FICHAS] Haciendo petición a API');
       isLoadingRef.current = true;
       lastVisitsJsonRef.current = currentVisitsJson;
 
       try {
-        // Intentar obtener del caché primero
-        const cachedFichas = getCachedFichas();
-        if (cachedFichas && !hasVisitsChanged) {
-          const fichasMap = new Map();
-          cachedFichas.forEach((ficha) => {
-            if (ficha.id_visitas && ficha.pdf_path) {
-              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-            }
-          });
-          setPdfMap(fichasMap);
-          hasFetchedPDFsRef.current = true;
-          isLoadingRef.current = false;
-          return;
-        }
-
-        // Si hay cambios o no hay caché, hacer la petición
+        // Hacer la petición
         const response = await commonService.getListToken();
         const allFichas = response.data || [];
         
-        // Guardar en caché
-        setCachedFichas(allFichas);
+        // Guardar en caché junto con el snapshot de visitas
+        setCachedFichas(allFichas, currentVisitsJson);
+        console.log('💾 [FICHAS] Guardado en caché:', allFichas.length, 'fichas');
 
         // Crear el mapa
         const fichasMap = new Map();
