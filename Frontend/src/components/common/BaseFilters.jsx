@@ -261,7 +261,6 @@ const BaseFilters = ({
     
     // Solo actualizar si realmente cambió el contenido
     if (currentJson !== lastFilteredJsonRef.current) {
-      console.log('🔄 BaseFilters: Datos filtrados cambiaron, notificando al padre...');
       lastFilteredJsonRef.current = currentJson;
       onFilteredChange?.(filteredData);
     }
