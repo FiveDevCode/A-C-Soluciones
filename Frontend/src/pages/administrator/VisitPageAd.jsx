@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import ListVisitAd from "../../components/administrator/ListVisitAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
@@ -34,10 +34,17 @@ const Card = styled.div`
 `;
 
 const VisitPageAd = () => {
-  const { data: visits, isLoading: loading, reload: loadVisits } = useDataCache(
+  const { data: visitsData, isLoading: loading, reload: loadVisits } = useDataCache(
     'visits_cache',
     handleGetListVisitAd
   );
+  
+  // Ordenar visitas por ID descendente (más recientes primero)
+  const visits = useMemo(() => {
+    if (!visitsData || visitsData.length === 0) return [];
+    return [...visitsData].sort((a, b) => b.id - a.id);
+  }, [visitsData]);
+
   const { timeAgo, manualRefresh } = useAutoRefresh(loadVisits, 3, 'visits');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
