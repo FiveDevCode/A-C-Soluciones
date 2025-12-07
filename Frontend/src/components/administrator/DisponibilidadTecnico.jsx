@@ -10,11 +10,39 @@ const DisponibilidadContainer = styled.div`
   border: 1px solid #e0e0e0;
 `;
 
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: ${props => props.$isExpanded ? '10px' : '0'};
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 const Title = styled.h4`
-  margin: 0 0 10px 0;
+  margin: 0;
   color: #333;
   font-size: 14px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const ToggleIcon = styled.span`
+  font-size: 18px;
+  transition: transform 0.3s ease;
+  transform: ${props => props.$isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+`;
+
+const ContentWrapper = styled.div`
+  max-height: ${props => props.$isExpanded ? '1000px' : '0'};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
 `;
 
 const LoadingText = styled.p`
@@ -85,6 +113,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
   const [disponibilidad, setDisponibilidad] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   useEffect(() => {
     if (!tecnicoId || !fecha) {
@@ -125,8 +154,13 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
   if (loading) {
     return (
       <DisponibilidadContainer>
-        <Title>🕐 Verificando disponibilidad...</Title>
-        <LoadingText>Consultando horarios del técnico...</LoadingText>
+        <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
+          <Title>🕐 Verificando disponibilidad...</Title>
+          <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
+        </TitleContainer>
+        <ContentWrapper $isExpanded={isExpanded}>
+          <LoadingText>Consultando horarios del técnico...</LoadingText>
+        </ContentWrapper>
       </DisponibilidadContainer>
     );
   }
@@ -134,8 +168,13 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
   if (error) {
     return (
       <DisponibilidadContainer>
-        <Title>⚠️ Error</Title>
-        <NoDisponibleText>{error}</NoDisponibleText>
+        <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
+          <Title>⚠️ Error</Title>
+          <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
+        </TitleContainer>
+        <ContentWrapper $isExpanded={isExpanded}>
+          <NoDisponibleText>{error}</NoDisponibleText>
+        </ContentWrapper>
       </DisponibilidadContainer>
     );
   }
@@ -148,13 +187,17 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
 
   return (
     <DisponibilidadContainer>
-      <Title>
-        📅 Disponibilidad de {tecnico.nombre}
-      </Title>
-      <InfoText style={{ marginBottom: '10px', background: '#e3f2fd', padding: '8px', borderRadius: '4px', border: '1px solid #2196f3' }}>
-        💡 Horario laboral: 8:00 AM - 6:00 PM<br/>
-        ℹ️ Los bloques libres muestran períodos de tiempo donde puede programar su visita
-      </InfoText>
+      <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
+        <Title>
+          📅 Disponibilidad de {tecnico.nombre}
+        </Title>
+        <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
+      </TitleContainer>
+      <ContentWrapper $isExpanded={isExpanded}>
+        <InfoText style={{ marginBottom: '10px', background: '#e3f2fd', padding: '8px', borderRadius: '4px', border: '1px solid #2196f3' }}>
+          💡 Horario laboral: 8:00 AM - 6:00 PM<br/>
+          ℹ️ Los bloques libres muestran períodos de tiempo donde puede programar su visita
+        </InfoText>
       
       {intervalosOcupados.length > 0 && (
         <IntervalosOcupados style={{ marginTop: 0, marginBottom: '15px', paddingTop: 0, borderTop: 'none' }}>
@@ -210,6 +253,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
           </HorariosList>
         </>
       )}
+      </ContentWrapper>
     </DisponibilidadContainer>
   );
 };
