@@ -6,7 +6,17 @@ import 'dotenv/config';
 
 export const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
-  logging: false, 
+  logging: false,
+  pool: {
+    max: 10,          // Máximo de conexiones en el pool
+    min: 2,           // Mínimo de conexiones siempre disponibles
+    acquire: 30000,   // Tiempo máximo para obtener una conexión (30s)
+    idle: 10000,      // Tiempo máximo que una conexión puede estar inactiva (10s)
+  },
+  dialectOptions: {
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000,
+  },
 });
 
 
