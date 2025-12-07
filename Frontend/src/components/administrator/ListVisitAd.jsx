@@ -88,17 +88,8 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       // Intentar obtener del caché primero siempre
       const cachedFichas = getCachedFichas();
       
-      console.log('🔍 [FICHAS] Verificando caché:', {
-        hayCacheValido: !!cachedFichas,
-        visitasActuales: currentVisitsJson.slice(0, 50),
-        visitasPrevias: lastVisitsJsonRef.current.slice(0, 50),
-        sonIguales: currentVisitsJson === lastVisitsJsonRef.current
-      });
-      
       // Si hay caché válido Y las visitas no han cambiado, usar el caché
       if (cachedFichas && currentVisitsJson === lastVisitsJsonRef.current) {
-        console.log('✅ [FICHAS] Usando caché, NO hace petición');
-        
         // Solo actualizar el mapa si está vacío
         if (pdfMap.size === 0) {
           const fichasMap = new Map();
@@ -113,7 +104,6 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       }
 
       // Si llegamos aquí, necesitamos hacer la petición
-      console.log('🌐 [FICHAS] Haciendo petición a API');
       isLoadingRef.current = true;
       lastVisitsJsonRef.current = currentVisitsJson;
 
@@ -124,7 +114,6 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
         
         // Guardar en caché junto con el snapshot de visitas
         setCachedFichas(allFichas, currentVisitsJson);
-        console.log('💾 [FICHAS] Guardado en caché:', allFichas.length, 'fichas');
 
         // Crear el mapa
         const fichasMap = new Map();
