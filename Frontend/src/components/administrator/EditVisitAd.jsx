@@ -122,6 +122,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
       onClose={onClose}
       onSuccess={onSuccess}
       successMessage="¡Visita actualizada exitosamente!"
+      enableScroll={true}
       onFieldChange={(name, value) => {
         if (name === 'tecnico_id_fk') setSelectedTecnico(value);
         if (name === 'fecha_programada') setSelectedFecha(value);

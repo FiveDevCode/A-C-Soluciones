@@ -37,6 +37,8 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 16px;
   width: 400px;
+  max-height: ${props => props.$enableScroll ? '90vh' : 'none'};
+  overflow-y: ${props => props.$enableScroll ? 'auto' : 'visible'};
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
   animation: slideUp 0.25s ease-out;
 
@@ -51,10 +53,31 @@ const ModalContent = styled.div`
     }
   }
 
+  ${props => props.$enableScroll && `
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  `}
+
   @media (max-width: 1350px) {
     width: 330px;
     padding: 20px;
     border-radius: 12px;
+    max-height: ${props => props.$enableScroll ? '85vh' : 'none'};
   }
 `;
 
@@ -145,6 +168,7 @@ const BaseEditModal = ({
   successMessage = "Actualizado correctamente",
   onFieldChange,
   additionalContent,
+  enableScroll = false,
 }) => {
   const { showToast } = useToastContext();
 
@@ -209,7 +233,7 @@ const BaseEditModal = ({
   return (
     <>
     <ModalOverlay>
-      <ModalContent>
+      <ModalContent $enableScroll={enableScroll}>
         <Title>{title}</Title>
 
         <FormContainer onSubmit={handleFormSubmit}>
