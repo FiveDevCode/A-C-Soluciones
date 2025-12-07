@@ -460,7 +460,8 @@ const BaseTable = ({
 
   const handleOpenView = async (row) => {
     // Ver detalle se abre inmediatamente sin pantalla de carga
-    setSelectedViewRow(row);
+    // Guardar solo el ID para mantener estabilidad
+    setSelectedViewRow(row.id ? row.id : row);
     setShowModal(true);
   };
 
@@ -741,7 +742,9 @@ const BaseTable = ({
       )}
       {ViewComponent && selectedViewRow && showModal && (
         <ViewComponent
-          selected={selectedViewRow}
+          selected={typeof selectedViewRow === 'number' || typeof selectedViewRow === 'string' 
+            ? data.find(row => row.id === selectedViewRow) || selectedViewRow
+            : selectedViewRow}
           onClose={handleCloseView}
           onReady={handleModalReady}
         />

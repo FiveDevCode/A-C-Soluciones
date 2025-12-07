@@ -37,6 +37,11 @@ export class VisitaRepository {
           model: this.tecnicoModel,
           as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
+        },
+        {
+          model: this.servicioModel,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion']
         }
       ]
     });
@@ -53,6 +58,11 @@ export class VisitaRepository {
           model: this.tecnicoModel,
           as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
+        },
+        {
+          model: this.servicioModel,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion']
         }
       ],
       order: [['fecha_programada', 'DESC']]

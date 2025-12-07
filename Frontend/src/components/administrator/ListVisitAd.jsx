@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
@@ -40,8 +40,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     return new Map();
   };
 
-  // Estado donde guardaremos visits + pdf_path
-  const [visitsWithPDF, setVisitsWithPDF] = useState([]);
+  // Estados para manejo de PDFs
   const [pdfMap, setPdfMap] = useState(getInitialPdfMap);
   const lastVisitsJsonRef = useRef(sessionStorage.getItem(FICHAS_VISITS_KEY) || "");
   const isLoadingRef = useRef(false);
@@ -140,21 +139,22 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     loadFichas();
   }, [visits]); // Se ejecuta cuando cambian las visitas
 
-  // Combinar visits con pdf_path usando useMemo
-  useEffect(() => {
+  // Combinar visits con pdf_path usando useMemo - ESTABLE
+  const visitsWithPDF = useMemo(() => {
     if (!visits || visits.length === 0) {
-      setVisitsWithPDF([]);
-      return;
+      return [];
     }
 
     // Mapear las visitas con sus PDFs correspondientes
-    const updatedVisits = visits.map((visit) => ({
+    return visits.map((visit) => ({
       ...visit,
       pdf_path: pdfMap.get(visit.id) || null,
     }));
-
-    setVisitsWithPDF(updatedVisits);
   }, [visits, pdfMap]);
+
+  // Crear componentes estables para evitar re-montajes
+  const ViewComponentMemo = useCallback((props) => <ViewVisitDetailAd {...props} />, []);
+  const EditComponentMemo = useCallback((props) => <EditVisitAd {...props} onSuccess={reloadData} />, [reloadData]);
 
   // Abrir modal de crear reporte
   const handleOpenReport = (row) => {
@@ -290,10 +290,8 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           row.estado === "en_camino" ? "En camino" : row.estado
         }
         emptyMessage="No hay visitas registradas"
-        EditComponent={(props) => (
-          <EditVisitAd {...props} onSuccess={reloadData} />
-        )}
-        ViewComponent={(props) => <ViewVisitDetailAd {...props} />}
+        EditComponent={EditComponentMemo}
+        ViewComponent={ViewComponentMemo}
         onSelectRows={onSelectRows}
         isLoadingData={isLoadingData}
         mobileConfig={{

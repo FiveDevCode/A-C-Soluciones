@@ -1,6 +1,4 @@
-import { use, useEffect, useState } from "react";
 import BaseDetailModal from "../common/BaseDetailModal";
-import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
 
 const stateLabels = {
   programada: "Programada",
@@ -10,35 +8,8 @@ const stateLabels = {
   cancelada: "Cancelada",
 };
 
-const ViewVisitDetailAd = ({ selected, onClose, onReady }) => {
-  const [service, setService] = useState("");
-  const [isLoadingService, setIsLoadingService] = useState(true);
-  
+const ViewVisitDetailAd = ({ selected, onClose }) => {
   if (!selected) return null;
-  
-  useEffect(() => {
-    const fetchService = async () => {
-      setIsLoadingService(true);
-      try {
-        const response = await handleGetService(selected.servicio_id_fk);
-        const serviceData = response.data.data;
-        setService(serviceData);
-      } catch (error) {
-        console.error("Error fetching service:", error);
-      } finally {
-        setIsLoadingService(false);
-        // Notificar que los datos están listos
-        if (onReady) onReady();
-      }
-    };
-    
-    fetchService();
-  }, [selected.servicio_id_fk, onReady]);
-  
-  // No mostrar nada hasta que el servicio esté cargado
-  if (isLoadingService) {
-    return null;
-  }
 
   const fields = [
     { label: "Notas previas", value: selected.notas_previas || "Sin notas previas" },
@@ -64,7 +35,7 @@ const ViewVisitDetailAd = ({ selected, onClose, onReady }) => {
     },
     { label: "Solicitud", value: selected.solicitud_asociada ? `${selected.solicitud_asociada.descripcion}` : "No asignada" },
     { label: "Técnico", value: selected.tecnico_asociado ? `${selected.tecnico_asociado.nombre} ${selected.tecnico_asociado.apellido}` : "No asignado" },
-    { label: "Servicio", value: service ? service.nombre : "No asignado" },
+    { label: "Servicio", value: selected.servicio ? selected.servicio.nombre : "No asignado" },
     { label: "Estado", value: stateLabels[selected.estado] || selected.estado, isBadge: true },
   ];
 

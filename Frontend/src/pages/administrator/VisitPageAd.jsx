@@ -72,7 +72,7 @@ const VisitPageAd = () => {
         <ListVisitAd
           visits={filteredVisits}
           reloadData={loadVisits}
-          isLoadingData={loading}
+          isLoadingData={loading && visitsData.length === 0}
         />
       </Card>
 
