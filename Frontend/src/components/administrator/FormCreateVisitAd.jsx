@@ -51,7 +51,13 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
       options: serviceList.map(s => ({ value: s.id, label: `${s.nombre} - ${s.descripcion.slice(0,50)}` })),
       required: true
     },
-    { name: "fecha_programada", label: "Fecha programada", type: "datetime-local", required: true },
+    { 
+      name: "fecha_programada", 
+      label: "Fecha programada", 
+      type: "datetime-local", 
+      required: true,
+      disabled: !selectedTecnico 
+    },
   ];
 
   const handleSubmit = async (data) => {

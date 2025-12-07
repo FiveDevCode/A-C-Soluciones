@@ -371,6 +371,7 @@ const BaseFormModal = ({
             onChange={handleChange}
             error={Boolean(fieldErrors[field.name])}
             helperText={fieldErrors[field.name]}
+            disabled={field.disabled || false}
             inputProps={field.inputProps}
             InputLabelProps={{
               shrink:

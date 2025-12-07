@@ -90,7 +90,12 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
       type: "autocomplete",
       options: serviceList.map(s => ({ value: s.id, label: `${s.nombre}` }))
     },
-    { name: "fecha_programada", label: "Fecha programada", type: "datetime-local" },
+    { 
+      name: "fecha_programada", 
+      label: "Fecha programada", 
+      type: "datetime-local",
+      disabled: !selectedTecnico 
+    },
   ];
 
   const initialData = {
