@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { commonService } from "../../services/common-service";
 
 const DisponibilidadContainer = styled.div`
-  margin: 15px 0;
-  padding: 15px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  margin: 12px 0;
+  border: 1px solid #e0e7ff;
   border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  background: linear-gradient(to bottom, #ffffff, #fafbff);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(99, 102, 241, 0.1);
 `;
 
 const TitleContainer = styled.div`
@@ -16,109 +17,169 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
-  margin-bottom: ${props => props.$isExpanded ? '10px' : '0'};
-  padding: 8px;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+  padding: 12px 14px;
+  background: ${props => props.$isExpanded ? 
+    'linear-gradient(to right, #eef2ff, #e0e7ff)' : 
+    'linear-gradient(to right, #f8fafc, #f1f5f9)'
+  };
+  border-bottom: ${props => props.$isExpanded ? '2px solid #6366f1' : 'none'};
+  transition: all 0.2s ease;
   
   &:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(to right, #eef2ff, #ddd6fe);
   }
 `;
 
 const Title = styled.h4`
   margin: 0;
-  color: #333;
-  font-size: 14px;
+  color: #4f46e5;
+  font-size: 13px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1;
-`;
-
-const ClickHint = styled.span`
-  font-size: 11px;
-  color: #666;
-  font-weight: normal;
-  margin-left: 8px;
-  opacity: 0.7;
+  
+  &::before {
+    content: "📅";
+    font-size: 16px;
+  }
 `;
 
 const ToggleIcon = styled.span`
+  color: #6366f1;
   font-size: 18px;
-  transition: transform 0.3s ease;
+  font-weight: bold;
+  transition: transform 0.2s ease;
   transform: ${props => props.$isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
 `;
 
 const ContentWrapper = styled.div`
-  max-height: ${props => props.$isExpanded ? '1000px' : '0'};
+  max-height: ${props => props.$isExpanded ? '600px' : '0'};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
 `;
 
-const LoadingText = styled.p`
-  color: #666;
-  font-size: 13px;
-  margin: 5px 0;
+const ContentInner = styled.div`
+  padding: 14px;
 `;
 
-const NoDisponibleText = styled.p`
-  color: #d32f2f;
-  font-size: 13px;
-  font-weight: 500;
-  margin: 10px 0;
+const InfoBanner = styled.div`
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left: 4px solid #3b82f6;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: #1e40af;
+  line-height: 1.6;
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+  
+  &::before {
+    content: "ℹ️";
+    margin-right: 6px;
+    font-size: 14px;
+  }
+`;
+
+const Section = styled.div`
+  margin-bottom: 14px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const SectionTitle = styled.div`
+  font-size: 12px;
+  font-weight: 600;
+  color: ${props => props.$error ? '#dc2626' : props.$warning ? '#d97706' : '#059669'};
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+  &::before {
+    content: ${props => props.$error ? '"🔴"' : '"✅"'};
+    font-size: 13px;
+  }
+`;
+
+const LoadingText = styled.p`
+  color: #6b7280;
+  font-size: 12px;
+  margin: 0;
+  padding: 14px;
 `;
 
 const HorariosList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
 `;
 
 const HorarioItem = styled.div`
-  background: white;
-  padding: 10px;
+  background: ${props => props.$sufficient ? 
+    'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' : 
+    'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)'
+  };
+  border-left: 4px solid ${props => props.$sufficient ? '#22c55e' : '#f59e0b'};
   border-radius: 6px;
-  border-left: 4px solid #4caf50;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 12px;
+  font-size: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const HorarioTime = styled.div`
   font-weight: 600;
-  color: #2e7d32;
-  font-size: 14px;
+  color: ${props => props.$sufficient ? '#15803d' : '#b45309'};
+  font-size: 13px;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+  &::before {
+    content: "🕐";
+    font-size: 14px;
+  }
 `;
 
 const HorarioDuration = styled.div`
-  color: #666;
-  font-size: 12px;
-`;
-
-const IntervalosOcupados = styled.div`
-  margin-top: 15px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
+  color: #4b5563;
+  font-size: 11px;
+  line-height: 1.5;
 `;
 
 const OcupadoItem = styled.div`
-  background: #ffe6e6;
-  padding: 8px;
-  border-radius: 4px;
-  border-left: 4px solid #f44336;
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  padding: 9px 12px;
   margin-bottom: 6px;
   font-size: 12px;
-  color: #c62828;
-`;
-
-const InfoText = styled.p`
-  color: #666;
-  font-size: 12px;
-  margin: 8px 0 0 0;
-  font-style: italic;
+  color: #991b1b;
+  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.1);
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    
+    &::before {
+      content: "⏰";
+      font-size: 13px;
+    }
+  }
 `;
 
 const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
@@ -167,7 +228,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
     return (
       <DisponibilidadContainer>
         <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
-          <Title>🕐 Verificando disponibilidad...</Title>
+          <Title>Verificando disponibilidad...</Title>
           <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
         </TitleContainer>
         <ContentWrapper $isExpanded={isExpanded}>
@@ -181,11 +242,13 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
     return (
       <DisponibilidadContainer>
         <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
-          <Title>⚠️ Error</Title>
+          <Title>Disponibilidad del técnico</Title>
           <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
         </TitleContainer>
         <ContentWrapper $isExpanded={isExpanded}>
-          <NoDisponibleText>{error}</NoDisponibleText>
+          <ContentInner>
+            <SectionTitle $error>{error}</SectionTitle>
+          </ContentInner>
         </ContentWrapper>
       </DisponibilidadContainer>
     );
@@ -200,72 +263,73 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
   return (
     <DisponibilidadContainer>
       <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
-        <Title>
-          📅 Disponibilidad de {tecnico.nombre}
-          <ClickHint>(clic para {isExpanded ? 'ocultar' : 'ver'})</ClickHint>
-        </Title>
+        <Title>Disponibilidad de {tecnico.nombre}</Title>
         <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
       </TitleContainer>
       <ContentWrapper $isExpanded={isExpanded}>
-        <InfoText style={{ marginBottom: '10px', background: '#e3f2fd', padding: '8px', borderRadius: '4px', border: '1px solid #2196f3' }}>
-          💡 Horario laboral: 8:00 AM - 6:00 PM<br/>
-          ℹ️ Los bloques libres muestran períodos de tiempo donde puede programar su visita
-        </InfoText>
+        <ContentInner>
+          <InfoBanner>
+            Horario laboral: 8:00 AM - 6:00 PM<br/>
+            Los bloques libres muestran períodos donde puede programar la visita
+          </InfoBanner>
       
-      {intervalosOcupados.length > 0 && (
-        <IntervalosOcupados style={{ marginTop: 0, marginBottom: '15px', paddingTop: 0, borderTop: 'none' }}>
-          <LoadingText style={{ color: '#d32f2f', fontWeight: 600 }}>🔴 Visitas ya programadas:</LoadingText>
-          {intervalosOcupados.map((intervalo, index) => (
-            <OcupadoItem key={index}>
-              <strong>{formatTime(intervalo.inicio)} - {formatTime(intervalo.fin)}</strong>
-              <span style={{ marginLeft: '8px', fontSize: '11px' }}>({intervalo.duracion} minutos)</span>
-            </OcupadoItem>
-          ))}
-        </IntervalosOcupados>
-      )}
+          {intervalosOcupados.length > 0 && (
+            <Section>
+              <SectionTitle $error>Visitas ya programadas:</SectionTitle>
+              {intervalosOcupados.map((intervalo, index) => (
+                <OcupadoItem key={index}>
+                  <strong>{formatTime(intervalo.inicio)} - {formatTime(intervalo.fin)}</strong>
+                  <span style={{ marginLeft: '8px', fontSize: '11px', opacity: 0.8 }}>
+                    ({intervalo.duracion} min)
+                  </span>
+                </OcupadoItem>
+              ))}
+            </Section>
+          )}
 
-      {horariosDisponibles.length === 0 ? (
-        <NoDisponibleText>
-          ❌ El técnico no tiene horarios disponibles para esta fecha.
-        </NoDisponibleText>
-      ) : (
-        <>
-          <LoadingText style={{ color: '#2e7d32', fontWeight: 600 }}>✅ Horarios disponibles:</LoadingText>
-          <HorariosList>
-            {horariosDisponibles.map((horario, index) => {
-              const suficiente = duracionEstimada ? 
-                horario.duracionDisponible >= parseInt(duracionEstimada) : true;
-              
-              return (
-                <HorarioItem 
-                  key={index}
-                  style={{ 
-                    borderLeftColor: suficiente ? '#4caf50' : '#ff9800',
-                    background: suficiente ? 'white' : '#fff3e0'
-                  }}
-                >
-                  <HorarioTime style={{ color: suficiente ? '#2e7d32' : '#e65100' }}>
-                    {formatTime(horario.inicio)} - {formatTime(horario.fin)}
-                  </HorarioTime>
-                  <HorarioDuration>
-                    ⏱️ Bloque libre de {horario.duracionDisponible} minutos
-                    {duracionEstimada && suficiente && (
-                      <span style={{ color: '#2e7d32', marginLeft: '8px', fontWeight: 600 }}>
-                        ✓ Puede programar su visita de {duracionEstimada} min aquí
-                      </span>
-                    )}
-                    {duracionEstimada && !suficiente && (
-                      <span style={{ color: '#e65100', marginLeft: '8px' }}>
-                        ✗ Insuficiente para {duracionEstimada} min
-                      </span>
-                    )}
-                  </HorarioDuration>
-                </HorarioItem>
-              );
-            })}
-          </HorariosList>
-        </>
-      )}
+          {horariosDisponibles.length === 0 ? (
+            <SectionTitle $error>El técnico no tiene horarios disponibles para esta fecha.
+        </SectionTitle>
+          ) : (
+            <Section>
+              <SectionTitle>Horarios disponibles:</SectionTitle>
+              <HorariosList>
+                {horariosDisponibles.map((horario, index) => {
+                  const suficiente = duracionEstimada ? 
+                    horario.duracionDisponible >= parseInt(duracionEstimada) : true;
+                  
+                  return (
+                    <HorarioItem 
+                      key={index}
+                      $sufficient={suficiente}
+                    >
+                      <HorarioTime $sufficient={suficiente}>
+                        {formatTime(horario.inicio)} - {formatTime(horario.fin)}
+                      </HorarioTime>
+                      <HorarioDuration>
+                        Bloque libre de {horario.duracionDisponible} minutos
+                        {duracionEstimada && (
+                          <>
+                            <br/>
+                            {suficiente ? (
+                              <span style={{ color: '#15803d', fontWeight: 600 }}>
+                                ✓ Puede programar su visita de {duracionEstimada} min aquí
+                              </span>
+                            ) : (
+                              <span style={{ color: '#b45309' }}>
+                                ✗ Insuficiente para {duracionEstimada} min
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </HorarioDuration>
+                    </HorarioItem>
+                  );
+                })}
+              </HorariosList>
+            </Section>
+          )}
+        </ContentInner>
       </ContentWrapper>
     </DisponibilidadContainer>
   );
