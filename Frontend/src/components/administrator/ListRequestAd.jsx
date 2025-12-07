@@ -4,16 +4,16 @@ import ViewRequestDetailAd from "./ViewRequestDetailAd";
 const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false }) => {
   const columns = [
     {
-      header: "Comentarios",
-      accessor: "comentarios",
+      header: "Descripción",
+      accessor: "descripcion",
       render: (value) => {
         if (!value) return "—";
         return value.length > 50 ? value.slice(0, 50) + "..." : value;
       }
     },
     {
-      header: "Descripción",
-      accessor: "descripcion",
+      header: "Comentarios",
+      accessor: "comentarios",
       render: (value) => {
         if (!value) return "—";
         return value.length > 50 ? value.slice(0, 50) + "..." : value;

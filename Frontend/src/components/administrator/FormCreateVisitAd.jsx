@@ -23,22 +23,25 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
     { 
       name: "solicitud", 
       label: "Solicitudes", 
-      type: "select", 
-      options: requestList.map(r => ({ value: r.id, label: `${r.id} - ${r.descripcion.slice(0,50)}` }))
+      type: "autocomplete", 
+      options: requestList.map(r => ({ value: r.id, label: `${r.id} - ${r.descripcion.slice(0,50)}` })),
+      required: true
     },
     { 
       name: "tecnico", 
       label: "Técnico", 
-      type: "select", 
-      options: technicalList.map(t => ({ value: t.id, label: `${t.numero_de_cedula} - ${t.nombre} ${t.apellido}` }))
+      type: "autocomplete", 
+      options: technicalList.map(t => ({ value: t.id, label: `${t.numero_de_cedula} - ${t.nombre} ${t.apellido}` })),
+      required: true
     },
     { 
       name: "servicio", 
       label: "Servicio", 
-      type: "select", 
-      options: serviceList.map(s => ({ value: s.id, label: `${s.nombre} - ${s.descripcion.slice(0,50)}` }))
+      type: "autocomplete", 
+      options: serviceList.map(s => ({ value: s.id, label: `${s.nombre} - ${s.descripcion.slice(0,50)}` })),
+      required: true
     },
-    { name: "fecha_programada", label: "Fecha programada", type: "date" },
+    { name: "fecha_programada", label: "Fecha programada", type: "date", required: true },
   ];
 
   const handleSubmit = async (data) => {

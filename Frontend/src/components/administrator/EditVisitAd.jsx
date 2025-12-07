@@ -57,19 +57,19 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
     {
       name: "solicitud_id_fk",
       label: "Solicitudes",
-      type: "select",
+      type: "autocomplete",
       options: requestList.map(r => ({ value: r.id, label: `${r.id} - ${r.descripcion.slice(0,50)}` }))
     },
     {
       name: "tecnico_id_fk",
       label: "Técnico",
-      type: "select",
+      type: "autocomplete",
       options: technicalList.map(t => ({ value: t.id, label: `${t.numero_de_cedula} - ${t.nombre} ${t.apellido}` }))
     },
     {
       name: "servicio_id_fk",
       label: "Servicio",
-      type: "select",
+      type: "autocomplete",
       options: serviceList.map(s => ({ value: s.id, label: `${s.nombre}` }))
     },
     { name: "fecha_programada", label: "Fecha programada", type: "datetime-local" },
