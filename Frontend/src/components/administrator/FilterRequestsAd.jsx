@@ -25,9 +25,14 @@ const FilterRequestsAd = ({ requests = [], onFilteredChange }) => {
   return (
     <BaseFilters
       data={requests}
-      placeholder="Buscar por nombre..."
+      placeholder="Buscar por descripción, cliente o servicio..."
       filterOptions={filterOptions}
-      searchKeys={["nombre"]}
+      searchKeys={[
+        "descripcion",
+        "cliente_solicitud.nombre",
+        "cliente_solicitud.apellido",
+        "servicio_solicitud.nombre"
+      ]}
       onFilteredChange={onFilteredChange}
     />
   );

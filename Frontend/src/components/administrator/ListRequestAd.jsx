@@ -20,12 +20,30 @@ const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false }) => {
       }
     },
     {
+      header: "Servicio",
+      accessor: "servicio_solicitud",
+      render: (value) => {
+        if (!value || !value.nombre) return "—";
+        return value.nombre;
+      }
+    },
+    {
       header: "Fecha de solicitud",
       accessor: "fecha_solicitud",
       render: (value) => {
         if (!value) return "—";
-        const date = new Date(value);
-        return date.toLocaleDateString("es-CO");
+        
+        const d = new Date(value);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+
+        let hours = d.getHours();
+        const minutes = String(d.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12;
+
+        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
       }
     },
     {
