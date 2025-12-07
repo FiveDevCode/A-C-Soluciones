@@ -25,12 +25,15 @@ const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
     { label: "Número de cuenta", value: selected.numero_cuenta },
     {
       label: "Fecha de registro",
-      value: new Date(selected.fecha_registro).toLocaleDateString(
+      value: new Date(selected.fecha_registro).toLocaleString(
         "es-ES",
         {
           year: "numeric",
           month: "long",
           day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "UTC"
         }
       ),
     },

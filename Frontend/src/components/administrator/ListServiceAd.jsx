@@ -12,8 +12,18 @@ const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = fal
       accessor: "fecha_creacion",
       render: (value) => {
         if (!value) return "—";
-        const date = new Date(value);
-        return date.toLocaleDateString("es-CO");
+        
+        const d = new Date(value);
+        const day = String(d.getUTCDate()).padStart(2, "0");
+        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+        const year = d.getUTCFullYear();
+
+        let hours = d.getUTCHours();
+        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12;
+
+        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
       }
     },
     {

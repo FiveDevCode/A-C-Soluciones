@@ -62,7 +62,25 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   };
 
   const columns = [
-    { header: "Fecha", accessor: "fecha" },
+    { 
+      header: "Fecha", 
+      accessor: "fecha",
+      render: (value) => {
+        if (!value) return "—";
+        
+        const d = new Date(value);
+        const day = String(d.getUTCDate()).padStart(2, "0");
+        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+        const year = d.getUTCFullYear();
+
+        let hours = d.getUTCHours();
+        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12;
+
+        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+      }
+    },
     { header: "Ciudad", accessor: "ciudad" },
     { header: "Dirección", accessor: "direccion" },
     { header: "Encargado", accessor: "encargado" },

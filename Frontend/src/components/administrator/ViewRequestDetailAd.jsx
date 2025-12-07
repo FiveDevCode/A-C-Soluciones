@@ -13,12 +13,13 @@ const ViewRequestDetailAd = ({ selected, onClose }) => {
     {
       label: "Fecha de solicitud",
       value: selected.fecha_solicitud
-        ? new Date(selected.fecha_solicitud).toLocaleDateString("es-ES", {
+        ? new Date(selected.fecha_solicitud).toLocaleString("es-ES", {
             year: "numeric",
             month: "long",
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
+            timeZone: "UTC"
           })
         : "—",
     },
