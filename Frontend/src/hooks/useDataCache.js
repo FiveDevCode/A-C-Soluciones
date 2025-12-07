@@ -124,10 +124,30 @@ const useDataCache = (cacheKey, fetchFunction, options = {}) => {
   };
 
   const reload = async () => {
+    // Invalidar el caché primero
     invalidateCache();
     hasFetchedRef.current = false;
+    
+    // Forzar recarga desde el servidor
+    isLoadingRef.current = true;
     setIsLoading(true);
-    await loadData(true);
+
+    try {
+      // Obtener datos del servidor (sin intentar caché)
+      const result = await fetchFunction();
+      const newData = result?.data?.data || result?.data || result || [];
+
+      // Guardar en caché
+      setCachedData(newData);
+      setData(newData);
+      hasFetchedRef.current = true;
+    } catch (err) {
+      console.error(`Error al recargar datos [${cacheKey}]:`, err);
+      setData([]);
+    } finally {
+      isLoadingRef.current = false;
+      setIsLoading(false);
+    }
   };
 
   // Cargar datos automáticamente solo si no es lazy Y no hay datos en caché

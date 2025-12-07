@@ -49,16 +49,15 @@ const ViewVisitDetailAd = ({ selected, onClose, onReady }) => {
       value: selected.fecha_programada
         ? (() => {
             const d = new Date(selected.fecha_programada);
-            const day = String(d.getDate()).padStart(2, "0");
-            const month = String(d.getMonth() + 1).padStart(2, "0");
-            const year = d.getFullYear();
+            const day = String(d.getUTCDate()).padStart(2, "0");
+            const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+            const year = d.getUTCFullYear();
 
-            let hours = d.getHours();
-            const minutes = String(d.getMinutes()).padStart(2, "0");
+            let hours = d.getUTCHours();
+            const minutes = String(d.getUTCMinutes()).padStart(2, "0");
             const ampm = hours >= 12 ? "pm" : "am";
             hours = hours % 12 || 12;
 
-            // Formato Colombiano: DD/MM/YYYY - hh:mm am/pm
             return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
           })()
         : "No hay fecha programada"

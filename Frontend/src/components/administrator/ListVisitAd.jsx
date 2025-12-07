@@ -80,18 +80,49 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   useEffect(() => {
     const loadFichas = async () => {
       if (isLoadingRef.current) return;
-      if (!visits || visits.length === 0) return;
+      if (!visits || visits.length === 0) {
+        setVisitsWithPDF([]);
+        return;
+      }
 
       // Verificar si las visitas han cambiado (por ID o cantidad)
       const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
       
-      // Intentar obtener del caché primero siempre
-      const cachedFichas = getCachedFichas();
-      
-      // Si hay caché válido Y las visitas no han cambiado, usar el caché
-      if (cachedFichas && currentVisitsJson === lastVisitsJsonRef.current) {
-        // Solo actualizar el mapa si está vacío
-        if (pdfMap.size === 0) {
+      // Si las visitas cambiaron (nueva recarga), invalidar caché de fichas
+      if (currentVisitsJson !== lastVisitsJsonRef.current) {
+        // Las visitas cambiaron, necesitamos recargar las fichas
+        isLoadingRef.current = true;
+        lastVisitsJsonRef.current = currentVisitsJson;
+
+        try {
+          // Hacer la petición SIN usar caché
+          const response = await commonService.getListToken();
+          const allFichas = response.data || [];
+          
+          // Guardar en caché junto con el snapshot de visitas
+          setCachedFichas(allFichas, currentVisitsJson);
+
+          // Crear el mapa
+          const fichasMap = new Map();
+          allFichas.forEach((ficha) => {
+            if (ficha.id_visitas && ficha.pdf_path) {
+              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+            }
+          });
+          
+          setPdfMap(fichasMap);
+          hasFetchedPDFsRef.current = true;
+        } catch (err) {
+          console.error("Error al obtener fichas:", err);
+        } finally {
+          isLoadingRef.current = false;
+        }
+      } else {
+        // Las visitas NO cambiaron, podemos usar el caché
+        const cachedFichas = getCachedFichas();
+        
+        if (cachedFichas && pdfMap.size === 0) {
+          // Usar caché solo si el mapa está vacío
           const fichasMap = new Map();
           cachedFichas.forEach((ficha) => {
             if (ficha.id_visitas && ficha.pdf_path) {
@@ -100,35 +131,6 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           });
           setPdfMap(fichasMap);
         }
-        return;
-      }
-
-      // Si llegamos aquí, necesitamos hacer la petición
-      isLoadingRef.current = true;
-      lastVisitsJsonRef.current = currentVisitsJson;
-
-      try {
-        // Hacer la petición
-        const response = await commonService.getListToken();
-        const allFichas = response.data || [];
-        
-        // Guardar en caché junto con el snapshot de visitas
-        setCachedFichas(allFichas, currentVisitsJson);
-
-        // Crear el mapa
-        const fichasMap = new Map();
-        allFichas.forEach((ficha) => {
-          if (ficha.id_visitas && ficha.pdf_path) {
-            fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-          }
-        });
-        
-        setPdfMap(fichasMap);
-        hasFetchedPDFsRef.current = true;
-      } catch (err) {
-        console.error("Error al obtener fichas:", err);
-      } finally {
-        isLoadingRef.current = false;
       }
     };
 

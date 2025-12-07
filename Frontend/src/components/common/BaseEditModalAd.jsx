@@ -180,12 +180,14 @@ const BaseEditModal = ({
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
-      onClose();
       
-      setTimeout(() => {
-        showToast(successMessage, "success", 4000);
-        onSuccess?.();
-      }, 500);
+      // Llamar a onSuccess ANTES de cerrar para recargar datos
+      if (onSuccess) {
+        await onSuccess();
+      }
+      
+      onClose();
+      showToast(successMessage, "success", 4000);
     } catch (err) {
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);

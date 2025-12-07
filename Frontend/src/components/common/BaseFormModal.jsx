@@ -247,12 +247,14 @@ const BaseFormModal = ({
       await onSubmit({ ...formData, ...files });
 
       handleReset();
-      onClose();
       
-      setTimeout(() => {
-        showToast(successMessage, "success", 4000);
-        onSuccess?.();
-      }, 500);
+      // Llamar a onSuccess ANTES de cerrar para recargar datos
+      if (onSuccess) {
+        await onSuccess();
+      }
+      
+      onClose();
+      showToast(successMessage, "success", 4000);
     } catch (err) {
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
