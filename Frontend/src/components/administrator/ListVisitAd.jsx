@@ -15,9 +15,34 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   const [openReportModal, setOpenReportModal] = useState(false);
   const [selectedVisitId, setSelectedVisitId] = useState(null);
 
+  // Función auxiliar para obtener el mapa inicial del caché
+  const getInitialPdfMap = () => {
+    try {
+      const cached = sessionStorage.getItem(FICHAS_CACHE_KEY);
+      const timestamp = sessionStorage.getItem(FICHAS_CACHE_TIMESTAMP);
+      
+      if (cached && timestamp) {
+        const age = Date.now() - parseInt(timestamp);
+        if (age < CACHE_DURATION) {
+          const fichas = JSON.parse(cached);
+          const map = new Map();
+          fichas.forEach((ficha) => {
+            if (ficha.id_visitas && ficha.pdf_path) {
+              map.set(ficha.id_visitas, ficha.pdf_path);
+            }
+          });
+          return map;
+        }
+      }
+    } catch (err) {
+      console.error('Error al leer caché inicial:', err);
+    }
+    return new Map();
+  };
+
   // Estado donde guardaremos visits + pdf_path
   const [visitsWithPDF, setVisitsWithPDF] = useState([]);
-  const [pdfMap, setPdfMap] = useState(new Map());
+  const [pdfMap, setPdfMap] = useState(getInitialPdfMap);
   const lastVisitsJsonRef = useRef(sessionStorage.getItem(FICHAS_VISITS_KEY) || "");
   const isLoadingRef = useRef(false);
   const hasFetchedPDFsRef = useRef(false);
@@ -73,13 +98,17 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       // Si hay caché válido Y las visitas no han cambiado, usar el caché
       if (cachedFichas && currentVisitsJson === lastVisitsJsonRef.current) {
         console.log('✅ [FICHAS] Usando caché, NO hace petición');
-        const fichasMap = new Map();
-        cachedFichas.forEach((ficha) => {
-          if (ficha.id_visitas && ficha.pdf_path) {
-            fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-          }
-        });
-        setPdfMap(fichasMap);
+        
+        // Solo actualizar el mapa si está vacío
+        if (pdfMap.size === 0) {
+          const fichasMap = new Map();
+          cachedFichas.forEach((ficha) => {
+            if (ficha.id_visitas && ficha.pdf_path) {
+              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+            }
+          });
+          setPdfMap(fichasMap);
+        }
         return;
       }
 
