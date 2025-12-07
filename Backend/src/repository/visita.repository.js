@@ -118,6 +118,26 @@ export class VisitaRepository {
     return visitas.length === 0;
   }
 
+  async obtenerHorariosDisponibles(tecnicoId, fecha) {
+    // Extraer solo la fecha (sin hora) para buscar todas las visitas del día
+    const fechaObj = new Date(fecha);
+    const inicioDia = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 0, 0, 0);
+    const finDia = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 23, 59, 59);
+
+    const visitas = await this.model.findAll({
+      where: {
+        tecnico_id_fk: tecnicoId,
+        fecha_programada: {
+          [Op.between]: [inicioDia, finDia]
+        }
+      },
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado'],
+      order: [['fecha_programada', 'ASC']]
+    });
+
+    return visitas;
+  }
+
 
 
   async obtenerServiciosPorTecnico(tecnico_id) {

@@ -143,6 +143,8 @@ const BaseEditModal = ({
   onClose,
   onSuccess,
   successMessage = "Actualizado correctamente",
+  onFieldChange,
+  additionalContent,
 }) => {
   const { showToast } = useToastContext();
 
@@ -158,6 +160,7 @@ const BaseEditModal = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    onFieldChange?.(name, value);
   };
 
   const handleFormSubmit = async (e) => {
@@ -296,6 +299,9 @@ const BaseEditModal = ({
               </StyledTextField>
             );
           })}
+
+          {/* Contenido adicional */}
+          {additionalContent}
 
           <ButtonsContainer>
             <StyledButton

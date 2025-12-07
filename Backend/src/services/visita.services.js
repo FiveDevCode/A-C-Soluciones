@@ -79,4 +79,67 @@ export class VisitaService {
   async obtenerServicioAsignadoPorId(tecnico_id, visita_id) {
     return await this.visitaRepository.obtenerServicioAsignadoPorId(tecnico_id, visita_id);
   }
+
+  async obtenerDisponibilidadTecnico(tecnicoId, fecha) {
+    // Obtener información del técnico
+    const tecnico = await this.tecnicoRepository.obtenerTecnicoPorId(tecnicoId);
+    if (!tecnico) {
+      throw new Error('Técnico no encontrado');
+    }
+
+    // Obtener todas las visitas del técnico para ese día
+    const visitas = await this.visitaRepository.obtenerHorariosDisponibles(tecnicoId, fecha);
+
+    // Calcular intervalos ocupados
+    const intervalosOcupados = visitas.map(visita => {
+      const inicio = new Date(visita.fecha_programada);
+      const fin = new Date(inicio.getTime() + visita.duracion_estimada * 60000);
+      return {
+        inicio: inicio.toISOString(),
+        fin: fin.toISOString(),
+        duracion: visita.duracion_estimada
+      };
+    });
+
+    // Definir horario laboral (8 AM a 6 PM)
+    const fechaObj = new Date(fecha);
+    const horaInicio = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 8, 0, 0);
+    const horaFin = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 18, 0, 0);
+
+    // Calcular bloques disponibles
+    const horariosDisponibles = [];
+    let tiempoActual = horaInicio;
+
+    intervalosOcupados.forEach(intervalo => {
+      const inicioOcupado = new Date(intervalo.inicio);
+      if (tiempoActual < inicioOcupado) {
+        horariosDisponibles.push({
+          inicio: tiempoActual.toISOString(),
+          fin: inicioOcupado.toISOString(),
+          duracion: Math.floor((inicioOcupado - tiempoActual) / 60000)
+        });
+      }
+      tiempoActual = new Date(intervalo.fin);
+    });
+
+    // Agregar último bloque disponible si existe
+    if (tiempoActual < horaFin) {
+      horariosDisponibles.push({
+        inicio: tiempoActual.toISOString(),
+        fin: horaFin.toISOString(),
+        duracion: Math.floor((horaFin - tiempoActual) / 60000)
+      });
+    }
+
+    return {
+      tecnico: {
+        id: tecnico.id,
+        nombre: `${tecnico.nombre} ${tecnico.apellido}`,
+        especialidad: tecnico.especialidad
+      },
+      fecha: fechaObj.toISOString(),
+      intervalosOcupados,
+      horariosDisponibles
+    };
+  }
 }

@@ -5,12 +5,16 @@ import { handleGetListTechnical } from "../../controllers/administrator/getTechn
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
 import { handleUpdateVisitAd } from "../../controllers/administrator/updateVisitAd.controller";
+import DisponibilidadTecnico from "./DisponibilidadTecnico";
 
 const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const [visitData, setVisitData] = useState(null);
   const [technicalList, setTechnicalList] = useState([]);
   const [requestList, setRequestList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
+  const [selectedTecnico, setSelectedTecnico] = useState(null);
+  const [selectedFecha, setSelectedFecha] = useState(null);
+  const [selectedDuracion, setSelectedDuracion] = useState(null);
 
 
   const formatDateTimeLocal = (isoString) => {
@@ -42,7 +46,12 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
         // Luego cargar la visita
         if (selected?.id) {
           const visitRes = await handleGetVisit(selected.id);
-          setVisitData(visitRes.data.data);
+          const vData = visitRes.data.data;
+          setVisitData(vData);
+          // Inicializar los valores seleccionados
+          setSelectedTecnico(vData.tecnico_id_fk);
+          setSelectedFecha(vData.fecha_programada);
+          setSelectedDuracion(vData.duracion_estimada);
         }
       } catch (err) {
         console.error("Error al cargar datos:", err);
@@ -107,6 +116,18 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
       onClose={onClose}
       onSuccess={onSuccess}
       successMessage="¡Visita actualizada exitosamente!"
+      onFieldChange={(name, value) => {
+        if (name === 'tecnico_id_fk') setSelectedTecnico(value);
+        if (name === 'fecha_programada') setSelectedFecha(value);
+        if (name === 'duracion_estimada') setSelectedDuracion(value);
+      }}
+      additionalContent={
+        <DisponibilidadTecnico 
+          tecnicoId={selectedTecnico} 
+          fecha={selectedFecha}
+          duracionEstimada={selectedDuracion}
+        />
+      }
     />
   );
 };

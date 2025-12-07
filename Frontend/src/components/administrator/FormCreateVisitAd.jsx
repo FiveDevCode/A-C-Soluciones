@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
+import DisponibilidadTecnico from "./DisponibilidadTecnico";
 
 const FormAssignVisitAd = ({ onClose, onSuccess }) => {
   const [technicalList, setTechnicalList] = useState([]);
   const [requestList, setRequestList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
+  const [selectedTecnico, setSelectedTecnico] = useState(null);
+  const [selectedFecha, setSelectedFecha] = useState(null);
+  const [selectedDuracion, setSelectedDuracion] = useState(null);
 
   useEffect(() => {
     handleGetListTechnical().then(res => setTechnicalList(res.data)).catch(console.error);
@@ -70,6 +74,18 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
       onClose={onClose}
       onSuccess={onSuccess}
       successMessage="¡Visita asignada exitosamente!"
+      onFieldChange={(name, value) => {
+        if (name === 'tecnico') setSelectedTecnico(value);
+        if (name === 'fecha_programada') setSelectedFecha(value);
+        if (name === 'duracion_estimada') setSelectedDuracion(value);
+      }}
+      additionalContent={
+        <DisponibilidadTecnico 
+          tecnicoId={selectedTecnico} 
+          fecha={selectedFecha}
+          duracionEstimada={selectedDuracion}
+        />
+      }
     />
   );
 };

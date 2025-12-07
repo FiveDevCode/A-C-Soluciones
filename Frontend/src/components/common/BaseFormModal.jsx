@@ -148,7 +148,9 @@ const BaseFormModal = ({
   successMessage = "Guardado exitosamente",
   customFormData,
   onFormDataChange,
+  onFieldChange,
   extraContent,
+  additionalContent,
   renderStepContent,
 }) => {
 
@@ -202,6 +204,7 @@ const BaseFormModal = ({
     const newFormData = { ...formData, [name]: value };
     setFormData(newFormData);
     onFormDataChange?.(newFormData);
+    onFieldChange?.(name, value);
   };
 
   // ========= RESET =========
@@ -443,6 +446,7 @@ const BaseFormModal = ({
               </FormGrid>
               {/* Contenido extra para formularios simples */}
               {extraContent}
+              {additionalContent}
             </>
           )}
         </Content>
