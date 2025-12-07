@@ -212,16 +212,22 @@ const BaseEditModal = ({
                   key={field.name}
                   freeSolo={false}
                   options={field.options || []}
-                  value={formData[field.name] || null}
+                  value={
+                    // Buscar el objeto completo basado en el value almacenado
+                    field.options?.find(opt => opt.value === formData[field.name]) || null
+                  }
                   onChange={(event, newValue) => {
+                    // Extraer solo el value del objeto seleccionado
+                    const extractedValue = newValue?.value || "";
                     const syntheticEvent = {
                       target: {
                         name: field.name,
-                        value: newValue || "",
+                        value: extractedValue,
                       },
                     };
                     handleChange(syntheticEvent);
                   }}
+                  isOptionEqualToValue={(option, value) => option.value === value?.value}
                   renderInput={(params) => (
                     <StyledTextField
                       {...params}

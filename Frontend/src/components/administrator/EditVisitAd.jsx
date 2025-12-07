@@ -16,9 +16,13 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const formatDateTimeLocal = (isoString) => {
     if (!isoString) return "";
     const date = new Date(isoString);
-    const offset = date.getTimezoneOffset();
-    const localDate = new Date(date.getTime() - offset * 60000);
-    return localDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+    // Usar UTC para evitar conversión de zona horaria
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const hours = String(date.getUTCHours()).padStart(2, "0");
+    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   useEffect(() => {
@@ -53,7 +57,12 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const fields = [
     { name: "notas_previas", label: "Notas previas", type: "textarea" },
     { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
-    { name: "duracion_estimada", label: "Duración estimada", type: "number" },
+    { 
+      name: "duracion_estimada", 
+      label: "Duración estimada (minutos)", 
+      type: "number",
+      inputProps: { min: 1, step: 1 }
+    },
     {
       name: "solicitud_id_fk",
       label: "Solicitudes",
@@ -79,11 +88,9 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
     notas_previas: visitData.notas_previas || "",
     notas_posteriores: visitData.notas_posteriores || "",
     duracion_estimada: visitData.duracion_estimada || "",
-    solicitud_id_fk: visitData.solicitud?.id || "",
-    tecnico_id_fk: visitData.tecnico?.id || "",
-    servicio_id_fk: visitData.servicio_id_fk && serviceList.some(s => s.id === visitData.servicio_id_fk) 
-      ? visitData.servicio_id_fk 
-      : "",
+    solicitud_id_fk: visitData.solicitud_id_fk || "",
+    tecnico_id_fk: visitData.tecnico_id_fk || "",
+    servicio_id_fk: visitData.servicio_id_fk || "",
     fecha_programada: formatDateTimeLocal(visitData.fecha_programada),
   };
 

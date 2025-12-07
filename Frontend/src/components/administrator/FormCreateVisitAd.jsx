@@ -19,7 +19,13 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
   const fields = [
     { name: "notas_previas", label: "Notas previas", type: "textarea" },
     { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
-    { name: "duracion_estimada", label: "Duración estimada", type: "number" },
+    { 
+      name: "duracion_estimada", 
+      label: "Duración estimada (minutos)", 
+      type: "number",
+      required: true,
+      inputProps: { min: 1, step: 1 }
+    },
     { 
       name: "solicitud", 
       label: "Solicitudes", 
@@ -41,7 +47,7 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
       options: serviceList.map(s => ({ value: s.id, label: `${s.nombre} - ${s.descripcion.slice(0,50)}` })),
       required: true
     },
-    { name: "fecha_programada", label: "Fecha programada", type: "date", required: true },
+    { name: "fecha_programada", label: "Fecha programada", type: "datetime-local", required: true },
   ];
 
   const handleSubmit = async (data) => {
