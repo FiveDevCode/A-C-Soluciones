@@ -182,11 +182,11 @@ const OcupadoItem = styled.div`
   }
 `;
 
-const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
+const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada, defaultExpanded = false }) => {
   const [disponibilidad, setDisponibilidad] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   useEffect(() => {
     if (!tecnicoId || !fecha) {

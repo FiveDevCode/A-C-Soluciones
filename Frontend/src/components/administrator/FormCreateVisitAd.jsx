@@ -90,6 +90,7 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
           tecnicoId={selectedTecnico} 
           fecha={selectedFecha}
           duracionEstimada={selectedDuracion}
+          defaultExpanded={true}
         />
       }
     />
