@@ -116,7 +116,7 @@ export class VisitaService {
         horariosDisponibles.push({
           inicio: tiempoActual.toISOString(),
           fin: inicioOcupado.toISOString(),
-          duracion: Math.floor((inicioOcupado - tiempoActual) / 60000)
+          duracionDisponible: Math.floor((inicioOcupado - tiempoActual) / 60000)
         });
       }
       tiempoActual = new Date(intervalo.fin);
@@ -127,7 +127,7 @@ export class VisitaService {
       horariosDisponibles.push({
         inicio: tiempoActual.toISOString(),
         fin: horaFin.toISOString(),
-        duracion: Math.floor((horaFin - tiempoActual) / 60000)
+        duracionDisponible: Math.floor((horaFin - tiempoActual) / 60000)
       });
     }
 

@@ -151,14 +151,29 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
       <Title>
         📅 Disponibilidad de {tecnico.nombre}
       </Title>
+      <InfoText style={{ marginBottom: '10px' }}>
+        💡 Horario laboral: 8:00 AM - 6:00 PM
+      </InfoText>
       
+      {intervalosOcupados.length > 0 && (
+        <IntervalosOcupados style={{ marginTop: 0, marginBottom: '15px', paddingTop: 0, borderTop: 'none' }}>
+          <LoadingText style={{ color: '#d32f2f', fontWeight: 600 }}>🔴 Visitas ya programadas:</LoadingText>
+          {intervalosOcupados.map((intervalo, index) => (
+            <OcupadoItem key={index}>
+              <strong>{formatTime(intervalo.inicio)} - {formatTime(intervalo.fin)}</strong>
+              <span style={{ marginLeft: '8px', fontSize: '11px' }}>({intervalo.duracion} minutos)</span>
+            </OcupadoItem>
+          ))}
+        </IntervalosOcupados>
+      )}
+
       {horariosDisponibles.length === 0 ? (
         <NoDisponibleText>
           ❌ El técnico no tiene horarios disponibles para esta fecha.
         </NoDisponibleText>
       ) : (
         <>
-          <LoadingText>✅ Horarios disponibles:</LoadingText>
+          <LoadingText style={{ color: '#2e7d32', fontWeight: 600 }}>✅ Horarios disponibles:</LoadingText>
           <HorariosList>
             {horariosDisponibles.map((horario, index) => {
               const suficiente = duracionEstimada ? 
@@ -187,21 +202,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
               );
             })}
           </HorariosList>
-          <InfoText>
-            💡 Horario laboral: 8:00 AM - 6:00 PM
-          </InfoText>
         </>
-      )}
-
-      {intervalosOcupados.length > 0 && (
-        <IntervalosOcupados>
-          <LoadingText>🔴 Horarios ocupados:</LoadingText>
-          {intervalosOcupados.map((intervalo, index) => (
-            <OcupadoItem key={index}>
-              {formatTime(intervalo.inicio)} - {formatTime(intervalo.fin)} ({intervalo.duracion} min)
-            </OcupadoItem>
-          ))}
-        </IntervalosOcupados>
       )}
     </DisponibilidadContainer>
   );
