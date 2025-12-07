@@ -91,13 +91,16 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       // Si las visitas cambiaron (nueva recarga), invalidar caché de fichas
       if (currentVisitsJson !== lastVisitsJsonRef.current) {
         // Las visitas cambiaron, necesitamos recargar las fichas
+        console.log('🔄 ListVisitAd: Visitas cambiaron, recargando fichas...');
         isLoadingRef.current = true;
         lastVisitsJsonRef.current = currentVisitsJson;
 
         try {
           // Hacer la petición SIN usar caché
+          console.log('📡 ListVisitAd: Obteniendo fichas del servidor...');
           const response = await commonService.getListToken();
           const allFichas = response.data || [];
+          console.log(`✅ ListVisitAd: ${allFichas.length} fichas obtenidas`);
           
           // Guardar en caché junto con el snapshot de visitas
           setCachedFichas(allFichas, currentVisitsJson);

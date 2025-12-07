@@ -179,11 +179,14 @@ const BaseEditModal = ({
 
     setIsSubmitting(true);
     try {
+      console.log('💾 Guardando cambios...');
       await onSubmit(formData);
       
+      console.log('✅ Guardado exitoso, recargando datos...');
       // Llamar a onSuccess ANTES de cerrar para recargar datos
       if (onSuccess) {
         await onSuccess();
+        console.log('✅ Recarga completada');
       }
       
       onClose();

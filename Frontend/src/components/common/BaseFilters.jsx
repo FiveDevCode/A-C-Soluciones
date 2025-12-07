@@ -256,11 +256,12 @@ const BaseFilters = ({
   }), [data, filters, searchTerm, searchKeys, filterOptions]);
 
   useEffect(() => {
-    // Crear un JSON de los IDs para comparar si realmente cambió
-    const currentJson = JSON.stringify(filteredData.map(item => item.id || item));
+    // Crear un JSON completo de los datos filtrados para detectar cualquier cambio
+    const currentJson = JSON.stringify(filteredData);
     
     // Solo actualizar si realmente cambió el contenido
     if (currentJson !== lastFilteredJsonRef.current) {
+      console.log('🔄 BaseFilters: Datos filtrados cambiaron, notificando al padre...');
       lastFilteredJsonRef.current = currentJson;
       onFilteredChange?.(filteredData);
     }
