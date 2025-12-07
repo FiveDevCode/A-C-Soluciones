@@ -49,19 +49,26 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     }
   };
 
-  // Cargar fichas solo una vez (con caché)
+  // Cargar fichas cuando cambian las visitas
   useEffect(() => {
     const loadFichas = async () => {
-      // Si ya cargamos, no volver a cargar
-      if (hasFetchedPDFsRef.current) return;
       if (isLoadingRef.current) return;
+      if (!visits || visits.length === 0) return;
+
+      // Verificar si las visitas han cambiado (por ID o cantidad)
+      const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
+      const hasVisitsChanged = currentVisitsJson !== lastVisitsJsonRef.current;
+
+      // Si no han cambiado y ya tenemos PDFs cargados, no hacer nada
+      if (!hasVisitsChanged && hasFetchedPDFsRef.current) return;
 
       isLoadingRef.current = true;
+      lastVisitsJsonRef.current = currentVisitsJson;
 
       try {
         // Intentar obtener del caché primero
         const cachedFichas = getCachedFichas();
-        if (cachedFichas) {
+        if (cachedFichas && !hasVisitsChanged) {
           const fichasMap = new Map();
           cachedFichas.forEach((ficha) => {
             if (ficha.id_visitas && ficha.pdf_path) {
@@ -74,7 +81,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           return;
         }
 
-        // Si no hay caché, hacer la petición
+        // Si hay cambios o no hay caché, hacer la petición
         const response = await commonService.getListToken();
         const allFichas = response.data || [];
         
@@ -99,7 +106,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     };
 
     loadFichas();
-  }, []); // Solo se ejecuta una vez al montar
+  }, [visits]); // Se ejecuta cuando cambian las visitas
 
   // Combinar visits con pdf_path usando useMemo
   useEffect(() => {
