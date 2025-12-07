@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditClientAd from "./EditClientAd";
 import ViewClientDetailAd from "./ViewClientDetailAd";
 
 const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditClientAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewClientDetailAd {...props} />, []);
   const columns = [
     { header: "Cédula", accessor: "numero_de_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -26,12 +29,8 @@ const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false
       columns={columns}
       getBadgeValue={(row, accessor) => row[accessor]}
       emptyMessage="No hay clientes registrados"
-      EditComponent={(props) => (
-        <EditClientAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewClientDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

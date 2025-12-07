@@ -1,23 +1,24 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import { handleUpdateClient } from "../../controllers/administrator/updateClient.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditClientAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [clientData, setClientData] = useState(null);
 
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const response = await handleGetClient(selected.id);
+        const response = await handleGetClient(selectedIdRef.current);
         setClientData(response.data);
       } catch (error) {
         console.error("Error al cargar cliente:", error);
       }
     };
 
-    if (selected?.id) fetchClient();
-  }, [selected]);
+    if (selectedIdRef.current) fetchClient();
+  }, []);
 
   if (!clientData) return null;
 
@@ -48,7 +49,7 @@ const EditClientAd = ({ selected, onClose, onSuccess }) => {
 
   const handleSubmit = async (data) => {
     console.log('Datos a enviar:', data); // ← Verifica qué se está enviando
-    await handleUpdateClient(selected.id, data);
+    await handleUpdateClient(selectedIdRef.current, data);
   };
 
   return (
@@ -64,4 +65,4 @@ const EditClientAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditClientAd;
+export default React.memo(EditClientAd);

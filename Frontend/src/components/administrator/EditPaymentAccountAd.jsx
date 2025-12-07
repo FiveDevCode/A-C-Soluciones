@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetPaymentAccountAd } from "../../controllers/administrator/getPaymentAccountAd.controller";
 import { handleUpdatePaymentAccountAd } from "../../controllers/administrator/updatePaymentAccountAd.controller";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
@@ -6,6 +6,7 @@ import accountIcon from "../../assets/administrator/registerPaymentAccount.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [accountData, setAccountData] = useState(null);
   const [clientList, setClientList] = useState([]);
 
@@ -13,7 +14,7 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
     const fetchData = async () => {
       try {
         const [accountRes, clientsRes] = await Promise.all([
-          handleGetPaymentAccountAd(selected.id),
+          handleGetPaymentAccountAd(selectedIdRef.current),
           handleGetListClient(),
         ]);
         setAccountData(accountRes.data);
@@ -22,8 +23,8 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
         console.error("Error al cargar datos de cuenta:", error);
       }
     };
-    if (selected?.id) fetchData();
-  }, [selected]);
+    if (selectedIdRef.current) fetchData();
+  }, []);
 
   if (!accountData) return null;
 
@@ -49,7 +50,7 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdatePaymentAccountAd(selected.id, data);
+    await handleUpdatePaymentAccountAd(selectedIdRef.current, data);
   };
 
   return (
@@ -66,4 +67,4 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditPaymentAccountAd;
+export default React.memo(EditPaymentAccountAd);

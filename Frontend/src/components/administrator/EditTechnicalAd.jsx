@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetTechnical } from "../../controllers/administrator/getTechnicalAd.controller";
 import { handleUpdateTechnical } from "../../controllers/administrator/updateTechnicalAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
@@ -108,19 +108,20 @@ const ESPECIALIDADES_HIDROELECTRICAS = [
 ];
 
 const EditTechnicalAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [technicalData, setTechnicalData] = useState(null);
 
   useEffect(() => {
     const fetchTechnical = async () => {
       try {
-        const response = await handleGetTechnical(selected.id);
+        const response = await handleGetTechnical(selectedIdRef.current);
         setTechnicalData(response.data);
       } catch (error) {
         console.error("Error al cargar técnico:", error);
       }
     };
-    if (selected?.id) fetchTechnical();
-  }, [selected]);
+    if (selectedIdRef.current) fetchTechnical();
+  }, []);
 
   if (!technicalData) return null;
 
@@ -156,7 +157,7 @@ const EditTechnicalAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateTechnical(selected.id, data);
+    await handleUpdateTechnical(selectedIdRef.current, data);
   };
 
   return (
@@ -172,4 +173,4 @@ const EditTechnicalAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditTechnicalAd;
+export default React.memo(EditTechnicalAd);

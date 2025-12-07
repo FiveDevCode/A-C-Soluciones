@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditServiceAd from "./EditServiceAd";
 import ViewServiceDetailAd from "./ViewServiceDetailAd";
 
 const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditServiceAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewServiceDetailAd {...props} />, []);
 
   const columns = [
     { header: "Nombre", accessor: "nombre" },
@@ -39,12 +42,8 @@ const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = fal
       columns={columns}
       getBadgeValue={(row) => row.estado}
       emptyMessage="No hay servicios registrados"
-      EditComponent={(props) => (
-        <EditServiceAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewServiceDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

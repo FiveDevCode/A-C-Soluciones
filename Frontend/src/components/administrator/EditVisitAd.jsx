@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import React, { use, useEffect, useState, useRef } from "react";
 import { handleGetVisit } from "../../controllers/administrator/getVisitAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
@@ -8,6 +8,7 @@ import { handleUpdateVisitAd } from "../../controllers/administrator/updateVisit
 import DisponibilidadTecnico from "./DisponibilidadTecnico";
 
 const EditVisitAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [visitData, setVisitData] = useState(null);
   const [technicalList, setTechnicalList] = useState([]);
   const [requestList, setRequestList] = useState([]);
@@ -43,9 +44,9 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
         setRequestList(requestRes.data);
         setServiceList(serviceRes);
 
-        // Luego cargar la visita
-        if (selected?.id) {
-          const visitRes = await handleGetVisit(selected.id);
+        // Luego cargar la visita usando el ID guardado en el ref
+        if (selectedIdRef.current) {
+          const visitRes = await handleGetVisit(selectedIdRef.current);
           const vData = visitRes.data.data;
           setVisitData(vData);
           // Inicializar los valores seleccionados
@@ -59,7 +60,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
     };
 
     cargarDatos();
-  }, [selected]);
+  }, []);
   
   if (!visitData) return null; // No mostrar nada mientras carga
 
@@ -109,7 +110,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateVisitAd(selected.id, data);
+    await handleUpdateVisitAd(selectedIdRef.current, data);
   };
 
   return (
@@ -137,4 +138,4 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditVisitAd;
+export default React.memo(EditVisitAd);

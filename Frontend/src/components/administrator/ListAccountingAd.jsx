@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditAccountingAd from "./EditAccountingAd";
 import ViewAccountingDetailAd from "./ViewAccountingDetailAd";
 
 const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditAccountingAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewAccountingDetailAd {...props} />, []);
   const columns = [
     { header: "Cédula", accessor: "numero_de_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -21,12 +24,8 @@ const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData
       columns={columns}
       getBadgeValue={(row) => row.estado}
       emptyMessage="No hay empleados contables registrados"
-      EditComponent={(props) => (
-        <EditAccountingAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewAccountingDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

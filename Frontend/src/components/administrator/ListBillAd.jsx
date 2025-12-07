@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditBillAd from "./EditBillAd";
 import ViewBillDetailAd from "./ViewBillDetailAd";
 
 const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditBillAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewBillDetailAd {...props} />, []);
   const columns = [
     {
       header: "Número de factura",
@@ -65,12 +68,8 @@ const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false }) 
       columns={columns}
       getBadgeValue={(row) => row.estado_factura}
       emptyMessage="No hay facturas registradas"
-      EditComponent={(props) => (
-        <EditBillAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewBillDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

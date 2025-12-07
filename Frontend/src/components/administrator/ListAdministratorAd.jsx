@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditAdministratorAd from "./EditAdministratorAd";
 import ViewAdministratorDetailAd from "./ViewAdministratorDetailAd";
 
 const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditAdministratorAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewAdministratorDetailAd {...props} />, []);
   const columns = [
     { header: "Cédula", accessor: "numero_cedula" },
     { header: "Nombre", accessor: "nombre" },
@@ -21,12 +24,8 @@ const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadi
       columns={columns}
       getBadgeValue={(row) => row.estado}
       emptyMessage="No hay administradores registrados"
-      EditComponent={(props) => (
-        <EditAdministratorAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewAdministratorDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

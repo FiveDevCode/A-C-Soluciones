@@ -1,8 +1,11 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditPaymentAccountAd from "./EditPaymentAccountAd";
 import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 
 const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false }) => {
+  const EditComponentMemo = useCallback((props) => <EditPaymentAccountAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewPaymentAccountDetailAd {...props} />, []);
   const columns = [
     { header: "N° Cuenta", accessor: "numero_cuenta" },
     { header: "NIT", accessor: "nit" },
@@ -41,12 +44,8 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
       columns={columns}
       emptyMessage="No hay cuentas de pago registradas"
       getBadgeValue={(row) => row.estado}
-      EditComponent={(props) => (
-        <EditPaymentAccountAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewPaymentAccountDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{

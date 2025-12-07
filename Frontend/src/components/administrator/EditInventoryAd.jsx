@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetInventoryAd } from "../../controllers/administrator/getInventoryAd.controller";
 import { handleUpdateInventoryAd } from "../../controllers/administrator/updateInventoryAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [toolData, setToolData] = useState(null);
 
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const response = await handleGetInventoryAd(selected.id);
+        const response = await handleGetInventoryAd(selectedIdRef.current);
         setToolData(response.data);
       } catch (error) {
         console.error("Error al cargar herramienta:", error);
       }
     };
-    if (selected?.id) fetchTool();
-  }, [selected]);
+    if (selectedIdRef.current) fetchTool();
+  }, []);
 
   if (!toolData) return null; // no mostrar nada mientras carga
 
@@ -50,7 +51,7 @@ const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateInventoryAd(selected.id, data);
+    await handleUpdateInventoryAd(selectedIdRef.current, data);
   };
 
   return (
@@ -66,4 +67,4 @@ const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditInventoryAd;
+export default React.memo(EditInventoryAd);

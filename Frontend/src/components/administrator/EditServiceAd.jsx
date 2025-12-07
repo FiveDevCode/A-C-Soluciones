@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetService } from "../../controllers/administrator/getServiceAd.controller";
 import { handleUpdateServiceAd } from "../../controllers/administrator/updateServiceAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditServiceAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [serviceData, setServiceData] = useState(null);
 
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const response = await handleGetService(selected.id);
+        const response = await handleGetService(selectedIdRef.current);
         setServiceData(response.data.data);
       } catch (error) {
         console.error("Error al cargar servicio:", error);
       }
     };
-    if (selected?.id) fetchService();
-  }, [selected]);
+    if (selectedIdRef.current) fetchService();
+  }, []);
 
   if (!serviceData) return null; // no mostrar nada mientras carga
 
@@ -38,7 +39,7 @@ const EditServiceAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateServiceAd(selected.id, data);
+    await handleUpdateServiceAd(selectedIdRef.current, data);
   };
 
   return (
@@ -54,4 +55,4 @@ const EditServiceAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditServiceAd;
+export default React.memo(EditServiceAd);

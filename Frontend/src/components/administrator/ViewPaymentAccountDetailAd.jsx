@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BaseDetailModal from "../common/BaseDetailModal";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 
 const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
+  const clientIdRef = useRef(selected?.id_cliente);
   const [clientData, setClientData] = useState(null);
 
   useEffect(() => {
     const fetchClient = async () => {
-      if (selected?.id_cliente) {
+      if (clientIdRef.current) {
         try {
-          const response = await handleGetClient(selected.id_cliente);
+          const response = await handleGetClient(clientIdRef.current);
           setClientData(response.data);
         } catch (error) {
           console.error("Error al cargar cliente asociado:", error);
@@ -17,7 +18,7 @@ const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
       }
     };
     fetchClient();
-  }, [selected]);
+  }, []);
 
   if (!selected) return null;
 

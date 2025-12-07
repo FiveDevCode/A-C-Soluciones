@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
@@ -117,13 +117,13 @@ const useDataCache = (cacheKey, fetchFunction, options = {}) => {
   };
 
   // Función para iniciar la carga manualmente (útil en modo lazy)
-  const init = () => {
+  const init = useCallback(() => {
     if (!hasFetchedRef.current) {
       loadData();
     }
-  };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const reload = async () => {
+  const reload = useCallback(async () => {
     console.log(`🔄 Recargando datos [${cacheKey}]...`);
     
     // Invalidar el caché primero
@@ -155,7 +155,7 @@ const useDataCache = (cacheKey, fetchFunction, options = {}) => {
       isLoadingRef.current = false;
       setIsLoading(false);
     }
-  };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Cargar datos automáticamente solo si no es lazy Y no hay datos en caché
   useEffect(() => {
