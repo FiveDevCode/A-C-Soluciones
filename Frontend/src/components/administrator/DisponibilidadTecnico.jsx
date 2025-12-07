@@ -17,9 +17,12 @@ const TitleContainer = styled.div`
   cursor: pointer;
   user-select: none;
   margin-bottom: ${props => props.$isExpanded ? '10px' : '0'};
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
   
   &:hover {
-    opacity: 0.8;
+    background-color: rgba(255, 255, 255, 0.5);
   }
 `;
 
@@ -31,6 +34,15 @@ const Title = styled.h4`
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
+`;
+
+const ClickHint = styled.span`
+  font-size: 11px;
+  color: #666;
+  font-weight: normal;
+  margin-left: 8px;
+  opacity: 0.7;
 `;
 
 const ToggleIcon = styled.span`
@@ -113,7 +125,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
   const [disponibilidad, setDisponibilidad] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (!tecnicoId || !fecha) {
@@ -190,6 +202,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada }) => {
       <TitleContainer onClick={() => setIsExpanded(!isExpanded)} $isExpanded={isExpanded}>
         <Title>
           📅 Disponibilidad de {tecnico.nombre}
+          <ClickHint>(clic para {isExpanded ? 'ocultar' : 'ver'})</ClickHint>
         </Title>
         <ToggleIcon $isExpanded={isExpanded}>▼</ToggleIcon>
       </TitleContainer>
