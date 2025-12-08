@@ -18,11 +18,17 @@ export const createTransporter = () => {
 export const sendEmail = async (to, subject, text, filePath) => {
   const transporter = createTransporter();
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER, // 
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
     to,
     subject,
     text,
-    attachments: [{ path: filePath }],
-  });
+  };
+
+  // Solo agregar adjunto si hay filePath
+  if (filePath) {
+    mailOptions.attachments = [{ path: filePath }];
+  }
+
+  await transporter.sendMail(mailOptions);
 };

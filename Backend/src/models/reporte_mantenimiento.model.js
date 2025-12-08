@@ -123,6 +123,10 @@ const ReporteMantenimientoPlantasElectricas = sequelize.define('ReporteMantenimi
         type: DataTypes.TEXT,
         allowNull: true
     },
+    pdf_path: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
