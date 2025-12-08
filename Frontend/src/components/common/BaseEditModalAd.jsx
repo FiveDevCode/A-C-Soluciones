@@ -178,13 +178,68 @@ const BaseEditModal = ({
 
   useEffect(() => {
     // Actualiza los valores cuando cambian los datos iniciales
-    setFormData(initialData);
+    // Si hay campos currency, formatearlos al cargar
+    const formattedData = { ...initialData };
+    fields.forEach((field) => {
+      if (field.type === "currency" && formattedData[field.name]) {
+        formattedData[field.name] = formatCurrency(formattedData[field.name]);
+      }
+    });
+    setFormData(formattedData);
   }, [initialData]);
+
+  // ========= UTILIDADES DE FORMATO DE MONEDA =========
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    // Remover todo excepto números y punto decimal
+    const cleanValue = value.toString().replace(/[^\d.]/g, "");
+    // Separar enteros y decimales
+    const parts = cleanValue.split(".");
+    const integerPart = parts[0];
+    const decimalPart = parts[1] !== undefined ? parts[1] : "";
+    
+    // Formatear parte entera con puntos
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    
+    // Retornar con coma decimal si existe
+    return decimalPart !== "" ? `${formattedInteger},${decimalPart}` : formattedInteger;
+  };
+
+  const parseCurrency = (value) => {
+    if (!value) return "";
+    // Remover puntos (separadores de miles) y reemplazar coma por punto para el valor numérico
+    return value.toString().replace(/\./g, "").replace(",", ".");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     onFieldChange?.(name, value);
+  };
+
+  const handleCurrencyChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Permitir solo números, coma y borrar todo
+    const cleanValue = value.replace(/[^\d,]/g, "");
+    
+    // Prevenir múltiples comas
+    const parts = cleanValue.split(",");
+    const sanitizedValue = parts.length > 2 
+      ? parts[0] + "," + parts.slice(1).join("") 
+      : cleanValue;
+    
+    // Limitar decimales a 2 dígitos
+    const [integer, decimal] = sanitizedValue.split(",");
+    const limitedValue = decimal !== undefined && decimal.length > 2
+      ? `${integer},${decimal.substring(0, 2)}`
+      : sanitizedValue;
+    
+    // Formatear con puntos para visualización
+    const formattedValue = formatCurrency(limitedValue);
+    
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    onFieldChange?.(name, parseCurrency(formattedValue));
   };
 
   const handleFormSubmit = async (e) => {
@@ -207,7 +262,16 @@ const BaseEditModal = ({
     setIsSubmitting(true);
     try {
       console.log('💾 Guardando cambios...');
-      await onSubmit(formData);
+      
+      // Parsear campos de tipo currency antes de enviar
+      const parsedFormData = { ...formData };
+      fields.forEach((field) => {
+        if (field.type === "currency" && parsedFormData[field.name]) {
+          parsedFormData[field.name] = parseCurrency(parsedFormData[field.name]);
+        }
+      });
+      
+      await onSubmit(parsedFormData);
       
       console.log('✅ Guardado exitoso, recargando datos...');
       // Llamar a onSuccess ANTES de cerrar para recargar datos
@@ -326,7 +390,9 @@ const BaseEditModal = ({
                 key={field.name}
                 select={field.type === "select"}
                 type={
-                  field.type === "number"
+                  field.type === "currency"
+                    ? "text"
+                    : field.type === "number"
                     ? "number"
                     : field.type === "date"
                     ? "date"
@@ -341,10 +407,16 @@ const BaseEditModal = ({
                 fullWidth
                 size="small"
                 value={formData[field.name] ?? ""}
-                onChange={handleChange}
+                onChange={field.type === "currency" ? handleCurrencyChange : handleChange}
                 error={Boolean(fieldErrors[field.name])}
                 helperText={fieldErrors[field.name]}
-                inputProps={field.inputProps}
+                inputProps={{
+                  ...field.inputProps,
+                  ...(field.type === "currency" && {
+                    placeholder: "0",
+                    style: { textAlign: "right" }
+                  })
+                }}
                 disabled={field.disabled}
                 InputLabelProps={{
                   shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined

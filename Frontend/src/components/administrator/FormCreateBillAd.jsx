@@ -36,9 +36,9 @@ const FormCreateBillAd = ({ onClose, onSuccess }) => {
     },
     { name: "fecha_factura", label: "Fecha de factura", type: "date" },
     { name: "concepto", label: "Concepto", type: "textarea" },
-    { name: "monto_facturado", label: "Monto facturado", type: "number" },
-    { name: "abonos", label: "Abonos", type: "number" },
-    { name: "saldo_pendiente", label: "Saldo pendiente", type: "number" },
+    { name: "monto_facturado", label: "Monto facturado", type: "currency" },
+    { name: "abonos", label: "Abonos", type: "currency" },
+    { name: "saldo_pendiente", label: "Saldo pendiente", type: "currency" },
     { name: "fecha_vencimiento", label: "Fecha de vencimiento", type: "date" }
   ];
 
