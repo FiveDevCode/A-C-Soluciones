@@ -497,14 +497,6 @@ const BaseHeaderSection = ({
             )}
           </SearchContainer>
           <ActionsRow>
-            {onRefresh && (
-              <RefreshContainer>
-                <RefreshButton onClick={onRefresh} title="Refrescar lista">
-                  <FaSyncAlt />
-                </RefreshButton>
-                {lastUpdateTime && <LastUpdateText>{lastUpdateTime}</LastUpdateText>}
-              </RefreshContainer>
-            )}
             {onDeleteSelected && (
               <Button
                 active={selectedCount > 0}
