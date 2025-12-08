@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { Tooltip } from "@mui/material";
 import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
@@ -255,9 +256,36 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           >
             Ver reporte
           </button>
+        ) : row.estado !== "completada" ? (
+          // ========================
+          // ✔ BOTÓN GENERAR REPORTE DESHABILITADO
+          // ========================
+          <Tooltip 
+            title="Solo disponible para visitas completadas" 
+            arrow 
+            placement="top"
+          >
+            <span>
+              <button
+                style={{
+                  padding: "6px 10px",
+                  background: "#94a3b8",
+                  color: "white",
+                  borderRadius: "6px",
+                  cursor: "not-allowed",
+                  border: "none",
+                  fontWeight: 600,
+                  opacity: 0.6,
+                }}
+                disabled
+              >
+                Generar reporte
+              </button>
+            </span>
+          </Tooltip>
         ) : (
           // ========================
-          // ✔ BOTÓN GENERAR REPORTE
+          // ✔ BOTÓN GENERAR REPORTE HABILITADO
           // ========================
           <button
             style={{
@@ -296,6 +324,39 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           renderExtra: (row) => {
             if (!row.pdf_path) {
               // Mostrar botón de generar reporte
+              if (row.estado !== "completada") {
+                // Botón deshabilitado con tooltip
+                return (
+                  <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                    <Tooltip 
+                      title="Solo disponible para visitas completadas" 
+                      arrow 
+                      placement="top"
+                    >
+                      <span>
+                        <button
+                          style={{
+                            padding: "5px 8px",
+                            background: "#94a3b8",
+                            color: "white",
+                            borderRadius: "6px",
+                            cursor: "not-allowed",
+                            border: "none",
+                            fontSize: "11px",
+                            fontWeight: 600,
+                            opacity: 0.6,
+                          }}
+                          disabled
+                        >
+                          Generar reporte
+                        </button>
+                      </span>
+                    </Tooltip>
+                  </div>
+                );
+              }
+              
+              // Botón habilitado sin tooltip
               return (
                 <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
                   <button
@@ -307,7 +368,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
                       cursor: "pointer",
                       border: "none",
                       fontSize: "11px",
-                      fontWeight: 600
+                      fontWeight: 600,
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
