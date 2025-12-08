@@ -259,6 +259,45 @@ const BaseEditModal = ({
                     };
                     handleChange(syntheticEvent);
                   }}
+                  filterOptions={(options, { inputValue }) => {
+                    if (!inputValue) return options;
+                    
+                    // Función para normalizar texto (quitar tildes y convertir a minúsculas)
+                    const normalizeText = (text) => {
+                      return text
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+                    };
+                    
+                    // Normalizar el input de búsqueda
+                    const searchTerm = normalizeText(inputValue.trim());
+                    
+                    // Si es una búsqueda muy corta (1-2 caracteres), buscar coincidencia exacta
+                    if (searchTerm.length <= 2) {
+                      return options.filter(option => 
+                        normalizeText(option.label).includes(searchTerm)
+                      );
+                    }
+                    
+                    // Para búsquedas más largas, separar en palabras (ignorando palabras comunes)
+                    const palabrasIgnoradas = ['de', 'del', 'la', 'el', 'los', 'las', 'y', 'o', 'para', 'con', 'sin', 'en', 'a', 'un', 'una'];
+                    const palabrasBusqueda = searchTerm
+                      .split(/\s+/)
+                      .filter(palabra => palabra.length > 1 && !palabrasIgnoradas.includes(palabra));
+                    
+                    if (palabrasBusqueda.length === 0) {
+                      return options.filter(option => 
+                        normalizeText(option.label).includes(searchTerm)
+                      );
+                    }
+                    
+                    // Buscar opciones que contengan AL MENOS UNA palabra clave (como YouTube)
+                    return options.filter(option => {
+                      const textoOpcion = normalizeText(option.label);
+                      return palabrasBusqueda.some(palabra => textoOpcion.includes(palabra));
+                    });
+                  }}
                   isOptionEqualToValue={(option, value) => option.value === value?.value}
                   renderInput={(params) => (
                     <StyledTextField
