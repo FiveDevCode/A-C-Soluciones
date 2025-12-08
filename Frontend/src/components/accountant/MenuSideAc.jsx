@@ -163,7 +163,7 @@ export const MenuSideAc = () => {
 
         <ContainerOption to="/contador/inventario">
           <IconOption icon={faBoxes} />
-          <TitleOption>Inventario</TitleOption>
+          <TitleOption>Herramientas</TitleOption>
         </ContainerOption>
 
         <ContainerOption to="/contador/notificaciones">

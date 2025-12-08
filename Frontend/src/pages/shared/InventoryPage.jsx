@@ -84,8 +84,8 @@ const InventoryPage = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="INVENTARIO"
-        sectionTitle="Inventario de herramientas"
+        headerTitle="HERRAMIENTAS"
+        sectionTitle="Gestión de herramientas"
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
