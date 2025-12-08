@@ -1,5 +1,9 @@
 import { VisitaService } from '../services/visita.services.js';
 import { ValidationError } from 'sequelize';
+import * as notificacionService from '../services/notificacion.services.js';
+import { TecnicoModel } from '../models/tecnico.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
+import { SolicitudModel } from '../models/solicitud.model.js';
 
 export class VisitaController {
   constructor() {
@@ -8,13 +12,46 @@ export class VisitaController {
 
   crearVisita = async (req, res) => {
     try {
-      if (req.user.rol !== 'administrador' ) {
+      if (req.user.rol !== 'administrador') {
         return res.status(403).json({
           success: false,
           message: 'Solo los administradores pueden programar visitas'
         });
       }
       const visita = await this.visitaService.crearVisita(req.body);
+      
+      // Notificar al técnico sobre la nueva visita asignada
+      try {
+        // Obtener información completa de la visita con cliente
+        const visitaCompleta = await this.visitaService.obtenerVisitaPorId(visita.id);
+        
+        let nombreCliente = 'un cliente';
+        if (visitaCompleta.solicitud_asociada?.cliente_solicitud) {
+          const cliente = visitaCompleta.solicitud_asociada.cliente_solicitud;
+          nombreCliente = `${cliente.nombre} ${cliente.apellido || ''}`.trim();
+        }
+        
+        // Formatear fecha
+        const fechaProgramada = new Date(visita.fecha_programada).toLocaleDateString('es-CO', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        await notificacionService.notificarTecnicoNuevaVisita(
+          req.body.tecnico_id_fk,
+          visita.id,
+          nombreCliente,
+          fechaProgramada
+        ).catch(err => console.error('Error al enviar notificación al técnico:', err));
+        
+      } catch (notifError) {
+        console.error('Error al procesar notificación de nueva visita:', notifError);
+        // No fallar la creación si falla la notificación
+      }
+      
       return res.status(201).json({
         success: true,
         data: visita
@@ -22,18 +59,19 @@ export class VisitaController {
     } catch (error) {
       console.error('Error al crear visita:', error);
       if (error instanceof ValidationError) {
-          const fieldErrors = {};
-          error.errors.forEach((err) => {
-              if (err.path) {
-                  fieldErrors[err.path] = err.message;
-              }
-          });
-          return res.status(400).json({ errors: fieldErrors });
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        }
+
+        return res.status(400).json({ errors: fieldErrors });
       }
       //extraer el mensaje error o usar el predeterminado de forma explicita
       let mensajeDeError = 'Error al agendar la visita. Intente nuevamente.'
-      if  (error.message && error.message.trim() !== ''){
-        mensajeDeError= error.message;
+      if (error.message && error.message.trim() !== '') {
+        mensajeDeError = error.message;
       }
 
       return res.status(500).json({
@@ -118,6 +156,46 @@ export class VisitaController {
       }
 
       const visitaActualizada = await this.visitaService.actualizarVisita(req.params.id, req.body);
+      
+      // Si un técnico marca la visita como completada, notificar a los administradores
+      if (req.body.estado === 'completada' && req.user.rol === 'tecnico') {
+        try {
+          // Obtener información del técnico
+          const tecnico = await TecnicoModel.Tecnico.findByPk(req.user.id);
+          
+          // Obtener información de la visita con la solicitud y cliente
+          const visitaCompleta = await this.visitaService.obtenerVisitaPorId(req.params.id);
+          
+          let nombreCliente = 'Cliente';
+          if (visitaCompleta.solicitud_asociada?.cliente_solicitud) {
+            const cliente = visitaCompleta.solicitud_asociada.cliente_solicitud;
+            nombreCliente = `${cliente.nombre} ${cliente.apellido || ''}`.trim();
+          }
+          
+          const nombreTecnico = tecnico ? `${tecnico.nombre} ${tecnico.apellido || ''}`.trim() : 'Técnico';
+          
+          // Obtener todos los administradores y notificarlos
+          const { AdminModel: AdminModelImport } = await import('../models/administrador.model.js');
+          const administradores = await AdminModelImport.Admin.findAll({
+            attributes: ['id']
+          });
+          
+          // Notificar a cada administrador
+          for (const admin of administradores) {
+            await notificacionService.notificarAdminVisitaCompletada(
+              admin.id,
+              visitaActualizada.id,
+              nombreTecnico,
+              nombreCliente
+            ).catch(err => console.error(`Error al enviar notificación al admin ${admin.id}:`, err));
+          }
+          
+        } catch (notifError) {
+          console.error('Error al procesar notificación de visita completada:', notifError);
+          // No fallar la actualización si falla la notificación
+        }
+      }
+      
       return res.status(200).json({
         success: true,
         data: visitaActualizada
@@ -155,7 +233,7 @@ export class VisitaController {
       });
     } catch (error) {
       console.error('Error al cancelar visita:', error);
-        // Extraer mensaje de error de forma explícita
+      // Extraer mensaje de error de forma explícita
       let errorMessage = 'Error al cancelar la visita';
       if (error.message && error.message.trim() !== '') {
         errorMessage = error.message;
@@ -186,8 +264,8 @@ export class VisitaController {
       console.error('Error al obtener técnicos disponibles:', error);
 
       let errorMessageTecnicosDisponibles = 'Error al obtener ténicos disponibles'
-      if (error.message && error.message.trim() !== ''){
-        errorMessageTecnicosDisponibles=error.message
+      if (error.message && error.message.trim() !== '') {
+        errorMessageTecnicosDisponibles = error.message
       }
       return res.status(500).json({
         success: false,
@@ -220,7 +298,7 @@ export class VisitaController {
       console.error('Error al obtener servicios asignados:', error);
 
       let errorMessage = 'Error al obtener servicios asignados';
-      if (error.message && error.message.trim() !== ''){
+      if (error.message && error.message.trim() !== '') {
         errorMessage = error.message
       }
       return res.status(500).json({
@@ -261,7 +339,7 @@ export class VisitaController {
     } catch (error) {
       console.error('Error al obtener servicio asignado por ID:', error);
       let errorMessageServicioAsignadoID = 'Error al obtener servicio asignado por ID:';
-      if (error.message && error.message.trim() !== ''){
+      if (error.message && error.message.trim() !== '') {
         errorMessageServicioAsignadoID = error.message
       }
       return res.status(500).json({

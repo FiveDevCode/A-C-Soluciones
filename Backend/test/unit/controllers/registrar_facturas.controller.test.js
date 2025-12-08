@@ -1,10 +1,52 @@
+// Mock TODOS los modelos y servicios ANTES de los imports
+jest.mock('../../../src/database/conexion.js', () => ({
+  sequelize: {
+    define: jest.fn(() => ({
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }))
+  }
+}));
+
+jest.mock('../../../src/models/administrador.model.js', () => ({
+  AdminModel: {
+    Admin: {
+      findAll: jest.fn().mockResolvedValue([]),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/models/contabilidad.model.js', () => ({
+  ContabilidadModel: {
+    Contabilidad: {
+      findAll: jest.fn().mockResolvedValue([]),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/models/cliente.model.js', () => ({
+  ClienteModel: {
+    Cliente: {
+      findByPk: jest.fn().mockResolvedValue({ nombre: 'Test', apellido: 'User' }),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/services/notificacion.services.js', () => ({
+  notificarNuevaFactura: jest.fn().mockResolvedValue(true)
+}));
+
+jest.mock('../../../src/services/registrar_facturas.services.js');
 
 import { RegistrarFacturasController } from '../../../src/controllers/registrar_facturas.controller.js';
 import { RegistroFacturaService } from '../../../src/services/registrar_facturas.services.js';
 import { ValidationError } from 'sequelize';
-
-// Mock al servicio
-jest.mock('../../../src/services/registrar_facturas.services.js');
 
 describe('RegistrarFacturasController', () => {
   let controller;
@@ -16,7 +58,7 @@ describe('RegistrarFacturasController', () => {
   beforeEach(() => {
     mockService = new RegistroFacturaService();
     controller = new RegistrarFacturasController();
-    controller.registroFacturaService = mockService; // Inyectar el mock
+    controller.registroFacturaService = mockService; // mock del controlador
 
     mockRequest = {};
     mockResponse = {
@@ -30,7 +72,7 @@ describe('RegistrarFacturasController', () => {
     jest.clearAllMocks();
   });
 
-  // Pruebas para crearRegistroFactura
+  // Pruebas para crear el registro de la factura
   describe('crearRegistroFactura', () => {
     it('debe crear una factura y devolver 201 si no existe', async () => {
       mockRequest.body = { numero_factura: 'F-001', monto: 100 };
@@ -88,7 +130,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para obtenerRegistroPorCliente
+  // Pruebas para obtener registro por cliente
   describe('obtenerRegistroPorCliente', () => {
     it('debe devolver las facturas de un cliente y un estado 200', async () => {
       mockRequest.params = { id_cliente: '1' };
@@ -127,7 +169,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para obtenerRegistroPorId
+  // Pruebas para obtener registro por ID
   describe('obtenerRegistroPorId', () => {
     it('debe devolver una factura por id y un estado 200', async () => {
       mockRequest.params = { id: '1' };
@@ -167,7 +209,7 @@ describe('RegistrarFacturasController', () => {
   });
 
 
-  // Pruebas para obtenerRegistroPorNumero
+  // Pruebas para por numero de factura
   describe('obtenerRegistroPorNumero', () => {
     it('debe devolver una factura por número y un estado 200', async () => {
       mockRequest.params = { numero_factura: 'F-001' };
@@ -203,7 +245,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para obtenerRegistros
+  // Pruebas para obtener todos los regstro de facturas
   describe('obtenerRegistros', () => {
     it('debe devolver todas las facturas y un estado 200', async () => {
       const facturas = [{ id: 1 }, { id: 2 }];
@@ -230,7 +272,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para obtenerPorSaldoPendiente
+  // Pruebas para saldo pendiente
   describe('obtenerPorSaldoPendiente', () => {
     it('debe devolver facturas con saldo pendiente y un estado 200', async () => {
       const facturas = [{ id: 1, saldo_pendiente: 100 }];
@@ -257,7 +299,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para obtenerPorEstado
+  // Pruebas para estado
   describe('obtenerPorEstado', () => {
     it('debe devolver facturas por estado y un estado 200', async () => {
       mockRequest.params = { estado_factura: 'pendiente' };
@@ -286,7 +328,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para actualizarRegistroFactura
+  // Pruebas para actualizar
   describe('actualizarRegistroFactura', () => {
     it('debe actualizar una factura y devolver 200', async () => {
       mockRequest.params = { id: '1' };
@@ -343,7 +385,7 @@ describe('RegistrarFacturasController', () => {
     });
   });
 
-  // Pruebas para eliminarRegistroFactura
+  // Pruebas para eliminar
   describe('eliminarRegistroFactura', () => {
     it('debe eliminar una factura y devolver 200', async () => {
       mockRequest.params = { id: '1' };

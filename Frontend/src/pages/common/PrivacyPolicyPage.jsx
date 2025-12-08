@@ -15,6 +15,14 @@ const ContainerContent = styled.main`
   justify-content: center;
   padding: 4rem 1rem;
   background-color: #ffffff;
+
+  @media screen and (max-width: 1280px) {
+    padding: 3rem 1.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
 `;
 
 const ContainerPage = styled.div`
@@ -23,12 +31,24 @@ const ContainerPage = styled.div`
   max-width: 1200px;
   width: 100%;
   gap: 4rem;
+
+  @media screen and (max-width: 1280px) {
+    gap: 3rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    gap: 1.5rem;
+  }
 `;
 
 const Section = styled.section`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  @media screen and (max-width: 768px) {
+    gap: 1rem;
+  }
 `;
 
 const Title = styled.h2`
@@ -37,12 +57,24 @@ const Title = styled.h2`
   margin-bottom: 1rem;
   border-left: 6px solid #00aaff;
   padding-left: 0.75rem;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    border-left-width: 4px;
+    padding-left: 0.6rem;
+  }
 `;
 
 const Paragraph = styled.p`
   font-size: 1.125rem;
   color: #333;
   line-height: 1.8;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
 `;
 
 const PrivacyPolicyPage = () => {

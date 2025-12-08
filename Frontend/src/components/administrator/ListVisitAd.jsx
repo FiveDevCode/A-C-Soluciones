@@ -1,132 +1,274 @@
-import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
-import Logo from "../common/Logo";
-import { FormControl, Pagination, TextField } from '@mui/material';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useState, useEffect } from "react";
+import BaseTable from "../common/BaseTable";
+import ViewVisitDetailAd from "./ViewVisitDetailAd";
+import EditVisitAd from "./EditVisitAd";
+import FormCreateReportAd from "../administrator/FormCreateReportAd";
+import { commonService } from "../../services/common-service";
+const API_KEY = "http://localhost:8000";
 
+const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
+  const [openReportModal, setOpenReportModal] = useState(false);
+  const [selectedVisitId, setSelectedVisitId] = useState(null);
 
-const ContainerNoti = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+  // Estado donde guardaremos visits + pdf_path
+  const [visitsWithPDF, setVisitsWithPDF] = useState([]);
 
-const Notification = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid rgba(0,0,0,0.25);
-  padding-left: 1rem;
-  padding-right: 5rem;
-  justify-content: space-between;
-  
-  &:first-child{
-    border-radius: 5px 5px 0 0;
-  }
-`;
+  useEffect(() => {
+    const fetchPDFs = async () => {
+      if (!visits || visits.length === 0) {
+        setVisitsWithPDF([]);
+        return;
+      }
 
-const NotificationDescription = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`
+      try {
+        // 🚀 UNA SOLA PETICIÓN para obtener TODAS las fichas
+        const response = await commonService.getListToken();
+        const allFichas = response.data || [];
 
-const NotificationInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
+        // Crear un mapa de id_visitas -> pdf_path para búsqueda O(1)
+        const fichasMap = new Map();
+        allFichas.forEach((ficha) => {
+          if (ficha.id_visitas && ficha.pdf_path) {
+            fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+          }
+        });
 
-const ContainerOption = styled.div`
-  display: flex;
-  gap: 4rem;
-  width: 50%;
-  justify-content: end;
-`
+        // Mapear las visitas con sus PDFs correspondientes
+        const updatedVisits = visits.map((visit) => ({
+          ...visit,
+          pdf_path: fichasMap.get(visit.id) || null,
+        }));
 
-const TitleNoti = styled.h2`
-  font-size: 1rem;
-  font-weight: lighter;
-`;
+        setVisitsWithPDF(updatedVisits);
+      } catch (err) {
+        console.error("Error al obtener fichas:", err);
+        // En caso de error, mostrar visitas sin PDF
+        setVisitsWithPDF(visits.map((v) => ({ ...v, pdf_path: null })));
+      }
+    };
 
-const Description = styled.h2`
-  font-size: 1rem;
-  font-weight: bold;
-`;
+    fetchPDFs();
+  }, [visits]);
 
-const Date = styled.h2`
-  font-size: 1rem;
-  font-weight: normal;
-`;
+  // Abrir modal de crear reporte
+  const handleOpenReport = (row) => {
+    setSelectedVisitId(row.id);
+    setOpenReportModal(true);
+  };
 
-const SeeMore = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`
+  const handleCloseReport = () => {
+    setOpenReportModal(false);
+    setSelectedVisitId(null);
+    reloadData();
+  };
 
-const ITEMS_PER_PAGE = 6;
+  const columns = [
+    {
+      header: "Notas Previas",
+      accessor: "notas_previas",
+      render: (value) => {
+        if (!value) return "—";
+        return value.length > 50 ? value.slice(0, 50) + "..." : value;
+      }
+    },
+    {
+      header: "Notas Posteriores",
+      accessor: "notas_posteriores",
+      render: (value) => {
+        if (!value) return "—";
+        return value.length > 50 ? value.slice(0, 50) + "..." : value;
+      }
+    },
+    {
+      header: "Fecha Programada",
+      accessor: "fecha_programada",
+      render: (value) => {
+        if (!value) return "—";
+        const date = new Date(value);
+        return date.toLocaleDateString("es-CO");
+      }
+    },
+    {
+      header: "Estado",
+      accessor: "estado",
+      isBadge: true,
+    },
+    {
+      header: "Reporte",
+      accessor: "pdf_path",
+      render: (value, row) =>
+        value ? (
+          // ========================
+          // ✔ BOTÓN VER REPORTE
+          // ========================
+          <button
+            style={{
+              padding: "6px 10px",
+              background: "#16a34a",
+              color: "white",
+              borderRadius: "6px",
+              cursor: "pointer",
+              border: "none",
+              fontWeight: 600,
+            }}
+            onClick={async () => {
+              try {
+                const token = localStorage.getItem("authToken");
 
+                const relativePath = value
+                  .replace(/^uploads[\\/]/, "")
+                  .replace(/\\/g, "/");
 
-const ListVisitAd = ({visits}) => {
+                const publicUrl = `${API_KEY}/${relativePath}`;
 
+                const response = await fetch(publicUrl, {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                });
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
+                if (!response.ok) {
+                  throw new Error("No se pudo obtener el PDF");
+                }
 
-  const paginatedVisit = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return visits.slice(start, start + ITEMS_PER_PAGE);
-  }, [visits, currentPage]);
-
+                const blob = await response.blob();
+                const fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, "_blank");
+              } catch (err) {
+                console.error("Error al abrir PDF:", err);
+                alert("No se pudo abrir el reporte.");
+              }
+            }}
+          >
+            Ver reporte
+          </button>
+        ) : (
+          // ========================
+          // ✔ BOTÓN GENERAR REPORTE
+          // ========================
+          <button
+            style={{
+              padding: "6px 10px",
+              background: "#2563eb",
+              color: "white",
+              borderRadius: "6px",
+              cursor: "pointer",
+              border: "none",
+              fontWeight: 600,
+            }}
+            onClick={() => handleOpenReport(row)}
+          >
+            Generar reporte
+          </button>
+        ),
+    },
+  ];
 
   return (
-    <ContainerNoti>
-      {paginatedVisit.map((visit, index) => (
-        <Notification key={index}>
-          <NotificationDescription>
-            <Logo src={serviceTehc}/>
-            <NotificationInfo>
-              <TitleNoti>
-                {visit.notas_posteriores && visit.notas_posteriores.length > 50
-                  ? `${visit.notas_posteriores.slice(0, 50)}...`
-                  : visit.notas_posteriores || "Sin notas posteriores"}
-              </TitleNoti>
-              <Description>
-                {visit.notas_previas && visit.notas_previas.length > 50
-                  ? `${visit.notas_previas.slice(0, 50)}...`
-                  : visit.notas_previas || "Sin notas previas"}
-              </Description>
-              <Date>{visit.fecha_programada.substring(0, 10)}</Date>
-            </NotificationInfo>
-          </NotificationDescription>
-          <ContainerOption>
-            <FormControl sx={{ width: "30%", minWidth: "200px" }}>
-              <TextField
-                value={visit.estado === "en_camino" ? "en camino" : visit.estado}
-                label="Estado"
-                disabled
-              />
-            </FormControl>
-            <SeeMore>
-              <FontAwesomeIcon icon={faArrowRight} />
-              <Link to={`/admin/visita/${visit.id}`}>Ver</Link>
-            </SeeMore>
-          </ContainerOption>
-        </Notification>
-      ))}
-      <Pagination
-        count={totalPages}
-        page={currentPage}
-        onChange={(e, page) => setCurrentPage(page)}
-        color="primary"
-        shape="rounded"
-        sx={{ marginTop: "3rem", alignSelf: "center" }}
+    <>
+      <BaseTable
+        data={visitsWithPDF} // 👈 AHORA SÍ USA LA LISTA CON PDF
+        columns={columns}
+        getBadgeValue={(row) =>
+          row.estado === "en_camino" ? "En camino" : row.estado
+        }
+        emptyMessage="No hay visitas registradas"
+        EditComponent={(props) => (
+          <EditVisitAd {...props} onSuccess={reloadData} />
+        )}
+        ViewComponent={(props) => <ViewVisitDetailAd {...props} />}
+        onSelectRows={onSelectRows}
+        mobileConfig={{
+          title: "fecha_programada",
+          subtitle: "notas_previas",
+          renderExtra: (row) => {
+            if (!row.pdf_path) {
+              // Mostrar botón de generar reporte
+              return (
+                <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                  <button
+                    style={{
+                      padding: "5px 8px",
+                      background: "#2563eb",
+                      color: "white",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      border: "none",
+                      fontSize: "11px",
+                      fontWeight: 600
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenReport(row);
+                    }}
+                  >
+                    Generar reporte
+                  </button>
+                </div>
+              );
+            }
+            
+            // Mostrar botón de ver reporte
+            return (
+              <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                <button
+                  style={{
+                    padding: "5px 8px",
+                    background: "#16a34a",
+                    color: "white",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    border: "none",
+                    fontSize: "11px",
+                    fontWeight: 600
+                  }}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    try {
+                      const token = localStorage.getItem("authToken");
+                      const relativePath = row.pdf_path
+                        .replace(/^uploads[\\/]/, "")
+                        .replace(/\\/g, "/");
+                      const publicUrl = `${API_KEY}/${relativePath}`;
+
+                      const response = await fetch(publicUrl, {
+                        method: "GET",
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      });
+
+                      if (!response.ok) {
+                        throw new Error("No se pudo obtener el PDF");
+                      }
+
+                      const blob = await response.blob();
+                      const fileURL = URL.createObjectURL(blob);
+                      window.open(fileURL, "_blank");
+                    } catch (err) {
+                      console.error("Error al abrir PDF:", err);
+                      alert("No se pudo abrir el reporte.");
+                    }
+                  }}
+                >
+                  Ver reporte
+                </button>
+              </div>
+            );
+          }
+        }}
       />
-    </ContainerNoti>
+
+      {openReportModal && (
+        <FormCreateReportAd
+          id={selectedVisitId}
+          onClose={handleCloseReport}
+          onSuccess={handleCloseReport}
+        />
+      )}
+    </>
   );
-}
+};
 
-
-export default ListVisitAd
+export default ListVisitAd;

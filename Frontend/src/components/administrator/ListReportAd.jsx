@@ -1,194 +1,176 @@
-import styled from "styled-components";
-import serviceTehc from "../../assets/technical/serviceTehc.png";
-import Logo from "../common/Logo";
-import { FormControl, Pagination, TextField } from '@mui/material';
+import BaseTable from "../common/BaseTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import ViewReportDetailAd from "../administrator/ViewReportDetailAd";
 
-const API_KEY = import.meta.env.VITE_API_URL;
+const API_KEY = "http://localhost:8000";
+const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
 
+  const handleDownloadPDF = async (visit) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
+      const publicUrl = `${API_KEY}/${relativePath}`;
 
-const ContainerNoti = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+      const response = await fetch(publicUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-const Notification = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid rgba(0,0,0,0.25);
-  padding-left: 1rem;
-  padding-right: 5rem;
-  justify-content: space-between;
-  
-  &:first-child{
-    border-radius: 5px 5px 0 0;
-  }
-`;
+      if (!response.ok) throw new Error("No se pudo descargar el PDF");
 
-const NotificationDescription = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Reporte-visita-${visit.id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error al descargar:", err);
+      alert("No se pudo descargar el PDF.");
+    }
+  };
 
-const NotificationInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
+  const handleViewPDF = async (visit) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
+      const publicUrl = `${API_KEY}/${relativePath}`;
 
-const ContainerOption = styled.div`
-  display: flex;
-  gap: 4rem;
-  width: 50%;
-  justify-content: end;
-`
+      const response = await fetch(publicUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-const TitleNoti = styled.h2`
-  font-size: 1rem;
-  font-weight: lighter;
-`;
+      if (!response.ok) throw new Error("No se pudo abrir el PDF");
 
-const Description = styled.h2`
-  font-size: 1rem;
-  font-weight: bold;
-`;
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error("Error al abrir:", err);
+      alert("No se pudo abrir el PDF.");
+    }
+  };
 
-const Date = styled.h2`
-  font-size: 1rem;
-  font-weight: normal;
-`;
+  const columns = [
+    {
+      header: "Fecha programada",
+      accessor: "fecha_programada",
+      render: (value) => {
+        if (!value) return "No hay fecha programada";
 
-const SeeMore = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`
+        const d = new Date(value);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
 
-const ITEMS_PER_PAGE = 6;
+        let hours = d.getHours();
+        const minutes = String(d.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12;
 
+        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+      },
+    },
+    { header: "Notas previas", accessor: "notas_previas" },
+    { header: "Notas posteriores", accessor: "notas_posteriores" },
+    {
+      header: "PDF",
+      accessor: "pdf_path",
+      render: (_, row) => (
+        <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
+          <button
+            style={{
+              padding: "6px 10px",
+              background: "#2563eb",
+              color: "white",
+              borderRadius: "6px",
+              cursor: "pointer",
+              border: "none"
+            }}
+            onClick={() => handleDownloadPDF(row)}
+          >
+            <FontAwesomeIcon icon={faDownload} /> Descargar
+          </button>
 
-const ListReportAd = ({visits}) => {
-
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
-
-  const paginatedVisit = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return visits.slice(start, start + ITEMS_PER_PAGE);
-  }, [visits, currentPage]);
-
+          <button
+            style={{
+              padding: "6px 10px",
+              background: "#0f172a",
+              color: "white",
+              borderRadius: "6px",
+              cursor: "pointer",
+              border: "none"
+            }}
+            onClick={() => handleViewPDF(row)}
+          >
+            Ver <FontAwesomeIcon icon={faArrowRight} />
+          </button>
+        </div>
+      )
+    }
+  ];
 
   return (
-    <ContainerNoti>
-      {paginatedVisit.map((visit, index) => (
-        <Notification key={index}>
-          <NotificationDescription>
-            <Logo src={serviceTehc}/>
-            <NotificationInfo>
-              <TitleNoti>
-                {visit.notas_posteriores && visit.notas_posteriores.length > 50
-                  ? `${visit.notas_posteriores.slice(0, 50)}...`
-                  : visit.notas_posteriores || "Sin notas posteriores"}
-              </TitleNoti>
-              <Description>
-                {visit.notas_previas && visit.notas_previas.length > 50
-                  ? `${visit.notas_previas.slice(0, 50)}...`
-                  : visit.notas_previas || "Sin notas previas"}
-              </Description>
-              <Date>{visit.fecha_programada.substring(0, 10)}</Date>
-            </NotificationInfo>
-          </NotificationDescription>
-          <ContainerOption>
-            <SeeMore
-              style={{ cursor: 'pointer', color: '#1976d2' }} // azul como botón MUI
-              onClick={async () => {
-                try {
-                  const token = localStorage.getItem('authToken');
-
-                  const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                  const publicUrl = `${API_KEY}/${relativePath}`;
-
-                  const response = await fetch(publicUrl, {
-                    method: 'GET',
-                    headers: {
-                      'Authorization': `Bearer ${token}`
-                    }
-                  });
-
-                  if (!response.ok) {
-                    throw new Error('No se pudo descargar el PDF');
-                  }
-
-                  const blob = await response.blob();
-                  const url = window.URL.createObjectURL(blob);
-
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = `Reporte-visita-${visit.id}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  link.remove();
-                } catch (err) {
-                  console.error('Error al descargar el PDF:', err);
-                }
+    <BaseTable
+      data={visits}
+      columns={columns}
+      emptyMessage="No hay reportes generados"
+      onSelectRows={onSelectRows}
+      mobileConfig={{
+        title: "fecha_programada",
+        subtitle: "notas_previas",
+        renderExtra: (row) => (
+          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+            <button
+              style={{
+                padding: "5px 8px",
+                background: "#2563eb",
+                color: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                border: "none",
+                fontSize: "11px",
+                fontWeight: 600
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDownloadPDF(row);
               }}
             >
-              <FontAwesomeIcon icon={faDownload} />
-              <span>Descargar PDF</span>
-            </SeeMore>
-            {visit.pdf_path && (
-              <SeeMore
-                style={{ cursor: 'pointer', color: '#2e7d32' }}
-                onClick={async () => {
-                  try {
-                    const token = localStorage.getItem('authToken');
-
-                    const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-                    const publicUrl = `${API_KEY}/${relativePath}`;
-                    
-                    const response = await fetch(publicUrl, {
-                      method: 'GET',
-                      headers: {
-                        'Authorization': `Bearer ${token}`
-                      }
-                    });
-
-                    if (!response.ok) {
-                      throw new Error('No se pudo abrir el PDF');
-                    }
-
-                    const blob = await response.blob();
-                    const fileURL = URL.createObjectURL(blob);
-                    window.open(fileURL, '_blank');
-                  } catch (err) {
-                    console.error('Error al abrir el PDF:', err);
-                  }
-                }}
-              >
-                <FontAwesomeIcon icon={faArrowRight} />
-                <span>Ver PDF</span>
-              </SeeMore>
-            )}
-
-          </ContainerOption>
-        </Notification>
-      ))}
-      <Pagination
-        count={totalPages}
-        page={currentPage}
-        onChange={(e, page) => setCurrentPage(page)}
-        color="primary"
-        shape="rounded"
-        sx={{ marginTop: "3rem", alignSelf: "center" }}
-      />
-    </ContainerNoti>
+              <FontAwesomeIcon icon={faDownload} /> Descargar
+            </button>
+            <button
+              style={{
+                padding: "5px 8px",
+                background: "#0f172a",
+                color: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                border: "none",
+                fontSize: "11px",
+                fontWeight: 600
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewPDF(row);
+              }}
+            >
+              Ver <FontAwesomeIcon icon={faArrowRight} />
+            </button>
+          </div>
+        )
+      }}
+    />
   );
-}
+};
 
-
-export default ListReportAd
+export default ListReportAd;

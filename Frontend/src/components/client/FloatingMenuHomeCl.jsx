@@ -22,7 +22,7 @@ const ContainerFloating = styled.section`
   @media screen and (max-width: 1520px) {
     left: calc(100vw - 226px);
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     left: calc(100vw - 194px);
   }
 

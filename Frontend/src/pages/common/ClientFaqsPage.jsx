@@ -20,11 +20,32 @@ const Container = styled.div`
   margin-bottom: 2rem;
   margin-top: 2rem;
   padding: 2rem 8rem;
+
+  @media screen and (max-width: 1350px) {
+    padding: 2rem 4rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const FiltroContainer = styled.div`
   width: 300px;
   margin-right: 2rem;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+  }
 `;
 
 const TituloFiltro = styled.div`
@@ -33,26 +54,50 @@ const TituloFiltro = styled.div`
   font-weight: bold;
   margin-bottom: 1rem;
   color: black;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: #7b2cbf;
+  }
 `;
 
 const Seccion = styled.div`
   margin-bottom: 2rem;
   color: black;
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 0;
+  }
 `;
 
 const CategoriaTitulo = styled.p`
   font-weight: bold;
   margin-bottom: 0.5rem;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
   margin: 0.3rem 0;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+    margin: 0.1rem 0;
+    padding: 0.1rem 0;
+  }
 `;
 
 const Contenido = styled.div`
   flex: 1;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Pregunta = styled.div`
@@ -61,12 +106,27 @@ const Pregunta = styled.div`
   padding: 0.8rem 1rem;
   border-radius: 8px;
   font-weight: bold;
+
+  @media screen and (max-width: 768px) {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    line-height: 1.4;
+  }
 `;
 
 const Respuesta = styled.p`
   font-size: 0.9rem;
   margin: 0.5rem 0 1.5rem 0;
   color: black;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+    margin: 0.6rem 0 1.2rem 0;
+    line-height: 1.6;
+    color: #333;
+    padding: 0 0.25rem;
+  }
 `;
 
 // ...
@@ -142,6 +202,11 @@ const ClientFaqsPage = () => {
                   size="small"
                   checked={selectedCategories.includes(cat)}
                   onChange={() => handleCheckboxChange(cat)}
+                  sx={{
+                    '@media (max-width: 768px)': {
+                      '& .MuiSvgIcon-root': { fontSize: 24 }
+                    }
+                  }}
                 />
                 {cat}
               </CheckboxLabel>
@@ -150,7 +215,17 @@ const ClientFaqsPage = () => {
         </FiltroContainer>
 
         <Contenido>
-          <Typography variant="h6" align="center" gutterBottom style={{ color: "black" }}>
+          <Typography 
+            variant="h6" 
+            align="center" 
+            gutterBottom 
+            style={{ 
+              color: "black",
+              fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.25rem',
+              fontWeight: 'bold',
+              marginBottom: window.innerWidth <= 768 ? '1rem' : '1.5rem'
+            }}
+          >
             Preguntas frecuentes
           </Typography>
 

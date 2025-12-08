@@ -37,9 +37,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.3% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/13</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -218,7 +218,9 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,6 +251,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -313,6 +316,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -374,16 +378,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ClienteService } from "../services/cliente.services.js";
-import { ValidationError } from 'sequelize'; 
+import { ValidationError } from 'sequelize';
 import { camposPermitidosCliente } from '../services/allowedFields.js';
 &nbsp;
 &nbsp;
 &nbsp;
 export class ClienteController {
-constructor(clienteService = new ClienteService()) {
-    this.clienteService = clienteService;
-    this.actualizarMiPerfil = this.actualizarMiPerfil.bind(this);
-}    crearCliente = async (req, res) =&gt; {
+    constructor(clienteService = new ClienteService()) {
+        this.clienteService = clienteService;
+        this.actualizarMiPerfil = this.actualizarMiPerfil.bind(this);
+    } crearCliente = async (req, res) =&gt; {
         try {
             const { numero_de_cedula } = req.body;
             const clienteExistente = await this.clienteService.obtenerClientePorCedula(numero_de_cedula);
@@ -399,11 +403,12 @@ constructor(clienteService = new ClienteService()) {
 &nbsp;
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) =&gt; {
+                for (const err of error.errors) {
                     <span class="missing-if-branch" title="else path not taken" >E</span>if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+&nbsp;
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({ message: 'Error al crear el cliente.' });
@@ -418,21 +423,21 @@ constructor(clienteService = new ClienteService()) {
             return res.status(200).json(cliente);
         } catch (error) {
             console.error(error);
-            
+&nbsp;
             return res.status(500).json({ message: 'Error al obtener el cliente.' });
         }
     };
     obtenerClientePorCedula = async (req, res) =&gt; {
         try {
             const cliente = await this.clienteService.obtenerClientePorCedula(req.params.numero_de_cedula);
-            
+&nbsp;
             if (!cliente) {
                 return res.status(404).json({ message: 'Cliente no encontrado' });
             }
             return res.status(200).json({ cliente });
         } catch (error) {
             console.error(error);
-            
+&nbsp;
             return res.status(500).json({ message: 'Error al obtener el cliente.' });
         }
     };
@@ -444,7 +449,7 @@ constructor(clienteService = new ClienteService()) {
             console.error(error);
             return res.status(500).json({ message: 'Error al obtener los clientes.' });
         }
-    };  
+    };
     obtenerClientesActivos = async (req, res) =&gt; {
         try {
             const clientes = await this.clienteService.obtenerClientesActivos();
@@ -465,11 +470,12 @@ constructor(clienteService = new ClienteService()) {
             console.error(error);
             <span class="missing-if-branch" title="if path not taken" >I</span>if (error instanceof ValidationError) {
                 const fieldErrors = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >                error.errors.forEach(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                for (const err of error.errors) {</span>
 <span class="cstat-no" title="statement not covered" >                    if (err.path) {</span>
 <span class="cstat-no" title="statement not covered" >                        fieldErrors[err.path] = err.message;</span>
                     }
-                });
+                }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                return res.status(400).json({ errors: fieldErrors });</span>
             }
             return res.status(500).json({ message: 'Error al actualizar el cliente.' });
@@ -501,7 +507,7 @@ constructor(clienteService = new ClienteService()) {
     };
 &nbsp;
 &nbsp;
-    
+&nbsp;
 &nbsp;
     actualizarMiPerfil = async (req, res) =&gt; {
         try {
@@ -524,7 +530,7 @@ constructor(clienteService = new ClienteService()) {
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error al actualizar el perfil del cliente.' });
-         }
+        }
     };
 &nbsp;
 }
@@ -535,7 +541,7 @@ constructor(clienteService = new ClienteService()) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-14T04:39:02.090Z
+                at 2025-12-07T23:58:15.871Z
             </div>
         <script src="../prettify.js"></script>
         <script>

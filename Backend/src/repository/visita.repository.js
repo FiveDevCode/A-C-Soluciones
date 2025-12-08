@@ -1,8 +1,9 @@
-import { Op } from 'sequelize'; 
+import { Sequelize, Op } from 'sequelize'; 
 import { VisitaModel } from '../models/visita.model.js';
 import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ServicioModel } from '../models/servicios.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
 
 
 export class VisitaRepository {
@@ -11,31 +12,9 @@ export class VisitaRepository {
     this.solicitudModel = SolicitudModel.Solicitud;
     this.tecnicoModel = TecnicoModel.Tecnico;
     this.servicioModel = ServicioModel.Servicio;
-    this.setupAssociations();
+    this.clienteModel = ClienteModel.Cliente;
   }
-  setupAssociations() {
-    if (!this.model.associations?.solicitud) {
-      this.model.belongsTo(this.solicitudModel, {
-        foreignKey: 'solicitud_id_fk',
-        as: 'solicitud'
-      });
-    }
-    if (!this.model.associations?.tecnico) {
-      this.model.belongsTo(this.tecnicoModel, {
-        foreignKey: 'tecnico_id_fk',
-        as: 'tecnico'
-      });
-    }
-
-    if (!this.model.associations?.servicio) {
-      this.model.belongsTo(this.servicioModel, {
-        foreignKey: 'servicio_id_fk',
-        as: 'servicio'
-      });
-    }
-    
-  }
-
+  
   async crearVisita(data) {
     return await this.model.create(data);
   }
@@ -44,12 +23,19 @@ export class VisitaRepository {
       include: [
          {
           model: this.solicitudModel,
-          as: 'solicitud',
-          attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado']
+          as: 'solicitud_asociada',
+          attributes: ['id', 'fecha_solicitud', 'descripcion', 'direccion_servicio', 'comentarios','estado'],
+          include: [
+            {
+              model: this.clienteModel,
+              as: 'cliente_solicitud',
+              attributes: ['id', 'nombre', 'apellido']
+            }
+          ]
          },
         {
           model: this.tecnicoModel,
-          as: 'tecnico',
+          as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
         }
       ]
@@ -60,12 +46,12 @@ export class VisitaRepository {
       include: [
         {
           model: this.solicitudModel,
-          as: 'solicitud',
+          as: 'solicitud_asociada',
           attributes: ['id', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
         },
         {
           model: this.tecnicoModel,
-          as: 'tecnico',
+          as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
         }
       ],
@@ -99,41 +85,40 @@ export class VisitaRepository {
     if (!fechaProgramada || isNaN(new Date(fechaProgramada).getTime())) {
       throw new Error("Fecha programada inválida");
     }
+
     const duracionMin = Number(duracionEstimada);
     if (isNaN(duracionMin)) {
       throw new Error("Duración estimada inválida");
     }
+
     const inicio = new Date(fechaProgramada);
-    const fin = new Date(inicio.getTime() + duracionMin * 60000); 
+    const fin = new Date(inicio.getTime() + duracionMin * 60000);
+
     const visitas = await this.model.findAll({
       where: {
         tecnico_id_fk: tecnicoId,
-        [Op.or]: [
+        [Op.and]: [
+          // inicio_bd < fin_nueva
           {
-            fecha_programada: {
-              [Op.between]: [inicio, fin]
-            }
+            fecha_programada: { [Op.lt]: fin }
           },
-          {
-            [Op.and]: [
-              {
-                fecha_programada: {
-                  [Op.lte]: inicio
-                }
-              },
-              {
-                duracion_estimada: {
-                  [Op.gte]: duracionMin
-                }
-              }
-            ]
-          }
+
+          // fin_bd > inicio_nueva
+          Sequelize.where(
+            Sequelize.literal(
+              `fecha_programada + (duracion_estimada || ' minutes')::interval`
+            ),
+            ">",
+            inicio
+          )
         ]
       }
     });
-  
+
     return visitas.length === 0;
   }
+
+
 
   async obtenerServiciosPorTecnico(tecnico_id) {
     return await VisitaModel.Visita.findAll({

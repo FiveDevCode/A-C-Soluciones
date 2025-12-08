@@ -1,5 +1,9 @@
 import { RegistroFacturaService } from '../services/registrar_facturas.services.js';
 import { ValidationError } from 'sequelize';
+import * as notificacionService from '../services/notificacion.services.js';
+import { AdminModel } from '../models/administrador.model.js';
+import { ContabilidadModel } from '../models/contabilidad.model.js';
+import { ClienteModel } from '../models/cliente.model.js';
 
 export class RegistrarFacturasController {
     constructor() {
@@ -16,6 +20,54 @@ export class RegistrarFacturasController {
                 });
             }
             const nuevaFactura = await this.registroFacturaService.crearRegistroFactura(req.body);
+            
+            // Notificar a administradores y contabilidad sobre la nueva factura
+            try {
+                // Obtener información del cliente
+                const cliente = await ClienteModel.Cliente.findByPk(req.body.id_cliente);
+                const nombreCliente = cliente 
+                    ? `${cliente.nombre} ${cliente.apellido || ''}`.trim()
+                    : 'Cliente';
+                
+                const monto = parseFloat(nuevaFactura.monto_facturado).toFixed(2);
+                
+                // Obtener todos los administradores
+                const administradores = await AdminModel.Admin.findAll({
+                    attributes: ['id']
+                });
+                
+                // Obtener todo el personal de contabilidad
+                const contadores = await ContabilidadModel.Contabilidad.findAll({
+                    attributes: ['id']
+                });
+                
+                // Notificar a cada administrador
+                for (const admin of administradores) {
+                    await notificacionService.notificarNuevaFactura(
+                        admin.id,
+                        'administrador',
+                        nuevaFactura.numero_factura,
+                        nombreCliente,
+                        monto
+                    ).catch(err => console.error(`Error al notificar admin ${admin.id}:`, err));
+                }
+                
+                // Notificar a cada contador
+                for (const contador of contadores) {
+                    await notificacionService.notificarNuevaFactura(
+                        contador.id,
+                        'contador',
+                        nuevaFactura.numero_factura,
+                        nombreCliente,
+                        monto
+                    ).catch(err => console.error(`Error al notificar contador ${contador.id}:`, err));
+                }
+                
+            } catch (notifError) {
+                console.error('Error al enviar notificaciones de nueva factura:', notifError);
+                // No fallar el registro de factura si falla la notificación
+            }
+            
             return res.status(201).json({
                 message: 'Factura registrada exitosamente',
                 data: nuevaFactura
@@ -24,11 +76,12 @@ export class RegistrarFacturasController {
             console.error('Error en registrarFactura:', error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({
@@ -67,7 +120,7 @@ export class RegistrarFacturasController {
                 });
             }
             return res.status(200).json(factura);
-                
+
         }
         catch (error) {
             console.error('Error en obtenerFacturaPorId:', error);
@@ -80,7 +133,7 @@ export class RegistrarFacturasController {
 
     obtenerRegistroPorNumero = async (req, res) => {
         try {
-            const {numero_factura} = req.params;
+            const { numero_factura } = req.params;
             const factura = await this.registroFacturaService.obtenerRegistroPorNumero(numero_factura);
             if (!factura) {
                 return res.status(404).json({ message: 'Factura no encontrada' });
@@ -148,11 +201,12 @@ export class RegistrarFacturasController {
             console.error('Error en actualizarFactura:', error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({
@@ -164,7 +218,7 @@ export class RegistrarFacturasController {
 
     eliminarRegistroFactura = async (req, res) => {
         try {
-            const facturaEliminada = await this.registroFacturaService.eliminarRegistroFactura(req.params.id);    
+            const facturaEliminada = await this.registroFacturaService.eliminarRegistroFactura(req.params.id);
             if (!facturaEliminada) {
                 return res.status(404).json({ message: 'Factura no encontrada' });
             }

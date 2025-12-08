@@ -142,9 +142,6 @@ const Cliente= sequelize.define('Cliente',{
               args: [10, 255],
               msg: 'La dirección debe tener entre 10 y 255 caracteres.',
             },
-            notEmpty: {
-              msg: 'La dirección no puede estar vacía.',
-            },
             sinEspaciosSolamente
           }
     },
@@ -173,6 +170,17 @@ const Cliente= sequelize.define('Cliente',{
         type: DataTypes.ENUM('activo', 'inactivo'),
         allowNull: false,
         defaultValue: 'activo'
+    },
+    tipo_cliente: {
+        type: DataTypes.ENUM('regular', 'fijo'),
+        allowNull: false,
+        defaultValue: 'regular',
+        validate: {
+            isIn: {
+                args: [['regular', 'fijo']],
+                msg: 'El tipo de cliente debe ser "regular" o "fijo".'
+            }
+        }
     },
 
 }, {

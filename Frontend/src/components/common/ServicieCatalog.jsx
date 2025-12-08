@@ -11,9 +11,12 @@ const ContainerCatalog = styled.section`
     padding: 0 4rem;
     
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding: 0 2rem;
     
+  }
+  @media (max-width: 768px) {
+    padding: 0 1rem 1rem 1rem;
   }
 `;
 
@@ -21,11 +24,28 @@ const TitleService = styled.h1`
   font-size: 1.75rem;
   color: #5B5BDE;
   margin-bottom: 1rem;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
 `;
 
 const ContainerService = styled.div`
   display: flex;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-bottom: 0;
+    width: 100%;
+    gap: 0.75rem;
+  }
 `;
 
 const CatalogService = styled.div`
@@ -43,11 +63,39 @@ const CatalogService = styled.div`
     border-right: none;
   }
 
+  @media (min-width: 769px) and (max-width: 1350px) {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    gap: 1rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+    border-right: none;
+    border: none;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    gap: 0.5rem;
+  }
+
 `;
 
 const TitleCatalog = styled.h2`
   font-size: 1rem;
   font-weight: bold;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    color: #5B5BDE;
+    margin-bottom: 0.5rem;
+  }
 
 `;
 
@@ -55,6 +103,24 @@ const Service = styled(Link)`
   font-size: 1rem;
   font-weight: normal;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 0.85rem;
+    line-height: 1.4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    padding-left: 0.5rem;
+    position: relative;
+    
+    &::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #5B5BDE;
+    }
+  }
 `;
 
 

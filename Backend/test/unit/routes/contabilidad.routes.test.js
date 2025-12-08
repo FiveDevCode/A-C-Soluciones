@@ -1,70 +1,120 @@
-
+// test/unit/routes/contabilidad.routes.test.js
 import express from 'express';
-import request from 'supertest';
-import contabilidadRouter from '../../../src/routers/contabilidad.routes.js';
+
+// Mock de dependencias
+jest.mock('express', () => ({
+  Router: jest.fn(() => ({
+    post: jest.fn(),
+    get: jest.fn(),
+    delete: jest.fn(),
+    put: jest.fn(),
+  })),
+}));
+
+jest.mock('../../../src/controllers/contabilidad.controller.js', () => ({
+  ContabilidadController: jest.fn().mockImplementation(() => ({
+    crearContabilidad: jest.fn(),
+    obtenerContabilidad: jest.fn(),
+    obtenerContabilidadPorId: jest.fn(),
+    obtenerContabilidadPorCedula: jest.fn(),
+    obtenerContabilidadPorCorreo: jest.fn(),
+    eliminarContabilidad: jest.fn(),
+    autenticarContabilidad: jest.fn(),
+    actualizarContabilidad: jest.fn(),
+  })),
+}));
+
+jest.mock('../../../src/middlewares/autenticacion.js', () => ({
+  authenticate: jest.fn(),
+  isAdmin: jest.fn(),
+}));
+
+// Importar después de los mocks
+import router from '../../../src/routers/contabilidad.routes.js';
 import { ContabilidadController } from '../../../src/controllers/contabilidad.controller.js';
 import { authenticate, isAdmin } from '../../../src/middlewares/autenticacion.js';
 
-jest.mock('../../../src/controllers/contabilidad.controller.js');
-jest.mock('../../../src/middlewares/autenticacion.js', () => ({
-  authenticate: jest.fn((req, res, next) => next()),
-  isAdmin: jest.fn((req, res, next) => next()),
-}));
+describe('Contabilidad Router', () => {
+  let mockRouterInstance;
 
-const app = express();
-app.use(express.json());
-app.use(contabilidadRouter);
-
-describe('Contabilidad Routes', () => {
-  let contabilidadControllerMock;
-
-  beforeEach(() => {
-    contabilidadControllerMock = new ContabilidadController();
-    ContabilidadController.mock.instances[0] = contabilidadControllerMock;
+  beforeAll(() => {
+    mockRouterInstance = express.Router.mock.results[0].value;
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('debería crear una instancia del router', () => {
+    expect(express.Router).toHaveBeenCalledTimes(1);
   });
 
-  it('debería llamar a crearContabilidad en POST /api/contabilidad', async () => {
-    contabilidadControllerMock.crearContabilidad = jest.fn((req, res) => res.sendStatus(201));
-    await request(app).post('/api/contabilidad').send({});
-    expect(contabilidadControllerMock.crearContabilidad).toHaveBeenCalled();
+  it('debería crear una instancia del controlador de contabilidad', () => {
+    expect(ContabilidadController).toHaveBeenCalledTimes(1);
   });
 
-  it('debería llamar a obtenerContabilidadPorId en GET /api/contabilidad/:id', async () => {
-    contabilidadControllerMock.obtenerContabilidadPorId = jest.fn((req, res) => res.sendStatus(200));
-    await request(app).get('/api/contabilidad/1');
-    expect(contabilidadControllerMock.obtenerContabilidadPorId).toHaveBeenCalled();
+  it('debería tener la ruta POST /api/contabilidad configurada correctamente', () => {
+    expect(mockRouterInstance.post).toHaveBeenCalledWith(
+      '/api/contabilidad',
+      expect.any(Function), // authenticate
+      expect.any(Function), // isAdmin
+      expect.any(Function)  // contabilidadController.crearContabilidad
+    );
   });
 
-  it('debería llamar a obtenerContabilidadPorCedula en GET /api/contabilidad/cedula/:numero_cedula', async () => {
-    contabilidadControllerMock.obtenerContabilidadPorCedula = jest.fn((req, res) => res.sendStatus(200));
-    await request(app).get('/api/contabilidad/cedula/123');
-    expect(contabilidadControllerMock.obtenerContabilidadPorCedula).toHaveBeenCalled();
+  it('debería tener la ruta GET /api/contabilidad configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/contabilidad',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 
-  it('debería llamar a obtenerContabilidadPorCorreo en GET /api/contabilidad/correo/:correo_electronico', async () => {
-    contabilidadControllerMock.obtenerContabilidadPorCorreo = jest.fn((req, res) => res.sendStatus(200));
-    await request(app).get('/api/contabilidad/correo/a@a.com');
-    expect(contabilidadControllerMock.obtenerContabilidadPorCorreo).toHaveBeenCalled();
+  it('debería tener la ruta GET /api/contabilidad/:id configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/contabilidad/:id',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 
-  it('debería llamar a eliminarContabilidad en DELETE /api/contabilidad/:id', async () => {
-    contabilidadControllerMock.eliminarContabilidad = jest.fn((req, res) => res.sendStatus(200));
-    await request(app).delete('/api/contabilidad/1');
-    expect(contabilidadControllerMock.eliminarContabilidad).toHaveBeenCalled();
+  it('debería tener la ruta GET /api/contabilidad/cedula/:numero_cedula configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/contabilidad/cedula/:numero_cedula',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 
-  it('debería llamar a autenticarContabilidad en POST /api/admin/login', async () => {
-    contabilidadControllerMock.autenticarContabilidad = jest.fn((req, res) => res.sendStatus(200));
-    await request(app).post('/api/admin/login').send({});
-    expect(contabilidadControllerMock.autenticarContabilidad).toHaveBeenCalled();
+  it('debería tener la ruta GET /api/contabilidad/correo/:correo_electronico configurada correctamente', () => {
+    expect(mockRouterInstance.get).toHaveBeenCalledWith(
+      '/api/contabilidad/correo/:correo_electronico',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 
-  it('debería usar los middlewares authenticate y isAdmin en las rutas protegidas', async () => {
-    expect(authenticate).toHaveBeenCalled();
-    expect(isAdmin).toHaveBeenCalled();
+  it('debería tener la ruta DELETE /api/contabilidad/:id configurada correctamente', () => {
+    expect(mockRouterInstance.delete).toHaveBeenCalledWith(
+      '/api/contabilidad/:id',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('debería tener la ruta POST /api/admin/login configurada correctamente', () => {
+    expect(mockRouterInstance.post).toHaveBeenCalledWith(
+      '/api/admin/login',
+      expect.any(Function) // contabilidadController.autenticarContabilidad
+    );
+  });
+
+  it('debería tener la ruta PUT /api/contabilidad/:id configurada correctamente', () => {
+    expect(mockRouterInstance.put).toHaveBeenCalledWith(
+      '/api/contabilidad/:id',
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 });

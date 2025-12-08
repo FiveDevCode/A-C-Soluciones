@@ -14,6 +14,11 @@ const Form = styled.form`
   gap: 1rem;
   width: 35%;
   max-width: 500px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    gap: 1rem;
+  }
 `;
 
 const LinkForgot = styled(Link)`
@@ -21,11 +26,17 @@ const LinkForgot = styled(Link)`
   color: #0000EE;
   text-decoration: underline;
   font-size: 1.05rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    align-self: center;
+  }
 `;
 
 const ContainerButton = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
 
   & > *:first-child {
     width: 50%;
@@ -33,6 +44,18 @@ const ContainerButton = styled.div`
   & > *:nth-child(2) {
     width: 40%;
     background-color:#17A2B8;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+
+    & > *:first-child {
+      width: 100%;
+    }
+    & > *:nth-child(2) {
+      width: 100%;
+    }
   }
 `;
 
@@ -82,6 +105,9 @@ const FormLogin = () => {
           case "administrador":
             navigate("/admin/inicio");
             break;
+          case "Contador":
+            navigate("/contador/inicio");
+            break;
           default:
             break;
         }
@@ -113,6 +139,9 @@ const FormLogin = () => {
       const role = decoded.rol;
       localStorage.setItem('userRole', role);
 
+      // Notificar cambio de autenticación para notificaciones
+      window.dispatchEvent(new Event('authChange'));
+
       // Gestión de sesión/tab para múltiples pestañas
       const sessionId = localStorage.getItem('sessionId') || `${Date.now()}_${Math.random()}`;
       localStorage.setItem('sessionId', sessionId);
@@ -134,6 +163,9 @@ const FormLogin = () => {
           break;
         case "administrador":
           navigate("/admin/inicio");
+          break;
+        case "Contador":
+          navigate("/contador/inicio");
           break;
         default:
           navigate("/iniciar-sesion");

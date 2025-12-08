@@ -5,13 +5,29 @@ import FooterHome from "../../components/common/FooterHome";
 import ServicieCatalog from "../../components/common/ServicieCatalog";
 import styled from "styled-components";
 import WorkProductCl from "../../components/client/WorkProductCl";
+import ChatBubble from "../../components/chatbot/ChatBubble";
 
 
 const ContainerHome = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 3.125rem;
+`;
 
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3.125rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 2rem;
+  }
 `;
 
 const Home = () => {
@@ -21,10 +37,13 @@ const Home = () => {
         <HeaderBarHome />
         <BackgroundHome />
       </div>
-      <ContentHome />
-      <WorkProductCl />
-      <ServicieCatalog />
+      <ContentWrapper>
+        <ContentHome />
+        <WorkProductCl />
+        <ServicieCatalog />
+      </ContentWrapper>
       <FooterHome />
+      <ChatBubble />
     </ContainerHome>
   )
 }

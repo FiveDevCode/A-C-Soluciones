@@ -197,10 +197,8 @@ describe('Cliente Model Tests', () => {
     expect(direccionField.validate.len.args).toEqual([10, 255]);
     expect(() => direccionField.validate.len.msg).not.toThrow();
     
-    // Test not empty validation
-    expect(() => direccionField.validate.notEmpty.msg).not.toThrow();
-    
     // Test custom validations
+    expect(direccionField.validate.sinEspaciosSolamente).toBeDefined();
     expect(() => direccionField.validate.sinEspaciosSolamente('Calle 123 #45-67')).not.toThrow();
     expect(() => direccionField.validate.sinEspaciosSolamente('   ')).toThrow();
   });

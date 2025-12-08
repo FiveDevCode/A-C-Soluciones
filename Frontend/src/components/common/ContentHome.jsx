@@ -14,9 +14,13 @@ const ContainerHome = styled.section`
     padding: 0 4rem;
     
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding: 0 2rem;
     
+  }
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    gap: 2rem;
   }
 `
 const ContainerWho = styled.div`
@@ -28,8 +32,13 @@ const ContainerWho = styled.div`
     gap: 1rem;
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding-top: 0;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
 `
@@ -47,7 +56,13 @@ const ContainerWhoInfo = styled.div`
     width: 50%;
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
+    padding-top: 0;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 1rem;
     padding-top: 0;
   }
 
@@ -60,6 +75,11 @@ const Img = styled.img`
     height: fit-content; 
   }
 
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+  }
+
 
 
 `
@@ -69,12 +89,30 @@ const WhoTitle = styled.h1`
   font-size: 1.625rem;
   color: #5B5BDE;
   font-weight: bold;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `
 const WhoDescription = styled.h2`
   font-size: 1.25rem;
   font-weight: normal;
   line-height: 2.5rem;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.1rem;
+    line-height: 1.9rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.6rem;
+  }
 `
 
 const ContainerService = styled.div`
@@ -87,9 +125,14 @@ const ContainerService = styled.div`
     
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     gap: 1.5rem;
     padding-top: 0;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    gap: 1.5rem;
   }
 
 
@@ -110,9 +153,15 @@ const ContainerServiceInfo = styled.div`
 
   }
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1350px) {
     padding-top: 0;
     width: 50%;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 1rem;
+    padding-top: 0;
   }
 
 `
@@ -120,6 +169,14 @@ const ServiceTitle = styled.h1`
   font-size: 1.625rem;
   color: #5B5BDE;
   font-weight: bold;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `
 const ServiceDescription = styled.h2`
   font-size: 1.25rem;
@@ -127,6 +184,16 @@ const ServiceDescription = styled.h2`
   line-height: 2.5rem;
   width: 100%;
   color: #505050;
+
+  @media (min-width: 769px) and (max-width: 1350px) {
+    font-size: 1.1rem;
+    line-height: 1.9rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.6rem;
+  }
 
 `
 
@@ -136,6 +203,16 @@ const CustomButton = styled(Button)`
     text-transform: none;
     font-size: 1rem;
     font-weight: bold;
+
+    @media (min-width: 769px) and (max-width: 1350px) {
+      font-size: 0.9rem;
+      padding: 0.5rem 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
   }
 
 `

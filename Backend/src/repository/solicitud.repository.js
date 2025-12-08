@@ -9,28 +9,8 @@ export class SolicitudRepository {
     this.clienteModel = ClienteModel.Cliente;
     this.servicioModel = ServicioModel.Servicio;
     this.adminModel = AdminModel.Admin; 
-    this.setupAssociations();
   }
-  setupAssociations() {
-    if (!this.model.associations?.cliente) {
-      this.model.belongsTo(this.clienteModel, {
-        foreignKey: 'cliente_id_fk',
-        as: 'cliente'
-      });
-    }
-    if (!this.model.associations?.servicio) {
-      this.model.belongsTo(this.servicioModel, {
-        foreignKey: 'servicio_id_fk',
-        as: 'servicio'
-      });
-    }
-    if (!this.model.associations?.admin) {
-      this.model.belongsTo(this.adminModel, {
-        foreignKey: 'admin_id_fk',
-        as: 'admin'
-      });
-    }
-  }
+  
   async crear(data) {
     const clienteExiste = await this.clienteExiste(data.cliente_id_fk);
     const servicioExiste = await this.servicioExiste(data.servicio_id_fk);
@@ -44,17 +24,17 @@ export class SolicitudRepository {
       include: [
         {
           model: this.clienteModel,
-          as: 'cliente',
+          as: 'cliente_solicitud',
           attributes: ['id', 'nombre', 'apellido', 'telefono']
         },
         {
           model: this.adminModel, 
-          as: 'admin',
+          as: 'administrador',
           attributes: ['id', 'nombre', 'apellido']
         },
         {
           model: this.servicioModel,
-          as: 'servicio',
+          as: 'servicio_solicitud',
           attributes: ['id', 'nombre', 'descripcion']
         }
       ],
@@ -66,12 +46,12 @@ export class SolicitudRepository {
       include: [
         {
           model: this.clienteModel,
-          as: 'cliente',
+          as: 'cliente_solicitud',
           attributes: ['id', 'nombre', 'apellido', 'telefono', 'direccion']
         },
         {
           model: this.servicioModel,
-          as: 'servicio',
+          as: 'servicio_solicitud',
           attributes: ['id', 'nombre', 'descripcion']
         }
       ]
@@ -83,7 +63,7 @@ export class SolicitudRepository {
       include: [
         {
           model: this.servicioModel,
-          as: 'servicio',
+          as: 'servicio_solicitud',
           attributes: ['id', 'nombre', 'descripcion']
         }
       ],

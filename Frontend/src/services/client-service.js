@@ -21,6 +21,12 @@ const getServiceList = () => {
   return api.get("/servicios/activos")
 }
 
+const getHistorialServiciosByCliente = (clienteId) => {
+  return api.get(`/cliente/${clienteId}/servicios`);
+}
+
+
+
 const createRequest = (serviceAddress, description, comments, requestId, clientId) => {
   const token = localStorage.getItem("authToken");
 
@@ -48,5 +54,6 @@ export const clientService = {
   createClient,
   getServiceList,
   createRequest,
-  getClient
+  getClient,
+  getHistorialServiciosByCliente
 }

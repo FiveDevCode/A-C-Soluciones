@@ -1,10 +1,9 @@
 // src/services/api.js
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_API_URL;
-
+const API_KEY = import.meta.env.VITE_API_URL ;
 const api = axios.create({
-  baseURL: `http://localhost:8000/api`, // puedes usar una variable de entorno
+  baseURL: API_KEY, // La variable de entorno ya debe incluir /api
   
 });
 
@@ -31,6 +30,7 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
       localStorage.removeItem('sessionId');
+      window.dispatchEvent(new Event('authChange'));
 
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith('tab_')) localStorage.removeItem(key);

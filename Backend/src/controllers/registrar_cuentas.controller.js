@@ -2,45 +2,46 @@ import { RegistrarCuentasService } from "../services/registrar_cuentas.services.
 import { ValidationError } from "sequelize";
 
 export class RegistrarCuentasController {
-  constructor() {
-    this.registrarCuentasService = new RegistrarCuentasService();
-  }
-
-  crearRegistroCuenta = async (req, res) => {
-    try {
-      const { numero_cuenta, nit } = req.body;
-      const cuentaExistente =
-        await this.registrarCuentasService.obtenerCuentaPorNumero(
-          numero_cuenta
-        );
-      if (cuentaExistente) {
-        return res.status(400).json({
-          message: "La cuenta ya está registrada (número de cuenta en uso)",
-        });
-      }
-      const nuevaCuenta =
-        await this.registrarCuentasService.crearRegistroCuenta(req.body);
-      return res.status(201).json({
-        message: "Cuenta registrada exitosamente",
-        data: nuevaCuenta,
-      });
-    } catch (error) {
-      console.error("Error en crearRegistroCuenta:", error);
-      if (error instanceof ValidationError) {
-        const fieldErrors = {};
-        error.errors.forEach((err) => {
-          if (err.path) {
-            fieldErrors[err.path] = err.message;
-          }
-        });
-        return res.status(400).json({ errors: fieldErrors });
-      }
-      return res.status(500).json({
-        message: "Error al registrar la cuenta",
-        error: error.message,
-      });
+    constructor() {
+        this.registrarCuentasService = new RegistrarCuentasService();
     }
-  };
+
+    crearRegistroCuenta = async (req, res) => {
+        try {
+            const { numero_cuenta, nit } = req.body;
+            const cuentaExistente =
+                await this.registrarCuentasService.obtenerCuentaPorNumero(
+                    numero_cuenta
+                );
+            if (cuentaExistente) {
+                return res.status(400).json({
+                    message: "La cuenta ya está registrada (número de cuenta en uso)",
+                });
+            }
+            const nuevaCuenta =
+                await this.registrarCuentasService.crearRegistroCuenta(req.body);
+            return res.status(201).json({
+                message: "Cuenta registrada exitosamente",
+                data: nuevaCuenta,
+            });
+        } catch (error) {
+            console.error("Error en crearRegistroCuenta:", error);
+            if (error instanceof ValidationError) {
+                const fieldErrors = {};
+                for (const err of error.errors) {
+                    if (err.path) {
+                        fieldErrors[err.path] = err.message;
+                    }
+                }
+
+                return res.status(400).json({ errors: fieldErrors });
+            }
+            return res.status(500).json({
+                message: "Error al registrar la cuenta",
+                error: error.message,
+            });
+        }
+    };
 
     obtenerCuentaPorId = async (req, res) => {
         try {
@@ -100,7 +101,7 @@ export class RegistrarCuentasController {
 
     obtenerCuentaPorNit = async (req, res) => {
         try {
-            const { nit } = req.params; 
+            const { nit } = req.params;
             const cuenta = await this.registrarCuentasService.obtenerCuentaPorNit(nit);
             if (!cuenta) {
                 return res.status(404).json({
@@ -146,23 +147,24 @@ export class RegistrarCuentasController {
             console.error('Error en actualizarRegistroCuenta:', error);
             if (error instanceof ValidationError) {
                 const fieldErrors = {};
-                error.errors.forEach((err) => {
+                for (const err of error.errors) {
                     if (err.path) {
                         fieldErrors[err.path] = err.message;
                     }
-                });
+                }
+
                 return res.status(400).json({ errors: fieldErrors });
             }
             return res.status(500).json({
                 message: 'Error al actualizar la cuenta',
                 error: error.message
             });
-        }   
+        }
     };
 
     eliminarRegistroCuenta = async (req, res) => {
         try {
-            const cuentaEliminada = await this.registrarCuentasService.eliminarRegistroCuenta(req.params.id);   
+            const cuentaEliminada = await this.registrarCuentasService.eliminarRegistroCuenta(req.params.id);
             if (!cuentaEliminada) {
                 return res.status(404).json({
                     message: 'Cuenta no encontrada'
