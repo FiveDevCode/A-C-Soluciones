@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import BaseHome from "../../components/common/BaseHome";
 import ActivityListAd from "../../components/administrator/ActivityListAd";
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
@@ -44,7 +44,7 @@ const HomeAd = () => {
   );
 
   // Auto-refresh global para home (recarga todos los datos)
-  const reloadAll = async () => {
+  const reloadAll = useCallback(async () => {
     await Promise.all([
       reloadRequests(),
       reloadServices(),
@@ -52,7 +52,7 @@ const HomeAd = () => {
       reloadVisits(),
       reloadInventory()
     ]);
-  };
+  }, [reloadRequests, reloadServices, reloadTechnicians, reloadVisits, reloadInventory]);
 
   const { timeAgo, manualRefresh } = useAutoRefresh(reloadAll, 3, 'home');
 
