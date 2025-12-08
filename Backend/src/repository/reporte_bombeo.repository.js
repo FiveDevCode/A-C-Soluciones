@@ -72,6 +72,17 @@ export const obtenerReportesPorCliente = async (cliente_id) => {
     });
 };
 
+export const obtenerReportesPorTecnico = async (tecnico_id) => {
+    return await ReporteBombeo.findAll({
+        where: { tecnico_id },
+        order: [['fecha', 'DESC']],
+        include: [
+             { model: EquipoBombeo, as: 'equipos' },
+             { model: ParametroBombeo, as: 'parametrosLinea' },
+        ]
+    });
+};
+
 export const actualizarPDFPath = async (reporteId, pdfPath) => {
     const [updatedCount] = await ReporteBombeo.update(
         { pdf_path: pdfPath },

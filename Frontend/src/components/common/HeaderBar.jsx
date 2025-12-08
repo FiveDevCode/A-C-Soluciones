@@ -83,6 +83,8 @@ const HeaderBar = () => {
     "/tecnico/perfil": "Perfil técnico",
     "/tecnico/visitas": "Visitas",
     "/tecnico/reportes": "Reportes",
+    "/tecnico/reporte-electrico": "Reportes eléctricos",
+    "/tecnico/reporte-bombeo": "Reportes de bombeo",
     "/tecnico/visitas-iniciadas": "Visitas iniciadas",
     "/tecnico/visitas-completadas": "Visitas completadas",
     "/tecnico/visitas-programadas": "Visitas programadas",
