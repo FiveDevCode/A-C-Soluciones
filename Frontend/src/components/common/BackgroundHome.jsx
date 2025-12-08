@@ -5,17 +5,17 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 // Import all images from the new background folder
-import home1 from '../../assets/common/background/home1.png'
-import home2 from '../../assets/common/background/home2.png'
-import home3 from '../../assets/common/background/home3.png'
-import home4 from '../../assets/common/background/home4.png'
-import home5 from '../../assets/common/background/home5.png'
-import home6 from '../../assets/common/background/home6.png'
-import home7 from '../../assets/common/background/home7.png'
-import home8 from '../../assets/common/background/home8.png'
-import home9 from '../../assets/common/background/home9.png'
-import home10 from '../../assets/common/background/home10.png'
-import home11 from '../../assets/common/background/home11.png'
+import home1 from '../../assets/common/background/home1.jpg'
+import home2 from '../../assets/common/background/home2.jpg'
+import home3 from '../../assets/common/background/home3.jpg'
+import home4 from '../../assets/common/background/home4.jpg'
+import home5 from '../../assets/common/background/home5.jpg'
+import home6 from '../../assets/common/background/home6.jpg'
+import home7 from '../../assets/common/background/home7.jpg'
+import home8 from '../../assets/common/background/home8.jpg'
+import home9 from '../../assets/common/background/home9.jpg'
+import home10 from '../../assets/common/background/home10.jpg'
+import home11 from '../../assets/common/background/home11.jpg'
 
 const images = [
   home1, home2, home3, home4, home5, home6, home7, home8, home9, home10, home11
