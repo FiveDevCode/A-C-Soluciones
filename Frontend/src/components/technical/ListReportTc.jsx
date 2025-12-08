@@ -209,7 +209,7 @@ const ListReportTc = ({visits}) => {
       const fileName = visit.pdf_path.split(/[/\\]/).pop();
       
       // Usar la ruta de descarga del backend
-      const pdfUrl = `${API_KEY}/api/descargar/${fileName}`;
+      const pdfUrl = `${API_KEY}/descargar/${fileName}`;
 
       const response = await fetch(pdfUrl, {
         method: 'GET',
@@ -250,7 +250,7 @@ const ListReportTc = ({visits}) => {
       const fileName = visit.pdf_path.split(/[/\\]/).pop();
       
       // Usar la ruta de descarga del backend
-      const pdfUrl = `${API_KEY}/api/descargar/${fileName}`;
+      const pdfUrl = `${API_KEY}/descargar/${fileName}`;
       
       const response = await fetch(pdfUrl, {
         method: 'GET',
