@@ -474,8 +474,7 @@ const BaseFormModal = ({
             inputProps={{
               ...field.inputProps,
               ...(field.type === "currency" && {
-                placeholder: "0",
-                style: { textAlign: "right" }
+                placeholder: "0"
               })
             }}
             InputLabelProps={{
