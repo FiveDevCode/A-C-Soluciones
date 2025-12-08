@@ -111,4 +111,9 @@ export class SolicitudRepository {
     await solicitud.destroy();
     return solicitud;
   }
+
+  async obtenerSolicitudPorId(id) {
+        return await SolicitudModel.Solicitud.findByPk(id);
+    }
+
 }
