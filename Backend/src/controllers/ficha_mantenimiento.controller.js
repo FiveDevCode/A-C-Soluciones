@@ -6,6 +6,7 @@ import * as fichaRepo from '../repository/ficha_mantenimiento.repository.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ValidationError, DatabaseError } from 'sequelize';
 import * as notificacionService from '../services/notificacion.services.js';
+import { uploadPDFToCloudinary } from '../services/cloudinary.services.js';
 
 export const crearFichaMantenimiento = async (req, res) => {
   
@@ -150,10 +151,25 @@ export const crearFichaMantenimiento = async (req, res) => {
     const pdfPath = await generarPDF(nuevaFicha, clienteInfo, tecnicoInfo, imagenes);
     console.log('✓ PDF generado en:', pdfPath);
 
-    // Guardar path PDF en BD
-    console.log('=== ACTUALIZANDO PATH DEL PDF EN BD ===');
-    await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfPath);
-    console.log('✓ Path actualizado en BD');
+    // Subir PDF a Cloudinary
+    console.log('=== SUBIENDO PDF A CLOUDINARY ===');
+    let pdfUrl = pdfPath; // Por defecto, usar ruta local
+    try {
+      const cloudinaryResult = await uploadPDFToCloudinary(
+        pdfPath, 
+        `ficha_${nuevaFicha.id}_${Date.now()}`
+      );
+      pdfUrl = cloudinaryResult.url;
+      console.log('✓ PDF subido a Cloudinary:', pdfUrl);
+    } catch (cloudinaryError) {
+      console.error('✗ Error al subir PDF a Cloudinary:', cloudinaryError.message);
+      console.log('⚠️  Continuando con ruta local (solo funcionará en desarrollo)');
+    }
+
+    // Guardar URL del PDF en BD
+    console.log('=== ACTUALIZANDO URL DEL PDF EN BD ===');
+    await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfUrl);
+    console.log('✓ URL actualizada en BD');
 
     // Enviar email con PDF con timeout
     console.log('=== ENVIANDO EMAIL ===');
