@@ -113,7 +113,7 @@ describe('Cliente Model Tests', () => {
     expect(direccionField.allowNull).toBe(false);
     expect(direccionField.validate).toBeDefined();
     expect(direccionField.validate.len).toBeDefined();
-    expect(direccionField.validate.notEmpty).toBeDefined();
+    expect(direccionField.validate.sinEspaciosSolamente).toBeDefined();
   });
 
   test('Debe tener fecha_registro con defaultValue NOW', () => {

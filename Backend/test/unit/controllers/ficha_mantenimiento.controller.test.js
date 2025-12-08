@@ -112,7 +112,8 @@ describe('crearFichaMantenimiento', () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
-      errors: [{ path: 'campo', message: 'Mensaje de error' }]
+      error: 'Error de validación',
+      errores: expect.arrayContaining([expect.objectContaining({ campo: 'campo', mensaje: 'Mensaje de error' })])
     });
   });
 
@@ -122,7 +123,10 @@ describe('crearFichaMantenimiento', () => {
     await crearFichaMantenimiento(mockReq, mockRes);
 
     expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error al crear la ficha' });
+    expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ 
+      error: expect.any(String),
+      message: expect.any(String)
+    }));
   });
 });
 

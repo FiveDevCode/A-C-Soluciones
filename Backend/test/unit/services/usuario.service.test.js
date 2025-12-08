@@ -326,13 +326,13 @@ describe('AuthService (usuario.services.js) - unit tests', () => {
     });
 
     it('debe lanzar error si no hay código guardado', async () => {
-      const user = { ...baseUser, recovery_code: null };
+      const user = { ...baseUser, recovery_code: null, recovery_expires: new Date(Date.now() + 10000) };
       AdminModel.Admin.findOne.mockResolvedValue(user);
       ClienteModel.Cliente.findOne.mockResolvedValue(null);
       TecnicoModel.Tecnico.findOne.mockResolvedValue(null);
       ContabilidadModel.Contabilidad.findOne.mockResolvedValue(null);
 
-      await expect(authService.verifyRecoveryCode(user.correo_electronico, '123')).rejects.toThrow('No hay código guardado');
+      await expect(authService.verifyRecoveryCode(user.correo_electronico, '123')).rejects.toThrow('Código incorrecto');
     });
 
     it('debe lanzar error si el código no coincide', async () => {

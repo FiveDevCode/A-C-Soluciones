@@ -9,5 +9,9 @@ const handleGetVisitAssign = (id) => {
 
 };
 
+const handleGetAllVisitsAssign = () => {
+  return technicalService.getListVisits();
+};
 
-export {handleGetVisitAssign};
+
+export { handleGetVisitAssign, handleGetAllVisitsAssign };
