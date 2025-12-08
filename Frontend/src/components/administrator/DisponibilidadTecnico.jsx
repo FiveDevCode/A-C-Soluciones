@@ -213,11 +213,11 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada, defaultExpa
 
   const formatTime = (isoString) => {
     const date = new Date(isoString);
-    return date.toLocaleTimeString('es-CO', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
-    });
+    let hours = date.getUTCHours();
+    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    const ampm = hours >= 12 ? "p. m." : "a. m.";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes} ${ampm}`;
   };
 
   if (!tecnicoId || !fecha) {
