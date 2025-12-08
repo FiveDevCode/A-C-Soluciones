@@ -210,12 +210,18 @@ const EditInventoryAd = ({ selected, onClose, onSuccess }) => {
     { value: "inactivo", label: "Inactivo" },
   ];
 
+  const estadosCondicion = [
+    { value: "Nueva", label: "Nueva" },
+    { value: "Dañada", label: "Dañada" },
+    { value: "En mantenimiento", label: "En mantenimiento" },
+  ];
+
   const fields = [
     { name: "nombre", label: "Nombre de la herramienta", type: "autocomplete", options: herramientasPredefinidas },
     { name: "codigo", label: "Código", type: "text" },
     { name: "categoria", label: "Categoría", type: "select", options: categorias },
     { name: "cantidad_disponible", label: "Cantidad disponible", type: "number" },
-    { name: "estado", label: "Estado", type: "text" },
+    { name: "estado", label: "Estado", type: "select", options: estadosCondicion },
     { name: "estado_herramienta", label: "Estado de la herramienta", type: "select", options: estadosHerramienta },
   ];
 
