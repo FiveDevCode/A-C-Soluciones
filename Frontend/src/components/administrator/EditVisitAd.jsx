@@ -64,6 +64,14 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   
   if (!visitData) return null; // No mostrar nada mientras carga
 
+  const estadosVisita = [
+    { value: "programada", label: "Programada" },
+    { value: "en_camino", label: "En camino" },
+    { value: "iniciada", label: "Iniciada" },
+    { value: "completada", label: "Completada" },
+    { value: "cancelada", label: "Cancelada" }
+  ];
+
   const fields = [
     { name: "notas_previas", label: "Notas previas", type: "textarea" },
     { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
@@ -97,6 +105,12 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
       type: "datetime-local",
       disabled: !selectedTecnico 
     },
+    {
+      name: "estado",
+      label: "Estado",
+      type: "select",
+      options: estadosVisita
+    }
   ];
 
   const initialData = {
@@ -107,6 +121,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
     tecnico_id_fk: visitData.tecnico_id_fk || "",
     servicio_id_fk: visitData.servicio_id_fk || "",
     fecha_programada: formatDateTimeLocal(visitData.fecha_programada),
+    estado: visitData.estado || "programada",
   };
 
   const handleSubmit = async (data) => {

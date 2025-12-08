@@ -97,7 +97,7 @@ const Title = styled.h2`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.7rem;
 
   @media (max-width: 1350px) {
     gap: 0.5rem;
@@ -111,10 +111,10 @@ const StyledTextField = styled(TextField)`
   & .MuiFormLabel-root {
     font-size: 14px;
   }
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   @media (max-width: 1350px) {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     & .MuiInputBase-input {
       font-size: 12px;
     }
@@ -316,7 +316,7 @@ const BaseEditModal = ({
                       style: { zIndex: 99999 }
                     }
                   }}
-                  sx={{ marginBottom: '16px' }}
+                  sx={{ marginBottom: '12px' }}
                 />
               );
             }
