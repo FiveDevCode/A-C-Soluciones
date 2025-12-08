@@ -81,7 +81,12 @@ const FormLogin = () => {
     if (sessionExpired === 'true') {
       setErrorMsg("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
     }
-  }, [location.search]);
+    
+    // Mostrar mensaje si viene desde servicios
+    if (location.state?.message) {
+      setErrorMsg(location.state.message);
+    }
+  }, [location.search, location.state]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');

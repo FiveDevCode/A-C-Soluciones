@@ -148,7 +148,14 @@ const BackgroundHome = () => {
         <CompanyPhrase>
           Expertos en reparaciones hidroeléctricas: pequeña empresa, gran ingeniería.
         </CompanyPhrase>
-        <ButtonService variant="contained" LinkComponent={Link} to="/iniciar-sesion">Ver nuestros servicios</ButtonService>
+        <ButtonService 
+          variant="contained" 
+          LinkComponent={Link} 
+          to="/iniciar-sesion"
+          state={{ message: "Para ver nuestros servicios debes iniciar sesión o crear una cuenta" }}
+        >
+          Ver nuestros servicios
+        </ButtonService>
       </Content>
     </BackgroundWrapper>
   )
