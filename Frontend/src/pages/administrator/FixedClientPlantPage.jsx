@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress, Alert } from '@mui/material';
 import styled from 'styled-components';
 import { handleGetClient } from '../../controllers/administrator/getClientAd.controller';
+import { handleGetListTechnical } from '../../controllers/administrator/getTechnicalListAd.controller';
+import FixedClientPlantForm from '../../components/administrator/FixedClientPlantForm';
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -28,6 +30,7 @@ const FixedClientPlantPage = () => {
   const { clientId } = useParams();
   const navigate = useNavigate();
   const [clientData, setClientData] = useState(null);
+  const [technicals, setTechnicals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -44,9 +47,14 @@ const FixedClientPlantPage = () => {
         }
 
         setClientData(client);
+
+        // Cargar técnicos
+        const techResponse = await handleGetListTechnical();
+        setTechnicals(techResponse.data || []);
+        
       } catch (err) {
         console.error('Error:', err);
-        setError('Error al cargar el cliente');
+        setError('Error al cargar los datos');
       } finally {
         setLoading(false);
       }
@@ -55,10 +63,17 @@ const FixedClientPlantPage = () => {
     loadData();
   }, [clientId, navigate]);
 
+  const handleBack = () => {
+    navigate('/admin/reportes-clientes-fijos');
+  };
+
   if (loading) {
     return (
       <LoadingContainer>
-        <CircularProgress />
+        <CircularProgress size={60} />
+        <MessageBox>
+          <h2>Cargando información del cliente...</h2>
+        </MessageBox>
       </LoadingContainer>
     );
   }
@@ -66,25 +81,19 @@ const FixedClientPlantPage = () => {
   if (error) {
     return (
       <LoadingContainer>
-        <Alert severity="error">{error}</Alert>
+        <MessageBox>
+          <Alert severity="error">{error}</Alert>
+        </MessageBox>
       </LoadingContainer>
     );
   }
 
   return (
-    <LoadingContainer>
-      <MessageBox>
-        <h2>Reporte de Mantenimiento de Planta Eléctrica para Cliente Fijo</h2>
-        <Alert severity="info" sx={{ mt: 2 }}>
-          Cliente: {clientData?.nombre} {clientData?.apellido}
-          <br />
-          <br />
-          <strong>Formulario en construcción</strong>
-          <br />
-          Este formulario permitirá crear reportes de mantenimiento de plantas eléctricas directamente para clientes fijos sin necesidad de visita programada.
-        </Alert>
-      </MessageBox>
-    </LoadingContainer>
+    <FixedClientPlantForm
+      clientData={clientData}
+      technicals={technicals}
+      onBack={handleBack}
+    />
   );
 };
 

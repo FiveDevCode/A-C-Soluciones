@@ -10,6 +10,12 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   
   const handleDownloadPDF = async (report) => {
     try {
+      // Si el PDF está en Cloudinary, descargarlo directamente
+      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
+        window.open(report.pdf_generado, '_blank');
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       // Usar el endpoint del backend para descargar el PDF por ID
       const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
@@ -40,6 +46,12 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
 
   const handleViewPDF = async (report) => {
     try {
+      // Si el PDF está en Cloudinary, abrirlo directamente
+      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
+        window.open(report.pdf_generado, '_blank');
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       // Usar el endpoint del backend para ver el PDF por ID
       const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
