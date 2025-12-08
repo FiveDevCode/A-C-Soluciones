@@ -47,7 +47,7 @@ export class VisitaRepository {
         {
           model: this.solicitudModel,
           as: 'solicitud_asociada',
-          attributes: ['id', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
+          attributes: ['id', 'cliente_id_fk', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
         },
         {
           model: this.tecnicoModel,

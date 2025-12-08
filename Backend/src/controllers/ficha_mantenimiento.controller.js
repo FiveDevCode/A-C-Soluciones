@@ -155,10 +155,18 @@ export const crearFichaMantenimiento = async (req, res) => {
     await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfPath);
     console.log('✓ Path actualizado en BD');
 
-    // Enviar email con PDF
+    // Enviar email con PDF con timeout
     console.log('=== ENVIANDO EMAIL ===');
-    await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
-    console.log('✓ Email enviado a:', clienteInfo.correo);
+    try {
+      await Promise.race([
+        sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Email timeout')), 25000)) // 25 segundos
+      ]);
+      console.log('✓ Email enviado a:', clienteInfo.correo);
+    } catch (emailError) {
+      console.error('✗ Error al enviar email:', emailError.message);
+      // Continuamos aunque falle el email
+    }
     
     // Notificar al cliente sobre la ficha creada
     console.log('=== ENVIANDO NOTIFICACIONES ===');
