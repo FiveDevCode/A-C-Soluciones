@@ -113,6 +113,12 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
             }}
             onClick={async () => {
               try {
+                // Si es una URL de Cloudinary, abrirla directamente
+                if (value.includes('cloudinary.com')) {
+                  window.open(value, "_blank");
+                  return;
+                }
+
                 const token = localStorage.getItem("authToken");
 
                 const relativePath = value
@@ -226,6 +232,12 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows }) => {
                   onClick={async (e) => {
                     e.stopPropagation();
                     try {
+                      // Si es una URL de Cloudinary, abrirla directamente
+                      if (row.pdf_path.includes('cloudinary.com')) {
+                        window.open(row.pdf_path, "_blank");
+                        return;
+                      }
+
                       const token = localStorage.getItem("authToken");
                       const relativePath = row.pdf_path
                         .replace(/^uploads[\\/]/, "")

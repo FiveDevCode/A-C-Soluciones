@@ -319,6 +319,12 @@ const HistoryServicesPage = () => {
 
     // Abrir el PDF usando el mismo método que el admin
     try {
+      // Si es una URL de Cloudinary, abrirla directamente
+      if (finalPdfPath.includes('cloudinary.com')) {
+        window.open(finalPdfPath, "_blank");
+        return;
+      }
+
       const token = localStorage.getItem("authToken");
       
       // Extraer solo el nombre del archivo del path
