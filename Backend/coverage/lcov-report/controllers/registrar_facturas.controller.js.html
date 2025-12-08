@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.81% </span>
+                <span class="strong">94.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>91/97</span>
+                <span class='fraction'>92/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.76% </span>
+                <span class="strong">84.61% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/26</span>
+                <span class='fraction'>22/26</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.81% </span>
+                <span class="strong">94.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>91/97</span>
+                <span class='fraction'>92/97</span>
             </div>
         
             
@@ -342,17 +342,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,11 +352,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -559,8 +559,8 @@ export class RegistrarFacturasController {
                 // Obtener información del cliente
                 const cliente = await ClienteModel.Cliente.findByPk(req.body.id_cliente);
                 const nombreCliente = cliente 
-                    ? <span class="branch-0 cbranch-no" title="branch not covered" >`${cliente.nombre} ${cliente.apellido || ''}`.trim()</span>
-                    : 'Cliente';
+                    ? `${cliente.nombre} ${cliente.apellido || <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>`.trim()
+                    : <span class="branch-1 cbranch-no" title="branch not covered" >'Cliente';</span>
                 
                 const monto = parseFloat(nuevaFactura.monto_facturado).toFixed(2);
                 
@@ -576,7 +576,7 @@ export class RegistrarFacturasController {
                 
                 // Notificar a cada administrador
                 for (const admin of administradores) {
-                    await notificacionService.notificarNuevaFactura(
+<span class="cstat-no" title="statement not covered" >                    await notificacionService.notificarNuevaFactura(</span>
                         admin.id,
                         'administrador',
                         nuevaFactura.numero_factura,
@@ -586,7 +586,7 @@ export class RegistrarFacturasController {
                 }
                 
                 // Notificar a cada contador
-<span class="cstat-no" title="statement not covered" >                for (const contador of contadores) {</span>
+                for (const contador of contadores) {
 <span class="cstat-no" title="statement not covered" >                    await notificacionService.notificarNuevaFactura(</span>
                         contador.id,
                         'contador',
@@ -601,7 +601,7 @@ export class RegistrarFacturasController {
                 // No fallar el registro de factura si falla la notificación
             }
             
-<span class="cstat-no" title="statement not covered" >            return res.status(201).json({</span>
+            return res.status(201).json({
                 message: 'Factura registrada exitosamente',
                 data: nuevaFactura
             });
@@ -772,7 +772,7 @@ export class RegistrarFacturasController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-06T21:23:26.665Z
+                at 2025-12-07T23:58:15.871Z
             </div>
         <script src="../prettify.js"></script>
         <script>

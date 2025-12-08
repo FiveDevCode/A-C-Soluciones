@@ -1,10 +1,52 @@
+// Mock TODOS los modelos y servicios ANTES de los imports
+jest.mock('../../../src/database/conexion.js', () => ({
+  sequelize: {
+    define: jest.fn(() => ({
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }))
+  }
+}));
+
+jest.mock('../../../src/models/administrador.model.js', () => ({
+  AdminModel: {
+    Admin: {
+      findAll: jest.fn().mockResolvedValue([]),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/models/contabilidad.model.js', () => ({
+  ContabilidadModel: {
+    Contabilidad: {
+      findAll: jest.fn().mockResolvedValue([]),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/models/cliente.model.js', () => ({
+  ClienteModel: {
+    Cliente: {
+      findByPk: jest.fn().mockResolvedValue({ nombre: 'Test', apellido: 'User' }),
+      belongsTo: jest.fn(),
+      hasMany: jest.fn()
+    }
+  }
+}));
+
+jest.mock('../../../src/services/notificacion.services.js', () => ({
+  notificarNuevaFactura: jest.fn().mockResolvedValue(true)
+}));
+
+jest.mock('../../../src/services/registrar_facturas.services.js');
 
 import { RegistrarFacturasController } from '../../../src/controllers/registrar_facturas.controller.js';
 import { RegistroFacturaService } from '../../../src/services/registrar_facturas.services.js';
 import { ValidationError } from 'sequelize';
-
-// Mock al servicio
-jest.mock('../../../src/services/registrar_facturas.services.js');
 
 describe('RegistrarFacturasController', () => {
   let controller;

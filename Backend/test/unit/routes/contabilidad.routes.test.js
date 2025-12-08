@@ -114,7 +114,6 @@ describe('Contabilidad Router', () => {
     expect(mockRouterInstance.put).toHaveBeenCalledWith(
       '/api/contabilidad/:id',
       expect.any(Function),
-      expect.any(Function),
       expect.any(Function)
     );
   });

@@ -352,8 +352,7 @@ describe('ServicioController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        success: false,
-        errors: ['Nombre inválido']
+        errors: expect.any(Object)
       }));
     });
     

@@ -39,9 +39,20 @@ const updateProfileTechnical = (id, nameUser, lastName, phone, email) => {
   });
 }
 
+const getFichasPorTecnico = (id_tecnico) => {
+  const token = localStorage.getItem("authToken");
+  
+  return api.get(`/obtener-por-tecnico/${id_tecnico}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const technicalService = {
   getServiceAssign,
   getListVisits,
   getTechnicalId,
   updateProfileTechnical,
+  getFichasPorTecnico,
 }

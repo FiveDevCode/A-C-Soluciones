@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import FilterVisitsAd from "../../components/administrator/FilterVisitsAd";
-import { handleGetListToken } from "../../controllers/common/getListToken.controller";
 import { jwtDecode } from "jwt-decode";
-import { handleGetVisitAssign } from "../../controllers/technical/getVisitAssignTc.controller";
+import { handleGetAllVisitsAssign } from "../../controllers/technical/getVisitAssignTc.controller";
 import ListReportTc from "../../components/technical/ListReportTc";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import { useMenu } from "../../components/technical/MenuContext";
+import { technicalService } from "../../services/techical-service";
 
 const Container = styled.div`
   display: flex;
@@ -59,12 +59,12 @@ const ViewReportListPageTc = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener las fichas (reportes)
-        const reportRes = await handleGetListToken();
-        const reportList = reportRes.data;
+        // Obtener las fichas (reportes) del técnico
+        const reportRes = await technicalService.getFichasPorTecnico(idTechnical);
+        const reportList = reportRes.data.fichas || [];
 
-        // Obtener las visitas
-        const visitRes = await handleGetVisitAssign(idTechnical);
+        // Obtener las visitas (usa el token, no necesita ID)
+        const visitRes = await handleGetAllVisitsAssign();
         const allVisits = visitRes.data.data;
 
         // Crear un mapa: { id_visitas => pdf_path }
@@ -97,12 +97,12 @@ const ViewReportListPageTc = () => {
   const handleRefresh = () => {
     const fetchData = async () => {
       try {
-        // Obtener las fichas (reportes)
-        const reportRes = await handleGetListToken();
-        const reportList = reportRes.data;
+        // Obtener las fichas (reportes) del técnico
+        const reportRes = await technicalService.getFichasPorTecnico(idTechnical);
+        const reportList = reportRes.data.fichas || [];
 
-        // Obtener las visitas
-        const visitRes = await handleGetVisitAssign(idTechnical);
+        // Obtener las visitas (usa el token, no necesita ID)
+        const visitRes = await handleGetAllVisitsAssign();
         const allVisits = visitRes.data.data;
 
         // Crear un mapa: { id_visitas => pdf_path }
