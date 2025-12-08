@@ -8,6 +8,12 @@ import { TecnicoModel } from '../models/tecnico.model.js'; // Asegúrate de impo
 
 
 export const crearReporteBombeo = async (req, res) => {
+    console.log('═══════════════════════════════════════════════════════');
+    console.log('📝 INICIANDO CREACIÓN DE REPORTE DE BOMBEO');
+    console.log('Usuario autenticado:', req.user);
+    console.log('Body recibido:', JSON.stringify(req.body, null, 2));
+    console.log('═══════════════════════════════════════════════════════');
+    
     try {
         const {
             fecha,
@@ -26,19 +32,26 @@ export const crearReporteBombeo = async (req, res) => {
 
         // Validación básica
         if (!fecha || !cliente_id || !tecnico_id || !equipos || !parametrosLinea) {
+            console.log('❌ ERROR: Faltan datos requeridos');
+            console.log('Validación:', { fecha: !!fecha, cliente_id: !!cliente_id, tecnico_id: !!tecnico_id, equipos: !!equipos, parametrosLinea: !!parametrosLinea });
             return res.status(400).json({ error: 'Faltan datos requeridos (fecha, cliente_id, tecnico_id, equipos, parametrosLinea).' });
         }
 
         // Validar tipo de cliente y requisito de visita
+        console.log('🔍 Buscando cliente con ID:', cliente_id);
         const cliente = await ClienteModel.Cliente.findByPk(cliente_id);
         if (!cliente) {
+            console.log('❌ Cliente no encontrado');
             return res.status(404).json({ 
                 error: 'Cliente no encontrado' 
             });
         }
+        
+        console.log('✓ Cliente encontrado:', { id: cliente.id, nombre: cliente.nombre, tipo_cliente: cliente.tipo_cliente });
 
         // Si es cliente regular, requiere visita_id
         if (cliente.tipo_cliente === 'regular' && !visita_id) {
+            console.log('❌ ERROR: Cliente regular sin visita_id');
             return res.status(400).json({ 
                 error: 'Los clientes regulares requieren una visita asociada. Por favor seleccione una visita.' 
             });
@@ -46,10 +59,13 @@ export const crearReporteBombeo = async (req, res) => {
 
         // Si es cliente fijo, NO debe tener visita_id
         if (cliente.tipo_cliente === 'fijo' && visita_id) {
+            console.log('❌ ERROR: Cliente fijo con visita_id');
             return res.status(400).json({ 
                 error: 'Los clientes fijos no requieren visitas. Este campo debe estar vacío.' 
             });
         }
+        
+        console.log('✓ Validaciones de cliente/visita pasadas');
 
         const reporteData = {
             fecha, cliente_id, tecnico_id, administrador_id, visita_id, direccion, ciudad, telefono, encargado, observaciones_finales

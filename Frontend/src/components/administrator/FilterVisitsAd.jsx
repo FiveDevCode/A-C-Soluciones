@@ -6,7 +6,9 @@ const FilterVisitsAd = ({ visits = [], onFilteredChange }) => {
   const mappedVisits = useMemo(() => {
     return visits.map(v => ({
       ...v,
-      tecnicoNombreCompleto: `${v.tecnico_asociado.nombre} ${v.tecnico_asociado.apellido}`.toLowerCase(),
+      tecnicoNombreCompleto: v.tecnico_asociado 
+        ? `${v.tecnico_asociado.nombre} ${v.tecnico_asociado.apellido}`.toLowerCase()
+        : '',
     }));
   }, [visits]);
 
