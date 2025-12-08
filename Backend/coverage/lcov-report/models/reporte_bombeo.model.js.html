@@ -152,10 +152,31 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,7 +260,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/conexion.js'; // Asumiendo que esta es tu conexión
@@ -295,27 +337,48 @@ export const ReporteBombeo = sequelize.define('ReporteBombeo', {
     },
     direccion: {
         type: DataTypes.STRING(150),
-        allowNull: true,
-        validate: { len: [0, 150] }
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'La dirección es requerida' },
+            len: { args: [0, 150], msg: 'La dirección debe tener entre 0 y 150 caracteres' },
+            notEmpty: { msg: 'La dirección no puede estar vacía' }
+        }
     },
     ciudad: {
         type: DataTypes.STRING(100),
-        allowNull: true,
-        validate: { len: [0, 100] }
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'La ciudad es requerida' },
+            len: { args: [0, 100], msg: 'La ciudad debe tener entre 0 y 100 caracteres' },
+            notEmpty: { msg: 'La ciudad no puede estar vacía' }
+         }
     },
     telefono: {
         type: DataTypes.STRING(50),
-        allowNull: true,
-        validate: { len: [0, 50] }
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'El teléfono es requerido' },
+            len: { args: [0, 50], msg: 'El teléfono debe tener entre 0 y 50 caracteres' },
+            notEmpty: { msg: 'El teléfono no puede estar vacío' }
+         }
     },
     encargado: {
         type: DataTypes.STRING(100),
-        allowNull: true,
-        validate: { len: [0, 100] }
+        allowNull: false,
+        validate: { 
+            notNull: { msg: 'El encargado es requerido' },
+            len: { args: [0, 100], msg: 'El encargado debe tener entre 0 y 100 caracteres' },
+            notEmpty: { msg: 'El encargado no puede estar vacío' }
+&nbsp;
+         }
     },
     observaciones_finales: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false, 
+        validate:{
+            notNull: { msg: 'Las observaciones finales son requeridas' },
+&nbsp;
+        }
     },
     pdf_path: {
         type: DataTypes.STRING(255),
@@ -337,7 +400,7 @@ export const ReporteBombeoModel = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-11T21:13:03.644Z
+                at 2025-12-07T23:58:15.871Z
             </div>
         <script src="../prettify.js"></script>
         <script>
