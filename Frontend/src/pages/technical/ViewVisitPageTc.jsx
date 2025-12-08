@@ -480,7 +480,7 @@ const ViewVisitPageTc = () => {
                     try {
                       const token = localStorage.getItem('authToken');
                       const fileName = pathName.split(/[/\\]/).pop();
-                      const pdfUrl = `${API_KEY}/api/descargar/${fileName}`;
+                      const pdfUrl = `${API_KEY}/descargar/${fileName}`;
                       
                       const response = await fetch(pdfUrl, {
                         method: 'GET',
