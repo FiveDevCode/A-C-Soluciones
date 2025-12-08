@@ -18,30 +18,33 @@ import {
 
 const HomeAd = () => {
   // Cargar datos con caché
-  const { data: requests, reload: reloadRequests } = useDataCache(
+  const { data: requests, reload: reloadRequests, isLoading: loadingRequests } = useDataCache(
     'home_requests_cache',
     handleGetListRequest
   );
 
-  const { data: services, reload: reloadServices } = useDataCache(
+  const { data: services, reload: reloadServices, isLoading: loadingServices } = useDataCache(
     'home_services_cache',
     handleGetListServiceAd
   );
 
-  const { data: technicians, reload: reloadTechnicians } = useDataCache(
+  const { data: technicians, reload: reloadTechnicians, isLoading: loadingTechnicians } = useDataCache(
     'home_technicians_cache',
     handleGetListTechnical
   );
 
-  const { data: visits, reload: reloadVisits } = useDataCache(
+  const { data: visits, reload: reloadVisits, isLoading: loadingVisits } = useDataCache(
     'home_visits_cache',
     handleGetListVisitAd
   );
 
-  const { data: inventory, reload: reloadInventory } = useDataCache(
+  const { data: inventory, reload: reloadInventory, isLoading: loadingInventory } = useDataCache(
     'home_inventory_cache',
     handleGetListInventoryAd
   );
+
+  // Combinar estados de carga
+  const isLoading = loadingRequests || loadingServices || loadingTechnicians || loadingVisits || loadingInventory;
 
   // Auto-refresh global para home (recarga todos los datos)
   const reloadAll = useCallback(async () => {
@@ -131,6 +134,7 @@ const HomeAd = () => {
       emptyMessage="No tienes ninguna solicitud asignada por el momento."
       lastUpdateTime={timeAgo}
       onRefresh={manualRefresh}
+      isLoading={isLoading}
     />
   );
 };

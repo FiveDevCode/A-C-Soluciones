@@ -16,20 +16,23 @@ import {
 
 const HomeAc = () => {
   // Cargar datos con caché
-  const { data: bills, reload: reloadBills } = useDataCache(
+  const { data: bills, reload: reloadBills, isLoading: loadingBills } = useDataCache(
     'home_ac_bills_cache',
     handleGetListBillAc
   );
 
-  const { data: inventory, reload: reloadInventory } = useDataCache(
+  const { data: inventory, reload: reloadInventory, isLoading: loadingInventory } = useDataCache(
     'home_ac_inventory_cache',
     handleGetListInventoryAd
   );
 
-  const { data: paymentAccounts, reload: reloadPaymentAccounts } = useDataCache(
+  const { data: paymentAccounts, reload: reloadPaymentAccounts, isLoading: loadingAccounts } = useDataCache(
     'home_ac_accounts_cache',
     handleGetListPaymentAccountAd
   );
+
+  // Combinar estados de carga
+  const isLoading = loadingBills || loadingInventory || loadingAccounts;
 
   // Auto-refresh global para home (recarga todos los datos)
   const reloadAll = useCallback(async () => {
@@ -115,6 +118,7 @@ const HomeAc = () => {
       emptyMessage="No tienes ninguna factura asignada por el momento."
       lastUpdateTime={timeAgo}
       onRefresh={manualRefresh}
+      isLoading={isLoading}
     />
   );
 };

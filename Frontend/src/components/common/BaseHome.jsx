@@ -446,9 +446,9 @@ const BaseHome = ({
   emptyMessage = "No hay datos disponibles por el momento.",
   lastUpdateTime,
   onRefresh,
+  isLoading = false,
 }) => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   let collapsed = false;
   
   // Intentar obtener el estado del menú si es técnico
@@ -461,14 +461,6 @@ const BaseHome = ({
       collapsed = false;
     }
   }
-
-  useEffect(() => {
-    // Simular carga inicial
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [stats]);
 
   const handleProfileClick = () => {
     if (profilePath) {
