@@ -192,18 +192,37 @@ const BaseFormModal = ({
   // ========= UTILIDADES DE FORMATO DE MONEDA =========
   const formatCurrency = (value) => {
     if (!value) return "";
-    // Remover todo excepto números y coma
-    const cleanValue = value.toString().replace(/[^\d,]/g, "");
-    // Separar enteros y decimales
-    const parts = cleanValue.split(",");
-    const integerPart = parts[0];
-    const decimalPart = parts[1] !== undefined ? parts[1] : "";
+    const stringValue = value.toString();
     
-    // Formatear parte entera con puntos
-    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    // Si ya tiene coma, trabajar con eso
+    if (stringValue.includes(",")) {
+      // Remover puntos (separadores) y mantener la coma
+      const withoutSeparators = stringValue.replace(/\./g, "");
+      const parts = withoutSeparators.split(",");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return `${formattedInteger},${decimalPart}`;
+    }
     
-    // Retornar con coma decimal si existe
-    return decimalPart !== "" ? `${formattedInteger},${decimalPart}` : formattedInteger;
+    // Si tiene punto (viene del backend), convertir a formato colombiano
+    if (stringValue.includes(".")) {
+      const parts = stringValue.split(".");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return decimalPart ? `${formattedInteger},${decimalPart}` : formattedInteger;
+    }
+    
+    // Solo números enteros
+    const cleanValue = stringValue.replace(/[^\d]/g, "");
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   const parseCurrency = (value) => {
@@ -233,14 +252,16 @@ const BaseFormModal = ({
   const handleCurrencyChange = (e) => {
     const { name, value } = e.target;
     
-    // Permitir solo números, coma y borrar todo
-    const cleanValue = value.replace(/[^\d,]/g, "");
+    // Permitir solo números, puntos y coma
+    const cleanValue = value.replace(/[^\d.,]/g, "");
+    // Remover puntos (separadores de miles) para trabajar solo con el número
+    const withoutSeparators = cleanValue.replace(/\./g, "");
     
     // Prevenir múltiples comas
-    const parts = cleanValue.split(",");
+    const parts = withoutSeparators.split(",");
     const sanitizedValue = parts.length > 2 
       ? parts[0] + "," + parts.slice(1).join("") 
-      : cleanValue;
+      : withoutSeparators;
     
     // Limitar decimales a 2 dígitos
     const [integer, decimal] = sanitizedValue.split(",");
