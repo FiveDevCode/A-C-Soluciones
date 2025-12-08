@@ -66,13 +66,13 @@ const HomeAd = () => {
     const techniciansData = Array.isArray(technicians) ? (technicians?.data?.data || technicians?.data || technicians) : [];
     const visitsData = Array.isArray(visits) ? visits : (visits?.data?.data || visits?.data || []);
     const inventoryData = Array.isArray(inventory) ? inventory : [];
-
+    console.log(inventoryData);
     return {
       pendingRequests: requestsData.filter(r => r.estado === 'pendiente').length,
       totalServices: servicesData.filter(s => s.estado === 'activo' || s.estado === 'habilitado').length,
       totalTechnicians: techniciansData.filter(t => t.estado === 'activo' || t.estado === 'habilitado').length,
       totalVisits: visitsData.filter(v => v.estado === 'pendiente' || v.estado === 'programada').length,
-      totalInventory: inventoryData.filter(i => i.estado_herramienta === 'disponible').length
+      totalInventory: inventoryData.filter(i => i.estado === 'Nueva').length
     };
   }, [requests, services, technicians, visits, inventory]);
 
