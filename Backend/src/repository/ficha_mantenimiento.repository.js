@@ -26,9 +26,14 @@ export const obtenerFichasPorCliente = async (id_cliente) => {
   });
 };
 
-export const obtenerFichasPorTecnico = async (id_tecnico) => {
+export const obtenerFichasPorTecnico = async (id_tecnico, id_visitas = null) => {
+  const where = { id_tecnico };
+  if (id_visitas) {
+    where.id_visitas = id_visitas;
+  }
+  
   return await FichaModel.FichaMantenimiento.findAll({
-    where: { id_tecnico },
+    where,
     order: [['fecha_de_mantenimiento', 'DESC']]
   });
 }

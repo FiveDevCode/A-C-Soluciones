@@ -195,25 +195,93 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
     }
   }, []);
 
+  const validateForm = () => {
+    const errors = {};
+    let isValid = true;
+
+    // Validar dirección de servicio
+    const trimmedAddress = serviceAddress.trim();
+    if (!trimmedAddress) {
+      errors.direccion_servicio = 'La dirección del servicio no puede estar vacía.';
+      isValid = false;
+    } else if (trimmedAddress.length < 10) {
+      errors.direccion_servicio = 'La dirección de servicio debe tener al menos 10 caracteres.';
+      isValid = false;
+    } else if (trimmedAddress.length > 255) {
+      errors.direccion_servicio = 'La dirección de servicio no debe exceder los 255 caracteres.';
+      isValid = false;
+    }
+
+    // Validar descripción
+    const trimmedDescription = description.trim();
+    if (!trimmedDescription) {
+      errors.descripcion = 'La descripción no puede estar vacía.';
+      isValid = false;
+    } else if (trimmedDescription.length < 5) {
+      errors.descripcion = 'La descripción debe tener al menos 5 caracteres.';
+      isValid = false;
+    } else if (trimmedDescription.length > 500) {
+      errors.descripcion = 'La descripción no debe exceder los 500 caracteres.';
+      isValid = false;
+    }
+
+    // Validar comentarios (opcional pero con límite)
+    const trimmedComments = comments.trim();
+    if (trimmedComments.length > 255) {
+      errors.comentarios = 'Los comentarios no deben exceder los 255 caracteres.';
+      isValid = false;
+    }
+
+    setFieldErrors(errors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFieldErrors({});
+    setErrorMsg("");
+
+    // Validar antes de enviar
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       await handleCreateRequest(
-        serviceAddress,
-        description,
-        comments,
+        serviceAddress.trim(),
+        description.trim(),
+        comments.trim(),
         requestId,
         clientId
       );
 
       setShowSuccess(true);
       setErrorMsg("");
+      setFieldErrors({});
     } catch (err) {
       if (err.response?.data?.errors) {
-        setFieldErrors(err.response.data.errors);
+        // El backend devuelve un objeto con los errores por campo
+        const backendErrors = err.response.data.errors;
+        
+        if (Array.isArray(backendErrors)) {
+          // Compatibilidad con formato antiguo (array de mensajes)
+          const fieldErrorsMap = {};
+          backendErrors.forEach(errorMsg => {
+            if (errorMsg.includes('dirección de servicio') || errorMsg.includes('direccion_servicio')) {
+              fieldErrorsMap.direccion_servicio = errorMsg;
+            } else if (errorMsg.includes('descripción') || errorMsg.includes('descripcion')) {
+              fieldErrorsMap.descripcion = errorMsg;
+            } else if (errorMsg.includes('comentarios')) {
+              fieldErrorsMap.comentarios = errorMsg;
+            }
+          });
+          setFieldErrors(fieldErrorsMap);
+        } else {
+          // Formato nuevo: objeto con claves por campo
+          setFieldErrors(backendErrors);
+        }
       } else {
-        setErrorMsg("Hubo un error al registrar la solicitud.");
+        setErrorMsg(err.response?.data?.message || "Hubo un error al registrar la solicitud.");
       }
     }
   };
@@ -240,33 +308,54 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
             fullWidth
             size="small"
             value={serviceAddress}
-            onChange={(e) => setServiceAddress(e.target.value)}
+            onChange={(e) => {
+              setServiceAddress(e.target.value);
+              // Limpiar error del campo cuando el usuario empiece a escribir
+              if (fieldErrors.direccion_servicio) {
+                setFieldErrors(prev => ({ ...prev, direccion_servicio: undefined }));
+              }
+            }}
             error={Boolean(fieldErrors.direccion_servicio)}
-            helperText={fieldErrors.direccion_servicio}
+            helperText={fieldErrors.direccion_servicio || `${serviceAddress.trim().length}/255 caracteres (mínimo 10)`}
             multiline
             rows={2}
+            inputProps={{ maxLength: 255 }}
           />
           <StyledTextField
             label="Descripción del problema"
             fullWidth
             size="small"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              // Limpiar error del campo cuando el usuario empiece a escribir
+              if (fieldErrors.descripcion) {
+                setFieldErrors(prev => ({ ...prev, descripcion: undefined }));
+              }
+            }}
             error={Boolean(fieldErrors.descripcion)}
-            helperText={fieldErrors.descripcion}
+            helperText={fieldErrors.descripcion || `${description.trim().length}/500 caracteres (mínimo 5)`}
             multiline
             rows={3}
+            inputProps={{ maxLength: 500 }}
           />
           <StyledTextField
             label="Comentarios"
             fullWidth
             size="small"
             value={comments}
-            onChange={(e) => setComments(e.target.value)}
+            onChange={(e) => {
+              setComments(e.target.value);
+              // Limpiar error del campo cuando el usuario empiece a escribir
+              if (fieldErrors.comentarios) {
+                setFieldErrors(prev => ({ ...prev, comentarios: undefined }));
+              }
+            }}
             error={Boolean(fieldErrors.comentarios)}
-            helperText={fieldErrors.comentarios}
+            helperText={fieldErrors.comentarios || `${comments.trim().length}/255 caracteres (opcional)`}
             multiline
             rows={2}
+            inputProps={{ maxLength: 255 }}
           />
 
           {errorMsg && (
