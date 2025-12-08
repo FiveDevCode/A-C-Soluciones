@@ -37,7 +37,12 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
     { name: "numero_cuenta", label: "Número de cuenta", type: "text" },
     { name: "fecha_registro", label: "Fecha de registro", type: "date" },
     { name: "nit", label: "NIT", type: "text" },
-    { name: "id_cliente", label: "Cliente asociado", type: "select", options: clientOptions },
+    {
+      name: "id_cliente",
+      label: "Cliente asociado",
+      type: "autocomplete",
+      options: clientList.map(c => ({ value: c.id, label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}` }))
+    },
   ];
 
   const initialData = {

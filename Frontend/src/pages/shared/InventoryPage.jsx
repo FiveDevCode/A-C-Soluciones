@@ -107,7 +107,7 @@ const InventoryPage = () => {
 
 
       <Card>
-        <ListInventoyAd
+        <ListInventoryAd
           inventory={filteredInventory}
           reloadData={loadInventory}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}

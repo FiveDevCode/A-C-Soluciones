@@ -186,18 +186,12 @@ const FormCreateInventoryAd = ({ onClose, onSuccess }) => {
     { value: "manuales", label: "Manuales" },
     { value: "medicion", label: "Medición" },
   ];
-  const estados = [
-    { value: "Nueva", label: "Nueva" },
-    { value: "Dañada", label: "Dañada" },
-    { value: "En mantenimiento", label: "En mantenimiento" },
-  ];
 
   const fields = [
     { name: "nombre", label: "Nombre", type: "autocomplete", options: herramientasPredefinidas },
     { name: "codigo", label: "Código", type: "text" },
     { name: "categoria", label: "Categoría", type: "select", options: categorias },
     { name: "cantidad_disponible", label: "Cantidad", type: "number" },
-    { name: "estado", label: "Estado", type: "select", options: estados },
   ];
 
   const handleSubmit = async (data) => {

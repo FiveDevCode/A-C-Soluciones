@@ -23,15 +23,15 @@ const FormCreatePaymentAccountAd = ({ onClose, onSuccess }) => {
   // 🔹 Definición de campos del formulario
   const fields = [
     { name: "numero_cuenta", label: "Número de cuenta", type: "text" },
-    { name: "fecha_registro", label: "Fecha de registro", type: "date" },
     {
       name: "id_cliente",
       label: "Cliente",
-      type: "select",
+      type: "autocomplete",
       options: clients.map((c) => ({
         value: c.id,
-        label: `${c.nombre} ${c.apellido}`,
+        label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}`,
       })),
+      required: true
     },
     { name: "nit", label: "NIT", type: "text" },
   ];
