@@ -1,5 +1,4 @@
 import BaseTable from "../common/BaseTable";
-import ViewMaintenanceReportDetailAd from "./ViewMaintenanceReportDetailAd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -73,12 +72,7 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
         const month = String(d.getUTCMonth() + 1).padStart(2, "0");
         const year = d.getUTCFullYear();
 
-        let hours = d.getUTCHours();
-        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
-        const ampm = hours >= 12 ? "pm" : "am";
-        hours = hours % 12 || 12;
-
-        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+        return `${day}/${month}/${year}`;
       }
     },
     { header: "Ciudad", accessor: "ciudad" },
@@ -131,54 +125,7 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
       data={reports}
       columns={columns}
       emptyMessage="No hay reportes registrados"
-      ViewComponent={(props) => (
-        <ViewMaintenanceReportDetailAd {...props} />
-      )}
-      onSelectRows={onSelectRows}
-      mobileConfig={{
-        title: "fecha",
-        subtitle: "ciudad",
-        renderExtra: (row) => (
-          <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
-            <button
-              style={{
-                padding: "5px 8px",
-                background: "#2563eb",
-                color: "white",
-                borderRadius: "6px",
-                cursor: "pointer",
-                border: "none",
-                fontSize: "11px",
-                fontWeight: 600
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDownloadPDF(row);
-              }}
-            >
-              <FontAwesomeIcon icon={faDownload} /> Descargar
-            </button>
-            <button
-              style={{
-                padding: "5px 8px",
-                background: "#0f172a",
-                color: "white",
-                borderRadius: "6px",
-                cursor: "pointer",
-                border: "none",
-                fontSize: "11px",
-                fontWeight: 600
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleViewPDF(row);
-              }}
-            >
-              Ver <FontAwesomeIcon icon={faArrowRight} />
-            </button>
-          </div>
-        )
-      }}
+      
     />
   );
 };

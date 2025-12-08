@@ -35,7 +35,6 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
 
   const fields = [
     { name: "numero_cuenta", label: "Número de cuenta", type: "text" },
-    { name: "fecha_registro", label: "Fecha de registro", type: "date" },
     { name: "nit", label: "NIT", type: "text" },
     {
       name: "id_cliente",

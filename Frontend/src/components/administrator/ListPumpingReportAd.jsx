@@ -1,5 +1,4 @@
 import BaseTable from "../common/BaseTable";
-import ViewPumpingReportDetailAd from "./ViewPumpingReportDetailAd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -73,12 +72,7 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
         const month = String(d.getUTCMonth() + 1).padStart(2, "0");
         const year = d.getUTCFullYear();
 
-        let hours = d.getUTCHours();
-        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
-        const ampm = hours >= 12 ? "pm" : "am";
-        hours = hours % 12 || 12;
-
-        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+        return `${day}/${month}/${year}`;
       }
     },
     { header: "Ciudad", accessor: "ciudad" },
@@ -136,7 +130,6 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
       data={reports}
       columns={columns}
       emptyMessage="No hay reportes registrados"
-      ViewComponent={(props) => <ViewPumpingReportDetailAd {...props} />}
       onSelectRows={onSelectRows}
       mobileConfig={{
         title: "fecha",
