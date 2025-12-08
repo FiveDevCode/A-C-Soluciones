@@ -4,14 +4,16 @@ import axios from 'axios';
 const API_KEY = import.meta.env.VITE_API_URL ;
 const api = axios.create({
   baseURL: API_KEY, // La variable de entorno ya debe incluir /api
-  
+  timeout: 60000, // 60 segundos de timeout (para operaciones pesadas como PDFs con email)
 });
 
 // Agrega el token en cada request si existe
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('authToken');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    // Asegurar que el token no tenga "Bearer" ya incluido
+    const cleanToken = token.replace(/^Bearer\s+/i, '').trim();
+    config.headers.Authorization = `Bearer ${cleanToken}`;
   }
   return config;
 });
