@@ -79,7 +79,7 @@ const useAutoRefresh = (onRefresh, intervalMinutes = 3, storageKey = 'default') 
         clearInterval(intervalRef.current);
       }
     };
-  }, [onRefresh, intervalMinutes, storageKey, lastUpdate]);
+  }, [onRefresh, intervalMinutes, storageKey]);
 
   // Función para refresh manual
   const manualRefresh = async () => {

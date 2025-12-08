@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faBell, faSync } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import NotificationBell from './NotificationBell';
@@ -112,6 +112,21 @@ const HeaderRight = styled.div`
 
   @media (max-width: 768px) {
     gap: 0.5rem;
+  }
+`;
+
+const RefreshInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.95);
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -429,6 +444,8 @@ const BaseHome = ({
   notificationPath,
   profilePath,
   emptyMessage = "No hay datos disponibles por el momento.",
+  lastUpdateTime,
+  onRefresh,
 }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -487,6 +504,16 @@ const BaseHome = ({
           <p>{subtitle}</p>
         </HeaderLeft>
         <HeaderRight>
+          {lastUpdateTime && (
+            <RefreshInfo>
+              <span>{lastUpdateTime}</span>
+            </RefreshInfo>
+          )}
+          {onRefresh && (
+            <IconButton onClick={onRefresh} title="Actualizar datos">
+              <FontAwesomeIcon icon={faSync} />
+            </IconButton>
+          )}
           <NotificationBell />
           <IconButton onClick={handleProfileClick} title="Mi Perfil">
             <FontAwesomeIcon icon={faUserCircle} />
