@@ -177,7 +177,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
     {
       title: "Información General",
       fields: [
-        { name: "fecha", label: "Fecha", type: "date" },
+        { name: "fecha", label: "Fecha", type: "date", required: true },
         {
           name: "id_cliente",
           label: "Cliente",
@@ -186,6 +186,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
             value: c.id,
             label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}`,
           })),
+          required: true
         },
         {
           name: "id_tecnico",
@@ -195,20 +196,21 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
             value: t.id,
             label: `${t.numero_de_cedula} - ${t.nombre} ${t.apellido}`,
           })),
+          required: true
         },
-        { name: "ciudad", label: "Ciudad", type: "select", options: ciudadesColombia },
-        { name: "direccion", label: "Dirección", type: "text", fullWidth: true },
-        { name: "telefono", label: "Teléfono", type: "text" },
-        { name: "encargado", label: "Encargado", type: "text" },
+        { name: "ciudad", label: "Ciudad", type: "select", options: ciudadesColombia, required: true },
+        { name: "direccion", label: "Dirección", type: "text", fullWidth: true, required: true },
+        { name: "telefono", label: "Teléfono", type: "text", required: true },
+        { name: "encargado", label: "Encargado", type: "text", required: true },
       ]
     },
     {
       title: "Información del Generador",
       fields: [
-        { name: "marca_generador", label: "Marca del Generador", type: "text" },
-        { name: "modelo_generador", label: "Modelo del Generador", type: "text" },
-        { name: "kva", label: "KVA", type: "number" },
-        { name: "serie_generador", label: "Serie del Generador", type: "text" },
+        { name: "marca_generador", label: "Marca del Generador", type: "text", required: true },
+        { name: "modelo_generador", label: "Modelo del Generador", type: "text", required: true },
+        { name: "kva", label: "KVA", type: "number", required: true },
+        { name: "serie_generador", label: "Serie del Generador", type: "text", required: true },
       ]
     },
     {
@@ -222,7 +224,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
     {
       title: "Observaciones Finales",
       fields: [
-        { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true },
+        { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true, required: true },
       ]
     }
   ];

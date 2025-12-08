@@ -183,7 +183,7 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
     {
       title: "Información General",
       fields: [
-        { name: "fecha", label: "Fecha", type: "date" },
+        { name: "fecha", label: "Fecha", type: "date", required: true },
         {
           name: "cliente_id",
           label: "Cliente",
@@ -211,10 +211,10 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
           options: ciudadesColombia,
           required: true
         },
-        { name: "direccion", label: "Dirección", type: "text", fullWidth: true },
-        { name: "telefono", label: "Teléfono", type: "text" },
-        { name: "encargado", label: "Encargado", type: "text" },
-        { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true },
+        { name: "direccion", label: "Dirección", type: "text", fullWidth: true, required: true },
+        { name: "telefono", label: "Teléfono", type: "text", required: true },
+        { name: "encargado", label: "Encargado", type: "text", required: true },
+        { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true, required: true },
       ]
     },
     {
