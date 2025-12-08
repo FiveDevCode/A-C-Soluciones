@@ -153,7 +153,7 @@ export const listarReportes = async (req, res) => {
             reportes = await reporteRepo.obtenerTodosReportes(visita_id);
         } else if (rol === 'tecnico') {
             // El técnico solo ve los reportes donde es responsable
-            reportes = await reporteRepo.obtenerTodosReportes(visita_id); 
+            reportes = await reporteRepo.obtenerReportesPorTecnico(id); 
         } else if (rol === 'cliente') {
             // El cliente solo ve sus reportes
             reportes = await reporteRepo.obtenerReportesPorCliente(id); 
