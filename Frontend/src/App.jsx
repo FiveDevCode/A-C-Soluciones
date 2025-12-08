@@ -70,6 +70,8 @@ import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
 import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
+import MaintenanceReportPageTc from "./pages/technical/MaintenanceReportTc.jsx";
+import PumpingReportPageTc from "./pages/technical/PumpingReportTc.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 import MetricasPage from "./pages/administrator/MetricasPage.jsx";
 import CreateFixedClientAd from "./pages/administrator/CreateFixedClientAd.jsx";
@@ -438,6 +440,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="tecnico">
                 <NotificationPage/>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/tecnico/reporte-electrico"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <MaintenanceReportPageTc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/tecnico/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <PumpingReportPageTc />
               </PrivateRoute>
             }
           />

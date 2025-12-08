@@ -361,6 +361,8 @@ const MenuSide = () => {
       { to: '/tecnico/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/tecnico/visitas', icon: faCompass, label: 'Visitas' },
       { to: '/tecnico/reportes', icon: faFileAlt, label: 'Fichas de mantenimiento' },
+      { to: '/tecnico/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
+      { to: '/tecnico/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
     ],
 
     Contador: [
