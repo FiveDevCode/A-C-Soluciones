@@ -399,6 +399,7 @@ const BaseTable = ({
   onSelectRows, // <-- sigue funcionando individualmente
   isLoadingData = false, // <-- prop para saber si está cargando
   mobileConfig = {}, // <-- configuración para vista móvil: { title, subtitle, renderExtra }
+  clearSelectionTrigger, // <-- nueva prop para forzar limpieza de selección
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -432,6 +433,28 @@ const BaseTable = ({
       onSelectRows(selectedRows);
     }
   }, [selectedRows]);
+
+  // Limpiar selecciones cuando los datos cambian (por ejemplo, después de eliminar)
+  useEffect(() => {
+    if (selectedRows.length === 0) return;
+    
+    const selectedIds = selectedRows.map(row => row.id);
+    const currentIds = data.map(row => row.id);
+    const hasRemovedRows = selectedIds.some(id => !currentIds.includes(id));
+    
+    if (hasRemovedRows) {
+      // Mantener solo las filas que aún existen en los datos
+      const validRows = selectedRows.filter(row => currentIds.includes(row.id));
+      setSelectedRows(validRows);
+    }
+  }, [data.length, data]);
+
+  // Limpiar selecciones cuando el padre lo solicita
+  useEffect(() => {
+    if (clearSelectionTrigger !== undefined) {
+      setSelectedRows([]);
+    }
+  }, [clearSelectionTrigger]);
 
   const handleCloseEdit = () => {
     setSelectedRow(null);

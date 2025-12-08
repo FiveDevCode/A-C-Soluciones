@@ -48,6 +48,7 @@ const InventoryPage = () => {
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -66,8 +67,9 @@ const InventoryPage = () => {
       for (const id of selectedIds) {
         await handleDeleteInventory(id);
       }
-      showToast(`${selectedIds.length} herramienta(s) deshabilitada(s) correctamente`, "success", 4000);
+      showToast(`${selectedIds.length} herramientas deshabilitadas correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadInventory();
     } catch (error) {
       console.error("Error eliminando registros:", error);
@@ -105,11 +107,12 @@ const InventoryPage = () => {
 
 
       <Card>
-        <ListInventoryAd
+        <ListInventoyAd
           inventory={filteredInventory}
           reloadData={loadInventory}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

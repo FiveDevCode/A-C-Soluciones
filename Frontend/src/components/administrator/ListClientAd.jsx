@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditClientAd from "./EditClientAd";
 import ViewClientDetailAd from "./ViewClientDetailAd";
 
-const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditClientAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewClientDetailAd {...props} />, []);
   const columns = [
@@ -33,6 +33,7 @@ const ListClientAd = ({ clients, reloadData, onSelectRows, isLoadingData = false
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
         subtitle: "numero_de_cedula"

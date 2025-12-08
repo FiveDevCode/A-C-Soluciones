@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditBillAd from "./EditBillAd";
 import ViewBillDetailAd from "./ViewBillDetailAd";
 
-const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditBillAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewBillDetailAd {...props} />, []);
   const columns = [
@@ -72,9 +72,10 @@ const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false }) 
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "numero_factura",
-        subtitle: "cliente"
+        subtitle: "concepto"
       }}
     />
   );

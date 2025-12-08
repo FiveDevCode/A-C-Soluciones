@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditAdministratorAd from "./EditAdministratorAd";
 import ViewAdministratorDetailAd from "./ViewAdministratorDetailAd";
 
-const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditAdministratorAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewAdministratorDetailAd {...props} />, []);
   const columns = [
@@ -28,9 +28,10 @@ const ListAdministratorAd = ({ administrators, reloadData, onSelectRows, isLoadi
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
-        subtitle: "numero_cedula"
+        subtitle: "numero_de_cedula"
       }}
     />
   );

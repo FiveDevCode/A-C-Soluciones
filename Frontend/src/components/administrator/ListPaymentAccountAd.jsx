@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditPaymentAccountAd from "./EditPaymentAccountAd";
 import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 
-const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditPaymentAccountAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewPaymentAccountDetailAd {...props} />, []);
   const columns = [
@@ -48,9 +48,10 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
-        title: "numero_cuenta",
-        subtitle: "cliente"
+        title: "numero_de_cuenta",
+        subtitle: "banco"
       }}
     />
   );

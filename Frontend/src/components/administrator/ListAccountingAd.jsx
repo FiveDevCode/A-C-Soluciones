@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditAccountingAd from "./EditAccountingAd";
 import ViewAccountingDetailAd from "./ViewAccountingDetailAd";
 
-const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditAccountingAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewAccountingDetailAd {...props} />, []);
   const columns = [
@@ -28,6 +28,7 @@ const ListAccountingAd = ({ accountings, reloadData, onSelectRows, isLoadingData
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
         subtitle: "numero_de_cedula"

@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditServiceAd from "./EditServiceAd";
 import ViewServiceDetailAd from "./ViewServiceDetailAd";
 
-const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditServiceAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewServiceDetailAd {...props} />, []);
 
@@ -46,6 +46,7 @@ const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = fal
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
         subtitle: "descripcion"

@@ -4,7 +4,7 @@ import EditInventoryAd from "./EditInventoryAd";
 import ViewInventoryDetail from "./ViewInventoryDetailAd";
 
 
-const ListInventoryAd = ({ inventory, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListInventoyAd = ({ inventory, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditInventoryAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewInventoryDetail {...props} />, []);
   const categoryLabels = {
@@ -43,12 +43,13 @@ const ListInventoryAd = ({ inventory, reloadData, onSelectRows, isLoadingData = 
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
-        subtitle: "cantidad_disponible"
+        subtitle: "cantidad"
       }}
     />
   );
 };
 
-export default ListInventoryAd;
+export default ListInventoyAd;

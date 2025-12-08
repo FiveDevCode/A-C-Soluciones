@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import ViewRequestDetailAd from "./ViewRequestDetailAd";
 
-const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false }) => {
+const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const columns = [
     {
       header: "Descripción",
@@ -64,6 +64,7 @@ const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false }) => {
       )}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "descripcion",
         subtitle: "fecha_solicitud"

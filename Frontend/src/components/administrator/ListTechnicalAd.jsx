@@ -3,7 +3,7 @@ import BaseTable from "../common/BaseTable";
 import EditTechnicalAd from "./EditTechnicalAd";
 import ViewTechnicalDetailAd from "./ViewTechnicalDetailAd";
 
-const ListTechnicalAd = ({ technicals, reloadData, onSelectRows, isLoadingData = false }) => {
+const ListTechnicalAd = ({ technicals, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditTechnicalAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewTechnicalDetailAd {...props} />, []);
   const columns = [
@@ -28,9 +28,10 @@ const ListTechnicalAd = ({ technicals, reloadData, onSelectRows, isLoadingData =
       ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "nombre",
-        subtitle: "especialidad"
+        subtitle: "numero_de_cedula"
       }}
     />
   );

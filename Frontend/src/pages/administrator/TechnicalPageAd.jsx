@@ -50,11 +50,12 @@ const TechnicalPageAd = () => {
   const [filteredTechnicals, setFilteredTechnicals] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un técnico para eliminar.", "error", 3000);
+      showToast("Selecciona al menos un técnico para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -68,8 +69,9 @@ const TechnicalPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteTechnicalAd(id);
       }
-      showToast(`${selectedIds.length} técnico(s) eliminado(s) correctamente`, "success", 4000);
+      showToast(`${selectedIds.length} técnico(s) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadTechnicals();
     } catch (error) {
       console.error("Error eliminando técnicos:", error);
@@ -111,6 +113,7 @@ const TechnicalPageAd = () => {
           reloadData={loadTechnicals}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

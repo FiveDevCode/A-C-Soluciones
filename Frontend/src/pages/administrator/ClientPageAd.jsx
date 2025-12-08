@@ -48,6 +48,7 @@ const ClientPageAd = () => {
   const [filteredClients, setFilteredClients] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -68,6 +69,7 @@ const ClientPageAd = () => {
       }
       showToast(`${selectedIds.length} cliente(s) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadClients();
     } catch (error) {
       console.error("Error eliminando registros:", error);
@@ -114,6 +116,7 @@ const ClientPageAd = () => {
           reloadData={loadClients}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

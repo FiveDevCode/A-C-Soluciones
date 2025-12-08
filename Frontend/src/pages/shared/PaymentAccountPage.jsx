@@ -70,6 +70,7 @@ const PaymentAccountPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -90,6 +91,7 @@ const PaymentAccountPage = () => {
       }
       showToast(`${selectedIds.length} cuenta(s) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadAccounts();
     } catch (error) {
       console.error("Error al eliminar registros:", error);
@@ -130,6 +132,7 @@ const PaymentAccountPage = () => {
           reloadData={loadAccounts}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

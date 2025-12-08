@@ -48,6 +48,7 @@ const RequestPageAd = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleSelectRows = (rows) => {
@@ -74,6 +75,7 @@ const RequestPageAd = () => {
       }
       showToast(`${selectedIds.length} solicitud(es) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadRequests();
     } catch (error) {
       console.error("Error eliminando registros:", error);
@@ -112,6 +114,7 @@ const RequestPageAd = () => {
           requests={filteredRequests}
           onSelectRows={handleSelectRows}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

@@ -44,9 +44,10 @@ const AccountingPageAd = () => {
   const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounting, 3, 'accounting');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [filteredAccounting, setFilteredAccounting] = useState([]);
+  const [filteredAccountings, setFilteredAccountings] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -65,9 +66,10 @@ const AccountingPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteAccountingAd(id);
       }
-      showToast(`${selectedIds.length} empleado(s) deshabilitado(s) correctamente`, "success", 4000);
+      showToast(`${selectedIds.length} contador(es) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
-      loadAccounting();
+      setClearTrigger(prev => prev + 1);
+      loadAccountings();
     } catch (error) {
       console.error("Error eliminando registros:", error);
       showToast("Error al deshabilitar los empleados", "error", 5000);
@@ -104,10 +106,11 @@ const AccountingPageAd = () => {
 
       <Card>
         <ListAccountingAd
-          accountings={filteredAccounting}
-          reloadData={loadAccounting}
+          accountings={filteredAccountings}
+          reloadData={loadAccountings}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

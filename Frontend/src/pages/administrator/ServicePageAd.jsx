@@ -48,6 +48,7 @@ const ServicePageAd = () => {
   const [filteredServices, setFilteredServices] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -68,6 +69,7 @@ const ServicePageAd = () => {
       }
       showToast(`${selectedIds.length} servicio(s) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadServices();
     } catch (error) {
       console.error("Error eliminando registros:", error);
@@ -109,6 +111,7 @@ const ServicePageAd = () => {
           reloadData={loadServices}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

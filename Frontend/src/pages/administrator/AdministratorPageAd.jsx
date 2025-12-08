@@ -50,6 +50,7 @@ const AdministratorPageAd = () => {
   const [filteredAdministrators, setFilteredAdministrators] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -68,8 +69,9 @@ const AdministratorPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteAdministratorAd(id);
       }
-      showToast(`${selectedIds.length} administrador(es) deshabilitado(s) correctamente`, "success", 4000);
+      showToast(`${selectedIds.length} administrador(es) eliminado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadAdministrators();
     } catch (error) {
       console.error("Error deshabilitando administradores:", error);
@@ -111,6 +113,7 @@ const AdministratorPageAd = () => {
           reloadData={loadAdministrators}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 

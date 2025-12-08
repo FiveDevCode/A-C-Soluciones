@@ -73,6 +73,7 @@ const BillPage = () => {
   const [filteredBills, setFilteredBills] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
   const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
@@ -93,6 +94,7 @@ const BillPage = () => {
       }
       showToast(`${selectedIds.length} factura(s) eliminada(s) correctamente`, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadBills();
     } catch (error) {
       console.error("Error eliminando registros:", error);
@@ -128,6 +130,7 @@ const BillPage = () => {
           reloadData={loadBills}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
         />
       </Card>
 
