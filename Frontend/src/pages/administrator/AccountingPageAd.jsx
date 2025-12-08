@@ -52,7 +52,7 @@ const AccountingPageAd = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un registro para deshabilitar.", "error", 3000);
+      showToast("Selecciona al menos un contador para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -69,9 +69,8 @@ const AccountingPageAd = () => {
       showToast(`${selectedIds.length} contador(es) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
-      loadAccountings();
+      loadAccounting();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
       showToast("Error al deshabilitar los empleados", "error", 5000);
     } finally {
       setIsDeleting(false);
@@ -99,7 +98,7 @@ const AccountingPageAd = () => {
         filterComponent={
           <FilterAccountingAd
             accountings={accountings}
-            onFilteredChange={setFilteredAccounting}
+            onFilteredChange={setFilteredAccountings}
           />
         }
       />
@@ -107,7 +106,7 @@ const AccountingPageAd = () => {
       <Card>
         <ListAccountingAd
           accountings={filteredAccountings}
-          reloadData={loadAccountings}
+          reloadData={loadAccounting}
           onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
           isLoadingData={loading}
           clearSelectionTrigger={clearTrigger}
