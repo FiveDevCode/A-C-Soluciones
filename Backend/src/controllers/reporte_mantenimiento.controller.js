@@ -2,6 +2,7 @@ import { ClienteModel } from '../models/cliente.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { generarPDFReporte } from '../services/reporte_mantenimiento.services.js';
 import { sendEmail } from '../services/email.services.js';
+import { uploadPDFToCloudinary } from '../services/cloudinary.services.js';
 import * as reporteRepo from '../repository/reporte_mantenimiento.repository.js';
 import { ValidationError } from 'sequelize';
 
@@ -141,14 +142,59 @@ export const crearReporteMantenimiento = async (req, res) => {
 
     console.log('PDF generado en:', pdfPath);
 
-    // Enviar email con el PDF adjunto
+    // Subir PDF a Cloudinary
+    console.log('=== SUBIENDO PDF A CLOUDINARY ===');
+    let pdfUrl;
     try {
-      await sendEmail(
-        clienteInfo.correo,
-        'Reporte de Mantenimiento - Planta Eléctrica',
-        `Estimado/a ${clienteInfo.nombre},\n\nAdjunto encontrará el reporte de mantenimiento de su planta eléctrica realizado en fecha ${new Date(fecha).toLocaleDateString('es-CO')}.\n\nSaludos cordiales,\nA-C Soluciones`,
-        pdfPath
+      const timestamp = Date.now();
+      console.log('Llamando a uploadPDFToCloudinary con:', pdfPath);
+      const cloudinaryResult = await uploadPDFToCloudinary(
+        pdfPath,
+        `reporte_mantenimiento_${nuevoReporte.id}_${timestamp}`
       );
+      console.log('Resultado de Cloudinary:', cloudinaryResult);
+      pdfUrl = cloudinaryResult.url;
+      console.log('✅ PDF subido exitosamente a Cloudinary');
+      console.log('✅ URL asignada:', pdfUrl);
+    } catch (cloudinaryError) {
+      console.error('❌ Error al subir PDF a Cloudinary:', cloudinaryError.message);
+      console.error('Stack:', cloudinaryError.stack);
+      console.log('⚠️ Continuando con ruta local');
+      pdfUrl = pdfPath;
+    }
+
+    // Actualizar el reporte con la URL del PDF
+    console.log('Guardando en BD la URL:', pdfUrl);
+    await nuevoReporte.update({ pdf_path: pdfUrl });
+    console.log('✅ URL del PDF guardada en la base de datos');
+
+    // Enviar email al cliente
+    const correo = clienteInfo.correo;
+    const subject = 'Reporte de Mantenimiento - Planta Eléctrica';
+    
+    let emailBody;
+    let attachmentPath = null;
+
+    if (pdfUrl.includes('cloudinary.com')) {
+      emailBody = `Estimado/a ${clienteInfo.nombre},\n\nSu reporte de mantenimiento de planta eléctrica realizado el ${new Date(fecha).toLocaleDateString('es-CO')} está disponible en el siguiente enlace:\n\n${pdfUrl}\n\nSaludos cordiales,\nA-C Soluciones`;
+    } else {
+      emailBody = `Estimado/a ${clienteInfo.nombre},\n\nAdjunto encontrará el reporte de mantenimiento de su planta eléctrica realizado en fecha ${new Date(fecha).toLocaleDateString('es-CO')}.\n\nSaludos cordiales,\nA-C Soluciones`;
+      attachmentPath = pdfPath;
+    }
+
+    try {
+      const emailPromise = sendEmail(
+        correo,
+        subject,
+        emailBody,
+        attachmentPath
+      );
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Email timeout')), 25000)
+      );
+
+      await Promise.race([emailPromise, timeoutPromise]);
       console.log('Email enviado correctamente');
     } catch (emailError) {
       console.error('Error al enviar email:', emailError);
@@ -162,7 +208,7 @@ export const crearReporteMantenimiento = async (req, res) => {
         fecha: nuevoReporte.fecha,
         cliente: clienteInfo.nombre,
         tecnico: `${tecnicoInfo.nombre} ${tecnicoInfo.apellido}`,
-        pdf_generado: pdfPath,
+        pdf_generado: pdfUrl,
         parametros: parametrosCreados.length,
         verificaciones: verificacionesCreadas.length
       }
@@ -279,7 +325,13 @@ export const descargarPDF = async (req, res) => {
       return res.status(403).json({ error: 'No tiene permisos para descargar este reporte' });
     }
 
-    // Obtener información del cliente y técnico para regenerar el PDF
+    // Si el PDF está en Cloudinary, redirigir
+    if (reporte.pdf_path && reporte.pdf_path.includes('cloudinary.com')) {
+      return res.redirect(reporte.pdf_path);
+    }
+
+    // Si no está en Cloudinary, buscar el archivo local
+    // Obtener información del cliente y técnico para regenerar el PDF si es necesario
     const cliente = await ClienteModel.Cliente.findByPk(reporte.id_cliente);
     const tecnico = await TecnicoModel.Tecnico.findByPk(reporte.id_tecnico);
 

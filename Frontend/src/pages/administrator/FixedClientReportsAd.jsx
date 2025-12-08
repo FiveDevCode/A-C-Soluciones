@@ -10,10 +10,25 @@ import {
   Card as MuiCard,
   CardContent,
   Typography,
-  Alert
+  Alert,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material';
-import { FileText, Zap, Droplet } from 'lucide-react';
+import { FileText, Zap, Droplet, History, Wrench, ChevronDown } from 'lucide-react';
 import { handleGetListClient } from '../../controllers/common/getListClient.controller';
+import { administratorService } from '../../services/administrator-service';
+import { commonService } from '../../services/common-service';
 
 const Container = styled.div`
   display: flex;
@@ -111,6 +126,12 @@ const FixedClientReportsAd = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Estados para el historial
+  const [historialLoading, setHistorialLoading] = useState(false);
+  const [fichas, setFichas] = useState([]);
+  const [reportesBombeo, setReportesBombeo] = useState([]);
+  const [reportesMantenimiento, setReportesMantenimiento] = useState([]);
+
   useEffect(() => {
     loadClients();
   }, []);
@@ -138,6 +159,56 @@ const FixedClientReportsAd = () => {
 
   const handleClientChange = (event) => {
     setSelectedClient(event.target.value);
+    // Cargar historial cuando se selecciona un cliente
+    if (event.target.value) {
+      loadHistorial(event.target.value);
+    } else {
+      // Limpiar historial si se deselecciona
+      setFichas([]);
+      setReportesBombeo([]);
+      setReportesMantenimiento([]);
+    }
+  };
+
+  const loadHistorial = async (clientId) => {
+    setHistorialLoading(true);
+    try {
+      // Cargar fichas
+      const fichasResponse = await commonService.getListToken();
+      const fichasData = fichasResponse.data.fichas || fichasResponse.data || [];
+      console.log('Fichas completas:', fichasData);
+      const fichasFiltradas = fichasData.filter(f => 
+        (f.cliente_id === clientId || f.id_cliente === clientId) ||
+        (f.cliente_id === parseInt(clientId) || f.id_cliente === parseInt(clientId))
+      );
+      console.log('Fichas filtradas:', fichasFiltradas);
+      setFichas(fichasFiltradas);
+
+      // Cargar reportes de bombeo
+      const bombeoResponse = await administratorService.getListPumpingReports();
+      const bombeoData = bombeoResponse.data.reportes || bombeoResponse.data || [];
+      console.log('Reportes bombeo completos:', bombeoData);
+      const bombeoFiltrados = bombeoData.filter(r => 
+        r.cliente_id === clientId || r.cliente_id === parseInt(clientId)
+      );
+      console.log('Reportes bombeo filtrados:', bombeoFiltrados);
+      setReportesBombeo(bombeoFiltrados);
+
+      // Cargar reportes de mantenimiento
+      const mantenimientoResponse = await administratorService.getListMaintenanceReport();
+      const mantenimientoData = mantenimientoResponse.data.reportes || mantenimientoResponse.data || [];
+      console.log('Reportes mantenimiento completos:', mantenimientoData);
+      const mantenimientoFiltrados = mantenimientoData.filter(r => 
+        r.id_cliente === clientId || r.id_cliente === parseInt(clientId)
+      );
+      console.log('Reportes mantenimiento filtrados:', mantenimientoFiltrados);
+      setReportesMantenimiento(mantenimientoFiltrados);
+
+    } catch (err) {
+      console.error('Error al cargar historial:', err);
+    } finally {
+      setHistorialLoading(false);
+    }
   };
 
   const handleCreateReport = (reportType) => {
@@ -278,6 +349,189 @@ const FixedClientReportsAd = () => {
                 </CardContent>
               </ReportCard>
             </ReportGrid>
+          </Section>
+        )}
+
+        {selectedClient && (
+          <Section>
+            <SectionTitle>
+              <History size={24} />
+              Historial del Cliente
+            </SectionTitle>
+
+            {historialLoading ? (
+              <Box display="flex" justifyContent="center" padding={4}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box>
+                {/* Fichas de Mantenimiento */}
+                <Accordion defaultExpanded>
+                  <AccordionSummary expandIcon={<ChevronDown />}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Wrench size={20} color="#43a047" />
+                      <Typography variant="h6">
+                        Fichas de Mantenimiento ({fichas.length})
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {fichas.length > 0 ? (
+                      <TableContainer component={Paper} elevation={0}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                              <TableCell><strong>Fecha</strong></TableCell>
+                              <TableCell><strong>Introducción</strong></TableCell>
+                              <TableCell><strong>Estado</strong></TableCell>
+                              <TableCell><strong>PDF</strong></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {fichas.map((ficha) => (
+                              <TableRow key={ficha.id} hover>
+                                <TableCell>
+                                  {new Date(ficha.fecha_de_mantenimiento).toLocaleDateString('es-CO')}
+                                </TableCell>
+                                <TableCell>{ficha.introduccion?.substring(0, 50) || 'Sin introducción'}...</TableCell>
+                                <TableCell>
+                                  <Chip 
+                                    label={ficha.estado_maquina || 'Completado'} 
+                                    size="small" 
+                                    color="success" 
+                                  />
+                                </TableCell>
+                                <TableCell>
+                                  {ficha.pdf_path && (
+                                    <Button
+                                      size="small"
+                                      variant="outlined"
+                                      onClick={() => window.open(ficha.pdf_path, '_blank')}
+                                    >
+                                      Ver PDF
+                                    </Button>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    ) : (
+                      <Alert severity="info">No hay fichas de mantenimiento registradas</Alert>
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Reportes de Bombeo */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ChevronDown />}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Droplet size={20} color="#1976d2" />
+                      <Typography variant="h6">
+                        Reportes de Bombeo ({reportesBombeo.length})
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {reportesBombeo.length > 0 ? (
+                      <TableContainer component={Paper} elevation={0}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                              <TableCell><strong>Fecha</strong></TableCell>
+                              <TableCell><strong>Dirección</strong></TableCell>
+                              <TableCell><strong>Ciudad</strong></TableCell>
+                              <TableCell><strong>Técnico</strong></TableCell>
+                              <TableCell><strong>PDF</strong></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {reportesBombeo.map((reporte) => (
+                              <TableRow key={reporte.id} hover>
+                                <TableCell>
+                                  {new Date(reporte.fecha).toLocaleDateString('es-CO')}
+                                </TableCell>
+                                <TableCell>{reporte.direccion}</TableCell>
+                                <TableCell>{reporte.ciudad}</TableCell>
+                                <TableCell>{reporte.tecnico?.nombre || 'N/A'}</TableCell>
+                                <TableCell>
+                                  {reporte.pdf_path && (
+                                    <Button
+                                      size="small"
+                                      variant="outlined"
+                                      onClick={() => window.open(reporte.pdf_path, '_blank')}
+                                    >
+                                      Ver PDF
+                                    </Button>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    ) : (
+                      <Alert severity="info">No hay reportes de bombeo registrados</Alert>
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Reportes de Plantas Eléctricas */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ChevronDown />}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Zap size={20} color="#f57c00" />
+                      <Typography variant="h6">
+                        Reportes de Plantas Eléctricas ({reportesMantenimiento.length})
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {reportesMantenimiento.length > 0 ? (
+                      <TableContainer component={Paper} elevation={0}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                              <TableCell><strong>Fecha</strong></TableCell>
+                              <TableCell><strong>Dirección</strong></TableCell>
+                              <TableCell><strong>Ciudad</strong></TableCell>
+                              <TableCell><strong>Marca</strong></TableCell>
+                              <TableCell><strong>PDF</strong></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {reportesMantenimiento.map((reporte) => (
+                              <TableRow key={reporte.id} hover>
+                                <TableCell>
+                                  {new Date(reporte.fecha).toLocaleDateString('es-CO')}
+                                </TableCell>
+                                <TableCell>{reporte.direccion}</TableCell>
+                                <TableCell>{reporte.ciudad}</TableCell>
+                                <TableCell>{reporte.marca_generador}</TableCell>
+                                <TableCell>
+                                  {reporte.pdf_path && (
+                                    <Button
+                                      size="small"
+                                      variant="outlined"
+                                      onClick={() => window.open(reporte.pdf_path, '_blank')}
+                                    >
+                                      Ver PDF
+                                    </Button>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    ) : (
+                      <Alert severity="info">No hay reportes de plantas eléctricas registrados</Alert>
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            )}
           </Section>
         )}
       </Content>
