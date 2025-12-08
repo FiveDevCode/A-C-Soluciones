@@ -54,7 +54,7 @@ const AdministratorPageAd = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un administrador para eliminar.", "error", 3000);
+      showToast("Selecciona al menos un administrador para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -68,12 +68,12 @@ const AdministratorPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteAdministratorAd(id);
       }
-      showToast(`${selectedIds.length} administrador(es) eliminado(s) correctamente`, "success", 4000);
+      showToast(`${selectedIds.length} administrador(es) deshabilitado(s) correctamente`, "success", 4000);
       setSelectedIds([]);
       loadAdministrators();
     } catch (error) {
-      console.error("Error eliminando administradores:", error);
-      showToast("Error al eliminar los administradores", "error", 5000);
+      console.error("Error deshabilitando administradores:", error);
+      showToast("Error al deshabilitar los administradores", "error", 5000);
     } finally {
       setIsDeleting(false);
     }
@@ -95,8 +95,8 @@ const AdministratorPageAd = () => {
         lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
-        loadingMessage="Eliminando administradores..."
-        actionType="Eliminar seleccionados"
+        loadingMessage="Deshabilitando administradores seleccionados..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterAdministratorAd
             administrators={administrators}
@@ -126,7 +126,7 @@ const AdministratorPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de eliminar ${selectedIds.length} administrador${selectedIds.length > 1 ? 'es' : ''}? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} administrador${selectedIds.length > 1 ? 'es' : ''}?`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />
