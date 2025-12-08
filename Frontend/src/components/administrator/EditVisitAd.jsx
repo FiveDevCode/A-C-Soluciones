@@ -6,6 +6,7 @@ import { handleGetListRequest } from "../../controllers/administrator/getListReq
 import { handleGetListServiceAd } from "../../controllers/administrator/getListServiceAd.controller";
 import { handleUpdateVisitAd } from "../../controllers/administrator/updateVisitAd.controller";
 import DisponibilidadTecnico from "./DisponibilidadTecnico";
+import ConfirmModal from "../common/ConfirmModal";
 
 const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const selectedIdRef = useRef(selected?.id);
@@ -16,6 +17,11 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const [selectedTecnico, setSelectedTecnico] = useState(null);
   const [selectedFecha, setSelectedFecha] = useState(null);
   const [selectedDuracion, setSelectedDuracion] = useState(null);
+  const [estadoBloqueado, setEstadoBloqueado] = useState(false);
+  const [showConfirmEstado, setShowConfirmEstado] = useState(false);
+  const [nuevoEstado, setNuevoEstado] = useState(null);
+  const [estadoActual, setEstadoActual] = useState(null);
+  const [estadoAnterior, setEstadoAnterior] = useState(null);
 
 
   const formatDateTimeLocal = (isoString) => {
@@ -53,6 +59,14 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
           setSelectedTecnico(vData.tecnico_id_fk);
           setSelectedFecha(vData.fecha_programada);
           setSelectedDuracion(vData.duracion_estimada);
+          setEstadoActual(vData.estado);
+          setEstadoAnterior(vData.estado);
+          
+          // Bloquear automáticamente si ya está en estado completada o cancelada
+          const estadosCriticos = ['completada', 'cancelada'];
+          if (estadosCriticos.includes(vData.estado)) {
+            setEstadoBloqueado(true);
+          }
         }
       } catch (err) {
         console.error("Error al cargar datos:", err);
@@ -61,18 +75,17 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
 
     cargarDatos();
   }, []);
-  
-  if (!visitData) return null; // No mostrar nada mientras carga
 
-  const estadosVisita = [
+  const estadosVisita = React.useMemo(() => [
     { value: "programada", label: "Programada" },
     { value: "en_camino", label: "En camino" },
     { value: "iniciada", label: "Iniciada" },
     { value: "completada", label: "Completada" },
     { value: "cancelada", label: "Cancelada" }
-  ];
+  ], []);
 
-  const fields = [
+  // Crear fields dinámicamente para que refleje el estado actual de estadoBloqueado
+  const fields = React.useMemo(() => [
     { name: "notas_previas", label: "Notas previas", type: "textarea" },
     { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
     { 
@@ -109,48 +122,102 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
       name: "estado",
       label: "Estado",
       type: "select",
-      options: estadosVisita
+      options: estadosVisita,
+      disabled: estadoBloqueado,
+      requiresConfirmation: true
     }
-  ];
+  ], [requestList, technicalList, serviceList, selectedTecnico, estadoBloqueado, estadosVisita]);
 
-  const initialData = {
-    notas_previas: visitData.notas_previas || "",
-    notas_posteriores: visitData.notas_posteriores || "",
-    duracion_estimada: visitData.duracion_estimada || "",
-    solicitud_id_fk: visitData.solicitud_id_fk || "",
-    tecnico_id_fk: visitData.tecnico_id_fk || "",
-    servicio_id_fk: visitData.servicio_id_fk || "",
-    fecha_programada: formatDateTimeLocal(visitData.fecha_programada),
-    estado: visitData.estado || "programada",
+  // Memorizar initialData para que solo se cree una vez con visitData
+  const initialData = React.useMemo(() => {
+    if (!visitData) return {};
+    return {
+      notas_previas: visitData.notas_previas || "",
+      notas_posteriores: visitData.notas_posteriores || "",
+      duracion_estimada: visitData.duracion_estimada || "",
+      solicitud_id_fk: visitData.solicitud_id_fk || "",
+      tecnico_id_fk: visitData.tecnico_id_fk || "",
+      servicio_id_fk: visitData.servicio_id_fk || "",
+      fecha_programada: formatDateTimeLocal(visitData.fecha_programada),
+      estado: visitData.estado || "programada",
+    };
+  }, [visitData]);
+  
+  if (!visitData) return null; // No mostrar nada mientras carga
+
+  const handleConfirmEstado = () => {
+    // Confirmar el cambio de estado - no actualizar estadoActual aquí
+    // porque eso recrearía el initialData y resetearía el formulario
+    setEstadoBloqueado(true);
+    setShowConfirmEstado(false);
+  };
+
+  const handleCancelEstado = () => {
+    // Cerrar el modal sin hacer cambios
+    setShowConfirmEstado(false);
+    setNuevoEstado(null);
+  };
+
+  const handleFieldChange = (name, value) => {
+    // Actualizar estados internos
+    if (name === 'tecnico_id_fk') setSelectedTecnico(value);
+    if (name === 'fecha_programada') setSelectedFecha(value);
+    if (name === 'duracion_estimada') setSelectedDuracion(value);
+    
+    // Interceptar cambios de estado para completada y cancelada
+    if (name === 'estado' && !estadoBloqueado) {
+      const estadosQueRequierenConfirmacion = ['completada', 'cancelada'];
+      if (estadosQueRequierenConfirmacion.includes(value) && value !== visitData.estado) {
+        setNuevoEstado(value);
+        setShowConfirmEstado(true);
+      }
+    }
   };
 
   const handleSubmit = async (data) => {
+    // Si hay un estado pendiente de confirmación, no permitir submit
+    if (showConfirmEstado) {
+      return false;
+    }
+    
+    // Continuar con el submit normal
     await handleUpdateVisitAd(selectedIdRef.current, data);
   };
 
+  const getEstadoLabel = (estado) => {
+    const estadoObj = estadosVisita.find(e => e.value === estado);
+    return estadoObj ? estadoObj.label : estado;
+  };
+
   return (
-    <BaseEditModal
-      title={`Editar visita: ${visitData.tecnico?.nombre || ""} - ${visitData.servicio?.nombre || ""}`}
-      fields={fields}
-      initialData={initialData}
-      onSubmit={handleSubmit}
-      onClose={onClose}
-      onSuccess={onSuccess}
-      successMessage="¡Visita actualizada exitosamente!"
-      enableScroll={true}
-      onFieldChange={(name, value) => {
-        if (name === 'tecnico_id_fk') setSelectedTecnico(value);
-        if (name === 'fecha_programada') setSelectedFecha(value);
-        if (name === 'duracion_estimada') setSelectedDuracion(value);
-      }}
-      additionalContent={
-        <DisponibilidadTecnico 
-          tecnicoId={selectedTecnico} 
-          fecha={selectedFecha}
-          duracionEstimada={selectedDuracion}
+    <>
+      <BaseEditModal
+        title={`Editar visita: ${visitData.tecnico?.nombre || ""} - ${visitData.servicio?.nombre || ""}`}
+        fields={fields}
+        initialData={initialData}
+        onSubmit={handleSubmit}
+        onClose={onClose}
+        onSuccess={onSuccess}
+        successMessage="¡Visita actualizada exitosamente!"
+        enableScroll={true}
+        onFieldChange={handleFieldChange}
+        additionalContent={
+          <DisponibilidadTecnico 
+            tecnicoId={selectedTecnico} 
+            fecha={selectedFecha}
+            duracionEstimada={selectedDuracion}
+          />
+        }
+      />
+      
+      {showConfirmEstado && (
+        <ConfirmModal
+          message={`¿Está seguro de cambiar el estado a "${getEstadoLabel(nuevoEstado)}"? Esta acción no se puede deshacer y el campo quedará bloqueado.`}
+          onConfirm={handleConfirmEstado}
+          onCancel={handleCancelEstado}
         />
-      }
-    />
+      )}
+    </>
   );
 };
 

@@ -345,6 +345,7 @@ const BaseEditModal = ({
                 error={Boolean(fieldErrors[field.name])}
                 helperText={fieldErrors[field.name]}
                 inputProps={field.inputProps}
+                disabled={field.disabled}
                 InputLabelProps={{
                   shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
                 }}
