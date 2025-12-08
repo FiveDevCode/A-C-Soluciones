@@ -14,6 +14,7 @@ import UsuarioRouter from './routers/usuario.routes.js';
 import ServicioRouter from "./routers/servicio.routes.js"
 import SolicitudRouter from './routers/solicitud.routes.js';
 import VisitaRouter from './routers/visita.routes.js';
+import EncuestaRouter from './routers/encuesta.routes.js';
 import fichaRouter from './routers/ficha.routes.js';
 import fichaClienteRouter from './routers/ficha.routes.js';
 import FaqRouter from './routers/preguntas_frecuentes.routes.js';
@@ -82,6 +83,7 @@ App.use('/fichas', fichaClienteRouter);
 App.use(ReporteBombeoRouter);
 App.use(NotificacionRouter);
 App.use(MetricasRouter);
+App.use(EncuestaRouter);
 
 App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente puede ver su PDF
 App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
