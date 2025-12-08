@@ -124,7 +124,7 @@ const InventoryPage = () => {
       )}
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea deshabilitar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} herramienta${selectedIds.length > 1 ? 's' : ''}?`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />

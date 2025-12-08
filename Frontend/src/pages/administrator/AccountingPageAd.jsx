@@ -123,7 +123,7 @@ const AccountingPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea deshabilitar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} contador${selectedIds.length > 1 ? 'es' : ''}?`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />

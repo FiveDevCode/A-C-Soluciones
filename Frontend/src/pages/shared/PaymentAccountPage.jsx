@@ -145,7 +145,7 @@ const PaymentAccountPage = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de eliminar ${selectedIds.length} cuenta${selectedIds.length > 1 ? 's' : ''} de pago? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />

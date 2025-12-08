@@ -126,7 +126,7 @@ const AdministratorPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de eliminar ${selectedIds.length} administrador${selectedIds.length > 1 ? 'es' : ''}? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />
