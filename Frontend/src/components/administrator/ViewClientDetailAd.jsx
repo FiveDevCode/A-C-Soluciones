@@ -27,6 +27,18 @@ const ViewClientDetailAd = ({ selected, onClose }) => {
   
   if (!selected) return null;
 
+  const formatDateCO = (value) => {
+    if (!value) return "—";
+    return new Date(value).toLocaleString("es-CO", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "UTC"
+    });
+  };
+
   const fields = [
     { label: "Cédula", value: selected.numero_de_cedula },
     { label: "Nombre", value: selected.nombre },
@@ -34,6 +46,7 @@ const ViewClientDetailAd = ({ selected, onClose }) => {
     { label: "Teléfono", value: selected.telefono },
     { label: "Dirección", value: selected.direccion },
     { label: "Correo electrónico", value: selected.correo_electronico },
+    { label: "Fecha de registro", value: formatDateCO(selected.fecha_registro) },
     { label: "Tipo de Cliente", value: tipoClienteLabels[selected.tipo_cliente] || selected.tipo_cliente, isBadge: true },
     { label: "Estado", value: stateLabels[selected.estado] || selected.estado, isBadge: true },
   ];
