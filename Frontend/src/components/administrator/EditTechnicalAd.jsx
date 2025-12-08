@@ -130,6 +130,11 @@ const EditTechnicalAd = ({ selected, onClose, onSuccess }) => {
     { value: "inactivo", label: "Inactivo" },
   ];
 
+  const especialidadesOptions = ESPECIALIDADES_HIDROELECTRICAS.map(esp => ({
+    value: esp,
+    label: esp
+  }));
+
   const fields = [
     { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
     { name: "nombre", label: "Nombre", type: "text", required: true },
@@ -139,7 +144,7 @@ const EditTechnicalAd = ({ selected, onClose, onSuccess }) => {
       name: "especialidad", 
       label: "Especialidad", 
       type: "autocomplete",
-      options: ESPECIALIDADES_HIDROELECTRICAS,
+      options: especialidadesOptions,
       required: true
     },
     { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 }, required: true },

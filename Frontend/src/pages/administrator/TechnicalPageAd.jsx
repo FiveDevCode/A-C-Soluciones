@@ -95,8 +95,8 @@ const TechnicalPageAd = () => {
         lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         isLoading={isDeleting}
-        loadingMessage="Eliminando técnicos..."
-        actionType="Eliminar seleccionados"
+        loadingMessage="Deshabilitando técnicos seleccionados..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterTechnicalsAd
             technicals={technicals}
@@ -126,7 +126,7 @@ const TechnicalPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} técnico${selectedIds.length > 1 ? 's' : ''}?`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />
