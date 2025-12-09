@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetAdminId } from "../../controllers/administrator/getAdminIdAd.controller";
 import { handleUpdateAdmin } from "../../controllers/administrator/updateAdminAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [adminData, setAdminData] = useState(null);
 
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const response = await handleGetAdminId(selected.id);
+        const response = await handleGetAdminId(selectedIdRef.current);
         setAdminData(response.data);
       } catch (error) {
         console.error("Error al cargar administrador:", error);
       }
     };
-    if (selected?.id) fetchAdmin();
-  }, [selected]);
+    if (selectedIdRef.current) fetchAdmin();
+  }, []);
 
   if (!adminData) return null;
 
@@ -43,7 +44,7 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateAdmin(selected.id, data.numero_cedula, data.nombre, data.apellido, data.correo_electronico, data.estado);
+    await handleUpdateAdmin(selectedIdRef.current, data.numero_cedula, data.nombre, data.apellido, data.correo_electronico, data.estado);
   };
 
   return (
@@ -59,4 +60,4 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditAdministratorAd;
+export default React.memo(EditAdministratorAd);

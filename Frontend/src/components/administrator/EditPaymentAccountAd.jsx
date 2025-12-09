@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetPaymentAccountAd } from "../../controllers/administrator/getPaymentAccountAd.controller";
 import { handleUpdatePaymentAccountAd } from "../../controllers/administrator/updatePaymentAccountAd.controller";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
@@ -6,6 +6,7 @@ import accountIcon from "../../assets/administrator/registerPaymentAccount.png";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [accountData, setAccountData] = useState(null);
   const [clientList, setClientList] = useState([]);
 
@@ -13,7 +14,7 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
     const fetchData = async () => {
       try {
         const [accountRes, clientsRes] = await Promise.all([
-          handleGetPaymentAccountAd(selected.id),
+          handleGetPaymentAccountAd(selectedIdRef.current),
           handleGetListClient(),
         ]);
         setAccountData(accountRes.data);
@@ -22,8 +23,8 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
         console.error("Error al cargar datos de cuenta:", error);
       }
     };
-    if (selected?.id) fetchData();
-  }, [selected]);
+    if (selectedIdRef.current) fetchData();
+  }, []);
 
   if (!accountData) return null;
 
@@ -34,9 +35,13 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
 
   const fields = [
     { name: "numero_cuenta", label: "Número de cuenta", type: "text" },
-    { name: "fecha_registro", label: "Fecha de registro", type: "date" },
     { name: "nit", label: "NIT", type: "text" },
-    { name: "id_cliente", label: "Cliente asociado", type: "select", options: clientOptions },
+    {
+      name: "id_cliente",
+      label: "Cliente asociado",
+      type: "autocomplete",
+      options: clientList.map(c => ({ value: c.id, label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}` }))
+    },
   ];
 
   const initialData = {
@@ -49,7 +54,7 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdatePaymentAccountAd(selected.id, data);
+    await handleUpdatePaymentAccountAd(selectedIdRef.current, data);
   };
 
   return (
@@ -66,4 +71,4 @@ const EditPaymentAccountAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditPaymentAccountAd;
+export default React.memo(EditPaymentAccountAd);

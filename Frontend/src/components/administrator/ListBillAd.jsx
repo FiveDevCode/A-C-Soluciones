@@ -1,8 +1,12 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditBillAd from "./EditBillAd";
 import ViewBillDetailAd from "./ViewBillDetailAd";
 
-const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
+const ListBillAd = ({ bills, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
+  const EditComponentMemo = useCallback((props) => <EditBillAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewBillDetailAd {...props} />, []);
+  
   const columns = [
     {
       header: "Número de factura",
@@ -17,7 +21,7 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
       accessor: "cliente",
       render: (value) => {
         if (!value) return "Sin cliente vinculado";
-        const fullName = `${value.nombre || ""} ${value.apellido || ""}`.trim();
+        const fullName = `${value.numero_de_cedula || ""} - ${value.nombre || ""} ${value.apellido || ""}`.trim();
         return fullName || "Sin nombre";
       }
     },
@@ -26,8 +30,17 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
       accessor: "fecha_factura",
       render: (value) => {
         if (!value) return "—";
-        const date = new Date(value);
-        return date.toLocaleDateString("es-CO");
+        
+        const d = new Date(value);
+        
+        // Restar 5 horas para Colombia (UTC-5)
+        const colombiaTime = new Date(d.getTime() - (5 * 60 * 60 * 1000));
+        
+        const day = String(colombiaTime.getUTCDate()).padStart(2, "0");
+        const month = String(colombiaTime.getUTCMonth() + 1).padStart(2, "0");
+        const year = colombiaTime.getUTCFullYear();
+
+        return `${day}/${month}/${year}`;
       }
     },   
     {
@@ -55,16 +68,14 @@ const ListBillAd = ({ bills, reloadData, onSelectRows }) => {
       columns={columns}
       getBadgeValue={(row) => row.estado_factura}
       emptyMessage="No hay facturas registradas"
-      EditComponent={(props) => (
-        <EditBillAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewBillDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "numero_factura",
-        subtitle: "cliente"
+        subtitle: "concepto"
       }}
     />
   );

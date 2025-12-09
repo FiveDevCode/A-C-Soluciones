@@ -2,16 +2,43 @@ import { Button } from '@mui/material'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 
-import logoHome from '../../assets/client/backgroundHome.png'
-import logoHome1 from '../../assets/client/backgroundHome1.png'
-import logoHome2 from '../../assets/client/backgroundHome2.png'
 import { Link } from 'react-router-dom'
 
-const images = [logoHome, logoHome1, logoHome2]
+// Import all images from the new background folder
+import home1 from '../../assets/common/background/home1.jpg'
+import home2 from '../../assets/common/background/home2.jpg'
+import home3 from '../../assets/common/background/home3.jpg'
+import home4 from '../../assets/common/background/home4.jpg'
+import home5 from '../../assets/common/background/home5.jpg'
+import home6 from '../../assets/common/background/home6.jpg'
+import home7 from '../../assets/common/background/home7.jpg'
+import home8 from '../../assets/common/background/home8.jpg'
+import home9 from '../../assets/common/background/home9.jpg'
+import home10 from '../../assets/common/background/home10.jpg'
+import home11 from '../../assets/common/background/home11.jpg'
+
+const images = [
+  home1, home2, home3, home4, home5, home6, home7, home8, home9, home10, home11
+]
+
+// Posiciones específicas para cada imagen
+const imagePositions = [
+  'top',    // home1 - parte de arriba
+  'center', // home2
+  'center', // home3
+  'center', // home4
+  '15%',    // home5 - un poco más abajo que top
+  'bottom', // home6 - parte de abajo
+  'center', // home7
+  'center', // home8
+  'center', // home9
+  'center', // home10
+  'center'  // home11
+]
 
 const BackgroundWrapper = styled.div`
   position: relative;
-  height: 430px;
+  height: 500px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -136,11 +163,7 @@ const BackgroundHome = () => {
           key={index}
           $background={img}
           $active={index === currentImage}
-          $shift={
-            index === 1 ? '30%' :
-            index === 2 ? '20%' :    
-            'center'                 
-          }
+          $shift={imagePositions[index]}
         />
       ))}
       <Content>
@@ -148,7 +171,14 @@ const BackgroundHome = () => {
         <CompanyPhrase>
           Expertos en reparaciones hidroeléctricas: pequeña empresa, gran ingeniería.
         </CompanyPhrase>
-        <ButtonService variant="contained" LinkComponent={Link} to="/iniciar-sesion">Ver nuestros servicios</ButtonService>
+        <ButtonService 
+          variant="contained" 
+          LinkComponent={Link} 
+          to="/iniciar-sesion"
+          state={{ message: "Para ver nuestros servicios debes iniciar sesión o crear una cuenta" }}
+        >
+          Ver nuestros servicios
+        </ButtonService>
       </Content>
     </BackgroundWrapper>
   )

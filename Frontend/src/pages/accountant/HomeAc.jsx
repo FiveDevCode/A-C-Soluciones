@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import BaseHome from "../../components/common/BaseHome";
 import { ActivityListAc } from "../../components/accountant/ActivityListAc";
 import { handleGetListBillAc } from "../../controllers/accountant/getListBillAc.controller";
 import { handleGetListPaymentAccountAd } from "../../controllers/administrator/getListPaymentAccountAd.controller";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
+import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { 
   faFileInvoiceDollar, 
   faBoxes,
@@ -13,62 +15,50 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const HomeAc = () => {
-  const [bills, setBills] = useState([]);
-  const [statsData, setStatsData] = useState({
-    totalBills: 0,
-    pendingBills: 0,
-    paidBills: 0,
-    totalInventory: 0,
-    totalAccounts: 0
-  });
+  // Cargar datos con caché
+  const { data: bills, reload: reloadBills, isLoading: loadingBills } = useDataCache(
+    'home_ac_bills_cache',
+    handleGetListBillAc
+  );
 
-  useEffect(() => {
-    // Cargar facturas
-    handleGetListBillAc()
-      .then((res) => {
-        const billsData = res.data || [];
-        setBills(billsData);
-        
-        if (Array.isArray(billsData)) {
-          const total = billsData.length;
-          const pending = billsData.filter(b => b.estado_factura === 'pendiente' || b.estado_factura === 'sin pagar').length;
-          const paid = billsData.filter(b => b.estado_factura === 'pagado' || b.estado_factura === 'pagada').length;
-          
-          setStatsData(prev => ({ 
-            ...prev, 
-            totalBills: total,
-            pendingBills: pending,
-            paidBills: paid
-          }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error obteniendo las facturas", err);
-        setBills([]);
-      });
+  const { data: inventory, reload: reloadInventory, isLoading: loadingInventory } = useDataCache(
+    'home_ac_inventory_cache',
+    handleGetListInventoryAd
+  );
 
-    // Cargar inventario total
-    handleGetListInventoryAd()
-      .then((inventory) => {
-        if (Array.isArray(inventory)) {
-          setStatsData(prev => ({ ...prev, totalInventory: inventory.length }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar inventario:", err);
-      });
+  const { data: paymentAccounts, reload: reloadPaymentAccounts, isLoading: loadingAccounts } = useDataCache(
+    'home_ac_accounts_cache',
+    handleGetListPaymentAccountAd
+  );
 
-    // Cargar cuentas de pago registradas
-    handleGetListPaymentAccountAd()
-      .then((payments) => {
-        if (Array.isArray(payments)) {
-          setStatsData(prev => ({ ...prev, totalAccounts: payments.length }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar cuentas:", err);
-      });
-  }, []);
+  // Combinar estados de carga
+  const isLoading = loadingBills || loadingInventory || loadingAccounts;
+
+  // Auto-refresh global para home (recarga todos los datos)
+  const reloadAll = useCallback(async () => {
+    await Promise.all([
+      reloadBills(),
+      reloadInventory(),
+      reloadPaymentAccounts()
+    ]);
+  }, [reloadBills, reloadInventory, reloadPaymentAccounts]);
+
+  const { timeAgo, manualRefresh } = useAutoRefresh(reloadAll, 3, 'home_ac');
+
+  // Calcular estadísticas desde los datos cacheados
+  const statsData = useMemo(() => {
+    const billsData = Array.isArray(bills) ? bills : (bills?.data || []);
+    const inventoryData = Array.isArray(inventory) ? inventory : [];
+    const accountsData = Array.isArray(paymentAccounts) ? paymentAccounts : [];
+
+    return {
+      totalBills: billsData.length,
+      pendingBills: billsData.filter(b => b.estado_factura === 'pendiente' || b.estado_factura === 'sin pagar').length,
+      paidBills: billsData.filter(b => b.estado_factura === 'pagado' || b.estado_factura === 'pagada').length,
+      totalInventory: inventoryData.length,
+      totalAccounts: accountsData.length
+    };
+  }, [bills, inventory, paymentAccounts]);
 
   const stats = [
     {
@@ -108,6 +98,8 @@ const HomeAc = () => {
     }
   ];
 
+  const billsArray = Array.isArray(bills) ? bills : (bills?.data || []);
+
   return (
     <BaseHome
       title="Panel de Contabilidad"
@@ -117,13 +109,16 @@ const HomeAc = () => {
       sectionTitle="Facturas Recientes"
       sectionGradient="linear-gradient(135deg, #00b894 0%, #00cec9 100%)"
       activityComponent={
-        !Array.isArray(bills) || bills.length === 0 ? null : (
-          <ActivityListAc bills={bills} />
+        billsArray.length === 0 ? null : (
+          <ActivityListAc bills={billsArray} />
         )
       }
       notificationCount={2}
       notificationPath="/contador/notificaciones"
       emptyMessage="No tienes ninguna factura asignada por el momento."
+      lastUpdateTime={timeAgo}
+      onRefresh={manualRefresh}
+      isLoading={isLoading}
     />
   );
 };

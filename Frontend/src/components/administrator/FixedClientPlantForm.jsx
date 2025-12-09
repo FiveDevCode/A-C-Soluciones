@@ -316,6 +316,12 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
       const token = localStorage.getItem("authToken");
       const decoded = jwtDecode(token);
 
+      console.log('🔍 [FRONTEND] Enviando reporte con:', {
+        id_cliente: clientData.id,
+        id_cliente_parseado: parseInt(clientData.id),
+        clientData_completo: clientData
+      });
+
       await handleCreateMaintenanceReportAd({
         fecha: formData.fecha,
         id_cliente: parseInt(clientData.id),

@@ -1,10 +1,9 @@
 
-import { Button, InputAdornment, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import styled from "styled-components";
 import Logo from "../common/Logo";
 import logo from "../../assets/common/logoA&C.png"
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 
 
@@ -133,12 +132,12 @@ const MenuOption = styled.div`
 
 const LinkOption = styled(Link)`
   text-decoration: none;
-  color: #000000;
+  color: #4A90E2;
   font-weight: 500;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #007BFF;
+    color: #6BA3E8;
   }
 
   @media (min-width: 769px) and (max-width: 1350px) {
@@ -161,7 +160,6 @@ const ButtonProfile = styled(Link)`
 
 const HeaderBarHome = () => {
 
-  const navigate = useNavigate();
   
   return (
     <ContainerHeader>
@@ -177,7 +175,12 @@ const HeaderBarHome = () => {
         </Link> 
         <MenuOption>
           <LinkOption to="/acerca-de-nosotros">Acerca de nosotros</LinkOption>
-          <LinkOption to="/iniciar-sesion">Servicios</LinkOption>
+          <LinkOption 
+            to="/iniciar-sesion" 
+            state={{ message: "Para ver nuestros servicios debes iniciar sesión o crear una cuenta" }}
+          >
+            Servicios
+          </LinkOption>
         </MenuOption>
 
 

@@ -7,6 +7,8 @@ const visitaController = new VisitaController();
 
 // Rutas protegidas para administradores
 router.post('/api/visitas', authenticate, isAdmin, visitaController.crearVisita);
+// Obtener disponibilidad de técnico
+router.get('/api/visitas/disponibilidad/tecnico', authenticate, isAdmin, visitaController.obtenerDisponibilidadTecnico);
 // Obtener servicios asignados a un técnico autenticado
 router.get('/api/visitas/asignados', authenticate, isTecnico, visitaController.obtenerServiciosAsignados);
 router.get('/api/visitas/asignados/:id', authenticate, isTecnico, visitaController.obtenerServicioAsignadoPorId);

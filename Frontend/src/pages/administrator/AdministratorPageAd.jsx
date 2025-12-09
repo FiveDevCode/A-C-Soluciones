@@ -8,6 +8,8 @@ import { handleGetListAdministrator } from "../../controllers/administrator/getA
 import { handleDeleteAdministratorAd } from "../../controllers/administrator/deleteAdministratorAd.controller";
 import FilterAdministratorAd from "../../components/administrator/FilterAdministratorAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -42,33 +44,50 @@ const AdministratorPageAd = () => {
       return res.data;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAdministrators, 3, 'administrators');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredAdministrators, setFilteredAdministrators] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un administrador para eliminar.");
+      showToast("Selecciona al menos un administrador para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteAdministratorAd(id);
       }
-      alert("Administradores eliminados correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 administrador eliminado correctamente"
+        : `${cantidad} administradores eliminados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadAdministrators();
     } catch (error) {
-      console.error("Error eliminando administradores:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar los administradores", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -79,29 +98,28 @@ const AdministratorPageAd = () => {
         addLabel="Agregar administrador"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAdministrators}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando administradores seleccionados..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterAdministratorAd
             administrators={administrators}
             onFilteredChange={setFilteredAdministrators}
           />
         }
-        actionType="Eliminar seleccionados"
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando administradores...
-          </p>
-        ) : (
-          <ListAdministratorAd
-            administrators={filteredAdministrators}
-            reloadData={loadAdministrators}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListAdministratorAd
+          administrators={filteredAdministrators}
+          reloadData={loadAdministrators}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showModal && (
@@ -116,9 +134,9 @@ const AdministratorPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} administrador(es)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} administrador${selectedIds.length > 1 ? 'es' : ''}?`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

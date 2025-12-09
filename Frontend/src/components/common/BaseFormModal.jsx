@@ -4,13 +4,13 @@ import {
   TextField,
   MenuItem,
   Button,
-  Collapse,
-  Alert,
   IconButton,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useToastContext } from "../../contexts/ToastContext";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -148,9 +148,38 @@ const BaseFormModal = ({
   successMessage = "Guardado exitosamente",
   customFormData,
   onFormDataChange,
+  onFieldChange,
   extraContent,
+  additionalContent,
   renderStepContent,
 }) => {
+
+
+  const validateTimeRange = (datetimeValue, minHour = 8, maxHour = 18) => {
+    if (!datetimeValue) return datetimeValue;
+    
+    const date = new Date(datetimeValue);
+    const hours = date.getHours();
+    
+    // Si está fuera del rango, ajustar a la hora más cercana válida
+    if (hours < minHour) {
+      date.setHours(minHour, 0, 0, 0);
+    } else if (hours >= maxHour) {
+      date.setHours(maxHour - 1, 59, 0, 0);
+    }
+    
+    // Convertir de vuelta a formato datetime-local (YYYY-MM-DDTHH:mm)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+  };
+
+
+
 
   // ========= DETECCIÓN DE MULTIPASOS =========
   const isMultiStep = Array.isArray(steps) && steps.length > 0;
@@ -166,6 +195,8 @@ const BaseFormModal = ({
   const allFields = normalizedSteps.flatMap((s) => s.fields);
 
   // ========= ESTADOS PRINCIPALES =========
+  const { showToast } = useToastContext();
+
   const [formData, setFormData] = useState(
     customFormData || Object.fromEntries(
       allFields
@@ -182,12 +213,53 @@ const BaseFormModal = ({
     )
   );
 
-  const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+
+  // ========= UTILIDADES DE FORMATO DE MONEDA =========
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    const stringValue = value.toString();
+    
+    // Si ya tiene coma, trabajar con eso
+    if (stringValue.includes(",")) {
+      // Remover puntos (separadores) y mantener la coma
+      const withoutSeparators = stringValue.replace(/\./g, "");
+      const parts = withoutSeparators.split(",");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return `${formattedInteger},${decimalPart}`;
+    }
+    
+    // Si tiene punto (viene del backend), convertir a formato colombiano
+    if (stringValue.includes(".")) {
+      const parts = stringValue.split(".");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return decimalPart ? `${formattedInteger},${decimalPart}` : formattedInteger;
+    }
+    
+    // Solo números enteros
+    const cleanValue = stringValue.replace(/[^\d]/g, "");
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const parseCurrency = (value) => {
+    if (!value) return "";
+    // Remover puntos (separadores de miles) y reemplazar coma por punto para el valor numérico
+    return value.toString().replace(/\./g, "").replace(",", ".");
+  };
 
   // ========= HANDLE CHANGE =========
+  // ========= HANDLE CHANGE (MODIFICADO) =========
   const handleChange = (e) => {
     const { name, value, files: fileInput } = e.target;
 
@@ -199,11 +271,59 @@ const BaseFormModal = ({
       return;
     }
 
-    const newFormData = { ...formData, [name]: value };
+    // Buscar el campo para verificar si tiene restricciones de tiempo
+    const field = allFields.find(f => f.name === name);
+    let processedValue = value;
+    
+    // Si es datetime-local y tiene timeRange, validar el horario
+    if (field?.type === "datetime-local" && field?.timeRange) {
+      const { minHour = 8, maxHour = 18 } = field.timeRange;
+      processedValue = validateTimeRange(value, minHour, maxHour);
+      
+      // Si el valor fue ajustado, mostrar una advertencia
+      if (processedValue !== value) {
+        const hours = new Date(value).getHours();
+        if (hours < minHour) {
+          showToast(`La hora mínima permitida es ${minHour}:00`, "warning", 3000);
+        } else if (hours >= maxHour) {
+          showToast(`La hora máxima permitida es ${maxHour - 1}:59`, "warning", 3000);
+        }
+      }
+    }
+
+    const newFormData = { ...formData, [name]: processedValue };
     setFormData(newFormData);
     onFormDataChange?.(newFormData);
+    onFieldChange?.(name, processedValue);
+  };
 
-    if (showSuccess) setShowSuccess(false);
+  const handleCurrencyChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Permitir solo números, puntos y coma
+    const cleanValue = value.replace(/[^\d.,]/g, "");
+    // Remover puntos (separadores de miles) para trabajar solo con el número
+    const withoutSeparators = cleanValue.replace(/\./g, "");
+    
+    // Prevenir múltiples comas
+    const parts = withoutSeparators.split(",");
+    const sanitizedValue = parts.length > 2 
+      ? parts[0] + "," + parts.slice(1).join("") 
+      : withoutSeparators;
+    
+    // Limitar decimales a 2 dígitos
+    const [integer, decimal] = sanitizedValue.split(",");
+    const limitedValue = decimal !== undefined && decimal.length > 2
+      ? `${integer},${decimal.substring(0, 2)}`
+      : sanitizedValue;
+    
+    // Formatear con puntos para visualización
+    const formattedValue = formatCurrency(limitedValue);
+    
+    const newFormData = { ...formData, [name]: formattedValue };
+    setFormData(newFormData);
+    onFormDataChange?.(newFormData);
+    onFieldChange?.(name, parseCurrency(formattedValue));
   };
 
   // ========= RESET =========
@@ -224,31 +344,53 @@ const BaseFormModal = ({
       )
     );
 
-    setErrorMsg("");
     setFieldErrors({});
   };
 
   // ========= SUBMIT FINAL =========
   const handleSubmitFinal = async () => {
+    // Validar campos requeridos
+    const errors = {};
+    allFields.forEach((field) => {
+      if (field.required && (!formData[field.name] || formData[field.name] === "")) {
+        errors[field.name] = `${field.label} es obligatorio`;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      showToast("Por favor, complete todos los campos obligatorios", "error", 5000);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      await onSubmit({ ...formData, ...files });
+      // Parsear campos de tipo currency antes de enviar
+      const parsedFormData = { ...formData };
+      allFields.forEach((field) => {
+        if (field.type === "currency" && parsedFormData[field.name]) {
+          parsedFormData[field.name] = parseCurrency(parsedFormData[field.name]);
+        }
+      });
+
+      await onSubmit({ ...parsedFormData, ...files });
 
       handleReset();
-      setShowSuccess(true);
-
-      setTimeout(() => {
-        setShowSuccess(false);
-        onSuccess?.();
-      }, 1800);
+      
+      // Llamar a onSuccess ANTES de cerrar para recargar datos
+      if (onSuccess) {
+        await onSuccess();
+      }
+      
+      onClose();
+      showToast(successMessage, "success", 4000);
     } catch (err) {
-      setShowSuccess(false);
-
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+        showToast("Error en los campos del formulario", "error", 5000);
       } else {
-        setErrorMsg(err.response?.data?.message || "Error al guardar");
+        showToast(err.response?.data?.message || "Error al guardar", "error", 5000);
       }
     } finally {
       setIsSubmitting(false);
@@ -296,11 +438,90 @@ const BaseFormModal = ({
               </div>
             )}
           </>
+        ) : field.type === "autocomplete" ? (
+          <Autocomplete
+            freeSolo={false}
+            options={field.options || []}
+            value={
+              // Buscar el objeto completo basado en el value almacenado
+              field.options?.find(opt => opt.value === formData[field.name]) || null
+            }
+            onChange={(event, newValue) => {
+              // Extraer solo el value del objeto seleccionado
+              const extractedValue = newValue?.value || "";
+              const syntheticEvent = {
+                target: {
+                  name: field.name,
+                  value: extractedValue,
+                },
+              };
+              handleChange(syntheticEvent);
+            }}
+            filterOptions={(options, { inputValue }) => {
+              if (!inputValue) return options;
+              
+              // Función para normalizar texto (quitar tildes y convertir a minúsculas)
+              const normalizeText = (text) => {
+                return text
+                  .toLowerCase()
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '');
+              };
+              
+              // Normalizar el input de búsqueda
+              const searchTerm = normalizeText(inputValue.trim());
+              
+              // Si es una búsqueda muy corta (1-2 caracteres), buscar coincidencia exacta
+              if (searchTerm.length <= 2) {
+                return options.filter(option => 
+                  normalizeText(option.label).includes(searchTerm)
+                );
+              }
+              
+              // Para búsquedas más largas, separar en palabras (ignorando palabras comunes)
+              const palabrasIgnoradas = ['de', 'del', 'la', 'el', 'los', 'las', 'y', 'o', 'para', 'con', 'sin', 'en', 'a', 'un', 'una'];
+              const palabrasBusqueda = searchTerm
+                .split(/\s+/)
+                .filter(palabra => palabra.length > 1 && !palabrasIgnoradas.includes(palabra));
+              
+              if (palabrasBusqueda.length === 0) {
+                return options.filter(option => 
+                  normalizeText(option.label).includes(searchTerm)
+                );
+              }
+              
+              // Buscar opciones que contengan AL MENOS UNA palabra clave (como YouTube)
+              return options.filter(option => {
+                const textoOpcion = normalizeText(option.label);
+                return palabrasBusqueda.some(palabra => textoOpcion.includes(palabra));
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.value === value?.value}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={field.label}
+                size="small"
+                error={Boolean(fieldErrors[field.name])}
+                helperText={fieldErrors[field.name]}
+              />
+            )}
+            ListboxProps={{
+              style: { zIndex: 99999 }
+            }}
+            componentsProps={{
+              popper: {
+                style: { zIndex: 99999 }
+              }
+            }}
+          />
         ) : (
           <TextField
             select={field.type === "select"}
             type={
-              field.type === "number"
+              field.type === "currency"
+                ? "text"
+                : field.type === "number"
                 ? "number"
                 : field.type === "date"
                 ? "date"
@@ -315,9 +536,21 @@ const BaseFormModal = ({
             multiline={field.type === "textarea"}
             rows={field.type === "textarea" ? 3 : undefined}
             value={formData[field.name]}
-            onChange={handleChange}
+            onChange={field.type === "currency" ? handleCurrencyChange : handleChange}
             error={Boolean(fieldErrors[field.name])}
-            helperText={fieldErrors[field.name]}
+            helperText={fieldErrors[field.name] || (field.type === "datetime-local" && field.timeRange ? `Horario permitido: ${field.timeRange.minHour || 8}:00 - ${field.timeRange.maxHour || 18}:00` : "")}
+            disabled={field.disabled || false}
+            inputProps={{
+              ...field.inputProps,
+              ...(field.type === "currency" && {
+                placeholder: "0"
+              }),
+              // Agregar min/max para datetime-local si tiene timeRange
+              ...(field.type === "datetime-local" && field.timeRange && {
+                // Esto ayuda visualmente pero la validación real está en handleChange
+                step: "60", // Pasos de 1 minuto
+              })
+            }}
             InputLabelProps={{
               shrink:
                 field.type === "date" ||
@@ -348,6 +581,7 @@ const BaseFormModal = ({
   };
 
   return (
+    <>
     <ModalOverlay onClick={onClose}>
       <Modal onClick={(e) => e.stopPropagation()}>
         <Header>
@@ -391,30 +625,8 @@ const BaseFormModal = ({
               </FormGrid>
               {/* Contenido extra para formularios simples */}
               {extraContent}
+              {additionalContent}
             </>
-          )}
-
-          {/* Errores */}
-          <Collapse in={!!errorMsg}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton onClick={() => setErrorMsg("")} size="small">
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mt: 2 }}
-            >
-              {errorMsg}
-            </Alert>
-          </Collapse>
-
-          {showSuccess && (
-            <Collapse in={showSuccess}>
-              <Alert severity="success" sx={{ mt: 2 }}>
-                {successMessage}
-              </Alert>
-            </Collapse>
           )}
         </Content>
 
@@ -423,6 +635,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep > 0 && (
             <Button 
               variant="outlined" 
+              disabled={isSubmitting}
               onClick={() => setCurrentStep((s) => s - 1)}
             >
               Anterior
@@ -432,6 +645,7 @@ const BaseFormModal = ({
           {isMultiStep && currentStep < totalSteps - 1 ? (
             <Button 
               variant="contained" 
+              disabled={isSubmitting}
               onClick={() => setCurrentStep((s) => s + 1)}
             >
               Siguiente
@@ -447,13 +661,18 @@ const BaseFormModal = ({
           )}
 
           {!isMultiStep && (
-            <Button variant="outlined" onClick={handleReset}>
+            <Button 
+              variant="outlined" 
+              disabled={isSubmitting}
+              onClick={handleReset}
+            >
               Limpiar
             </Button>
           )}
         </Footer>
       </Modal>
     </ModalOverlay>
+    </>
   );
 };
 

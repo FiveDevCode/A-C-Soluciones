@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetAccountingAd } from "../../controllers/administrator/getAccountingAd.controller";
 import { handleUpdateAccountingAd } from "../../controllers/administrator/updateAccountingAd.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditAccountingAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [accountingData, setAccountingData] = useState(null);
 
   useEffect(() => {
     const fetchAccounting = async () => {
       try {
-        const response = await handleGetAccountingAd(selected.id);
+        const response = await handleGetAccountingAd(selectedIdRef.current);
         setAccountingData(response.data);
       } catch (error) {
         console.error("Error al cargar contador:", error);
       }
     };
-    if (selected?.id) fetchAccounting();
-  }, [selected]);
+    if (selectedIdRef.current) fetchAccounting();
+  }, []);
 
   if (!accountingData) return null; // No mostrar nada mientras carga
 
@@ -26,11 +27,11 @@ const EditAccountingAd = ({ selected, onClose, onSuccess }) => {
   ];
 
   const fields = [
-    { name: "numero_de_cedula", label: "Cédula", type: "text" },
+    { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }  },
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "apellido", label: "Apellido", type: "text" },
     { name: "correo_electronico", label: "Correo electrónico", type: "email" },
-    { name: "telefono", label: "Teléfono", type: "text" },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
     { name: "estado", label: "Estado", type: "select", options: estados },
   ];
 
@@ -44,7 +45,7 @@ const EditAccountingAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateAccountingAd(selected.id, data);
+    await handleUpdateAccountingAd(selectedIdRef.current, data);
   };
 
   return (
@@ -60,4 +61,4 @@ const EditAccountingAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditAccountingAd;
+export default React.memo(EditAccountingAd);

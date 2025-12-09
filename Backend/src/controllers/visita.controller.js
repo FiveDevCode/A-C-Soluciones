@@ -348,4 +348,30 @@ export class VisitaController {
       });
     }
   }
+
+  obtenerDisponibilidadTecnico = async (req, res) => {
+    try {
+      const { tecnicoId, fecha } = req.query;
+
+      if (!tecnicoId || !fecha) {
+        return res.status(400).json({
+          success: false,
+          message: 'Se requieren tecnicoId y fecha'
+        });
+      }
+
+      const disponibilidad = await this.visitaService.obtenerDisponibilidadTecnico(tecnicoId, fecha);
+
+      return res.status(200).json({
+        success: true,
+        data: disponibilidad
+      });
+    } catch (error) {
+      console.error('Error al obtener disponibilidad:', error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Error al obtener disponibilidad del técnico'
+      });
+    }
+  }
 }

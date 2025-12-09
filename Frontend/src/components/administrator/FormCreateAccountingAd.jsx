@@ -3,26 +3,13 @@ import { handleCreateSubmitAccountingAd } from "../../controllers/administrator/
 import BaseFormModal from "../common/BaseFormModal";
 
 const FormCreateAccountingAd = ({ onClose, onSuccess }) => {
-  const cargos = [
-    { value: "Contador", label: "Contador" },
-    { value: "Auxiliar contable", label: "Auxiliar contable" },
-    { value: "Analista financiero", label: "Analista financiero" },
-  ];
-
-  const estados = [
-    { value: "Activo", label: "Activo" },
-    { value: "Inactivo", label: "Inactivo" },
-  ];
-
   const fields = [
-    { name: "numero_de_cedula", label: "Cédula", type: "text" },
-    { name: "nombre", label: "Nombre", type: "text" },
-    { name: "apellido", label: "Apellido", type: "text" },
-    { name: "correo_electronico", label: "Correo electrónico", type: "email" },
-    { name: "telefono", label: "Teléfono", type: "text" },
-    { name: "contrasenia", label: "Contraseña", type: "password" },
-    { name: "cargo", label: "Cargo", type: "select", options: cargos },
-    { name: "estado", label: "Estado", type: "select", options: estados },
+    { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
+    { name: "nombre", label: "Nombre", type: "text", required: true },
+    { name: "apellido", label: "Apellido", type: "text", required: true },
+    { name: "correo_electronico", label: "Correo electrónico", type: "email", required: true },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 }, required: true },
+    { name: "contrasenia", label: "Contraseña", type: "password", required: true },
   ];
 
   const handleSubmit = async (data) => {

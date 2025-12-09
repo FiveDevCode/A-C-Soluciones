@@ -4,11 +4,9 @@ import {
   TextField,
   MenuItem,
   Button,
-  Collapse,
-  Alert,
-  IconButton,
+  Autocomplete,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { useToastContext } from "../../contexts/ToastContext";
 
 // ======== ESTILOS HEREDADOS ========
 const ModalOverlay = styled.div`
@@ -22,6 +20,16 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1200;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const ModalContent = styled.div`
@@ -29,12 +37,47 @@ const ModalContent = styled.div`
   padding: 30px;
   border-radius: 16px;
   width: 400px;
+  max-height: ${props => props.$enableScroll ? '90vh' : 'none'};
+  overflow-y: ${props => props.$enableScroll ? 'auto' : 'visible'};
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease-out;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  ${props => props.$enableScroll && `
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  `}
 
   @media (max-width: 1350px) {
     width: 330px;
     padding: 20px;
     border-radius: 12px;
+    max-height: ${props => props.$enableScroll ? '85vh' : 'none'};
   }
 `;
 
@@ -54,7 +97,7 @@ const Title = styled.h2`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.7rem;
 
   @media (max-width: 1350px) {
     gap: 0.5rem;
@@ -68,10 +111,10 @@ const StyledTextField = styled(TextField)`
   & .MuiFormLabel-root {
     font-size: 14px;
   }
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   @media (max-width: 1350px) {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     & .MuiInputBase-input {
       font-size: 12px;
     }
@@ -123,40 +166,149 @@ const BaseEditModal = ({
   onClose,
   onSuccess,
   successMessage = "Actualizado correctamente",
+  onFieldChange,
+  additionalContent,
+  enableScroll = false,
 }) => {
+  const { showToast } = useToastContext();
+
   const [formData, setFormData] = useState(initialData);
-  const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     // Actualiza los valores cuando cambian los datos iniciales
-    setFormData(initialData);
+    // Si hay campos currency, formatearlos al cargar
+    const formattedData = { ...initialData };
+    fields.forEach((field) => {
+      if (field.type === "currency" && formattedData[field.name]) {
+        formattedData[field.name] = formatCurrency(formattedData[field.name]);
+      }
+    });
+    setFormData(formattedData);
   }, [initialData]);
+
+  // ========= UTILIDADES DE FORMATO DE MONEDA =========
+  const formatCurrency = (value) => {
+    if (!value) return "";
+    const stringValue = value.toString();
+    
+    // Si ya tiene coma, trabajar con eso
+    if (stringValue.includes(",")) {
+      // Remover puntos (separadores) y mantener la coma
+      const withoutSeparators = stringValue.replace(/\./g, "");
+      const parts = withoutSeparators.split(",");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return `${formattedInteger},${decimalPart}`;
+    }
+    
+    // Si tiene punto (viene del backend), convertir a formato colombiano
+    if (stringValue.includes(".")) {
+      const parts = stringValue.split(".");
+      const integerPart = parts[0];
+      const decimalPart = parts[1] || "";
+      
+      // Formatear parte entera con puntos
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return decimalPart ? `${formattedInteger},${decimalPart}` : formattedInteger;
+    }
+    
+    // Solo números enteros
+    const cleanValue = stringValue.replace(/[^\d]/g, "");
+    return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const parseCurrency = (value) => {
+    if (!value) return "";
+    // Remover puntos (separadores de miles) y reemplazar coma por punto para el valor numérico
+    return value.toString().replace(/\./g, "").replace(",", ".");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (showSuccess) setShowSuccess(false);
+    onFieldChange?.(name, value);
+  };
+
+  const handleCurrencyChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Permitir solo números, puntos y coma
+    const cleanValue = value.replace(/[^\d.,]/g, "");
+    // Remover puntos (separadores de miles) para trabajar solo con el número
+    const withoutSeparators = cleanValue.replace(/\./g, "");
+    
+    // Prevenir múltiples comas
+    const parts = withoutSeparators.split(",");
+    const sanitizedValue = parts.length > 2 
+      ? parts[0] + "," + parts.slice(1).join("") 
+      : withoutSeparators;
+    
+    // Limitar decimales a 2 dígitos
+    const [integer, decimal] = sanitizedValue.split(",");
+    const limitedValue = decimal !== undefined && decimal.length > 2
+      ? `${integer},${decimal.substring(0, 2)}`
+      : sanitizedValue;
+    
+    // Formatear con puntos para visualización
+    const formattedValue = formatCurrency(limitedValue);
+    
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    onFieldChange?.(name, parseCurrency(formattedValue));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar campos requeridos
+    const errors = {};
+    fields.forEach((field) => {
+      if (field.required && (!formData[field.name] || formData[field.name] === "")) {
+        errors[field.name] = `${field.label} es obligatorio`;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      showToast("Por favor, complete todos los campos obligatorios", "error", 5000);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        onSuccess?.();
-      }, 2000);
+      console.log('💾 Guardando cambios...');
+      
+      // Parsear campos de tipo currency antes de enviar
+      const parsedFormData = { ...formData };
+      fields.forEach((field) => {
+        if (field.type === "currency" && parsedFormData[field.name]) {
+          parsedFormData[field.name] = parseCurrency(parsedFormData[field.name]);
+        }
+      });
+      
+      await onSubmit(parsedFormData);
+      
+      console.log('✅ Guardado exitoso, recargando datos...');
+      // Llamar a onSuccess ANTES de cerrar para recargar datos
+      if (onSuccess) {
+        await onSuccess();
+        console.log('✅ Recarga completada');
+      }
+      
+      onClose();
+      showToast(successMessage, "success", 4000);
     } catch (err) {
-      setShowSuccess(false);
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+        showToast("Error en los campos del formulario", "error", 5000);
       } else {
-        setErrorMsg(err.response?.data?.message || "Error al actualizar");
+        showToast(err.response?.data?.message || "Error al actualizar", "error", 5000);
       }
     } finally {
       setIsSubmitting(false);
@@ -164,82 +316,148 @@ const BaseEditModal = ({
   };
 
   return (
+    <>
     <ModalOverlay>
-      <ModalContent>
+      <ModalContent $enableScroll={enableScroll}>
         <Title>{title}</Title>
 
         <FormContainer onSubmit={handleFormSubmit}>
-          {fields.map((field) => (
-            <StyledTextField
-              key={field.name}
-              select={field.type === "select"}
-              type={
-                field.type === "number"
-                  ? "number"
-                  : field.type === "date"
-                  ? "date"
-                  : field.type === "datetime-local"
-                  ? "datetime-local"
-                  : field.type === "textarea"
-                  ? ""
-                  : "text"
-              }
-              label={field.label}
-              name={field.name}
-              fullWidth
-              size="small"
-              value={formData[field.name] ?? ""}
-              onChange={handleChange}
-              error={Boolean(fieldErrors[field.name])}
-              helperText={fieldErrors[field.name]}
-              InputLabelProps={{
-                shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
-              }}
-              SelectProps={{
-                onClose: () => document.activeElement.blur(),
-                MenuProps: { disableScrollLock: true },
-              }}
-            >
-              {field.type === "select" &&
-                field.options?.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-            </StyledTextField>
-          ))}
+          {fields.map((field) => {
+            if (field.type === "autocomplete") {
+              return (
+                <Autocomplete
+                  key={field.name}
+                  freeSolo={false}
+                  options={field.options || []}
+                  value={
+                    // Buscar el objeto completo basado en el value almacenado
+                    field.options?.find(opt => opt.value === formData[field.name]) || null
+                  }
+                  onChange={(event, newValue) => {
+                    // Extraer solo el value del objeto seleccionado
+                    const extractedValue = newValue?.value || "";
+                    const syntheticEvent = {
+                      target: {
+                        name: field.name,
+                        value: extractedValue,
+                      },
+                    };
+                    handleChange(syntheticEvent);
+                  }}
+                  filterOptions={(options, { inputValue }) => {
+                    if (!inputValue) return options;
+                    
+                    // Función para normalizar texto (quitar tildes y convertir a minúsculas)
+                    const normalizeText = (text) => {
+                      return text
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+                    };
+                    
+                    // Normalizar el input de búsqueda
+                    const searchTerm = normalizeText(inputValue.trim());
+                    
+                    // Si es una búsqueda muy corta (1-2 caracteres), buscar coincidencia exacta
+                    if (searchTerm.length <= 2) {
+                      return options.filter(option => 
+                        normalizeText(option.label).includes(searchTerm)
+                      );
+                    }
+                    
+                    // Para búsquedas más largas, separar en palabras (ignorando palabras comunes)
+                    const palabrasIgnoradas = ['de', 'del', 'la', 'el', 'los', 'las', 'y', 'o', 'para', 'con', 'sin', 'en', 'a', 'un', 'una'];
+                    const palabrasBusqueda = searchTerm
+                      .split(/\s+/)
+                      .filter(palabra => palabra.length > 1 && !palabrasIgnoradas.includes(palabra));
+                    
+                    if (palabrasBusqueda.length === 0) {
+                      return options.filter(option => 
+                        normalizeText(option.label).includes(searchTerm)
+                      );
+                    }
+                    
+                    // Buscar opciones que contengan AL MENOS UNA palabra clave (como YouTube)
+                    return options.filter(option => {
+                      const textoOpcion = normalizeText(option.label);
+                      return palabrasBusqueda.some(palabra => textoOpcion.includes(palabra));
+                    });
+                  }}
+                  isOptionEqualToValue={(option, value) => option.value === value?.value}
+                  renderInput={(params) => (
+                    <StyledTextField
+                      {...params}
+                      label={field.label}
+                      size="small"
+                      error={Boolean(fieldErrors[field.name])}
+                      helperText={fieldErrors[field.name]}
+                    />
+                  )}
+                  ListboxProps={{
+                    style: { zIndex: 99999 }
+                  }}
+                  componentsProps={{
+                    popper: {
+                      style: { zIndex: 99999 }
+                    }
+                  }}
+                  sx={{ marginBottom: '12px' }}
+                />
+              );
+            }
 
-          {errorMsg && (
-            <Collapse in={!!errorMsg}>
-              <Alert
-                severity="error"
-                action={
-                  <IconButton onClick={() => setErrorMsg("")} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
+            return (
+              <StyledTextField
+                key={field.name}
+                select={field.type === "select"}
+                type={
+                  field.type === "currency"
+                    ? "text"
+                    : field.type === "number"
+                    ? "number"
+                    : field.type === "date"
+                    ? "date"
+                    : field.type === "datetime-local"
+                    ? "datetime-local"
+                    : field.type === "textarea"
+                    ? ""
+                    : "text"
                 }
-                sx={{ mb: 2 }}
+                label={field.label}
+                name={field.name}
+                fullWidth
+                size="small"
+                value={formData[field.name] ?? ""}
+                onChange={field.type === "currency" ? handleCurrencyChange : handleChange}
+                error={Boolean(fieldErrors[field.name])}
+                helperText={fieldErrors[field.name]}
+                inputProps={{
+                  ...field.inputProps,
+                  ...(field.type === "currency" && {
+                    placeholder: "0"
+                  })
+                }}
+                disabled={field.disabled}
+                InputLabelProps={{
+                  shrink: field.type === "date" || field.type === "datetime-local" ? true : undefined
+                }}
+                SelectProps={{
+                  onClose: () => document.activeElement.blur(),
+                  MenuProps: { disableScrollLock: true },
+                }}
               >
-                {errorMsg}
-              </Alert>
-            </Collapse>
-          )}
+                {field.type === "select" &&
+                  field.options?.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+              </StyledTextField>
+            );
+          })}
 
-          {showSuccess && (
-            <Collapse in={showSuccess}>
-              <Alert
-                severity="success"
-                action={
-                  <IconButton onClick={() => setShowSuccess(false)} size="small">
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                {successMessage}
-              </Alert>
-            </Collapse>
-          )}
+          {/* Contenido adicional */}
+          {additionalContent}
 
           <ButtonsContainer>
             <StyledButton
@@ -258,6 +476,7 @@ const BaseEditModal = ({
               type="button"
               variant="contained"
               color="error"
+              disabled={isSubmitting}
               onClick={onClose}
             >
               Cerrar
@@ -266,6 +485,7 @@ const BaseEditModal = ({
         </FormContainer>
       </ModalContent>
     </ModalOverlay>
+    </>
   );
 };
 

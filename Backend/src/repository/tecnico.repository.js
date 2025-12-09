@@ -24,7 +24,9 @@ export class TecnicoRepository {
     });
   }
   async obtenerTecnicos() {
-    return await TecnicoModel.Tecnico.findAll();
+    return await TecnicoModel.Tecnico.findAll({
+      order: [['fecha_registro', 'DESC']]
+    });
   }
   async actualizarTecnico(id, data) {
     const tecnico = await TecnicoModel.Tecnico.findByPk(id);

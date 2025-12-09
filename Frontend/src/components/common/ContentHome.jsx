@@ -3,6 +3,7 @@ import whoHome from "../../assets/client/whoHome.png"
 import serviceHome from "../../assets/client/serviceHome.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import WorkProductCl from "../client/WorkProductCl";
 
 
 const ContainerHome = styled.section`
@@ -237,7 +238,7 @@ const ContentHome = () => {
         <Img src={whoHome} alt="whoHome.png" />
           
       </ContainerWho>
-
+      <WorkProductCl />
       <ContainerService>
     
         <Img src={serviceHome} alt="serviceHome.png"/>

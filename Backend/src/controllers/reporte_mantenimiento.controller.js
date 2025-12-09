@@ -8,7 +8,7 @@ import { ValidationError } from 'sequelize';
 
 export const crearReporteMantenimiento = async (req, res) => {
   try {
-    console.log('req.body:', req.body);
+    console.log('🆕 [CREAR REPORTE] req.body:', req.body);
 
     const {
       fecha,
@@ -30,7 +30,7 @@ export const crearReporteMantenimiento = async (req, res) => {
       verificaciones
     } = req.body;
 
-    console.log('Campos principales:', {
+    console.log('🔍 [CREAR REPORTE] Campos principales:', {
       fecha,
       id_cliente,
       id_tecnico,
@@ -50,6 +50,8 @@ export const crearReporteMantenimiento = async (req, res) => {
       });
     }
 
+    console.log('💾 [CREAR REPORTE] Guardando reporte con id_cliente:', id_cliente, 'tipo:', typeof id_cliente);
+
     // Crear el reporte principal
     const nuevoReporte = await reporteRepo.crearReporte({
       fecha,
@@ -67,7 +69,7 @@ export const crearReporteMantenimiento = async (req, res) => {
       observaciones_finales
     });
 
-    console.log('Reporte creado con ID:', nuevoReporte.id);
+    console.log('✅ [CREAR REPORTE] Reporte creado con ID:', nuevoReporte.id, 'para id_cliente:', nuevoReporte.id_cliente);
 
     // Crear parámetros de operación si existen
     let parametrosCreados = [];
@@ -238,13 +240,26 @@ export const listarReportes = async (req, res) => {
       return res.status(401).json({ error: 'Usuario no autenticado' });
     }
 
+    console.log('🔍 [REPORTE MANTENIMIENTO] Usuario autenticado:', {
+      id: req.user.id,
+      rol: req.user.rol,
+      email: req.user.email
+    });
+
     let reportes;
 
     if (req.user.rol === 'admin' || req.user.rol === 'administrador') {
+      console.log('📋 Admin solicitando todos los reportes de mantenimiento');
       reportes = await reporteRepo.obtenerTodosReportes();
     } else if (req.user.rol === 'cliente') {
+      console.log('🧑 Cliente solicitando reportes de mantenimiento con id:', req.user.id);
       reportes = await reporteRepo.obtenerReportesPorCliente(req.user.id);
+      console.log('📊 Reportes encontrados para cliente:', reportes.length);
+      if (reportes.length > 0) {
+        console.log('📝 IDs de reportes encontrados:', reportes.map(r => ({ id: r.id, id_cliente: r.id_cliente })));
+      }
     } else if (req.user.rol === 'tecnico') {
+      console.log('🔧 Técnico solicitando reportes de mantenimiento con id:', req.user.id);
       reportes = await reporteRepo.obtenerReportesPorTecnico(req.user.id);
     } else {
       return res.status(403).json({ error: 'No tiene permisos para listar reportes' });

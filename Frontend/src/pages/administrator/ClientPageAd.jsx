@@ -9,6 +9,8 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterClientAd from "../../components/administrator/FilterClientAd";
 import { handleDeleteClientAd } from "../../controllers/administrator/deleteClientAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -41,32 +43,49 @@ const ClientPageAd = () => {
     'clients_cache',
     handleGetListClient
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadClients, 3, 'clients');
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un cliente para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteClientAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 cliente deshabilitado correctamente"
+        : `${cantidad} clientes deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadClients();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar los clientes", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   const handleCreateFixedClient = () => {
@@ -82,36 +101,35 @@ const ClientPageAd = () => {
         secondaryIcon={<FaUserPlus />}
         onSecondaryAction={handleCreateFixedClient}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadClients}
+        onRefresh={manualRefresh}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando clientes..."
+        actionType="Deshabilitar seleccionados"
+        lastUpdateTime={timeAgo}
         filterComponent={
           <FilterClientAd
             clients={clients}
             onFilteredChange={setFilteredClients}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista de clientes...
-          </p>
-        ) : (
-          <ListClientAd
-            clients={filteredClients}
-            reloadData={loadClients}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListClientAd
+          clients={filteredClients}
+          reloadData={loadClients}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} cliente${selectedIds.length > 1 ? 's' : ''}?`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

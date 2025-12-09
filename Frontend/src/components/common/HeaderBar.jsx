@@ -102,7 +102,7 @@ const HeaderBar = () => {
     "/admin/editar-cliente": "Editar cliente", 
     "/admin/visitas": "Visitas",
     "/admin/solicitudes": "Solicitudes",
-    "/admin/tecnicos": "Tecnicos",
+    "/admin/tecnicos": "Técnicos",
     "/admin/clientes":"Clientes",
     "/admin/administradores":"Administradores",
     "/admin/servicios":"Servicios",

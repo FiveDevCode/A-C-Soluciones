@@ -48,6 +48,7 @@ import PaymentAccountPage from "./pages/shared/PaymentAccountPage.jsx";
 import InventoryPage from "./pages/shared/InventoryPage.jsx";
 import NotificationPage from "./pages/shared/NotificationPage.jsx";
 import { NotificacionProvider } from "./hooks/useNotificaciones.jsx";
+import { ToastProvider } from "./contexts/ToastContext.jsx";
 
 // Páginas de Contador
 import HomeAc from "./pages/accountant/HomeAc.jsx";
@@ -700,7 +701,7 @@ function AppContent() {
           />
 
           <Route
-            path="/admin/reporte"
+            path="/admin/ficha-mantenimiento"
             element={
               <PrivateRoute roleRequired="administrador">
                 <ReportPageAd />
@@ -719,15 +720,17 @@ function App() {
   return (
     <>
       <Global />
-      <NotificacionProvider>
-        <MenuProvider>
-          <MenuProviderTc>
-            <Router>
-              <AppContent />
-            </Router>
-          </MenuProviderTc>
-        </MenuProvider>
-      </NotificacionProvider>
+      <ToastProvider>
+        <NotificacionProvider>
+          <MenuProvider>
+            <MenuProviderTc>
+              <Router>
+                <AppContent />
+              </Router>
+            </MenuProviderTc>
+          </MenuProvider>
+        </NotificacionProvider>
+      </ToastProvider>
     </>
   );
 }

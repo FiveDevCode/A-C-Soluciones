@@ -5,11 +5,11 @@ import { handleCreateAdmin } from "../../controllers/administrator/createAdminAd
 const FormCreateAdministratorAd = ({ onClose, onSuccess }) => {
 
   const fields = [
-    { name: "numero_cedula", label: "Cédula", type: "text" },
-    { name: "nombre", label: "Nombre", type: "text" },
-    { name: "apellido", label: "Apellido", type: "text" },
-    { name: "correo_electronico", label: "Correo electrónico", type: "email" },
-    { name: "contrasenia", label: "Contraseña", type: "password" },
+    { name: "numero_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
+    { name: "nombre", label: "Nombre", type: "text", required: true },
+    { name: "apellido", label: "Apellido", type: "text", required: true },
+    { name: "correo_electronico", label: "Correo electrónico", type: "email", required: true },
+    { name: "contrasenia", label: "Contraseña", type: "password", required: true },
   ];
 
   const handleSubmit = async (data) => {
