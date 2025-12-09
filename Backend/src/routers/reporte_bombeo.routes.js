@@ -10,28 +10,28 @@ const router = express.Router();
 
 // 1. Crear Reporte
 router.post(
-    '/reportes-bombeo',
+    '/api/reportes-bombeo',
     authenticate, isAdminOrTecnico,
     crearReporteBombeo
 );
 
 // 2. Listar Reportes (con filtro opcional de visita_id en query params)
 router.get(
-    '/reportes-bombeo',
+    '/api/reportes-bombeo',
     authenticate, isAdminOrTecnicoOrCliente, 
     listarReportes
 );
 
 // 3. Obtener Reporte por ID
 router.get(
-    '/reportes-bombeo/:idReporte',
+    '/api/reportes-bombeo/:idReporte',
     authenticate,
     isAdminOrTecnicoOrCliente,
     obtenerReportePorId
 );
 
 // 4. Descargar PDF del Reporte
-router.get('/reportes-bombeo/descargar/:nombreArchivo', authenticate, isAdminOrTecnicoOrCliente, async (req, res) => {
+router.get('/api/reportes-bombeo/descargar/:nombreArchivo', authenticate, isAdminOrTecnicoOrCliente, async (req, res) => {
     const { nombreArchivo } = req.params;
     
     // Buscar el reporte por el nombre del archivo

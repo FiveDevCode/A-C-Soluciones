@@ -183,6 +183,29 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
     "María La Baja, Bolívar"
   ].map(ciudad => ({ value: ciudad, label: ciudad }));
 
+
+  useEffect(() => {
+    const fetchVisitas = async () => {
+      if (selectedClienteId && tipoCliente === 'regular') {
+        try {
+          const response = await administratorService.getListVisit();
+          const visitasArray = response.data.data || [];
+          const visitasCliente = visitasArray.filter(v => v.solicitud_asociada?.cliente_id_fk === selectedClienteId);
+          console.log(visitasCliente);
+          setVisitas(visitasCliente);
+        } catch (error) {
+          console.error('Error al obtener visitas:', error);
+          setVisitas([]);
+        }
+      } else {
+        setVisitas([]);
+      }
+    };
+
+    fetchVisitas();
+  }, [selectedClienteId, tipoCliente]);
+
+
   const steps = [
     {
       title: "Información General",
@@ -200,7 +223,7 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
         },
         ...(tipoCliente === 'regular' ? [{
           name: "visita_id",
-          label: "Visita Asociada *",
+          label: "Visita Asociada",
           type: "select",
           required: true,
           options: visitas.map(v => ({
