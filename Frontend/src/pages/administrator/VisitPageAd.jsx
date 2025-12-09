@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import ListVisitAd from "../../components/administrator/ListVisitAd";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
@@ -6,6 +6,7 @@ import FormCreateVisitAd from "../../components/administrator/FormCreateVisitAd"
 import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import FilterVisitsAd from "../../components/administrator/FilterVisitsAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +34,18 @@ const Card = styled.div`
 `;
 
 const VisitPageAd = () => {
-  const { data: visits, isLoading: loading, reload: loadVisits } = useDataCache(
+  const { data: visitsData, isLoading: loading, reload: loadVisits } = useDataCache(
     'visits_cache',
     handleGetListVisitAd
   );
+  
+  // Ordenar visitas por ID descendente (más recientes primero)
+  const visits = useMemo(() => {
+    if (!visitsData || visitsData.length === 0) return [];
+    return [...visitsData].sort((a, b) => b.id - a.id);
+  }, [visitsData]);
+
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadVisits, 3, 'visits');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredVisits, setFilteredVisits] = useState([]);
@@ -48,7 +57,8 @@ const VisitPageAd = () => {
         sectionTitle="Lista de visitas asignadas"
         addLabel="Agregar visita"
         onAdd={() => setShowModal(true)}
-        onRefresh={loadVisits}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         filterComponent={
           <FilterVisitsAd
             visits={visits}
@@ -59,16 +69,11 @@ const VisitPageAd = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista de visitas...
-          </p>
-        ) : (
-          <ListVisitAd
-            visits={filteredVisits}
-            reloadData={loadVisits}
-          />
-        )}
+        <ListVisitAd
+          visits={filteredVisits}
+          reloadData={loadVisits}
+          isLoadingData={loading && visitsData.length === 0}
+        />
       </Card>
 
       {showModal && (

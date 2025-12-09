@@ -78,7 +78,7 @@ const FormRecoverCode = () => {
 
     try {
       await handleCreateVerificCode(email, code);
-      setSuccessMsg("El codigo ingresado es correcto, redirigiendo...");
+      setSuccessMsg("El código ingresado es correcto, redirigiendo...");
       setIsVerified(true);
 
       setTimeout(() => {

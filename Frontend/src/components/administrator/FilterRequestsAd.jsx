@@ -1,12 +1,19 @@
 import BaseFilters from "../common/BaseFilters";
 
 const FilterRequestsAd = ({ requests = [], onFilteredChange }) => {
-  // Definir todos los estados disponibles
-  const statusOptions = [
-    { value: "pendiente", label: "Pendiente" },
-    { value: "aceptada", label: "Aceptada" },
-    { value: "rechazada", label: "Rechazada" },
-  ];
+  const statusLabels = {
+    pendiente: "Pendiente",
+    aceptada: "Aceptada",
+    completada: "Completada",
+    rechazada: "Rechazada",
+  };
+
+  const statusOptions = [...new Set(requests.map((r) => r.estado).filter(Boolean))].map(
+    (st) => ({
+      value: st,
+      label: statusLabels[st] || st,
+    })
+  );
 
   const filterOptions = [
     {
@@ -19,9 +26,14 @@ const FilterRequestsAd = ({ requests = [], onFilteredChange }) => {
   return (
     <BaseFilters
       data={requests}
-      placeholder="Buscar por nombre..."
+      placeholder="Buscar por descripción, cliente o servicio..."
       filterOptions={filterOptions}
-      searchKeys={["nombre"]}
+      searchKeys={[
+        "descripcion",
+        "cliente_solicitud.nombre",
+        "cliente_solicitud.apellido",
+        "servicio_solicitud.nombre"
+      ]}
       onFilteredChange={onFilteredChange}
     />
   );

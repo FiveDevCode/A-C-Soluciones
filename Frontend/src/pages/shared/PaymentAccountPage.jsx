@@ -9,6 +9,8 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreatePaymentAccountAd from "../../components/administrator/FormCreatePaymentAccountAd";
 import FilterPaymentAccountAd from "../../components/administrator/FilterPaymentAccountAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -38,58 +40,52 @@ const Card = styled.div`
 const PaymentAccountPage = () => {
   const { data: accounts, isLoading: loading, reload: loadAccounts } = useDataCache(
     'payment_accounts_cache',
-    async () => {
-      const accountsData = await handleGetListPaymentAccountAd();
-
-      const enrichedAccounts = await Promise.all(
-        accountsData.map(async (account) => {
-          if (account.id_cliente) {
-            try {
-              const clientRes = await handleGetClient(account.id_cliente);
-              return {
-                ...account,
-                cliente: clientRes.data,
-              };
-            } catch (err) {
-              console.error(`Error obteniendo cliente ${account.id_cliente}:`, err);
-              return account;
-            }
-          }
-          return account;
-        })
-      );
-
-      return enrichedAccounts;
-    }
+    handleGetListPaymentAccountAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounts, 3, 'accounts');
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos una cuenta para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeletePaymentAccount(id);
       }
-      alert("Cuentas eliminadas correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 cuenta eliminada correctamente"
+        : `${cantidad} cuentas eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadAccounts();
     } catch (error) {
-      console.error("Error al eliminar registros:", error);
-      alert("Error al eliminar algunas cuentas.");
+      showToast("Error al eliminar las cuentas", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -100,8 +96,11 @@ const PaymentAccountPage = () => {
         addLabel="Agregar cuenta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAccounts}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando cuentas..."
         filterComponent={
           <FilterPaymentAccountAd
             accounts={accounts}
@@ -111,17 +110,13 @@ const PaymentAccountPage = () => {
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando cuentas...
-          </p>
-        ) : (
-          <ListPaymentAccountAd
-            accounts={filteredAccounts}
-            reloadData={loadAccounts}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListPaymentAccountAd
+          accounts={filteredAccounts}
+          reloadData={loadAccounts}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showModal && (
@@ -136,9 +131,9 @@ const PaymentAccountPage = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} cuenta(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de eliminar ${selectedIds.length} cuenta${selectedIds.length > 1 ? 's' : ''} de pago? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

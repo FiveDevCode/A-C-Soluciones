@@ -8,6 +8,8 @@ import FilterInventoryAd from "../../components/administrator/FilterInventoryAd"
 import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateInventoryAd from "../../components/administrator/FormCreateInventoryAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 
 const Container = styled.div`
@@ -40,68 +42,83 @@ const InventoryPage = () => {
     'inventory_cache',
     handleGetListInventoryAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadInventory, 3, 'inventory');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos una herramienta para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteInventory(id);
       }
-      alert("Registros eliminados correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 herramienta deshabilitada correctamente"
+        : `${cantidad} herramientas deshabilitadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadInventory();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar las herramientas", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="INVENTARIO"
-        sectionTitle="Inventario de herramientas"
+        headerTitle="HERRAMIENTAS"
+        sectionTitle="Gestión de herramientas"
         addLabel="Agregar herramienta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadInventory}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando herramientas..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterInventoryAd
             inventory={inventory}
             onFilteredChange={setFilteredInventory}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando inventario...
-          </p>
-        ) : (
-          <ListInventoryAd
-            inventory={filteredInventory}
-            reloadData={loadInventory}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListInventoryAd
+          inventory={filteredInventory}
+          reloadData={loadInventory}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showModal && (
@@ -115,9 +132,9 @@ const InventoryPage = () => {
       )}
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} herramienta${selectedIds.length > 1 ? 's' : ''}?`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

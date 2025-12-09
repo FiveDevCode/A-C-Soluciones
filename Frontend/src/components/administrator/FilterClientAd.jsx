@@ -6,12 +6,12 @@ const FilterClientAd = ({ clients = [], onFilteredChange }) => {
     {
       key: "estado",
       label: "Estado",
-      options: ["activo", "inactivo"],
+      options: ["Activo", "Inactivo"],
     },
     {
       key: "tipo_cliente",
       label: "Tipo de Cliente",
-      options: ["regular", "fijo"],
+      options: ["Regular", "Fijo"],
     },
   ];
 

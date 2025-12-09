@@ -6,6 +6,7 @@ import FilterPumpingReportAd from "../../components/administrator/FilterPumpingR
 import FormCreatePumpingReportAd from "../../components/administrator/FormCreatePumpingReportAd";
 import { handleGetListPumpingReportAd } from "../../controllers/administrator/getListPumpingReportAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const PumpingReportPageAd = () => {
     'pumping_reports_cache',
     handleGetListPumpingReportAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'pumping_reports');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
@@ -49,7 +51,8 @@ const PumpingReportPageAd = () => {
         sectionTitle="Reportes de bombeo generados"
         addLabel="Agregar reporte de bombeo"
         onAdd={() => setShowModal(true)}
-        onRefresh={loadReports}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterPumpingReportAd

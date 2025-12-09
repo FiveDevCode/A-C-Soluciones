@@ -3,16 +3,10 @@ import { handleCreateService } from "../../controllers/administrator/createServi
 import BaseFormModal from "../common/BaseFormModal";
 
 const FormCreateServiceAd = ({ onClose, onSuccess }) => {
-  const estados = [
-    { value: "pendiente", label: "Pendiente" },
-    { value: "en_proceso", label: "En proceso" },
-    { value: "completado", label: "Completado" },
-  ];
 
   const fields = [
     { name: "nombre", label: "Nombre del servicio", type: "text" },
-    { name: "descripcion", label: "Descripción", type: "textarea" },
-    { name: "estado", label: "Estado", type: "select", options: estados },
+    { name: "descripcion", label: "Descripción", type: "textarea" }
   ];
 
   const handleSubmit = async (data) => {

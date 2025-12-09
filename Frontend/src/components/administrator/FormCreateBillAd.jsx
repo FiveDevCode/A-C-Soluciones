@@ -21,37 +21,25 @@ const FormCreateBillAd = ({ onClose, onSuccess }) => {
     fetchClients();
   }, []);
 
-  // 🔹 Estados disponibles
-  const estados = [
-    { value: "pendiente", label: "Pendiente" },
-    { value: "pagada", label: "Pagada" },
-    { value: "vencida", label: "Vencida" },
-  ];
-
   // 🔹 Campos del formulario
   const fields = [
     { name: "numero_factura", label: "Número de factura", type: "text" },
     {
       name: "id_cliente",
       label: "Cliente",
-      type: "select",
+      type: "autocomplete",
       options: clients.map((c) => ({
         value: c.id,
-        label: `${c.nombre} ${c.apellido}`,
+        label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}`,
       })),
+      required: true
     },
     { name: "fecha_factura", label: "Fecha de factura", type: "date" },
     { name: "concepto", label: "Concepto", type: "textarea" },
-    { name: "monto_facturado", label: "Monto facturado", type: "number" },
-    { name: "abonos", label: "Abonos", type: "number" },
-    { name: "saldo_pendiente", label: "Saldo pendiente", type: "number" },
-    { name: "fecha_vencimiento", label: "Fecha de vencimiento", type: "date" },
-    {
-      name: "estado_factura",
-      label: "Estado de factura",
-      type: "select",
-      options: estados,
-    },
+    { name: "monto_facturado", label: "Monto facturado", type: "currency" },
+    { name: "abonos", label: "Abonos", type: "currency" },
+    { name: "saldo_pendiente", label: "Saldo pendiente", type: "currency" },
+    { name: "fecha_vencimiento", label: "Fecha de vencimiento", type: "date" }
   ];
 
   // 🔹 Envío del formulario

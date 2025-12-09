@@ -68,12 +68,12 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
         if (!value) return "No hay fecha programada";
 
         const d = new Date(value);
-        const day = String(d.getDate()).padStart(2, "0");
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const year = d.getFullYear();
+        const day = String(d.getUTCDate()).padStart(2, "0");
+        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+        const year = d.getUTCFullYear();
 
-        let hours = d.getHours();
-        const minutes = String(d.getMinutes()).padStart(2, "0");
+        let hours = d.getUTCHours();
+        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
         const ampm = hours >= 12 ? "pm" : "am";
         hours = hours % 12 || 12;
 

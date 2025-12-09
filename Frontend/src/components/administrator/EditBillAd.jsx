@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { handleGetBillAd } from "../../controllers/administrator/getBillAd.controller";
 import { handleUpdateBill } from "../../controllers/administrator/updateBillAd.controller";
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import BaseEditModal from "../common/BaseEditModalAd";
 
 const EditBillAd = ({ selected, onClose, onSuccess }) => {
+  const selectedIdRef = useRef(selected?.id);
   const [billData, setBillData] = useState(null);
   const [clientList, setClientList] = useState([]);
 
@@ -12,7 +13,7 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
     const fetchData = async () => {
       try {
         const [billRes, clientsRes] = await Promise.all([
-          handleGetBillAd(selected.id),
+          handleGetBillAd(selectedIdRef.current),
           handleGetListClient(),
         ]);
         setBillData(billRes.data);
@@ -21,8 +22,8 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
         console.error("Error al cargar datos de factura:", error);
       }
     };
-    if (selected?.id) fetchData();
-  }, [selected]);
+    if (selectedIdRef.current) fetchData();
+  }, []);
 
   if (!billData) return null;
 
@@ -40,9 +41,9 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
   const fields = [
     { name: "numero_factura", label: "Número de factura", type: "text" },
     { name: "concepto", label: "Concepto", type: "text" },
-    { name: "monto_facturado", label: "Monto facturado", type: "number" },
-    { name: "abonos", label: "Abonos", type: "number" },
-    { name: "saldo_pendiente", label: "Saldo pendiente", type: "number" },
+    { name: "monto_facturado", label: "Monto facturado", type: "currency" },
+    { name: "abonos", label: "Abonos", type: "currency" },
+    { name: "saldo_pendiente", label: "Saldo pendiente", type: "currency" },
     { name: "fecha_factura", label: "Fecha de factura", type: "date" },
     { name: "fecha_vencimiento", label: "Fecha de vencimiento", type: "date" },
     { name: "estado_factura", label: "Estado de factura", type: "select", options: estadosFactura },
@@ -62,7 +63,7 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateBill(selected.id, data);
+    await handleUpdateBill(selectedIdRef.current, data);
   };
 
   return (
@@ -78,4 +79,4 @@ const EditBillAd = ({ selected, onClose, onSuccess }) => {
   );
 };
 
-export default EditBillAd;
+export default React.memo(EditBillAd);

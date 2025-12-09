@@ -89,7 +89,7 @@ const FooterHome = () => {
       <DividerFooter />
       <ContainerFooterOption>
         <OptionFooter to="/acerca-de-nosotros">Acerca de nosotros</OptionFooter>
-        <OptionFooter to="/politicas-de-privacidad">Politicas de privacidad</OptionFooter>
+        <OptionFooter to="/politicas-de-privacidad">Políticas de privacidad</OptionFooter>
         <OptionFooter to="/preguntas-frecuentes">Preguntas Frecuentes (FAQ)</OptionFooter>
         <OptionFooter to="/terminos-y-condiciones">Términos y Condiciones</OptionFooter>
       </ContainerFooterOption>

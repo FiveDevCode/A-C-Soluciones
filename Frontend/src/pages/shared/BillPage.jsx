@@ -9,6 +9,8 @@ import { handleDeleteBill } from "../../controllers/administrator/deleteBillAd.c
 import FilterBillAd from "../../components/administrator/FilterBillAd";
 import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -38,60 +40,52 @@ const Card = styled.div`
 const BillPage = () => {
   const { data: bills, isLoading: loading, reload: loadBills } = useDataCache(
     'bills_cache',
-    async () => {
-      const billsData = await handleGetListBillAd();
-
-      // Enriquecer cada factura con información del cliente
-      const enrichedBills = await Promise.all(
-        billsData.map(async (bill) => {
-          if (bill.id_cliente) {
-            try {
-              const clientRes = await handleGetClient(bill.id_cliente);
-              const cliente = clientRes.data;
-              return {
-                ...bill,
-                cliente,
-                nombre_cliente: `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim(),
-              };
-            } catch (err) {
-              console.error(`Error obteniendo cliente ${bill.id_cliente}:`, err);
-              return bill;
-            }
-          }
-          return bill;
-        })
-      );
-
-      return enrichedBills;
-    }
+    handleGetListBillAd
   );
-  const [showModal, setShowModal] = useState(false);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadBills, 3, 'bills');
   const [filteredBills, setFilteredBills] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteBill(id);
       }
-      alert("Registros eliminados correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 factura eliminada correctamente"
+        : `${cantidad} facturas eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadBills();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al eliminar las facturas", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -102,25 +96,24 @@ const BillPage = () => {
         addLabel="Agregar factura"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadBills}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando facturas..."
         filterComponent={
           <FilterBillAd bills={bills} onFilteredChange={setFilteredBills} />
         }
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando facturas...
-          </p>
-        ) : (
-          <ListBillAd
-            bills={filteredBills}
-            reloadData={loadBills}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListBillAd
+          bills={filteredBills}
+          reloadData={loadBills}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showModal && (
@@ -135,9 +128,9 @@ const BillPage = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de eliminar ${selectedIds.length} factura${selectedIds.length > 1 ? 's' : ''}? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

@@ -1,9 +1,8 @@
 import FormLogin from "../../components/common/FormLogin";
-import Logo from "../../components/common/Logo";
 import logo from '../../assets/common/logoA&C.png';
 import fondoLogin from '../../assets/common/fondoLogin.png';
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 
 const SectionPage = styled.section`
   display: flex;
@@ -21,6 +20,23 @@ const SectionPage = styled.section`
     justify-content: flex-start;
   }
 `
+
+const LogoLink = styled(Link)`
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+const LogoImage = styled.img`
+  max-width: 300px;
+  width: 80%;
+  height: auto;
+`
+
 const Title = styled.h1`
   font-size: 2rem;
   margin: 0;
@@ -52,13 +68,14 @@ const Subtitle = styled.h4`
 const LoginPage = () => {
   return (
     <SectionPage>
-      <Logo src={logo} max="300px" size="80%"/>
-      <Title>Iniciar sesion</Title>
+      <LogoLink to="/">
+        <LogoImage src={logo} alt="Logo A&C" />
+      </LogoLink>
+      <Title>Iniciar sesión</Title>
       <Subtitle>Inicia sesión con tu cuenta</Subtitle>
       <FormLogin />
     </SectionPage>
   )
 }
-
 
 export default LoginPage;
