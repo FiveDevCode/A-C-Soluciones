@@ -213,8 +213,10 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada, defaultExpa
 
   const formatTime = (isoString) => {
     const date = new Date(isoString);
-    let hours = date.getUTCHours();
-    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    // Convertir explícitamente a hora de Colombia (UTC-5)
+    const colombiaTime = new Date(date.toLocaleString("en-US", { timeZone: "America/Bogota" }));
+    let hours = colombiaTime.getHours();
+    const minutes = String(colombiaTime.getMinutes()).padStart(2, "0");
     const ampm = hours >= 12 ? "p. m." : "a. m.";
     hours = hours % 12 || 12;
     return `${hours}:${minutes} ${ampm}`;
@@ -288,8 +290,7 @@ const DisponibilidadTecnico = ({ tecnicoId, fecha, duracionEstimada, defaultExpa
           )}
 
           {horariosDisponibles.length === 0 ? (
-            <SectionTitle $error>El técnico no tiene horarios disponibles para esta fecha.
-        </SectionTitle>
+            <SectionTitle $error>El técnico no tiene horarios disponibles para esta fecha.</SectionTitle>
           ) : (
             <Section>
               <SectionTitle>Horarios disponibles:</SectionTitle>

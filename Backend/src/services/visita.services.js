@@ -81,16 +81,13 @@ export class VisitaService {
   }
 
   async obtenerDisponibilidadTecnico(tecnicoId, fecha) {
-    // Obtener información del técnico
     const tecnico = await this.tecnicoRepository.obtenerTecnicoPorId(tecnicoId);
     if (!tecnico) {
       throw new Error('Técnico no encontrado');
     }
 
-    // Obtener todas las visitas del técnico para ese día
     const visitas = await this.visitaRepository.obtenerHorariosDisponibles(tecnicoId, fecha);
 
-    // Calcular intervalos ocupados
     const intervalosOcupados = visitas.map(visita => {
       const inicio = new Date(visita.fecha_programada);
       const fin = new Date(inicio.getTime() + visita.duracion_estimada * 60000);
@@ -101,34 +98,59 @@ export class VisitaService {
       };
     });
 
-    // Definir horario laboral (8 AM a 6 PM)
+    // CORRECCIÓN: Definir horario laboral en UTC (Colombia = UTC-5)
+    // 8:00 AM Colombia = 13:00 UTC
+    // 6:00 PM Colombia = 23:00 UTC
     const fechaObj = new Date(fecha);
-    const horaInicio = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 8, 0, 0);
-    const horaFin = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 18, 0, 0);
+    
+    // Obtener la fecha en formato YYYY-MM-DD en UTC
+    const year = fechaObj.getUTCFullYear();
+    const month = fechaObj.getUTCMonth();
+    const date = fechaObj.getUTCDate();
+    
+    // Crear horarios en UTC (8 AM Colombia = 13:00 UTC, 6 PM Colombia = 23:00 UTC)
+    const horaInicio = new Date(Date.UTC(year, month, date, 13, 0, 0)); // 8 AM Colombia
+    const horaFin = new Date(Date.UTC(year, month, date, 23, 0, 0));    // 6 PM Colombia
 
     // Calcular bloques disponibles
     const horariosDisponibles = [];
     let tiempoActual = horaInicio;
 
-    intervalosOcupados.forEach(intervalo => {
+    // Ordenar intervalos por fecha de inicio
+    const intervalosOrdenados = intervalosOcupados.sort((a, b) => 
+      new Date(a.inicio) - new Date(b.inicio)
+    );
+
+    intervalosOrdenados.forEach(intervalo => {
       const inicioOcupado = new Date(intervalo.inicio);
+      const finOcupado = new Date(intervalo.fin);
+      
+      // Solo agregar bloque si hay tiempo disponible antes de este intervalo ocupado
       if (tiempoActual < inicioOcupado) {
-        horariosDisponibles.push({
-          inicio: tiempoActual.toISOString(),
-          fin: inicioOcupado.toISOString(),
-          duracionDisponible: Math.floor((inicioOcupado - tiempoActual) / 60000)
-        });
+        const duracion = Math.floor((inicioOcupado - tiempoActual) / 60000);
+        if (duracion > 0) {
+          horariosDisponibles.push({
+            inicio: tiempoActual.toISOString(),
+            fin: inicioOcupado.toISOString(),
+            duracionDisponible: duracion
+          });
+        }
       }
-      tiempoActual = new Date(intervalo.fin);
+      
+      // Mover el tiempo actual al final del intervalo ocupado
+      tiempoActual = finOcupado > tiempoActual ? finOcupado : tiempoActual;
     });
 
     // Agregar último bloque disponible si existe
     if (tiempoActual < horaFin) {
-      horariosDisponibles.push({
-        inicio: tiempoActual.toISOString(),
-        fin: horaFin.toISOString(),
-        duracionDisponible: Math.floor((horaFin - tiempoActual) / 60000)
-      });
+      const duracion = Math.floor((horaFin - tiempoActual) / 60000);
+      if (duracion > 0) {
+        horariosDisponibles.push({
+          inicio: tiempoActual.toISOString(),
+          fin: horaFin.toISOString(),
+          duracionDisponible: duracion
+        });
+      }
     }
 
     return {

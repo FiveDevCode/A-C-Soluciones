@@ -129,10 +129,15 @@ export class VisitaRepository {
   }
 
   async obtenerHorariosDisponibles(tecnicoId, fecha) {
-    // Extraer solo la fecha (sin hora) para buscar todas las visitas del día
     const fechaObj = new Date(fecha);
-    const inicioDia = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 0, 0, 0);
-    const finDia = new Date(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate(), 23, 59, 59);
+    
+    // Obtener inicio y fin del día en UTC
+    const year = fechaObj.getUTCFullYear();
+    const month = fechaObj.getUTCMonth();
+    const date = fechaObj.getUTCDate();
+    
+    const inicioDia = new Date(Date.UTC(year, month, date, 0, 0, 0));
+    const finDia = new Date(Date.UTC(year, month, date, 23, 59, 59));
 
     const visitas = await this.model.findAll({
       where: {
@@ -147,7 +152,6 @@ export class VisitaRepository {
 
     return visitas;
   }
-
 
 
   async obtenerServiciosPorTecnico(tecnico_id) {
