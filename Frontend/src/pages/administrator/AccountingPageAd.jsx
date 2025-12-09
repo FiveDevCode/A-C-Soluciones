@@ -76,7 +76,7 @@ const AccountingPageAd = () => {
       setClearTrigger(prev => prev + 1);
       loadAccounting();
     } catch (error) {
-      showToast("Error al deshabilitar los empleados", "error", 5000);
+      showToast("Error al deshabilitar los contadores", "error", 5000);
     } finally {
       setIsDeleting(false);
     }

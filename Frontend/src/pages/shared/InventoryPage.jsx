@@ -53,7 +53,7 @@ const InventoryPage = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un registro para deshabilitar.", "error", 3000);
+      showToast("Selecciona al menos una herramienta para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -78,7 +78,6 @@ const InventoryPage = () => {
       setClearTrigger(prev => prev + 1);
       loadInventory();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
       showToast("Error al deshabilitar las herramientas", "error", 5000);
     } finally {
       setIsDeleting(false);

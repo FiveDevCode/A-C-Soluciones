@@ -53,7 +53,7 @@ const ClientPageAd = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un registro para deshabilitar.", "error", 3000);
+      showToast("Selecciona al menos un cliente para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -78,7 +78,6 @@ const ClientPageAd = () => {
       setClearTrigger(prev => prev + 1);
       loadClients();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
       showToast("Error al deshabilitar los clientes", "error", 5000);
     } finally {
       setIsDeleting(false);

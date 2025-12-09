@@ -53,7 +53,7 @@ const PaymentAccountPage = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
+      showToast("Selecciona al menos una cuenta para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -78,7 +78,6 @@ const PaymentAccountPage = () => {
       setClearTrigger(prev => prev + 1);
       loadAccounts();
     } catch (error) {
-      console.error("Error al eliminar registros:", error);
       showToast("Error al eliminar las cuentas", "error", 5000);
     } finally {
       setIsDeleting(false);

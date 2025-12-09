@@ -78,7 +78,6 @@ const BillPage = () => {
       setClearTrigger(prev => prev + 1);
       loadBills();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
       showToast("Error al eliminar las facturas", "error", 5000);
     } finally {
       setIsDeleting(false);

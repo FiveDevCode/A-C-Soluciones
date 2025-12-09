@@ -80,7 +80,6 @@ const AdministratorPageAd = () => {
       setClearTrigger(prev => prev + 1);
       loadAdministrators();
     } catch (error) {
-      console.error("Error deshabilitando administradores:", error);
       showToast("Error al deshabilitar los administradores", "error", 5000);
     } finally {
       setIsDeleting(false);

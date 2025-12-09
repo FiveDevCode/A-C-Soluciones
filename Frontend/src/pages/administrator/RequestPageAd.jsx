@@ -59,7 +59,7 @@ const RequestPageAd = () => {
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      showToast("Selecciona al menos un registro para eliminar.", "error", 3000);
+      showToast("Selecciona al menos una solicitud para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
@@ -84,7 +84,6 @@ const RequestPageAd = () => {
       setClearTrigger(prev => prev + 1);
       loadRequests();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
       showToast("Error al eliminar las solicitudes", "error", 5000);
     } finally {
       setIsDeleting(false);

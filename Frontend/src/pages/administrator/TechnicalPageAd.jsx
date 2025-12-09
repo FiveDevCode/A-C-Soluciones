@@ -80,8 +80,7 @@ const TechnicalPageAd = () => {
       setClearTrigger(prev => prev + 1);
       loadTechnicals();
     } catch (error) {
-      console.error("Error eliminando técnicos:", error);
-      showToast("Error al eliminar los técnicos", "error", 5000);
+      showToast("Error al deshabilitar los técnicos", "error", 5000);
     } finally {
       setIsDeleting(false);
     }
