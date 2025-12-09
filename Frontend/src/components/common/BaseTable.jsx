@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
-import { Checkbox, Pagination } from "@mui/material";
+import { Checkbox, Pagination, Tooltip } from "@mui/material";
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import useItemsPerPage from "../../hooks/useItemPerPage";
 
@@ -594,17 +594,28 @@ const BaseTable = ({
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton 
-                          onClick={() => {
-                            if (!(typeof isEditDisabled === 'function' && isEditDisabled(row))) {
-                              handleOpenEdit(row);
-                            }
-                          }}
-                          disabled={typeof isEditDisabled === 'function' ? isEditDisabled(row) : false}
-                          style={typeof isEditDisabled === 'function' && isEditDisabled(row) ? { backgroundColor: '#bdbdbd', cursor: 'not-allowed' } : {}}
-                        >
-                          <FontAwesomeIcon icon={faEdit} /> Editar
-                        </ActionButton>
+                        typeof isEditDisabled === 'function' && isEditDisabled(row) ? (
+                          <Tooltip 
+                            title={row.estado === 'completada' ? 'No se puede editar una visita completada.' : row.estado === 'cancelada' ? 'No se puede editar una visita cancelada.' : 'Edición deshabilitada'} 
+                            arrow 
+                            placement="top"
+                          >
+                            <span>
+                              <ActionButton 
+                                disabled
+                                style={{ backgroundColor: '#bdbdbd', cursor: 'not-allowed', opacity: 0.7 }}
+                              >
+                                <FontAwesomeIcon icon={faEdit} /> Editar
+                              </ActionButton>
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          <ActionButton 
+                            onClick={() => handleOpenEdit(row)}
+                          >
+                            <FontAwesomeIcon icon={faEdit} /> Editar
+                          </ActionButton>
+                        )
                       )}
                     </td>
                   )}
@@ -710,18 +721,31 @@ const BaseTable = ({
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (!(typeof isEditDisabled === 'function' && isEditDisabled(row))) {
+                        typeof isEditDisabled === 'function' && isEditDisabled(row) ? (
+                          <Tooltip 
+                            title={row.estado === 'completada' ? 'No se puede editar una visita completada.' : row.estado === 'cancelada' ? 'No se puede editar una visita cancelada.' : 'Edición deshabilitada'} 
+                            arrow 
+                            placement="top"
+                          >
+                            <span>
+                              <ActionButton 
+                                disabled
+                                style={{ backgroundColor: '#bdbdbd', cursor: 'not-allowed', opacity: 0.7 }}
+                              >
+                                <FontAwesomeIcon icon={faEdit} /> Editar
+                              </ActionButton>
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          <ActionButton 
+                            onClick={(e) => {
+                              e.stopPropagation();
                               handleOpenEdit(row);
-                            }
-                          }}
-                          disabled={typeof isEditDisabled === 'function' ? isEditDisabled(row) : false}
-                          style={typeof isEditDisabled === 'function' && isEditDisabled(row) ? { backgroundColor: '#bdbdbd', cursor: 'not-allowed' } : {}}
-                        >
-                          <FontAwesomeIcon icon={faEdit} /> Editar
-                        </ActionButton>
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faEdit} /> Editar
+                          </ActionButton>
+                        )
                       )}
                     </MobileActions>
                   </MobileCardRight>
