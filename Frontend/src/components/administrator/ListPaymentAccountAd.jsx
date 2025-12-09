@@ -14,7 +14,7 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
       accessor: "cliente",
       render: (value) =>
         value
-          ? `${value.nombre || ""} ${value.apellido || ""}`.trim()
+          ? `${value.numero_de_cedula || ""} - ${value.nombre || ""} ${value.apellido || ""}`.trim()
           : "Sin cliente vinculado",
     },
     {
