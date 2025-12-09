@@ -30,7 +30,8 @@ export const obtenerReportePorId = async (id) => {
 };
 
 export const obtenerReportesPorCliente = async (id_cliente) => {
-  return await ReporteMantenimientoPlantasElectricas.findAll({
+  console.log('🔎 [REPO] Buscando reportes de mantenimiento para id_cliente:', id_cliente);
+  const reportes = await ReporteMantenimientoPlantasElectricas.findAll({
     where: { id_cliente },
     include: [
       {
@@ -44,6 +45,15 @@ export const obtenerReportesPorCliente = async (id_cliente) => {
     ],
     order: [['fecha', 'DESC']]
   });
+  console.log('✅ [REPO] Reportes de mantenimiento encontrados:', reportes.length);
+  if (reportes.length > 0) {
+    console.log('📄 [REPO] Primer reporte:', {
+      id: reportes[0].id,
+      id_cliente: reportes[0].id_cliente,
+      fecha: reportes[0].fecha
+    });
+  }
+  return reportes;
 };
 
 export const obtenerReportesPorTecnico = async (id_tecnico) => {
