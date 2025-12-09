@@ -27,11 +27,11 @@ const EditAccountingAd = ({ selected, onClose, onSuccess }) => {
   ];
 
   const fields = [
-    { name: "numero_de_cedula", label: "Cédula", type: "text" },
+    { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }  },
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "apellido", label: "Apellido", type: "text" },
     { name: "correo_electronico", label: "Correo electrónico", type: "email" },
-    { name: "telefono", label: "Teléfono", type: "text" },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
     { name: "estado", label: "Estado", type: "select", options: estados },
   ];
 
