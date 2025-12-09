@@ -32,11 +32,8 @@ const Solicitud = sequelize.define('Solicitud', {
     estado: {
         type: DataTypes.ENUM(
             'pendiente', 
-            'cotizada', 
             'aceptada', 
-            'en proceso',
-            'completada', 
-            'cancelada'
+            'rechazada'
         ),
         allowNull: false,
         defaultValue: 'pendiente'
@@ -120,7 +117,17 @@ const Solicitud = sequelize.define('Solicitud', {
             key: 'id'
         },
         
-    },    
+    },
+    motivo_cancelacion: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        validate: {
+            len: {
+                args: [5, 500],
+                msg: 'El motivo de cancelación debe tener entre 5 y 500 caracteres.',
+            },
+        },
+    },
 },{
     tableName: 'solicitudes',
     timestamps: false,

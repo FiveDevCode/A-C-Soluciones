@@ -78,11 +78,16 @@ export class SolicitudRepository {
     const servicio = await this.servicioModel.findByPk(servicio_id);
     return !!servicio;
   }
-  async actualizarEstado(id, estado) {
+  async actualizarEstado(id, estado, motivo_cancelacion = null) {
     const solicitud = await this.model.findByPk(id);
     if (!solicitud) return null;
 
-    await solicitud.update({ estado });
+    const updateData = { estado };
+    if (estado === 'rechazada' && motivo_cancelacion) {
+      updateData.motivo_cancelacion = motivo_cancelacion;
+    }
+
+    await solicitud.update(updateData);
     return solicitud;
   }
   async eliminar(id) {

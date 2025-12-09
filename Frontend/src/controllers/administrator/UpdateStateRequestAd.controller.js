@@ -1,16 +1,7 @@
 import { administratorService } from "../../services/administrator-service"
 
-
-
-
-
-
-const handleUpdateStateRequest = (id, state) => {
-
-  return administratorService
-  .updateStateRequest(id, state)
-
-
+const handleUpdateStateRequest = (id, state, motivoCancelacion = null) => {
+  return administratorService.updateStateRequest(id, state, motivoCancelacion);
 }
 
 export {handleUpdateStateRequest}

@@ -29,8 +29,8 @@ export class SolicitudService {
         return await this.repository.servicioExiste(servicio_id);
     }
 
-    async actualizarEstado(id, estado) {
-        const solicitud = await this.repository.actualizarEstado(id, estado);
+    async actualizarEstado(id, estado, motivo_cancelacion = null) {
+        const solicitud = await this.repository.actualizarEstado(id, estado, motivo_cancelacion);
         if (!solicitud) throw new Error('Solicitud no encontrada');
         return solicitud;
     }
