@@ -8,6 +8,18 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
   
   const handleDownloadPDF = async (report) => {
     try {
+      // Si es una URL de Cloudinary, descargarla directamente
+      if (report.pdf_path.includes('cloudinary.com')) {
+        const link = document.createElement('a');
+        link.href = report.pdf_path;
+        link.download = `Reporte-bombeo-${report.id}.pdf`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       const relativePath = report.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
       const publicUrl = `${API_KEY}/${relativePath}`;
@@ -38,6 +50,12 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
 
   const handleViewPDF = async (report) => {
     try {
+      // Si es una URL de Cloudinary, abrirla directamente
+      if (report.pdf_path.includes('cloudinary.com')) {
+        window.open(report.pdf_path, "_blank");
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       const relativePath = report.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
       const publicUrl = `${API_KEY}/${relativePath}`;

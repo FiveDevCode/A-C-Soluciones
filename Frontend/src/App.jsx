@@ -57,6 +57,8 @@ import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 
 // Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
+import MaintenanceReportPageCl from "./pages/client/MaintenanceReportCl.jsx";
+import PumpingReportPageCl from "./pages/client/PumpingReportCl.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
 import { MenuProvider as MenuProviderTc } from "./components/technical/MenuContext.jsx";
 
@@ -71,6 +73,8 @@ import RequestPageAd from "./pages/administrator/RequestPageAd.jsx";
 import EditAdminPageAd from "./pages/administrator/EditAdminPageAd.jsx";
 import MaintenanceReportPageAd from "./pages/administrator/MaintenanceReportAd.jsx";
 import PumpingReportPageAd from "./pages/administrator/PumpingReportAd.jsx";
+import MaintenanceReportPageTc from "./pages/technical/MaintenanceReportTc.jsx";
+import PumpingReportPageTc from "./pages/technical/PumpingReportTc.jsx";
 import ReportPageAd from "./pages/administrator/ReportPageAd.jsx";
 import MetricasPage from "./pages/administrator/MetricasPage.jsx";
 import CreateFixedClientAd from "./pages/administrator/CreateFixedClientAd.jsx";
@@ -230,6 +234,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="cliente">
                 <EditProfileCl />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/cliente/reporte-electrico"
+            element={
+              <PrivateRoute roleRequired="cliente">
+                <MaintenanceReportPageCl />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/cliente/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="cliente">
+                <PumpingReportPageCl />
               </PrivateRoute>
             }
           />
@@ -439,6 +461,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="tecnico">
                 <NotificationPage/>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/tecnico/reporte-electrico"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <MaintenanceReportPageTc />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/tecnico/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="tecnico">
+                <PumpingReportPageTc />
               </PrivateRoute>
             }
           />

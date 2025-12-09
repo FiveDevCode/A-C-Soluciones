@@ -6,10 +6,14 @@ import BaseFormModal, { FormGrid, FullWidth, EquipmentCard } from "../common/Bas
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
 import { handleCreatePumpingReportAd } from "../../controllers/administrator/createPumpingReportAd.controller";
+import { administratorService } from "../../services/administrator-service";
 
 const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
   const [clients, setClients] = useState([]);
   const [technicals, setTechnicals] = useState([]);
+  const [visitas, setVisitas] = useState([]);
+  const [selectedClienteId, setSelectedClienteId] = useState(null);
+  const [tipoCliente, setTipoCliente] = useState(null);
   const [equipos, setEquipos] = useState([]);
   const [parametrosLinea, setParametrosLinea] = useState({
     voltaje_linea: "",
@@ -194,6 +198,16 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
           })),
           required: true
         },
+        ...(tipoCliente === 'regular' ? [{
+          name: "visita_id",
+          label: "Visita Asociada *",
+          type: "select",
+          required: true,
+          options: visitas.map(v => ({
+            value: v.id,
+            label: `Visita #${v.id} - ${new Date(v.fecha_programada).toLocaleDateString()} - ${v.estado}`,
+          })),
+        }] : []),
         {
           name: "tecnico_id",
           label: "Técnico",
@@ -223,7 +237,9 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
     },
     {
       title: "Parámetros de Línea",
-      fields: []
+      fields: [
+        { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true },
+      ]
     }
   ];
 
@@ -393,7 +409,7 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
     const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
 
-    await handleCreatePumpingReportAd({
+    const reportData = {
       fecha: data.fecha,
       cliente_id: parseInt(data.cliente_id),
       tecnico_id: parseInt(data.tecnico_id),
@@ -405,7 +421,14 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
       observaciones_finales: data.observaciones_finales,
       equipos,
       parametrosLinea
-    });
+    };
+
+    // Agregar visita_id solo si es cliente regular
+    if (tipoCliente === 'regular' && data.visita_id) {
+      reportData.visita_id = parseInt(data.visita_id);
+    }
+
+    await handleCreatePumpingReportAd(reportData);
   };
 
   return (
@@ -417,6 +440,13 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
       onSuccess={onSuccess}
       successMessage="¡Reporte de bombeo creado exitosamente!"
       renderStepContent={renderStepContent}
+      onFormDataChange={(data) => {
+        if (data.cliente_id && data.cliente_id !== selectedClienteId) {
+          const cliente = clients.find(c => c.id === parseInt(data.cliente_id));
+          setSelectedClienteId(parseInt(data.cliente_id));
+          setTipoCliente(cliente?.tipo_cliente || null);
+        }
+      }}
     />
   );
 };

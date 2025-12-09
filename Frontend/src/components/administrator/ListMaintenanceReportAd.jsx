@@ -2,15 +2,22 @@ import BaseTable from "../common/BaseTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-const API_KEY = "http://localhost:8000";
+const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 
 const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   
   const handleDownloadPDF = async (report) => {
     try {
+      // Si el PDF está en Cloudinary, descargarlo directamente
+      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
+        window.open(report.pdf_generado, '_blank');
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       // Usar el endpoint del backend para descargar el PDF por ID
-      const publicUrl = `${API_KEY}/api/reportes-mantenimiento/${report.id}/pdf`;
+      const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
 
       const response = await fetch(publicUrl, {
         method: 'GET',
@@ -38,9 +45,15 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
 
   const handleViewPDF = async (report) => {
     try {
+      // Si el PDF está en Cloudinary, abrirlo directamente
+      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
+        window.open(report.pdf_generado, '_blank');
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       // Usar el endpoint del backend para ver el PDF por ID
-      const publicUrl = `${API_KEY}/api/reportes-mantenimiento/${report.id}/pdf`;
+      const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
 
       const response = await fetch(publicUrl, {
         method: 'GET',

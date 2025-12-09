@@ -6,6 +6,7 @@ import * as fichaRepo from '../repository/ficha_mantenimiento.repository.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ValidationError, DatabaseError } from 'sequelize';
 import * as notificacionService from '../services/notificacion.services.js';
+import { uploadPDFToCloudinary } from '../services/cloudinary.services.js';
 
 export const crearFichaMantenimiento = async (req, res) => {
   
@@ -150,15 +151,59 @@ export const crearFichaMantenimiento = async (req, res) => {
     const pdfPath = await generarPDF(nuevaFicha, clienteInfo, tecnicoInfo, imagenes);
     console.log('✓ PDF generado en:', pdfPath);
 
-    // Guardar path PDF en BD
-    console.log('=== ACTUALIZANDO PATH DEL PDF EN BD ===');
-    await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfPath);
-    console.log('✓ Path actualizado en BD');
+    // Subir PDF a Cloudinary
+    console.log('=== SUBIENDO PDF A CLOUDINARY ===');
+    let pdfUrl = pdfPath; // Por defecto, usar ruta local
+    try {
+      const cloudinaryResult = await uploadPDFToCloudinary(
+        pdfPath, 
+        `ficha_${nuevaFicha.id}_${Date.now()}`
+      );
+      pdfUrl = cloudinaryResult.url;
+      console.log('✓ PDF subido a Cloudinary:', pdfUrl);
+    } catch (cloudinaryError) {
+      console.error('✗ Error al subir PDF a Cloudinary:', cloudinaryError.message);
+      console.log('⚠️  Continuando con ruta local (solo funcionará en desarrollo)');
+    }
 
-    // Enviar email con PDF
+    // Guardar URL del PDF en BD
+    console.log('=== ACTUALIZANDO URL DEL PDF EN BD ===');
+    await fichaRepo.actualizarPDFPath(nuevaFicha.id, pdfUrl);
+    console.log('✓ URL actualizada en BD');
+
+    // Enviar email con PDF con timeout
     console.log('=== ENVIANDO EMAIL ===');
-    await sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath);
-    console.log('✓ Email enviado a:', clienteInfo.correo);
+    try {
+      // Si el PDF está en Cloudinary, enviar la URL en el cuerpo del email
+      if (pdfUrl.includes('cloudinary.com')) {
+        const emailBody = `
+Estimado/a cliente,
+
+Adjunto encontrará la ficha de mantenimiento generada.
+
+Puede descargar el PDF desde el siguiente enlace:
+${pdfUrl}
+
+Saludos cordiales,
+A-C Soluciones
+        `.trim();
+        
+        await Promise.race([
+          sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', emailBody, null),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Email timeout')), 25000))
+        ]);
+      } else {
+        // Si es ruta local, adjuntar el archivo
+        await Promise.race([
+          sendEmail(clienteInfo.correo, 'Ficha de mantenimiento', 'Adjunto encontrarás la ficha generada.', pdfPath),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Email timeout')), 25000))
+        ]);
+      }
+      console.log('✓ Email enviado a:', clienteInfo.correo);
+    } catch (emailError) {
+      console.error('✗ Error al enviar email:', emailError.message);
+      // Continuamos aunque falle el email
+    }
     
     // Notificar al cliente sobre la ficha creada
     console.log('=== ENVIANDO NOTIFICACIONES ===');
@@ -252,7 +297,8 @@ export const listarFichas = async (req, res) => {
     if (rol === 'admin' || rol === 'administrador') {
       fichas = await fichaRepo.obtenerTodasFichas(id_visitas);
     } else if (rol === 'tecnico') {
-      fichas = await fichaRepo.obtenerTodasFichas(id_visitas); //CORRECCION: esta es para todas las fichas no solo las que maneja tecnico corregir eso
+      // El técnico solo ve sus propias fichas, opcionalmente filtradas por visita
+      fichas = await fichaRepo.obtenerFichasPorTecnico(id, id_visitas);
     } else if (rol === 'cliente') {
       fichas = await fichaRepo.obtenerFichasPorCliente(id, id_visitas);
     } else {

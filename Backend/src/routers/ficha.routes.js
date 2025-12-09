@@ -2,7 +2,7 @@ import path from 'path';
 
 import express from 'express';
 import { crearFichaMantenimiento, listarFichas} from '../controllers/ficha_mantenimiento.controller.js';
-import { isAdminOrTecnico, isCliente, authenticate, isAdminOrCliente} from '../middlewares/autenticacion.js';
+import { isAdminOrTecnico, isCliente, authenticate, isAdminOrCliente, isAdminOrTecnicoOrCliente} from '../middlewares/autenticacion.js';
 import upload from '../middlewares/uploadImages.js';
 import { obtenerFichasPorCliente, obtenerFichasPorTecnico} from '../controllers/ficha_mantenimiento.controller.js';
 
@@ -35,10 +35,30 @@ router.post(
 
 router.get('/fichas', authenticate, isAdminOrTecnico, listarFichas);
 
-router.get('/descargar/:nombreArchivo', authenticate, isAdminOrCliente, (req, res) => {
+router.get('/descargar/:nombreArchivo', authenticate, isAdminOrTecnicoOrCliente, async (req, res) => {
   const { nombreArchivo } = req.params;
+  
+  // Buscar la ficha por el nombre del archivo
+  const fichaId = nombreArchivo.match(/ficha_(\d+)/)?.[1];
+  
+  if (fichaId) {
+    try {
+      const { obtenerFichaPorId } = await import('../repository/ficha_mantenimiento.repository.js');
+      const ficha = await obtenerFichaPorId(fichaId);
+      
+      if (ficha && ficha.pdf_path) {
+        // Si la URL es de Cloudinary, redirigir
+        if (ficha.pdf_path.includes('cloudinary.com')) {
+          return res.redirect(ficha.pdf_path);
+        }
+      }
+    } catch (error) {
+      console.error('Error buscando ficha:', error);
+    }
+  }
+  
+  // Fallback: intentar archivo local
   const filePath = path.resolve(`uploads/fichas/${nombreArchivo}`);
-
   res.sendFile(filePath, (err) => { 
     if (err) {
       console.error('Error enviando archivo:', err);

@@ -5,7 +5,7 @@ import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
 import { Pagination, Stack, Typography } from "@mui/material";
 
-const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_KEY = import.meta.env.VITE_API_URL ;
 
 const ContainerNoti = styled.div`
   display: grid;
@@ -197,12 +197,21 @@ const ListReportTc = ({visits}) => {
   };
 
   const handleDownloadPDF = async (visit) => {
+    if (!visit.pdf_path) {
+      alert('No hay PDF disponible para este reporte');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('authToken');
-      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-      const publicUrl = `${API_KEY}/${relativePath}`;
+      
+      // Extraer solo el nombre del archivo del path (igual que en admin)
+      const fileName = visit.pdf_path.split(/[/\\]/).pop();
+      
+      // Usar la ruta de descarga del backend
+      const pdfUrl = `${API_KEY}/descargar/${fileName}`;
 
-      const response = await fetch(publicUrl, {
+      const response = await fetch(pdfUrl, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -217,7 +226,7 @@ const ListReportTc = ({visits}) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Reporte-visita-${visit.id}.pdf`;
+      link.download = fileName || `Reporte-${visit.id}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -229,12 +238,21 @@ const ListReportTc = ({visits}) => {
   };
 
   const handleViewPDF = async (visit) => {
+    if (!visit.pdf_path) {
+      alert('No hay PDF disponible para este reporte');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('authToken');
-      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-      const publicUrl = `${API_KEY}/${relativePath}`;
       
-      const response = await fetch(publicUrl, {
+      // Extraer solo el nombre del archivo del path (igual que en admin)
+      const fileName = visit.pdf_path.split(/[/\\]/).pop();
+      
+      // Usar la ruta de descarga del backend
+      const pdfUrl = `${API_KEY}/descargar/${fileName}`;
+      
+      const response = await fetch(pdfUrl, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`

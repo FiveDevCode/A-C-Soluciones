@@ -215,9 +215,14 @@ const getListAdministrator = () => {
 
 }
 
-const updateStateRequest = (id, state) => {
+const updateStateRequest = (id, state, motivoCancelacion = null) => {
+  const body = { estado: state };
+  if (motivoCancelacion) {
+    body.motivo_cancelacion = motivoCancelacion;
+  }
+  
   return api.patch(`/solicitudes/${id}/estado`, 
-    { estado: state }, // Aquí va el body
+    body,
     {
       headers: {
         "Content-Type": "application/json"

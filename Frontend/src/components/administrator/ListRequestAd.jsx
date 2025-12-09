@@ -60,7 +60,7 @@ const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false, clearSel
       getBadgeValue={(row) => row.estado}
       emptyMessage="No hay solicitudes registradas"
       ViewComponent={(props) => (
-        <ViewRequestDetailAd {...props} />
+        <ViewRequestDetailAd {...props} onUpdate={onUpdate} />
       )}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}

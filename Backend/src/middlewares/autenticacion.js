@@ -10,17 +10,41 @@ export const authenticate = async (req, res, next) => {
     // Obtener el token del header Authorization
     const authHeader = req.headers.authorization;
     
-    if (!authHeader?.startsWith('Bearer ')) {
+    console.log('Authorization header recibido:', authHeader ? authHeader.substring(0, 30) + '...' : 'NO PRESENTE');
+    
+    if (!authHeader) {
       return res.status(401).json({ 
+        success: false,
+        message: 'Token no proporcionado' 
+      });
+    }
+    
+    // Limpiar el header de espacios adicionales y verificar formato
+    const cleanHeader = authHeader.trim();
+    
+    if (!cleanHeader.toLowerCase().startsWith('bearer ')) {
+      console.log('⚠️ Header no empieza con "Bearer ". Header completo:', cleanHeader.substring(0, 50));
+      return res.status(400).json({ 
         success: false,
         message: 'Formato de token inválido. Use: Bearer <token>' 
       });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = cleanHeader.substring(7).trim(); // Extraer después de "Bearer "
+    
+    if (!token) {
+      return res.status(401).json({ 
+        success: false,
+        message: 'Token vacío' 
+      });
+    }
+    
+    console.log('Token extraído (primeros 20 chars):', token.substring(0, 20) + '...');
     
     // Verificar el token
+    console.log('Intentando verificar token...');
     const decoded = await authService.verifyToken(token);
+    console.log('✓ Token verificado correctamente. Usuario:', decoded.id, 'Rol:', decoded.rol);
     
     // Adjuntar el usuario decodificado a la solicitud
     req.user = {
@@ -31,7 +55,8 @@ export const authenticate = async (req, res, next) => {
     
     next();
   } catch (error) {
-    console.error('Error en autenticación:', error.message);
+    console.error('❌ Error en autenticación:', error.message);
+    console.error('Stack:', error.stack);
     
     const message = error.name === 'TokenExpiredError' 
       ? 'Token expirado' 
@@ -78,4 +103,6 @@ export const isContador = authorize(['contador']);
 export const isAdminOrTecnico = authorize(['admin', 'administrador', 'tecnico']);
 export const isAdminOrCliente = authorize(['admin', 'administrador', 'cliente']);
 export const isAdminOrContador = authorize(['admin', 'administrador', 'contador']);
-export const isAdminOrContadorOrTecnico = authorize(['admin','administrador','contador','tecnico'])
+export const isAdminOrContadorOrTecnico = authorize(['admin','administrador','contador','tecnico']);
+export const isTecnicoOrCliente = authorize(['tecnico', 'cliente']);
+export const isAdminOrTecnicoOrCliente = authorize(['admin', 'administrador', 'tecnico', 'cliente']);

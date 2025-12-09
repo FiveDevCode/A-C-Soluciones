@@ -1,6 +1,56 @@
-import BaseDetailModal from "../common/BaseDetailModal";
+import { useState } from "react";
+import styled from "styled-components";
+import { 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  DialogActions, 
+  Button, 
+  Select, 
+  MenuItem, 
+  FormControl, 
+  InputLabel,
+  Chip,
+  Box,
+  Typography,
+  Divider,
+  TextField
+} from "@mui/material";
+import { handleUpdateStateRequest } from "../../controllers/administrator/UpdateStateRequestAd.controller";
 
-const ViewRequestDetailAd = ({ selected, onClose }) => {
+const DetailRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+`;
+
+const Label = styled.span`
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+`;
+
+const Value = styled.span`
+  color: #333;
+  font-size: 1rem;
+`;
+
+const getEstadoColor = (estado) => {
+  const colores = {
+    pendiente: "#ff9800",
+    aceptada: "#4caf50",
+    rechazada: "#f44336",
+  };
+  return colores[estado] || "#757575";
+};
+
+const ViewRequestDetailAd = ({ selected, onClose, onUpdate }) => {
+  const [estado, setEstado] = useState(selected?.estado || "pendiente");
+  const [motivoCancelacion, setMotivoCancelacion] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMotivo, setErrorMotivo] = useState("");
+
   if (!selected) return null;
 
   const fields = [
