@@ -346,7 +346,7 @@ const MenuSide = () => {
       { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
       { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/admin/metricas', icon: faChartBar, label: 'Métricas y Estadísticas' },
-      { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
+      { to: '/admin/contadores', icon: faCalculator, label: 'Contadores' },
       { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
       { to: '/admin/inventario', icon: faBoxes, label: 'Herramientas' },

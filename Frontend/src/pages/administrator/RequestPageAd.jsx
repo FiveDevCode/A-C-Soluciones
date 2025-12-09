@@ -73,7 +73,13 @@ const RequestPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteRequestAd(id);
       }
-      showToast(`${selectedIds.length} solicitud(es) eliminada(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 solicitud eliminada correctamente"
+        : `${cantidad} solicitudes eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadRequests();

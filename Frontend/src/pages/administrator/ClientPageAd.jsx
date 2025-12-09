@@ -67,7 +67,13 @@ const ClientPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteClientAd(id);
       }
-      showToast(`${selectedIds.length} cliente(s) deshabilitado(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 cliente deshabilitado correctamente"
+        : `${cantidad} clientes deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadClients();

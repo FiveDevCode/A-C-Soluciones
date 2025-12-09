@@ -66,7 +66,12 @@ const AccountingPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteAccountingAd(id);
       }
-      showToast(`${selectedIds.length} contador(es) deshabilitado(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+      const texto = cantidad === 1 
+        ? "1 contador deshabilitado correctamente"
+        : `${cantidad} contadores deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadAccounting();
@@ -84,7 +89,7 @@ const AccountingPageAd = () => {
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="CONTABILIDAD"
+        headerTitle="CONTADORES"
         sectionTitle="Lista de empleados contables"
         addLabel="Agregar empleado contable"
         onAdd={() => setShowModal(true)}

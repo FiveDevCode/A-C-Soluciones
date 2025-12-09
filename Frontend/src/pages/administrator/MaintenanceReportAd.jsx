@@ -60,7 +60,6 @@ const MaintenanceReportPageAd = () => {
             onFilteredChange={setFilteredReports}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
       <Card>

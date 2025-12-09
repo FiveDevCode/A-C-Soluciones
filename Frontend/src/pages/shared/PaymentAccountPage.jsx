@@ -67,7 +67,13 @@ const PaymentAccountPage = () => {
       for (const id of selectedIds) {
         await handleDeletePaymentAccount(id);
       }
-      showToast(`${selectedIds.length} cuenta(s) eliminada(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 cuenta eliminada correctamente"
+        : `${cantidad} cuentas eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadAccounts();

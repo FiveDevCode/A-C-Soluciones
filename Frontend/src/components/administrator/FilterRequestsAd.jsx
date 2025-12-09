@@ -5,6 +5,7 @@ const FilterRequestsAd = ({ requests = [], onFilteredChange }) => {
     pendiente: "Pendiente",
     aceptada: "Aceptada",
     completada: "Completada",
+    rechazada: "Rechazada",
   };
 
   const statusOptions = [...new Set(requests.map((r) => r.estado).filter(Boolean))].map(

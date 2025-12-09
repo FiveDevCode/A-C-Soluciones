@@ -69,7 +69,13 @@ const TechnicalPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteTechnicalAd(id);
       }
-      showToast(`${selectedIds.length} técnico(s) deshabilitado(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 técnico deshabilitado correctamente"
+        : `${cantidad} técnicos deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadTechnicals();

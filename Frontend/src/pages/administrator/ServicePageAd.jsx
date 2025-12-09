@@ -67,7 +67,13 @@ const ServicePageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteServiceAd(id);
       }
-      showToast(`${selectedIds.length} servicio(s) deshabilitado(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 servicio deshabilitado correctamente"
+        : `${cantidad} servicios deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadServices();

@@ -67,7 +67,13 @@ const BillPage = () => {
       for (const id of selectedIds) {
         await handleDeleteBill(id);
       }
-      showToast(`${selectedIds.length} factura(s) eliminada(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 factura eliminada correctamente"
+        : `${cantidad} facturas eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadBills();

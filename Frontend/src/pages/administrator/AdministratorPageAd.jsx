@@ -69,7 +69,13 @@ const AdministratorPageAd = () => {
       for (const id of selectedIds) {
         await handleDeleteAdministratorAd(id);
       }
-      showToast(`${selectedIds.length} administrador(es) eliminado(s) correctamente`, "success", 4000);
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 administrador eliminado correctamente"
+        : `${cantidad} administradores eliminados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
       setClearTrigger(prev => prev + 1);
       loadAdministrators();
