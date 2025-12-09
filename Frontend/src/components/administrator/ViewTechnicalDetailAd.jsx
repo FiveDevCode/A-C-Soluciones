@@ -10,13 +10,23 @@ const ViewTechnicalDetailAd = ({ selected, onClose }) => {
 
   const formatDateCO = (value) => {
     if (!value) return "—";
-    return new Date(value).toLocaleString("es-CO", {
+    // Convertir string UTC a Date
+    const utcDate = new Date(value);
+    // Obtener los componentes UTC
+    const year = utcDate.getUTCFullYear();
+    const month = utcDate.getUTCMonth();
+    const day = utcDate.getUTCDate();
+    const hour = utcDate.getUTCHours();
+    const minute = utcDate.getUTCMinutes();
+    // Ajustar hora Colombia (UTC-5)
+    const localDate = new Date(Date.UTC(year, month, day, hour - 5, minute));
+    return localDate.toLocaleString("es-CO", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: "UTC"
+      hour12: true
     });
   };
 
