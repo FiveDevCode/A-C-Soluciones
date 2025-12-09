@@ -211,40 +211,22 @@ const DateInputWrapper = styled.div`
     content: attr(data-label);
     position: absolute;
     left: 32px;
-    font-size: 13px;
-    color: #999;
+    top: -2px;           /* SIEMPRE ARRIBA */
+    font-size: 11px;    /* SIEMPRE PEQUEÑO */
+    color: #999;        /* Color apagado */
     pointer-events: none;
-    opacity: ${props => props.hasValue ? 0 : 1};
-    transition: opacity 0.2s;
+    transition: color 0.2s ease;
   }
 
+  /* Si tiene valor o está en foco → solo cambia color */
+  ${props => props.hasValue && `
     &::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 13px;
-    color: #999;
-    pointer-events: none;
-    transition: all 0.2s ease;
-  }
-
-  /* Cuando tiene valor o está enfocado → el label sube */
-  ${(props) => props.hasValue && `
-    &::before {
-      top: 4px;
-      font-size: 10px;
       color: #1976d2;
-      transform: translateY(0);
     }
   `}
 
   &:focus-within::before {
-    top: 4px;
-    font-size: 10px;
     color: #1976d2;
-    transform: translateY(0);
   }
 
   @media (max-width: 1350px) and (min-width: 769px) {
