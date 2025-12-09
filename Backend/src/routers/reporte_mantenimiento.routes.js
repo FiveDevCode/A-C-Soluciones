@@ -1,41 +1,41 @@
 import path from 'path';
 import express from 'express';
 import { crearReporteMantenimiento, listarReportes, obtenerReportePorId, descargarPDF } from '../controllers/reporte_mantenimiento.controller.js';
-import { isAdminOrTecnico, isCliente, authenticate} from '../middlewares/autenticacion.js';
+import { isAdminOrTecnico, isAdminOrTecnicoOrCliente, authenticate} from '../middlewares/autenticacion.js';
 import * as reporteRepo from '../repository/reporte_mantenimiento.repository.js';
 
 const router = express.Router();
 
 router.post(
-  '/reportes-mantenimiento',
+  '/api/reportes-mantenimiento',
   authenticate,
   isAdminOrTecnico,
   crearReporteMantenimiento
 );
 
 router.get(
-  '/reportes-mantenimiento',
+  '/api/reportes-mantenimiento',
   authenticate,
-  isAdminOrTecnico,
+  isAdminOrTecnicoOrCliente,
   listarReportes
 );
 
 router.get(
-  '/reportes-mantenimiento/:id',
+  '/api/reportes-mantenimiento/:id',
   authenticate,
-  isAdminOrTecnico,
+  isAdminOrTecnicoOrCliente,
   obtenerReportePorId
 );
 
 router.get(
-  '/reportes-mantenimiento/:id/pdf',
+  '/api/reportes-mantenimiento/:id/pdf',
   authenticate,
-  isAdminOrTecnico,
+  isAdminOrTecnicoOrCliente,
   descargarPDF
 );
 
 // Ruta para descargar PDF directamente por nombre de archivo
-router.get('/descargar/:nombreArchivo', authenticate, async (req, res) => {
+router.get('/api/reportes-mantenimiento/descargar/:nombreArchivo', authenticate, isAdminOrTecnicoOrCliente, async (req, res) => {
   try {
     const { nombreArchivo } = req.params;
     

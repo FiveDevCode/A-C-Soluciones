@@ -230,13 +230,27 @@ export const listarReportes = async (req, res) => {
 export const obtenerReportePorId = async (req, res) => {
     try {
         const { idReporte } = req.params;
+
+        if (!req.user) {
+            return res.status(401).json({ error: 'Usuario no autenticado' });
+        }
+
         const reporte = await reporteRepo.obtenerReportePorId(idReporte);
 
         if (!reporte) {
             return res.status(404).json({ mensaje: 'Reporte no encontrado' });
         }
         
-        // Opcional: Agregar lógica de autorización (solo cliente/técnico/admin asociado puede verlo)
+        // Verificar permisos
+        const { rol, id } = req.user;
+        
+        if (rol === 'cliente' && reporte.cliente_id !== id) {
+            return res.status(403).json({ error: 'No tiene permisos para ver este reporte' });
+        }
+
+        if (rol === 'tecnico' && reporte.tecnico_id !== id) {
+            return res.status(403).json({ error: 'No tiene permisos para ver este reporte' });
+        }
 
         res.status(200).json(reporte);
     } catch (error) {

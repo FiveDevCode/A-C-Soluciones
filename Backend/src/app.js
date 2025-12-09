@@ -87,7 +87,7 @@ App.use('/fichas', express.static(path.resolve('uploads/fichas'))); // Cliente p
 App.use('/reportes', express.static(path.resolve('uploads/reportes'))); // Acceso a PDFs de reportes
 App.use('/reportes_bombeo', express.static(path.resolve('uploads/reportes_bombeo'))); // Acceso a PDFs de reportes de bombeo
 App.use('/api', fichaRouter);
-App.use('/api', ReporteMantenimientoRouter);
+App.use(ReporteMantenimientoRouter);
 // Documentación Swagger
 const openApiPath = path.join(__dirname, '../openapi.json');
 if (fs.existsSync(openApiPath)) {
