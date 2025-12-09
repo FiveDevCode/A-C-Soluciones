@@ -53,7 +53,7 @@ const LoginPage = () => {
   return (
     <SectionPage>
       <Logo src={logo} max="300px" size="80%"/>
-      <Title>Iniciar sesion</Title>
+      <Title>Iniciar sesión</Title>
       <Subtitle>Inicia sesión con tu cuenta</Subtitle>
       <FormLogin />
     </SectionPage>
