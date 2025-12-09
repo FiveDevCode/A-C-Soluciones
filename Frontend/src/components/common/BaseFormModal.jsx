@@ -154,6 +154,33 @@ const BaseFormModal = ({
   renderStepContent,
 }) => {
 
+
+  const validateTimeRange = (datetimeValue, minHour = 8, maxHour = 18) => {
+    if (!datetimeValue) return datetimeValue;
+    
+    const date = new Date(datetimeValue);
+    const hours = date.getHours();
+    
+    // Si está fuera del rango, ajustar a la hora más cercana válida
+    if (hours < minHour) {
+      date.setHours(minHour, 0, 0, 0);
+    } else if (hours >= maxHour) {
+      date.setHours(maxHour - 1, 59, 0, 0);
+    }
+    
+    // Convertir de vuelta a formato datetime-local (YYYY-MM-DDTHH:mm)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+  };
+
+
+
+
   // ========= DETECCIÓN DE MULTIPASOS =========
   const isMultiStep = Array.isArray(steps) && steps.length > 0;
 
@@ -232,6 +259,7 @@ const BaseFormModal = ({
   };
 
   // ========= HANDLE CHANGE =========
+  // ========= HANDLE CHANGE (MODIFICADO) =========
   const handleChange = (e) => {
     const { name, value, files: fileInput } = e.target;
 
@@ -243,10 +271,30 @@ const BaseFormModal = ({
       return;
     }
 
-    const newFormData = { ...formData, [name]: value };
+    // Buscar el campo para verificar si tiene restricciones de tiempo
+    const field = allFields.find(f => f.name === name);
+    let processedValue = value;
+    
+    // Si es datetime-local y tiene timeRange, validar el horario
+    if (field?.type === "datetime-local" && field?.timeRange) {
+      const { minHour = 8, maxHour = 18 } = field.timeRange;
+      processedValue = validateTimeRange(value, minHour, maxHour);
+      
+      // Si el valor fue ajustado, mostrar una advertencia
+      if (processedValue !== value) {
+        const hours = new Date(value).getHours();
+        if (hours < minHour) {
+          showToast(`La hora mínima permitida es ${minHour}:00`, "warning", 3000);
+        } else if (hours >= maxHour) {
+          showToast(`La hora máxima permitida es ${maxHour - 1}:59`, "warning", 3000);
+        }
+      }
+    }
+
+    const newFormData = { ...formData, [name]: processedValue };
     setFormData(newFormData);
     onFormDataChange?.(newFormData);
-    onFieldChange?.(name, value);
+    onFieldChange?.(name, processedValue);
   };
 
   const handleCurrencyChange = (e) => {
@@ -490,12 +538,17 @@ const BaseFormModal = ({
             value={formData[field.name]}
             onChange={field.type === "currency" ? handleCurrencyChange : handleChange}
             error={Boolean(fieldErrors[field.name])}
-            helperText={fieldErrors[field.name]}
+            helperText={fieldErrors[field.name] || (field.type === "datetime-local" && field.timeRange ? `Horario permitido: ${field.timeRange.minHour || 8}:00 - ${field.timeRange.maxHour || 18}:00` : "")}
             disabled={field.disabled || false}
             inputProps={{
               ...field.inputProps,
               ...(field.type === "currency" && {
                 placeholder: "0"
+              }),
+              // Agregar min/max para datetime-local si tiene timeRange
+              ...(field.type === "datetime-local" && field.timeRange && {
+                // Esto ayuda visualmente pero la validación real está en handleChange
+                step: "60", // Pasos de 1 minuto
               })
             }}
             InputLabelProps={{

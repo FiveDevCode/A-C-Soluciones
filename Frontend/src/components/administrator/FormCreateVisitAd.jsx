@@ -56,7 +56,12 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
       label: "Fecha programada", 
       type: "datetime-local", 
       required: true,
-      disabled: !selectedTecnico 
+      disabled: !selectedTecnico,
+      // ✅ AGREGAR RESTRICCIÓN DE HORARIO
+      timeRange: {
+        minHour: 8,  // 8:00 AM
+        maxHour: 18  // 6:00 PM (última hora válida es 17:59)
+      }
     },
   ];
 
