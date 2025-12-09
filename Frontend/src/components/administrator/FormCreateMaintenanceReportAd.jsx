@@ -181,7 +181,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
         {
           name: "id_cliente",
           label: "Cliente",
-          type: "select",
+          type: "autocomplete",
           options: clients.map(c => ({
             value: c.id,
             label: `${c.numero_de_cedula} - ${c.nombre} ${c.apellido}`,
@@ -191,14 +191,20 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
         {
           name: "id_tecnico",
           label: "Técnico",
-          type: "select",
+          type: "autocomplete",
           options: technicals.map(t => ({
             value: t.id,
             label: `${t.numero_de_cedula} - ${t.nombre} ${t.apellido}`,
           })),
           required: true
         },
-        { name: "ciudad", label: "Ciudad", type: "select", options: ciudadesColombia, required: true },
+        {
+          name: "ciudad",
+          label: "Ciudad",
+          type: "autocomplete",
+          options: ciudadesColombia,
+          required: true
+        },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true, required: true },
         { name: "telefono", label: "Teléfono", type: "text", required: true },
         { name: "encargado", label: "Encargado", type: "text", required: true },
