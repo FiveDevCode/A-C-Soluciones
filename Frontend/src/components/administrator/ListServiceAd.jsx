@@ -17,12 +17,16 @@ const ListServiceAd = ({ services, reloadData, onSelectRows, isLoadingData = fal
         if (!value) return "—";
         
         const d = new Date(value);
-        const day = String(d.getUTCDate()).padStart(2, "0");
-        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-        const year = d.getUTCFullYear();
+        
+        // Restar 5 horas para Colombia (UTC-5)
+        const colombiaTime = new Date(d.getTime() - (10 * 60 * 60 * 1000));
+        
+        const day = String(colombiaTime.getUTCDate()).padStart(2, "0");
+        const month = String(colombiaTime.getUTCMonth() + 1).padStart(2, "0");
+        const year = colombiaTime.getUTCFullYear();
 
-        let hours = d.getUTCHours();
-        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+        let hours = colombiaTime.getUTCHours();
+        const minutes = String(colombiaTime.getUTCMinutes()).padStart(2, "0");
         const ampm = hours >= 12 ? "pm" : "am";
         hours = hours % 12 || 12;
 

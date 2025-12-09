@@ -39,13 +39,10 @@ const getListTechnical = () => {
   return api.get("/tecnico")
 };
 
-const createService = (nameService, descripcion) => {
+const createService = (data) => {
   const token = localStorage.getItem("authToken");
 
-  return api.post("/servicios", {
-    nombre: nameService,
-    descripcion: descripcion
-  }, {
+  return api.post("/servicios", data, {
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`
