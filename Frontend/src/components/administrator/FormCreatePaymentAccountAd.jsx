@@ -36,19 +36,23 @@ const FormCreatePaymentAccountAd = ({ onClose, onSuccess }) => {
     { name: "nit", label: "NIT", type: "text" },
   ];
 
-  // 🔹 Acción al enviar el formulario
   const handleSubmit = async (data) => {
     const token = localStorage.getItem("authToken");
     const decoded = jwtDecode(token);
-    const idAdministrador = parseInt(decoded.id);
 
-    await handleCreateSubmitPaymentAccount(
-      data.numero_cuenta,
-      data.fecha_registro,
-      data.id_cliente,
-      idAdministrador,
-      data.nit
-    );
+    // Solo enviar la fecha en formato YYYY-MM-DD
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    
+    const fechaSolo = `${year}-${month}-${day}`;
+
+    await handleCreateSubmitPaymentAccount({
+      ...data,
+      fecha_registro: fechaSolo,
+      id_admin: parseInt(decoded.id),
+    });
   };
 
   return (
