@@ -40,37 +40,12 @@ const Card = styled.div`
 const BillPage = () => {
   const { data: bills, isLoading: loading, reload: loadBills } = useDataCache(
     'bills_cache',
-    async () => {
-      const billsData = await handleGetListBillAd();
-
-      // Enriquecer cada factura con información del cliente
-      const enrichedBills = await Promise.all(
-        billsData.map(async (bill) => {
-          if (bill.id_cliente) {
-            try {
-              const clientRes = await handleGetClient(bill.id_cliente);
-              const cliente = clientRes.data;
-              return {
-                ...bill,
-                cliente,
-                nombre_cliente: `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim(),
-              };
-            } catch (err) {
-              console.error(`Error obteniendo cliente ${bill.id_cliente}:`, err);
-              return bill;
-            }
-          }
-          return bill;
-        })
-      );
-
-      return enrichedBills;
-    }
+    handleGetListBillAd
   );
   const { timeAgo, manualRefresh } = useAutoRefresh(loadBills, 3, 'bills');
-  const [showModal, setShowModal] = useState(false);
-  const [selectedIds, setSelectedIds] = useState([]);
   const [filteredBills, setFilteredBills] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [clearTrigger, setClearTrigger] = useState(0);
@@ -106,7 +81,9 @@ const BillPage = () => {
   
   const cancelDelete = () => {
     setShowConfirmModal(false);
-  };  return (
+  };
+
+  return (
     <Container>
       <BaseHeaderSection
         headerTitle="FACTURAS"
