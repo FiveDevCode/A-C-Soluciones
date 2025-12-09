@@ -55,10 +55,117 @@ const FormCreateCl = () => {
 
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
 
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [offersAccepted, setOffersAccepted] = useState(false);
+
+  // Validaciones
+  const validateField = (fieldName, value) => {
+    const errors = { ...validationErrors };
+
+    switch (fieldName) {
+      case 'idCard':
+        if (!value.trim()) {
+          errors.idCard = 'La cédula es requerida';
+        } else if (!/^\d+$/.test(value)) {
+          errors.idCard = 'La cédula solo debe contener números';
+        } else if (value.length < 6 || value.length > 10) {
+          errors.idCard = 'La cédula debe tener entre 6 y 10 dígitos';
+        } else {
+          delete errors.idCard;
+        }
+        break;
+
+      case 'name':
+        if (!value.trim()) {
+          errors.name = 'El nombre es requerido';
+        } else if (value.trim() !== value) {
+          errors.name = 'El nombre no debe tener espacios al inicio o final';
+        } else if (/\s{2,}/.test(value)) {
+          errors.name = 'El nombre no debe tener espacios múltiples';
+        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+          errors.name = 'El nombre solo debe contener letras';
+        } else if (value.length < 2) {
+          errors.name = 'El nombre debe tener al menos 2 caracteres';
+        } else {
+          delete errors.name;
+        }
+        break;
+
+      case 'lastName':
+        if (!value.trim()) {
+          errors.lastName = 'El apellido es requerido';
+        } else if (value.trim() !== value) {
+          errors.lastName = 'El apellido no debe tener espacios al inicio o final';
+        } else if (/\s{2,}/.test(value)) {
+          errors.lastName = 'El apellido no debe tener espacios múltiples';
+        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+          errors.lastName = 'El apellido solo debe contener letras';
+        } else if (value.length < 2) {
+          errors.lastName = 'El apellido debe tener al menos 2 caracteres';
+        } else {
+          delete errors.lastName;
+        }
+        break;
+
+      case 'phone':
+        if (!value.trim()) {
+          errors.phone = 'El teléfono es requerido';
+        } else if (!/^\d+$/.test(value)) {
+          errors.phone = 'El teléfono solo debe contener números';
+        } else if (value.length !== 10) {
+          errors.phone = 'El teléfono debe tener 10 dígitos';
+        } else {
+          delete errors.phone;
+        }
+        break;
+
+      case 'email':
+        if (!value.trim()) {
+          errors.email = 'El correo electrónico es requerido';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errors.email = 'El correo electrónico no es válido';
+        } else {
+          delete errors.email;
+        }
+        break;
+
+      case 'address':
+        if (!value.trim()) {
+          errors.address = 'La dirección es requerida';
+        } else if (value.trim() !== value) {
+          errors.address = 'La dirección no debe tener espacios al inicio o final';
+        } else if (value.length < 5) {
+          errors.address = 'La dirección debe tener al menos 5 caracteres';
+        } else {
+          delete errors.address;
+        }
+        break;
+
+      case 'password':
+        if (!value) {
+          errors.password = 'La contraseña es requerida';
+        } else if (value.length < 6) {
+          errors.password = 'La contraseña debe tener al menos 6 caracteres';
+        } else if (!/(?=.*[a-z])/.test(value)) {
+          errors.password = 'La contraseña debe contener al menos una letra minúscula';
+        } else if (!/(?=.*[A-Z])/.test(value)) {
+          errors.password = 'La contraseña debe contener al menos una letra mayúscula';
+        } else if (!/(?=.*\d)/.test(value)) {
+          errors.password = 'La contraseña debe contener al menos un número';
+        } else {
+          delete errors.password;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setValidationErrors(errors);
+  };
   
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -93,15 +200,19 @@ const FormCreateCl = () => {
         label="Cédula" 
         fullWidth size="medium" 
         value={idCard} 
-        onChange={(e) => setIdCard(e.target.value)}
+        onChange={(e) => {
+          setIdCard(e.target.value);
+          validateField('idCard', e.target.value);
+        }}
+        onBlur={(e) => validateField('idCard', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.numero_de_cedula)}
-        helperText={fieldErrors.numero_de_cedula}
+        error={Boolean(validationErrors.idCard || fieldErrors.numero_de_cedula)}
+        helperText={validationErrors.idCard || fieldErrors.numero_de_cedula}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       />
@@ -109,15 +220,19 @@ const FormCreateCl = () => {
         label="Nombre" 
         fullWidth size="medium" 
         value={name} 
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setName(e.target.value);
+          validateField('name', e.target.value);
+        }}
+        onBlur={(e) => validateField('name', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.nombre)}
-        helperText={fieldErrors.nombre}
+        error={Boolean(validationErrors.name || fieldErrors.nombre)}
+        helperText={validationErrors.name || fieldErrors.nombre}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       />
@@ -125,15 +240,19 @@ const FormCreateCl = () => {
         label="Apellidos" 
         fullWidth size="medium" 
         value={lastName} 
-        onChange={(e) => setLastName(e.target.value)}
+        onChange={(e) => {
+          setLastName(e.target.value);
+          validateField('lastName', e.target.value);
+        }}
+        onBlur={(e) => validateField('lastName', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.apellido)}
-        helperText={fieldErrors.apellido}
+        error={Boolean(validationErrors.lastName || fieldErrors.apellido)}
+        helperText={validationErrors.lastName || fieldErrors.apellido}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       />
@@ -142,15 +261,19 @@ const FormCreateCl = () => {
         fullWidth size="medium" 
         type='number'
         value={phone} 
-        onChange={(e) => setPhone(e.target.value)}
+        onChange={(e) => {
+          setPhone(e.target.value);
+          validateField('phone', e.target.value);
+        }}
+        onBlur={(e) => validateField('phone', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.telefono)}
-        helperText={fieldErrors.telefono}
+        error={Boolean(validationErrors.phone || fieldErrors.telefono)}
+        helperText={validationErrors.phone || fieldErrors.telefono}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       />
@@ -158,14 +281,19 @@ const FormCreateCl = () => {
         label="Dirrecion" 
         fullWidth size="medium" 
         value={address} 
-        onChange={(e) => setAddress(e.target.value)}
+        onChange={(e) => {
+          setAddress(e.target.value);
+          validateField('address', e.target.value);
+        }}
+        onBlur={(e) => validateField('address', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.direccion)}
-        helperText={fieldErrors.direccion}
+        error={Boolean(validationErrors.address || fieldErrors.direccion)}
+        helperText={validationErrors.address || fieldErrors.direccion}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
+            color: 'error.main',
           },
         }}
       />
@@ -173,31 +301,40 @@ const FormCreateCl = () => {
         label="Correo electrónico" 
         fullWidth size="medium" 
         value={email} 
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          validateField('email', e.target.value);
+        }}
+        onBlur={(e) => validateField('email', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.correo_electronico)}
-        helperText={fieldErrors.correo_electronico}
+        error={Boolean(validationErrors.email || fieldErrors.correo_electronico)}
+        helperText={validationErrors.email || fieldErrors.correo_electronico}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       />
       <TextField 
         label="Contraseña" 
         fullWidth size="medium" 
+        type="password"
         value={password} 
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          validateField('password', e.target.value);
+        }}
+        onBlur={(e) => validateField('password', e.target.value)}
         sx={{ backgroundColor: 'white' }}
-        error={Boolean(fieldErrors.contrasenia)}
-        helperText={fieldErrors.contrasenia}
+        error={Boolean(validationErrors.password || fieldErrors.contrasenia)}
+        helperText={validationErrors.password || fieldErrors.contrasenia}
         FormHelperTextProps={{
           sx: {
             backgroundColor: '#F2F5F7',
             margin: 0,
-
+            color: 'error.main',
           },
         }}
       /> 
@@ -236,7 +373,17 @@ const FormCreateCl = () => {
 
 
       <ContainerButton>
-        <Button type="submit" variant="contained" disabled={!termsAccepted}>Crear cuenta</Button>
+        <Button 
+          type="submit" 
+          variant="contained" 
+          disabled={
+            !termsAccepted || 
+            Object.keys(validationErrors).length > 0 ||
+            !idCard || !name || !lastName || !phone || !email || !address || !password
+          }
+        >
+          Crear cuenta
+        </Button>
         <LinkForgot to="/iniciar-sesion">¿Ya tienes cuenta?</LinkForgot>
       </ContainerButton>
 
