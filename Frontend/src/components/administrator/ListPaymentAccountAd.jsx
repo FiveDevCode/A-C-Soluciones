@@ -33,12 +33,7 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
         const month = String(colombiaTime.getUTCMonth() + 1).padStart(2, "0");
         const year = colombiaTime.getUTCFullYear();
 
-        let hours = colombiaTime.getUTCHours();
-        const minutes = String(colombiaTime.getUTCMinutes()).padStart(2, "0");
-        const ampm = hours >= 12 ? "pm" : "am";
-        hours = hours % 12 || 12;
-
-        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+        return `${day}/${month}/${year}`;
       }
     },
   ];
