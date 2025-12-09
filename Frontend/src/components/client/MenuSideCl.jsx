@@ -3,7 +3,7 @@ import logo from '../../assets/common/logoA&C.png';
 import { Divider, Tooltip, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faArrowRightFromBracket, faWrench, faHistory, faCircleUser} from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faArrowRightFromBracket, faWrench, faHistory, faCircleUser, faBolt, faFaucet} from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { PanelLeft } from 'lucide-react';
 import { useMenu } from './MenuContext';
@@ -190,6 +190,8 @@ const MenuSideCl = () => {
     { to: '/cliente/inicio', icon: faHouse, label: 'Inicio' },
     { to: '/cliente/servicios', icon: faWrench, label: 'Servicios' },
     { to: '/cliente/historial', icon: faHistory, label: 'Historial' },
+    { to: '/cliente/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
+    { to: '/cliente/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
   ];
 
   return (
@@ -212,7 +214,9 @@ const MenuSideCl = () => {
               (opt.to === '/cliente/inicio' && location.pathname === '/cliente/inicio') ||
               (opt.to === '/cliente/perfil' && (location.pathname === '/cliente/perfil' || location.pathname === '/cliente/editar-perfil')) ||
               (opt.to === '/cliente/servicios' && location.pathname.startsWith('/cliente/servicios')) ||
-              (opt.to === '/cliente/historial' && location.pathname.startsWith('/cliente/historial'));
+              (opt.to === '/cliente/historial' && location.pathname.startsWith('/cliente/historial')) ||
+              (opt.to === '/cliente/reporte-electrico' && location.pathname.startsWith('/cliente/reporte-electrico')) ||
+              (opt.to === '/cliente/reporte-bombeo' && location.pathname.startsWith('/cliente/reporte-bombeo'));
             
             return (
               <Tooltip key={opt.to} title={collapsed ? opt.label : ''} placement="right" arrow>
