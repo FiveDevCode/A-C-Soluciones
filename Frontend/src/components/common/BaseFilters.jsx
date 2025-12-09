@@ -145,12 +145,33 @@ const Button = styled.button.withConfig({
   }
 `;
 
-
 const DateRangeContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+`;
+
+const DateRangeLabel = styled.label`
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+`;
+
+const DateInputsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 `;
 
 const DateInputWrapper = styled.div`
@@ -158,31 +179,113 @@ const DateInputWrapper = styled.div`
   display: flex;
   align-items: center;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  padding: 8px 12px;
-  min-width: 150px;
+  padding: 8px 10px;
+  min-width: 145px;
+  transition: border-color 0.3s;
+
+  &:focus-within {
+    border-color: #1976d2;
+  }
 
   svg {
     color: #555;
-    margin-right: 8px;
+    margin-right: 6px;
+    flex-shrink: 0;
   }
 
   input {
     border: none;
     outline: none;
-    font-size: 14px;
+    font-size: 13px;
     width: 100%;
+    cursor: pointer;
+    
+    &::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+    }
+  }
+
+  &::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 32px;
+    font-size: 13px;
+    color: #999;
+    pointer-events: none;
+    opacity: ${props => props.hasValue ? 0 : 1};
+    transition: opacity 0.2s;
+  }
+
+    &::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #999;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+
+  /* Cuando tiene valor o está enfocado → el label sube */
+  ${(props) => props.hasValue && `
+    &::before {
+      top: 4px;
+      font-size: 10px;
+      color: #1976d2;
+      transform: translateY(0);
+    }
+  `}
+
+  &:focus-within::before {
+    top: 4px;
+    font-size: 10px;
+    color: #1976d2;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 8px;
+    min-width: 130px;
+
+    input {
+      font-size: 12px;
+    }
+
+    &::before {
+      font-size: 12px;
+      left: 28px;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    min-width: 140px;
+
+    input {
+      font-size: 14px;
+    }
+
+    &::before {
+      font-size: 14px;
+      left: 36px;
+    }
   }
 `;
 
 const DateSeparator = styled.span`
   color: #666;
   font-size: 14px;
+  font-weight: 500;
 `;
-
-
-
 
 const BaseFilters = ({
   data = [],
@@ -395,27 +498,34 @@ const BaseFilters = ({
           const range = dateRanges[filter.key] || {};
           return (
             <DateRangeContainer key={filter.key}>
-              <DateInputWrapper>
-                <FaCalendar />
-                <input
-                  type="date"
-                  value={range.start || ""}
-                  onChange={(e) => handleDateRangeChange(filter.key, "start", e.target.value)}
-                  max={range.end || undefined}
-                  placeholder="Desde"
-                />
-              </DateInputWrapper>
-              <DateSeparator>-</DateSeparator>
-              <DateInputWrapper>
-                <FaCalendar />
-                <input
-                  type="date"
-                  value={range.end || ""}
-                  onChange={(e) => handleDateRangeChange(filter.key, "end", e.target.value)}
-                  min={range.start || undefined}
-                  placeholder="Hasta"
-                />
-              </DateInputWrapper>
+              <DateRangeLabel>{filter.label || "Rango de fechas"}</DateRangeLabel>
+              <DateInputsWrapper>
+                <DateInputWrapper 
+                  hasValue={!!range.start}
+                  data-label="Desde"
+                >
+                  <FaCalendar />
+                  <input
+                    type="date"
+                    value={range.start || ""}
+                    onChange={(e) => handleDateRangeChange(filter.key, "start", e.target.value)}
+                    max={range.end || undefined}
+                  />
+                </DateInputWrapper>
+                <DateSeparator>-</DateSeparator>
+                <DateInputWrapper 
+                  hasValue={!!range.end}
+                  data-label="Hasta"
+                >
+                  <FaCalendar />
+                  <input
+                    type="date"
+                    value={range.end || ""}
+                    onChange={(e) => handleDateRangeChange(filter.key, "end", e.target.value)}
+                    min={range.start || undefined}
+                  />
+                </DateInputWrapper>
+              </DateInputsWrapper>
             </DateRangeContainer>
           );
         }

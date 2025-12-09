@@ -4,8 +4,8 @@ const FilterReportAd = ({ visits = [], onFilteredChange }) => {
   const filterOptions = [
     {
       key: "fecha_programada",
-      label: "Fecha programada",
-      type: "dateRange", // ⭐ Nuevo: indica que es un selector de rango de fechas
+      label: "Fecha programada", // 👈 Este label ahora se muestra arriba
+      type: "dateRange",
     }
   ];
 
