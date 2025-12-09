@@ -159,10 +159,32 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     setOpenReportModal(true);
   };
 
-  const handleCloseReport = () => {
+  // Nueva función para recargar fichas manualmente
+  const reloadFichas = async () => {
+    try {
+      const response = await commonService.getListToken();
+      const allFichas = response.data || [];
+      // Guardar en caché junto con el snapshot de visitas
+      const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
+      setCachedFichas(allFichas, currentVisitsJson);
+      // Crear el mapa
+      const fichasMap = new Map();
+      allFichas.forEach((ficha) => {
+        if (ficha.id_visitas && ficha.pdf_path) {
+          fichasMap.set(ficha.id_visitas, ficha.pdf_path);
+        }
+      });
+      setPdfMap(fichasMap);
+    } catch (err) {
+      console.error("Error al recargar fichas:", err);
+    }
+  };
+
+  const handleCloseReport = async () => {
     setOpenReportModal(false);
     setSelectedVisitId(null);
-    reloadData();
+    await reloadFichas(); // Recarga fichas y actualiza caché
+    reloadData(); // Recarga visitas
   };
 
   const columns = [
