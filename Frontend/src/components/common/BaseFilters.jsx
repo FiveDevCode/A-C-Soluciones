@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaCalendar  } from "react-icons/fa";
 
 const FiltersContainer = styled.div`
   display: flex;
@@ -145,6 +145,45 @@ const Button = styled.button.withConfig({
   }
 `;
 
+
+const DateRangeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+const DateInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-width: 150px;
+
+  svg {
+    color: #555;
+    margin-right: 8px;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+  }
+`;
+
+const DateSeparator = styled.span`
+  color: #666;
+  font-size: 14px;
+`;
+
+
+
+
 const BaseFilters = ({
   data = [],
   placeholder = "Buscar...",
@@ -154,15 +193,27 @@ const BaseFilters = ({
 }) => {
   const [filters, setFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [dateRanges, setDateRanges] = useState({});
   const lastFilteredJsonRef = useRef("");
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleDateRangeChange = (key, type, value) => {
+    setDateRanges((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [type]: value,
+      },
+    }));
+  };
+
   const handleClearFilters = () => {
     setFilters({});
     setSearchTerm("");
+    setDateRanges({});
   };
 
   // --- Permite leer claves anidadas como "tecnico.nombre"
@@ -187,11 +238,39 @@ const BaseFilters = ({
     
     // Si no hay término de búsqueda, no filtrar por búsqueda
     if (!searchText) {
+      // Aplicar filtros normales
       const matchesFilters = filterOptions.every((filter) => {
-        const filterKey = filter.key;
-        const filterValue = filters[filterKey];
+        // Si es un filtro de rango de fechas, aplicar lógica especial
+        if (filter.type === "dateRange") {
+          const filterKey = filter.key;
+          const range = dateRanges[filterKey];
+          
+          if (!range || (!range.start && !range.end)) return true;
+          
+          const rawItemValue = getNestedValue(item, filterKey);
+          if (!rawItemValue) return false;
+          
+          // Extraer solo la fecha (YYYY-MM-DD)
+          const itemDate = rawItemValue.substring(0, 10);
+          const itemDateObj = new Date(itemDate);
+          
+          if (range.start) {
+            const startDate = new Date(range.start);
+            if (itemDateObj < startDate) return false;
+          }
+          
+          if (range.end) {
+            const endDate = new Date(range.end);
+            if (itemDateObj > endDate) return false;
+          }
+          
+          return true;
+        }
+        
+        // Filtros normales (select)
+        const filterValue = filters[filter.key];
         if (!filterValue) return true;
-        const rawItemValue = getNestedValue(item, filterKey);
+        const rawItemValue = getNestedValue(item, filter.key);
         const itemValue =
           rawItemValue !== undefined && rawItemValue !== null
             ? rawItemValue.toString().toLowerCase()
@@ -237,13 +316,38 @@ const BaseFilters = ({
 
     // Aplicar filtros (filterOptions)
     const matchesFilters = filterOptions.every((filter) => {
-      const filterKey = filter.key;
-      const filterValue = filters[filterKey];
+      // Si es un filtro de rango de fechas
+      if (filter.type === "dateRange") {
+        const filterKey = filter.key;
+        const range = dateRanges[filterKey];
+        
+        if (!range || (!range.start && !range.end)) return true;
+        
+        const rawItemValue = getNestedValue(item, filterKey);
+        if (!rawItemValue) return false;
+        
+        // Extraer solo la fecha (YYYY-MM-DD)
+        const itemDate = rawItemValue.substring(0, 10);
+        const itemDateObj = new Date(itemDate);
+        
+        if (range.start) {
+          const startDate = new Date(range.start);
+          if (itemDateObj < startDate) return false;
+        }
+        
+        if (range.end) {
+          const endDate = new Date(range.end);
+          if (itemDateObj > endDate) return false;
+        }
+        
+        return true;
+      }
 
+      // Filtros normales
+      const filterValue = filters[filter.key];
       if (!filterValue) return true;
 
-      // soporta claves anidadas también para filtros si hace falta
-      const rawItemValue = getNestedValue(item, filterKey);
+      const rawItemValue = getNestedValue(item, filter.key);
       const itemValue =
         rawItemValue !== undefined && rawItemValue !== null
           ? rawItemValue.toString().toLowerCase()
@@ -253,7 +357,7 @@ const BaseFilters = ({
     });
 
     return matchesSearch && matchesFilters;
-  }), [data, filters, searchTerm, searchKeys, filterOptions]);
+  }), [data, filters, dateRanges, searchTerm, searchKeys, filterOptions]);
 
   useEffect(() => {
     // Crear un JSON completo de los datos filtrados para detectar cualquier cambio
@@ -268,7 +372,10 @@ const BaseFilters = ({
   }, [filteredData]);
 
   // Detectar si hay filtros activos
-  const hasActiveFilters = searchTerm !== "" || Object.values(filters).some(val => val !== "" && val !== undefined);
+  const hasActiveFilters = 
+    searchTerm !== "" || 
+    Object.values(filters).some(val => val !== "" && val !== undefined) ||
+    Object.values(dateRanges).some(range => range?.start || range?.end);
 
   return (
     <FiltersContainer>
@@ -282,29 +389,62 @@ const BaseFilters = ({
         />
       </SearchBox>
 
-      {filterOptions.map((filter) => (
-        <Select
-          key={filter.key}
-          value={filters[filter.key] || ""}
-          onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-        >
-          <option value="">-{filter.label}-</option>
-          {filter.options.map((opt, i) => {
-            if (typeof opt === "object") {
+      {filterOptions.map((filter) => {
+        // Si es un filtro de rango de fechas
+        if (filter.type === "dateRange") {
+          const range = dateRanges[filter.key] || {};
+          return (
+            <DateRangeContainer key={filter.key}>
+              <DateInputWrapper>
+                <FaCalendar />
+                <input
+                  type="date"
+                  value={range.start || ""}
+                  onChange={(e) => handleDateRangeChange(filter.key, "start", e.target.value)}
+                  max={range.end || undefined}
+                  placeholder="Desde"
+                />
+              </DateInputWrapper>
+              <DateSeparator>-</DateSeparator>
+              <DateInputWrapper>
+                <FaCalendar />
+                <input
+                  type="date"
+                  value={range.end || ""}
+                  onChange={(e) => handleDateRangeChange(filter.key, "end", e.target.value)}
+                  min={range.start || undefined}
+                  placeholder="Hasta"
+                />
+              </DateInputWrapper>
+            </DateRangeContainer>
+          );
+        }
+
+        // Filtro normal (select)
+        return (
+          <Select
+            key={filter.key}
+            value={filters[filter.key] || ""}
+            onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+          >
+            <option value="">-{filter.label}-</option>
+            {filter.options.map((opt, i) => {
+              if (typeof opt === "object") {
+                return (
+                  <option key={opt.value || i} value={opt.value}>
+                    {opt.label || opt.value}
+                  </option>
+                );
+              }
               return (
-                <option key={opt.value || i} value={opt.value}>
-                  {opt.label || opt.value}
+                <option key={opt || i} value={opt}>
+                  {opt}
                 </option>
               );
-            }
-            return (
-              <option key={opt || i} value={opt}>
-                {opt}
-              </option>
-            );
-          })}
-        </Select>
-      ))}
+            })}
+          </Select>
+        );
+      })}
 
       <ButtonGroup>
         <Button type="clear" onClick={handleClearFilters} hasActiveFilters={hasActiveFilters}>
