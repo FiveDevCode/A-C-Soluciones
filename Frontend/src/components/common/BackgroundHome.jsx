@@ -21,6 +21,21 @@ const images = [
   home1, home2, home3, home4, home5, home6, home7, home8, home9, home10, home11
 ]
 
+// Posiciones específicas para cada imagen
+const imagePositions = [
+  'top',    // home1 - parte de arriba
+  'center', // home2
+  'center', // home3
+  'center', // home4
+  'top',    // home5 - parte de arriba
+  'bottom', // home6 - parte de abajo
+  'center', // home7
+  'center', // home8
+  'center', // home9
+  'center', // home10
+  'center'  // home11
+]
+
 const BackgroundWrapper = styled.div`
   position: relative;
   height: 500px;
@@ -148,7 +163,7 @@ const BackgroundHome = () => {
           key={index}
           $background={img}
           $active={index === currentImage}
-          $shift={'center'}
+          $shift={imagePositions[index]}
         />
       ))}
       <Content>
