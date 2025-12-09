@@ -400,6 +400,7 @@ const BaseTable = ({
   isLoadingData = false, // <-- prop para saber si está cargando
   mobileConfig = {}, // <-- configuración para vista móvil: { title, subtitle, renderExtra }
   clearSelectionTrigger, // <-- nueva prop para forzar limpieza de selección
+  isEditDisabled,
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -593,7 +594,15 @@ const BaseTable = ({
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton onClick={() => handleOpenEdit(row)}>
+                        <ActionButton 
+                          onClick={() => {
+                            if (!(typeof isEditDisabled === 'function' && isEditDisabled(row))) {
+                              handleOpenEdit(row);
+                            }
+                          }}
+                          disabled={typeof isEditDisabled === 'function' ? isEditDisabled(row) : false}
+                          style={typeof isEditDisabled === 'function' && isEditDisabled(row) ? { backgroundColor: '#bdbdbd', cursor: 'not-allowed' } : {}}
+                        >
                           <FontAwesomeIcon icon={faEdit} /> Editar
                         </ActionButton>
                       )}
@@ -704,8 +713,12 @@ const BaseTable = ({
                         <ActionButton 
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleOpenEdit(row);
+                            if (!(typeof isEditDisabled === 'function' && isEditDisabled(row))) {
+                              handleOpenEdit(row);
+                            }
                           }}
+                          disabled={typeof isEditDisabled === 'function' ? isEditDisabled(row) : false}
+                          style={typeof isEditDisabled === 'function' && isEditDisabled(row) ? { backgroundColor: '#bdbdbd', cursor: 'not-allowed' } : {}}
                         >
                           <FontAwesomeIcon icon={faEdit} /> Editar
                         </ActionButton>

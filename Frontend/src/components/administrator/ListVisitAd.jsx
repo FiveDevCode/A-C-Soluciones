@@ -330,7 +330,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   return (
     <>
       <BaseTable
-        data={visitsWithPDF} // 👈 AHORA SÍ USA LA LISTA CON PDF
+        data={visitsWithPDF}
         columns={columns}
         getBadgeValue={(row) =>
           row.estado === "en_camino" ? "En camino" : row.estado
@@ -340,6 +340,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
         ViewComponent={ViewComponentMemo}
         onSelectRows={onSelectRows}
         isLoadingData={isLoadingData}
+        isEditDisabled={(row) => row.estado === "completada" || row.estado === "cancelada"}
         mobileConfig={{
           title: "fecha_programada",
           subtitle: "notas_previas",
