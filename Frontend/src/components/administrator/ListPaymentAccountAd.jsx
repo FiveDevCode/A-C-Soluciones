@@ -6,6 +6,7 @@ import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
   const EditComponentMemo = useCallback((props) => <EditPaymentAccountAd {...props} onSuccess={reloadData} />, [reloadData]);
   const ViewComponentMemo = useCallback((props) => <ViewPaymentAccountDetailAd {...props} />, []);
+  
   const columns = [
     { header: "N° Cuenta", accessor: "numero_cuenta" },
     { header: "NIT", accessor: "nit" },
@@ -24,12 +25,16 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
         if (!value) return "—";
         
         const d = new Date(value);
-        const day = String(d.getUTCDate()).padStart(2, "0");
-        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-        const year = d.getUTCFullYear();
+        
+        // Restar 5 horas para Colombia (UTC-5)
+        const colombiaTime = new Date(d.getTime() - (5 * 60 * 60 * 1000));
+        
+        const day = String(colombiaTime.getUTCDate()).padStart(2, "0");
+        const month = String(colombiaTime.getUTCMonth() + 1).padStart(2, "0");
+        const year = colombiaTime.getUTCFullYear();
 
-        let hours = d.getUTCHours();
-        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+        let hours = colombiaTime.getUTCHours();
+        const minutes = String(colombiaTime.getUTCMinutes()).padStart(2, "0");
         const ampm = hours >= 12 ? "pm" : "am";
         hours = hours % 12 || 12;
 
@@ -50,8 +55,8 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingDat
       isLoadingData={isLoadingData}
       clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
-        title: "numero_de_cuenta",
-        subtitle: "banco"
+        title: "numero_cuenta",
+        subtitle: "nit"
       }}
     />
   );

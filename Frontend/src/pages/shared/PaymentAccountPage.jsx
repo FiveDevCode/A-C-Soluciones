@@ -40,29 +40,7 @@ const Card = styled.div`
 const PaymentAccountPage = () => {
   const { data: accounts, isLoading: loading, reload: loadAccounts } = useDataCache(
     'payment_accounts_cache',
-    async () => {
-      const accountsData = await handleGetListPaymentAccountAd();
-
-      const enrichedAccounts = await Promise.all(
-        accountsData.map(async (account) => {
-          if (account.id_cliente) {
-            try {
-              const clientRes = await handleGetClient(account.id_cliente);
-              return {
-                ...account,
-                cliente: clientRes.data,
-              };
-            } catch (err) {
-              console.error(`Error obteniendo cliente ${account.id_cliente}:`, err);
-              return account;
-            }
-          }
-          return account;
-        })
-      );
-
-      return enrichedAccounts;
-    }
+    handleGetListPaymentAccountAd
   );
   const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounts, 3, 'accounts');
   const [filteredAccounts, setFilteredAccounts] = useState([]);
