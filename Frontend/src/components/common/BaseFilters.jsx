@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaCalendar  } from "react-icons/fa";
 
 const FiltersContainer = styled.div`
   display: flex;
@@ -145,6 +145,130 @@ const Button = styled.button.withConfig({
   }
 `;
 
+const DateRangeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const DateRangeLabel = styled.label`
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+`;
+
+const DateInputsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+`;
+
+const DateInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 10px;
+  min-width: 145px;
+  transition: border-color 0.3s;
+
+  &:focus-within {
+    border-color: #1976d2;
+  }
+
+  svg {
+    color: #555;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    width: 100%;
+    cursor: pointer;
+    
+    &::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+    }
+  }
+
+  &::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 32px;
+    top: -2px;           /* SIEMPRE ARRIBA */
+    font-size: 11px;    /* SIEMPRE PEQUEÑO */
+    color: #999;        /* Color apagado */
+    pointer-events: none;
+    transition: color 0.2s ease;
+  }
+
+  /* Si tiene valor o está en foco → solo cambia color */
+  ${props => props.hasValue && `
+    &::before {
+      color: #1976d2;
+    }
+  `}
+
+  &:focus-within::before {
+    color: #1976d2;
+  }
+
+  @media (max-width: 1350px) and (min-width: 769px) {
+    padding: 6px 8px;
+    min-width: 130px;
+
+    input {
+      font-size: 12px;
+    }
+
+    &::before {
+      font-size: 12px;
+      left: 28px;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    min-width: 140px;
+
+    input {
+      font-size: 14px;
+    }
+
+    &::before {
+      font-size: 14px;
+      left: 36px;
+    }
+  }
+`;
+
+const DateSeparator = styled.span`
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
 const BaseFilters = ({
   data = [],
   placeholder = "Buscar...",
@@ -154,14 +278,27 @@ const BaseFilters = ({
 }) => {
   const [filters, setFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [dateRanges, setDateRanges] = useState({});
+  const lastFilteredJsonRef = useRef("");
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleDateRangeChange = (key, type, value) => {
+    setDateRanges((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [type]: value,
+      },
+    }));
+  };
+
   const handleClearFilters = () => {
     setFilters({});
     setSearchTerm("");
+    setDateRanges({});
   };
 
   // --- Permite leer claves anidadas como "tecnico.nombre"
@@ -170,28 +307,132 @@ const BaseFilters = ({
     return key.split(".").reduce((o, k) => (o ? o[k] : undefined), obj);
   };
 
-  const filteredData = data.filter((item) => {
-    const text = (searchTerm || "").toString().toLowerCase();
+  // Normalizar texto: quitar tildes, convertir a minúsculas y quitar espacios extra
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return text
+      .toString()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
 
-    // Buscar por searchKeys (soporta claves anidadas)
-    const matchesSearch =
-      searchKeys.length === 0
-        ? true
-        : searchKeys.some((key) => {
-            const raw = getNestedValue(item, key);
-            const value = raw !== undefined && raw !== null ? raw.toString().toLowerCase() : "";
-            return value.includes(text);
-          });
+  const filteredData = useMemo(() => data.filter((item) => {
+    const searchText = normalizeText(searchTerm);
+    
+    // Si no hay término de búsqueda, no filtrar por búsqueda
+    if (!searchText) {
+      // Aplicar filtros normales
+      const matchesFilters = filterOptions.every((filter) => {
+        // Si es un filtro de rango de fechas, aplicar lógica especial
+        if (filter.type === "dateRange") {
+          const filterKey = filter.key;
+          const range = dateRanges[filterKey];
+          
+          if (!range || (!range.start && !range.end)) return true;
+          
+          const rawItemValue = getNestedValue(item, filterKey);
+          if (!rawItemValue) return false;
+          
+          // Extraer solo la fecha (YYYY-MM-DD)
+          const itemDate = rawItemValue.substring(0, 10);
+          const itemDateObj = new Date(itemDate);
+          
+          if (range.start) {
+            const startDate = new Date(range.start);
+            if (itemDateObj < startDate) return false;
+          }
+          
+          if (range.end) {
+            const endDate = new Date(range.end);
+            if (itemDateObj > endDate) return false;
+          }
+          
+          return true;
+        }
+        
+        // Filtros normales (select)
+        const filterValue = filters[filter.key];
+        if (!filterValue) return true;
+        const rawItemValue = getNestedValue(item, filter.key);
+        const itemValue =
+          rawItemValue !== undefined && rawItemValue !== null
+            ? rawItemValue.toString().toLowerCase()
+            : "";
+        return itemValue === filterValue.toString().toLowerCase();
+      });
+      return matchesFilters;
+    }
+
+    // Dividir el término de búsqueda en palabras individuales
+    const searchWords = searchText.split(/\s+/).filter(word => word.length > 0);
+
+    // Construir un array con todos los valores de búsqueda
+    const searchableValues = [];
+    
+    // Agregar valores individuales de cada searchKey
+    searchKeys.forEach((key) => {
+      const raw = getNestedValue(item, key);
+      if (raw !== undefined && raw !== null) {
+        searchableValues.push(normalizeText(raw));
+      }
+    });
+
+    // Si hay campos nombre y apellido, agregar el nombre completo
+    const hasNombre = searchKeys.includes("nombre");
+    const hasApellido = searchKeys.includes("apellido");
+    if (hasNombre && hasApellido) {
+      const nombre = getNestedValue(item, "nombre") || "";
+      const apellido = getNestedValue(item, "apellido") || "";
+      const nombreCompleto = normalizeText(`${nombre} ${apellido}`);
+      if (nombreCompleto) {
+        searchableValues.push(nombreCompleto);
+      }
+    }
+
+    // Unir todos los valores en un solo texto para búsqueda
+    const combinedText = searchableValues.join(" ");
+
+    // Buscar: TODAS las palabras deben aparecer en algún lugar del texto combinado
+    const matchesSearch = searchKeys.length === 0 
+      ? true 
+      : searchWords.every(word => combinedText.includes(word));
 
     // Aplicar filtros (filterOptions)
     const matchesFilters = filterOptions.every((filter) => {
-      const filterKey = filter.key;
-      const filterValue = filters[filterKey];
+      // Si es un filtro de rango de fechas
+      if (filter.type === "dateRange") {
+        const filterKey = filter.key;
+        const range = dateRanges[filterKey];
+        
+        if (!range || (!range.start && !range.end)) return true;
+        
+        const rawItemValue = getNestedValue(item, filterKey);
+        if (!rawItemValue) return false;
+        
+        // Extraer solo la fecha (YYYY-MM-DD)
+        const itemDate = rawItemValue.substring(0, 10);
+        const itemDateObj = new Date(itemDate);
+        
+        if (range.start) {
+          const startDate = new Date(range.start);
+          if (itemDateObj < startDate) return false;
+        }
+        
+        if (range.end) {
+          const endDate = new Date(range.end);
+          if (itemDateObj > endDate) return false;
+        }
+        
+        return true;
+      }
 
+      // Filtros normales
+      const filterValue = filters[filter.key];
       if (!filterValue) return true;
 
-      // soporta claves anidadas también para filtros si hace falta
-      const rawItemValue = getNestedValue(item, filterKey);
+      const rawItemValue = getNestedValue(item, filter.key);
       const itemValue =
         rawItemValue !== undefined && rawItemValue !== null
           ? rawItemValue.toString().toLowerCase()
@@ -201,15 +442,25 @@ const BaseFilters = ({
     });
 
     return matchesSearch && matchesFilters;
-  });
+  }), [data, filters, dateRanges, searchTerm, searchKeys, filterOptions]);
 
   useEffect(() => {
-    onFilteredChange?.(filteredData);
+    // Crear un JSON completo de los datos filtrados para detectar cualquier cambio
+    const currentJson = JSON.stringify(filteredData);
+    
+    // Solo actualizar si realmente cambió el contenido
+    if (currentJson !== lastFilteredJsonRef.current) {
+      lastFilteredJsonRef.current = currentJson;
+      onFilteredChange?.(filteredData);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, searchTerm, data]);
+  }, [filteredData]);
 
   // Detectar si hay filtros activos
-  const hasActiveFilters = searchTerm !== "" || Object.values(filters).some(val => val !== "" && val !== undefined);
+  const hasActiveFilters = 
+    searchTerm !== "" || 
+    Object.values(filters).some(val => val !== "" && val !== undefined) ||
+    Object.values(dateRanges).some(range => range?.start || range?.end);
 
   return (
     <FiltersContainer>
@@ -223,29 +474,69 @@ const BaseFilters = ({
         />
       </SearchBox>
 
-      {filterOptions.map((filter) => (
-        <Select
-          key={filter.key}
-          value={filters[filter.key] || ""}
-          onChange={(e) => handleFilterChange(filter.key, e.target.value)}
-        >
-          <option value="">-{filter.label}-</option>
-          {filter.options.map((opt, i) => {
-            if (typeof opt === "object") {
+      {filterOptions.map((filter) => {
+        // Si es un filtro de rango de fechas
+        if (filter.type === "dateRange") {
+          const range = dateRanges[filter.key] || {};
+          return (
+            <DateRangeContainer key={filter.key}>
+              <DateRangeLabel>{filter.label || "Rango de fechas"}</DateRangeLabel>
+              <DateInputsWrapper>
+                <DateInputWrapper 
+                  hasValue={!!range.start}
+                  data-label="Desde"
+                >
+                  <FaCalendar />
+                  <input
+                    type="date"
+                    value={range.start || ""}
+                    onChange={(e) => handleDateRangeChange(filter.key, "start", e.target.value)}
+                    max={range.end || undefined}
+                  />
+                </DateInputWrapper>
+                <DateSeparator>-</DateSeparator>
+                <DateInputWrapper 
+                  hasValue={!!range.end}
+                  data-label="Hasta"
+                >
+                  <FaCalendar />
+                  <input
+                    type="date"
+                    value={range.end || ""}
+                    onChange={(e) => handleDateRangeChange(filter.key, "end", e.target.value)}
+                    min={range.start || undefined}
+                  />
+                </DateInputWrapper>
+              </DateInputsWrapper>
+            </DateRangeContainer>
+          );
+        }
+
+        // Filtro normal (select)
+        return (
+          <Select
+            key={filter.key}
+            value={filters[filter.key] || ""}
+            onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+          >
+            <option value="">-{filter.label}-</option>
+            {filter.options.map((opt, i) => {
+              if (typeof opt === "object") {
+                return (
+                  <option key={opt.value || i} value={opt.value}>
+                    {opt.label || opt.value}
+                  </option>
+                );
+              }
               return (
-                <option key={opt.value || i} value={opt.value}>
-                  {opt.label || opt.value}
+                <option key={opt || i} value={opt}>
+                  {opt}
                 </option>
               );
-            }
-            return (
-              <option key={opt || i} value={opt}>
-                {opt}
-              </option>
-            );
-          })}
-        </Select>
-      ))}
+            })}
+          </Select>
+        );
+      })}
 
       <ButtonGroup>
         <Button type="clear" onClick={handleClearFilters} hasActiveFilters={hasActiveFilters}>

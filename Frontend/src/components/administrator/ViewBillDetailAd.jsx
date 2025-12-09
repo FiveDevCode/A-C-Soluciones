@@ -8,10 +8,11 @@ const estadoLabels = {
 
 const formatDateCO = (value) => {
   if (!value) return "—";
-  return new Date(value).toLocaleDateString("es-CO", {
+  return new Date(value).toLocaleString("es-CO", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC"
   });
 };
 

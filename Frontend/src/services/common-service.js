@@ -161,6 +161,16 @@ const getListFaqs = () => {
   return api.get("/faqs")
 }
 
+const getDisponibilidadTecnico = (tecnicoId, fecha) => {
+  const token = localStorage.getItem("authToken");
+  return api.get(`/visitas/disponibilidad/tecnico`, {
+    params: { tecnicoId, fecha },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export const commonService = {
   login,
   createMaintenanceSheet,
@@ -173,6 +183,7 @@ export const commonService = {
   createForgotPassword,
   createVerificCode,
   updatePassword,
-  getListFaqs
+  getListFaqs,
+  getDisponibilidadTecnico
 
 }

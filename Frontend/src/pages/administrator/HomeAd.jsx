@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import BaseHome from "../../components/common/BaseHome";
 import ActivityListAd from "../../components/administrator/ActivityListAd";
 import { handleGetListRequest } from "../../controllers/administrator/getListRequestAd.controller";
@@ -6,6 +6,8 @@ import { handleGetListServiceAd } from "../../controllers/administrator/getListS
 import { handleGetListTechnical } from "../../controllers/administrator/getTechnicalListAd.controller";
 import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
 import { handleGetListInventoryAd } from "../../controllers/administrator/getListInventoryAd.controller";
+import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 import { 
   faClipboardCheck, 
   faTools, 
@@ -15,82 +17,66 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const HomeAd = () => {
-  const [requests, setRequests] = useState([]);
-  const [statsData, setStatsData] = useState({
-    pendingRequests: 0,
-    totalServices: 0,
-    totalTechnicians: 0,
-    totalVisits: 0,
-    totalInventory: 0
-  });
+  // Cargar datos con caché
+  const { data: requests, reload: reloadRequests, isLoading: loadingRequests } = useDataCache(
+    'home_requests_cache',
+    handleGetListRequest
+  );
 
-  useEffect(() => {
-    // Cargar solicitudes
-    handleGetListRequest()
-      .then((res) => {
-        const requestsData = res.data || [];
-        setRequests(requestsData);
-        
-        if (Array.isArray(requestsData)) {
-          const pending = requestsData.filter(r => r.estado === 'pendiente').length;
-          setStatsData(prev => ({ ...prev, pendingRequests: pending }));
-        }
-      })
-      .catch((err) => {
-        console.log("No se pudo obtener el listado de solicitudes", err);
-        setRequests([]);
-      });
+  const { data: services, reload: reloadServices, isLoading: loadingServices } = useDataCache(
+    'home_services_cache',
+    handleGetListServiceAd
+  );
 
-    // Cargar servicios
-    handleGetListServiceAd()
-      .then((services) => {
-        if (Array.isArray(services)) {
-          const activeServices = services.filter(s => s.estado === 'activo' || s.estado === 'habilitado').length;
-          setStatsData(prev => ({ ...prev, totalServices: activeServices }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar servicios:", err);
-      });
+  const { data: technicians, reload: reloadTechnicians, isLoading: loadingTechnicians } = useDataCache(
+    'home_technicians_cache',
+    handleGetListTechnical
+  );
 
-    // Cargar técnicos
-    handleGetListTechnical()
-      .then((res) => {
-        const technicians = res.data?.data || res.data || [];
-        if (Array.isArray(technicians)) {
-          const activeTechnicians = technicians.filter(t => t.estado === 'activo' || t.estado === 'habilitado').length;
-          setStatsData(prev => ({ ...prev, totalTechnicians: activeTechnicians }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar técnicos:", err);
-      });
+  const { data: visits, reload: reloadVisits, isLoading: loadingVisits } = useDataCache(
+    'home_visits_cache',
+    handleGetListVisitAd
+  );
 
-    // Cargar visitas
-    handleGetListVisitAd()
-      .then((res) => {
-        const visits = res.data?.data || res.data || [];
-        if (Array.isArray(visits)) {
-          const scheduledVisits = visits.filter(v => v.estado === 'pendiente' || v.estado === 'programada').length;
-          setStatsData(prev => ({ ...prev, totalVisits: scheduledVisits }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar visitas:", err);
-      });
+  const { data: inventory, reload: reloadInventory, isLoading: loadingInventory } = useDataCache(
+    'home_inventory_cache',
+    handleGetListInventoryAd
+  );
 
-    // Cargar inventario
-    handleGetListInventoryAd()
-      .then((inventory) => {
-        if (Array.isArray(inventory)) {
-          const availableItems = inventory.filter(i => i.estado_herramienta === 'activo').length;
-          setStatsData(prev => ({ ...prev, totalInventory: availableItems }));
-        }
-      })
-      .catch((err) => {
-        console.log("Error al cargar inventario:", err);
-      });
-  }, []);
+  // Combinar estados de carga
+  const isLoading = loadingRequests || loadingServices || loadingTechnicians || loadingVisits || loadingInventory;
+
+  // Auto-refresh global para home (recarga todos los datos)
+  const reloadAll = useCallback(async () => {
+    await Promise.all([
+      reloadRequests(),
+      reloadServices(),
+      reloadTechnicians(),
+      reloadVisits(),
+      reloadInventory()
+    ]);
+  }, [reloadRequests, reloadServices, reloadTechnicians, reloadVisits, reloadInventory]);
+
+  const { timeAgo, manualRefresh } = useAutoRefresh(reloadAll, 3, 'home');
+
+  // Calcular estadísticas desde los datos cacheados
+  const statsData = useMemo(() => {
+    const requestsData = Array.isArray(requests) ? requests : (requests?.data || []);
+    const servicesData = Array.isArray(services) ? services : [];
+    const techniciansData = Array.isArray(technicians) ? (technicians?.data?.data || technicians?.data || technicians) : [];
+    const visitsData = Array.isArray(visits) ? visits : (visits?.data?.data || visits?.data || []);
+    const inventoryData = Array.isArray(inventory) ? inventory : [];
+    console.log(inventoryData);
+    return {
+      pendingRequests: requestsData.filter(r => r.estado === 'pendiente').length,
+      totalServices: servicesData.filter(s => s.estado === 'activo' || s.estado === 'habilitado').length,
+      totalTechnicians: techniciansData.filter(t => t.estado === 'activo' || t.estado === 'habilitado').length,
+      totalVisits: visitsData.filter(v => v.estado === 'pendiente' || v.estado === 'programada').length,
+      totalInventory: inventoryData.filter(i => i.estado === 'Nueva').length
+    };
+  }, [requests, services, technicians, visits, inventory]);
+
+
 
   const stats = [
     {
@@ -146,6 +132,9 @@ const HomeAd = () => {
       notificationCount={3}
       notificationPath="/admin/notificaciones"
       emptyMessage="No tienes ninguna solicitud asignada por el momento."
+      lastUpdateTime={timeAgo}
+      onRefresh={manualRefresh}
+      isLoading={isLoading}
     />
   );
 };

@@ -2,11 +2,11 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleCreateService = (nameService, description) => {
+const handleCreateService = (data) => {
     
 
   return administratorService
-  .createService(nameService, description);
+  .createService(data);
 
 
 };

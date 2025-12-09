@@ -1,32 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import BaseDetailModal from "../common/BaseDetailModal";
-import { handleGetClient } from "../../controllers/administrator/getClientAd.controller";
 
 const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
-  const [clientData, setClientData] = useState(null);
-
-  useEffect(() => {
-    const fetchClient = async () => {
-      if (selected?.id_cliente) {
-        try {
-          const response = await handleGetClient(selected.id_cliente);
-          setClientData(response.data);
-        } catch (error) {
-          console.error("Error al cargar cliente asociado:", error);
-        }
-      }
-    };
-    fetchClient();
-  }, [selected]);
-
   if (!selected) return null;
 
   const fields = [
     { label: "Número de cuenta", value: selected.numero_cuenta },
     {
       label: "Fecha de registro",
-      value: new Date(selected.fecha_registro).toLocaleDateString(
-        "es-ES",
+      value: new Date(selected.fecha_registro).toLocaleString(
+        "es-CO",
         {
           year: "numeric",
           month: "long",
@@ -37,8 +20,8 @@ const ViewPaymentAccountDetailAd = ({ selected, onClose }) => {
     { label: "NIT", value: selected.nit },
     {
       label: "Cliente asociado",
-      value: clientData
-        ? `${clientData.nombre} ${clientData.apellido}`
+      value: selected.cliente
+        ? `${selected.cliente.numero_de_cedula} - ${selected.cliente.nombre} ${selected.cliente.apellido}`
         : "Sin cliente vinculado",
     },
   ];

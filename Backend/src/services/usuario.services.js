@@ -35,10 +35,9 @@ export class AuthService {
 
       const user = admin || cliente || tecnico || contabilidad;
       if (!user) {
-        throw new Error('Usuario no encontrado');
+        throw new Error('Correo o contraseña incorrectos');
       }
 
-      // validar que el empleado este activo para para ingresar a el sistema 
       if (tecnico?.correo_electronico && tecnico.estado === 'inactivo') {
         throw new Error('El empleado no está activo para ingresar al sistema');
       }
@@ -52,17 +51,17 @@ export class AuthService {
       }
 
       if (contabilidad?.correo_electronico && contabilidad.estado === 'inactivo') {
-        throw new Error('El Contador no está activa para ingresar al sistema');
+        throw new Error('El Contador no está activo para ingresar al sistema');
       }
 
       // Verificación de contraseña con hash
       if (!user.contrasenia?.startsWith('$2b$')) {
-        throw new Error('Credenciales no válidas (formato incorrecto)');
+        throw new Error('Correo o contraseña incorrectos');
       }
 
       const passwordMatch = await bcrypt.compare(contrasenia.trim(), user.contrasenia);
       if (!passwordMatch) {
-        throw new Error('Contraseña incorrecta');
+        throw new Error('Correo o contraseña incorrectos');
       }
 
       // Generación de token con más datos útiles

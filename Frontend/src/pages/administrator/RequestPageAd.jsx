@@ -7,6 +7,8 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FilterRequestsAd from "../../components/administrator/FilterRequestsAd";
 import { handleDeleteRequestAd } from "../../controllers/administrator/deleteRequestAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -41,32 +43,55 @@ const RequestPageAd = () => {
       return res.data;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadRequests, 3, 'requests');
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
+
+  const handleSelectRows = (rows) => {
+    // Extraer solo los IDs de los objetos seleccionados
+    const ids = rows.map(row => row.id);
+    setSelectedIds(ids);
+  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos una solicitud para eliminar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteRequestAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      const cantidad = selectedIds.length;
+
+      const texto = cantidad === 1
+        ? "1 solicitud eliminada correctamente"
+        : `${cantidad} solicitudes eliminadas correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadRequests();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al eliminar las solicitudes", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
@@ -75,40 +100,34 @@ const RequestPageAd = () => {
         headerTitle="SOLICITUDES"
         sectionTitle="Listado de solicitudes de servicio"
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadRequests}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Eliminando solicitudes..."
+        actionType="Eliminar seleccionados"
         filterComponent={
           <FilterRequestsAd
             requests={requests}
             onFilteredChange={setFilteredRequests}
           />
         }
-        actionType="Eliminar seleccionados"
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando solicitudes...
-          </p>
-        ) : filteredRequests.length === 0 ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            No hay ninguna solicitud por el momento.
-          </p>
-        ) : (
-          <ListRequestAd
-            requests={filteredRequests}
-            onSelectRows={setSelectedIds}
-            onUpdate={loadRequests}
-          />
-        )}
+        <ListRequestAd
+          requests={filteredRequests}
+          onSelectRows={handleSelectRows}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de eliminar ${selectedIds.length} solicitud${selectedIds.length > 1 ? 'es' : ''}? Esta acción no se puede deshacer.`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

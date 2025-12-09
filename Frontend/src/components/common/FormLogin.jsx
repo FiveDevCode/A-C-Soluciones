@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from 'jwt-decode';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const Form = styled.form`
   display: flex;
@@ -80,7 +81,12 @@ const FormLogin = () => {
     if (sessionExpired === 'true') {
       setErrorMsg("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
     }
-  }, [location.search]);
+    
+    // Mostrar mensaje si viene desde servicios
+    if (location.state?.message) {
+      setErrorMsg(location.state.message);
+    }
+  }, [location.search, location.state]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -174,6 +180,10 @@ const FormLogin = () => {
       console.error(err);
       if (err.response?.data?.errors) {
         setFieldErrors(err.response.data.errors);
+      }
+      
+      if (err.response?.data?.message) {
+        setErrorMsg(err.response.data.message);
       } else {
         setErrorMsg("Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.");
       }
@@ -233,7 +243,20 @@ const FormLogin = () => {
       />
 
       {errorMsg && (
-        <Typography color="error" sx={{ backgroundColor: '#F2F5F7', padding: '0.5rem', borderRadius: '4px' }}>
+        <Typography
+          color="error"
+          sx={{
+            backgroundColor: '#FDECEA',
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            borderLeft: '6px solid #f44336',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontWeight: 500
+          }}
+        >
+          <ErrorOutlineIcon />
           {errorMsg}
         </Typography>
       )}

@@ -1,8 +1,12 @@
+import { useCallback } from "react";
 import BaseTable from "../common/BaseTable";
 import EditPaymentAccountAd from "./EditPaymentAccountAd";
 import ViewPaymentAccountDetailAd from "./ViewPaymentAccountDetailAd";
 
-const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
+const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
+  const EditComponentMemo = useCallback((props) => <EditPaymentAccountAd {...props} onSuccess={reloadData} />, [reloadData]);
+  const ViewComponentMemo = useCallback((props) => <ViewPaymentAccountDetailAd {...props} />, []);
+  
   const columns = [
     { header: "N° Cuenta", accessor: "numero_cuenta" },
     { header: "NIT", accessor: "nit" },
@@ -11,13 +15,26 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
       accessor: "cliente",
       render: (value) =>
         value
-          ? `${value.nombre || ""} ${value.apellido || ""}`.trim()
+          ? `${value.numero_de_cedula || ""} - ${value.nombre || ""} ${value.apellido || ""}`.trim()
           : "Sin cliente vinculado",
     },
     {
       header: "Fecha de registro",
       accessor: "fecha_registro",
-      render: (value) => (value ? value.substring(0, 10) : "—"),
+      render: (value) => {
+        if (!value) return "—";
+        
+        const d = new Date(value);
+        
+        // Restar 5 horas para Colombia (UTC-5)
+        const colombiaTime = new Date(d.getTime() - (5 * 60 * 60 * 1000));
+        
+        const day = String(colombiaTime.getUTCDate()).padStart(2, "0");
+        const month = String(colombiaTime.getUTCMonth() + 1).padStart(2, "0");
+        const year = colombiaTime.getUTCFullYear();
+
+        return `${day}/${month}/${year}`;
+      }
     },
   ];
 
@@ -27,16 +44,14 @@ const ListPaymentAccountAd = ({ accounts, reloadData, onSelectRows }) => {
       columns={columns}
       emptyMessage="No hay cuentas de pago registradas"
       getBadgeValue={(row) => row.estado}
-      EditComponent={(props) => (
-        <EditPaymentAccountAd {...props} onSuccess={reloadData} />
-      )}
-      ViewComponent={(props) => (
-        <ViewPaymentAccountDetailAd {...props} />
-      )}
+      EditComponent={EditComponentMemo}
+      ViewComponent={ViewComponentMemo}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
+      clearSelectionTrigger={clearSelectionTrigger}
       mobileConfig={{
         title: "numero_cuenta",
-        subtitle: "cliente"
+        subtitle: "nit"
       }}
     />
   );

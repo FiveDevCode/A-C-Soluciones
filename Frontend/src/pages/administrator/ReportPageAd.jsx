@@ -7,6 +7,7 @@ import { handleGetListToken } from "../../controllers/common/getListToken.contro
 import FilterReportAd from "../../components/administrator/FilterReportAd";
 import FormCreateReportAd from "../../components/administrator/FormCreateReportAd";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 
 const Container = styled.div`
   display: flex;
@@ -62,6 +63,7 @@ const ReportPageAd = () => {
       return visitsWithReport;
     }
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'maintenance_sheets');
   const [filteredVisits, setFilteredVisits] = useState([]);
 
   return (
@@ -70,7 +72,8 @@ const ReportPageAd = () => {
       <BaseHeaderSection
         headerTitle="FICHAS DE MANTENIMIENTO"
         sectionTitle="Fichas de mantenimiento generadas"
-        onRefresh={loadReports}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         filterComponent={
           <FilterReportAd
             visits={visits}

@@ -148,7 +148,7 @@ export const MenuSideAc = () => {
 
         <ContainerOption to="/contador/metricas">
           <IconOption icon={faChartBar} />
-          <TitleOption>Métricas y Estadisticas</TitleOption>
+          <TitleOption>Métricas y Estadísticas</TitleOption>
         </ContainerOption>
 
         <ContainerOption to="/contador/facturas">
@@ -163,7 +163,7 @@ export const MenuSideAc = () => {
 
         <ContainerOption to="/contador/inventario">
           <IconOption icon={faBoxes} />
-          <TitleOption>Inventario</TitleOption>
+          <TitleOption>Herramientas</TitleOption>
         </ContainerOption>
 
         <ContainerOption to="/contador/notificaciones">

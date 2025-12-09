@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
-import { Checkbox, Pagination } from "@mui/material";
+import { Checkbox, Pagination, Tooltip } from "@mui/material";
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import useItemsPerPage from "../../hooks/useItemPerPage";
 
@@ -283,6 +283,16 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9998;
+  animation: fadeIn 0.2s ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const LoadingContent = styled.div`
@@ -294,6 +304,18 @@ const LoadingContent = styled.div`
   align-items: center;
   gap: 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.2s ease-out;
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;
 
 const LoadingText = styled.p`
@@ -377,6 +399,8 @@ const BaseTable = ({
   onSelectRows, // <-- sigue funcionando individualmente
   isLoadingData = false, // <-- prop para saber si está cargando
   mobileConfig = {}, // <-- configuración para vista móvil: { title, subtitle, renderExtra }
+  clearSelectionTrigger, // <-- nueva prop para forzar limpieza de selección
+  isEditDisabled,
 }) => {
   const ITEMS_PER_PAGE = useItemsPerPage();
   const [currentPage, setCurrentPage] = useState(1);
@@ -388,8 +412,8 @@ const BaseTable = ({
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
   
-  // Mostrar skeleton solo si realmente estamos cargando Y no hay datos
-  const isLoadingTable = isLoadingData && data.length === 0;
+  // Mostrar skeleton siempre que esté cargando
+  const isLoadingTable = isLoadingData;
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -411,6 +435,28 @@ const BaseTable = ({
     }
   }, [selectedRows]);
 
+  // Limpiar selecciones cuando los datos cambian (por ejemplo, después de eliminar)
+  useEffect(() => {
+    if (selectedRows.length === 0) return;
+    
+    const selectedIds = selectedRows.map(row => row.id);
+    const currentIds = data.map(row => row.id);
+    const hasRemovedRows = selectedIds.some(id => !currentIds.includes(id));
+    
+    if (hasRemovedRows) {
+      // Mantener solo las filas que aún existen en los datos
+      const validRows = selectedRows.filter(row => currentIds.includes(row.id));
+      setSelectedRows(validRows);
+    }
+  }, [data.length, data]);
+
+  // Limpiar selecciones cuando el padre lo solicita
+  useEffect(() => {
+    if (clearSelectionTrigger !== undefined) {
+      setSelectedRows([]);
+    }
+  }, [clearSelectionTrigger]);
+
   const handleCloseEdit = () => {
     setSelectedRow(null);
     setIsLoading(false);
@@ -427,16 +473,19 @@ const BaseTable = ({
     setShowModal(false);
     setSelectedRow(row);
     
-    // Mostrar pantalla de carga por 1.5 segundos, luego mostrar el modal
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowModal(true);
-    }, 1500);
+    // Delay mínimo para transición suave (200ms)
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+        setShowModal(true);
+      }, 200);
+    });
   };
 
   const handleOpenView = async (row) => {
     // Ver detalle se abre inmediatamente sin pantalla de carga
-    setSelectedViewRow(row);
+    // Guardar solo el ID para mantener estabilidad
+    setSelectedViewRow(row.id ? row.id : row);
     setShowModal(true);
   };
 
@@ -545,9 +594,28 @@ const BaseTable = ({
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton onClick={() => handleOpenEdit(row)}>
-                          <FontAwesomeIcon icon={faEdit} /> Editar
-                        </ActionButton>
+                        typeof isEditDisabled === 'function' && isEditDisabled(row) ? (
+                          <Tooltip 
+                            title={row.estado === 'completada' ? 'No se puede editar una visita completada.' : row.estado === 'cancelada' ? 'No se puede editar una visita cancelada.' : 'Edición deshabilitada'} 
+                            arrow 
+                            placement="top"
+                          >
+                            <span>
+                              <ActionButton 
+                                disabled
+                                style={{ backgroundColor: '#bdbdbd', cursor: 'not-allowed', opacity: 0.7 }}
+                              >
+                                <FontAwesomeIcon icon={faEdit} /> Editar
+                              </ActionButton>
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          <ActionButton 
+                            onClick={() => handleOpenEdit(row)}
+                          >
+                            <FontAwesomeIcon icon={faEdit} /> Editar
+                          </ActionButton>
+                        )
                       )}
                     </td>
                   )}
@@ -653,14 +721,31 @@ const BaseTable = ({
                         </ActionButton>
                       )}
                       {EditComponent && (
-                        <ActionButton 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenEdit(row);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faEdit} /> Editar
-                        </ActionButton>
+                        typeof isEditDisabled === 'function' && isEditDisabled(row) ? (
+                          <Tooltip 
+                            title={row.estado === 'completada' ? 'No se puede editar una visita completada.' : row.estado === 'cancelada' ? 'No se puede editar una visita cancelada.' : 'Edición deshabilitada'} 
+                            arrow 
+                            placement="top"
+                          >
+                            <span>
+                              <ActionButton 
+                                disabled
+                                style={{ backgroundColor: '#bdbdbd', cursor: 'not-allowed', opacity: 0.7 }}
+                              >
+                                <FontAwesomeIcon icon={faEdit} /> Editar
+                              </ActionButton>
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          <ActionButton 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenEdit(row);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faEdit} /> Editar
+                          </ActionButton>
+                        )
                       )}
                     </MobileActions>
                   </MobileCardRight>
@@ -717,7 +802,9 @@ const BaseTable = ({
       )}
       {ViewComponent && selectedViewRow && showModal && (
         <ViewComponent
-          selected={selectedViewRow}
+          selected={typeof selectedViewRow === 'number' || typeof selectedViewRow === 'string' 
+            ? data.find(row => row.id === selectedViewRow) || selectedViewRow
+            : selectedViewRow}
           onClose={handleCloseView}
           onReady={handleModalReady}
         />

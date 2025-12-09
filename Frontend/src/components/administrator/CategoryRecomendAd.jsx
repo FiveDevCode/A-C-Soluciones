@@ -81,7 +81,7 @@ const OptionTitle = styled.h2`
 const CategoryRecomendAd = () => {
   return (
     <ContainerCategory>
-      <h1>Categorias recomendadas</h1>
+      <h1>Categorías recomendadas</h1>
       <ContainerOption>
         {/* <Option to="/admin/reportes">
           <Icon icon={faFile} style={{stroke:"#28A745"}}/>

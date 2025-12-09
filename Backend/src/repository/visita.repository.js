@@ -37,6 +37,11 @@ export class VisitaRepository {
           model: this.tecnicoModel,
           as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
+        },
+        {
+          model: this.servicioModel,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion']
         }
       ]
     });
@@ -47,13 +52,25 @@ export class VisitaRepository {
         {
           model: this.solicitudModel,
           as: 'solicitud_asociada',
-          attributes: ['id', 'cliente_id_fk', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
+          attributes: ['id', 'cliente_id_fk', 'descripcion', 'direccion_servicio', 'comentarios', 'estado'],
+          include: [
+            {
+              model: ClienteModel.Cliente,
+              as: 'cliente_solicitud', // ← CAMBIAR AQUÍ: usa el alias correcto
+              attributes: ['id', 'numero_de_cedula', 'nombre', 'apellido']
+            }
+          ]
         },
         {
           model: this.tecnicoModel,
           as: 'tecnico_asociado',
           attributes: ['id', 'nombre', 'apellido', 'especialidad']
-        }
+        },
+        {
+          model: this.servicioModel,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion']
+        },
       ],
       order: [['fecha_programada', 'DESC']]
     });
@@ -118,6 +135,30 @@ export class VisitaRepository {
     return visitas.length === 0;
   }
 
+  async obtenerHorariosDisponibles(tecnicoId, fecha) {
+    const fechaObj = new Date(fecha);
+    
+    // Obtener inicio y fin del día en UTC
+    const year = fechaObj.getUTCFullYear();
+    const month = fechaObj.getUTCMonth();
+    const date = fechaObj.getUTCDate();
+    
+    const inicioDia = new Date(Date.UTC(year, month, date, 0, 0, 0));
+    const finDia = new Date(Date.UTC(year, month, date, 23, 59, 59));
+
+    const visitas = await this.model.findAll({
+      where: {
+        tecnico_id_fk: tecnicoId,
+        fecha_programada: {
+          [Op.between]: [inicioDia, finDia]
+        }
+      },
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado'],
+      order: [['fecha_programada', 'ASC']]
+    });
+
+    return visitas;
+  }
 
 
   async obtenerServiciosPorTecnico(tecnico_id) {

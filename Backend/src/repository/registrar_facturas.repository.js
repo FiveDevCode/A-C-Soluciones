@@ -1,5 +1,6 @@
 import { RegistroFacturaModel } from "../models/registrar_facturas.model.js";
 import { Op } from "sequelize";
+import { ClienteModel } from "../models/cliente.model.js";
 
 export class RegistroFacturaRepository {
     async crearRegistroFactura(data) {
@@ -15,7 +16,17 @@ export class RegistroFacturaRepository {
         return await RegistroFacturaModel.RegistroFactura.findByPk(id);
     }
     async obtenerRegistros() {
-        return await RegistroFacturaModel.RegistroFactura.findAll();
+        return await RegistroFacturaModel.RegistroFactura.findAll(
+            {
+                include: [
+                    {
+                        model: ClienteModel.Cliente,
+                        as: "cliente",
+                        attributes: ["id", "numero_de_cedula", "nombre", "apellido"]
+                    }
+                ]
+            }
+        );
     }
     async obtenerRegistroPorNumero(numero_factura) {
         return await RegistroFacturaModel.RegistroFactura.findOne({

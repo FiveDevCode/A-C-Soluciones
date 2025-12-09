@@ -8,6 +8,8 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import FormCreateAccountingAd from "../../components/administrator/FormCreateAccountingAd";
 import { handleDeleteAccountingAd } from "../../controllers/administrator/deleteAccountingAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Container = styled.div`
   display: flex;
@@ -39,67 +41,81 @@ const AccountingPageAd = () => {
     'accounting_cache',
     handleGetListAccountingAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadAccounting, 3, 'accounting');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [filteredAccounting, setFilteredAccounting] = useState([]);
+  const [filteredAccountings, setFilteredAccountings] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
+  const { showToast } = useToastContext();
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
-      alert("Selecciona al menos un registro para eliminar.");
+      showToast("Selecciona al menos un contador para deshabilitar.", "error", 3000);
       return;
     }
     setShowConfirmModal(true);
   };
 
   const confirmDelete = async () => {
+    setShowConfirmModal(false);
+    setIsDeleting(true);
+    
     try {
       for (const id of selectedIds) {
         await handleDeleteAccountingAd(id);
       }
-      alert("Registros eliminados correctamente.");
+      const cantidad = selectedIds.length;
+      const texto = cantidad === 1 
+        ? "1 contador deshabilitado correctamente"
+        : `${cantidad} contadores deshabilitados correctamente`;
+
+      showToast(texto, "success", 4000);
       setSelectedIds([]);
+      setClearTrigger(prev => prev + 1);
       loadAccounting();
     } catch (error) {
-      console.error("Error eliminando registros:", error);
-      alert("Error al eliminar algunos registros.");
+      showToast("Error al deshabilitar los contadores", "error", 5000);
     } finally {
-      setShowConfirmModal(false);
+      setIsDeleting(false);
     }
+  };
+  
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
   };
 
   return (
     <Container>
       <BaseHeaderSection
-        headerTitle="CONTABILIDAD"
+        headerTitle="CONTADORES"
         sectionTitle="Lista de empleados contables"
         addLabel="Agregar empleado contable"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}
-        onRefresh={loadAccounting}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
+        isLoading={isDeleting}
+        loadingMessage="Deshabilitando empleados..."
+        actionType="Deshabilitar seleccionados"
         filterComponent={
           <FilterAccountingAd
             accountings={accountings}
-            onFilteredChange={setFilteredAccounting}
+            onFilteredChange={setFilteredAccountings}
           />
         }
-        actionType="Deshabilitar seleccionados"
-
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando lista contable...
-          </p>
-        ) : (
-          <ListAccountingAd
-            accountings={filteredAccounting}
-            reloadData={loadAccounting}
-            onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
-          />
-        )}
+        <ListAccountingAd
+          accountings={filteredAccountings}
+          reloadData={loadAccounting}
+          onSelectRows={(rows) => setSelectedIds(rows.map((r) => r.id))}
+          isLoadingData={loading}
+          clearSelectionTrigger={clearTrigger}
+        />
       </Card>
 
       {showModal && (
@@ -114,9 +130,9 @@ const AccountingPageAd = () => {
 
       {showConfirmModal && (
         <ConfirmModal
-          message={`¿Está seguro de que desea eliminar ${selectedIds.length} registro(s)? Esta acción no se puede deshacer.`}
+          message={`¿Está seguro de deshabilitar ${selectedIds.length} contador${selectedIds.length > 1 ? 'es' : ''}?`}
           onConfirm={confirmDelete}
-          onCancel={() => setShowConfirmModal(false)}
+          onCancel={cancelDelete}
         />
       )}
     </Container>

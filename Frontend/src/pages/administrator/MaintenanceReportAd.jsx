@@ -7,6 +7,7 @@ import FilterMaintenanceReportAd from "../../components/administrator/FilterMain
 import FormCreateMaintenanceReportAd from "../../components/administrator/FormCreateMaintenanceReportAd";
 import { handleGetListMaintenanceReportAd } from "../../controllers/administrator/getListMaintenanceReportAd.controller";
 import useDataCache from "../../hooks/useDataCache";
+import useAutoRefresh from "../../hooks/useAutoRefresh";
 
 const Container = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ const MaintenanceReportPageAd = () => {
     'maintenance_reports_cache',
     handleGetListMaintenanceReportAd
   );
+  const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'maintenance_reports');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
@@ -49,7 +51,8 @@ const MaintenanceReportPageAd = () => {
         sectionTitle="Reportes eléctricos generados"
         addLabel="Agregar reporte eléctrico"
         onAdd={() => setShowModal(true)}
-        onRefresh={loadReports}
+        onRefresh={manualRefresh}
+        lastUpdateTime={timeAgo}
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterMaintenanceReportAd
@@ -57,7 +60,6 @@ const MaintenanceReportPageAd = () => {
             onFilteredChange={setFilteredReports}
           />
         }
-        actionType="Deshabilitar seleccionados"
       />
 
       <Card>

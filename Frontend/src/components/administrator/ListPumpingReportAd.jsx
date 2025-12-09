@@ -1,5 +1,4 @@
 import BaseTable from "../common/BaseTable";
-import ViewPumpingReportDetailAd from "./ViewPumpingReportDetailAd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -80,7 +79,20 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
   };
 
   const columns = [
-    { header: "Fecha", accessor: "fecha" },
+    { 
+      header: "Fecha", 
+      accessor: "fecha",
+      render: (value) => {
+        if (!value) return "—";
+        
+        const d = new Date(value);
+        const day = String(d.getUTCDate()).padStart(2, "0");
+        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+        const year = d.getUTCFullYear();
+
+        return `${day}/${month}/${year}`;
+      }
+    },
     { header: "Ciudad", accessor: "ciudad" },
     { header: "Dirección", accessor: "direccion" },
     { header: "Encargado", accessor: "encargado" },
@@ -136,7 +148,6 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
       data={reports}
       columns={columns}
       emptyMessage="No hay reportes registrados"
-      ViewComponent={(props) => <ViewPumpingReportDetailAd {...props} />}
       onSelectRows={onSelectRows}
       mobileConfig={{
         title: "fecha",

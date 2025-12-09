@@ -6,6 +6,11 @@ const categoryLabels = {
   medicion: "Medición",
 };
 
+const stateLabels = {
+  activo: "Activo",
+  inactivo: "Inactivo",
+};
+
 const ViewInventoryDetail = ({ selected, onClose }) => {
   console.log(selected)
   if (!selected) return null;
@@ -21,7 +26,8 @@ const ViewInventoryDetail = ({ selected, onClose }) => {
     { label: "Estado", value: selected.estado, isBadge: true },
     {
       label: "Estado de la herramienta",
-      value: selected.estado_herramienta,
+      value: stateLabels[selected.estado_herramienta] || selected.estado_herramienta,
+      isBadge: true
     },
   ];
 

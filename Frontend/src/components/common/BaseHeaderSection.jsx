@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { FaPlus, FaUserCircle, FaBell, FaSyncAlt } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useMenu } from "../technical/MenuContext";
 import NotificationBell from './NotificationBell';
+import { useToastContext } from "../../contexts/ToastContext";
 
 const Header = styled.header`
   background-color: #1976d2;
@@ -189,7 +191,8 @@ const ActionsRow = styled.div`
   align-items: center;
   gap: 10px;
 
-  > button:first-child {
+  /* Ocultar RefreshContainer en desktop para evitar duplicado */
+  > div:first-child {
     display: none;
   }
 
@@ -197,7 +200,8 @@ const ActionsRow = styled.div`
     width: 100%;
     justify-content: space-between;
 
-    > button:first-child {
+    /* Mostrar RefreshContainer en móvil */
+    > div:first-child {
       display: flex;
     }
   }
@@ -284,6 +288,49 @@ const ButtonsGroup = styled.div`
   flex-wrap: wrap;
 `;
 
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+`;
+
+const LoadingContent = styled.div`
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+`;
+
+const LoadingText = styled.p`
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 const RefreshButton = styled(Button)`
   background-color: #4caf50;
   color: white;
@@ -315,6 +362,33 @@ const RefreshButton = styled(Button)`
   }
 `;
 
+const RefreshContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+`;
+
+const LastUpdateText = styled.span`
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+  white-space: nowrap;
+
+  @media (max-width: 1350px) {
+    font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+`;
+
 const BaseHeaderSection = ({
   headerTitle = "GESTIÓN GENERAL",
   sectionTitle = "Listado de registros",
@@ -329,8 +403,12 @@ const BaseHeaderSection = ({
   filterComponent,
   actionType = "Eliminar seleccionados",
   notificationCount = 0,
+  isLoading = false,
+  loadingMessage = "Procesando...",
+  lastUpdateTime = null,
 }) => {
   const navigate = useNavigate();
+  
   let collapsed = false;
   try {
     const menuContext = useMenu();
@@ -410,21 +488,19 @@ const BaseHeaderSection = ({
           <SearchContainer>
             {filterComponent && <div>{filterComponent}</div>}
             {onRefresh && (
-              <RefreshButton onClick={onRefresh} title="Refrescar lista">
-                <FaSyncAlt />
-              </RefreshButton>
+              <RefreshContainer>
+                <RefreshButton onClick={onRefresh} title="Refrescar lista">
+                  <FaSyncAlt />
+                </RefreshButton>
+                {lastUpdateTime && <LastUpdateText>{lastUpdateTime}</LastUpdateText>}
+              </RefreshContainer>
             )}
           </SearchContainer>
           <ActionsRow>
-            {onRefresh && (
-              <RefreshButton onClick={onRefresh} title="Refrescar lista">
-                <FaSyncAlt />
-              </RefreshButton>
-            )}
             {onDeleteSelected && (
               <Button
                 active={selectedCount > 0}
-                disabled={selectedCount === 0}
+                disabled={selectedCount === 0 || isLoading}
                 onClick={onDeleteSelected}
               >
                 {actionType}
@@ -433,6 +509,15 @@ const BaseHeaderSection = ({
           </ActionsRow>
         </OptionsContainer>
       </Card>
+
+      {isLoading && (
+        <LoadingOverlay>
+          <LoadingContent>
+            <Spinner />
+            <LoadingText>{loadingMessage}</LoadingText>
+          </LoadingContent>
+        </LoadingOverlay>
+      )}
     </>
   );
 };

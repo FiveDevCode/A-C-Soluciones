@@ -49,6 +49,11 @@ export const setupAssociations = () => {
   });
 
   // Asociaciones Visita - Solicitud
+  Solicitud.hasMany(Visita, {
+    foreignKey: 'solicitud_id_fk',
+    as: 'visitas'
+  });
+
   Visita.belongsTo(Solicitud, {
     foreignKey: 'solicitud_id_fk',
     as: 'solicitud_asociada'

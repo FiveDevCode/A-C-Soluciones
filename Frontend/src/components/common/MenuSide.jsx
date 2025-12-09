@@ -346,11 +346,10 @@ const MenuSide = () => {
       { to: '/admin/administradores', icon: faUserTie, label: 'Administradores' },
       { to: '/admin/servicios', icon: faWrench, label: 'Servicios' },
       { to: '/admin/metricas', icon: faChartBar, label: 'Métricas y Estadísticas' },
-      { to: '/admin/contadores', icon: faCalculator, label: 'Contabilidad' },
+      { to: '/admin/contadores', icon: faCalculator, label: 'Contadores' },
       { to: '/admin/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/admin/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
-      { to: '/admin/inventario', icon: faBoxes, label: 'Inventario' },
-      { to: '/admin/notificaciones', icon: faBell, label: 'Notificaciones' },
+      { to: '/admin/inventario', icon: faBoxes, label: 'Herramientas' },
       { to: '/admin/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
       { to: '/admin/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
       { to: '/admin/ficha-mantenimiento', icon: faClipboardCheck, label: 'Fichas de mantenimiento' },
@@ -370,7 +369,7 @@ const MenuSide = () => {
       { to: '/contador/metricas', icon: faChartBar, label: 'Métricas y Estadísticas' },
       { to: '/contador/facturas', icon: faMoneyBill, label: 'Facturas' },
       { to: '/contador/cuentas', icon: faCreditCard, label: 'Cuentas de pago' },
-      { to: '/contador/inventario', icon: faBoxes, label: 'Inventario' }
+      { to: '/contador/inventario', icon: faBoxes, label: 'Herramientas' }
     ]
   };
   
