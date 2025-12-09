@@ -56,6 +56,8 @@ import EditProfilePageAc from "./pages/accountant/EditProfilePageAc.jsx";
 
 // Páginas de Cliente
 import HistoryServicesPage from "./pages/client/HistoryServicesPage.jsx";
+import MaintenanceReportPageCl from "./pages/client/MaintenanceReportCl.jsx";
+import PumpingReportPageCl from "./pages/client/PumpingReportCl.jsx";
 import { MenuProvider } from "./components/client/MenuContext.jsx";
 import { MenuProvider as MenuProviderTc } from "./components/technical/MenuContext.jsx";
 
@@ -231,6 +233,24 @@ function AppContent() {
             element={
               <PrivateRoute roleRequired="cliente">
                 <EditProfileCl />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/cliente/reporte-electrico"
+            element={
+              <PrivateRoute roleRequired="cliente">
+                <MaintenanceReportPageCl />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/cliente/reporte-bombeo"
+            element={
+              <PrivateRoute roleRequired="cliente">
+                <PumpingReportPageCl />
               </PrivateRoute>
             }
           />

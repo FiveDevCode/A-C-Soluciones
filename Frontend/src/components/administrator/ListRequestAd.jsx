@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import ViewRequestDetailAd from "./ViewRequestDetailAd";
 
-const ListRequestAd = ({ requests, onSelectRows }) => {
+const ListRequestAd = ({ requests, onSelectRows, onUpdate }) => {
   const columns = [
     {
       header: "Comentarios",
@@ -42,7 +42,7 @@ const ListRequestAd = ({ requests, onSelectRows }) => {
       getBadgeValue={(row) => row.estado}
       emptyMessage="No hay solicitudes registradas"
       ViewComponent={(props) => (
-        <ViewRequestDetailAd {...props} />
+        <ViewRequestDetailAd {...props} onUpdate={onUpdate} />
       )}
       onSelectRows={onSelectRows}
       mobileConfig={{
