@@ -189,6 +189,15 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
 
   const columns = [
     {
+      header: "Cliente",
+      accessor: "solicitud_asociada",
+      render: (value) => {
+        if (!value?.cliente_solicitud) return "—";
+        const { nombre, apellido } = value.cliente_solicitud;
+        return `${nombre} ${apellido}`;
+      }
+    },
+    {
       header: "Notas Previas",
       accessor: "notas_previas",
       render: (value) => {

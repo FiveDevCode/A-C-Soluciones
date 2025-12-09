@@ -52,7 +52,14 @@ export class VisitaRepository {
         {
           model: this.solicitudModel,
           as: 'solicitud_asociada',
-          attributes: ['id', 'cliente_id_fk', 'descripcion', 'direccion_servicio', 'comentarios', 'estado']
+          attributes: ['id', 'cliente_id_fk', 'descripcion', 'direccion_servicio', 'comentarios', 'estado'],
+          include: [
+            {
+              model: ClienteModel.Cliente,
+              as: 'cliente_solicitud', // ← CAMBIAR AQUÍ: usa el alias correcto
+              attributes: ['id', 'numero_de_cedula', 'nombre', 'apellido']
+            }
+          ]
         },
         {
           model: this.tecnicoModel,
@@ -63,7 +70,7 @@ export class VisitaRepository {
           model: this.servicioModel,
           as: 'servicio',
           attributes: ['id', 'nombre', 'descripcion']
-        }
+        },
       ],
       order: [['fecha_programada', 'DESC']]
     });

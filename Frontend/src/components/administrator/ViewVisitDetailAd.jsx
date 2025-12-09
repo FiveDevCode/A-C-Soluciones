@@ -42,6 +42,12 @@ const ViewVisitDetailAd = ({ selected, onClose }) => {
     },
     { label: "Solicitud", value: selected.solicitud_asociada ? `${selected.solicitud_asociada.descripcion}` : "No asignada" },
     { label: "Técnico", value: selected.tecnico_asociado ? `${selected.tecnico_asociado.nombre} ${selected.tecnico_asociado.apellido}` : "No asignado" },
+    { 
+      label: "Cliente", 
+      value: selected.solicitud_asociada?.cliente_solicitud 
+        ? `${selected.solicitud_asociada.cliente_solicitud.nombre} ${selected.solicitud_asociada.cliente_solicitud.apellido}` 
+        : "No asignado" 
+    },
     { label: "Servicio", value: selected.servicio ? selected.servicio.nombre : "No asignado" },
     { label: "Estado", value: stateLabels[selected.estado] || selected.estado, isBadge: true },
   ];
