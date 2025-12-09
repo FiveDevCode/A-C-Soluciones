@@ -27,7 +27,7 @@ const imagePositions = [
   'center', // home2
   'center', // home3
   'center', // home4
-  'top',    // home5 - parte de arriba
+  '15%',    // home5 - un poco más abajo que top
   'bottom', // home6 - parte de abajo
   'center', // home7
   'center', // home8
