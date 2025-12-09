@@ -108,6 +108,8 @@ const ESPECIALIDADES_HIDROELECTRICAS = [
 
 const FormCreateTechnicalAd = ({ onClose, onSuccess }) => {
 
+  const especialidadOptions = ESPECIALIDADES_HIDROELECTRICAS.map(e => ({ label: e, value: e }));
+
   const fields = [
     { name: "numero_de_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
     { name: "nombre", label: "Nombre", type: "text", required: true },
@@ -119,7 +121,7 @@ const FormCreateTechnicalAd = ({ onClose, onSuccess }) => {
       name: "especialidad", 
       label: "Especialidad", 
       type: "autocomplete",
-      options: ESPECIALIDADES_HIDROELECTRICAS,
+      options: especialidadOptions,
       required: true
     },
   ];
