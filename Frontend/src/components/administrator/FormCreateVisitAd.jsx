@@ -21,8 +21,7 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
   }, []);
 
   const fields = [
-    { name: "notas_previas", label: "Notas previas", type: "textarea" },
-    { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
+    { name: "notas", label: "Notas", type: "textarea" },
     { 
       name: "duracion_estimada", 
       label: "Duración estimada (minutos)", 
@@ -68,8 +67,7 @@ const FormAssignVisitAd = ({ onClose, onSuccess }) => {
   const handleSubmit = async (data) => {
     await handleCreateVisit(
       data.duracion_estimada,
-      data.notas_previas,
-      data.notas_posteriores,
+      data.notas,
       data.fecha_programada,
       data.solicitud,
       data.tecnico,

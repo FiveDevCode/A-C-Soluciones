@@ -180,12 +180,19 @@ export class VisitaRepository {
       where: {
         tecnico_id_fk: tecnico_id
       },
-      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
-      include: [{
-        model: ServicioModel.Servicio,
-        as: 'servicio',
-        attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
-      }],
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas', 'fecha_creacion', 'solicitud_id_fk'],
+      include: [
+        {
+          model: ServicioModel.Servicio,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
+        },
+        {
+          model: SolicitudModel.Solicitud,
+          as: 'solicitud_asociada',
+          attributes: ['id', 'cliente_id_fk']
+        }
+      ],
       order: [['fecha_creacion', 'DESC']]
     });
   }
@@ -196,7 +203,7 @@ export class VisitaRepository {
         id: visita_id,
         tecnico_id_fk: tecnico_id
       },
-      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas', 'fecha_creacion'],
       include: [{
         model: ServicioModel.Servicio,
         as: 'servicio',

@@ -283,14 +283,12 @@ const ListReportTc = ({visits}) => {
               </ImageWrapper>
               <NotificationInfo>
                 <TitleNoti>
-                  {visit.notas_posteriores && visit.notas_posteriores.length > 50
-                    ? `${visit.notas_posteriores.slice(0, 50)}...`
-                    : visit.notas_posteriores || "Sin notas posteriores"}
+                  {visit.notas && visit.notas.length > 50
+                    ? `${visit.notas.slice(0, 50)}...`
+                    : visit.notas || "Sin notas"}
                 </TitleNoti>
                 <Description>
-                  {visit.notas_previas && visit.notas_previas.length > 50
-                    ? `${visit.notas_previas.slice(0, 50)}...`
-                    : visit.notas_previas || "Sin notas previas"}
+                  Servicio: {visit.servicio?.nombre || "Sin servicio"}
                 </Description>
                 <Date>{formatDate(visit.fecha_programada)}</Date>
               </NotificationInfo>

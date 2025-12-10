@@ -410,8 +410,7 @@ const ActivityListTc = ({visits}) => {
           {visits.slice(0, 4).map((visit, index) => {
             const estadoConfig = getEstadoConfig(visit.estado);
             const servicioNombre = visit.servicio?.nombre || 'Servicio no especificado';
-            const notasPrevias = visit.notas_previas || 'Sin notas previas';
-            const notasPosteriores = visit.notas_posteriores || 'Sin notas posteriores';
+            const notas = visit.notas || 'Sin notas';
 
             return (
               <Notification 
@@ -431,17 +430,10 @@ const ActivityListTc = ({visits}) => {
                       <span>{servicioNombre}</span>
                     </ServiceTitle>
                     <Description>
-                      {notasPrevias.length > 80 
-                        ? `${notasPrevias.slice(0, 80)}...`
-                        : notasPrevias}
+                      {notas.length > 80 
+                        ? `${notas.slice(0, 80)}...`
+                        : notas}
                     </Description>
-                    {notasPosteriores !== 'Sin notas posteriores' && (
-                      <NotesText>
-                        {notasPosteriores.length > 60 
-                          ? `${notasPosteriores.slice(0, 60)}...`
-                          : notasPosteriores}
-                      </NotesText>
-                    )}
                     <DateContainer>
                       <FontAwesomeIcon icon={faCalendarAlt} />
                       <span>

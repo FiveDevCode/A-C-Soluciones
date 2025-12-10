@@ -42,19 +42,15 @@ export const Visita = sequelize.define('Visita', {
     defaultValue: 'programada',
     allowNull: false
   },
-  notas_previas: {
+  notas: {
     type: DataTypes.TEXT,
     allowNull: true,
     validate: {
       len: {
-        args: [0, 250],
-        msg: 'Las notas no pueden exceder los 250 caracteres'
+        args: [0, 500],
+        msg: 'Las notas no pueden exceder los 500 caracteres'
       }
     }
-  },
-  notas_posteriores: {
-    type: DataTypes.TEXT,
-    allowNull: true
   },
   fecha_creacion: {
     type: DataTypes.DATE,

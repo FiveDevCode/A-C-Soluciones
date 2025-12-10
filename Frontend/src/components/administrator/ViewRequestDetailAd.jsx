@@ -17,6 +17,7 @@ import {
   TextField
 } from "@mui/material";
 import { handleUpdateStateRequest } from "../../controllers/administrator/UpdateStateRequestAd.controller";
+import BaseDetailModal from "../common/BaseDetailModal";
 
 const DetailRow = styled.div`
   display: flex;
