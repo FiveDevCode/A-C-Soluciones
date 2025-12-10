@@ -11,6 +11,7 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
     const fetchAdmin = async () => {
       try {
         const response = await handleGetAdminId(selectedIdRef.current);
+        console.log(response.data);
         setAdminData(response.data);
       } catch (error) {
         console.error("Error al cargar administrador:", error);
@@ -30,7 +31,7 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
     { name: "numero_cedula", label: "Cédula", type: "text" },
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "apellido", label: "Apellido", type: "text" },
-    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
+    { name: "telefono", label: "Teléfono", type: "number", inputProps: { maxLength: 10 } },
     { name: "correo_electronico", label: "Correo electrónico", type: "email" },
     { name: "estado", label: "Estado", type: "select", options: estados },
   ];
