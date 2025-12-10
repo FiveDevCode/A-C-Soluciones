@@ -293,8 +293,7 @@ const ViewVisitPageTc = () => {
   const {
     fecha_programada,
     duracion_estimada,
-    notas_previas,
-    notas_posteriores,
+    notas,
     servicio,
   } = visitData || {};
   
@@ -394,23 +393,12 @@ const ViewVisitPageTc = () => {
             <ColumnTitle>Notas</ColumnTitle>
             
             <InfoItem>
-              <InfoLabel>Notas Previas</InfoLabel>
+              <InfoLabel>Notas</InfoLabel>
               <NotesBox>
                 <NotesText>
-                  {notas_previas?.trim() 
-                    ? notas_previas 
-                    : 'No hay notas previas registradas'}
-                </NotesText>
-              </NotesBox>
-            </InfoItem>
-
-            <InfoItem>
-              <InfoLabel>Notas Posteriores</InfoLabel>
-              <NotesBox>
-                <NotesText>
-                  {notas_posteriores?.trim() 
-                    ? notas_posteriores 
-                    : 'No hay notas posteriores registradas'}
+                  {notas?.trim() 
+                    ? notas 
+                    : 'No hay notas registradas'}
                 </NotesText>
               </NotesBox>
             </InfoItem>

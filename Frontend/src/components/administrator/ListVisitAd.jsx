@@ -198,16 +198,8 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       }
     },
     {
-      header: "Notas Previas",
-      accessor: "notas_previas",
-      render: (value) => {
-        if (!value) return "—";
-        return value.length > 50 ? value.slice(0, 50) + "..." : value;
-      }
-    },
-    {
-      header: "Notas Posteriores",
-      accessor: "notas_posteriores",
+      header: "Notas",
+      accessor: "notas",
       render: (value) => {
         if (!value) return "—";
         return value.length > 50 ? value.slice(0, 50) + "..." : value;
@@ -240,8 +232,11 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     {
       header: "Reporte",
       accessor: "pdf_path",
-      render: (value, row) =>
-        value ? (
+      render: (value, row) => {
+        // Buscar el pdf_path en la ficha de mantenimiento si existe
+        const pdfPath = row.ficha_mantenimiento?.pdf_path || value;
+        
+        return pdfPath ? (
           // ========================
           // ✔ BOTÓN VER REPORTE
           // ========================
@@ -258,14 +253,14 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
             onClick={async () => {
               try {
                 // Si es una URL de Cloudinary, abrirla directamente
-                if (value.includes('cloudinary.com')) {
-                  window.open(value, "_blank");
+                if (pdfPath.includes('cloudinary.com')) {
+                  window.open(pdfPath, "_blank");
                   return;
                 }
 
                 const token = localStorage.getItem("authToken");
 
-                const relativePath = value
+                const relativePath = pdfPath
                   .replace(/^uploads[\\/]/, "")
                   .replace(/\\/g, "/");
 
@@ -338,7 +333,8 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
           >
             Generar reporte
           </button>
-        ),
+        );
+      },
     },
   ];
 
@@ -358,7 +354,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
         isEditDisabled={(row) => row.estado === "completada" || row.estado === "cancelada"}
         mobileConfig={{
           title: "fecha_programada",
-          subtitle: "notas_previas",
+          subtitle: "notas",
           renderExtra: (row) => {
             if (!row.pdf_path) {
               // Mostrar botón de generar reporte

@@ -80,8 +80,7 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
         return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
       },
     },
-    { header: "Notas previas", accessor: "notas_previas" },
-    { header: "Notas posteriores", accessor: "notas_posteriores" },
+    { header: "Notas", accessor: "notas" },
     {
       header: "PDF",
       accessor: "pdf_path",
@@ -127,7 +126,7 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
       onSelectRows={onSelectRows}
       mobileConfig={{
         title: "fecha_programada",
-        subtitle: "notas_previas",
+        subtitle: "notas",
         renderExtra: (row) => (
           <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
             <button

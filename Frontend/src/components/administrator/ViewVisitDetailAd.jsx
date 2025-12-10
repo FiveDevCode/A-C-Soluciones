@@ -33,8 +33,7 @@ const ViewVisitDetailAd = ({ selected, onClose }) => {
     });
   };
   const fields = [
-    { label: "Notas previas", value: selected.notas_previas || "Sin notas previas" },
-    { label: "Notas posteriores", value: selected.notas_posteriores || "Sin notas posteriores" },
+    { label: "Notas", value: selected.notas || "Sin notas" },
     { label: "Duración estimada", value: selected.duracion_estimada ? `${selected.duracion_estimada} minutos` : "No se especificó" },
     {
       label: "Fecha programada",

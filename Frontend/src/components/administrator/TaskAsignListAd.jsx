@@ -80,14 +80,12 @@ const TaskAsingListAd = ({services}) => {
             <Logo src={serviceTehc} />
             <NotificationInfo>
               <TitleNoti>
-                {service.notas_posteriores.length > 50
-                  ? `${service.notas_posteriores.slice(0, 50)}...`
-                  : service.notas_posteriores}
+                {service.notas && service.notas.length > 50
+                  ? `${service.notas.slice(0, 50)}...`
+                  : service.notas || "Sin notas"}
               </TitleNoti>
               <Description>
-                {service.notas_previas.length > 50
-                  ? `${service.notas_previas.slice(0, 50)}...`
-                  : service.notas_previas}
+                Servicio: {service.servicio?.nombre || "Sin servicio"}
               </Description>
               <Date>{service.fecha_programada.substring(0, 10)}</Date>
             </NotificationInfo>
