@@ -122,6 +122,26 @@ const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false
       }
     },
     {
+      header: "Fecha programada",
+      accessor: "visita_asociada.fecha_programada",
+      render: (_, row) => {
+        const value = row.visita_asociada?.fecha_programada;
+        if (!value) return "—";
+
+        const d = new Date(value);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+
+        let hours = d.getHours();
+        const minutes = String(d.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12;
+
+        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
+      }
+    },
+    {
       header: "PDF",
       accessor: "pdf_path",
       render: (_, row) => (
