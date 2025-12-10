@@ -293,8 +293,7 @@ const ViewVisitPageTc = () => {
   const {
     fecha_programada,
     duracion_estimada,
-    notas_previas,
-    notas_posteriores,
+    notas,
     servicio,
   } = visitData || {};
   
@@ -394,23 +393,12 @@ const ViewVisitPageTc = () => {
             <ColumnTitle>Notas</ColumnTitle>
             
             <InfoItem>
-              <InfoLabel>Notas Previas</InfoLabel>
+              <InfoLabel>Notas</InfoLabel>
               <NotesBox>
                 <NotesText>
-                  {notas_previas?.trim() 
-                    ? notas_previas 
-                    : 'No hay notas previas registradas'}
-                </NotesText>
-              </NotesBox>
-            </InfoItem>
-
-            <InfoItem>
-              <InfoLabel>Notas Posteriores</InfoLabel>
-              <NotesBox>
-                <NotesText>
-                  {notas_posteriores?.trim() 
-                    ? notas_posteriores 
-                    : 'No hay notas posteriores registradas'}
+                  {notas?.trim() 
+                    ? notas 
+                    : 'No hay notas registradas'}
                 </NotesText>
               </NotesBox>
             </InfoItem>
@@ -478,6 +466,13 @@ const ViewVisitPageTc = () => {
                   fullWidth
                   onClick={async () => {
                     try {
+                      // Si es una URL de Cloudinary, abrirla directamente
+                      if (pathName.includes('cloudinary.com')) {
+                        window.open(pathName, '_blank');
+                        return;
+                      }
+
+                      // Si es una ruta local del servidor
                       const token = localStorage.getItem('authToken');
                       const fileName = pathName.split(/[/\\]/).pop();
                       const pdfUrl = `${API_KEY}/descargar/${fileName}`;

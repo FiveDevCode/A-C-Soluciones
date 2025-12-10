@@ -45,8 +45,7 @@ const FilterVisitsAd = ({ visits = [], onFilteredChange }) => {
         "tecnico_asociado.apellido",
         "tecnicoNombreCompleto",
         "solicitud_asociada.descripcion",
-        "notas_previas",
-        "notas_posteriores",
+        "notas",
       ]}
       onFilteredChange={onFilteredChange}
     />

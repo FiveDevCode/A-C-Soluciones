@@ -14,7 +14,7 @@ const FilterReportAd = ({ visits = [], onFilteredChange }) => {
       data={visits}
       placeholder="Buscar por notas..."
       filterOptions={filterOptions}
-      searchKeys={["notas_previas", "notas_posteriores"]}
+      searchKeys={["notas"]}
       onFilteredChange={onFilteredChange}
     />
   );

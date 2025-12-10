@@ -44,8 +44,7 @@ const FilterVisitsTc = ({ visits = [], onFilteredChange }) => {
         "servicioNombre",
         "servicio.descripcion",
         "servicioDescripcion",
-        "notas_previas",
-        "notas_posteriores",
+        "notas",
       ]}
       onFilteredChange={onFilteredChange}
     />

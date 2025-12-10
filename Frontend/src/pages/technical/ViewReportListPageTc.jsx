@@ -86,8 +86,7 @@ const ViewReportListPageTc = () => {
               id: `ficha-${ficha.id}`, // Usar ID de ficha que siempre es único
               fichaId: ficha.id, // Guardar ID de ficha para referencia
               visitaId: visita.id, // Guardar ID de visita para referencia
-              notas_previas: visita.notas_previas || ficha.detalles_servicio || 'Sin notas previas',
-              notas_posteriores: visita.notas_posteriores || ficha.observaciones || 'Sin notas posteriores',
+              notas: visita.notas || ficha.detalles_servicio || ficha.observaciones || 'Sin notas',
               fecha_programada: visita.fecha_programada || ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: visita.estado || 'completada'
@@ -97,8 +96,7 @@ const ViewReportListPageTc = () => {
             return {
               id: `ficha-${ficha.id}`, // ID único usando el ID de la ficha
               fichaId: ficha.id, // Guardar ID de ficha para referencia
-              notas_previas: ficha.detalles_servicio || ficha.estado_antes || 'Sin notas previas',
-              notas_posteriores: ficha.observaciones || ficha.recomendaciones || 'Sin notas posteriores',
+              notas: ficha.detalles_servicio || ficha.estado_antes || ficha.observaciones || ficha.recomendaciones || 'Sin notas',
               fecha_programada: ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: 'completada',
@@ -156,8 +154,7 @@ const ViewReportListPageTc = () => {
               id: `ficha-${ficha.id}`, // Usar ID de ficha que siempre es único
               fichaId: ficha.id, // Guardar ID de ficha para referencia
               visitaId: visita.id, // Guardar ID de visita para referencia
-              notas_previas: visita.notas_previas || ficha.detalles_servicio || 'Sin notas previas',
-              notas_posteriores: visita.notas_posteriores || ficha.observaciones || 'Sin notas posteriores',
+              notas: visita.notas || ficha.detalles_servicio || ficha.observaciones || 'Sin notas',
               fecha_programada: visita.fecha_programada || ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: visita.estado || 'completada'
@@ -167,8 +164,7 @@ const ViewReportListPageTc = () => {
             return {
               id: `ficha-${ficha.id}`, // ID único usando el ID de la ficha
               fichaId: ficha.id, // Guardar ID de ficha para referencia
-              notas_previas: ficha.detalles_servicio || ficha.estado_antes || 'Sin notas previas',
-              notas_posteriores: ficha.observaciones || ficha.recomendaciones || 'Sin notas posteriores',
+              notas: ficha.detalles_servicio || ficha.estado_antes || ficha.observaciones || ficha.recomendaciones || 'Sin notas',
               fecha_programada: ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: 'completada',

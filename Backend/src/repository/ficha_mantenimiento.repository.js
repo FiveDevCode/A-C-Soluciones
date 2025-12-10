@@ -37,8 +37,7 @@ export const obtenerTodasFichas = async (id_visitas = null) => {
           'fecha_programada',
           'duracion_estimada',
           'estado',
-          'notas_previas',
-          'notas_posteriores'
+          'notas'
         ],
         include: [
           {
@@ -93,8 +92,7 @@ export const obtenerFichasPorCliente = async (id_cliente, id_visitas = null) => 
           'fecha_programada',
           'duracion_estimada',
           'estado',
-          'notas_previas',
-          'notas_posteriores'
+          'notas'
         ],
         include: [
           {
@@ -137,8 +135,7 @@ export const obtenerFichasPorTecnico = async (id_tecnico, id_visitas = null) => 
           'fecha_programada',
           'duracion_estimada',
           'estado',
-          'notas_previas',
-          'notas_posteriores'
+          'notas'
         ],
         include: [
           {

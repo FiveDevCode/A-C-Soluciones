@@ -65,7 +65,7 @@ export class VisitaService {
     }
     const visitaActualizada = await this.visitaRepository.actualizarVisita(id, {
       estado: 'cancelada',
-      notas_posteriores: motivo
+      notas: motivo
     });
     return visitaActualizada;
   }

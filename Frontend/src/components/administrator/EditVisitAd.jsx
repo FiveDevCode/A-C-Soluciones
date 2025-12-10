@@ -86,8 +86,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
 
   // Crear fields dinámicamente para que refleje el estado actual de estadoBloqueado
   const fields = React.useMemo(() => [
-    { name: "notas_previas", label: "Notas previas", type: "textarea" },
-    { name: "notas_posteriores", label: "Notas posteriores", type: "textarea" },
+    { name: "notas", label: "Notas", type: "textarea" },
     { 
       name: "duracion_estimada", 
       label: "Duración estimada (minutos)", 
@@ -132,8 +131,7 @@ const EditVisitAd = ({ selected, onClose, onSuccess }) => {
   const initialData = React.useMemo(() => {
     if (!visitData) return {};
     return {
-      notas_previas: visitData.notas_previas || "",
-      notas_posteriores: visitData.notas_posteriores || "",
+      notas: visitData.notas || "",
       duracion_estimada: visitData.duracion_estimada || "",
       solicitud_id_fk: visitData.solicitud_id_fk || "",
       tecnico_id_fk: visitData.tecnico_id_fk || "",

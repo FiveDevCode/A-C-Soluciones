@@ -73,16 +73,8 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       }
     },
     {
-      header: "Notas Previas",
-      accessor: "notas_previas",
-      render: (value) => {
-        if (!value) return "—";
-        return value.length > 50 ? value.slice(0, 50) + "..." : value;
-      }
-    },
-    {
-      header: "Notas Posteriores",
-      accessor: "notas_posteriores",
+      header: "Nota",
+      accessor: "notas",
       render: (value) => {
         if (!value) return "—";
         return value.length > 50 ? value.slice(0, 50) + "..." : value;

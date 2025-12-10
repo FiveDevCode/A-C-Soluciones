@@ -5,7 +5,7 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleCreateVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId, serviceId ) => {
+const handleCreateVisit = (estimatedDuration, notas, scheduledDate, requestId, technicalId, serviceId ) => {
   // Convertir fecha_programada de datetime-local a ISO UTC
   let utcScheduledDate = scheduledDate;
   
@@ -31,7 +31,7 @@ const handleCreateVisit = (estimatedDuration, previousNotes, postnotes, schedule
   }
 
   return administratorService
-    .assignVisit(estimatedDuration, previousNotes, postnotes, utcScheduledDate, requestId, technicalId, serviceId);
+    .assignVisit(estimatedDuration, notas, utcScheduledDate, requestId, technicalId, serviceId);
 };
 
 export {handleCreateVisit};

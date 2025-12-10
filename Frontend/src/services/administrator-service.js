@@ -114,14 +114,13 @@ const getListRequest = () => {
   });
 }
 
-const assignVisit = (estimatedDuration, previousNotes, postnotes, scheduledDate, requestId, technicalId, serviceId) => {
+const assignVisit = (estimatedDuration, notas, scheduledDate, requestId, technicalId, serviceId) => {
   const token = localStorage.getItem("authToken");
 
   return api.post("/visitas", {
     duracion_estimada: estimatedDuration,
-    notas_previas: previousNotes,
+    notas: notas,
     fecha_programada: scheduledDate,
-    notas_posteriores: postnotes,
     solicitud_id_fk: requestId,
     tecnico_id_fk: technicalId,
     servicio_id_fk: serviceId

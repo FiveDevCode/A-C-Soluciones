@@ -94,6 +94,10 @@ const RequestPageAd = () => {
     setShowConfirmModal(false);
   };
 
+  const handleUpdate = () => {
+    loadRequests();
+  };
+
   return (
     <Container>
       <BaseHeaderSection
@@ -118,6 +122,7 @@ const RequestPageAd = () => {
         <ListRequestAd
           requests={filteredRequests}
           onSelectRows={handleSelectRows}
+          onUpdate={handleUpdate}
           isLoadingData={loading}
           clearSelectionTrigger={clearTrigger}
           onUpdate={loadRequests}
