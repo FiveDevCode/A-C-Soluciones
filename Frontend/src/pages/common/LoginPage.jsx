@@ -1,6 +1,6 @@
 import FormLogin from "../../components/common/FormLogin";
 import logo from '../../assets/common/logoA&C.png';
-import fondoLogin from '../../assets/common/fondoLogin.png';
+import fondoLogin from '../../assets/common/fondoLogin.jpg';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
