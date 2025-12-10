@@ -81,6 +81,15 @@ const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false
 
   const columns = [
     {
+      header: "Fecha del mantenimiento",
+      accessor: "fecha_de_mantenimiento",
+      render: (value) => {
+        if (!value) return "—";
+        const fecha = new Date(value);
+        return fecha.toLocaleDateString("es-CO");
+      }
+    },
+    {
       header: "Cliente",
       accessor: "cliente_ficha",
       render: (value) => {
@@ -102,25 +111,6 @@ const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false
       render: (value) => {
         if (!value?.servicio) return "—";
         return value.servicio.nombre;
-      }
-    },
-    {
-      header: "Fecha programada",
-      accessor: "visita_asociada",
-      render: (value) => {
-        if (!value?.fecha_programada) return "—";
-
-        const d = new Date(value.fecha_programada);
-        const day = String(d.getUTCDate()).padStart(2, "0");
-        const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-        const year = d.getUTCFullYear();
-
-        let hours = d.getUTCHours();
-        const minutes = String(d.getUTCMinutes()).padStart(2, "0");
-        const ampm = hours >= 12 ? "pm" : "am";
-        hours = hours % 12 || 12;
-
-        return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
       }
     },
     {

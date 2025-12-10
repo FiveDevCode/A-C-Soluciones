@@ -125,7 +125,6 @@ const RequestPageAd = () => {
           onUpdate={handleUpdate}
           isLoadingData={loading}
           clearSelectionTrigger={clearTrigger}
-          onUpdate={loadRequests}
         />
       </Card>
 
