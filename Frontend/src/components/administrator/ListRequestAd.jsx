@@ -1,7 +1,7 @@
 import BaseTable from "../common/BaseTable";
 import ViewRequestDetailAd from "./ViewRequestDetailAd";
 
-const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false, clearSelectionTrigger }) => {
+const ListRequestAd = ({ requests, onSelectRows, isLoadingData = false, clearSelectionTrigger, onUpdate  }) => {
   const columns = [
     {
       header: "Descripción",
