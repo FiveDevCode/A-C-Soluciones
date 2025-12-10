@@ -9,8 +9,10 @@ import {
 } from "@mui/material";
 import { handleUpdateStateRequest } from "../../controllers/administrator/UpdateStateRequestAd.controller";
 import BaseDetailModal from "../common/BaseDetailModal";
+import { useToastContext } from "../../contexts/ToastContext"; // Importa el hook para toasts
 
 const ViewRequestDetailAd = ({ selected, onClose, onUpdate }) => {
+  const { showToast } = useToastContext(); // Hook para mostrar toasts
   const [estado, setEstado] = useState(selected?.estado || "pendiente");
   const [motivoCancelacion, setMotivoCancelacion] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,6 +35,7 @@ const ViewRequestDetailAd = ({ selected, onClose, onUpdate }) => {
   const handleConfirmarCancelacion = async () => {
     if (!motivoCancelacion || motivoCancelacion.trim().length < 5) {
       setErrorMotivo("El motivo debe tener al menos 5 caracteres");
+      showToast("El motivo debe tener al menos 5 caracteres", "error", 3000);
       return;
     }
     await enviarActualizacion(estado, motivoCancelacion);
@@ -43,12 +46,16 @@ const ViewRequestDetailAd = ({ selected, onClose, onUpdate }) => {
     
     try {
       await handleUpdateStateRequest(selected.id, nuevoEstado, motivo);
-      alert("Estado actualizado correctamente");
+      showToast("Estado actualizado correctamente", "success", 4000);
       if (onUpdate) onUpdate();
       onClose();
     } catch (error) {
       console.error("Error al actualizar estado:", error);
-      alert("Error al actualizar el estado de la solicitud");
+      showToast(
+        error.response?.data?.message || "Error al actualizar el estado de la solicitud", 
+        "error", 
+        5000
+      );
       setEstado(selected.estado);
       setMotivoCancelacion("");
     } finally {
@@ -164,6 +171,13 @@ const ViewRequestDetailAd = ({ selected, onClose, onUpdate }) => {
       onClose={onClose}
       showDivider={true}
       additionalContent={additionalContent}
+      secondaryButton={estado === 'rechazada' ? {
+        label: "Cerrar",
+        color: "primary",
+        variant: "outlined",
+        onClick: onClose,
+        disabled: loading
+      } : null}
       primaryButton={estado === 'rechazada' ? {
         label: "Confirmar Rechazo",
         color: "error",
