@@ -466,6 +466,13 @@ const ViewVisitPageTc = () => {
                   fullWidth
                   onClick={async () => {
                     try {
+                      // Si es una URL de Cloudinary, abrirla directamente
+                      if (pathName.includes('cloudinary.com')) {
+                        window.open(pathName, '_blank');
+                        return;
+                      }
+
+                      // Si es una ruta local del servidor
                       const token = localStorage.getItem('authToken');
                       const fileName = pathName.split(/[/\\]/).pop();
                       const pdfUrl = `${API_KEY}/descargar/${fileName}`;
