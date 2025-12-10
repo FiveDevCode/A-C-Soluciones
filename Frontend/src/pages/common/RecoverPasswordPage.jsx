@@ -3,6 +3,7 @@ import Logo from "../../components/common/Logo";
 import logo from '../../assets/common/logoA&C.png';
 import styled from "styled-components";
 import FormRecoverPassword from "../../components/common/FormRecoverPassword";
+import fondoLogin from '../../assets/common/fondoLogin.jpg';
 
 
 const SectionPage = styled.section`
@@ -10,7 +11,12 @@ const SectionPage = styled.section`
   flex-direction: column;
   align-items: center;
   background-color: #F2F5F7;
-  height: 100vh;
+  background-image: url(${fondoLogin});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 2rem 1rem;
 
 `
 const Title = styled.h1`

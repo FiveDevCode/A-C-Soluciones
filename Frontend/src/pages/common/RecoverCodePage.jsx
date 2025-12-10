@@ -2,15 +2,19 @@ import Logo from "../../components/common/Logo";
 import logo from '../../assets/common/logoA&C.png';
 import styled from "styled-components";
 import FormRecoverCode from "../../components/common/FormRecoverCode";
+import fondoLogin from '../../assets/common/fondoLogin.jpg';
 
 
 const SectionPage = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #F2F5F7;
-  height: 100vh;
-
+  background-image: url(${fondoLogin});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 2rem 1rem;
 `
 const Title = styled.h1`
   font-size: 2rem;
