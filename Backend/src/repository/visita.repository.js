@@ -4,7 +4,7 @@ import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ServicioModel } from '../models/servicios.model.js';
 import { ClienteModel } from '../models/cliente.model.js';
-
+import { FichaModel } from '../models/ficha_mantenimiento.model.js';
 
 export class VisitaRepository {
   constructor() {
@@ -56,7 +56,7 @@ export class VisitaRepository {
           include: [
             {
               model: ClienteModel.Cliente,
-              as: 'cliente_solicitud', // ← CAMBIAR AQUÍ: usa el alias correcto
+              as: 'cliente_solicitud',
               attributes: ['id', 'numero_de_cedula', 'nombre', 'apellido']
             }
           ]
@@ -71,6 +71,20 @@ export class VisitaRepository {
           as: 'servicio',
           attributes: ['id', 'nombre', 'descripcion']
         },
+        // ⭐ AGREGAR ESTO
+        {
+          model: FichaModel.FichaMantenimiento,
+          as: 'ficha_mantenimiento',
+          required: false, // LEFT JOIN - no filtra visitas sin ficha
+          attributes: [
+            'id',
+            'pdf_path', // ← Campo principal que necesitas
+            'fecha_de_mantenimiento',
+            'estado_final',
+            'observaciones',
+            'recomendaciones'
+          ]
+        }
       ],
       order: [['fecha_programada', 'DESC']]
     });
