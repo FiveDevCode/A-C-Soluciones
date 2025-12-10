@@ -2,41 +2,23 @@ import BaseTable from "../common/BaseTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-const API_KEY = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
-
 const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
   
   const handleDownloadPDF = async (report) => {
     try {
-      // Si el PDF está en Cloudinary, descargarlo directamente
-      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
-        window.open(report.pdf_generado, '_blank');
-        return;
+      // Usar directamente la URL del pdf_path del JSON
+      if (report.pdf_path) {
+        // Crear un enlace temporal para descargar
+        const link = document.createElement('a');
+        link.href = report.pdf_path;
+        link.download = `Reporte-mantenimiento-${report.id}.pdf`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } else {
+        alert("No hay PDF disponible para este reporte.");
       }
-
-      const token = localStorage.getItem('authToken');
-      // Usar el endpoint del backend para descargar el PDF por ID
-      const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
-
-      const response = await fetch(publicUrl, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) throw new Error("No se pudo descargar el PDF");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Reporte-mantenimiento-${report.id}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Error al descargar:", err);
       alert("No se pudo descargar el PDF.");
@@ -45,28 +27,12 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
 
   const handleViewPDF = async (report) => {
     try {
-      // Si el PDF está en Cloudinary, abrirlo directamente
-      if (report.pdf_generado && report.pdf_generado.includes('cloudinary.com')) {
-        window.open(report.pdf_generado, '_blank');
-        return;
+      // Usar directamente la URL del pdf_path del JSON
+      if (report.pdf_path) {
+        window.open(report.pdf_path, '_blank');
+      } else {
+        alert("No hay PDF disponible para este reporte.");
       }
-
-      const token = localStorage.getItem('authToken');
-      // Usar el endpoint del backend para ver el PDF por ID
-      const publicUrl = `${API_KEY}/reportes-mantenimiento/${report.id}/pdf`;
-
-      const response = await fetch(publicUrl, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) throw new Error("No se pudo abrir el PDF");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      window.open(url, "_blank");
     } catch (err) {
       console.error("Error al abrir:", err);
       alert("No se pudo abrir el PDF.");
@@ -90,26 +56,28 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
     },
     { header: "Ciudad", accessor: "ciudad" },
     { header: "Dirección", accessor: "direccion" },
-    // { header: "Encargado", accessor: "encargado" },
     { header: "Marca generador", accessor: "marca_generador" },
     { header: "Modelo generador", accessor: "modelo_generador" },
     { header: "KVA", accessor: "kva" },
     {
       header: "PDF",
       render: (_, row) => {
-        // Todos los reportes tienen PDF generado automáticamente
+        // Verificar si existe pdf_path
+        const hasPDF = row.pdf_path;
+        
         return (
           <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
             <button
               style={{
                 padding: "6px 10px",
-                background: "#2563eb",
+                background: hasPDF ? "#2563eb" : "#94a3b8",
                 color: "white",
                 borderRadius: "6px",
-                cursor: "pointer",
+                cursor: hasPDF ? "pointer" : "not-allowed",
                 border: "none"
               }}
-              onClick={() => handleDownloadPDF(row)}
+              onClick={() => hasPDF && handleDownloadPDF(row)}
+              disabled={!hasPDF}
             >
               <FontAwesomeIcon icon={faDownload} /> Descargar
             </button>
@@ -117,13 +85,14 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
             <button
               style={{
                 padding: "6px 10px",
-                background: "#0f172a",
+                background: hasPDF ? "#0f172a" : "#94a3b8",
                 color: "white",
                 borderRadius: "6px",
-                cursor: "pointer",
+                cursor: hasPDF ? "pointer" : "not-allowed",
                 border: "none"
               }}
-              onClick={() => handleViewPDF(row)}
+              onClick={() => hasPDF && handleViewPDF(row)}
+              disabled={!hasPDF}
             >
               Ver <FontAwesomeIcon icon={faArrowRight} />
             </button>
@@ -138,7 +107,6 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
       data={reports}
       columns={columns}
       emptyMessage="No hay reportes registrados"
-      
     />
   );
 };
