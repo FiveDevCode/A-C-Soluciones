@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ConfirmModal from "../../components/common/ConfirmModal";
@@ -39,10 +39,24 @@ const MaintenanceReportPageAd = () => {
     'maintenance_reports_cache',
     handleGetListMaintenanceReportAd
   );
+
+  const sortedReports = useMemo(() => {
+    if (!reports || reports.length === 0) return [];
+    return [...reports].sort((a, b) => b.id - a.id);
+  }, [reports]);
+
   const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'maintenance_reports');
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
+
+
+
+  useEffect(() => {
+    if (sortedReports.length > 0) {
+      setFilteredReports(sortedReports);
+    }
+  }, [sortedReports]);
 
   return (
     <Container>
@@ -56,7 +70,7 @@ const MaintenanceReportPageAd = () => {
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterMaintenanceReportAd
-            reports={reports}
+            reports={sortedReports}
             onFilteredChange={setFilteredReports}
           />
         }
