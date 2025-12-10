@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ListReportAd from "../../components/administrator/ListReportAd";
-import { handleGetListVisitAd } from "../../controllers/administrator/getListVisitAd.controller";
-import { handleGetListToken } from "../../controllers/common/getListToken.controller";
 import FilterReportAd from "../../components/administrator/FilterReportAd";
-import FormCreateReportAd from "../../components/administrator/FormCreateReportAd";
 import useDataCache from "../../hooks/useDataCache";
 import useAutoRefresh from "../../hooks/useAutoRefresh";
+import { handleGetListReportAd } from "../../controllers/administrator/getListReportAd.controller";
 
 const Container = styled.div`
   display: flex;
@@ -35,40 +33,26 @@ const Card = styled.div`
 `;
 
 const ReportPageAd = () => {
-  const { data: visits, isLoading: loading, reload: loadReports } = useDataCache(
+  const { data: reports, isLoading: loading, reload: loadReports } = useDataCache(
     'reports_cache',
     async () => {
-      // Obtener los reportes (fichas con pdf)
-      const reportRes = await handleGetListToken();
-      const reportList = reportRes.data;
-
-      // Obtener todas las visitas
-      const visitRes = await handleGetListVisitAd();
-      const allVisits = visitRes.data.data;
-
-      // Mapa para emparejar visita => pdf
-      const reportMap = {};
-      for (const ficha of reportList) {
-        reportMap[ficha.id_visitas] = ficha.pdf_path;
-      }
-
-      // Filtrar visitas que tienen reporte y agregar pdf_path
-      const visitsWithReport = allVisits
-        .filter(visit => reportMap[visit.id])
-        .map(visit => ({
-          ...visit,
-          pdf_path: reportMap[visit.id]
-        }));
-
-      return visitsWithReport;
+      const response = await handleGetListReportAd();
+      return response.data || [];
     }
   );
+
   const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'maintenance_sheets');
-  const [filteredVisits, setFilteredVisits] = useState([]);
+  const [filteredReports, setFilteredReports] = useState([]);
+
+  // Inicializar filteredReports con todos los reports cuando se cargan
+  useEffect(() => {
+    if (reports && reports.length > 0) {
+      setFilteredReports(reports);
+    }
+  }, [reports]);
 
   return (
     <Container>
-
       <BaseHeaderSection
         headerTitle="FICHAS DE MANTENIMIENTO"
         sectionTitle="Fichas de mantenimiento generadas"
@@ -76,23 +60,18 @@ const ReportPageAd = () => {
         lastUpdateTime={timeAgo}
         filterComponent={
           <FilterReportAd
-            visits={visits}
-            onFilteredChange={setFilteredVisits}
+            reports={reports}
+            onFilteredChange={setFilteredReports}
           />
         }
       />
 
       <Card>
-        {loading ? (
-          <p style={{ textAlign: "center", marginTop: "20px" }}>
-            Cargando reportes...
-          </p>
-        ) : (
-          <ListReportAd
-            visits={filteredVisits}
-            reloadData={loadReports}
-          />
-        )}
+        <ListReportAd
+          reports={filteredReports}
+          reloadData={loadReports}
+          isLoadingData={loading}
+        />
       </Card>
     </Container>
   );

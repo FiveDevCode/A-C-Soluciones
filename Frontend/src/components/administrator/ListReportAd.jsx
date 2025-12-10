@@ -4,12 +4,25 @@ import { faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import ViewReportDetailAd from "../administrator/ViewReportDetailAd";
 
 const API_KEY = "http://localhost:8000";
-const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
 
-  const handleDownloadPDF = async (visit) => {
+const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false }) => {
+
+  const handleDownloadPDF = async (report) => {
     try {
+      // Si es URL de Cloudinary, descargar directamente
+      if (report.pdf_path.includes('cloudinary.com')) {
+        const link = document.createElement('a');
+        link.href = report.pdf_path;
+        link.download = `Reporte-${report.id}.pdf`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
-      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
+      const relativePath = report.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
       const publicUrl = `${API_KEY}/${relativePath}`;
 
       const response = await fetch(publicUrl, {
@@ -25,7 +38,7 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Reporte-visita-${visit.id}.pdf`;
+      link.download = `Reporte-${report.id}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -36,10 +49,16 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
     }
   };
 
-  const handleViewPDF = async (visit) => {
+  const handleViewPDF = async (report) => {
     try {
+      // Si es URL de Cloudinary, abrir directamente
+      if (report.pdf_path.includes('cloudinary.com')) {
+        window.open(report.pdf_path, "_blank");
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
-      const relativePath = visit.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
+      const relativePath = report.pdf_path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
       const publicUrl = `${API_KEY}/${relativePath}`;
 
       const response = await fetch(publicUrl, {
@@ -62,12 +81,36 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
 
   const columns = [
     {
-      header: "Fecha programada",
-      accessor: "fecha_programada",
+      header: "Cliente",
+      accessor: "cliente_ficha",
       render: (value) => {
-        if (!value) return "No hay fecha programada";
+        if (!value) return "—";
+        return `${value.nombre} ${value.apellido}`;
+      }
+    },
+    {
+      header: "Técnico",
+      accessor: "tecnico_ficha",
+      render: (value) => {
+        if (!value) return "—";
+        return `${value.nombre} ${value.apellido}`;
+      }
+    },
+    {
+      header: "Servicio",
+      accessor: "visita_asociada",
+      render: (value) => {
+        if (!value?.servicio) return "—";
+        return value.servicio.nombre;
+      }
+    },
+    {
+      header: "Fecha programada",
+      accessor: "visita_asociada",
+      render: (value) => {
+        if (!value?.fecha_programada) return "—";
 
-        const d = new Date(value);
+        const d = new Date(value.fecha_programada);
         const day = String(d.getUTCDate()).padStart(2, "0");
         const month = String(d.getUTCMonth() + 1).padStart(2, "0");
         const year = d.getUTCFullYear();
@@ -78,9 +121,16 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
         hours = hours % 12 || 12;
 
         return `${day}/${month}/${year} - ${hours}:${minutes} ${ampm}`;
-      },
+      }
     },
-    { header: "Notas", accessor: "notas" },
+    {
+      header: "Nota",
+      accessor: "visita_asociada",
+      render: (value) => {
+        if (!value?.notas) return "—";
+        return value.notas.length > 50 ? value.notas.slice(0, 50) + "..." : value.notas;
+      }
+    },
     {
       header: "PDF",
       accessor: "pdf_path",
@@ -93,7 +143,8 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
               color: "white",
               borderRadius: "6px",
               cursor: "pointer",
-              border: "none"
+              border: "none",
+              fontWeight: 600,
             }}
             onClick={() => handleDownloadPDF(row)}
           >
@@ -107,7 +158,8 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
               color: "white",
               borderRadius: "6px",
               cursor: "pointer",
-              border: "none"
+              border: "none",
+              fontWeight: 600,
             }}
             onClick={() => handleViewPDF(row)}
           >
@@ -120,13 +172,27 @@ const ListReportAd = ({ visits, reloadData, onSelectRows }) => {
 
   return (
     <BaseTable
-      data={visits}
+      data={reports || []}
       columns={columns}
       emptyMessage="No hay reportes generados"
+      ViewComponent={ViewReportDetailAd}
       onSelectRows={onSelectRows}
+      isLoadingData={isLoadingData}
       mobileConfig={{
-        title: "fecha_programada",
-        subtitle: "notas",
+        title: "visita_asociada",
+        titleRender: (value) => {
+          if (!value?.fecha_programada) return "Sin fecha";
+          const d = new Date(value.fecha_programada);
+          const day = String(d.getUTCDate()).padStart(2, "0");
+          const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+          const year = d.getUTCFullYear();
+          return `${day}/${month}/${year}`;
+        },
+        subtitle: "cliente_ficha",
+        subtitleRender: (value) => {
+          if (!value) return "—";
+          return `${value.nombre} ${value.apellido}`;
+        },
         renderExtra: (row) => (
           <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
             <button
