@@ -8,6 +8,7 @@ const FormCreateAdministratorAd = ({ onClose, onSuccess }) => {
     { name: "numero_cedula", label: "Cédula", type: "text", inputProps: { maxLength: 10 }, required: true },
     { name: "nombre", label: "Nombre", type: "text", required: true },
     { name: "apellido", label: "Apellido", type: "text", required: true },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
     { name: "correo_electronico", label: "Correo electrónico", type: "email", required: true },
     { name: "contrasenia", label: "Contraseña", type: "password", required: true },
   ];
@@ -20,6 +21,7 @@ const FormCreateAdministratorAd = ({ onClose, onSuccess }) => {
       data.numero_cedula,
       data.nombre,
       data.apellido,
+      data.telefono,
       data.correo_electronico,
       data.contrasenia,
       parseInt(decoded.id)

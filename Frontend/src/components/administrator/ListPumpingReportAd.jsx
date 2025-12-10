@@ -95,7 +95,7 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
     },
     { header: "Ciudad", accessor: "ciudad" },
     { header: "Dirección", accessor: "direccion" },
-    { header: "Encargado", accessor: "encargado" },
+    // { header: "Encargado", accessor: "encargado" },
     { header: "Teléfono", accessor: "telefono" },
     { 
       header: "N° Equipos",

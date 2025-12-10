@@ -194,7 +194,7 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
     ciudad: "",
     direccion: "",
     telefono: "",
-    encargado: "",
+    // encargado: "",
     observaciones_finales: ""
   });
 
@@ -255,8 +255,8 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
     const telefonoError = validateField('telefono', formData.telefono, 50, 'El teléfono');
     if (telefonoError) errors.telefono = telefonoError;
     
-    const encargadoError = validateField('encargado', formData.encargado, 100, 'El encargado');
-    if (encargadoError) errors.encargado = encargadoError;
+    // const encargadoError = validateField('encargado', formData.encargado, 100, 'El encargado');
+    // if (encargadoError) errors.encargado = encargadoError;
 
     return errors;
   };
@@ -597,7 +597,7 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
                   error={!!fieldErrors.telefono}
                   helperText={fieldErrors.telefono ? fieldErrors.telefono : `${formData.telefono.length}/50 caracteres`}
                 />
-                <TextField
+                {/* <TextField
                   label="Encargado"
                   value={formData.encargado}
                   onChange={(e) => handleInputChange("encargado", e.target.value)}
@@ -606,7 +606,7 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
                   inputProps={{ maxLength: 100 }}
                   error={!!fieldErrors.encargado}
                   helperText={fieldErrors.encargado ? fieldErrors.encargado : `${formData.encargado.length}/100 caracteres`}
-                />
+                /> */}
                 <FullWidthField>
                   <TextField
                     label="Observaciones Finales"

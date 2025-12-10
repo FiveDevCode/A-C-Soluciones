@@ -207,7 +207,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
         },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true, required: true },
         { name: "telefono", label: "Teléfono", type: "text", required: true },
-        { name: "encargado", label: "Encargado", type: "text", required: true },
+        // { name: "encargado", label: "Encargado", type: "text", required: true },
       ]
     },
     {

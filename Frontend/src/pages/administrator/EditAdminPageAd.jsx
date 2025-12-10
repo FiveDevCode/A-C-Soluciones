@@ -302,6 +302,7 @@ const EditAdminPageAd = () => {
   const [IdCard, setIdCard] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [lastName, setLastName] = useState("");
+  const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -341,6 +342,7 @@ const EditAdminPageAd = () => {
         IdCard,
         nameUser,
         lastName,
+        telefono,
         email
       );
 
@@ -381,6 +383,7 @@ const EditAdminPageAd = () => {
         setIdCard(res.data.numero_cedula || "");
         setNameUser(res.data.nombre || "");
         setLastName(res.data.apellido || "");
+        setTelefono(res.data.telefono || "");
         setEmail(res.data.correo_electronico || "");
 
 
@@ -388,6 +391,7 @@ const EditAdminPageAd = () => {
           numero_cedula: res.data.numero_cedula || "",
           nombre: res.data.nombre || "",
           apellido: res.data.apellido || "",
+          telefono: res.data.telefono || "",
           correo_electronico: res.data.correo_electronico || "",
         });
 
@@ -456,6 +460,15 @@ const EditAdminPageAd = () => {
               onChange={handleChange(setLastName, 'apellido')}
               error={Boolean(fieldErrors.apellido)}
               helperText={fieldErrors.apellido}
+            />
+            <TextField 
+              label="Teléfono" 
+              fullWidth 
+              value={telefono} 
+              onChange={handleChange(setTelefono, 'telefono')}
+              error={Boolean(fieldErrors.telefono)}
+              helperText={fieldErrors.telefono}
+              inputProps={{ maxLength: 10 }}
             />
             <TextField 
               label="Correo electrónico" 

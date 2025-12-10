@@ -95,7 +95,7 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
         { name: "ciudad", label: "Ciudad", type: "text" },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true },
         { name: "telefono", label: "Teléfono", type: "text" },
-        { name: "encargado", label: "Encargado", type: "text" },
+        // { name: "encargado", label: "Encargado", type: "text" },
       ]
     },
     {
