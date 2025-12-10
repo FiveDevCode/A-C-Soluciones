@@ -40,6 +40,11 @@ const ReportPageAd = () => {
       return response.data || [];
     }
   );
+  const sortedReports = useMemo(() => {
+    if (!reports || reports.length === 0) return [];
+    return [...reports].sort((a, b) => b.id - a.id); // Orden DESC por ID
+  }, [reports]);
+
 
   const { timeAgo, manualRefresh } = useAutoRefresh(loadReports, 3, 'maintenance_sheets');
   const [filteredReports, setFilteredReports] = useState([]);
@@ -47,7 +52,7 @@ const ReportPageAd = () => {
   // Inicializar filteredReports con todos los reports cuando se cargan
   useEffect(() => {
     if (reports && reports.length > 0) {
-      setFilteredReports(reports);
+      setFilteredReports(sortedReports);
     }
   }, [reports]);
 
@@ -60,7 +65,7 @@ const ReportPageAd = () => {
         lastUpdateTime={timeAgo}
         filterComponent={
           <FilterReportAd
-            reports={reports}
+            reports={sortedReports}
             onFilteredChange={setFilteredReports}
           />
         }

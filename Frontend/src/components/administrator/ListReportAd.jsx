@@ -175,7 +175,6 @@ const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false
       data={reports || []}
       columns={columns}
       emptyMessage="No hay reportes generados"
-      ViewComponent={ViewReportDetailAd}
       onSelectRows={onSelectRows}
       isLoadingData={isLoadingData}
       mobileConfig={{
