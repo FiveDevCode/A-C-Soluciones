@@ -4,11 +4,13 @@
 
 import { administratorService } from "../../services/administrator-service";
 
-const handleGetListAdministrator = () => {
-    
-  return administratorService
-  .getListAdministrator()
-
+const handleGetListAdministrator = async () => {
+  try {
+    const res = await administratorService.getListAdministrator();
+    return (res.data || []).slice().reverse();
+  } catch (err) {
+    throw err;
+  }
 };
 
 
