@@ -373,7 +373,7 @@ const HistoryServicesPage = () => {
                 marginBottom: "0.5rem",
               }}
             >
-              Historial de Servicios
+              Historial de visitas
             </Typography>
             <Typography
               sx={{
@@ -381,7 +381,7 @@ const HistoryServicesPage = () => {
                 color: "#6b7280",
               }}
             >
-              Visualiza todos tus servicios realizados
+              Visualiza todas las visitas de servicio que has recibido.
             </Typography>
           </TitleContainer>
 

@@ -304,7 +304,7 @@ const HomeSessionPageCl = () => {
               <StatHeader>
                 <div>
                   <StatValue>{loading ? '...' : stats.total}</StatValue>
-                  <StatLabel>Total de Servicios</StatLabel>
+                  <StatLabel>Total de Visitas</StatLabel>
                 </div>
                 <StatIcon $bgColor="#e3f2fd" $color="#007BFF">
                   <FontAwesomeIcon icon={faChartLine} />
@@ -316,7 +316,7 @@ const HomeSessionPageCl = () => {
               <StatHeader>
                 <div>
                   <StatValue>{loading ? '...' : stats.programadas}</StatValue>
-                  <StatLabel>Servicios Programados</StatLabel>
+                  <StatLabel>Visitas Programadas</StatLabel>
                 </div>
                 <StatIcon $bgColor="#e3f2fd" $color="#007BFF">
                   <FontAwesomeIcon icon={faClock} />
@@ -328,7 +328,7 @@ const HomeSessionPageCl = () => {
               <StatHeader>
                 <div>
                   <StatValue>{loading ? '...' : stats.completados}</StatValue>
-                  <StatLabel>Servicios Completados</StatLabel>
+                  <StatLabel>Visitas Completadas</StatLabel>
                 </div>
                 <StatIcon $bgColor="#e3f2fd" $color="#007BFF">
                   <FontAwesomeIcon icon={faCheckCircle} />
