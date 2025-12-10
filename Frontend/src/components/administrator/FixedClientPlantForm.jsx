@@ -209,7 +209,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
     ciudad: '',
     direccion: '',
     telefono: '',
-    encargado: '',
+    // encargado: '',
     marca_generador: '',
     modelo_generador: '',
     kva: '',
@@ -330,7 +330,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
         direccion: formData.direccion,
         ciudad: formData.ciudad,
         telefono: formData.telefono,
-        encargado: formData.encargado,
+        // encargado: formData.encargado,
         marca_generador: formData.marca_generador,
         modelo_generador: formData.modelo_generador,
         kva: formData.kva ? parseInt(formData.kva) : null,
@@ -415,7 +415,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
               />
             </FullWidthField>
 
-            <FullWidthField>
+            {/* <FullWidthField>
               <TextField
                 label="Encargado"
                 value={formData.encargado}
@@ -424,7 +424,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
                 size="small"
                 required
               />
-            </FullWidthField>
+            </FullWidthField> */}
           </>
         );
 

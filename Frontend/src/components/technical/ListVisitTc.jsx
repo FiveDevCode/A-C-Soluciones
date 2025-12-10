@@ -403,8 +403,7 @@ const ListVisitTc = ({visits}) => {
         {paginatedVisit.map((visit, index) => {
           const estadoConfig = getEstadoConfig(visit.estado);
           const servicioNombre = visit.servicio?.nombre || 'Servicio no especificado';
-          const notasPrevias = visit.notas_previas || 'Sin notas previas';
-          const notasPosteriores = visit.notas_posteriores || 'Sin notas posteriores';
+          const notas = visit.notas || 'Sin notas';
 
           return (
             <Notification 
@@ -424,17 +423,10 @@ const ListVisitTc = ({visits}) => {
                     <span>{servicioNombre}</span>
                   </ServiceTitle>
                   <Description>
-                    {notasPrevias.length > 60 
-                      ? `${notasPrevias.slice(0, 60)}...`
-                      : notasPrevias}
+                    {notas.length > 60 
+                      ? `${notas.slice(0, 60)}...`
+                      : notas}
                   </Description>
-                  {notasPosteriores !== 'Sin notas posteriores' && (
-                    <NotesText>
-                      {notasPosteriores.length > 50 
-                        ? `${notasPosteriores.slice(0, 50)}...`
-                        : notasPosteriores}
-                    </NotesText>
-                  )}
                   <DateContainer>
                     <FontAwesomeIcon icon={faCalendarAlt} />
                     <span>{formatDate(visit.fecha_programada)}</span>

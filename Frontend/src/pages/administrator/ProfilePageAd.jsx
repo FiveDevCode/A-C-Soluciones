@@ -366,6 +366,18 @@ const ProfilePageAd = () => {
             </CardHeader>
             <CardValue>{userAdmin?.correo_electronico}</CardValue>
           </InfoCard>
+
+          {userAdmin?.telefono && (
+            <InfoCard>
+              <CardHeader>
+                <IconWrapper>
+                  <FontAwesomeIcon icon={faPhone} />
+                </IconWrapper>
+                <CardTitle>Teléfono</CardTitle>
+              </CardHeader>
+              <CardValue>{userAdmin?.telefono}</CardValue>
+            </InfoCard>
+          )}
         </CardsGrid>
       </Content>
     </Container>

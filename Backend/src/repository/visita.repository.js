@@ -4,7 +4,7 @@ import { SolicitudModel } from '../models/solicitud.model.js';
 import { TecnicoModel } from '../models/tecnico.model.js';
 import { ServicioModel } from '../models/servicios.model.js';
 import { ClienteModel } from '../models/cliente.model.js';
-
+import { FichaModel } from '../models/ficha_mantenimiento.model.js';
 
 export class VisitaRepository {
   constructor() {
@@ -56,7 +56,7 @@ export class VisitaRepository {
           include: [
             {
               model: ClienteModel.Cliente,
-              as: 'cliente_solicitud', // ← CAMBIAR AQUÍ: usa el alias correcto
+              as: 'cliente_solicitud',
               attributes: ['id', 'numero_de_cedula', 'nombre', 'apellido']
             }
           ]
@@ -71,6 +71,20 @@ export class VisitaRepository {
           as: 'servicio',
           attributes: ['id', 'nombre', 'descripcion']
         },
+        // ⭐ AGREGAR ESTO
+        {
+          model: FichaModel.FichaMantenimiento,
+          as: 'ficha_mantenimiento',
+          required: false, // LEFT JOIN - no filtra visitas sin ficha
+          attributes: [
+            'id',
+            'pdf_path', // ← Campo principal que necesitas
+            'fecha_de_mantenimiento',
+            'estado_final',
+            'observaciones',
+            'recomendaciones'
+          ]
+        }
       ],
       order: [['fecha_programada', 'DESC']]
     });
@@ -166,12 +180,19 @@ export class VisitaRepository {
       where: {
         tecnico_id_fk: tecnico_id
       },
-      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
-      include: [{
-        model: ServicioModel.Servicio,
-        as: 'servicio',
-        attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
-      }],
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas', 'fecha_creacion', 'solicitud_id_fk'],
+      include: [
+        {
+          model: ServicioModel.Servicio,
+          as: 'servicio',
+          attributes: ['id', 'nombre', 'descripcion', 'estado', 'fecha_creacion', 'fecha_modificacion']
+        },
+        {
+          model: SolicitudModel.Solicitud,
+          as: 'solicitud_asociada',
+          attributes: ['id', 'cliente_id_fk']
+        }
+      ],
       order: [['fecha_creacion', 'DESC']]
     });
   }
@@ -182,7 +203,7 @@ export class VisitaRepository {
         id: visita_id,
         tecnico_id_fk: tecnico_id
       },
-      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas_previas', 'notas_posteriores', 'fecha_creacion'],
+      attributes: ['id', 'fecha_programada', 'duracion_estimada', 'estado', 'notas', 'fecha_creacion'],
       include: [{
         model: ServicioModel.Servicio,
         as: 'servicio',

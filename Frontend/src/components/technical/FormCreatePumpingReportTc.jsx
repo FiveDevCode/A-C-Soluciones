@@ -5,7 +5,7 @@ import BaseFormModal, { FormGrid, FullWidth, EquipmentCard } from "../common/Bas
 
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import { handleCreatePumpingReportAd } from "../../controllers/administrator/createPumpingReportAd.controller";
-import { administratorService } from "../../services/administrator-service";
+import { technicalService } from "../../services/techical-service";
 
 const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
   const [clients, setClients] = useState([]);
@@ -46,12 +46,16 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
     const fetchVisitas = async () => {
       if (selectedClienteId && tipoCliente === 'regular') {
         try {
-          const response = await administratorService.getListVisit();
+          console.log('🔍 Obteniendo visitas para cliente ID:', selectedClienteId);
+          const response = await technicalService.getListVisits();
+          console.log('📋 Respuesta completa:', response.data);
           const visitasArray = response.data.data || [];
+          console.log('📊 Total de visitas del técnico:', visitasArray.length);
           const visitasCliente = visitasArray.filter(v => v.solicitud_asociada?.cliente_id_fk === selectedClienteId);
+          console.log('✅ Visitas filtradas para cliente:', visitasCliente.length, visitasCliente);
           setVisitas(visitasCliente);
         } catch (error) {
-          console.error('Error al obtener visitas:', error);
+          console.error('❌ Error al obtener visitas:', error);
           setVisitas([]);
         }
       } else {
@@ -81,15 +85,17 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
           label: "Visita Asociada *",
           type: "select",
           required: true,
-          options: visitas.map(v => ({
-            value: v.id,
-            label: `Visita #${v.id} - ${new Date(v.fecha_programada).toLocaleDateString()} - ${v.estado}`,
-          })),
+          options: visitas.length > 0 
+            ? visitas.map(v => ({
+                value: v.id,
+                label: `Visita #${v.id} - ${new Date(v.fecha_programada).toLocaleDateString()} - ${v.estado}`,
+              }))
+            : [{ value: '', label: 'No hay visitas disponibles para este cliente' }],
         }] : []),
         { name: "ciudad", label: "Ciudad", type: "text" },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true },
         { name: "telefono", label: "Teléfono", type: "text" },
-        { name: "encargado", label: "Encargado", type: "text" },
+        // { name: "encargado", label: "Encargado", type: "text" },
       ]
     },
     {

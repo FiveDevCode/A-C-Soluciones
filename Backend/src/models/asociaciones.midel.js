@@ -9,6 +9,8 @@ import { EquipoBombeoModel } from './equipoBombeo.model.js';
 import { ParametroBombeoModel } from './parametroBombeo.model.js';
 import { Notificacion } from './notificacion.model.js';
 import { ReporteMantenimientoModel } from './reporte_mantenimiento.model.js';
+import { FichaModel } from './ficha_mantenimiento.model.js'; 
+
 export const setupAssociations = () => {
   // Extraer los modelos de sus contenedores
   const { Solicitud } = SolicitudModel;
@@ -20,6 +22,7 @@ export const setupAssociations = () => {
   const { ReporteBombeo } = ReporteBombeoModel;
   const { EquipoBombeo } = EquipoBombeoModel;
   const { ParametroBombeo } = ParametroBombeoModel;
+  const { FichaMantenimiento } = FichaModel;
 
   // Asociaciones Cliente - Solicitud
   Cliente.hasMany(Solicitud, {
@@ -74,6 +77,51 @@ export const setupAssociations = () => {
   Servicio.hasMany(Visita, {
     foreignKey: 'servicio_id_fk',
     as: 'visitas'
+  });
+
+  // Asociaciones Ficha de Mantenimiento - Visita
+
+  Visita.hasOne(FichaMantenimiento, {
+    foreignKey: 'id_visitas',
+    as: 'ficha_mantenimiento'
+  });
+
+  FichaMantenimiento.belongsTo(Visita, {
+    foreignKey: 'id_visitas',
+    as: 'visita_asociada'
+  });
+
+  // Asociaciones FichaMantenimiento - Cliente
+  FichaMantenimiento.belongsTo(Cliente, {
+    foreignKey: 'id_cliente',
+    as: 'cliente_ficha'
+  });
+
+  Cliente.hasMany(FichaMantenimiento, {
+    foreignKey: 'id_cliente',
+    as: 'fichas_mantenimiento'
+  });
+
+  // Asociaciones FichaMantenimiento - Tecnico
+  FichaMantenimiento.belongsTo(Tecnico, {
+    foreignKey: 'id_tecnico',
+    as: 'tecnico_ficha'
+  });
+
+  Tecnico.hasMany(FichaMantenimiento, {
+    foreignKey: 'id_tecnico',
+    as: 'fichas_mantenimiento'
+  });
+
+  // Asociaciones FichaMantenimiento - Admin
+  FichaMantenimiento.belongsTo(Admin, {
+    foreignKey: 'id_administrador',
+    as: 'administrador_ficha'
+  });
+
+  Admin.hasMany(FichaMantenimiento, {
+    foreignKey: 'id_administrador',
+    as: 'fichas_mantenimiento'
   });
 
 
