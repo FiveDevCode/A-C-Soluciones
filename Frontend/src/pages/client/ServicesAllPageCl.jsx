@@ -368,7 +368,7 @@ const ServicesAllPageCl = () => {
                 color: "#64748b",
               }}
             >
-              Explora nuestra amplia gama de servicios profesionales
+              Servicios disponibles para ti
             </Typography>
           </TitleSection>
 
