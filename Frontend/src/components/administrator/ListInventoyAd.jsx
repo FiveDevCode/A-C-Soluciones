@@ -12,7 +12,7 @@ const ListInventoyAd = ({ inventory, reloadData, onSelectRows, isLoadingData = f
     electricas: "Eléctrica",
     medicion: "Medición",
   };
-  
+
   const columns = [
     { header: "Código", accessor: "codigo" },
     { header: "Nombre", accessor: "nombre" },
@@ -27,7 +27,12 @@ const ListInventoyAd = ({ inventory, reloadData, onSelectRows, isLoadingData = f
     },
     { header: "Cantidad", accessor: "cantidad_disponible" },
     {
-      header: "Estado de la herramienta",
+      header: "Estado Herramienta",
+      accessor: "estado",
+      isBadge: true,
+    },
+    {
+      header: "Estado",
       accessor: "estado_herramienta",
       isBadge: true,
     },
@@ -37,7 +42,7 @@ const ListInventoyAd = ({ inventory, reloadData, onSelectRows, isLoadingData = f
     <BaseTable
       data={inventory}
       columns={columns}
-      getBadgeValue={(row) => row.estado_herramienta}
+  getBadgeValue={(row, accessor) => row[accessor]}
       emptyMessage="No hay herramientas registradas"
       EditComponent={EditComponentMemo}
       ViewComponent={ViewComponentMemo}
