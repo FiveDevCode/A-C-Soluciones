@@ -15,7 +15,7 @@ export const crearFichaMantenimiento = async (req, res) => {
     console.log('req.body:', req.body);
 
     // Extraer campos del cuerpo
-    const {
+    let {
       id_cliente,
       id_tecnico,
       introduccion,
@@ -30,6 +30,13 @@ export const crearFichaMantenimiento = async (req, res) => {
       fecha_de_mantenimiento,
       id_visitas
     } = req.body;
+
+    // Convertir string 'null' a null real
+    if (id_tecnico === 'null' || id_tecnico === '' || id_tecnico === undefined) {
+      id_tecnico = null;
+    } else if (id_tecnico) {
+      id_tecnico = parseInt(id_tecnico);
+    }
 
     // Log específico de los campos requeridos
     console.log('Campos requeridos extraídos:', {
@@ -121,21 +128,33 @@ export const crearFichaMantenimiento = async (req, res) => {
       correo: cliente.correo_electronico,
     };
 
-    // Buscar técnico
+    // Buscar técnico (opcional para clientes fijos creados por admin)
     console.log('=== BUSCANDO TÉCNICO ===');
-    const tecnico = await TecnicoModel.Tecnico.findByPk(id_tecnico);
-    if (!tecnico) {
-      console.error('Técnico no encontrado con ID:', id_tecnico);
-      return res.status(404).json({ error: 'Técnico no encontrado' });
+    let tecnicoInfo = null;
+    
+    if (id_tecnico) {
+      const tecnico = await TecnicoModel.Tecnico.findByPk(id_tecnico);
+      if (!tecnico) {
+        console.error('Técnico no encontrado con ID:', id_tecnico);
+        return res.status(404).json({ error: 'Técnico no encontrado' });
+      }
+      console.log('✓ Técnico encontrado:', tecnico.nombre, tecnico.apellido);
+      
+      tecnicoInfo = {
+        nombre: tecnico.nombre,
+        apellido: tecnico.apellido,
+        telefono: tecnico.telefono || 'No especificado',
+        correo: tecnico.correo_electronico,
+      };
+    } else {
+      console.log('⚠️  No se proporcionó ID de técnico (cliente fijo sin técnico asignado)');
+      tecnicoInfo = {
+        nombre: 'Sin asignar',
+        apellido: '',
+        telefono: 'No especificado',
+        correo: 'No especificado',
+      };
     }
-    console.log('✓ Técnico encontrado:', tecnico.nombre, tecnico.apellido);
-
-    const tecnicoInfo = {
-      nombre: tecnico.nombre,
-      apellido: tecnico.apellido,
-      telefono: tecnico.telefono || 'No especificado',
-      correo: tecnico.correo_electronico,
-    };
 
     // Ruta de imágenes para pasar al PDF
     console.log('=== PREPARANDO RUTAS DE IMÁGENES ===');

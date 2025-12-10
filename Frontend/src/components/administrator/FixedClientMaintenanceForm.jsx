@@ -196,7 +196,7 @@ const FixedClientMaintenanceForm = ({ clientId, clientData, technicianId }) => {
     try {
       await handleCreateMaintenanceSheet({
         id_cliente: clientId,
-        id_tecnico: technicianId,
+        id_tecnico: technicianId || null, // Permitir null para clientes fijos creados por admin
         id_visitas: null, // Cliente fijo no requiere visita
         ...formData,
         ...imagenes

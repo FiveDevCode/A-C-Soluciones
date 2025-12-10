@@ -189,7 +189,7 @@ const MenuSideCl = () => {
     { to: '/cliente/perfil', icon: faCircleUser, label: 'Perfil' },
     { to: '/cliente/inicio', icon: faHouse, label: 'Inicio' },
     { to: '/cliente/servicios', icon: faWrench, label: 'Servicios' },
-    { to: '/cliente/historial', icon: faHistory, label: 'Historial' },
+    { to: '/cliente/historial', icon: faHistory, label: 'Historial de visitas' },
     { to: '/cliente/reporte-electrico', icon: faBolt, label: 'Reportes eléctricos' },
     { to: '/cliente/reporte-bombeo', icon: faFaucet, label: 'Reportes de bombeo' },
   ];
