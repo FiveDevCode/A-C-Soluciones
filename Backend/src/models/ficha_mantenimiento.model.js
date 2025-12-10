@@ -176,12 +176,17 @@ const FichaMantenimiento = sequelize.define('FichaMantenimiento', {
             key: 'id'
         },
         validate: {
-            isInt: {
-                msg: 'El ID del técnico debe ser un número entero'
-            },
-            min: {
-                args: [1],
-                msg: 'Debe ser un ID válido'
+            isValidTechnicianId(value) {
+                // Permitir null para clientes fijos sin técnico asignado
+                if (value === null || value === undefined) {
+                    return;
+                }
+                if (!Number.isInteger(value)) {
+                    throw new Error('El ID del técnico debe ser un número entero');
+                }
+                if (value < 1) {
+                    throw new Error('Debe ser un ID válido');
+                }
             }
         }
     },

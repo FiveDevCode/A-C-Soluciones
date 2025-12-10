@@ -301,13 +301,6 @@ const ListReportTc = ({visits}) => {
               </NotificationInfo>
             </NotificationDescription>
             <ContainerOption>
-              <ActionButton
-                className="download"
-                onClick={() => handleDownloadPDF(visit)}
-              >
-                <FontAwesomeIcon icon={faDownload} />
-                <span>Descargar</span>
-              </ActionButton>
               {visit.pdf_path && (
                 <ActionButton onClick={() => handleViewPDF(visit)}>
                   <span>Ver PDF</span>

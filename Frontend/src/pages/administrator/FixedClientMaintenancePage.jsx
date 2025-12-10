@@ -25,12 +25,9 @@ const FixedClientMaintenancePage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Obtener ID del técnico/administrador del token
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          const decoded = jwtDecode(token);
-          setTechnicianId(decoded.id);
-        }
+        // Para clientes fijos creados por admin, no se requiere técnico
+        // El id_tecnico puede ser null
+        setTechnicianId(null);
 
         // Obtener datos del cliente
         const response = await handleGetClient(clientId);
