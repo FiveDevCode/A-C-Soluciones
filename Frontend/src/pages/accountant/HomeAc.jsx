@@ -86,7 +86,7 @@ const HomeAc = () => {
       icon: faBoxes,
       bgColor: "#e3f2fd",
       color: "#1976d2",
-      label: "Total Inventario",
+      label: "Total Herramientas",
       value: statsData.totalInventory
     },
     {

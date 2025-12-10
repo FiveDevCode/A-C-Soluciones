@@ -244,9 +244,16 @@ const ListReportTc = ({visits}) => {
     }
 
     try {
+      // Si es una URL de Cloudinary, abrirla directamente
+      if (visit.pdf_path.includes('cloudinary.com')) {
+        window.open(visit.pdf_path, '_blank');
+        return;
+      }
+
+      // Si es una ruta local del servidor
       const token = localStorage.getItem('authToken');
       
-      // Extraer solo el nombre del archivo del path (igual que en admin)
+      // Extraer solo el nombre del archivo del path
       const fileName = visit.pdf_path.split(/[/\\]/).pop();
       
       // Usar la ruta de descarga del backend
@@ -288,7 +295,7 @@ const ListReportTc = ({visits}) => {
                     : visit.notas || "Sin notas"}
                 </TitleNoti>
                 <Description>
-                  Servicio: {visit.servicio?.nombre || "Sin servicio"}
+                  Cliente: {visit.cliente ? `${visit.cliente.nombre} ${visit.cliente.apellido}` : "Sin cliente"}
                 </Description>
                 <Date>{formatDate(visit.fecha_programada)}</Date>
               </NotificationInfo>
