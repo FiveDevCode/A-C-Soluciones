@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const SectionPage = styled.section`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,6 +19,36 @@ const SectionPage = styled.section`
   @media (max-width: 768px) {
     padding: 1.5rem 1rem;
     justify-content: flex-start;
+  }
+`
+
+const BackButton = styled(Link)`
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: 2px solid #007bff;
+
+  &:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
   }
 `
 
@@ -68,6 +99,7 @@ const Subtitle = styled.h4`
 const LoginPage = () => {
   return (
     <SectionPage>
+      <BackButton to="/">← Regresar al inicio</BackButton>
       <LogoLink to="/">
         <LogoImage src={logo} alt="Logo A&C" />
       </LogoLink>

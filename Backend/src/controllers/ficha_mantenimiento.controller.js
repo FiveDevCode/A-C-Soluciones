@@ -240,20 +240,14 @@ A-C Soluciones
     
     // Errores de Sequelize
     if (error instanceof ValidationError) {
-      console.error('⚠️  ERRORES DE VALIDACIÓN:');
-      const errors = error.errors.map(err => ({
-        campo: err.path,
-        tipo: err.type,
-        mensaje: err.message,
-        valor: err.value
-      }));
-      console.error(JSON.stringify(errors, null, 2));
-      console.error('════════════════════════════════════════════════════════\n');
-      
-      return res.status(400).json({ 
-        error: 'Error de validación',
-        errores: errors
-      });
+      const fieldErrors = {};
+      for (const err of error.errors) {
+        if (err.path) {
+          fieldErrors[err.path] = err.message;
+        }
+      }
+
+      return res.status(400).json({ errors: fieldErrors });
     }
 
     if (error instanceof DatabaseError) {
