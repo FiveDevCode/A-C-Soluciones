@@ -129,21 +129,6 @@ const ListReportAd = ({ reports, reloadData, onSelectRows, isLoadingData = false
           <button
             style={{
               padding: "6px 10px",
-              background: "#2563eb",
-              color: "white",
-              borderRadius: "6px",
-              cursor: "pointer",
-              border: "none",
-              fontWeight: 600,
-            }}
-            onClick={() => handleDownloadPDF(row)}
-          >
-            <FontAwesomeIcon icon={faDownload} /> Descargar
-          </button>
-
-          <button
-            style={{
-              padding: "6px 10px",
               background: "#0f172a",
               color: "white",
               borderRadius: "6px",

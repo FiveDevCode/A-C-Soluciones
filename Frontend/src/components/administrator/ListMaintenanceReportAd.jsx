@@ -67,20 +67,6 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
         
         return (
           <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-            <button
-              style={{
-                padding: "6px 10px",
-                background: hasPDF ? "#2563eb" : "#94a3b8",
-                color: "white",
-                borderRadius: "6px",
-                cursor: hasPDF ? "pointer" : "not-allowed",
-                border: "none"
-              }}
-              onClick={() => hasPDF && handleDownloadPDF(row)}
-              disabled={!hasPDF}
-            >
-              <FontAwesomeIcon icon={faDownload} /> Descargar
-            </button>
 
             <button
               style={{
