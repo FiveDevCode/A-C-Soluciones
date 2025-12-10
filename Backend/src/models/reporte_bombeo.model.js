@@ -79,13 +79,8 @@ export const ReporteBombeo = sequelize.define('ReporteBombeo', {
     },
     encargado: {
         type: DataTypes.STRING(100),
-        allowNull: false,
-        validate: { 
-            notNull: { msg: 'El encargado es requerido' },
-            len: { args: [0, 100], msg: 'El encargado debe tener entre 0 y 100 caracteres' },
-            notEmpty: { msg: 'El encargado no puede estar vacío' }
-
-         }
+        allowNull: true,
+        
     },
     observaciones_finales: {
         type: DataTypes.TEXT,

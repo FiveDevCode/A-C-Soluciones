@@ -12,6 +12,7 @@ const ViewAdministratorDetailAd = ({ selected, onClose }) => {
     { label: "Cédula", value: selected.numero_cedula },
     { label: "Nombre", value: selected.nombre },
     { label: "Apellido", value: selected.apellido },
+    { label: "Teléfono", value: selected.telefono || "—" },
     { label: "Correo electrónico", value: selected.correo_electronico },
     { label: "Estado", value: stateLabels[selected.estado] || selected.estado, isBadge: true },
   ];

@@ -136,6 +136,18 @@ const Admin = sequelize.define('Admin', {
     },
   },
 
+  telefono: {
+    type: DataTypes.STRING(10),
+    allowNull: true,
+    validate: {
+      isNumeric: { msg: 'El teléfono solo puede contener números.' },
+      len: {
+        args: [10, 10],
+        msg: 'El teléfono debe tener exactamente 10 dígitos.',
+      },
+    },
+  },
+
   rol: {
     type: DataTypes.ENUM('administrador'),
     defaultValue: 'administrador',

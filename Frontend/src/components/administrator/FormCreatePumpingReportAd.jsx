@@ -250,7 +250,7 @@ const FormCreatePumpingReportAd = ({ onClose, onSuccess }) => {
         },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true, required: true },
         { name: "telefono", label: "Teléfono", type: "text", required: true },
-        { name: "encargado", label: "Encargado", type: "text", required: true },
+        // { name: "encargado", label: "Encargado", type: "text", required: true },
         { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true, required: true },
       ]
     },

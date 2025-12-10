@@ -35,11 +35,11 @@ const FilterPumpingReportAd = ({ reports = [], onFilteredChange }) => {
       label: "Ciudad",
       options: cityOptions,
     },
-    {
-      key: "encargado",
-      label: "Encargado",
-      options: encargadoOptions,
-    },
+    // {
+    //   key: "encargado",
+    //   label: "Encargado",
+    //   options: encargadoOptions,
+    // },
     {
       key: "equipos.marca",
       label: "Marca de equipo",
