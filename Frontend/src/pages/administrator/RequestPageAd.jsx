@@ -120,6 +120,7 @@ const RequestPageAd = () => {
           onSelectRows={handleSelectRows}
           isLoadingData={loading}
           clearSelectionTrigger={clearTrigger}
+          onUpdate={loadRequests}
         />
       </Card>
 
