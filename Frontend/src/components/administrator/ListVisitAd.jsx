@@ -1,153 +1,15 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Tooltip } from "@mui/material";
 import BaseTable from "../common/BaseTable";
 import ViewVisitDetailAd from "./ViewVisitDetailAd";
 import EditVisitAd from "./EditVisitAd";
 import FormCreateReportAd from "../administrator/FormCreateReportAd";
-import { commonService } from "../../services/common-service";
-const API_KEY = "http://localhost:8000";
 
-const FICHAS_CACHE_KEY = 'fichas_pdfs_cache';
-const FICHAS_CACHE_TIMESTAMP = 'fichas_pdfs_timestamp';
-const FICHAS_VISITS_KEY = 'fichas_visits_snapshot';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+const API_KEY = "http://localhost:8000";
 
 const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }) => {
   const [openReportModal, setOpenReportModal] = useState(false);
   const [selectedVisitId, setSelectedVisitId] = useState(null);
-
-  // Función auxiliar para obtener el mapa inicial del caché
-  const getInitialPdfMap = () => {
-    try {
-      const cached = sessionStorage.getItem(FICHAS_CACHE_KEY);
-      const timestamp = sessionStorage.getItem(FICHAS_CACHE_TIMESTAMP);
-      
-      if (cached && timestamp) {
-        const age = Date.now() - parseInt(timestamp);
-        if (age < CACHE_DURATION) {
-          const fichas = JSON.parse(cached);
-          const map = new Map();
-          fichas.forEach((ficha) => {
-            if (ficha.id_visitas && ficha.pdf_path) {
-              map.set(ficha.id_visitas, ficha.pdf_path);
-            }
-          });
-          return map;
-        }
-      }
-    } catch (err) {
-      console.error('Error al leer caché inicial:', err);
-    }
-    return new Map();
-  };
-
-  // Estados para manejo de PDFs
-  const [pdfMap, setPdfMap] = useState(getInitialPdfMap);
-  const lastVisitsJsonRef = useRef(sessionStorage.getItem(FICHAS_VISITS_KEY) || "");
-  const isLoadingRef = useRef(false);
-  const hasFetchedPDFsRef = useRef(false);
-
-  // Función para obtener fichas del caché
-  const getCachedFichas = () => {
-    try {
-      const cached = sessionStorage.getItem(FICHAS_CACHE_KEY);
-      const timestamp = sessionStorage.getItem(FICHAS_CACHE_TIMESTAMP);
-      
-      if (cached && timestamp) {
-        const age = Date.now() - parseInt(timestamp);
-        if (age < CACHE_DURATION) {
-          return JSON.parse(cached);
-        }
-      }
-    } catch (err) {
-      console.error('Error al leer caché de fichas:', err);
-    }
-    return null;
-  };
-
-  // Función para guardar fichas en el caché
-  const setCachedFichas = (fichas, visitsSnapshot) => {
-    try {
-      sessionStorage.setItem(FICHAS_CACHE_KEY, JSON.stringify(fichas));
-      sessionStorage.setItem(FICHAS_CACHE_TIMESTAMP, Date.now().toString());
-      sessionStorage.setItem(FICHAS_VISITS_KEY, visitsSnapshot);
-    } catch (err) {
-      console.error('Error al guardar caché de fichas:', err);
-    }
-  };
-
-  // Cargar fichas cuando cambian las visitas
-  useEffect(() => {
-    const loadFichas = async () => {
-      if (isLoadingRef.current) return;
-      if (!visits || visits.length === 0) {
-        return;
-      }
-
-      // Verificar si las visitas han cambiado (por ID o cantidad)
-      const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
-      
-      // Si las visitas cambiaron (nueva recarga), invalidar caché de fichas
-      if (currentVisitsJson !== lastVisitsJsonRef.current) {
-        // Las visitas cambiaron, necesitamos recargar las fichas
-        isLoadingRef.current = true;
-        lastVisitsJsonRef.current = currentVisitsJson;
-
-        try {
-          // Hacer la petición SIN usar caché
-          const response = await commonService.getListToken();
-          const allFichas = response.data || [];
-          
-          // Guardar en caché junto con el snapshot de visitas
-          setCachedFichas(allFichas, currentVisitsJson);
-
-          // Crear el mapa
-          const fichasMap = new Map();
-          allFichas.forEach((ficha) => {
-            if (ficha.id_visitas && ficha.pdf_path) {
-              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-            }
-          });
-          
-          setPdfMap(fichasMap);
-          hasFetchedPDFsRef.current = true;
-        } catch (err) {
-          console.error("Error al obtener fichas:", err);
-        } finally {
-          isLoadingRef.current = false;
-        }
-      } else {
-        // Las visitas NO cambiaron, podemos usar el caché
-        const cachedFichas = getCachedFichas();
-        
-        if (cachedFichas && pdfMap.size === 0) {
-          // Usar caché solo si el mapa está vacío
-          const fichasMap = new Map();
-          cachedFichas.forEach((ficha) => {
-            if (ficha.id_visitas && ficha.pdf_path) {
-              fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-            }
-          });
-          setPdfMap(fichasMap);
-        }
-      }
-    };
-
-    loadFichas();
-  }, [visits]); // Se ejecuta cuando cambian las visitas
-
-  // Combinar visits con pdf_path usando useMemo - ESTABLE
-  const visitsWithPDF = useMemo(() => {
-    if (!visits || visits.length === 0) {
-      return [];
-    }
-
-    // Mapear las visitas con sus PDFs correspondientes
-    return visits.map((visit) => ({
-      ...visit,
-      pdf_path: pdfMap.get(visit.id) || null,
-    }));
-  }, [visits, pdfMap]);
 
   // Crear componentes estables para evitar re-montajes
   const ViewComponentMemo = useCallback((props) => <ViewVisitDetailAd {...props} />, []);
@@ -159,32 +21,45 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     setOpenReportModal(true);
   };
 
-  // Nueva función para recargar fichas manualmente
-  const reloadFichas = async () => {
-    try {
-      const response = await commonService.getListToken();
-      const allFichas = response.data || [];
-      // Guardar en caché junto con el snapshot de visitas
-      const currentVisitsJson = JSON.stringify(visits.map(v => v.id).sort());
-      setCachedFichas(allFichas, currentVisitsJson);
-      // Crear el mapa
-      const fichasMap = new Map();
-      allFichas.forEach((ficha) => {
-        if (ficha.id_visitas && ficha.pdf_path) {
-          fichasMap.set(ficha.id_visitas, ficha.pdf_path);
-        }
-      });
-      setPdfMap(fichasMap);
-    } catch (err) {
-      console.error("Error al recargar fichas:", err);
-    }
-  };
-
-  const handleCloseReport = async () => {
+  const handleCloseReport = () => {
     setOpenReportModal(false);
     setSelectedVisitId(null);
-    await reloadFichas(); // Recarga fichas y actualiza caché
-    reloadData(); // Recarga visitas
+    reloadData(); // Recarga visitas (que ya incluyen fichas)
+  };
+
+  // Función para abrir PDF
+  const handleOpenPDF = async (pdfPath) => {
+    try {
+      // Si es una URL de Cloudinary, abrirla directamente
+      if (pdfPath.includes('cloudinary.com')) {
+        window.open(pdfPath, "_blank");
+        return;
+      }
+
+      const token = localStorage.getItem("authToken");
+      const relativePath = pdfPath
+        .replace(/^uploads[\\/]/, "")
+        .replace(/\\/g, "/");
+      const publicUrl = `${API_KEY}/${relativePath}`;
+
+      const response = await fetch(publicUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("No se pudo obtener el PDF");
+      }
+
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+      window.open(fileURL, "_blank");
+    } catch (err) {
+      console.error("Error al abrir PDF:", err);
+      alert("No se pudo abrir el reporte.");
+    }
   };
 
   const columns = [
@@ -198,7 +73,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
       }
     },
     {
-      header: "Notas",
+      header: "Nota",
       accessor: "notas",
       render: (value) => {
         if (!value) return "—";
@@ -231,94 +106,59 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
     },
     {
       header: "Reporte",
-      accessor: "pdf_path",
-      render: (value, row) => {
-        // Buscar el pdf_path en la ficha de mantenimiento si existe
-        const pdfPath = row.ficha_mantenimiento?.pdf_path || value;
-        
-        return pdfPath ? (
-          // ========================
-          // ✔ BOTÓN VER REPORTE
-          // ========================
-          <button
-            style={{
-              padding: "6px 10px",
-              background: "#16a34a",
-              color: "white",
-              borderRadius: "6px",
-              cursor: "pointer",
-              border: "none",
-              fontWeight: 600,
-            }}
-            onClick={async () => {
-              try {
-                // Si es una URL de Cloudinary, abrirla directamente
-                if (pdfPath.includes('cloudinary.com')) {
-                  window.open(pdfPath, "_blank");
-                  return;
-                }
+      accessor: "ficha_mantenimiento",
+      render: (ficha, row) => {
+        // Si existe la ficha y tiene PDF
+        if (ficha?.pdf_path) {
+          return (
+            <button
+              style={{
+                padding: "6px 10px",
+                background: "#16a34a",
+                color: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                border: "none",
+                fontWeight: 600,
+              }}
+              onClick={() => handleOpenPDF(ficha.pdf_path)}
+            >
+              Ver reporte
+            </button>
+          );
+        }
 
-                const token = localStorage.getItem("authToken");
+        // Si la visita no está completada
+        if (row.estado !== "completada") {
+          return (
+            <Tooltip 
+              title="Solo disponible para visitas completadas" 
+              arrow 
+              placement="top"
+            >
+              <span>
+                <button
+                  style={{
+                    padding: "6px 10px",
+                    background: "#94a3b8",
+                    color: "white",
+                    borderRadius: "6px",
+                    cursor: "not-allowed",
+                    border: "none",
+                    fontWeight: 600,
+                    opacity: 0.6,
+                  }}
+                  disabled
+                >
+                  Generar reporte
+                </button>
+              </span>
+            </Tooltip>
+          );
+        }
 
-                const relativePath = pdfPath
-                  .replace(/^uploads[\\/]/, "")
-                  .replace(/\\/g, "/");
-
-                const publicUrl = `${API_KEY}/${relativePath}`;
-
-                const response = await fetch(publicUrl, {
-                  method: "GET",
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                });
-
-                if (!response.ok) {
-                  throw new Error("No se pudo obtener el PDF");
-                }
-
-                const blob = await response.blob();
-                const fileURL = URL.createObjectURL(blob);
-                window.open(fileURL, "_blank");
-              } catch (err) {
-                console.error("Error al abrir PDF:", err);
-                alert("No se pudo abrir el reporte.");
-              }
-            }}
-          >
-            Ver reporte
-          </button>
-        ) : row.estado !== "completada" ? (
-          // ========================
-          // ✔ BOTÓN GENERAR REPORTE DESHABILITADO
-          // ========================
-          <Tooltip 
-            title="Solo disponible para visitas completadas" 
-            arrow 
-            placement="top"
-          >
-            <span>
-              <button
-                style={{
-                  padding: "6px 10px",
-                  background: "#94a3b8",
-                  color: "white",
-                  borderRadius: "6px",
-                  cursor: "not-allowed",
-                  border: "none",
-                  fontWeight: 600,
-                  opacity: 0.6,
-                }}
-                disabled
-              >
-                Generar reporte
-              </button>
-            </span>
-          </Tooltip>
-        ) : (
-          // ========================
-          // ✔ BOTÓN GENERAR REPORTE HABILITADO
-          // ========================
+        // Visita completada sin reporte
+        return (
           <button
             style={{
               padding: "6px 10px",
@@ -341,7 +181,7 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
   return (
     <>
       <BaseTable
-        data={visitsWithPDF}
+        data={visits || []}
         columns={columns}
         getBadgeValue={(row) =>
           row.estado === "en_camino" ? "En camino" : row.estado
@@ -354,117 +194,88 @@ const ListVisitAd = ({ visits, reloadData, onSelectRows, isLoadingData = false }
         isEditDisabled={(row) => row.estado === "completada" || row.estado === "cancelada"}
         mobileConfig={{
           title: "fecha_programada",
-          subtitle: "notas",
+          subtitle: "notas_previas",
           renderExtra: (row) => {
-            if (!row.pdf_path) {
-              // Mostrar botón de generar reporte
-              if (row.estado !== "completada") {
-                // Botón deshabilitado con tooltip
-                return (
-                  <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
-                    <Tooltip 
-                      title="Solo disponible para visitas completadas" 
-                      arrow 
-                      placement="top"
-                    >
-                      <span>
-                        <button
-                          style={{
-                            padding: "5px 8px",
-                            background: "#94a3b8",
-                            color: "white",
-                            borderRadius: "6px",
-                            cursor: "not-allowed",
-                            border: "none",
-                            fontSize: "11px",
-                            fontWeight: 600,
-                            opacity: 0.6,
-                          }}
-                          disabled
-                        >
-                          Generar reporte
-                        </button>
-                      </span>
-                    </Tooltip>
-                  </div>
-                );
-              }
-              
-              // Botón habilitado sin tooltip
+            const ficha = row.ficha_mantenimiento;
+
+            // Si existe PDF, mostrar botón de ver reporte
+            if (ficha?.pdf_path) {
               return (
                 <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
                   <button
                     style={{
                       padding: "5px 8px",
-                      background: "#2563eb",
+                      background: "#16a34a",
                       color: "white",
                       borderRadius: "6px",
                       cursor: "pointer",
                       border: "none",
                       fontSize: "11px",
-                      fontWeight: 600,
+                      fontWeight: 600
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleOpenReport(row);
+                      handleOpenPDF(ficha.pdf_path);
                     }}
                   >
-                    Generar reporte
+                    Ver reporte
                   </button>
                 </div>
               );
             }
-            
-            // Mostrar botón de ver reporte
+
+            // Si la visita no está completada
+            if (row.estado !== "completada") {
+              return (
+                <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                  <Tooltip 
+                    title="Solo disponible para visitas completadas" 
+                    arrow 
+                    placement="top"
+                  >
+                    <span>
+                      <button
+                        style={{
+                          padding: "5px 8px",
+                          background: "#94a3b8",
+                          color: "white",
+                          borderRadius: "6px",
+                          cursor: "not-allowed",
+                          border: "none",
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          opacity: 0.6,
+                        }}
+                        disabled
+                      >
+                        Generar reporte
+                      </button>
+                    </span>
+                  </Tooltip>
+                </div>
+              );
+            }
+
+            // Visita completada sin reporte
             return (
               <div style={{ display: "flex", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
                 <button
                   style={{
                     padding: "5px 8px",
-                    background: "#16a34a",
+                    background: "#2563eb",
                     color: "white",
                     borderRadius: "6px",
                     cursor: "pointer",
                     border: "none",
                     fontSize: "11px",
-                    fontWeight: 600
+                    fontWeight: 600,
                   }}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     e.stopPropagation();
-                    try {
-                      // Si es una URL de Cloudinary, abrirla directamente
-                      if (row.pdf_path.includes('cloudinary.com')) {
-                        window.open(row.pdf_path, "_blank");
-                        return;
-                      }
-
-                      const token = localStorage.getItem("authToken");
-                      const relativePath = row.pdf_path
-                        .replace(/^uploads[\\/]/, "")
-                        .replace(/\\/g, "/");
-                      const publicUrl = `${API_KEY}/${relativePath}`;
-
-                      const response = await fetch(publicUrl, {
-                        method: "GET",
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                      });
-
-                      if (!response.ok) {
-                        throw new Error("No se pudo obtener el PDF");
-                      }
-
-                      const blob = await response.blob();
-                      const fileURL = URL.createObjectURL(blob);
-                      window.open(fileURL, "_blank");
-                    } catch (err) {
-                      console.error("Error al abrir PDF:", err);
-                      alert("No se pudo abrir el reporte.");
-                    }
+                    handleOpenReport(row);
                   }}
                 >
-                  Ver reporte
+                  Generar reporte
                 </button>
               </div>
             );

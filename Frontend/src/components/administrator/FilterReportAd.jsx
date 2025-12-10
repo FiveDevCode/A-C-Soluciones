@@ -1,20 +1,21 @@
 import BaseFilters from "../common/BaseFilters";
 
-const FilterReportAd = ({ visits = [], onFilteredChange }) => {
+const FilterReportAd = ({ reports = [], onFilteredChange }) => {
+
   const filterOptions = [
     {
-      key: "fecha_programada",
-      label: "Fecha programada", // 👈 Este label ahora se muestra arriba
+      key: "visita_asociada.fecha_programada", // ← clave correcta del JSON
+      label: "Fecha programada",
       type: "dateRange",
     }
   ];
 
   return (
     <BaseFilters
-      data={visits}
+      data={reports}
       placeholder="Buscar por notas..."
       filterOptions={filterOptions}
-      searchKeys={["notas"]}
+      searchKeys={["visita_asociada.notas", "notas"]} 
       onFilteredChange={onFilteredChange}
     />
   );

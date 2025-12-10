@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import BaseHeaderSection from "../../components/common/BaseHeaderSection";
 import ListPumpingReportAd from "../../components/administrator/ListPumpingReportAd";
@@ -42,7 +42,17 @@ const PumpingReportPageAd = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
+  
+  const sortedReports = useMemo(() => {
+    if (!reports || reports.length === 0) return [];
+    return [...reports].sort((a, b) => b.id - a.id);
+  }, [reports]);
 
+  useEffect(() => {
+    if (sortedReports && sortedReports.length > 0) {
+      setFilteredReports(sortedReports);
+    }
+  }, [sortedReports]);
 
   return (
     <Container>
@@ -56,7 +66,7 @@ const PumpingReportPageAd = () => {
         selectedCount={selectedIds.length}
         filterComponent={
           <FilterPumpingReportAd
-            reports={reports}
+            reports={sortedReports}
             onFilteredChange={setFilteredReports}
           />
         }

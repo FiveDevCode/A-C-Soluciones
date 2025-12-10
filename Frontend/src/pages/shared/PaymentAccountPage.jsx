@@ -92,7 +92,7 @@ const PaymentAccountPage = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="CUENTAS DE PAGO"
-        sectionTitle="Cuentas registradas"
+        sectionTitle="Cuentas de pago registradas"
         addLabel="Agregar cuenta"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}

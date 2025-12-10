@@ -12,7 +12,7 @@ const ListRequestAd = ({ requests, onSelectRows, onUpdate, isLoadingData = false
       }
     },
     {
-      header: "Comentarios",
+      header: "Comentario",
       accessor: "comentarios",
       render: (value) => {
         if (!value) return "—";

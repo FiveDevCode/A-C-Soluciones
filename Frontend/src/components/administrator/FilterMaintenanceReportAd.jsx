@@ -32,9 +32,9 @@ const FilterMaintenanceReportAd = ({ reports = [], onFilteredChange }) => {
   return (
     <BaseFilters
       data={reports}
-      placeholder="Buscar por dirección o teléfono..."
+      placeholder="Buscar por dirección..."
       filterOptions={filterOptions}
-      searchKeys={["direccion", "telefono"]}
+      searchKeys={["direccion"]}
       onFilteredChange={onFilteredChange}
     />
   );

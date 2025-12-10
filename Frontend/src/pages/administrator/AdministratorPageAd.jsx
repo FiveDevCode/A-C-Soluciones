@@ -41,7 +41,7 @@ const AdministratorPageAd = () => {
     'administrators_cache',
     async () => {
       const res = await handleGetListAdministrator();
-      return res.data;
+      return res;
     }
   );
   const { timeAgo, manualRefresh } = useAutoRefresh(loadAdministrators, 3, 'administrators');

@@ -587,6 +587,16 @@ const createFixedClient = (clientData) => {
   });
 };
 
+
+const getListReport = () => {
+  const token = localStorage.getItem("authToken");  
+  return api.get("/fichas", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 export const administratorService = {
   createTechnical,
   getListTechnical,
@@ -642,5 +652,6 @@ export const administratorService = {
   createMaintenanceReport,
   getListPumpingReports,
   createPumpingReport,
-  createFixedClient
+  createFixedClient,
+  getListReport
 }

@@ -40,7 +40,10 @@ const Card = styled.div`
 const ServicePageAd = () => {
   const { data: services, isLoading: loading, reload: loadServices } = useDataCache(
     'services_cache',
-    handleGetListServiceAd
+    async () => {
+      const data = await handleGetListServiceAd();
+      return data || []; // ya tu función devuelve un array
+    }
   );
   const { timeAgo, manualRefresh } = useAutoRefresh(loadServices, 3, 'services');
   const [showModal, setShowModal] = useState(false);
@@ -92,7 +95,7 @@ const ServicePageAd = () => {
     <Container>
       <BaseHeaderSection
         headerTitle="SERVICIOS"
-        sectionTitle="Lista de servicios asignados"
+        sectionTitle="Lista de servicios"
         addLabel="Agregar servicio"
         onAdd={() => setShowModal(true)}
         onDeleteSelected={handleDeleteSelected}

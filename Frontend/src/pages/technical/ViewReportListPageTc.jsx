@@ -89,7 +89,9 @@ const ViewReportListPageTc = () => {
               notas: visita.notas || ficha.detalles_servicio || ficha.observaciones || 'Sin notas',
               fecha_programada: visita.fecha_programada || ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
-              estado: visita.estado || 'completada'
+              estado: visita.estado || 'completada',
+              servicio: visita.servicio,
+              cliente: ficha.cliente_ficha // Agregar información del cliente
             };
           } else {
             // Ficha de cliente fijo (sin visita), usar datos de la ficha
@@ -100,7 +102,8 @@ const ViewReportListPageTc = () => {
               fecha_programada: ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: 'completada',
-              isClienteFijo: true // Marcar como cliente fijo
+              isClienteFijo: true, // Marcar como cliente fijo
+              cliente: ficha.cliente_ficha // Agregar información del cliente
             };
           }
         });
@@ -157,7 +160,9 @@ const ViewReportListPageTc = () => {
               notas: visita.notas || ficha.detalles_servicio || ficha.observaciones || 'Sin notas',
               fecha_programada: visita.fecha_programada || ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
-              estado: visita.estado || 'completada'
+              estado: visita.estado || 'completada',
+              servicio: visita.servicio,
+              cliente: ficha.cliente_ficha // Agregar información del cliente
             };
           } else {
             // Ficha de cliente fijo (sin visita), usar datos de la ficha
@@ -168,7 +173,8 @@ const ViewReportListPageTc = () => {
               fecha_programada: ficha.fecha_de_mantenimiento,
               pdf_path: ficha.pdf_path,
               estado: 'completada',
-              isClienteFijo: true // Marcar como cliente fijo
+              isClienteFijo: true, // Marcar como cliente fijo
+              cliente: ficha.cliente_ficha // Agregar información del cliente
             };
           }
         });

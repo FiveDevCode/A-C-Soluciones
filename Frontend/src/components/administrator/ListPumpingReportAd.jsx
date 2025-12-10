@@ -113,20 +113,6 @@ const ListPumpingReportAd = ({ reports, reloadData, onSelectRows }) => {
             <button
               style={{
                 padding: "6px 10px",
-                background: "#2563eb",
-                color: "white",
-                borderRadius: "6px",
-                cursor: "pointer",
-                border: "none"
-              }}
-              onClick={() => handleDownloadPDF(row)}
-            >
-              <FontAwesomeIcon icon={faDownload} /> Descargar
-            </button>
-
-            <button
-              style={{
-                padding: "6px 10px",
                 background: "#0f172a",
                 color: "white",
                 borderRadius: "6px",

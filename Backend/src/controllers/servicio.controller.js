@@ -31,10 +31,14 @@ export class ServicioController {
       console.error('Error al crear servicio:', error);
 
       if (error instanceof ValidationError) {
+        const fieldErrors = {};
+        for (const err of error.errors) {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        }
 
-        const mensajes = error.errors.map((err) => err.message);
-
-        return res.status(400).json({ success: false, errors: mensajes });
+        return res.status(400).json({ errors: fieldErrors });
       }
       return res.status(500).json({
         success: false, message: 'Error al crear el servicio.'

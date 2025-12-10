@@ -135,7 +135,7 @@ const Admin = sequelize.define('Admin', {
       },
     },
   },
-
+//telefono
   telefono: {
     type: DataTypes.STRING(10),
     allowNull: true,
