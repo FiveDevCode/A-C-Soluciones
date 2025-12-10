@@ -83,15 +83,16 @@ const ReporteMantenimientoPlantasElectricas = sequelize.define('ReporteMantenimi
     },
     encargado: {
         type: DataTypes.STRING(150),
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'El encargado es requerido'
-            },
-            notEmpty: {
-                msg: 'El encargado no puede estar vacío'
-            }
-        }
+        allowNull: true,
+        // Campo opcional - puede ser null
+        // validate: {
+        //     notNull: {
+        //         msg: 'El encargado es requerido'
+        //     },
+        //     notEmpty: {
+        //         msg: 'El encargado no puede estar vacío'
+        //     }
+        // }
     },
     marca_generador: {
         type: DataTypes.STRING(100),

@@ -147,12 +147,13 @@ const getAdminId = (id) => {
   return api.get(`/admin/${id}`)
 }
 
-const updateAdmin = (id, idCard, nameUser, lastName, email, state) => {
+const updateAdmin = (id, idCard, nameUser, lastName, telefono, email, state) => {
   
   return api.put(`/admin/${id}`, {
     numero_cedula: idCard,
     nombre: nameUser,
     apellido: lastName,
+    telefono: telefono || null,
     correo_electronico: email,
     estado: state
   }, {
@@ -191,13 +192,14 @@ const getVisit =  (id_visit) => {
 
 }
 
-const createAdmin = (idCard, name, lastName, email, password) => {
+const createAdmin = (idCard, name, lastName, telefono, email, password) => {
   const token = localStorage.getItem("authToken");
 
   return api.post("/admin", {
     numero_cedula: idCard,
     nombre: name,
-    apellido: lastName, 
+    apellido: lastName,
+    telefono: telefono || null,
     correo_electronico: email,
     contrasenia: password
 

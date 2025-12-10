@@ -51,7 +51,7 @@ export const obtenerTodosReportes = async (visita_id = null) => {
 
     return await ReporteBombeo.findAll({
         where,
-        order: [['fecha', 'DESC']],
+        order: [['created_at', 'DESC']], // Más recientes primero
         include: [
             { model: EquipoBombeo, as: 'equipos' },
             { model: ParametroBombeo, as: 'parametrosLinea' },
@@ -64,7 +64,7 @@ export const obtenerTodosReportes = async (visita_id = null) => {
 export const obtenerReportesPorCliente = async (cliente_id) => {
     return await ReporteBombeo.findAll({
         where: { cliente_id },
-        order: [['fecha', 'DESC']],
+        order: [['created_at', 'DESC']], // Más recientes primero
         include: [
              { model: EquipoBombeo, as: 'equipos' },
              { model: ParametroBombeo, as: 'parametrosLinea' },
@@ -75,7 +75,7 @@ export const obtenerReportesPorCliente = async (cliente_id) => {
 export const obtenerReportesPorTecnico = async (tecnico_id) => {
     return await ReporteBombeo.findAll({
         where: { tecnico_id },
-        order: [['fecha', 'DESC']],
+        order: [['created_at', 'DESC']], // Más recientes primero
         include: [
              { model: EquipoBombeo, as: 'equipos' },
              { model: ParametroBombeo, as: 'parametrosLinea' },

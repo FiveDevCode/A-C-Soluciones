@@ -43,7 +43,7 @@ export const obtenerReportesPorCliente = async (id_cliente) => {
         as: 'verificaciones'
       }
     ],
-    order: [['fecha', 'DESC']]
+    order: [['created_at', 'DESC']] // Más recientes primero
   });
   console.log('✅ [REPO] Reportes de mantenimiento encontrados:', reportes.length);
   if (reportes.length > 0) {
@@ -69,7 +69,7 @@ export const obtenerReportesPorTecnico = async (id_tecnico) => {
         as: 'verificaciones'
       }
     ],
-    order: [['fecha', 'DESC']]
+    order: [['created_at', 'DESC']] // Más recientes primero
   });
 };
 
@@ -85,6 +85,6 @@ export const obtenerTodosReportes = async () => {
         as: 'verificaciones'
       }
     ],
-    order: [['fecha', 'DESC']]
+    order: [['created_at', 'DESC']] // Más recientes primero
   });
 };

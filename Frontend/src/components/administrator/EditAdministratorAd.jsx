@@ -30,6 +30,7 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
     { name: "numero_cedula", label: "Cédula", type: "text" },
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "apellido", label: "Apellido", type: "text" },
+    { name: "telefono", label: "Teléfono", type: "text", inputProps: { maxLength: 10 } },
     { name: "correo_electronico", label: "Correo electrónico", type: "email" },
     { name: "estado", label: "Estado", type: "select", options: estados },
   ];
@@ -38,13 +39,14 @@ const EditAdministratorAd = ({ selected, onClose, onSuccess }) => {
     numero_cedula: adminData.numero_cedula || "",
     nombre: adminData.nombre || "",
     apellido: adminData.apellido || "",
+    telefono: adminData.telefono || "",
     correo_electronico: adminData.correo_electronico || "",
     rol: adminData.rol || "",
     estado: adminData.estado || "",
   };
 
   const handleSubmit = async (data) => {
-    await handleUpdateAdmin(selectedIdRef.current, data.numero_cedula, data.nombre, data.apellido, data.correo_electronico, data.estado);
+    await handleUpdateAdmin(selectedIdRef.current, data.numero_cedula, data.nombre, data.apellido, data.telefono, data.correo_electronico, data.estado);
   };
 
   return (
