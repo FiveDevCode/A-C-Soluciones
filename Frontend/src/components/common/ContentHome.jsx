@@ -224,7 +224,7 @@ const ContentHome = () => {
     <ContainerHome>
       <ContainerWho>
         <ContainerWhoInfo>
-          <WhoTitle>QUIENES SOMOS?</WhoTitle>
+          <WhoTitle>¿QUIÉNES SOMOS?</WhoTitle>
           <WhoDescription>
             A & C Soluciones hidroeléctricas es una empresa 
             dedicada a la prestacion de servicios de montaje, 
