@@ -79,7 +79,7 @@ const ViewClientDetailAd = ({ selected, onClose }) => {
               onClick={handleViewHistory}
               fullWidth
             >
-              Ver Historial de Fichas de Mantenimiento
+              Historial de visitas
             </Button>
           </ButtonContainer>
         )
