@@ -1,18 +1,26 @@
 import BaseFilters from "../common/BaseFilters";
 
 const FilterBillAd = ({ bills = [], onFilteredChange }) => {
+
+  const billsWithClientData = bills.map(bill => ({
+    ...bill,
+    nombre_cliente: bill.cliente?.nombre || "",
+    apellido_cliente: bill.cliente?.apellido || "",
+    cedula_cliente: bill.cliente?.numero_de_cedula || "",
+    nombre_completo_cliente: bill.cliente ? `${bill.cliente.nombre} ${bill.cliente.apellido}` : "",
+  }));
+
   const paymentStatusLabels = {
     pagada: "Pagada",
     pendiente: "Pendiente",
     vencida: "Vencida",
   };
 
-  const paymentStatusOptions = [...new Set(bills.map((b) => b.estado_factura).filter(Boolean))].map(
-    (status) => ({
+  const paymentStatusOptions = [...new Set(bills.map(b => b.estado_factura).filter(Boolean))]
+    .map(status => ({
       value: status,
       label: paymentStatusLabels[status] || status,
-    })
-  );
+    }));
 
   const filterOptions = [
     {
@@ -24,10 +32,16 @@ const FilterBillAd = ({ bills = [], onFilteredChange }) => {
 
   return (
     <BaseFilters
-      data={bills}
-      placeholder="Buscar por número de factura o cliente..."
+      data={billsWithClientData}
+      placeholder="Buscar por número de factura, nombre o cédula..."
       filterOptions={filterOptions}
-      searchKeys={["numero_factura", "nombre_cliente"]}
+      searchKeys={[
+        "numero_factura",
+        "nombre_cliente",
+        "apellido_cliente",
+        "cedula_cliente",
+        "nombre_completo_cliente"
+      ]}
       onFilteredChange={onFilteredChange}
     />
   );
