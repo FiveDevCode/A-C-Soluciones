@@ -4,11 +4,11 @@
 
 import { clientService } from "../../services/client-service";
 
-const handleCreateRequest= (serviceAddress, description, comments, requestId, clientId) => {
+const handleCreateRequest= (serviceAddress, description, comments, fechaSolicitud, requestId, clientId) => {
     
 
   return clientService
-  .createRequest(serviceAddress, description, comments, requestId, clientId)
+  .createRequest(serviceAddress, description, comments, fechaSolicitud, requestId, clientId)
 
 
 };

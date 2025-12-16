@@ -2,13 +2,15 @@ import { SolicitudModel } from "../models/solicitud.model.js";
 import { ClienteModel } from "../models/cliente.model.js";
 import { ServicioModel } from "../models/servicios.model.js";
 import { AdminModel } from "../models/administrador.model.js";
+import { VisitaModel } from "../models/visita.model.js";
 
 export class SolicitudRepository {
   constructor() {
     this.model = SolicitudModel.Solicitud;
     this.clienteModel = ClienteModel.Cliente;
     this.servicioModel = ServicioModel.Servicio;
-    this.adminModel = AdminModel.Admin; 
+    this.adminModel = AdminModel.Admin;
+    this.visitaModel = VisitaModel.Visita;
   }
   
   async crear(data) {
@@ -21,6 +23,7 @@ export class SolicitudRepository {
   }
   async obtenerTodos() {
     return await this.model.findAll({
+      attributes: ['id', 'fecha_solicitud', 'estado', 'direccion_servicio', 'descripcion', 'comentarios', 'servicio_id_fk', 'cliente_id_fk'],
       include: [
         {
           model: this.clienteModel,
@@ -36,8 +39,18 @@ export class SolicitudRepository {
           model: this.servicioModel,
           as: 'servicio_solicitud',
           attributes: ['id', 'nombre', 'descripcion']
+        },
+        {
+          model: this.visitaModel,
+          as: 'visitas',
+          attributes: ['id'],
+          required: false // LEFT JOIN para incluir solicitudes sin visitas
         }
       ],
+      where: {
+        // Solo solicitudes que NO tienen visitas asignadas (visitas es null)
+        '$visitas.id$': null
+      },
       order: [['fecha_solicitud', 'DESC']]
     });
   }

@@ -74,7 +74,7 @@ const Dropdown = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: 380px;
   max-height: 500px;
-  overflow-y: auto;
+  overflow: hidden;
   z-index: 1000;
   display: ${props => props.$isOpen ? 'block' : 'none'};
 
@@ -338,7 +338,56 @@ const NotificationBell = () => {
     if (!notificacion.leida) {
       await marcarComoLeida(notificacion.id_notificacion);
     }
-    // Aquí puedes agregar navegación según el tipo de notificación
+    
+    // Cerrar el dropdown
+    setIsOpen(false);
+    
+    // Obtener rol del usuario
+    const role = localStorage.getItem('userRole');
+    
+    // Navegar según el tipo de notificación y rol
+    const tipo = notificacion.tipo_notificacion;
+    const tipoRef = notificacion.tipo_referencia;
+    
+    if (role === 'administrador') {
+      if (tipo === 'NUEVA_SOLICITUD' || tipoRef === 'solicitud') {
+        navigate('/admin/solicitudes');
+      } else if (tipo === 'VISITA_COMPLETADA' || tipoRef === 'visita') {
+        navigate('/admin/visitas');
+      } else if (tipoRef === 'ficha_mantenimiento') {
+        navigate('/admin/fichas');
+      } else if (tipoRef === 'factura' || tipo?.includes('FACTURA')) {
+        navigate('/admin/facturas');
+      } else if (tipoRef === 'inventario' || tipo?.includes('INVENTARIO')) {
+        navigate('/admin/inventario');
+      } else if (tipoRef === 'servicio') {
+        navigate('/admin/servicios');
+      } else if (tipoRef === 'cliente') {
+        navigate('/admin/clientes');
+      }
+    } else if (role === 'tecnico') {
+      if (tipo === 'FICHA_ASIGNADA' || tipoRef === 'ficha_mantenimiento') {
+        navigate('/tecnico/fichas');
+      } else if (tipoRef === 'visita') {
+        navigate('/tecnico/visitas');
+      } else if (tipoRef === 'servicio') {
+        navigate('/tecnico/servicios');
+      }
+    } else if (role === 'cliente') {
+      if (tipo === 'SERVICIO_SOLICITADO' || tipoRef === 'servicio') {
+        navigate('/cliente/servicios');
+      } else if (tipo === 'FICHA_CREADA' || tipoRef === 'ficha_mantenimiento') {
+        navigate('/cliente/historial');
+      } else if (tipo === 'CAMBIO_ESTADO_SOLICITUD' || tipoRef === 'solicitud') {
+        navigate('/cliente/servicios');
+      }
+    } else if (role === 'Contador') {
+      if (tipoRef === 'factura' || tipo?.includes('FACTURA')) {
+        navigate('/contador/facturas');
+      } else if (tipoRef === 'inventario' || tipo?.includes('INVENTARIO')) {
+        navigate('/contador/inventario');
+      }
+    }
   };
 
   const handleDelete = async (e, idNotificacion) => {

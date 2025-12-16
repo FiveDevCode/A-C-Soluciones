@@ -27,13 +27,14 @@ const getHistorialServiciosByCliente = (clienteId) => {
 
 
 
-const createRequest = (serviceAddress, description, comments, requestId, clientId) => {
+const createRequest = (serviceAddress, description, comments, fechaSolicitud, requestId, clientId) => {
   const token = localStorage.getItem("authToken");
 
   return api.post("/solicitudes", {
     direccion_servicio: serviceAddress,
     descripcion: description,
     comentarios: comments,
+    fecha_solicitud: fechaSolicitud,
     servicio_id_fk: requestId,
     cliente_id_fk: clientId
 

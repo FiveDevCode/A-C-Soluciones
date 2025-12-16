@@ -130,53 +130,57 @@ export class SolicitudController {
                 motivo_cancelacion
             );
             
-            // Obtener información del cliente para enviar correo
+            // Obtener información del cliente para enviar correo (en segundo plano)
             if (solicitudActualizada.cliente_id_fk) {
-                try {
-                    console.log(`[DEBUG] Obteniendo cliente ID: ${solicitudActualizada.cliente_id_fk}`);
-                    const cliente = await ClienteModel.Cliente.findByPk(solicitudActualizada.cliente_id_fk);
-                    console.log(`[DEBUG] Cliente encontrado:`, cliente ? `${cliente.nombre} ${cliente.apellido} - ${cliente.correo_electronico}` : 'No encontrado');
-                    
-                    // Enviar notificación en la plataforma
-                    await notificacionService.notificarCambioEstadoSolicitud(
-                        solicitudActualizada.cliente_id_fk,
-                        solicitudActualizada.id,
-                        estado
-                    ).catch(err => console.error('Error al enviar notificación en plataforma:', err));
-                    
-                    // Enviar correo electrónico
-                    if (cliente && cliente.correo_electronico) {
-                        const nombreCompleto = `${cliente.nombre} ${cliente.apellido}`;
-                        console.log(`[DEBUG] Intentando enviar correo a: ${cliente.correo_electronico}`);
-                        console.log(`[DEBUG] Estado anterior: ${estadoAnterior}, Estado nuevo: ${estado}`);
+                // Ejecutar envío de notificaciones de forma no bloqueante
+                setImmediate(async () => {
+                    try {
+                        console.log(`[DEBUG] Obteniendo cliente ID: ${solicitudActualizada.cliente_id_fk}`);
+                        const cliente = await ClienteModel.Cliente.findByPk(solicitudActualizada.cliente_id_fk);
+                        console.log(`[DEBUG] Cliente encontrado:`, cliente ? `${cliente.nombre} ${cliente.apellido} - ${cliente.correo_electronico}` : 'No encontrado');
                         
-                        const resultadoCorreo = await emailService.enviarNotificacionCambioEstadoSolicitud(
-                            cliente.correo_electronico,
-                            nombreCompleto,
-                            estadoAnterior,
-                            estado,
+                        // Enviar notificación en la plataforma
+                        await notificacionService.notificarCambioEstadoSolicitud(
+                            solicitudActualizada.cliente_id_fk,
                             solicitudActualizada.id,
-                            motivo_cancelacion
-                        );
+                            estado
+                        ).catch(err => console.error('Error al enviar notificación en plataforma:', err));
                         
-                        console.log(`[DEBUG] Resultado envío correo: ${resultadoCorreo ? 'ÉXITO' : 'FALLÓ'}`);
-                        
-                        if (resultadoCorreo) {
-                            console.log(`✅ Correo enviado exitosamente a ${cliente.correo_electronico} - Estado cambiado de ${estadoAnterior} a ${estado}`);
+                        // Enviar correo electrónico
+                        if (cliente && cliente.correo_electronico) {
+                            const nombreCompleto = `${cliente.nombre} ${cliente.apellido}`;
+                            console.log(`[DEBUG] Intentando enviar correo a: ${cliente.correo_electronico}`);
+                            console.log(`[DEBUG] Estado anterior: ${estadoAnterior}, Estado nuevo: ${estado}`);
+                            
+                            const resultadoCorreo = await emailService.enviarNotificacionCambioEstadoSolicitud(
+                                cliente.correo_electronico,
+                                nombreCompleto,
+                                estadoAnterior,
+                                estado,
+                                solicitudActualizada.id,
+                                motivo_cancelacion
+                            );
+                            
+                            console.log(`[DEBUG] Resultado envío correo: ${resultadoCorreo ? 'ÉXITO' : 'FALLÓ'}`);
+                            
+                            if (resultadoCorreo) {
+                                console.log(`✅ Correo enviado exitosamente a ${cliente.correo_electronico} - Estado cambiado de ${estadoAnterior} a ${estado}`);
+                            } else {
+                                console.error(`❌ No se pudo enviar el correo a ${cliente.correo_electronico}`);
+                            }
                         } else {
-                            console.error(`❌ No se pudo enviar el correo a ${cliente.correo_electronico}`);
+                            console.warn(`[DEBUG] Cliente sin correo electrónico registrado`);
                         }
-                    } else {
-                        console.warn(`[DEBUG] Cliente sin correo electrónico registrado`);
+                    } catch (notifError) {
+                        console.error('Error al enviar notificaciones:', notifError);
+                        console.error('Stack trace:', notifError.stack);
                     }
-                } catch (notifError) {
-                    console.error('Error al enviar notificaciones:', notifError);
-                    // No interrumpimos el flujo aunque falle el envío de notificaciones
-                }
+                });
             } else {
                 console.warn('[DEBUG] Solicitud sin cliente_id_fk');
             }
 
+            // Responder inmediatamente sin esperar el envío de correos
             return res.status(200).json(solicitudActualizada);
         } catch (error) {
             console.error(error);

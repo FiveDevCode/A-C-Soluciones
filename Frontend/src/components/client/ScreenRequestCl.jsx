@@ -180,6 +180,7 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
   const [serviceAddress, setServiceAddress] = useState("");
   const [description, setDescription] = useState("");
   const [comments, setComments] = useState("");
+  const [fechaSolicitud, setFechaSolicitud] = useState("");
   const [clientId, setClientId] = useState("");
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -232,6 +233,21 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
       isValid = false;
     }
 
+    // Validar fecha de solicitud
+    if (!fechaSolicitud) {
+      errors.fecha_solicitud = 'La fecha deseada para el servicio es requerida.';
+      isValid = false;
+    } else {
+      const selectedDate = new Date(fechaSolicitud);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        errors.fecha_solicitud = 'La fecha no puede ser anterior a hoy.';
+        isValid = false;
+      }
+    }
+
     setFieldErrors(errors);
     return isValid;
   };
@@ -251,6 +267,7 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
         serviceAddress.trim(),
         description.trim(),
         comments.trim(),
+        fechaSolicitud,
         requestId,
         clientId
       );
@@ -356,6 +373,23 @@ const ScreenRequestCl = ({ requestId, onClose }) => {
             multiline
             rows={2}
             inputProps={{ maxLength: 255 }}
+          />
+          <StyledTextField
+            label="Fecha deseada para el servicio"
+            type="date"
+            fullWidth
+            size="small"
+            value={fechaSolicitud}
+            onChange={(e) => {
+              setFechaSolicitud(e.target.value);
+              if (fieldErrors.fecha_solicitud) {
+                setFieldErrors(prev => ({ ...prev, fecha_solicitud: undefined }));
+              }
+            }}
+            error={Boolean(fieldErrors.fecha_solicitud)}
+            helperText={fieldErrors.fecha_solicitud || 'Selecciona la fecha deseada'}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ min: new Date().toISOString().split('T')[0] }}
           />
 
           {errorMsg && (
