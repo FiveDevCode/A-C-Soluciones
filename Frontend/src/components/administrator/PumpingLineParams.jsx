@@ -33,49 +33,39 @@ const PumpingLineParams = ({ parametrosLinea, setParametros }) => {
 
       <Card>
         <TextField
-          label="Voltaje línea"
-          value={parametrosLinea.voltaje_linea}
+          label="Tanque Marca"
+          value={parametrosLinea.tanque_marca}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
-          onChange={(e) => update("voltaje_linea", e.target.value)}
+          onChange={(e) => update("tanque_marca", e.target.value)}
         />
 
         <TextField
-          label="Corriente línea"
-          value={parametrosLinea.corriente_linea}
+          label="Carga Determinada"
+          value={parametrosLinea.tanque_carga_determinada}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
-          onChange={(e) => update("corriente_linea", e.target.value)}
+          onChange={(e) => update("tanque_carga_determinada", e.target.value)}
         />
 
         <TextField
-          label="Presión succión"
-          value={parametrosLinea.presion_succion}
+          label="Carga Media"
+          value={parametrosLinea.tanque_carga_media}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
-          onChange={(e) => update("presion_succion", e.target.value)}
+          onChange={(e) => update("tanque_carga_media", e.target.value)}
         />
 
         <TextField
-          label="Presión descarga"
-          value={parametrosLinea.presion_descarga}
+          label="Controlador Marca"
+          value={parametrosLinea.controlador_marca}
           fullWidth
           size="small"
           sx={{ mb: 1 }}
-          onChange={(e) => update("presion_descarga", e.target.value)}
-        />
-
-        <TextField
-          label="Observaciones"
-          value={parametrosLinea.observaciones}
-          fullWidth
-          size="small"
-          multiline
-          minRows={2}
-          onChange={(e) => update("observaciones", e.target.value)}
+          onChange={(e) => update("controlador_marca", e.target.value)}
         />
       </Card>
     </Panel>

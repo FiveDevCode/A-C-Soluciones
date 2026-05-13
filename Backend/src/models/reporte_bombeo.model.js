@@ -90,15 +90,6 @@ export const ReporteBombeo = sequelize.define('ReporteBombeo', {
 
         }
     },
-
-    firma_tecnico: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    firma_recibido: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
     pdf_path: {
         type: DataTypes.STRING(255),
         allowNull: true

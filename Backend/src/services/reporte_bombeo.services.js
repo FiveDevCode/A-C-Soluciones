@@ -20,272 +20,259 @@ export const generarPDFReporteBombeo = async (reporte, equipos, parametrosLinea,
     <head>
         <meta charset="UTF-8">
         <title>Reporte de Bombeo</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
         <style>
             body {
-                font-family: 'Roboto', sans-serif;
+                font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                color: #333;
-                font-size: 11px;
-                line-height: 1.5;
+                color: #000;
+                font-size: 10px;
             }
             .container {
                 width: 100%;
                 margin: 0 auto;
             }
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                border-bottom: 2px solid #0056b3;
-                padding-bottom: 15px;
-                margin-bottom: 25px;
+            .header-table {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .header-table td {
+                vertical-align: top;
             }
             .logo-section h1 {
-                color: #0056b3;
-                font-size: 22px;
-                font-weight: 700;
-                margin: 0 0 5px 0;
-                letter-spacing: 0.5px;
-            }
-            .logo-section p {
-                color: #666;
-                margin: 2px 0;
-                font-size: 11px;
-            }
-            .report-title-box {
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                border-left: 5px solid #0056b3;
-                border-radius: 4px;
-                padding: 18px;
-                margin-bottom: 30px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
-            .report-title-box h2 {
-                color: #0056b3;
-                font-size: 16px;
-                text-align: center;
-                margin: 0 0 15px 0;
-                text-transform: uppercase;
+                color: #1e3a8a;
+                font-size: 32px;
+                font-weight: 900;
+                margin: 0;
                 letter-spacing: 1px;
             }
-            .info-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                column-gap: 30px;
-                row-gap: 12px;
-            }
-            .info-item {
-                display: flex;
-                border-bottom: 1px dashed #ddd;
-                padding-bottom: 4px;
-            }
-            .info-item strong {
-                color: #555;
-                width: 90px;
-                font-weight: 600;
-            }
-            .info-item span {
-                color: #222;
-                font-weight: 500;
-            }
-            .section-title {
-                background-color: #0056b3;
-                color: white;
-                padding: 8px 15px;
+            .logo-section p {
+                color: #1e3a8a;
+                margin: 2px 0;
                 font-size: 13px;
-                font-weight: 500;
-                border-radius: 4px;
+                font-weight: bold;
+            }
+            .contact-info {
+                text-align: right;
+                color: #1e3a8a;
+                font-size: 13px;
+                font-weight: bold;
+                line-height: 1.5;
+            }
+            .report-title {
+                text-align: center;
+                background-color: transparent;
+                font-size: 16px;
+                font-weight: 900;
+                color: #1e3a8a;
+                border-top: 2px solid #1e3a8a;
+                border-bottom: 2px solid #1e3a8a;
+                padding: 6px;
                 margin-bottom: 15px;
-                margin-top: 30px;
-                display: inline-block;
-                box-shadow: 0 2px 4px rgba(0,86,179,0.2);
+                letter-spacing: 1px;
             }
-            table {
+            .client-table {
                 width: 100%;
+                margin-bottom: 15px;
+                color: #1e3a8a;
+                font-size: 12px;
+                font-weight: bold;
                 border-collapse: separate;
-                border-spacing: 0;
-                margin-bottom: 25px;
-                border: 1px solid #e0e0e0;
-                border-radius: 6px;
-                overflow: hidden;
+                border-spacing: 0 8px;
             }
-            th {
-                background-color: #f1f5f9;
-                color: #0056b3;
-                font-size: 10px;
-                padding: 10px 8px;
+            .client-table td {
+                border-bottom: 1px solid #1e3a8a;
+            }
+            .client-val {
+                color: #000;
+                font-weight: normal;
+                margin-left: 10px;
+            }
+            table.data-table {
+                width: 100%;
+                border-collapse: collapse;
                 text-align: center;
-                font-weight: 600;
-                border-bottom: 2px solid #cbd5e1;
-                text-transform: uppercase;
+                margin-bottom: 20px;
+                border: 1px solid #1e3a8a;
             }
-            td {
-                padding: 10px 8px;
-                font-size: 10px;
-                text-align: center;
-                border-bottom: 1px solid #eee;
-                color: #444;
+            table.data-table th, table.data-table td {
+                border: 1px solid #1e3a8a;
+                padding: 4px;
             }
-            .td-left {
-                text-align: left;
-            }
-            tr:last-child td {
-                border-bottom: none;
-            }
-            tr:nth-child(even) td {
-                background-color: #fafbfc;
-            }
-            .params-box {
-                background-color: #fff;
-                border: 1px solid #e2e8f0;
-                border-radius: 6px;
-                padding: 15px;
-            }
-            .params-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-            }
-            .param-item {
-                display: flex;
-                align-items: center;
-                background-color: #f8fafc;
-                padding: 8px 12px;
-                border-radius: 4px;
-            }
-            .param-item strong {
-                color: #0056b3;
-                width: 130px;
-                font-weight: 600;
-            }
-            .param-item span {
-                font-weight: 500;
-                color: #333;
+            table.data-table th {
+                color: #1e3a8a;
+                font-size: 9px;
+                font-weight: bold;
             }
             .obs-box {
-                background-color: #fff;
-                border: 1px solid #e2e8f0;
-                border-radius: 6px;
-                padding: 15px;
-                margin-bottom: 20px;
-                text-align: justify;
-                color: #444;
-                line-height: 1.6;
+                width: 100%;
+                min-height: 80px;
+                border: 1px solid #1e3a8a;
+                padding: 8px;
+                margin-bottom: 40px;
+                font-size: 11px;
+                color: #000;
+                box-sizing: border-box;
+            }
+            .obs-title {
+                color: #1e3a8a;
+                font-weight: bold;
+                font-size: 11px;
+                margin-bottom: 5px;
             }
             .signatures {
-                margin-top: 70px;
                 display: flex;
-                justify-content: space-around;
-                page-break-inside: avoid;
+                flex-direction: column;
+                margin-top: 40px;
+                margin-bottom: 20px;
             }
             .signature-box {
-                width: 35%;
+                width: 250px;
+                border-top: 1px solid #000;
                 text-align: center;
             }
-            .signature-line {
-                border-top: 1px solid #999;
-                margin-bottom: 8px;
-                padding-top: 8px;
-            }
-            .signature-box p {
-                margin: 3px 0;
-                color: #555;
-            }
             .signature-box strong {
-                color: #222;
+                color: #1e3a8a;
                 font-size: 12px;
+            }
+            .footer-text {
+                text-align: center;
+                color: #1e3a8a;
+                font-weight: bold;
+                font-size: 11px;
+                margin-top: 30px;
+                line-height: 1.4;
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <div class="header">
-                <div class="logo-section">
-                    <h1>A&C SOLUCIONES HIDROELÉCTRICAS SAS</h1>
-                    <p><strong>NIT:</strong> 901269341-0</p>
-                    <p><strong>Teléfonos:</strong> 3108950832 / 3153763994</p>
-                    <p><strong>Email:</strong> acsolucioneshidroelectricas@gmail.com</p>
-                    <p><strong>Dirección:</strong> CARRERA 23 NO. 28 - 11</p>
-                </div>
+            <table class="header-table">
+                <tr>
+                    <td style="width: 50%;">
+                        <div class="logo-section">
+                            <h1>A&C</h1>
+                            <p>SOLUCIONES</p>
+                            <p>HIDROELÉCTRICAS SAS</p>
+                        </div>
+                    </td>
+                    <td style="width: 50%;">
+                        <div class="contact-info">
+                            <div>Nit. 901269341-0</div>
+                            <div>3168950832 / 3155763894</div>
+                            <div>aycsolucioneshidroelectricas@gmail.com</div>
+                            <div>2830205 CALLE 23 No. 28 - 11</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="report-title">
+                REPORTE MANTENIMIENTO DE EQUIPOS DE BOMBEO
             </div>
 
-            <div class="report-title-box">
-                <h2>Reporte de Mantenimiento / Equipos de Bombeo</h2>
-                <div class="info-grid">
-                    <div class="info-item"><strong>CLIENTE:</strong> <span>${clienteInfo.nombre || 'N/A'}</span></div>
-                    <div class="info-item"><strong>FECHA:</strong> <span>${new Date(reporte.fecha).toLocaleDateString('es-CO')}</span></div>
-                    <div class="info-item"><strong>DIRECCIÓN:</strong> <span>${reporte.direccion || 'N/A'}</span></div>
-                    <div class="info-item"><strong>TELÉFONO:</strong> <span>${reporte.telefono || 'N/A'}</span></div>
-                    <div class="info-item"><strong>ENCARGADO:</strong> <span>${reporte.encargado || 'N/A'}</span></div>
-                    <div class="info-item"><strong>CIUDAD:</strong> <span>${reporte.ciudad || 'N/A'}</span></div>
-                </div>
-            </div>
+            <table class="client-table">
+                <tr>
+                    <td style="width: 60%;">CLIENTE: <span class="client-val">${clienteInfo.nombre || 'N/A'}</span></td>
+                    <td style="width: 40%;">TELÉFONO: <span class="client-val">${reporte.telefono || 'N/A'}</span></td>
+                </tr>
+                <tr>
+                    <td>FECHA: <span class="client-val">${new Date(reporte.fecha).toLocaleDateString('es-CO')}</span></td>
+                    <td>ATENCIÓN: <span class="client-val">${reporte.encargado || 'N/A'}</span></td>
+                </tr>
+            </table>
 
-            <div class="section-title">Equipos de Bombeo</div>
-            <table>
+            <table class="data-table">
                 <thead>
                     <tr>
-                        <th style="width: 15%;">Equipo</th>
-                        <th style="width: 12%;">Marca</th>
-                        <th style="width: 10%;">Amperaje</th>
-                        <th style="width: 10%;">Presión</th>
-                        <th style="width: 12%;">Temperatura</th>
-                        <th style="width: 12%;">Estado</th>
-                        <th style="width: 29%;">Observaciones</th>
+                        <th rowspan="2" style="width: 4%;">#</th>
+                        <th rowspan="2" style="width: 10%;">PRESIÓN</th>
+                        <th colspan="2" style="width: 18%;">EQUIPOS EN H.P<br>SUMERGIBLES</th>
+                        <th colspan="2" style="width: 18%;">AMPERAJE</th>
+                        <th colspan="2" style="width: 14%;">TEMPERATURA</th>
+                        <th colspan="2" style="width: 12%;">RUIDOS</th>
+                        <th colspan="2" style="width: 10%;">HUMEDAD</th>
+                        <th colspan="2" style="width: 14%;">CONEXIONES ELÉCTRICAS</th>
+                    </tr>
+                    <tr>
+                        <th>MEDIDA</th>
+                        <th>PLACA</th>
+                        <th>MEDIDA</th>
+                        <th>PLACA</th>
+                        <th>NORMAL</th>
+                        <th>RECALENTADA</th>
+                        <th>NORMAL</th>
+                        <th>FALLAS</th>
+                        <th>SI</th>
+                        <th>NO</th>
+                        <th>NORMAL</th>
+                        <th>FALLAS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${equipos.map(equipo => `
+                    ${equipos.map((equipo, index) => {
+                        // Map amperaje_estado ("Normal" / "Recalentada") to TEMPERATURA since it's the requested layout proxy
+                        const isTempNormal = equipo.amperaje_estado === 'Normal' ? 'X' : '';
+                        const isTempRecalENTADA = equipo.amperaje_estado === 'Recalentada' ? 'X' : '';
+                    
+                        return `
                         <tr>
-                            <td><strong>${equipo.equipo || 'N/A'}</strong></td>
-                            <td>${equipo.marca || 'N/A'}</td>
-                            <td>${equipo.amperaje || 'N/A'}</td>
-                            <td>${equipo.presion || 'N/A'}</td>
-                            <td>${equipo.temperatura || 'N/A'}</td>
-                            <td>
-                                <span style="background-color: ${equipo.estado === 'Bueno' ? '#dcfce7' : '#fef08a'}; color: ${equipo.estado === 'Bueno' ? '#166534' : '#854d0e'}; padding: 3px 8px; border-radius: 12px; font-weight: 500;">
-                                    ${equipo.estado || 'N/A'}
-                                </span>
-                            </td>
-                            <td class="td-left">${equipo.observacion || 'N/A'}</td>
+                            <td>${index + 1}</td>
+                            <td>${equipo.presion || ''}</td>
+                            <td>${equipo.sumergibles_medida || ''}</td>
+                            <td>${equipo.sumergibles_placa || ''}</td>
+                            <td>${equipo.amperaje_medida || ''}</td>
+                            <td>${equipo.amperaje_placa || ''}</td>
+                            <td><strong>${isTempNormal}</strong></td>
+                            <td><strong>${isTempRecalENTADA}</strong></td>
+                            <td><strong>${equipo.ruidos === 'Normal' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.ruidos === 'Fallas' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.humedad === 'Si' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.humedad === 'No' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.conexiones === 'Normal' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.conexiones === 'Fallas' ? 'X' : ''}</strong></td>
                         </tr>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </tbody>
             </table>
 
-            <div class="section-title">Parámetros Eléctricos y de Presión</div>
-            <div class="params-box">
-                <div class="params-grid">
-                    <div class="param-item"><strong>Voltaje Línea:</strong> <span>${parametrosLinea.voltaje_linea || 'N/A'}</span></div>
-                    <div class="param-item"><strong>Corriente Línea:</strong> <span>${parametrosLinea.corriente_linea || 'N/A'}</span></div>
-                    <div class="param-item"><strong>Presión Succión:</strong> <span>${parametrosLinea.presion_succion || 'N/A'}</span></div>
-                    <div class="param-item"><strong>Presión Descarga:</strong> <span>${parametrosLinea.presion_descarga || 'N/A'}</span></div>
-                </div>
-            </div>
+            <table class="data-table" style="width: 70%;">
+                <thead>
+                    <tr>
+                        <th colspan="3">TANQUE HIDRONEUMÁTICO</th>
+                        <th rowspan="2">CONTROLADOR DE VELOCIDAD<br>MARCA</th>
+                    </tr>
+                    <tr>
+                        <th>MARCA</th>
+                        <th>CARGA DETERMINADA</th>
+                        <th>CARGA MEDIA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${parametrosLinea.tanque_marca || ''}</td>
+                        <td>${parametrosLinea.tanque_carga_determinada || ''}</td>
+                        <td>${parametrosLinea.tanque_carga_media || ''}</td>
+                        <td>${parametrosLinea.controlador_marca || ''}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <div class="section-title">Observaciones de Parámetros</div>
             <div class="obs-box">
-                ${parametrosLinea.observaciones || 'Sin observaciones registradas en los parámetros operativos.'}
-            </div>
-
-            <div class="section-title">Observaciones y Recomendaciones Finales</div>
-            <div class="obs-box">
-                ${reporte.observaciones_finales || 'No se registraron observaciones o recomendaciones adicionales para este reporte.'}
+                <div class="obs-title">OBSERVACIONES:</div>
+                ${reporte.observaciones_finales || ''}
             </div>
 
             <div class="signatures">
                 <div class="signature-box">
-                    <div class="signature-line"></div>
-                    <p><strong>TÉCNICO:</strong> ${tecnicoInfo.nombre || ''} ${tecnicoInfo.apellido || ''}</p>
-                    <p>C.C./ID: ${tecnicoInfo.identificacion || 'N/A'}</p>
+                    <strong>TÉCNICO</strong>
                 </div>
-                <div class="signature-box">
-                    <div class="signature-line"></div>
-                    <p><strong>CLIENTE / ENCARGADO</strong></p>
-                    <p>${reporte.encargado || 'N/A'}</p>
-                </div>
+            </div>
+
+            <div class="footer-text">
+                <div>MONTAJES Y MANTENIMIENTO DE EQUIPOS DE PRESIÓN - PLANTAS ELÉCTRICAS DE EMERGENCIA</div>
+                <div>SISTEMA DE REDES CONTRA INCENDIO - ADECUACIONES ELÉCTRICAS</div>
             </div>
         </div>
     </body>
@@ -303,6 +290,7 @@ export const generarPDFReporteBombeo = async (reporte, equipos, parametrosLinea,
     await page.pdf({
         path: filePath,
         format: 'Letter',
+        landscape: true,
         printBackground: true,
         margin: {
             top: '40px',

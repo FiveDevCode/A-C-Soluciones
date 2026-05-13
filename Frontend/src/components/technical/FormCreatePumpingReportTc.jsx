@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { Button, TextField, Alert } from "@mui/material";
+import { Button, TextField, Alert, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from "@mui/material";
 import BaseFormModal, { FormGrid, FullWidth, EquipmentCard } from "../common/BaseFormModal";
 
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
@@ -15,11 +15,10 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
   const [tipoCliente, setTipoCliente] = useState(null);
   const [equipos, setEquipos] = useState([]);
   const [parametrosLinea, setParametrosLinea] = useState({
-    voltaje_linea: "",
-    corriente_linea: "",
-    presion_succion: "",
-    presion_descarga: "",
-    observaciones: ""
+    tanque_marca: "",
+    tanque_carga_determinada: "",
+    tanque_carga_media: "",
+    controlador_marca: ""
   });
 
   useEffect(() => {
@@ -114,13 +113,16 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
     setEquipos(prev => [
       ...prev,
       {
-        equipo: "",
-        marca: "",
-        amperaje: "",
+        sumergibles_medida: "",
+        sumergibles_placa: "",
+        amperaje_medida: "",
+        amperaje_placa: "",
+        amperaje_estado: "Normal",
+        ruidos: "Normal",
+        humedad: "No",
+        conexiones: "Normal",
         presion: "",
-        temperatura: "",
-        estado: "",
-        observacion: ""
+        temperatura: ""
       }
     ]);
   };
@@ -164,26 +166,44 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
               <h4 style={{ marginTop: 0 }}>Equipo #{index + 1}</h4>
               <FormGrid>
                 <TextField
-                  label="Equipo"
-                  value={equipo.equipo}
-                  onChange={(e) => updateEquipo(index, "equipo", e.target.value)}
+                  label="Sumergibles Medida"
+                  value={equipo.sumergibles_medida}
+                  onChange={(e) => updateEquipo(index, "sumergibles_medida", e.target.value)}
                   fullWidth
                   size="small"
                 />
                 <TextField
-                  label="Marca"
-                  value={equipo.marca}
-                  onChange={(e) => updateEquipo(index, "marca", e.target.value)}
+                  label="Sumergibles Placa"
+                  value={equipo.sumergibles_placa}
+                  onChange={(e) => updateEquipo(index, "sumergibles_placa", e.target.value)}
                   fullWidth
                   size="small"
                 />
                 <TextField
-                  label="Amperaje"
-                  value={equipo.amperaje}
-                  onChange={(e) => updateEquipo(index, "amperaje", e.target.value)}
+                  label="Amperaje Medida"
+                  value={equipo.amperaje_medida}
+                  onChange={(e) => updateEquipo(index, "amperaje_medida", e.target.value)}
                   fullWidth
                   size="small"
                 />
+                <TextField
+                  label="Amperaje Placa"
+                  value={equipo.amperaje_placa}
+                  onChange={(e) => updateEquipo(index, "amperaje_placa", e.target.value)}
+                  fullWidth
+                  size="small"
+                />
+                <FormControl component="fieldset">
+                  <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Estado Amperaje</FormLabel>
+                  <RadioGroup
+                    row
+                    value={equipo.amperaje_estado}
+                    onChange={(e) => updateEquipo(index, "amperaje_estado", e.target.value)}
+                  >
+                    <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                    <FormControlLabel value="Recalentada" control={<Radio size="small" />} label="Recalentada" />
+                  </RadioGroup>
+                </FormControl>
                 <TextField
                   label="Presión"
                   value={equipo.presion}
@@ -198,24 +218,41 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
                   fullWidth
                   size="small"
                 />
-                <TextField
-                  label="Estado"
-                  value={equipo.estado}
-                  onChange={(e) => updateEquipo(index, "estado", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <FullWidth>
-                  <TextField
-                    label="Observación"
-                    value={equipo.observacion}
-                    onChange={(e) => updateEquipo(index, "observacion", e.target.value)}
-                    fullWidth
-                    multiline
-                    rows={2}
-                    size="small"
-                  />
-                </FullWidth>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Ruidos</FormLabel>
+                  <RadioGroup
+                    row
+                    value={equipo.ruidos}
+                    onChange={(e) => updateEquipo(index, "ruidos", e.target.value)}
+                  >
+                    <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                    <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+                  </RadioGroup>
+                </FormControl>
+
+                <FormControl component="fieldset">
+                  <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Humedad</FormLabel>
+                  <RadioGroup
+                    row
+                    value={equipo.humedad}
+                    onChange={(e) => updateEquipo(index, "humedad", e.target.value)}
+                  >
+                    <FormControlLabel value="Si" control={<Radio size="small" />} label="Si" />
+                    <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                  </RadioGroup>
+                </FormControl>
+
+                <FormControl component="fieldset">
+                  <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Conexiones Eléctricas</FormLabel>
+                  <RadioGroup
+                    row
+                    value={equipo.conexiones}
+                    onChange={(e) => updateEquipo(index, "conexiones", e.target.value)}
+                  >
+                    <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                    <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+                  </RadioGroup>
+                </FormControl>
               </FormGrid>
               <Button
                 variant="outlined"
@@ -240,39 +277,29 @@ const FormCreatePumpingReportTc = ({ onClose, onSuccess }) => {
       return (
         <FormGrid>
           <TextField
-            label="Voltaje Línea"
-            value={parametrosLinea.voltaje_linea}
-            onChange={(e) => updateParametros("voltaje_linea", e.target.value)}
+            label="Tanque Marca"
+            value={parametrosLinea.tanque_marca}
+            onChange={(e) => updateParametros("tanque_marca", e.target.value)}
             fullWidth
           />
           <TextField
-            label="Corriente Línea"
-            value={parametrosLinea.corriente_linea}
-            onChange={(e) => updateParametros("corriente_linea", e.target.value)}
+            label="Tanque Carga Determinada"
+            value={parametrosLinea.tanque_carga_determinada}
+            onChange={(e) => updateParametros("tanque_carga_determinada", e.target.value)}
             fullWidth
           />
           <TextField
-            label="Presión Succión"
-            value={parametrosLinea.presion_succion}
-            onChange={(e) => updateParametros("presion_succion", e.target.value)}
+            label="Tanque Carga Media"
+            value={parametrosLinea.tanque_carga_media}
+            onChange={(e) => updateParametros("tanque_carga_media", e.target.value)}
             fullWidth
           />
           <TextField
-            label="Presión Descarga"
-            value={parametrosLinea.presion_descarga}
-            onChange={(e) => updateParametros("presion_descarga", e.target.value)}
+            label="Controlador Marca"
+            value={parametrosLinea.controlador_marca}
+            onChange={(e) => updateParametros("controlador_marca", e.target.value)}
             fullWidth
           />
-          <FullWidth>
-            <TextField
-              label="Observaciones"
-              value={parametrosLinea.observaciones}
-              onChange={(e) => updateParametros("observaciones", e.target.value)}
-              fullWidth
-              multiline
-              rows={3}
-            />
-          </FullWidth>
         </FormGrid>
       );
     }
