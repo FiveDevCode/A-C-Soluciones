@@ -56,6 +56,8 @@ const ListMaintenanceReportAd = ({ reports, reloadData, onSelectRows }) => {
     },
     { header: "Ciudad", accessor: "ciudad" },
     { header: "Dirección", accessor: "direccion" },
+    { header: "Generador", accessor: "generador" },
+    { header: "Motor", accessor: "motor" },
     { header: "Marca generador", accessor: "marca_generador" },
     { header: "Modelo generador", accessor: "modelo_generador" },
     { header: "KVA", accessor: "kva" },

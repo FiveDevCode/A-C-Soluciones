@@ -1,17 +1,30 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { Button, TextField, Alert, Checkbox, FormControlLabel } from "@mui/material";
+import {
+  Alert,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography
+} from "@mui/material";
 import BaseFormModal, { FormGrid, FullWidth, EquipmentCard } from "../common/BaseFormModal";
 
 import { handleGetListClient } from "../../controllers/common/getListClient.controller";
 import { handleCreateMaintenanceReportAd } from "../../controllers/administrator/createMaintenanceReportAd.controller";
+import {
+  buildDefaultChecklist,
+  toApiVerificaciones
+} from "../common/maintenanceReportChecklist";
+import SignaturePadField from "../common/SignaturePadField";
 
 const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
   const [clients, setClients] = useState([]);
   const [tecnicoId, setTecnicoId] = useState(null);
-  const [tecnicoNombre, setTecnicoNombre] = useState("");
-  const [parametrosOperacion, setParametrosOperacion] = useState([]);
-  const [verificaciones, setVerificaciones] = useState([]);
+  const [checklist, setChecklist] = useState(buildDefaultChecklist());
+  const [firmaTecnico, setFirmaTecnico] = useState("");
+  const [firmaRecibido, setFirmaRecibido] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,10 +37,6 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
         try {
           const decoded = jwtDecode(token);
           setTecnicoId(decoded.id);
-          // Intentar obtener el nombre del técnico si está en el token
-          if (decoded.nombre) {
-            setTecnicoNombre(`${decoded.nombre} ${decoded.apellido || ''}`.trim());
-          }
         } catch (error) {
           console.error("Error decodificando token:", error);
         }
@@ -54,24 +63,26 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
         { name: "ciudad", label: "Ciudad", type: "text" },
         { name: "direccion", label: "Dirección", type: "text", fullWidth: true },
         { name: "telefono", label: "Teléfono", type: "text" },
-        // { name: "encargado", label: "Encargado", type: "text" },
+        { name: "encargado", label: "Encargado(a)", type: "text" },
       ]
     },
     {
       title: "Información del Generador",
       fields: [
-        { name: "marca_generador", label: "Marca del Generador", type: "text" },
-        { name: "modelo_generador", label: "Modelo del Generador", type: "text" },
+        { name: "generador", label: "Generador", type: "text" },
+        { name: "marca_generador", label: "Marca", type: "text" },
         { name: "kva", label: "KVA", type: "number" },
-        { name: "serie_generador", label: "Serie del Generador", type: "text" },
+        { name: "motor", label: "Motor", type: "text" },
+        { name: "modelo_generador", label: "Modelo", type: "text" },
+        { name: "serie_generador", label: "Serie", type: "text" },
       ]
     },
     {
-      title: "Parámetros de Operación",
+      title: "Verificaciones",
       fields: []
     },
     {
-      title: "Verificaciones",
+      title: "Firmas",
       fields: []
     },
     {
@@ -82,50 +93,15 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
     }
   ];
 
-  const addParametro = () => {
-    setParametrosOperacion(prev => [
-      ...prev,
-      {
-        presion_aceite: "",
-        temperatura_aceite: "",
-        temperatura_refrigerante: "",
-        fugas_aceite: false,
-        fugas_combustible: false,
-        frecuencia_rpm: "",
-        voltaje_salida: ""
-      }
-    ]);
-  };
-
-  const updateParametro = (index, field, value) => {
-    const copy = [...parametrosOperacion];
-    copy[index][field] = value;
-    setParametrosOperacion(copy);
-  };
-
-  const removeParametro = (index) => {
-    setParametrosOperacion(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const addVerificacion = () => {
-    setVerificaciones(prev => [
-      ...prev,
-      {
-        item: "",
-        visto: false,
-        observacion: ""
-      }
-    ]);
-  };
-
-  const updateVerificacion = (index, field, value) => {
-    const copy = [...verificaciones];
-    copy[index][field] = value;
-    setVerificaciones(copy);
-  };
-
-  const removeVerificacion = (index) => {
-    setVerificaciones(prev => prev.filter((_, i) => i !== index));
+  const updateChecklist = (index, field, value) => {
+    setChecklist((prev) => {
+      const copy = [...prev];
+      copy[index] = {
+        ...copy[index],
+        [field]: value
+      };
+      return copy;
+    });
   };
 
   const renderStepContent = (step) => {
@@ -140,133 +116,33 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
     if (step === 2) {
       return (
         <>
-          <Button 
-            variant="contained" 
-            onClick={addParametro}
-            sx={{ mb: 2 }}
-          >
-            Agregar Parámetro
-          </Button>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Marque cada verificación como OK o NO. Si aplica, agregue observación corta.
+          </Alert>
 
-          {parametrosOperacion.map((param, index) => (
-            <EquipmentCard key={index}>
-              <h4 style={{ marginTop: 0 }}>Parámetro #{index + 1}</h4>
-              <FormGrid>
-                <TextField
-                  label="Presión de Aceite"
-                  value={param.presion_aceite}
-                  onChange={(e) => updateParametro(index, "presion_aceite", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <TextField
-                  label="Temperatura de Aceite"
-                  value={param.temperatura_aceite}
-                  onChange={(e) => updateParametro(index, "temperatura_aceite", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <TextField
-                  label="Temperatura de Refrigerante"
-                  value={param.temperatura_refrigerante}
-                  onChange={(e) => updateParametro(index, "temperatura_refrigerante", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <TextField
-                  label="Frecuencia/RPM"
-                  value={param.frecuencia_rpm}
-                  onChange={(e) => updateParametro(index, "frecuencia_rpm", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <TextField
-                  label="Voltaje de Salida"
-                  value={param.voltaje_salida}
-                  onChange={(e) => updateParametro(index, "voltaje_salida", e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-                <FullWidth>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={param.fugas_aceite}
-                        onChange={(e) => updateParametro(index, "fugas_aceite", e.target.checked)}
-                      />
-                    }
-                    label="Fugas de Aceite"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={param.fugas_combustible}
-                        onChange={(e) => updateParametro(index, "fugas_combustible", e.target.checked)}
-                      />
-                    }
-                    label="Fugas de Combustible"
-                  />
-                </FullWidth>
-              </FormGrid>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => removeParametro(index)}
-                fullWidth
-                sx={{ mt: 1 }}
-              >
-                Eliminar Parámetro
-              </Button>
-            </EquipmentCard>
-          ))}
-
-          {parametrosOperacion.length === 0 && (
-            <Alert severity="info">No hay parámetros agregados. Haz clic en "Agregar Parámetro" para comenzar.</Alert>
-          )}
-        </>
-      );
-    }
-
-    if (step === 3) {
-      return (
-        <>
-          <Button 
-            variant="contained" 
-            onClick={addVerificacion}
-            sx={{ mb: 2 }}
-          >
-            Agregar Verificación
-          </Button>
-
-          {verificaciones.map((verif, index) => (
-            <EquipmentCard key={index}>
-              <h4 style={{ marginTop: 0 }}>Verificación #{index + 1}</h4>
+          {checklist.map((item, index) => (
+            <EquipmentCard key={item.item}>
               <FormGrid>
                 <FullWidth>
-                  <TextField
-                    label="Item"
-                    value={verif.item}
-                    onChange={(e) => updateVerificacion(index, "item", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                </FullWidth>
-                <FullWidth>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={verif.visto}
-                        onChange={(e) => updateVerificacion(index, "visto", e.target.checked)}
-                      />
-                    }
-                    label="Verificado"
-                  />
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    {index + 1}. {item.item}
+                  </Typography>
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      value={item.estado}
+                      onChange={(e) => updateChecklist(index, "estado", e.target.value)}
+                    >
+                      <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
+                      <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
+                    </RadioGroup>
+                  </FormControl>
                 </FullWidth>
                 <FullWidth>
                   <TextField
                     label="Observación"
-                    value={verif.observacion}
-                    onChange={(e) => updateVerificacion(index, "observacion", e.target.value)}
+                    value={item.observacion}
+                    onChange={(e) => updateChecklist(index, "observacion", e.target.value)}
                     fullWidth
                     multiline
                     rows={2}
@@ -274,23 +150,36 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
                   />
                 </FullWidth>
               </FormGrid>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => removeVerificacion(index)}
-                fullWidth
-                sx={{ mt: 1 }}
-              >
-                Eliminar Verificación
-              </Button>
             </EquipmentCard>
           ))}
-
-          {verificaciones.length === 0 && (
-            <Alert severity="info">No hay verificaciones agregadas. Haz clic en "Agregar Verificación" para comenzar.</Alert>
-          )}
         </>
       );
+    }
+
+    if (step === 3) {
+      return (
+        <>
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            Debe registrar ambas firmas para generar el reporte en PDF.
+          </Alert>
+          <SignaturePadField
+            title="Firma técnico"
+            value={firmaTecnico}
+            onChange={setFirmaTecnico}
+            required
+          />
+          <SignaturePadField
+            title="Firma recibido"
+            value={firmaRecibido}
+            onChange={setFirmaRecibido}
+            required
+          />
+        </>
+      );
+    }
+
+    if (step === 4) {
+      return null;
     }
 
     return null;
@@ -299,6 +188,11 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
   const handleSubmit = async (data) => {
     if (!tecnicoId) {
       alert("Error: No se pudo obtener el ID del técnico autenticado");
+      return;
+    }
+
+    if (!firmaTecnico || !firmaRecibido) {
+      window.alert("Debes registrar la firma del técnico y la firma de recibido.");
       return;
     }
 
@@ -311,13 +205,17 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
       ciudad: data.ciudad,
       telefono: data.telefono,
       encargado: data.encargado,
+      generador: data.generador,
       marca_generador: data.marca_generador,
+      motor: data.motor,
       modelo_generador: data.modelo_generador,
-      kva: parseInt(data.kva) || null,
+      kva: data.kva !== undefined && data.kva !== null && data.kva !== '' ? parseInt(data.kva, 10) : null,
       serie_generador: data.serie_generador,
       observaciones_finales: data.observaciones_finales,
-      parametros_operacion: parametrosOperacion,
-      verificaciones
+      firma_tecnico: firmaTecnico,
+      firma_recibido: firmaRecibido,
+      parametros_operacion: [],
+      verificaciones: toApiVerificaciones(checklist)
     });
   };
 

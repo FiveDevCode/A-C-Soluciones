@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Button, TextField, Alert, Tabs, Tab, Box, Checkbox, FormControlLabel, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip } from "@mui/material";
+import { Button, TextField, Alert, Tabs, Tab, Box, Checkbox, FormControlLabel, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, FormControl, RadioGroup, Radio } from "@mui/material";
 import styled from "styled-components";
 import { ArrowLeft, Save, Info, Zap, CheckSquare, History, FileText, Droplet, Wrench } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { handleCreateMaintenanceReportAd } from "../../controllers/administrator/createMaintenanceReportAd.controller";
 import { administratorService } from "../../services/administrator-service";
 import { commonService } from "../../services/common-service";
+import { buildDefaultChecklist, toApiVerificaciones } from "../common/maintenanceReportChecklist";
 
 const Container = styled.div`
   display: flex;
@@ -210,7 +211,9 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
     direccion: '',
     telefono: '',
     // encargado: '',
+    generador: '',
     marca_generador: '',
+    motor: '',
     modelo_generador: '',
     kva: '',
     serie_generador: '',
@@ -218,7 +221,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
   });
 
   const [parametrosOperacion, setParametrosOperacion] = useState([]);
-  const [verificaciones, setVerificaciones] = useState([]);
+  const [verificaciones, setVerificaciones] = useState(buildDefaultChecklist());
 
   // Cargar historial cuando se monta el componente o cambia el tab a historial
   useEffect(() => {
@@ -285,26 +288,13 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
     setParametrosOperacion(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Verificaciones
-  const addVerificacion = () => {
-    setVerificaciones(prev => [
-      ...prev,
-      {
-        item: "",
-        visto: false,
-        observacion: ""
-      }
-    ]);
-  };
-
   const updateVerificacion = (index, field, value) => {
     const copy = [...verificaciones];
-    copy[index][field] = value;
+    copy[index] = {
+      ...copy[index],
+      [field]: value
+    };
     setVerificaciones(copy);
-  };
-
-  const removeVerificacion = (index) => {
-    setVerificaciones(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -331,13 +321,15 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
         ciudad: formData.ciudad,
         telefono: formData.telefono,
         // encargado: formData.encargado,
+        generador: formData.generador,
         marca_generador: formData.marca_generador,
+        motor: formData.motor,
         modelo_generador: formData.modelo_generador,
         kva: formData.kva ? parseInt(formData.kva) : null,
         serie_generador: formData.serie_generador,
         observaciones_finales: formData.observaciones_finales,
         parametros_operacion: parametrosOperacion,
-        verificaciones
+        verificaciones: toApiVerificaciones(verificaciones)
       });
 
       setSuccess(true);
@@ -432,7 +424,14 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
         return (
           <TwoColumnLayout>
             <TextField
-              label="Marca del Generador"
+              label="Generador"
+              value={formData.generador}
+              onChange={(e) => handleChange('generador', e.target.value)}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              label="Marca"
               value={formData.marca_generador}
               onChange={(e) => handleChange('marca_generador', e.target.value)}
               fullWidth
@@ -440,7 +439,14 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
               required
             />
             <TextField
-              label="Modelo del Generador"
+              label="Motor"
+              value={formData.motor}
+              onChange={(e) => handleChange('motor', e.target.value)}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              label="Modelo"
               value={formData.modelo_generador}
               onChange={(e) => handleChange('modelo_generador', e.target.value)}
               fullWidth
@@ -456,7 +462,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
               size="small"
             />
             <TextField
-              label="Serie del Generador"
+              label="Serie"
               value={formData.serie_generador}
               onChange={(e) => handleChange('serie_generador', e.target.value)}
               fullWidth
@@ -554,34 +560,25 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
       case 3: // Verificaciones
         return (
           <>
-            <AddButton onClick={addVerificacion} startIcon={<CheckSquare />}>
-              Agregar Verificación
-            </AddButton>
+            <Alert severity="info" sx={{ mb: 2 }}>
+              Verificación rápida: seleccione OK o NO en cada item y agregue observación si aplica.
+            </Alert>
 
             {verificaciones.map((verif, index) => (
-              <EquipmentCard key={index}>
-                <h4><CheckSquare size={20} /> Verificación #{index + 1}</h4>
+              <EquipmentCard key={verif.item}>
+                <h4><CheckSquare size={20} /> {index + 1}. {verif.item}</h4>
                 <FullWidthField>
-                  <TextField
-                    label="Item"
-                    value={verif.item}
-                    onChange={(e) => updateVerificacion(index, "item", e.target.value)}
-                    fullWidth
-                    size="small"
-                    sx={{ mb: 1.5 }}
-                  />
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      value={verif.estado}
+                      onChange={(e) => updateVerificacion(index, "estado", e.target.value)}
+                    >
+                      <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
+                      <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
+                    </RadioGroup>
+                  </FormControl>
                 </FullWidthField>
-                
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={verif.visto}
-                      onChange={(e) => updateVerificacion(index, "visto", e.target.checked)}
-                    />
-                  }
-                  label="Verificado"
-                  sx={{ mb: 1.5 }}
-                />
 
                 <FullWidthField>
                   <TextField
@@ -594,21 +591,8 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
                     size="small"
                   />
                 </FullWidthField>
-
-                <RemoveButton
-                  variant="outlined"
-                  onClick={() => removeVerificacion(index)}
-                  fullWidth
-                  sx={{ mt: 1 }}
-                >
-                  Eliminar Verificación
-                </RemoveButton>
               </EquipmentCard>
             ))}
-
-            {verificaciones.length === 0 && (
-              <Alert severity="info">No hay verificaciones agregadas. Haz clic en "Agregar Verificación" para comenzar.</Alert>
-            )}
           </>
         );
 

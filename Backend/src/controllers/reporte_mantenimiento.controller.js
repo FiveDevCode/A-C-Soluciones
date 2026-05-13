@@ -5,6 +5,53 @@ import { sendEmail } from '../services/email.services.js';
 import { uploadPDFToCloudinary } from '../services/cloudinary.services.js';
 import * as reporteRepo from '../repository/reporte_mantenimiento.repository.js';
 import { ValidationError } from 'sequelize';
+import {
+  ITEMS_VERIFICACION_MANTENIMIENTO,
+  normalizarItemVerificacion
+} from '../utils/reporte_mantenimiento.constants.js';
+
+const normalizarVisto = (valor) => {
+  if (typeof valor === 'boolean') return valor;
+  if (typeof valor === 'number') return valor === 1;
+  if (typeof valor === 'string') {
+    const limpio = valor.trim().toLowerCase();
+    return ['ok', 'si', 'sí', 'true', '1', 'verificado'].includes(limpio);
+  }
+  return false;
+};
+
+const construirVerificaciones = (entrada) => {
+  const porItem = new Map();
+
+  if (Array.isArray(entrada)) {
+    entrada.forEach((item) => {
+      const nombreItem = normalizarItemVerificacion(item?.item);
+      if (!nombreItem) return;
+
+      porItem.set(nombreItem, {
+        item: nombreItem,
+        visto: normalizarVisto(item?.visto),
+        observacion: item?.observacion || null
+      });
+    });
+  }
+
+  return ITEMS_VERIFICACION_MANTENIMIENTO.map((item) => {
+    const itemNormalizado = normalizarItemVerificacion(item);
+    return {
+      item,
+      visto: porItem.get(itemNormalizado)?.visto ?? true,
+      observacion: porItem.get(itemNormalizado)?.observacion ?? null
+    };
+  });
+};
+
+const normalizarKva = (valor) => {
+  if (valor === null || valor === undefined || valor === '') return null;
+  const numero = Number.parseInt(valor, 10);
+  if (Number.isNaN(numero)) return null;
+  return numero;
+};
 
 export const crearReporteMantenimiento = async (req, res) => {
   try {
@@ -19,11 +66,15 @@ export const crearReporteMantenimiento = async (req, res) => {
       ciudad,
       telefono,
       encargado,
+      generador,
       marca_generador,
+      motor,
       modelo_generador,
       kva,
       serie_generador,
       observaciones_finales,
+      firma_tecnico,
+      firma_recibido,
       // Parámetros de operación
       parametros_operacion,
       // Verificaciones
@@ -39,9 +90,24 @@ export const crearReporteMantenimiento = async (req, res) => {
       ciudad,
       telefono,
       encargado,
+      generador,
       marca_generador,
+      motor,
       modelo_generador
     });
+
+    if (!firma_tecnico || !firma_recibido) {
+      return res.status(400).json({
+        error: 'La firma del técnico y la firma de recibido son obligatorias'
+      });
+    }
+
+    const kvaNormalizado = normalizarKva(kva);
+    if (kva !== null && kva !== undefined && kva !== '' && kvaNormalizado === null) {
+      return res.status(400).json({
+        error: 'El campo KVA debe ser numérico'
+      });
+    }
 
     // Validar cliente
     if (!id_cliente) {
@@ -62,11 +128,15 @@ export const crearReporteMantenimiento = async (req, res) => {
       ciudad,
       telefono,
       encargado,
+      generador,
       marca_generador,
+      motor,
       modelo_generador,
-      kva,
+      kva: kvaNormalizado,
       serie_generador,
-      observaciones_finales
+      observaciones_finales,
+      firma_tecnico,
+      firma_recibido
     });
 
     console.log('✅ [CREAR REPORTE] Reporte creado con ID:', nuevoReporte.id, 'para id_cliente:', nuevoReporte.id_cliente);
@@ -95,18 +165,16 @@ export const crearReporteMantenimiento = async (req, res) => {
     }
 
     // Crear verificaciones si existen
-    let verificacionesCreadas = [];
-    if (verificaciones && Array.isArray(verificaciones) && verificaciones.length > 0) {
-      const verificacionesConReporteId = verificaciones.map(v => ({
-        reporte_id: nuevoReporte.id,
-        item: v.item,
-        visto: v.visto || false,
-        observacion: v.observacion || null
-      }));
+    const verificacionesNormalizadas = construirVerificaciones(verificaciones);
+    const verificacionesConReporteId = verificacionesNormalizadas.map((v) => ({
+      reporte_id: nuevoReporte.id,
+      item: v.item,
+      visto: v.visto,
+      observacion: v.observacion
+    }));
 
-      verificacionesCreadas = await reporteRepo.crearVerificaciones(verificacionesConReporteId);
-      console.log('Verificaciones creadas:', verificacionesCreadas.length);
-    }
+    const verificacionesCreadas = await reporteRepo.crearVerificaciones(verificacionesConReporteId);
+    console.log('Verificaciones creadas:', verificacionesCreadas.length);
 
     // Buscar información del cliente
     const cliente = await ClienteModel.Cliente.findByPk(id_cliente);
