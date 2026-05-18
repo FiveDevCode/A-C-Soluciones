@@ -1,7 +1,9 @@
 // configuracion de la conexion a la base de datos, este archivo no debe ser modificado
 
 import { Sequelize } from 'sequelize';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+
+dotenv.config({ override: true });
 
 export const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',

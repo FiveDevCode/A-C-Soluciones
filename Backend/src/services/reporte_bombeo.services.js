@@ -1,317 +1,306 @@
 import fs from 'fs';
 import path from 'path';
-import PDFDocument from 'pdfkit';
 import crypto from 'crypto';
+import puppeteer from 'puppeteer';
 import * as reporteRepo from '../repository/reporte_bombeo.repository.js';
 
-
-
 export const generarPDFReporteBombeo = async (reporte, equipos, parametrosLinea, clienteInfo, tecnicoInfo) => {
-    const doc = new PDFDocument({ margin: 40, size: 'LETTER' });
     const randomString = crypto.randomBytes(8).toString('hex');
     const filename = `reporte_bombeo_${randomString}.pdf`;
     const folderPath = path.join('uploads', 'reportes_bombeo');
     const filePath = path.join(folderPath, filename);
-    const subtleGray = '#DDDDDD';
+
     if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
     }
 
-    const stream = fs.createWriteStream(filePath);
-    doc.pipe(stream);
-
-    const mainColor = '#0b5394'; // Un azul institucional
-    const headerBgColor = '#f2f2f2';
-    const pageWidth = 612; // Ancho Letter
-    const marginLeft = 40;
-    const marginRight = 40;
-    const contentWidth = pageWidth - marginLeft - marginRight;
-
-    
-  
-    const drawHeader = () => {
-        // Logo/Título empresa
-        doc.fillColor(mainColor)
-           .fontSize(16)
-           .font('Helvetica-Bold')
-           .text('A&C SOLUCIONES HIDROELÉCTRICAS SAS', marginLeft, 40, { width: contentWidth, align: 'left' });
-
-        doc.fillColor('#000000')
-           .fontSize(9)
-           .font('Helvetica')
-           .text('NIT: 901269341-0', marginLeft, 58)
-           .text('3108950832 / 3153763994', marginLeft, 70)
-           .text('acsolucioneshidroelectricas@gmail.com', marginLeft, 82)
-           .text('CARRERA 23 NO. 28 - 11', marginLeft, 94);
-        
-        doc.y = 110; // Posición fija después del header
-    };
-
-    const drawReportTitle = () => {
-        const boxY = doc.y;
-        const boxHeight = 75;
-        
-        // Cuadro del título
-        doc.rect(marginLeft, boxY, contentWidth, boxHeight)
-           .fillAndStroke(headerBgColor, mainColor);
-        
-        doc.fillColor(mainColor)
-           .fontSize(13)
-           .font('Helvetica-Bold')
-           .text('REPORTE MANTENIMIENTO DE EQUIPOS DE BOMBEO', marginLeft + 10, boxY + 8, { 
-               width: contentWidth - 20, 
-               align: 'center' 
-           });
-        
-        doc.fillColor('#000000')
-           .fontSize(9)
-           .font('Helvetica');
-        
-        const infoY = boxY + 28;
-        const col1X = marginLeft + 10;
-        const col2X = marginLeft + 300;
-        
-        doc.text(`CLIENTE: ${clienteInfo.nombre}`, col1X, infoY, { width: 280 });
-        doc.text(`FECHA: ${new Date(reporte.fecha).toLocaleDateString('es-CO')}`, col2X, infoY, { width: 260 });
-        
-        doc.text(`DIRECCIÓN: ${reporte.direccion || 'N/A'}`, col1X, infoY + 12, { width: 280 });
-        doc.text(`TELÉFONO: ${reporte.telefono || 'N/A'}`, col2X, infoY + 12, { width: 260 });
-
-        doc.text(`ENCARGADO: ${reporte.encargado || 'N/A'}`, col1X, infoY + 24, { width: 280 });
-        doc.text(`CIUDAD: ${reporte.ciudad || 'N/A'}`, col2X, infoY + 24, { width: 260 });
-        
-        doc.y = boxY + boxHeight + 15; // Espacio después del cuadro
-    };
-
-    const drawEquiposTable = (equipos) => {
-        const checkPageBreak = (requiredSpace) => {
-            if (doc.y + requiredSpace > 720) { // 720 es cerca del final de la página
-                doc.addPage();
-                doc.y = 40;
+    const htmlTemplate = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte de Bombeo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                color: #000;
+                font-size: 10px;
             }
-        };
-
-        checkPageBreak(40);
-        
-        doc.fillColor(mainColor)
-           .fontSize(11)
-           .font('Helvetica-Bold')
-           .text('EQUIPOS DE BOMBEO', marginLeft, doc.y);
-        
-        doc.y += 10;
-        
-        const tableTop = doc.y;
-        const rowHeight = 25; // Aumentado para más espacio
-        const colWidths = [90, 60, 65, 55, 70, 60, 132]; // Total: 532
-        
-        // Headers
-        doc.fillColor(mainColor)
-           .rect(marginLeft, tableTop, contentWidth, rowHeight)
-           .fill();
-        
-        doc.fillColor('#FFFFFF')
-           .fontSize(8)
-           .font('Helvetica-Bold');
-        
-        const headers = ['EQUIPO', 'MARCA', 'AMPERAJE', 'PRESIÓN', 'TEMPERATURA', 'ESTADO', 'OBSERVACIONES'];
-        let currentX = marginLeft;
-        
-        headers.forEach((header, i) => {
-            doc.text(header, currentX + 3, tableTop + 8, { 
-                width: colWidths[i] - 6, 
-                align: 'center' 
-            });
-            currentX += colWidths[i];
-        });
-
-        let currentY = tableTop + rowHeight;
-        doc.font('Helvetica');
-
-        equipos.forEach((equipo, index) => {
-            checkPageBreak(rowHeight + 10);
-            
-            // Alternar colores de fila
-            const fillColor = index % 2 === 0 ? '#FFFFFF' : subtleGray;
-            doc.fillColor(fillColor)
-               .rect(marginLeft, currentY, contentWidth, rowHeight)
-               .fill();
-            
-            // Bordes de celda
-            doc.strokeColor('#CCCCCC').lineWidth(0.5);
-            currentX = marginLeft;
-            colWidths.forEach(width => {
-                doc.rect(currentX, currentY, width, rowHeight).stroke();
-                currentX += width;
-            });
-            
-            doc.fillColor('#000000').fontSize(8);
-            
-            const fields = [
-                equipo.equipo || 'N/A',
-                equipo.marca || 'N/A',
-                equipo.amperaje || 'N/A',
-                equipo.presion || 'N/A',
-                equipo.temperatura || 'N/A',
-                equipo.estado || 'N/A',
-                equipo.observacion || 'N/A'
-            ];
-
-            currentX = marginLeft;
-            fields.forEach((field, i) => {
-                const textY = currentY + 8;
-                doc.text(field, currentX + 3, textY, { 
-                    width: colWidths[i] - 6, 
-                    align: i < 6 ? 'center' : 'left',
-                    ellipsis: true,
-                    lineBreak: false
-                });
-                currentX += colWidths[i];
-            });
-            
-            currentY += rowHeight;
-        });
-
-        doc.y = currentY + 15; // Espacio después de la tabla
-    };
-
-    const drawParametrosLinea = (parametros) => {
-        const checkPageBreak = (requiredSpace) => {
-            if (doc.y + requiredSpace > 720) {
-                doc.addPage();
-                doc.y = 40;
+            .container {
+                width: 100%;
+                margin: 0 auto;
             }
-        };
+            .header-table {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .header-table td {
+                vertical-align: top;
+            }
+            .logo-section h1 {
+                color: #1e3a8a;
+                font-size: 32px;
+                font-weight: 900;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+            .logo-section p {
+                color: #1e3a8a;
+                margin: 2px 0;
+                font-size: 13px;
+                font-weight: bold;
+            }
+            .contact-info {
+                text-align: right;
+                color: #1e3a8a;
+                font-size: 13px;
+                font-weight: bold;
+                line-height: 1.5;
+            }
+            .report-title {
+                text-align: center;
+                background-color: transparent;
+                font-size: 16px;
+                font-weight: 900;
+                color: #1e3a8a;
+                border-top: 2px solid #1e3a8a;
+                border-bottom: 2px solid #1e3a8a;
+                padding: 6px;
+                margin-bottom: 15px;
+                letter-spacing: 1px;
+            }
+            .client-table {
+                width: 100%;
+                margin-bottom: 15px;
+                color: #1e3a8a;
+                font-size: 12px;
+                font-weight: bold;
+                border-collapse: separate;
+                border-spacing: 0 8px;
+            }
+            .client-table td {
+                border-bottom: 1px solid #1e3a8a;
+            }
+            .client-val {
+                color: #000;
+                font-weight: normal;
+                margin-left: 10px;
+            }
+            table.data-table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: center;
+                margin-bottom: 20px;
+                border: 1px solid #1e3a8a;
+            }
+            table.data-table th, table.data-table td {
+                border: 1px solid #1e3a8a;
+                padding: 4px;
+            }
+            table.data-table th {
+                color: #1e3a8a;
+                font-size: 9px;
+                font-weight: bold;
+            }
+            .obs-box {
+                width: 100%;
+                min-height: 80px;
+                border: 1px solid #1e3a8a;
+                padding: 8px;
+                margin-bottom: 40px;
+                font-size: 11px;
+                color: #000;
+                box-sizing: border-box;
+            }
+            .obs-title {
+                color: #1e3a8a;
+                font-weight: bold;
+                font-size: 11px;
+                margin-bottom: 5px;
+            }
+            .signatures {
+                display: flex;
+                flex-direction: column;
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
+            .signature-box {
+                width: 250px;
+                border-top: 1px solid #000;
+                text-align: center;
+            }
+            .signature-box strong {
+                color: #1e3a8a;
+                font-size: 12px;
+            }
+            .footer-text {
+                text-align: center;
+                color: #1e3a8a;
+                font-weight: bold;
+                font-size: 11px;
+                margin-top: 30px;
+                line-height: 1.4;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <table class="header-table">
+                <tr>
+                    <td style="width: 50%;">
+                        <div class="logo-section">
+                            <h1>A&C</h1>
+                            <p>SOLUCIONES</p>
+                            <p>HIDROELÉCTRICAS SAS</p>
+                        </div>
+                    </td>
+                    <td style="width: 50%;">
+                        <div class="contact-info">
+                            <div>Nit. 901269341-0</div>
+                            <div>3168950832 / 3155763894</div>
+                            <div>aycsolucioneshidroelectricas@gmail.com</div>
+                            <div>2830205 CALLE 23 No. 28 - 11</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-        checkPageBreak(80);
-        
-        doc.fillColor(mainColor)
-           .fontSize(11)
-           .font('Helvetica-Bold')
-           .text('PARÁMETROS ELÉCTRICOS Y DE PRESIÓN', marginLeft, doc.y);
-        
-        doc.y += 10;
-        doc.fillColor('#000000')
-           .fontSize(9)
-           .font('Helvetica');
-        
-        const params = [
-            { label: 'Voltaje Línea', value: parametros.voltaje_linea || 'N/A' },
-            { label: 'Corriente Línea', value: parametros.corriente_linea || 'N/A' },
-            { label: 'Presión Succión', value: parametros.presion_succion || 'N/A' },
-            { label: 'Presión Descarga', value: parametros.presion_descarga || 'N/A' },
-        ];
-        
-        const startY = doc.y;
-        const colWidth = (contentWidth / 2) - 5;
-        
-        params.forEach((param, index) => {
-            const col = index % 2;
-            const row = Math.floor(index / 2);
-            const xPos = marginLeft + (col * (colWidth + 10));
-            const yPos = startY + (row * 15);
-            
-            doc.font('Helvetica-Bold')
-               .text(`${param.label}:`, xPos, yPos, { continued: true, width: 100 });
-            doc.font('Helvetica')
-               .text(` ${param.value}`, { width: colWidth - 100 });
-        });
+            <div class="report-title">
+                REPORTE MANTENIMIENTO DE EQUIPOS DE BOMBEO
+            </div>
 
-        doc.y = startY + 40;
-        
-        checkPageBreak(60);
-        
-        doc.fillColor(mainColor)
-           .fontSize(10)
-           .font('Helvetica-Bold')
-           .text('OBSERVACIONES DE PARÁMETROS:', marginLeft, doc.y);
-        
-        doc.y += 8;
-        doc.fillColor('#000000')
-           .fontSize(9)
-           .font('Helvetica')
-           .text(parametros.observaciones || 'Sin observaciones.', marginLeft, doc.y, { 
-               width: contentWidth, 
-               align: 'justify' 
-           });
-        
-        doc.y += 20;
-    };
+            <table class="client-table">
+                <tr>
+                    <td style="width: 60%;">CLIENTE: <span class="client-val">${clienteInfo.nombre || 'N/A'}</span></td>
+                    <td style="width: 40%;">TELÉFONO: <span class="client-val">${reporte.telefono || 'N/A'}</span></td>
+                </tr>
+                <tr>
+                    <td>FECHA: <span class="client-val">${new Date(reporte.fecha).toLocaleDateString('es-CO')}</span></td>
+                    <td>ATENCIÓN: <span class="client-val">${reporte.encargado || 'N/A'}</span></td>
+                </tr>
+            </table>
 
-    // Generar el documento
-    drawHeader();
-    drawReportTitle();
-    drawEquiposTable(equipos);
-    drawParametrosLinea(parametrosLinea);
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 4%;">#</th>
+                        <th rowspan="2" style="width: 10%;">PRESIÓN</th>
+                        <th colspan="2" style="width: 18%;">EQUIPOS EN H.P<br>SUMERGIBLES</th>
+                        <th colspan="2" style="width: 18%;">AMPERAJE</th>
+                        <th colspan="2" style="width: 14%;">TEMPERATURA</th>
+                        <th colspan="2" style="width: 12%;">RUIDOS</th>
+                        <th colspan="2" style="width: 10%;">HUMEDAD</th>
+                        <th colspan="2" style="width: 14%;">CONEXIONES ELÉCTRICAS</th>
+                    </tr>
+                    <tr>
+                        <th>MEDIDA</th>
+                        <th>PLACA</th>
+                        <th>MEDIDA</th>
+                        <th>PLACA</th>
+                        <th>NORMAL</th>
+                        <th>RECALENTADA</th>
+                        <th>NORMAL</th>
+                        <th>FALLAS</th>
+                        <th>SI</th>
+                        <th>NO</th>
+                        <th>NORMAL</th>
+                        <th>FALLAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${equipos.map((equipo, index) => {
+                        // Map amperaje_estado ("Normal" / "Recalentada") to TEMPERATURA since it's the requested layout proxy
+                        const isTempNormal = equipo.amperaje_estado === 'Normal' ? 'X' : '';
+                        const isTempRecalENTADA = equipo.amperaje_estado === 'Recalentada' ? 'X' : '';
+                    
+                        return `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${equipo.presion || ''}</td>
+                            <td>${equipo.sumergibles_medida || ''}</td>
+                            <td>${equipo.sumergibles_placa || ''}</td>
+                            <td>${equipo.amperaje_medida || ''}</td>
+                            <td>${equipo.amperaje_placa || ''}</td>
+                            <td><strong>${isTempNormal}</strong></td>
+                            <td><strong>${isTempRecalENTADA}</strong></td>
+                            <td><strong>${equipo.ruidos === 'Normal' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.ruidos === 'Fallas' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.humedad === 'Si' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.humedad === 'No' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.conexiones === 'Normal' ? 'X' : ''}</strong></td>
+                            <td><strong>${equipo.conexiones === 'Fallas' ? 'X' : ''}</strong></td>
+                        </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
 
-    // Observaciones Generales
-    const checkPageBreak = (requiredSpace) => {
-        if (doc.y + requiredSpace > 720) {
-            doc.addPage();
-            doc.y = 40;
-        }
-    };
+            <table class="data-table" style="width: 70%;">
+                <thead>
+                    <tr>
+                        <th colspan="3">TANQUE HIDRONEUMÁTICO</th>
+                        <th rowspan="2">CONTROLADOR DE VELOCIDAD<br>MARCA</th>
+                    </tr>
+                    <tr>
+                        <th>MARCA</th>
+                        <th>CARGA DETERMINADA</th>
+                        <th>CARGA MEDIA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${parametrosLinea.tanque_marca || ''}</td>
+                        <td>${parametrosLinea.tanque_carga_determinada || ''}</td>
+                        <td>${parametrosLinea.tanque_carga_media || ''}</td>
+                        <td>${parametrosLinea.controlador_marca || ''}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    checkPageBreak(80);
-    
-    doc.fillColor(mainColor)
-       .fontSize(11)
-       .font('Helvetica-Bold')
-       .text('OBSERVACIONES Y RECOMENDACIONES FINALES', marginLeft, doc.y);
-    
-    doc.y += 8;
-    doc.fillColor('#000000')
-       .fontSize(9)
-       .font('Helvetica')
-       .text(reporte.observaciones_finales || 'Sin observaciones/recomendaciones finales.', marginLeft, doc.y, { 
-           width: contentWidth, 
-           align: 'justify' 
-       });
-    
-    // Firmas
-    doc.y += 40;
-    checkPageBreak(80);
-    
-    const yFirma = doc.y;
-    const firmaWidth = 200;
-    const firma1X = marginLeft + 30;
-    const firma2X = pageWidth - marginRight - firmaWidth - 30;
+            <div class="obs-box">
+                <div class="obs-title">OBSERVACIONES:</div>
+                ${reporte.observaciones_finales || ''}
+            </div>
 
-    // Línea firma técnico
-    doc.moveTo(firma1X, yFirma).lineTo(firma1X + firmaWidth, yFirma).stroke();
-    doc.fontSize(9)
-       .font('Helvetica-Bold')
-       .text(`TÉCNICO: ${tecnicoInfo.nombre} ${tecnicoInfo.apellido}`, firma1X, yFirma + 5, { 
-           align: 'center', 
-           width: firmaWidth 
-       });
-    doc.font('Helvetica')
-       .fontSize(8)
-       .text(`C.C./ID: ${tecnicoInfo.identificacion || 'N/A'}`, firma1X, yFirma + 18, { 
-           align: 'center', 
-           width: firmaWidth 
-       });
+            <div class="signatures">
+                <div class="signature-box">
+                    <strong>TÉCNICO</strong>
+                </div>
+            </div>
 
-    // Línea firma cliente
-    doc.moveTo(firma2X, yFirma).lineTo(firma2X + firmaWidth, yFirma).stroke();
-    doc.fontSize(9)
-       .font('Helvetica-Bold')
-       .text('CLIENTE / ENCARGADO', firma2X, yFirma + 5, { 
-           align: 'center', 
-           width: firmaWidth 
-       });
-    doc.font('Helvetica')
-       .fontSize(8)
-       .text(`NOMBRE: ${reporte.encargado || 'N/A'}`, firma2X, yFirma + 18, { 
-           align: 'center', 
-           width: firmaWidth 
-       });
+            <div class="footer-text">
+                <div>MONTAJES Y MANTENIMIENTO DE EQUIPOS DE PRESIÓN - PLANTAS ELÉCTRICAS DE EMERGENCIA</div>
+                <div>SISTEMA DE REDES CONTRA INCENDIO - ADECUACIONES ELÉCTRICAS</div>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
 
 
-    doc.end();
-
-    return new Promise((resolve, reject) => {
-        stream.on('finish', () => resolve(filePath));
-        stream.on('error', reject);
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-};
+    
+    const page = await browser.newPage();
+    await page.setContent(htmlTemplate, { waitUntil: 'networkidle0' });
+    await page.pdf({
+        path: filePath,
+        format: 'Letter',
+        landscape: true,
+        printBackground: true,
+        margin: {
+            top: '40px',
+            bottom: '40px',
+            left: '40px',
+            right: '40px'
+        }
+    });
 
+    await browser.close();
+
+    return filePath;
+};

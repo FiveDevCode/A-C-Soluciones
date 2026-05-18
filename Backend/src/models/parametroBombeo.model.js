@@ -16,45 +16,20 @@ export const ParametroBombeo = sequelize.define('ParametroBombeo', {
         },
         validate: { isInt: true, notNull: true }
     },
-    voltaje_linea: { 
-        type: DataTypes.STRING(50),
-        allowNull: false, 
-        validate: {
-            notNull: { msg: 'El voltaje de la línea es requerido' },
-            len: { args: [0, 50], msg: 'El voltaje de la línea debe tener entre 0 y 50 caracteres' },
-            notEmpty: { msg: 'El voltaje de la línea no puede estar vacío' }
-        }
+    tanque_marca: { 
+        type: DataTypes.STRING(100),
+        allowNull: true
     },
-    corriente_linea: { 
+    tanque_carga_determinada: { 
         type: DataTypes.STRING(50),
-        allowNull: false, 
-        validate: {
-            notNull: { msg: 'La corriente de la línea es requerida' },
-            len: { args: [0, 50], msg: 'La corriente de la línea debe tener entre 0 y 50 caracteres' },
-            notEmpty: { msg: 'La corriente de la línea no puede estar'
-        }
-    } 
+        allowNull: true
     },
-    presion_succion: {
+    tanque_carga_media: {
         type: DataTypes.STRING(50),
-        allowNull: false, 
-        validate: {
-            notNull: { msg: 'La presión de succión es requerida' },
-            len: { args: [0, 50], msg: 'La presión de succión debe tener entre 0 y 50 caracteres' },
-            notEmpty: { msg: 'La presión de succión no puede estar vacía' },
-        }
+        allowNull: true
     },
-    presion_descarga: {
-        type: DataTypes.STRING(50),
-        allowNull: false, 
-        validate: {
-            notNull: { msg: 'La presión de descarga es  requerida' },
-            len: { args: [0, 50], msg: 'La presión de descarga debe tener entre 0 y 50 caracteres' },
-            notEmpty: { msg: 'La presión de descarga no puede estar vacía' },
-        }
-    },
-    observaciones: {
-        type: DataTypes.TEXT,
+    controlador_marca: {
+        type: DataTypes.STRING(100),
         allowNull: true
     }
 }, {

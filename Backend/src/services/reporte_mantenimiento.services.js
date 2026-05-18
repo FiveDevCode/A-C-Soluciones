@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import PDFDocument from 'pdfkit';
 import crypto from 'crypto';
+import puppeteer from 'puppeteer';
+import {
+  ITEMS_VERIFICACION_MANTENIMIENTO,
+  normalizarItemVerificacion
+} from '../utils/reporte_mantenimiento.constants.js';
 
 export const generarPDFReporte = async (reporte, clienteInfo, tecnicoInfo, parametros, verificaciones) => {
-  const doc = new PDFDocument({ margin: 50 });
   const randomString = crypto.randomBytes(8).toString('hex');
   const filename = `reporte_mantenimiento_${randomString}.pdf`;
   const folderPath = path.join('uploads', 'reportes');
@@ -14,225 +17,289 @@ export const generarPDFReporte = async (reporte, clienteInfo, tecnicoInfo, param
     fs.mkdirSync(folderPath, { recursive: true });
   }
 
-  const stream = fs.createWriteStream(filePath);
-  doc.pipe(stream);
-
-  const headerColor = '#0056b3';
-  const titleColor = '#34495e';
-  const textColor = '#000000';
-  const borderColor = '#bdc3c7';
-  const subtleGray = '#ecf0f1';
-  const successColor = '#27ae60';
-  const warningColor = '#e74c3c';
-
-  const drawHeader = () => {
-    doc.fontSize(8)
-       .font('Helvetica')
-       .fillColor(textColor)
-       .text(`Fecha: ${new Date(reporte.fecha).toLocaleDateString('es-CO')}`, 50, 50, { align: 'right', width: doc.page.width - 100 });
-    
-    doc.fillColor(headerColor)
-       .fontSize(14)
-       .font('Helvetica-Bold')
-       .text('REPORTE DE MANTENIMIENTO PLANTAS ELÉCTRICAS', 50, 70, { align: 'center', width: doc.page.width - 100 });
-
-    doc.y = 95;
-    doc.moveDown(1);
-  };
-
-  const createSectionHeader = (title, column = 'full') => {
-    if (doc.y > 700) {
-      doc.addPage();
-    }
-    
-    const startX = column === 'left' ? 50 : column === 'right' ? (doc.page.width / 2) + 15 : 50;
-    const width = column === 'full' ? doc.page.width - 100 : (doc.page.width - 100) / 2 - 10;
-    
-    doc.fillColor(titleColor)
-       .fontSize(12)
-       .font('Helvetica-Bold')
-       .text(title, startX, doc.y, { width });
-    
-    doc.moveDown(0.6);
-  };
-
-  const createInfoRow = (label, value, column = 'full') => {
-    if (!value && value !== 0 && value !== false) return;
-    
-    const startX = column === 'left' ? 50 : column === 'right' ? (doc.page.width / 2) + 15 : 50;
-    const width = column === 'full' ? doc.page.width - 100 : (doc.page.width - 100) / 2 - 10;
-    const rowY = doc.y;
-    
-    doc.fontSize(10)
-       .font('Helvetica-Bold')
-       .fillColor(textColor)
-       .text(`${label}: `, startX, rowY, { width, continued: true });
-    doc.font('Helvetica')
-       .fontSize(10)
-       .text(value, { width });
-    doc.y = rowY + 14;
-  };
-
-  const createParagraph = (text) => {
-    if (!text) return;
-    doc.fillColor(textColor)
-       .fontSize(10)
-       .font('Helvetica')
-       .text(text, {
-         align: 'justify',
-         lineGap: 1.5
-       });
-    doc.moveDown(0.8);
-  };
-
-  const createTable = (headers, rows) => {
-    const startX = 50;
-    const startY = doc.y;
-    const columnWidth = (doc.page.width - 100) / headers.length;
-    const rowHeight = 25;
-
-    doc.fillColor(headerColor)
-       .fontSize(10)
-       .font('Helvetica-Bold');
-
-    headers.forEach((header, i) => {
-      const x = startX + (i * columnWidth);
-      doc.rect(x, startY, columnWidth, rowHeight)
-         .fillAndStroke(headerColor, borderColor);
-      
-      doc.fillColor('#ffffff')
-         .text(header, x + 5, startY + 7, {
-           width: columnWidth - 10,
-           align: 'center'
-         });
-    });
-
-    doc.fillColor(textColor)
-       .font('Helvetica')
-       .fontSize(9);
-    
-    rows.forEach((row, rowIndex) => {
-      const y = startY + rowHeight + (rowIndex * rowHeight);
-      
-      if (y > 700) {
-        doc.addPage();
-        return;
-      }
-
-      if (rowIndex % 2 === 0) {
-        doc.rect(startX, y, doc.page.width - 100, rowHeight)
-           .fill(subtleGray);
-      }
-
-      row.forEach((cell, colIndex) => {
-        const x = startX + (colIndex * columnWidth);
-        
-        doc.fillColor(textColor)
-           .text(cell, x + 5, y + 7, {
-             width: columnWidth - 10,
-             align: 'left'
-           });
-      });
-    });
-
-    doc.y = startY + rowHeight + (rows.length * rowHeight);
-    doc.moveDown(1.5);
-  };
-
-  drawHeader();
-
-  const row1StartY = doc.y;
-  
-  createSectionHeader('Información del Cliente', 'left');
-  createInfoRow('Nombre', clienteInfo.nombre, 'left');
-  createInfoRow('Dirección', reporte.direccion, 'left');
-  createInfoRow('Ciudad', reporte.ciudad, 'left');
-  createInfoRow('Teléfono', reporte.telefono || clienteInfo.telefono, 'left');
-  createInfoRow('Encargado', reporte.encargado, 'left');
-    createInfoRow('Correo', clienteInfo.correo, 'left');
-    const leftColEndY = doc.y;
-  
-  doc.y = row1StartY;
-  createSectionHeader('Técnico Responsable', 'right');
-  createInfoRow('Nombre', `${tecnicoInfo.nombre} ${tecnicoInfo.apellido}`, 'right');
-  createInfoRow('Teléfono', tecnicoInfo.telefono, 'right');
-    createInfoRow('Correo', tecnicoInfo.correo, 'right');
-    const rightColEndY = doc.y;
-  
-  doc.y = Math.max(leftColEndY, rightColEndY) + 15;
-
-  const row2StartY = doc.y;
-  
-  createSectionHeader('Información del Generador', 'left');
-  createInfoRow('Marca', reporte.marca_generador, 'left');
-  createInfoRow('Modelo', reporte.modelo_generador, 'left');
-  createInfoRow('KVA', reporte.kva || 'No especificado', 'left');
-    createInfoRow('Serie', reporte.serie_generador || 'No especificado', 'left');
-    const leftCol2EndY = doc.y;
-  
-  doc.y = row2StartY;
-  if (parametros && parametros.length > 0) {
-    createSectionHeader('Parámetros de Operación', 'right');
-    
-    parametros.forEach((param, index) => {
-      if (index > 0) {
-        doc.y += 5;
-      }
-      
-      createInfoRow('Presión de Aceite', param.presion_aceite || 'No registrado', 'right');
-      createInfoRow('Temperatura de Aceite', param.temperatura_aceite || 'No registrado', 'right');
-      createInfoRow('Temperatura de Refrigerante', param.temperatura_refrigerante || 'No registrado', 'right');
-      createInfoRow('Fugas de Aceite', param.fugas_aceite ? 'SÍ' : 'NO', 'right');
-      createInfoRow('Fugas de Combustible', param.fugas_combustible ? 'SÍ' : 'NO', 'right');
-      createInfoRow('Frecuencia/RPM', param.frecuencia_rpm || 'No registrado', 'right');
-      createInfoRow('Voltaje de Salida', param.voltaje_salida || 'No registrado', 'right');
-    });
-  } else {
-    createSectionHeader('Parámetros de Operación', 'right');
-    doc.y += 20;
-  }
-  const rightCol2EndY = doc.y;
-  
-  doc.y = Math.max(leftCol2EndY, rightCol2EndY) + 15;
-
-  if (verificaciones && verificaciones.length > 0) {
-    if (doc.y > 600) {
-      doc.addPage();
-    }
-    
-    createSectionHeader('Verificación de Mantenimiento');
-    
-    const headers = ['Item', 'Estado', 'Observación'];
-    const rows = verificaciones.map(v => [
-      v.item,
-      v.visto ? 'Verificado' : 'No verificado',
-      v.observacion || 'Sin observaciones'
-    ]);
-
-    createTable(headers, rows);
-  }
-
-  if (reporte.observaciones_finales) {
-    if (doc.y > 650) {
-      doc.addPage();
-    }
-    
-    createSectionHeader('Observaciones Finales');
-    createParagraph(reporte.observaciones_finales);
-  }
-
-  doc.fontSize(8)
-     .font('Helvetica-Oblique')
-     .fillColor(textColor)
-     .text('Este reporte ha sido generado automáticamente por A-C Soluciones', 50, doc.page.height - 50, {
-       align: 'center',
-       width: doc.page.width - 100
-     });
-
-  doc.end();
-
-  return new Promise((resolve, reject) => {
-    stream.on('finish', () => resolve(filePath));
-    stream.on('error', reject);
+  const verificacionesPorItem = new Map();
+  (verificaciones || []).forEach((v) => {
+    verificacionesPorItem.set(normalizarItemVerificacion(v?.item), v);
   });
+
+  const verificacionesOrdenadas = ITEMS_VERIFICACION_MANTENIMIENTO.map((item) => {
+    const actual = verificacionesPorItem.get(normalizarItemVerificacion(item));
+    return {
+      item,
+      visto: actual?.visto ?? true,
+      observacion: actual?.observacion || ''
+    };
+  });
+
+  const fechaFormat = reporte?.fecha ? new Date(reporte.fecha).toLocaleDateString('es-CO') : 'N/A';
+
+  // Helper para manejar las firmas en base64
+  const renderSignature = (firmaDataUrl) => {
+    if (firmaDataUrl && firmaDataUrl.startsWith('data:image')) {
+      return `<img src="${firmaDataUrl}" alt="Firma" style="max-height: 50px; max-width: 150px; object-fit: contain;">`;
+    }
+    return '';
+  };
+
+  const htmlTemplate = `
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+      <meta charset="UTF-8">
+      <title>Reporte de Mantenimiento</title>
+      <style>
+          @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+          
+          body {
+              font-family: 'Roboto', sans-serif;
+              margin: 0;
+              padding: 10px;
+              color: #000;
+              font-size: 11px;
+              line-height: 1.2;
+          }
+          
+          .container {
+              width: 100%;
+              max-width: 800px;
+              margin: 0 auto;
+              border: 1px solid #1f4e79;
+              padding: 15px;
+              box-sizing: border-box;
+          }
+
+          /* Header Styling */
+          .header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 20px;
+          }
+          .logo-area {
+              width: 40%;
+          }
+          .logo-area h1 {
+              color: #1f4e79;
+              font-size: 18px;
+              margin: 0;
+              line-height: 1.1;
+          }
+          .logo-area h2 {
+              color: #1f4e79;
+              font-size: 14px;
+              margin: 0;
+          }
+          .contact-area {
+              width: 55%;
+              text-align: right;
+              color: #1f4e79;
+              font-weight: bold;
+              font-size: 12px;
+          }
+          .contact-area p {
+              margin: 3px 0;
+          }
+
+          /* Title */
+          .title-box {
+              border: 1px solid #1f4e79;
+              text-align: center;
+              padding: 5px;
+              margin-bottom: 10px;
+              font-weight: bold;
+              color: #1f4e79;
+              font-size: 14px;
+          }
+
+          /* Tables */
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 10px;
+          }
+          th, td {
+              border: 1px solid #1f4e79;
+              padding: 4px 6px;
+              vertical-align: middle;
+          }
+          th {
+              background-color: #f0f4f8;
+              color: #1f4e79;
+              font-weight: bold;
+              text-align: center;
+              font-size: 10px;
+          }
+          .label-cell {
+              font-weight: bold;
+              width: 15%;
+          }
+          .value-cell {
+              width: 35%;
+          }
+
+          /* Signature Area */
+          .signatures-container {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 30px;
+          }
+          .signature-box {
+              width: 45%;
+          }
+          .sign-line {
+              border-top: 1px solid #000;
+              margin-top: 40px;
+              padding-top: 5px;
+              text-align: center;
+              font-weight: bold;
+              font-size: 10px;
+          }
+          
+          .observations-box {
+              border: none;
+              padding: 5px;
+              min-height: 50px;
+          }
+
+          /* Footer */
+          .footer {
+              text-align: center;
+              font-weight: bold;
+              color: #1f4e79;
+              font-size: 10px;
+              margin-top: 20px;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+          <!-- Header -->
+          <div class="header">
+              <div class="logo-area">
+                  <h1>A&C</h1>
+                  <h2>SOLUCIONES HIDROELÉCTRICAS SAS</h2>
+              </div>
+              <div class="contact-area">
+                  <p>Nit. 901269341-0</p>
+                  <p>3168950832 / 3155763894</p>
+                  <p>aycsolucioneshidroelectricas@gmail.com</p>
+                  <p>2830205 CALLE 23 No. 28 - 11</p>
+              </div>
+          </div>
+
+          <!-- Title -->
+          <div class="title-box">
+              MANTENIMIENTO DE EQUIPOS
+          </div>
+
+          <!-- General Info Table -->
+          <table>
+              <tr>
+                  <td class="label-cell">FECHA</td>
+                  <td class="value-cell">${fechaFormat}</td>
+                  <td class="label-cell">ENCARGADO(A):</td>
+                  <td class="value-cell">${reporte?.encargado || 'N/A'}</td>
+              </tr>
+              <tr>
+                  <td class="label-cell">CLIENTE</td>
+                  <td class="value-cell">${clienteInfo?.nombre || 'N/A'}</td>
+                  <td class="label-cell">DIRECCIÓN:</td>
+                  <td class="value-cell">${reporte?.direccion || 'N/A'}</td>
+              </tr>
+              <tr>
+                  <td class="label-cell">CIUDAD</td>
+                  <td class="value-cell">${reporte?.ciudad || 'N/A'}</td>
+                  <td class="label-cell">TELÉFONO:</td>
+                  <td class="value-cell">${reporte?.telefono || clienteInfo?.telefono || 'N/A'}</td>
+              </tr>
+          </table>
+
+          <!-- Generator Info Table -->
+          <table>
+              <tr>
+                  <td class="label-cell">GENERADOR:</td>
+                  <td>${reporte?.generador || ''}</td>
+                  <td class="label-cell">MARCA:</td>
+                  <td>${reporte?.marca_generador || ''}</td>
+                  <td class="label-cell">KVA:</td>
+                  <td>${reporte?.kva || ''}</td>
+              </tr>
+              <tr>
+                  <td class="label-cell">MOTOR:</td>
+                  <td>${reporte?.motor || ''}</td>
+                  <td class="label-cell">MODELO:</td>
+                  <td>${reporte?.modelo_generador || ''}</td>
+                  <td class="label-cell">SERIE:</td>
+                  <td>${reporte?.serie_generador || ''}</td>
+              </tr>
+          </table>
+
+          <!-- Verifications Table -->
+          <table>
+              <tr>
+                  <th style="width: 40%;">VERIFICACION</th>
+                  <th style="width: 10%;">VISTO</th>
+                  <th style="width: 50%;">OBSERVACIONES</th>
+              </tr>
+              ${verificacionesOrdenadas.map(v => `
+                  <tr>
+                      <td style="font-weight: bold; font-size: 10px;">${v.item}</td>
+                      <td style="text-align: center;">${v.visto ? 'OK' : ''}</td>
+                      <td>${v.observacion || ''}</td>
+                  </tr>
+              `).join('')}
+          </table>
+
+          <!-- Signatures & Observations -->
+          <div class="signatures-container" style="page-break-before: always; padding-top: 20px;">
+              <div class="signature-box">
+                  <div style="height: 40px; display: flex; justify-content: center; align-items: end;">
+                      ${renderSignature(reporte?.firma_tecnico)}
+                  </div>
+                  <div class="sign-line">TÉCNICO</div>
+                  <div class="observations-box">
+                      <strong>OBSERVACIONES Y RECOMENDACIONES:</strong>
+                      <p>${reporte?.observaciones_finales || ''}</p>
+                  </div>
+              </div>
+              
+              <div class="signature-box" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                  <div style="height: 40px; display: flex; justify-content: center; align-items: end;">
+                      ${renderSignature(reporte?.firma_recibido)}
+                  </div>
+                 <div class="sign-line">RECIBIDO</div>
+              </div>
+          </div>
+
+          <div class="footer">
+              MONTAJES Y MANTENIMIENTO DE EQUIPOS DE PRESIÓN - PLANTAS ELÉCTRICAS DE EMERGENCIA<br>
+              SISTEMA DE REDES CONTRA INCENDIO - ADECUACIONES ELÉCTRICAS
+          </div>
+      </div>
+  </body>
+  </html>
+  `;
+
+  const browser = await puppeteer.launch({
+      headless: "new",
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+  
+  const page = await browser.newPage();
+  await page.setContent(htmlTemplate, { waitUntil: 'networkidle0' });
+  await page.pdf({
+      path: filePath,
+      format: 'Letter',
+      printBackground: true,
+      margin: {
+          top: '40px',
+          bottom: '40px',
+          left: '40px',
+          right: '40px'
+      }
+  });
+
+  await browser.close();
+
+  return filePath;
 };
