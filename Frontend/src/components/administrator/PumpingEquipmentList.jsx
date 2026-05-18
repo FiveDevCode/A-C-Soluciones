@@ -1,4 +1,4 @@
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from "@mui/material";
 import styled from "styled-components";
 
 const Panel = styled.div`
@@ -25,13 +25,16 @@ const PumpingEquipmentList = ({ equipos, setEquipos }) => {
     setEquipos(prev => [
       ...prev,
       {
-        equipo: "",
-        marca: "",
-        amperaje: "",
+        sumergibles_medida: "",
+        sumergibles_placa: "",
+        amperaje_medida: "",
+        amperaje_placa: "",
+        amperaje_estado: "Normal",
+        ruidos: "Normal",
+        humedad: "No",
+        conexiones: "Normal",
         presion: "",
-        temperatura: "",
-        estado: "",
-        observacion: ""
+        temperatura: ""
       }
     ]);
   };
@@ -53,31 +56,52 @@ const PumpingEquipmentList = ({ equipos, setEquipos }) => {
       {equipos.map((e, i) => (
         <Card key={i}>
           <TextField
-            label="Equipo"
-            value={e.equipo}
+            label="Sumergibles - Medida"
+            value={e.sumergibles_medida}
             fullWidth
             size="small"
             sx={{ mb: 1 }}
-            onChange={(ev) => update(i, "equipo", ev.target.value)}
+            onChange={(ev) => update(i, "sumergibles_medida", ev.target.value)}
           />
 
           <TextField
-            label="Marca"
-            value={e.marca}
+            label="Sumergibles - Placa"
+            value={e.sumergibles_placa}
             fullWidth
             size="small"
             sx={{ mb: 1 }}
-            onChange={(ev) => update(i, "marca", ev.target.value)}
+            onChange={(ev) => update(i, "sumergibles_placa", ev.target.value)}
           />
 
           <TextField
-            label="Amperaje"
-            value={e.amperaje}
+            label="Amperaje - Medida"
+            value={e.amperaje_medida}
             fullWidth
             size="small"
             sx={{ mb: 1 }}
-            onChange={(ev) => update(i, "amperaje", ev.target.value)}
+            onChange={(ev) => update(i, "amperaje_medida", ev.target.value)}
           />
+
+          <TextField
+            label="Amperaje - Placa"
+            value={e.amperaje_placa}
+            fullWidth
+            size="small"
+            sx={{ mb: 1 }}
+            onChange={(ev) => update(i, "amperaje_placa", ev.target.value)}
+          />
+
+          <FormControl component="fieldset" sx={{ mb: 1, display: 'block' }}>
+            <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Estado Amperaje</FormLabel>
+            <RadioGroup
+              row
+              value={e.amperaje_estado}
+              onChange={(ev) => update(i, "amperaje_estado", ev.target.value)}
+            >
+              <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+              <FormControlLabel value="Recalentada" control={<Radio size="small" />} label="Recalentada" />
+            </RadioGroup>
+          </FormControl>
 
           <TextField
             label="Presión"
@@ -97,24 +121,41 @@ const PumpingEquipmentList = ({ equipos, setEquipos }) => {
             onChange={(ev) => update(i, "temperatura", ev.target.value)}
           />
 
-          <TextField
-            label="Estado"
-            value={e.estado}
-            fullWidth
-            size="small"
-            sx={{ mb: 1 }}
-            onChange={(ev) => update(i, "estado", ev.target.value)}
-          />
+          <FormControl component="fieldset" sx={{ mb: 1, display: 'block' }}>
+            <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Ruidos</FormLabel>
+            <RadioGroup
+              row
+              value={e.ruidos}
+              onChange={(ev) => update(i, "ruidos", ev.target.value)}
+            >
+              <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+              <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+            </RadioGroup>
+          </FormControl>
 
-          <TextField
-            label="Observación"
-            value={e.observacion}
-            fullWidth
-            size="small"
-            multiline
-            minRows={2}
-            onChange={(ev) => update(i, "observacion", ev.target.value)}
-          />
+          <FormControl component="fieldset" sx={{ mb: 1, display: 'block' }}>
+            <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Humedad</FormLabel>
+            <RadioGroup
+              row
+              value={e.humedad}
+              onChange={(ev) => update(i, "humedad", ev.target.value)}
+            >
+              <FormControlLabel value="Si" control={<Radio size="small" />} label="Si" />
+              <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl component="fieldset" sx={{ mb: 1, display: 'block' }}>
+            <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Conexiones Eléctricas</FormLabel>
+            <RadioGroup
+              row
+              value={e.conexiones}
+              onChange={(ev) => update(i, "conexiones", ev.target.value)}
+            >
+              <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+              <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+            </RadioGroup>
+          </FormControl>
 
           <Button
             fullWidth

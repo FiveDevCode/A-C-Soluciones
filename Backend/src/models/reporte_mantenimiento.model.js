@@ -94,6 +94,10 @@ const ReporteMantenimientoPlantasElectricas = sequelize.define('ReporteMantenimi
         //     }
         // }
     },
+    generador: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
     marca_generador: {
         type: DataTypes.STRING(100),
         allowNull: false,
@@ -113,10 +117,14 @@ const ReporteMantenimientoPlantasElectricas = sequelize.define('ReporteMantenimi
         }
     },
     kva: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.INTEGER,
         allowNull: true
     },
     serie_generador: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    motor: {
         type: DataTypes.STRING(100),
         allowNull: true
     },
@@ -137,7 +145,17 @@ const ReporteMantenimientoPlantasElectricas = sequelize.define('ReporteMantenimi
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
-    }
+    },
+
+    firma_tecnico: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    firma_recibido: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+
 }, {
     tableName: 'reportemantenimientoplantaselectricas',
     timestamps: true,

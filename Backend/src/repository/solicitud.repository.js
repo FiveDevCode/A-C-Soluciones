@@ -1,4 +1,5 @@
 import { SolicitudModel } from "../models/solicitud.model.js";
+import { Op } from "sequelize";
 import { ClienteModel } from "../models/cliente.model.js";
 import { ServicioModel } from "../models/servicios.model.js";
 import { AdminModel } from "../models/administrador.model.js";
@@ -48,8 +49,9 @@ export class SolicitudRepository {
         }
       ],
       where: {
-        // Solo solicitudes que NO tienen visitas asignadas (visitas es null)
-        '$visitas.id$': null
+        // Solo solicitudes que NO tienen visitas asignadas (visitas es null) y que no estén rechazadas
+        '$visitas.id$': null,
+        estado: { [Op.ne]: 'rechazada' }
       },
       order: [['fecha_solicitud', 'DESC']]
     });

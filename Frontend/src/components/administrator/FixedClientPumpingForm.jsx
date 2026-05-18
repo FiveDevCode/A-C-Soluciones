@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, TextField, Alert, Tabs, Tab, Box } from "@mui/material";
+import { Button, TextField, Alert, Tabs, Tab, Box, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from "@mui/material";
 import styled from "styled-components";
 import { ArrowLeft, Save, Info, Cpu, Activity } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
@@ -201,23 +201,25 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
   // Equipos
   const [equipos, setEquipos] = useState([
     {
-      equipo: "",
-      marca: "",
-      amperaje: "",
+      sumergibles_medida: "",
+      sumergibles_placa: "",
+      amperaje_medida: "",
+      amperaje_placa: "",
+      amperaje_estado: "Normal",
+      ruidos: "Normal",
+      humedad: "No",
+      conexiones: "Normal",
       presion: "",
-      temperatura: "",
-      estado: "",
-      observacion: ""
+      temperatura: ""
     }
   ]);
 
   // Parámetros de línea
   const [parametrosLinea, setParametrosLinea] = useState({
-    voltaje_linea: "",
-    corriente_linea: "",
-    presion_succion: "",
-    presion_descarga: "",
-    observaciones: ""
+    tanque_marca: "",
+    tanque_carga_determinada: "",
+    tanque_carga_media: "",
+    controlador_marca: ""
   });
 
   const handleInputChange = (field, value) => {
@@ -264,86 +266,36 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
   const validateEquipo = (equipo, index) => {
     const errors = {};
     
-    if (!equipo.equipo || equipo.equipo.trim() === '') {
-      errors.equipo = 'El equipo es requerido';
-    } else if (equipo.equipo.length > 100) {
-      errors.equipo = 'El equipo no debe exceder 100 caracteres';
-    }
-    
-    if (!equipo.marca || equipo.marca.trim() === '') {
-      errors.marca = 'La marca es requerida';
-    } else if (equipo.marca.length > 100) {
-      errors.marca = 'La marca no debe exceder 100 caracteres';
-    }
-    
-    if (!equipo.amperaje || equipo.amperaje.trim() === '') {
-      errors.amperaje = 'El amperaje es requerido';
-    } else if (equipo.amperaje.length > 50) {
-      errors.amperaje = 'El amperaje no debe exceder 50 caracteres';
-    }
-    
     if (!equipo.presion || equipo.presion.trim() === '') {
       errors.presion = 'La presión es requerida';
     } else if (equipo.presion.length > 50) {
       errors.presion = 'La presión no debe exceder 50 caracteres';
     }
     
-    if (!equipo.temperatura || equipo.temperatura.trim() === '') {
-      errors.temperatura = 'La temperatura es requerida';
-    } else if (equipo.temperatura.length > 50) {
-      errors.temperatura = 'La temperatura no debe exceder 50 caracteres';
-    }
-    
-    if (!equipo.estado || equipo.estado.trim() === '') {
-      errors.estado = 'El estado es requerido';
-    } else if (equipo.estado.length > 50) {
-      errors.estado = 'El estado no debe exceder 50 caracteres';
-    }
-
     return errors;
   };
 
   const validateParametros = () => {
     const errors = {};
-    
-    if (!parametrosLinea.voltaje_linea || parametrosLinea.voltaje_linea.trim() === '') {
-      errors.voltaje_linea = 'El voltaje de línea es requerido';
-    } else if (parametrosLinea.voltaje_linea.length > 50) {
-      errors.voltaje_linea = 'El voltaje no debe exceder 50 caracteres';
-    }
-    
-    if (!parametrosLinea.corriente_linea || parametrosLinea.corriente_linea.trim() === '') {
-      errors.corriente_linea = 'La corriente de línea es requerida';
-    } else if (parametrosLinea.corriente_linea.length > 50) {
-      errors.corriente_linea = 'La corriente no debe exceder 50 caracteres';
-    }
-    
-    if (!parametrosLinea.presion_succion || parametrosLinea.presion_succion.trim() === '') {
-      errors.presion_succion = 'La presión de succión es requerida';
-    } else if (parametrosLinea.presion_succion.length > 50) {
-      errors.presion_succion = 'La presión de succión no debe exceder 50 caracteres';
-    }
-    
-    if (!parametrosLinea.presion_descarga || parametrosLinea.presion_descarga.trim() === '') {
-      errors.presion_descarga = 'La presión de descarga es requerida';
-    } else if (parametrosLinea.presion_descarga.length > 50) {
-      errors.presion_descarga = 'La presión de descarga no debe exceder 50 caracteres';
-    }
-
     return errors;
   };
+
+
 
   const addEquipo = () => {
     setEquipos(prev => [
       ...prev,
       {
-        equipo: "",
-        marca: "",
-        amperaje: "",
+        sumergibles_medida: "",
+        sumergibles_placa: "",
+        amperaje_medida: "",
+        amperaje_placa: "",
+        amperaje_estado: "Normal",
+        ruidos: "Normal",
+        humedad: "No",
+        conexiones: "Normal",
         presion: "",
-        temperatura: "",
-        estado: "",
-        observacion: ""
+        temperatura: ""
       }
     ]);
   };
@@ -646,44 +598,50 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
                     </h4>
                     <CompactGrid>
                       <TextField
-                        label="Equipo"
-                        value={equipo.equipo}
-                        onChange={(e) => updateEquipo(index, "equipo", e.target.value)}
+                        label="Sumergibles Medida"
+                        value={equipo.sumergibles_medida}
+                        onChange={(e) => updateEquipo(index, "sumergibles_medida", e.target.value)}
                         fullWidth
                         size="small"
-                        inputProps={{ maxLength: 100 }}
-                        error={!!fieldErrors[`equipo_${index}_equipo`]}
-                        helperText={fieldErrors[`equipo_${index}_equipo`] ? fieldErrors[`equipo_${index}_equipo`] : `${equipo.equipo.length}/100`}
                       />
                       <TextField
-                        label="Marca"
-                        value={equipo.marca}
-                        onChange={(e) => updateEquipo(index, "marca", e.target.value)}
+                        label="Sumergibles Placa"
+                        value={equipo.sumergibles_placa}
+                        onChange={(e) => updateEquipo(index, "sumergibles_placa", e.target.value)}
                         fullWidth
                         size="small"
-                        inputProps={{ maxLength: 100 }}
-                        error={!!fieldErrors[`equipo_${index}_marca`]}
-                        helperText={fieldErrors[`equipo_${index}_marca`] ? fieldErrors[`equipo_${index}_marca`] : `${equipo.marca.length}/100`}
                       />
                       <TextField
-                        label="Amperaje"
-                        value={equipo.amperaje}
-                        onChange={(e) => updateEquipo(index, "amperaje", e.target.value)}
+                        label="Amperaje Medida"
+                        value={equipo.amperaje_medida}
+                        onChange={(e) => updateEquipo(index, "amperaje_medida", e.target.value)}
                         fullWidth
                         size="small"
-                        inputProps={{ maxLength: 50 }}
-                        error={!!fieldErrors[`equipo_${index}_amperaje`]}
-                        helperText={fieldErrors[`equipo_${index}_amperaje`] ? fieldErrors[`equipo_${index}_amperaje`] : `${equipo.amperaje.length}/50`}
                       />
+                      <TextField
+                        label="Amperaje Placa"
+                        value={equipo.amperaje_placa}
+                        onChange={(e) => updateEquipo(index, "amperaje_placa", e.target.value)}
+                        fullWidth
+                        size="small"
+                      />
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Estado Amperaje</FormLabel>
+                        <RadioGroup
+                          row
+                          value={equipo.amperaje_estado}
+                          onChange={(e) => updateEquipo(index, "amperaje_estado", e.target.value)}
+                        >
+                          <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                          <FormControlLabel value="Recalentada" control={<Radio size="small" />} label="Recalentada" />
+                        </RadioGroup>
+                      </FormControl>
                       <TextField
                         label="Presión"
                         value={equipo.presion}
                         onChange={(e) => updateEquipo(index, "presion", e.target.value)}
                         fullWidth
                         size="small"
-                        inputProps={{ maxLength: 50 }}
-                        error={!!fieldErrors[`equipo_${index}_presion`]}
-                        helperText={fieldErrors[`equipo_${index}_presion`] ? fieldErrors[`equipo_${index}_presion`] : `${equipo.presion.length}/50`}
                       />
                       <TextField
                         label="Temperatura"
@@ -691,32 +649,43 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
                         onChange={(e) => updateEquipo(index, "temperatura", e.target.value)}
                         fullWidth
                         size="small"
-                        inputProps={{ maxLength: 50 }}
-                        error={!!fieldErrors[`equipo_${index}_temperatura`]}
-                        helperText={fieldErrors[`equipo_${index}_temperatura`] ? fieldErrors[`equipo_${index}_temperatura`] : `${equipo.temperatura.length}/50`}
                       />
-                      <TextField
-                        label="Estado"
-                        value={equipo.estado}
-                        onChange={(e) => updateEquipo(index, "estado", e.target.value)}
-                        fullWidth
-                        size="small"
-                        inputProps={{ maxLength: 50 }}
-                        error={!!fieldErrors[`equipo_${index}_estado`]}
-                        helperText={fieldErrors[`equipo_${index}_estado`] ? fieldErrors[`equipo_${index}_estado`] : `${equipo.estado.length}/50`}
-                      />
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Ruidos</FormLabel>
+                        <RadioGroup
+                          row
+                          value={equipo.ruidos}
+                          onChange={(e) => updateEquipo(index, "ruidos", e.target.value)}
+                        >
+                          <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                          <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Humedad</FormLabel>
+                        <RadioGroup
+                          row
+                          value={equipo.humedad}
+                          onChange={(e) => updateEquipo(index, "humedad", e.target.value)}
+                        >
+                          <FormControlLabel value="Si" control={<Radio size="small" />} label="Si" />
+                          <FormControlLabel value="No" control={<Radio size="small" />} label="No" />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend" sx={{ fontSize: '0.85rem' }}>Conexiones Eléctricas</FormLabel>
+                        <RadioGroup
+                          row
+                          value={equipo.conexiones}
+                          onChange={(e) => updateEquipo(index, "conexiones", e.target.value)}
+                        >
+                          <FormControlLabel value="Normal" control={<Radio size="small" />} label="Normal" />
+                          <FormControlLabel value="Fallas" control={<Radio size="small" />} label="Fallas" />
+                        </RadioGroup>
+                      </FormControl>
                     </CompactGrid>
-                    <TextField
-                      label="Observación"
-                      value={equipo.observacion}
-                      onChange={(e) => updateEquipo(index, "observacion", e.target.value)}
-                      fullWidth
-                      multiline
-                      rows={2}
-                      size="small"
-                      placeholder="Observaciones específicas del equipo..."
-                      sx={{ mb: 1 }}
-                    />
                     {equipos.length > 1 && (
                       <Button
                         variant="outlined"
@@ -732,65 +701,41 @@ const FixedClientPumpingForm = ({ clientData, technicals = [], onBack }) => {
               )}
             </TabPanel>
 
-            {/* Tab Panel 2: Parámetros de Línea */}
+            {/* Tab Panel 2: Parámetros Tanque Hidroneumático */}
             <TabPanel active={activeTab === 2}>
               <TwoColumnLayout>
                 <TextField
-                  label="Voltaje Línea"
-                  value={parametrosLinea.voltaje_linea}
-                  onChange={(e) => updateParametros("voltaje_linea", e.target.value)}
+                  label="Tanque Marca"
+                  value={parametrosLinea.tanque_marca}
+                  onChange={(e) => updateParametros("tanque_marca", e.target.value)}
                   fullWidth
                   size="small"
-                  placeholder="Ej: 220V"
                   inputProps={{ maxLength: 50 }}
-                  error={!!fieldErrors.parametro_voltaje_linea}
-                  helperText={fieldErrors.parametro_voltaje_linea ? fieldErrors.parametro_voltaje_linea : `${parametrosLinea.voltaje_linea.length}/50 caracteres`}
                 />
                 <TextField
-                  label="Corriente Línea"
-                  value={parametrosLinea.corriente_linea}
-                  onChange={(e) => updateParametros("corriente_linea", e.target.value)}
+                  label="Tanque Carga Determinada"
+                  value={parametrosLinea.tanque_carga_determinada}
+                  onChange={(e) => updateParametros("tanque_carga_determinada", e.target.value)}
                   fullWidth
                   size="small"
-                  placeholder="Ej: 15A"
                   inputProps={{ maxLength: 50 }}
-                  error={!!fieldErrors.parametro_corriente_linea}
-                  helperText={fieldErrors.parametro_corriente_linea ? fieldErrors.parametro_corriente_linea : `${parametrosLinea.corriente_linea.length}/50 caracteres`}
                 />
                 <TextField
-                  label="Presión Succión"
-                  value={parametrosLinea.presion_succion}
-                  onChange={(e) => updateParametros("presion_succion", e.target.value)}
+                  label="Tanque Carga Media"
+                  value={parametrosLinea.tanque_carga_media}
+                  onChange={(e) => updateParametros("tanque_carga_media", e.target.value)}
                   fullWidth
                   size="small"
-                  placeholder="Ej: 2.5 PSI"
                   inputProps={{ maxLength: 50 }}
-                  error={!!fieldErrors.parametro_presion_succion}
-                  helperText={fieldErrors.parametro_presion_succion ? fieldErrors.parametro_presion_succion : `${parametrosLinea.presion_succion.length}/50 caracteres`}
                 />
                 <TextField
-                  label="Presión Descarga"
-                  value={parametrosLinea.presion_descarga}
-                  onChange={(e) => updateParametros("presion_descarga", e.target.value)}
+                  label="Controlador Marca"
+                  value={parametrosLinea.controlador_marca}
+                  onChange={(e) => updateParametros("controlador_marca", e.target.value)}
                   fullWidth
                   size="small"
-                  placeholder="Ej: 45 PSI"
                   inputProps={{ maxLength: 50 }}
-                  error={!!fieldErrors.parametro_presion_descarga}
-                  helperText={fieldErrors.parametro_presion_descarga ? fieldErrors.parametro_presion_descarga : `${parametrosLinea.presion_descarga.length}/50 caracteres`}
                 />
-                <FullWidthField>
-                  <TextField
-                    label="Observaciones de Parámetros"
-                    value={parametrosLinea.observaciones}
-                    onChange={(e) => updateParametros("observaciones", e.target.value)}
-                    fullWidth
-                    multiline
-                    rows={4}
-                    size="small"
-                    placeholder="Observaciones sobre los parámetros de línea..."
-                  />
-                </FullWidthField>
               </TwoColumnLayout>
             </TabPanel>
           </FormCard>
