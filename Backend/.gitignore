@@ -57,4 +57,4 @@ Thumbs.db
 # ===== Archivos de desarrollo =====
 *.bak
 *.tmp
-*.patch
+*.patch.cache/ 
