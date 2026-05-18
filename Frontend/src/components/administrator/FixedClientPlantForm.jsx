@@ -7,6 +7,7 @@ import { handleCreateMaintenanceReportAd } from "../../controllers/administrator
 import { administratorService } from "../../services/administrator-service";
 import { commonService } from "../../services/common-service";
 import { buildDefaultChecklist, toApiVerificaciones } from "../common/maintenanceReportChecklist";
+import SignaturePadField from "../common/SignaturePadField";
 
 const Container = styled.div`
   display: flex;
@@ -192,11 +193,13 @@ const RemoveButton = styled(Button)`
   }
 `;
 
-const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
+const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) => {
   const [currentTab, setCurrentTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [firmaTecnico, setFirmaTecnico] = useState("");
+  const [firmaRecibido, setFirmaRecibido] = useState("");
 
   // Estados para el historial
   const [historialLoading, setHistorialLoading] = useState(false);
@@ -207,10 +210,10 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
   const [formData, setFormData] = useState({
     fecha: new Date().toISOString().split('T')[0],
     id_tecnico: '',
-    ciudad: '',
-    direccion: '',
-    telefono: '',
-    // encargado: '',
+    ciudad: clientData?.ciudad || '',
+    direccion: clientData?.direccion || '',
+    telefono: clientData?.telefono || '',
+    encargado: tecnicoData?.nombre || '',
     generador: '',
     marca_generador: '',
     motor: '',
@@ -220,7 +223,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
     observaciones_finales: ''
   });
 
-  const [parametrosOperacion, setParametrosOperacion] = useState([]);
   const [verificaciones, setVerificaciones] = useState(buildDefaultChecklist());
 
   // Cargar historial cuando se monta el componente o cambia el tab a historial
@@ -262,32 +264,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Parámetros de Operación
-  const addParametro = () => {
-    setParametrosOperacion(prev => [
-      ...prev,
-      {
-        presion_aceite: "",
-        temperatura_aceite: "",
-        temperatura_refrigerante: "",
-        fugas_aceite: false,
-        fugas_combustible: false,
-        frecuencia_rpm: "",
-        voltaje_salida: ""
-      }
-    ]);
-  };
-
-  const updateParametro = (index, field, value) => {
-    const copy = [...parametrosOperacion];
-    copy[index][field] = value;
-    setParametrosOperacion(copy);
-  };
-
-  const removeParametro = (index) => {
-    setParametrosOperacion(prev => prev.filter((_, i) => i !== index));
-  };
-
   const updateVerificacion = (index, field, value) => {
     const copy = [...verificaciones];
     copy[index] = {
@@ -299,6 +275,13 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar firmas como en clientes normales
+    if (!firmaTecnico || !firmaRecibido) {
+      window.alert("Debes registrar la firma del técnico y la firma de recibido.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -320,7 +303,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
         direccion: formData.direccion,
         ciudad: formData.ciudad,
         telefono: formData.telefono,
-        // encargado: formData.encargado,
+        encargado: formData.encargado,
         generador: formData.generador,
         marca_generador: formData.marca_generador,
         motor: formData.motor,
@@ -328,7 +311,9 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
         kva: formData.kva ? parseInt(formData.kva) : null,
         serie_generador: formData.serie_generador,
         observaciones_finales: formData.observaciones_finales,
-        parametros_operacion: parametrosOperacion,
+        firma_tecnico: firmaTecnico,
+        firma_recibido: firmaRecibido,
+        parametros_operacion: [],
         verificaciones: toApiVerificaciones(verificaciones)
       });
 
@@ -407,7 +392,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
               />
             </FullWidthField>
 
-            {/* <FullWidthField>
+            <FullWidthField>
               <TextField
                 label="Encargado"
                 value={formData.encargado}
@@ -416,7 +401,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
                 size="small"
                 required
               />
-            </FullWidthField> */}
+            </FullWidthField>
           </>
         );
 
@@ -471,128 +456,72 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
           </TwoColumnLayout>
         );
 
-      case 2: // Parámetros de Operación
+      case 2: // Verificaciones
         return (
           <>
-            <AddButton onClick={addParametro} startIcon={<Zap />}>
-              Agregar Parámetro de Operación
-            </AddButton>
-
-            {parametrosOperacion.map((param, index) => (
-              <EquipmentCard key={index}>
-                <h4><Zap size={20} /> Parámetro #{index + 1}</h4>
-                <TwoColumnLayout>
-                  <TextField
-                    label="Presión de Aceite"
-                    value={param.presion_aceite}
-                    onChange={(e) => updateParametro(index, "presion_aceite", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                  <TextField
-                    label="Temperatura de Aceite"
-                    value={param.temperatura_aceite}
-                    onChange={(e) => updateParametro(index, "temperatura_aceite", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                  <TextField
-                    label="Temperatura Refrigerante"
-                    value={param.temperatura_refrigerante}
-                    onChange={(e) => updateParametro(index, "temperatura_refrigerante", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                  <TextField
-                    label="Frecuencia (RPM)"
-                    value={param.frecuencia_rpm}
-                    onChange={(e) => updateParametro(index, "frecuencia_rpm", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                  <TextField
-                    label="Voltaje de Salida"
-                    value={param.voltaje_salida}
-                    onChange={(e) => updateParametro(index, "voltaje_salida", e.target.value)}
-                    fullWidth
-                    size="small"
-                  />
-                </TwoColumnLayout>
-                
-                <TwoColumnLayout style={{ marginTop: '1rem' }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={param.fugas_aceite}
-                        onChange={(e) => updateParametro(index, "fugas_aceite", e.target.checked)}
-                      />
-                    }
-                    label="Fugas de Aceite"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={param.fugas_combustible}
-                        onChange={(e) => updateParametro(index, "fugas_combustible", e.target.checked)}
-                      />
-                    }
-                    label="Fugas de Combustible"
-                  />
-                </TwoColumnLayout>
-
-                <RemoveButton
-                  variant="outlined"
-                  onClick={() => removeParametro(index)}
-                  fullWidth
-                  sx={{ mt: 1 }}
-                >
-                  Eliminar Parámetro
-                </RemoveButton>
-              </EquipmentCard>
-            ))}
-
-            {parametrosOperacion.length === 0 && (
-              <Alert severity="info">No hay parámetros agregados. Haz clic en "Agregar Parámetro" para comenzar.</Alert>
-            )}
-          </>
-        );
-
-      case 3: // Verificaciones
-        return (
-          <>
-            <Alert severity="info" sx={{ mb: 2 }}>
+            <Alert severity="info" sx={{ mb: 3 }}>
               Verificación rápida: seleccione OK o NO en cada item y agregue observación si aplica.
             </Alert>
 
-            {verificaciones.map((verif, index) => (
-              <EquipmentCard key={verif.item}>
-                <h4><CheckSquare size={20} /> {index + 1}. {verif.item}</h4>
-                <FullWidthField>
-                  <FormControl>
-                    <RadioGroup
-                      row
-                      value={verif.estado}
-                      onChange={(e) => updateVerificacion(index, "estado", e.target.value)}
-                    >
-                      <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
-                      <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
-                    </RadioGroup>
-                  </FormControl>
-                </FullWidthField>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
+              {verificaciones.map((verif, index) => (
+                <EquipmentCard key={verif.item} style={{ marginBottom: 0, padding: '1.25rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <h4 style={{ fontSize: '1rem', margin: '0 0 0.75rem 0', minHeight: '40px' }}>
+                    <CheckSquare size={18} /> {index + 1}. {verif.item}
+                  </h4>
+                  
+                  <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <FormControl>
+                      <RadioGroup
+                        row
+                        value={verif.estado}
+                        onChange={(e) => updateVerificacion(index, "estado", e.target.value)}
+                        style={{ justifyContent: 'flex-start' }}
+                      >
+                        <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
+                        <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
+                      </RadioGroup>
+                    </FormControl>
 
-                <FullWidthField>
-                  <TextField
-                    label="Observación"
-                    value={verif.observacion}
-                    onChange={(e) => updateVerificacion(index, "observacion", e.target.value)}
-                    fullWidth
-                    multiline
-                    rows={2}
-                    size="small"
-                  />
-                </FullWidthField>
-              </EquipmentCard>
-            ))}
+                    <TextField
+                      label="Observación"
+                      value={verif.observacion}
+                      onChange={(e) => updateVerificacion(index, "observacion", e.target.value)}
+                      fullWidth
+                      size="small"
+                      placeholder="Añadir novedad..."
+                    />
+                  </div>
+                </EquipmentCard>
+              ))}
+            </div>
+          </>
+        );
+
+      case 3: // Firmas
+        return (
+          <>
+            <Alert severity="warning" sx={{ mb: 3 }}>
+              Debe registrar ambas firmas para generar el reporte en PDF.
+            </Alert>
+            <TwoColumnLayout>
+              <div style={{ padding: '15px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                <SignaturePadField
+                  title="Firma técnico"
+                  value={firmaTecnico}
+                  onChange={setFirmaTecnico}
+                  required
+                />
+              </div>
+              <div style={{ padding: '15px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                <SignaturePadField
+                  title="Firma recibido"
+                  value={firmaRecibido}
+                  onChange={setFirmaRecibido}
+                  required
+                />
+              </div>
+            </TwoColumnLayout>
           </>
         );
 
@@ -814,8 +743,8 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack }) => {
             <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)}>
               <Tab icon={<Info size={18} />} label="General" iconPosition="start" />
               <Tab icon={<Zap size={18} />} label="Generador" iconPosition="start" />
-              <Tab icon={<Zap size={18} />} label="Parámetros" iconPosition="start" />
               <Tab icon={<CheckSquare size={18} />} label="Verificaciones" iconPosition="start" />
+              <Tab icon={<CheckSquare size={18} />} label="Firmas" iconPosition="start" />
               <Tab icon={<Info size={18} />} label="Observaciones" iconPosition="start" />
               <Tab icon={<History size={18} />} label="Historial" iconPosition="start" />
             </Tabs>
