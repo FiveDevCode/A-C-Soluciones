@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
   Alert,
+  Box,
   FormControl,
   FormControlLabel,
   Radio,
@@ -111,7 +112,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
   const renderStepContent = (step) => {
     if (step === 3) {
       return (
-        <>
+        <Box key="step-3-signatures">
           <Alert severity="warning" sx={{ mb: 2 }}>
             Debe registrar ambas firmas para generar el reporte en PDF.
           </Alert>
@@ -127,7 +128,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
             onChange={setFirmaRecibido}
             required
           />
-        </>
+        </Box>
       );
     }
 
@@ -136,7 +137,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
     }
 
     return (
-      <>
+      <Box key="step-2-verifications">
         <Alert severity="info" sx={{ mb: 2 }}>
           Este reporte usa una lista fija de verificación. Solo marque OK o NO y agregue observación cuando aplique.
         </Alert>
@@ -173,7 +174,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
             </FormGrid>
           </EquipmentCard>
         ))}
-      </>
+      </Box>
     );
   };
 
