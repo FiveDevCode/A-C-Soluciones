@@ -176,6 +176,10 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
             required
           />
         </Box>
+      );
+    }
+
+    if (step === 4) {
       return null;
     }
 
