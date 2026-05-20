@@ -244,7 +244,9 @@ export const generarPDFReporte = async (reporte, clienteInfo, tecnicoInfo, param
               ${verificacionesOrdenadas.map(v => `
                   <tr>
                       <td style="font-weight: bold; font-size: 10px;">${v.item}</td>
-                      <td style="text-align: center;">${v.visto ? 'OK' : ''}</td>
+                      <td style="text-align: center; color: ${v.visto ? 'green' : 'red'};">
+                          ${v.visto ? 'OK' : 'NO'}
+                      </td>
                       <td>${v.observacion || ''}</td>
                   </tr>
               `).join('')}
