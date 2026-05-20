@@ -498,9 +498,9 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </>
         );
 
-      case 3: // Firmas
+      case 3: // Firmas y Observaciones
         return (
-          <>
+          <Box key="step-3-signatures">
             <Alert severity="warning" sx={{ mb: 3 }}>
               Debe registrar ambas firmas para generar el reporte en PDF.
             </Alert>
@@ -522,25 +522,23 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                 />
               </div>
             </TwoColumnLayout>
-          </>
+            <Box mt={3}>
+              <FullWidthField>
+                <TextField
+                  label="Observaciones Finales"
+                  value={formData.observaciones_finales}
+                  onChange={(e) => handleChange('observaciones_finales', e.target.value)}
+                  fullWidth
+                  multiline
+                  rows={6}
+                  placeholder="Ingrese cualquier observación adicional sobre el mantenimiento realizado..."
+                />
+              </FullWidthField>
+            </Box>
+          </Box>
         );
 
-      case 4: // Observaciones Finales
-        return (
-          <FullWidthField>
-            <TextField
-              label="Observaciones Finales"
-              value={formData.observaciones_finales}
-              onChange={(e) => handleChange('observaciones_finales', e.target.value)}
-              fullWidth
-              multiline
-              rows={6}
-              placeholder="Ingrese cualquier observación adicional sobre el mantenimiento realizado..."
-            />
-          </FullWidthField>
-        );
-
-      case 5: // Historial
+      case 4: // Historial
         return (
           <div>
             {historialLoading ? (
@@ -744,8 +742,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
               <Tab icon={<Info size={18} />} label="General" iconPosition="start" />
               <Tab icon={<Zap size={18} />} label="Generador" iconPosition="start" />
               <Tab icon={<CheckSquare size={18} />} label="Verificaciones" iconPosition="start" />
-              <Tab icon={<CheckSquare size={18} />} label="Firmas" iconPosition="start" />
-              <Tab icon={<Info size={18} />} label="Observaciones" iconPosition="start" />
+              <Tab icon={<CheckSquare size={18} />} label="Firmas y Observaciones" iconPosition="start" />
               <Tab icon={<History size={18} />} label="Historial" iconPosition="start" />
             </Tabs>
           </Box>
@@ -756,9 +753,8 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
             <TabPanel active={currentTab === 2}>{currentTab === 2 && renderTabContent()}</TabPanel>
             <TabPanel active={currentTab === 3}>{currentTab === 3 && renderTabContent()}</TabPanel>
             <TabPanel active={currentTab === 4}>{currentTab === 4 && renderTabContent()}</TabPanel>
-            <TabPanel active={currentTab === 5}>{currentTab === 5 && renderTabContent()}</TabPanel>
 
-            {currentTab !== 5 && ( 
+            {currentTab !== 4 && ( 
               <ActionButtons>
                 {currentTab > 0 && (
                   <Button
@@ -769,7 +765,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                   </Button>
                 )}
 
-                {currentTab < 4 ? (
+                {currentTab < 3 ? (
                   <Button
                     variant="contained"
                     onClick={() => setCurrentTab(prev => prev + 1)}
