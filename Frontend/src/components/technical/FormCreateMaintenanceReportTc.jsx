@@ -83,11 +83,7 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
       fields: []
     },
     {
-      title: "Firmas",
-      fields: []
-    },
-    {
-      title: "Observaciones Finales",
+      title: "Firmas y Observaciones",
       fields: [
         { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true },
       ]
@@ -177,10 +173,6 @@ const FormCreateMaintenanceReportTc = ({ onClose, onSuccess }) => {
           />
         </Box>
       );
-    }
-
-    if (step === 4) {
-      return null;
     }
 
     return null;

@@ -87,11 +87,7 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
       fields: []
     },
     {
-      title: "Firmas",
-      fields: []
-    },
-    {
-      title: "Observaciones Finales",
+      title: "Firmas y Observaciones",
       fields: [
         { name: "observaciones_finales", label: "Observaciones Finales", type: "textarea", fullWidth: true, required: false },
       ]
