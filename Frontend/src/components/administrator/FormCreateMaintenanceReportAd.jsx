@@ -105,10 +105,13 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
     });
   };
 
+  // FIX: Se eliminaron los `key` props del Box raíz de cada caso (causaban
+  // que React destruyera/recreara nodos incorrectamente al navegar entre pasos).
+  // Se retorna <></> en lugar de null para mantener consistencia en el árbol.
   const renderStepContent = (step) => {
     if (step === 3) {
       return (
-        <Box key="step-3-signatures">
+        <Box>
           <Alert severity="warning" sx={{ mb: 2 }}>
             Debe registrar ambas firmas para generar el reporte en PDF.
           </Alert>
@@ -128,50 +131,54 @@ const FormCreateMaintenanceReportAd = ({ onClose, onSuccess }) => {
       );
     }
 
-    if (step !== 2) {
-      return null;
+    if (step === 2) {
+      return (
+        <Box>
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Este reporte usa una lista fija de verificación. Solo marque OK o NO y agregue observación cuando aplique.
+          </Alert>
+
+          {checklist.map((item, index) => (
+            // FIX: key estable usando índice en lugar de item.item (evita
+            // colisiones si el texto tiene caracteres especiales)
+            <EquipmentCard key={`checklist-item-${index}`}>
+              <FormGrid>
+                <FullWidth>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    {index + 1}. {item.item}
+                  </Typography>
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      value={item.estado}
+                      onChange={(e) => updateChecklist(index, "estado", e.target.value)}
+                    >
+                      <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
+                      <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
+                    </RadioGroup>
+                  </FormControl>
+                </FullWidth>
+                <FullWidth>
+                  <TextField
+                    label="Observación"
+                    value={item.observacion}
+                    onChange={(e) => updateChecklist(index, "observacion", e.target.value)}
+                    fullWidth
+                    multiline
+                    rows={2}
+                    size="small"
+                  />
+                </FullWidth>
+              </FormGrid>
+            </EquipmentCard>
+          ))}
+        </Box>
+      );
     }
 
-    return (
-      <Box key="step-2-verifications">
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Este reporte usa una lista fija de verificación. Solo marque OK o NO y agregue observación cuando aplique.
-        </Alert>
-
-        {checklist.map((item, index) => (
-          <EquipmentCard key={item.item}>
-            <FormGrid>
-              <FullWidth>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                  {index + 1}. {item.item}
-                </Typography>
-                <FormControl>
-                  <RadioGroup
-                    row
-                    value={item.estado}
-                    onChange={(e) => updateChecklist(index, "estado", e.target.value)}
-                  >
-                    <FormControlLabel value="ok" control={<Radio size="small" />} label="OK" />
-                    <FormControlLabel value="no" control={<Radio size="small" />} label="NO" />
-                  </RadioGroup>
-                </FormControl>
-              </FullWidth>
-              <FullWidth>
-                <TextField
-                  label="Observación"
-                  value={item.observacion}
-                  onChange={(e) => updateChecklist(index, "observacion", e.target.value)}
-                  fullWidth
-                  multiline
-                  rows={2}
-                  size="small"
-                />
-              </FullWidth>
-            </FormGrid>
-          </EquipmentCard>
-        ))}
-      </Box>
-    );
+    // FIX: Retorna fragmento vacío en lugar de null para evitar que React
+    // encuentre un nodo vacío donde antes había un árbol completo
+    return <></>;
   };
 
   const handleSubmit = async (data) => {
