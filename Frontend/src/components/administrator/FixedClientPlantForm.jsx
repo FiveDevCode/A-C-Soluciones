@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Button, TextField, Alert, Tabs, Tab, Box, Checkbox, FormControlLabel, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, FormControl, RadioGroup, Radio } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, TextField, Alert, Tabs, Tab, Box, FormControlLabel, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, FormControl, RadioGroup, Radio } from "@mui/material";
 import styled from "styled-components";
-import { ArrowLeft, Save, Info, Zap, CheckSquare, History, FileText, Droplet, Wrench } from "lucide-react";
+import { ArrowLeft, Save, Info, Zap, CheckSquare, History, Droplet, Wrench } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { handleCreateMaintenanceReportAd } from "../../controllers/administrator/createMaintenanceReportAd.controller";
 import { administratorService } from "../../services/administrator-service";
@@ -82,9 +82,12 @@ const FormCard = styled.div`
   }
 `;
 
+// FIX: Cambiado `active` por `$active` (transient prop de styled-components).
+// La prop `active` como booleano se propagaba al <div> HTML nativo, corrompiendo
+// el DOM en producción y causando el error NotFoundError: insertBefore.
 const TabPanel = styled.div`
   padding: 1.5rem 0;
-  display: ${props => props.active ? 'block' : 'none'};
+  display: ${props => props.$active ? 'block' : 'none'};
 `;
 
 const ClientInfoBanner = styled.div`
@@ -201,7 +204,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
   const [firmaTecnico, setFirmaTecnico] = useState("");
   const [firmaRecibido, setFirmaRecibido] = useState("");
 
-  // Estados para el historial
   const [historialLoading, setHistorialLoading] = useState(false);
   const [fichas, setFichas] = useState([]);
   const [reportesBombeo, setReportesBombeo] = useState([]);
@@ -225,9 +227,8 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
 
   const [verificaciones, setVerificaciones] = useState(buildDefaultChecklist());
 
-  // Cargar historial cuando se monta el componente o cambia el tab a historial
   useEffect(() => {
-    if (currentTab === 5 && clientData) { // Tab 5 será el de historial
+    if (currentTab === 5 && clientData) {
       loadHistorial();
     }
   }, [currentTab, clientData]);
@@ -235,19 +236,16 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
   const loadHistorial = async () => {
     setHistorialLoading(true);
     try {
-      // Cargar fichas
       const fichasResponse = await commonService.getListToken();
       const fichasData = fichasResponse.data.fichas || fichasResponse.data || [];
       const fichasFiltradas = fichasData.filter(f => f.cliente_id === clientData.id || f.id_cliente === clientData.id);
       setFichas(fichasFiltradas);
 
-      // Cargar reportes de bombeo
       const bombeoResponse = await administratorService.getListPumpingReports();
       const bombeoData = bombeoResponse.data.reportes || bombeoResponse.data || [];
       const bombeoFiltrados = bombeoData.filter(r => r.cliente_id === clientData.id);
       setReportesBombeo(bombeoFiltrados);
 
-      // Cargar reportes de mantenimiento
       const mantenimientoResponse = await administratorService.getListMaintenanceReport();
       const mantenimientoData = mantenimientoResponse.data.reportes || mantenimientoResponse.data || [];
       const mantenimientoFiltrados = mantenimientoData.filter(r => r.id_cliente === clientData.id);
@@ -276,7 +274,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar firmas como en clientes normales
     if (!firmaTecnico || !firmaRecibido) {
       window.alert("Debes registrar la firma del técnico y la firma de recibido.");
       return;
@@ -288,12 +285,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
     try {
       const token = localStorage.getItem("authToken");
       const decoded = jwtDecode(token);
-
-      console.log('🔍 [FRONTEND] Enviando reporte con:', {
-        id_cliente: clientData.id,
-        id_cliente_parseado: parseInt(clientData.id),
-        clientData_completo: clientData
-      });
 
       await handleCreateMaintenanceReportAd({
         fecha: formData.fecha,
@@ -331,7 +322,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
 
   const renderTabContent = () => {
     switch (currentTab) {
-      case 0: // Información General
+      case 0:
         return (
           <>
             <TwoColumnLayout>
@@ -405,7 +396,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </>
         );
 
-      case 1: // Información del Generador
+      case 1:
         return (
           <TwoColumnLayout>
             <TextField
@@ -456,7 +447,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </TwoColumnLayout>
         );
 
-      case 2: // Verificaciones
+      case 2:
         return (
           <>
             <Alert severity="info" sx={{ mb: 3 }}>
@@ -465,7 +456,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
               {verificaciones.map((verif, index) => (
-                <EquipmentCard key={verif.item} style={{ marginBottom: 0, padding: '1.25rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <EquipmentCard key={`verif-${index}`} style={{ marginBottom: 0, padding: '1.25rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
                   <h4 style={{ fontSize: '1rem', margin: '0 0 0.75rem 0', minHeight: '40px' }}>
                     <CheckSquare size={18} /> {index + 1}. {verif.item}
                   </h4>
@@ -498,9 +489,9 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </>
         );
 
-      case 3: // Firmas y Observaciones
+      case 3:
         return (
-          <Box key="step-3-signatures">
+          <Box>
             <Alert severity="warning" sx={{ mb: 3 }}>
               Debe registrar ambas firmas para generar el reporte en PDF.
             </Alert>
@@ -538,7 +529,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </Box>
         );
 
-      case 4: // Historial
+      case 4:
         return (
           <div>
             {historialLoading ? (
@@ -547,7 +538,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
               </Box>
             ) : (
               <>
-                {/* Fichas de Mantenimiento */}
                 <Box mb={4}>
                   <Box display="flex" alignItems="center" gap={1} mb={2}>
                     <Wrench size={20} color="#1976d2" />
@@ -574,11 +564,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                               </TableCell>
                               <TableCell>
                                 {ficha.pdf_path && (
-                                  <Button
-                                    size="small"
-                                    variant="outlined"
-                                    onClick={() => window.open(ficha.pdf_path, '_blank')}
-                                  >
+                                  <Button size="small" variant="outlined" onClick={() => window.open(ficha.pdf_path, '_blank')}>
                                     Ver PDF
                                   </Button>
                                 )}
@@ -593,7 +579,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                   )}
                 </Box>
 
-                {/* Reportes de Bombeo */}
                 <Box mb={4}>
                   <Box display="flex" alignItems="center" gap={1} mb={2}>
                     <Droplet size={20} color="#1976d2" />
@@ -620,11 +605,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                               <TableCell>{reporte.tecnico?.nombre || 'N/A'}</TableCell>
                               <TableCell>
                                 {reporte.pdf_path && (
-                                  <Button
-                                    size="small"
-                                    variant="outlined"
-                                    onClick={() => window.open(reporte.pdf_path, '_blank')}
-                                  >
+                                  <Button size="small" variant="outlined" onClick={() => window.open(reporte.pdf_path, '_blank')}>
                                     Ver PDF
                                   </Button>
                                 )}
@@ -639,7 +620,6 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                   )}
                 </Box>
 
-                {/* Reportes de Mantenimiento Plantas Eléctricas */}
                 <Box mb={4}>
                   <Box display="flex" alignItems="center" gap={1} mb={2}>
                     <Zap size={20} color="#1976d2" />
@@ -666,11 +646,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
                               <TableCell>{reporte.marca_generador}</TableCell>
                               <TableCell>
                                 {reporte.pdf_path && (
-                                  <Button
-                                    size="small"
-                                    variant="outlined"
-                                    onClick={() => window.open(reporte.pdf_path, '_blank')}
-                                  >
+                                  <Button size="small" variant="outlined" onClick={() => window.open(reporte.pdf_path, '_blank')}>
                                     Ver PDF
                                   </Button>
                                 )}
@@ -690,7 +666,7 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
         );
 
       default:
-        return null;
+        return <></>;
     }
   };
 
@@ -748,13 +724,17 @@ const FixedClientPlantForm = ({ clientData, technicals, onBack, tecnicoData }) =
           </Box>
 
           <form onSubmit={handleSubmit}>
-            <TabPanel active={currentTab === 0}>{currentTab === 0 && renderTabContent()}</TabPanel>
-            <TabPanel active={currentTab === 1}>{currentTab === 1 && renderTabContent()}</TabPanel>
-            <TabPanel active={currentTab === 2}>{currentTab === 2 && renderTabContent()}</TabPanel>
-            <TabPanel active={currentTab === 3}>{currentTab === 3 && renderTabContent()}</TabPanel>
-            <TabPanel active={currentTab === 4}>{currentTab === 4 && renderTabContent()}</TabPanel>
+            {/* FIX: Cambiado active={...} por $active={...} en todos los TabPanel.
+                La prop `active` (booleano) se filtraba al DOM nativo causando el error
+                NotFoundError en producción. El prefijo $ marca la prop como "transient"
+                en styled-components, impidiéndole llegar al elemento HTML. */}
+            <TabPanel $active={currentTab === 0}>{currentTab === 0 && renderTabContent()}</TabPanel>
+            <TabPanel $active={currentTab === 1}>{currentTab === 1 && renderTabContent()}</TabPanel>
+            <TabPanel $active={currentTab === 2}>{currentTab === 2 && renderTabContent()}</TabPanel>
+            <TabPanel $active={currentTab === 3}>{currentTab === 3 && renderTabContent()}</TabPanel>
+            <TabPanel $active={currentTab === 4}>{currentTab === 4 && renderTabContent()}</TabPanel>
 
-            {currentTab !== 4 && ( 
+            {currentTab !== 4 && (
               <ActionButtons>
                 {currentTab > 0 && (
                   <Button
